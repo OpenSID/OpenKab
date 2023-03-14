@@ -9,3 +9,8 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+/node_modules
+/vendor
+/composer.lock
+/package-lock.json

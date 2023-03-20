@@ -125,9 +125,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        try {
+            $user->delete();
+        } catch (\Exception $e) {
+            report($e);
+            return redirect()->route('users.index')->with('error', 'Pengguna gagal dihapus!');
+        }
+
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil dihapus!');
     }
 
     /**

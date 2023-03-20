@@ -67,23 +67,24 @@
 @push('page_scripts')
 <script type="module">
     $(function () {
-    
-    var table = $('.yajra-datatable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('users.list') }}",
-        columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'aksi', name: 'action', orderable: false, searchable: false},
-            {data: 'nama', name: 'nama'},
-            {data: 'username', name: 'username'},
-            {data: 'email', name: 'email'},
-            {data: 'active', name: 'active'},
-            {data: 'company', name: 'company'},
-            {data: 'phone', name: 'phone'},
-        ]
+        
+        var table = $('.yajra-datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('users.list') }}",
+            columns: [
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'aksi', name: 'action', orderable: false, searchable: false},
+                {data: 'nama', name: 'nama'},
+                {data: 'username', name: 'username'},
+                {data: 'email', name: 'email'},
+                {data: 'active', name: 'active'},
+                {data: 'company', name: 'company'},
+                {data: 'phone', name: 'phone'},
+            ]
+        });
+        
     });
-    
-  });
 </script>
+@include('partials.delete_modal')
 @endpush

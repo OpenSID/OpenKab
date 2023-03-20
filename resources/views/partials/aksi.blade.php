@@ -5,7 +5,7 @@
         </a>
     @endif
     @if( isset( $delete ) )
-        <a href="javascript:void(0)" class="{!! empty( $delete ) ? 'disabled' : '' !!}" title="Hapus" data-href="{!! empty( $delete ) ? 'javascript:void(0)' : $delete !!}" data-button="delete" id="deleteModal">
+        <a href="javascript:void(0)" class="{!! empty( $delete ) ? 'disabled' : '' !!}" title="Hapus" data-href="{!! empty( $delete ) ? 'javascript:void(0)' : $delete !!}" id="deleteModal">
             <button type="button" class="mr-1 btn btn-icon btn-danger btn-sm" style="width: 40px"><i class="fa fa-trash" aria-hidden="true"></i></button>
         </a>
     @endif

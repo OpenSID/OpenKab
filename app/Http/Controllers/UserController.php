@@ -108,9 +108,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, User $user)
     {
-        //
+        try {
+            $user->update($request->all());
+            return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
+        } catch (\Exception $e) {
+            report($e);
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
 
     /**

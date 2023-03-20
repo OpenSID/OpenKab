@@ -24,16 +24,17 @@ class UserRequest extends FormRequest
     public function rules()
     {
         if ($this->isMethod('put')) {
-            $id = "," . $this->segment(4);
+            $id = "," . $this->user->id;
         } else {
             $id = "";
         }
+        
         return [
             'nama'       => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
             'username'   => 'required|string|unique:users,username' . $id,
             'email'      => 'required|email|unique:users,email' . $id,
             'password'   => 'required|min:8|max:32',
-            'company'    => 'required|string',
+            'company'    => 'nullable|string',
             'phone'      => 'nullable|numeric|digits_between:10,13',
         ];
     }

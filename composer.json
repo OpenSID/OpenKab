@@ -11,7 +11,8 @@
         "infyomlabs/laravel-ui-adminlte": "^5.1",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7"
+        "laravel/tinker": "^2.7",
+        "yajra/laravel-datatables-oracle": "^10.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

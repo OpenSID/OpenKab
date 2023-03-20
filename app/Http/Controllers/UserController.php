@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
 use App\Models\User;
+use App\Enums\Status;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,9 +16,31 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::get();
+        return view('user.index');
+    }
 
-        return view('user.index', compact('users'));
+    public function getUsers(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = User::get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('aksi', function ($row) {
+                    if (! auth()->guest()) {
+                        $data['edit_url']   = route('users.edit', $row->id);
+                        $data['delete_url'] = route('users.destroy', $row->id);
+                        // if ($row->status == Status::Aktif) {
+                        //     $data['suspend_url'] = route('users.status', [$row->id, Status::TidakAktif]);
+                        // } else {
+                        //     $data['active_url'] = route('users.status', [$row->id, Status::Aktif]);
+                        // }
+                    }
+
+                    return view('partials.aksi', $data);
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
+        }
     }
 
     /**
@@ -83,5 +107,23 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Update status resource from storage.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function lock($id, $status)
+    {
+        try {
+            User::findOrFail($id)->update(['status' => $status]);
+        } catch (\Exception $e) {
+            report($e);
+            return redirect()->route('data.User.index')->with('error', 'Status User gagal diubah!');
+        }
+
+        return redirect()->route('data.User.index')->with('success', 'Status User berhasil diubah!');
     }
 }

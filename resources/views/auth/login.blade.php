@@ -25,7 +25,7 @@
     <!-- /.login-box-body -->
     <div class="card">
         <div class="card-body login-card-body">
-            <p class="login-box-msg">Sign in to start your session</p>
+            <p class="login-box-msg">Masukkan email dan kata sandi</p>
 
             <form method="post" action="{{ url('/login') }}">
                 @csrf
@@ -64,22 +64,19 @@
                     <div class="col-8">
                         <div class="icheck-primary">
                             <input type="checkbox" id="remember">
-                            <label for="remember">Remember Me</label>
+                            <label for="remember">Ingat saya</label>
                         </div>
                     </div>
 
                     <div class="col-4">
-                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                        <button type="submit" class="btn btn-primary btn-block">Masuk</button>
                     </div>
 
                 </div>
             </form>
 
             <p class="mb-1">
-                <a href="{{ route('password.request') }}">I forgot my password</a>
-            </p>
-            <p class="mb-0">
-                <a href="{{ route('register') }}" class="text-center">Register a new membership</a>
+                <a href="{{ route('password.request') }}">Lupa kata sandi</a>
             </p>
         </div>
         <!-- /.login-card-body -->

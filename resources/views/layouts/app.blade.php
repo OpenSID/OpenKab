@@ -42,15 +42,15 @@
                              alt="User Image">
                         <p>
                             {{ Auth::user()->name }}
-                            <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>
+                            <small>Bergabung sejak {{ Auth::user()->created_at->translatedFormat('M Y') }}</small>
                         </p>
                     </li>
                     <!-- Menu Footer-->
                     <li class="user-footer">
-                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                        <a href="#" class="btn btn-default btn-flat">Profil</a>
                         <a href="#" class="btn btn-default btn-flat float-right"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Sign out
+                            Keluar
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf

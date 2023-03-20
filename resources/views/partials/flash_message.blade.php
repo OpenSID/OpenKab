@@ -18,3 +18,14 @@
     </div>
 @endif
 
+@push('page_scripts')
+<script type="module">
+    $(document).ready(function() {
+        window.setTimeout(function() {
+            $("#notifikasi").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 3000);
+    });
+</script>
+@endpush

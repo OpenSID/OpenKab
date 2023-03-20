@@ -1,23 +1,22 @@
 <div class="btn-group blocks" id="exampleToolbar" role="group">
-    @if( isset( $edit_url ) )
-        <a href="{!! empty( $edit_url ) ? 'javascript:void(0)' : $edit_url !!}" class="{!! empty( $edit_url ) ? 'disabled' : '' !!}" title="Ubah" data-button="edit">
+    @if( isset( $edit ) )
+        <a href="{!! empty( $edit ) ? 'javascript:void(0)' : $edit !!}" class="{!! empty( $edit ) ? 'disabled' : '' !!}" title="Ubah" data-button="edit">
             <button type="button" class="mr-1 btn btn-success btn-sm" style="width: 40px;"><i class="fa fa-edit" aria-hidden="true"></i></button>
         </a>
     @endif
-    @if( isset( $delete_url ) )
-        <a href="javascript:void(0)" class="{!! empty( $delete_url ) ? 'disabled' : '' !!}" title="Hapus" data-href="{!! empty( $delete_url ) ? 'javascript:void(0)' : $delete_url !!}" data-button="delete" id="deleteModal">
+    @if( isset( $delete ) )
+        <a href="javascript:void(0)" class="{!! empty( $delete ) ? 'disabled' : '' !!}" title="Hapus" data-href="{!! empty( $delete ) ? 'javascript:void(0)' : $delete !!}" data-button="delete" id="deleteModal">
             <button type="button" class="mr-1 btn btn-icon btn-danger btn-sm" style="width: 40px"><i class="fa fa-trash" aria-hidden="true"></i></button>
         </a>
     @endif
-    @if( isset( $active_url ) )
-        <a href="javascript:void(0)" class="{!! empty( $active_url ) ? 'disabled' : '' !!}" title="Aktif" data-href="{!! empty( $active_url ) ? 'javascript:void(0)' : $active_url !!}" data-button="delete" id="activeModal">
-            <button type="button" class="mr-1 btn btn-icon btn-info btn-sm" style="width: 40px; background-color: #1FF43E; border-color: #1FF43E;"><i class="fa fa-check" aria-hidden="true"></i></button>
+    @if( isset( $active ) )
+        <a href="{!! empty( $active ) ? 'javascript:void(0)' : $active !!}" class="{!! empty( $active ) ? 'disabled' : '' !!}" title="Aktifkan" data-button="aktifkan">
+            <button type="button" class="mr-1 btn bg-navy btn-sm" style="width: 40px;"><i class="fa fa-lock" aria-hidden="true"></i></button>
         </a>
     @endif
-    @if( isset( $suspend_url ) )
-        <a href="javascript:void(0)" class="{!! empty( $suspend_url ) ? 'disabled' : '' !!}" title="Suspend" data-href="{!! empty( $suspend_url ) ? 'javascript:void(0)' : $suspend_url !!}" data-button="delete" id="suspendModal">
-            <button type="button" class="mr-1 btn btn-icon btn-danger btn-sm" style="width: 40px; background-color: #FFA500; border-color: #FFA500;"><i class="fa fa-power-off" aria-hidden="true"></i>
-            </button>
+    @if( isset( $deactive ) )
+        <a href="{!! empty( $deactive ) ? 'javascript:void(0)' : $deactive !!}" class="{!! empty( $deactive ) ? 'disabled' : '' !!}" title="Non-aktifkan" data-button="non-aktifkan">
+            <button type="button" class="mr-1 btn bg-navy btn-sm" style="width: 40px;"><i class="fa fa-unlock" aria-hidden="true"></i></button>
         </a>
     @endif
 </div>

@@ -27,19 +27,26 @@ class UserController extends Controller
                 ->addIndexColumn()
                 ->addColumn('aksi', function ($row) {
                     if (! auth()->guest()) {
-                        $data['edit_url']   = route('users.edit', $row->id);
-                        $data['delete_url'] = route('users.destroy', $row->id);
-                        // if ($row->status == Status::Aktif) {
-                        //     $data['suspend_url'] = route('users.status', [$row->id, Status::TidakAktif]);
-                        // } else {
-                        //     $data['active_url'] = route('users.status', [$row->id, Status::Aktif]);
-                        // }
+                        $data['edit']   = route('users.edit', $row->id);
+                        $data['delete'] = route('users.destroy', $row->id);
+                        if ($row->active == Status::Aktif) {
+                            $data['deactive'] = route('users.status', [$row->id, Status::TidakAktif]);
+                        } else {
+                            $data['active'] = route('users.status', [$row->id, Status::Aktif]);
+                        }
                     }
 
                     return view('partials.aksi', $data);
                 })
-                ->rawColumns(['aksi'])
-                ->make(true);
+                ->editColumn('active', function ($row) {
+                    if ($row->active == Status::TidakAktif) {
+                        return '<span class="badge badge-danger">Tidak Aktif</span>';
+                    } else {
+                        return '<span class="badge badge-success">Aktif</span>';
+                    }
+                })
+                ->rawColumns(['active'])
+                ->make();
         }
     }
 
@@ -115,15 +122,15 @@ class UserController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function lock($id, $status)
+    public function status($id, $status)
     {
         try {
-            User::findOrFail($id)->update(['status' => $status]);
+            User::findOrFail($id)->update(['active' => $status]);
         } catch (\Exception $e) {
             report($e);
-            return redirect()->route('data.User.index')->with('error', 'Status User gagal diubah!');
+            return redirect()->route('users.index')->with('error', 'Status gagal diubah!');
         }
 
-        return redirect()->route('data.User.index')->with('success', 'Status User berhasil diubah!');
+        return redirect()->route('users.index')->with('success', 'Status berhasil diubah!');
     }
 }

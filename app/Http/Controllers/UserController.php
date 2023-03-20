@@ -6,6 +6,7 @@ use DataTables;
 use App\Models\User;
 use App\Enums\Status;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -57,18 +58,25 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $user = null;
+        return view('user.create', compact('user'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\UserRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        try {
+            User::create($request->all());
+            return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            report($e);
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -88,9 +96,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('user.edit', compact('user'));
     }
 
     /**

@@ -1,7 +1,3 @@
-@extends('layouts.app')
+@extends('layouts.index')
 
-@section('content')
-    <div class="container-fluid">
-        <h1 class="text-black-50">Halaman administrasi</h1>
-    </div>
-@endsection
+@section('title', 'Dashboard')

@@ -24,4 +24,8 @@ Route::get('/', [HomeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::prefix('penduduk')->group(function () {
+        Route::get('/', [\App\Http\Controllers\PendudukController::class, 'index']);
+    });
 });

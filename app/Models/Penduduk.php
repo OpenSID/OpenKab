@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property \App\Models\Enums\TempatDilahirkanEnum $tempat_dilahirkan
+ * @property \App\Models\Enums\JenisKelahiranEnum $jenis_kelahiran
+ * @property \App\Models\Enums\PenolongKelahiranEnum $penolong_kelahiran
+ */
 class Penduduk extends Model
 {
     use HasFactory;

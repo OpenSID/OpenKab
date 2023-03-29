@@ -83,7 +83,7 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.foto"
+                    data: "attributes.foto",
                     searchable: false,
                     orderable: false
                 },
@@ -91,10 +91,10 @@
                     data: "attributes.nik", name: "nik"
                 },
                 {
-                    data: "attributes.tag_id_card": name: "tag_id_card"
+                    data: "attributes.tag_id_card", name: "tag_id_card"
                 },
                 {
-                    data: "attributes.nama": name: "nama"
+                    data: "attributes.nama", name: "nama"
                 },
                 {
                     data: function (attributes) {

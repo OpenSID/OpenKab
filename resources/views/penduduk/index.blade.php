@@ -19,6 +19,7 @@
                                     <th>Aksi</th>
                                     <th>Foto</th>
                                     <th>NIK</th>
+                                    <th>Tag ID Card</th>
                                     <th>Nama</th>
                                     <th>No. KK</th>
                                     <th>Nama Ayah</th>
@@ -43,4 +44,111 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        var penduduk = $('#penduduk').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: true,
+            ajax: {
+                url: `{{ url('api/v1/penduduk') }}`,
+                xhrFields: {
+                    withCredentials: true
+                },
+                method: 'get',
+                data: function(d) {
+                    return {
+                        "page[size]": d.length,
+                        "page[number]": (d.start / d.length) + 1
+                    };
+                },
+                // TODO: Fix me, tidak bisa render data dari paginasi sebelumnya
+                // dataSrc: function(json) {
+                //     json.recordsTotal = json.meta.pagination.total
+                //     json.recordsFiltered = json.meta.pagination.total
+                //     json.draw = json.meta.pagination.current_page
+
+                //     return json.data
+                // },
+            },
+            columns: [
+                {
+                    data: null,
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.foto"
+                },
+                {
+                    data: "attributes.nik"
+                },
+                {
+                    data: "attributes.tag_id_card"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: function (attributes) {
+                        return attributes.keluarga?.no_kk ?? null
+                    }
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                }
+            ]
+        })
+
+        penduduk.on('draw.dt', function() {
+            var PageInfo = $('#penduduk').DataTable().page.info();
+            penduduk.column(0, {
+                page: 'current'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
+        });
+    </script>
 @endsection

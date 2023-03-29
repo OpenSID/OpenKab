@@ -32,12 +32,20 @@ class Penduduk extends Model
         'jenisKelamin',
         'agama',
         'pendidikan',
+        'pendidikanKK',
         'pekerjaan',
         'wargaNegara',
         'golonganDarah',
         'cacat',
+        'sakitMenahun',
+        'kb',
         'statusKawin',
+        'pendudukHubungan',
         'pendudukStatus',
+        'keluarga',
+        'clusterDesa',
+        'logPenduduk',
+        'logPerubahanPenduduk',
     ];
 
     /** {@inheritdoc} */

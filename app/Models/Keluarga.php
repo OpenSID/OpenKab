@@ -12,14 +12,4 @@ class Keluarga extends Model
 
     /** {@inheritdoc} */
     protected $table = 'tweb_keluarga';
-
-    /**
-     * Define a one-to-many relationship.
-     *
-     * @return HasMany
-     */
-    public function anggota()
-    {
-        return $this->hasMany(Penduduk::class, 'id_kk')->orderBy('kk_level')->orderBy('tanggallahir');
-    }
 }

@@ -55,9 +55,6 @@
             ordering: true,
             ajax: {
                 url: `{{ url('api/v1/penduduk') }}`,
-                xhrFields: {
-                    withCredentials: true
-                },
                 method: 'get',
                 data: function(d) {
                     return {
@@ -71,7 +68,6 @@
 
                     return json.data
                 },
-                
             },
             columns: [
                 {

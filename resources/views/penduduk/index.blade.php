@@ -65,14 +65,13 @@
                         "page[number]": (d.start / d.length) + 1
                     };
                 },
-                // TODO: Fix me, tidak bisa render data dari paginasi sebelumnya
-                // dataSrc: function(json) {
-                //     json.recordsTotal = json.meta.pagination.total
-                //     json.recordsFiltered = json.meta.pagination.total
-                //     json.draw = json.meta.pagination.current_page
+                dataSrc: function(json) {
+                    json.recordsTotal = json.meta.pagination.total
+                    json.recordsFiltered = json.meta.pagination.total
 
-                //     return json.data
-                // },
+                    return json.data
+                },
+                
             },
             columns: [
                 {

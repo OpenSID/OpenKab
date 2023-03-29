@@ -56,10 +56,12 @@
             ajax: {
                 url: `{{ url('api/v1/penduduk') }}`,
                 method: 'get',
-                data: function(d) {
+                data: function(row) {
                     return {
-                        "page[size]": d.length,
-                        "page[number]": (d.start / d.length) + 1
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[nama]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
                     };
                 },
                 dataSrc: function(json) {
@@ -76,19 +78,23 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: "attributes.nama",
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     data: "attributes.foto"
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nik"
+                    data: "attributes.nik", name: "nik"
                 },
                 {
-                    data: "attributes.tag_id_card"
+                    data: "attributes.tag_id_card": name: "tag_id_card"
                 },
                 {
-                    data: "attributes.nama"
+                    data: "attributes.nama": name: "nama"
                 },
                 {
                     data: function (attributes) {

@@ -33,9 +33,9 @@ class EventServiceProvider extends ServiceProvider
             Config::get()->each(function ($item, $key) use ($event) {
                 $event->menu->addIn('desa', [
                     'text' => $item->nama_desa,
-                    'url' => "sesi/desa/{$item->app_key}",
-                    'active' => session('desa.app_key') === $item->app_key,
-                    'active' => session()->has('desa') ? session('desa.app_key') === $item->app_key : false,
+                    'url' => "sesi/desa/{$item->kode_desa}",
+                    'active' => session('desa.kode_desa') === $item->kode_desa,
+                    'active' => session()->has('desa') ? session('desa.kode_desa') === $item->kode_desa : false,
                 ]);
             });
         });

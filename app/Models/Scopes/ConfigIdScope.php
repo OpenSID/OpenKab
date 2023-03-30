@@ -2,10 +2,10 @@
 
 namespace App\Models\Scopes;
 
+use App\Models\Config;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Support\Facades\Schema;
 
 class ConfigIdScope implements Scope
 {
@@ -14,34 +14,16 @@ class ConfigIdScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if (! session()->has('desa')) {
-            return;
+        // from web request
+        if (session()->has('desa')) {
+            return $builder->where("{$model->getTable()}.config_id", session('desa.id'));
         }
 
-        if (! Schema::hasColumn($model->getTable(), 'config_id')) {
-            return;
+        // from api request
+        if (request()->hasHeader('X-Desa') && ! empty(request()->header('X-Desa'))) {
+            if ($config = Config::where('kode_desa', request()->header('X-Desa'))->first()) {
+                return $builder->where("{$model->getTable()}.config_id", $config->id);
+            }
         }
-
-        return $builder->where("{$model->getTable()}.config_id", session('desa.id'));
-    }
-
-    /**
-     * Extend the query builder with the needed functions.
-     *
-     * @return void
-     */
-    public function extend(Builder $builder)
-    {
-        $builder->macro('withConfigId', static function (Builder $builder, $alias = null) {
-            if (! Schema::hasColumn($builder->getModel()->getTable(), 'config_id')) {
-                return $builder;
-            }
-
-            if ($alias) {
-                return $builder->where("{$alias}.config_id", session('desa.id'));
-            }
-
-            return $builder->where('config_id', session('desa.id'));
-        });
     }
 }

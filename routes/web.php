@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::prefix('sesi')->group(function () {
-        Route::middleware(WilayahMiddleware::class)->get('desa/{appKey}', function () {
+        Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
             return redirect('/');
         });
         Route::get('hapus', function () {

@@ -60,10 +60,13 @@
                     'X-Desa': `{{ session('desa.kode_desa') }}`
                 },
                 data: function(row) {
+                    console.log(row)
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[nama]": row.search.value,
+                        "filter[nik]": row.search.value,
+                        "filter[tag_id_card]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
                     };
                 },
@@ -102,13 +105,15 @@
                 {
                     data: function (attributes) {
                         return attributes.keluarga?.no_kk ?? null
-                    }
+                    },
+                    orderable: false,
+                    name: "keluarga.no_kk"
                 },
                 {
-                    data: "attributes.nama"
+                    data: "attributes.nama_ayah"
                 },
                 {
-                    data: "attributes.nama"
+                    data: "attributes.nama_ibu"
                 },
                 {
                     data: "attributes.nama"

@@ -14,11 +14,16 @@ class PendudukRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                AllowedFilter::exact('nik'),
+                AllowedFilter::exact('keluarga.no_kk'),
                 'nama',
+                'nik',
+                'tag_id_card',
             ])
             ->allowedSorts([
+                'nik',
                 'nama',
+                'umur',
+                'created_at',
             ])
             ->jsonPaginate();
     }

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property \App\Models\Enums\TempatDilahirkanEnum $tempat_dilahirkan
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Penduduk extends Model
 {
+    use ConfigIdTrait;
     use HasFactory;
 
     /** {@inheritdoc} */

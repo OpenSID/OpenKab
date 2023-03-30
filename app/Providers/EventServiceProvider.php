@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Config;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
+use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -27,7 +29,16 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Event::listen(BuildingMenu::class, function (BuildingMenu $event) {
+            Config::get()->each(function ($item, $key) use ($event) {
+                $event->menu->addIn('desa', [
+                    'text' => $item->nama_desa,
+                    'url' => "sesi/desa/{$item->app_key}",
+                    'active' => session('desa.app_key') === $item->app_key,
+                    'active' => session()->has('desa') ? session('desa.app_key') === $item->app_key : false,
+                ]);
+            });
+        });
     }
 
     /**

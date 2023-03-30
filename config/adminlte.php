@@ -290,6 +290,18 @@ return [
     */
 
     'menu' => [
+        //Topbar items:
+        [
+            'key'          => 'desa',
+            'text'         => 'Wilayah',
+            'topnav_right' => true,
+            'submenu'      => [
+                [
+                    'text' => 'Semua',
+                    'url'  => 'sesi/hapus',
+                ],
+            ],
+        ],
         // Navbar items:
         [
             'type'         => 'navbar-search',

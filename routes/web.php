@@ -24,4 +24,8 @@ Route::get('/', [HomeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
+    Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
+    Route::resource('users', UserController::class);
 });

@@ -23,8 +23,7 @@ class UserController extends Controller
     public function getUsers(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::get();
-            return DataTables::of($data)
+            return DataTables::of(User::get())
                 ->addIndexColumn()
                 ->addColumn('aksi', function ($row) {
                     if (! auth()->guest()) {

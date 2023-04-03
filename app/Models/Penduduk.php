@@ -29,6 +29,15 @@ class Penduduk extends Model
     ];
 
     /** {@inheritdoc} */
+    protected $appends = [
+        'wajibKTP',
+        'statusPerkawinan',
+        'statusHamil',
+        'namaAsuransi',
+        'umur',
+    ];
+
+    /** {@inheritdoc} */
     protected $with = [
         'jenisKelamin',
         'agama',
@@ -273,5 +282,15 @@ class Penduduk extends Model
                 ? "Nama/No Asuransi : {$this->no_asuransi}"
                 : "No Asuransi : {$this->no_asuransi}")
             : '';
+    }
+
+    /**
+     * Getter umur attribute.
+     *
+     * @return string|null
+     */
+    public function getUmurAttribute()
+    {
+        return $this->tanggallahir?->age;
     }
 }

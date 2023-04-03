@@ -56,9 +56,6 @@
             ajax: {
                 url: `{{ url('api/v1/penduduk') }}`,
                 method: 'get',
-                headers: {
-                    'X-Desa': `{{ session('desa.kode_desa') }}`
-                },
                 data: function(row) {
                     return {
                         "page[size]": row.length,
@@ -157,7 +154,7 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: "attributes.umur"
                 },
                 {
                     data: "attributes.nama"

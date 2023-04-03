@@ -17,6 +17,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        BuildingMenu::class => [
+            \App\Listeners\MenuListener::class,
+        ],
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
@@ -29,16 +32,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Event::listen(BuildingMenu::class, function (BuildingMenu $event) {
-            Config::get()->each(function ($item, $key) use ($event) {
-                $event->menu->addIn('desa', [
-                    'text' => $item->nama_desa,
-                    'url' => "sesi/desa/{$item->kode_desa}",
-                    'active' => session('desa.kode_desa') === $item->kode_desa,
-                    'active' => session()->has('desa') ? session('desa.kode_desa') === $item->kode_desa : false,
-                ]);
-            });
-        });
     }
 
     /**

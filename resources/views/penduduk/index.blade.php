@@ -60,7 +60,6 @@
                     'X-Desa': `{{ session('desa.kode_desa') }}`
                 },
                 data: function(row) {
-                    console.log(row)
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
@@ -116,22 +115,46 @@
                     data: "attributes.nama_ibu"
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (attributes) {
+                        return attributes.rtm?.no_kk ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (attributes) {
+                        return attributes.keluarga?.alamat ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (attributes) {
+                        return attributes.cluster_desa?.dusun ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (attributes) {
+                        return attributes.cluster_desa?.rw ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (attributes) {
+                        return attributes.cluster_desa?.rt ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (attributes) {
+                        return attributes.pendidikan_k_k?.nama ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     data: "attributes.nama"

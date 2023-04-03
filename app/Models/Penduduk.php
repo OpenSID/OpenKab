@@ -44,6 +44,7 @@ class Penduduk extends Model
         'pendudukHubungan',
         'pendudukStatus',
         'keluarga',
+        'rtm',
         'clusterDesa',
         'logPenduduk',
         'logPerubahanPenduduk',
@@ -195,6 +196,11 @@ class Penduduk extends Model
     public function keluarga()
     {
         return $this->belongsTo(Keluarga::class, 'id_kk')->withDefault();
+    }
+
+    public function rtm()
+    {
+        return $this->belongsTo(Rtm::class, 'id_rtm', 'no_kk');
     }
 
     /**

@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+    @include('partials.flash_message')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -57,4 +58,5 @@
             ]
         })
     </script>
+    @include('partials.delete_modal')
 @endsection

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -35,6 +36,7 @@ class Penduduk extends Model
         'statusHamil',
         'namaAsuransi',
         'umur',
+        'urlFoto',
     ];
 
     /** {@inheritdoc} */
@@ -292,5 +294,21 @@ class Penduduk extends Model
     public function getUmurAttribute()
     {
         return $this->tanggallahir?->age;
+    }
+
+    /**
+     * Getter url foto attribute.
+     *
+     * @return string
+     */
+    public function getUrlFotoAttribute()
+    {
+        if (empty($this->foto)) {
+            return $this->sex === 1
+                ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
+                : Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/wuser.png');
+        }
+
+        return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
     }
 }

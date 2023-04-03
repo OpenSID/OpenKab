@@ -1,5 +1,9 @@
 @extends('layouts.index')
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/progressive-image/progressive-image.css') }}">
+@endpush
+
 @section('title', 'Data Penduduk')
 
 @section('content_header')
@@ -46,6 +50,10 @@
     </div>
 @endsection
 
+@push('js')
+    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+@endpush
+
 @section('js')
     <script>
         var penduduk = $('#penduduk').DataTable({
@@ -85,9 +93,11 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.foto",
-                    searchable: false,
-                    orderable: false
+                    data: function (data) {
+                        return `<a href="${data.attributes.urlFoto}" class="progressive replace kecil">
+                                    <img class="preview" loading="lazy" src="{{ asset('assets/img/img-loader.gif') }}" alt="Foto Penduduk"/>
+                                </a>`
+                    }
                 },
                 {
                     data: "attributes.nik", name: "nik"
@@ -99,8 +109,8 @@
                     data: "attributes.nama", name: "nama"
                 },
                 {
-                    data: function (attributes) {
-                        return attributes.keluarga?.no_kk ?? null
+                    data: function (data) {
+                        return data.attributes.keluarga?.no_kk ?? null
                     },
                     orderable: false,
                     name: "keluarga.no_kk"
@@ -112,43 +122,43 @@
                     data: "attributes.nama_ibu"
                 },
                 {
-                    data: function (attributes) {
-                        return attributes.rtm?.no_kk ?? null
+                    data: function (data) {
+                        return data.attributes.rtm?.no_kk ?? null
                     },
                     searchable: false,
                     orderable: false
                 },
                 {
-                    data: function (attributes) {
-                        return attributes.keluarga?.alamat ?? null
+                    data: function (data) {
+                        return data.attributes.keluarga?.alamat ?? null
                     },
                     searchable: false,
                     orderable: false
                 },
                 {
-                    data: function (attributes) {
-                        return attributes.cluster_desa?.dusun ?? null
+                    data: function (data) {
+                        return data.attributes.cluster_desa?.dusun ?? null
                     },
                     searchable: false,
                     orderable: false
                 },
                 {
-                    data: function (attributes) {
-                        return attributes.cluster_desa?.rw ?? null
+                    data: function (data) {
+                        return data.attributes.cluster_desa?.rw ?? null
                     },
                     searchable: false,
                     orderable: false
                 },
                 {
-                    data: function (attributes) {
-                        return attributes.cluster_desa?.rt ?? null
+                    data: function (data) {
+                        return data.attributes.cluster_desa?.rt ?? null
                     },
                     searchable: false,
                     orderable: false
                 },
                 {
-                    data: function (attributes) {
-                        return attributes.pendidikan_k_k?.nama ?? null
+                    data: function (data) {
+                        return data.attributes.pendidikan_k_k?.nama ?? null
                     },
                     searchable: false,
                     orderable: false

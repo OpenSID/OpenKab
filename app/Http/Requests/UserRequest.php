@@ -30,7 +30,7 @@ class UserRequest extends FormRequest
         }
 
         return [
-            'nama'       => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
+            'name'       => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
             'username'   => 'required|string|unique:users,username' . $id,
             'email'      => 'required|email|unique:users,email' . $id,
             'password'   => 'required|min:8|max:32',

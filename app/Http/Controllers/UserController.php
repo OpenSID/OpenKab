@@ -70,7 +70,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try {
-            User::create($request->all());
+            User::create($request->validated());
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
         } catch (\Exception $e) {
             report($e);
@@ -110,7 +110,7 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         try {
-            $user->update($request->all());
+            $user->update($request->validated());
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {
             report($e);

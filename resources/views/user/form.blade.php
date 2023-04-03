@@ -28,6 +28,7 @@
     </div>
 </div>
 
+@if (!$user)
 <div class="col">
     <div class="mb-4">
         <label for="password">Kata Sandi<span class="text-danger">*</span></label>
@@ -37,6 +38,7 @@
         @enderror
     </div>
 </div>
+@endif
 
 <div class="col">
     <div class="mb-4">

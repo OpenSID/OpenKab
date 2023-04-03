@@ -33,7 +33,7 @@ class UserRequest extends FormRequest
             'name'       => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
             'username'   => 'required|string|unique:users,username' . $id,
             'email'      => 'required|email|unique:users,email' . $id,
-            'password'   => 'required|min:8|max:32',
+            'password'   => 'sometime|min:8|max:32',
             'company'    => 'nullable|string',
             'phone'      => 'nullable|numeric|digits_between:10,13',
         ];

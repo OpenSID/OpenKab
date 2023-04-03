@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('last_login')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('active')->default(0);
-            $table->string('nama', 50)->nullable();
+            $table->string('name', 50)->nullable();
             $table->string('company', 100)->nullable();
             $table->string('phone', 20)->nullable();
             $table->string('foto', 100)->nullable();

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Enums\StatusEnum;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -17,9 +18,10 @@ class CreateAdminUserSeeder extends Seeder
     public function run()
     {
         return User::create([
-            'name' => 'admin',
+            'username' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
+            'active' => StatusEnum::aktif,
         ]);
     }
 }

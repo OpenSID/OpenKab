@@ -33,12 +33,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    /** {@inheritdoc} */
     protected $casts = [
+        'last_login' => 'datetime',
         'email_verified_at' => 'datetime',
+        'tempat_dilahirkan' => \App\Models\Enums\StatusEnum::class,
     ];
 }

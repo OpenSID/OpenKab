@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->timestamp('last_login')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('active')->default(Status::TidakAktif);
+            $table->boolean('active')->default(0);
             $table->string('nama', 50)->nullable();
             $table->string('company', 100)->nullable();
             $table->string('phone', 20)->nullable();

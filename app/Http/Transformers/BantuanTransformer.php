@@ -21,15 +21,15 @@ class BantuanTransformer extends TransformerAbstract
     {
         $bantuan = $bantuan->toArray();
 
-        $bantuan['statistik'] = $this->getStatistik($bantuan['id']);
+        $bantuan['statistik'] = $this->getStatistik($bantuan['id'], $bantuan['sasaran']);
 
         return $bantuan;
     }
 
-    private function getStatistik($id)
+    private function getStatistik($id, $sasaran)
     {
-        $peserta = $this->getPeserta($id);
-        $total  = $this->getTotal($id);
+        $peserta = $this->getPeserta($id, $sasaran);
+        $total  = $this->getTotal($id, $sasaran);
 
         return [
             'peserta' => $peserta,
@@ -42,25 +42,58 @@ class BantuanTransformer extends TransformerAbstract
         ];
     }
 
-    private function getPeserta($id)
+    private function getPeserta($id, $sasaran)
     {
-        return $this->connection->table('program_peserta')
-            ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
-            ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'program_peserta.kartu_id_pend')
-            ->where('tweb_penduduk.status_dasar', 1)
-            ->where('program_peserta.program_id', $id)
-            ->first();
+        switch (true) {
+            case '1':
+                return $this->connection->table('program_peserta')
+                            ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
+                            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
+                            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+                            ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'program_peserta.kartu_id_pend')
+                            ->where('tweb_penduduk.status_dasar', 1)
+                            ->where('program_peserta.program_id', $id)
+                            ->first();
+
+            case '2':
+                return $this->connection->table('program_peserta')
+                            ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
+                            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
+                            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+                            ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'program_peserta.kartu_id_pend')
+                            ->where('tweb_penduduk.status_dasar', 1)
+                            ->where('program_peserta.program_id', $id)
+                            ->first();
+
+
+
+            default:
+                return [];
+        }
     }
 
-    private function getTotal($id)
+    private function getTotal($id, $sasaran)
     {
-        return $this->connection->table('tweb_penduduk')
-            ->selectRaw('COUNT(id) AS jumlah')
-            ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
-            ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')
-            ->where('status_dasar', 1)
-            ->first();
+        switch (true) {
+            case '1':
+                return $this->connection->table('tweb_penduduk')
+                            ->selectRaw('COUNT(id) AS jumlah')
+                            ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
+                            ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')
+                            ->where('status_dasar', 1)
+                            ->first();
+
+
+            case '2':
+                return $this->connection->table('tweb_penduduk')
+                            ->selectRaw('COUNT(id) AS jumlah')
+                            ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
+                            ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')
+                            ->where('status_dasar', 1)
+                            ->first();
+
+            default:
+                return [];
+        }
     }
 }

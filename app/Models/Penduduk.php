@@ -226,7 +226,7 @@ class Penduduk extends Model
 
     public function logPenduduk()
     {
-        return $this->hasMany(LogPenduduk::class, 'id_pend');
+        return $this->hasMany(LogPenduduk::class, 'id_pend')->selectRaw('max(id) as id');
     }
 
     public function logPerubahanPenduduk()

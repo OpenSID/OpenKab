@@ -167,16 +167,28 @@
                     data: "attributes.umur"
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (data) {
+                        return data.attributes.pekerjaan?.nama ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (data) {
+                        return data.attributes.status_kawin?.nama ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: function (data) {
+                        return data.attributes.log_penduduk?.tgl_peristiwa ?? null
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: "attributes.nama"
+                    data: "attributes.created_at"
                 }
             ]
         })

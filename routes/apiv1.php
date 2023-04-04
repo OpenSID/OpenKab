@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', \App\Http\Controllers\Api\PendudukController::class);
     });
 
-    Route::prefix('statistik-bantuan')->group(function () {
+    Route::prefix('bantuan')->group(function () {
         Route::get('/', \App\Http\Controllers\Api\BantuanController::class);
     });
 });

@@ -20,7 +20,7 @@ class Bantuan extends Model
 
     /** {@inheritdoc} */
     protected $casts = [
-        'sasaran' => SasaranEnum::class,
+        // 'sasaran' => SasaranEnum::class,
     ];
 
     /**

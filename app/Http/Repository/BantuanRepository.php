@@ -3,13 +3,12 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
-use App\Models\Penduduk;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
-class PendudukRepository
+class BantuanRepository
 {
-    public function listPenduduk()
+    public function listBantuan()
     {
         return QueryBuilder::for(Bantuan::class)
             ->allowedFields('*')

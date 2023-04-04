@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Enums\StatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->timestamp('last_login')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('active')->default(0);
+            $table->boolean('active')->default(StatusEnum::tidakAktif);
             $table->string('name', 50)->nullable();
             $table->string('company', 100)->nullable();
             $table->string('phone', 20)->nullable();

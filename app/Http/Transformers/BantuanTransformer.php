@@ -10,6 +10,13 @@ use League\Fractal\TransformerAbstract;
 
 class BantuanTransformer extends TransformerAbstract
 {
+    protected $connection;
+
+    public function __construct()
+    {
+        $this->connection = DB::connection('openkab');
+    }
+
     public function transform(Bantuan $bantuan)
     {
         $bantuan = $bantuan->toArray();
@@ -37,8 +44,7 @@ class BantuanTransformer extends TransformerAbstract
 
     private function getPeserta($id)
     {
-        return DB::connection('openkab')
-            ->table('program_peserta')
+        return $this->connection->table('program_peserta')
             ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
@@ -50,8 +56,7 @@ class BantuanTransformer extends TransformerAbstract
 
     private function getTotal($id)
     {
-        return DB::connection('openkab')
-            ->table('tweb_penduduk')
+        return $this->connection->table('tweb_penduduk')
             ->selectRaw('COUNT(id) AS jumlah')
             ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
             ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')

@@ -27,4 +27,24 @@ class BantuanRepository
             ])
             ->jsonPaginate();
     }
+
+    public function statistik()
+    {
+        return QueryBuilder::for(Bantuan::class)
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('keluarga.no_kk'),
+                'nama',
+                'nik',
+                'tag_id_card',
+            ])
+            ->allowedSorts([
+                'nik',
+                'nama',
+                'umur',
+                'created_at',
+            ])
+            ->get();
+    }
 }

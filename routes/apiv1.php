@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\BantuanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', \App\Http\Controllers\Api\PendudukController::class);
     });
 
-    Route::prefix('bantuan')->group(function () {
-        Route::get('/', \App\Http\Controllers\Api\BantuanController::class);
+    Route::controller(BantuanController::class)->prefix('bantuan')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/statistik', 'statistik');
     });
 });

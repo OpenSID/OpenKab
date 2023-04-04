@@ -20,7 +20,6 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Aksi</th>
                                     <th>Foto</th>
                                     <th>NIK</th>
                                     <th>Tag ID Card</th>
@@ -84,11 +83,6 @@
             columns: [
                 {
                     data: null,
-                    searchable: false,
-                    orderable: false
-                },
-                {
-                    data: "attributes.nama",
                     searchable: false,
                     orderable: false
                 },

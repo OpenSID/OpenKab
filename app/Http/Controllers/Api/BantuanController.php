@@ -14,7 +14,7 @@ class BantuanController extends Controller
 
     public function __invoke()
     {
-        return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer, 'bantuan')->respond();
+        // return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer, 'bantuan')->respond();
     }
 
     public function statistik()

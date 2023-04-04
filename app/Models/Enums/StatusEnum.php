@@ -2,16 +2,10 @@
 
 namespace App\Models\Enums;
 
-enum StatusEnum: int {
-    case tidakAktif = 0;
-    case aktif      = 1;
+use Illuminate\Validation\Rules\Enum;
 
-    public function label(): string|null
-    {
-        return match ($this) {
-            static::tidakAktif => 'Tidak Aktif',
-            static::aktif      => 'Aktif',
-            default => null,
-        };
-    }
+final class StatusEnum extends Enum
+{
+    const tidakAktif = 0;
+    const aktif = 1;
 }

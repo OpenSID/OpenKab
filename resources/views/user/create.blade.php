@@ -14,7 +14,7 @@
                     <div class="card-header">
                         <a href="{{ route('users.index') }}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i>&ensp;Kembali</a>
                     </div>
-                    <form action="{{ route('users.store') }}" method="POST">
+                    <form action="{{ route('users.store') }}" method="POST" id="form-user">
                         @csrf
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -31,3 +31,5 @@
         </div>
     </div>
 @endsection
+
+@include('partials.reset_form')

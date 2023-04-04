@@ -32,3 +32,5 @@
         </div>
     </div>
 @endsection
+
+@include('partials.reset_form')

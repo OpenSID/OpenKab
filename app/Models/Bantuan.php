@@ -14,11 +14,6 @@ class Bantuan extends Model
     protected $table = 'program';
 
     /** {@inheritdoc} */
-    protected $with = [
-        'peserta'
-    ];
-
-    /** {@inheritdoc} */
     protected $casts = [
         // 'sasaran' => SasaranEnum::class,
     ];

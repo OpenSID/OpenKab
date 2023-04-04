@@ -19,6 +19,6 @@ class BantuanController extends Controller
 
     public function statistik()
     {
-        return $this->fractal($this->bantuan->statistik(), new BantuanTransformer, 'bantuan')->respond();
+        return $this->fractal($this->bantuan->statistik(), new BantuanTransformer, 'statistik')->respond();
     }
 }

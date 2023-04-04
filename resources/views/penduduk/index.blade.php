@@ -16,7 +16,7 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped" id="penduduk">
+                        <table class="table table-striped" id="penduduk">
                             <thead>
                                 <tr>
                                     <th>No</th>

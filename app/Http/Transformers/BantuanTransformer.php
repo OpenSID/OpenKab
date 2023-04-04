@@ -50,7 +50,7 @@ class BantuanTransformer extends TransformerAbstract
                             ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
                             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
                             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
-                            ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'program_peserta.kartu_id_pend')
+                            ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'program_peserta.kartu_id_pend', 'left')
                             ->where('tweb_penduduk.status_dasar', 1)
                             ->where('program_peserta.program_id', $id)
                             ->first();
@@ -60,12 +60,33 @@ class BantuanTransformer extends TransformerAbstract
                             ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
                             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
                             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
-                            ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'program_peserta.kartu_id_pend')
+                            ->join('tweb_keluarga', 'tweb_keluarga.nokk = program_peserta.peserta', 'left')
+                            ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'program_peserta.kartu_id_pend', 'left')
                             ->where('tweb_penduduk.status_dasar', 1)
                             ->where('program_peserta.program_id', $id)
                             ->first();
 
+            case '3':
+                return $this->connection->table('program_peserta')
+                            ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
+                            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
+                            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+                            ->join('tweb_rtm', 'tweb_rtm.no_kk = program_peserta.peserta', 'left')
+                            ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'program_peserta.kartu_id_pend', 'left')
+                            ->where('tweb_penduduk.status_dasar', 1)
+                            ->where('program_peserta.program_id', $id)
+                            ->first();
 
+            case '4':
+                return $this->connection->table('program_peserta')
+                            ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
+                            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
+                            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+                            ->join('kelompok', 'kelompok.id = program_peserta.peserta', 'left')
+                            ->join('tweb_penduduk', 'kelompok.id_ketua = tweb_penduduk.id', 'left')
+                            ->where('tweb_penduduk.status_dasar', 1)
+                            ->where('program_peserta.program_id', $id)
+                            ->first();
 
             default:
                 return [];
@@ -85,11 +106,30 @@ class BantuanTransformer extends TransformerAbstract
 
 
             case '2':
-                return $this->connection->table('tweb_penduduk')
+                return $this->connection->table('tweb_keluarga')
                             ->selectRaw('COUNT(id) AS jumlah')
                             ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
                             ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')
-                            ->where('status_dasar', 1)
+                            ->join('tweb_penduduk', 'tweb_keluarga.nik_kepala = tweb_penduduk.id', 'left')
+                            ->where('tweb_penduduk.status_dasar', 1)
+                            ->first();
+
+            case '3':
+                return $this->connection->table('tweb_rtm')
+                            ->selectRaw('COUNT(id) AS jumlah')
+                            ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
+                            ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')
+                            ->join('tweb_penduduk', 'tweb_rtm.no_kk = tweb_penduduk.id', 'left')
+                            ->where('tweb_penduduk.status_dasar', 1)
+                            ->first();
+
+            case '4':
+                return $this->connection->table('kelompok')
+                            ->selectRaw('COUNT(id) AS jumlah')
+                            ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
+                            ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')
+                            ->join('tweb_penduduk', 'kelompok.id_ketua = tweb_penduduk.id', 'left')
+                            ->where('tweb_penduduk.status_dasar', 1)
                             ->first();
 
             default:

@@ -104,9 +104,9 @@ class BantuanTransformer extends TransformerAbstract
         }
 
         return $query->selectRaw('COUNT(id) AS jumlah')
-                ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
-                ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')
-                ->where('tweb_penduduk.status_dasar', 1)
-                ->first();
+            ->selectRaw('COUNT(CASE WHEN sex = 1 THEN id END) AS laki')
+            ->selectRaw('COUNT(CASE WHEN sex = 2 THEN id END) AS perempuan')
+            ->where('tweb_penduduk.status_dasar', 1)
+            ->first();
     }
 }

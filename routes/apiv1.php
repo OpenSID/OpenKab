@@ -23,8 +23,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', \App\Http\Controllers\Api\PendudukController::class);
     });
 
-    Route::controller(BantuanController::class)->prefix('bantuan')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{id}', 'show');
+    // Statistik
+    Route::prefix('statistik')->group(function () {
+        // Statistik Bantuan
+        Route::controller(BantuanController::class)
+            ->prefix('bantuan')->group(function () {
+                Route::get('/', 'index');
+                Route::get('/{id}', 'show');
+            });
     });
 });

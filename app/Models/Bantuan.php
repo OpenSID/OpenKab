@@ -50,7 +50,7 @@ class Bantuan extends Model
         return [
             $peserta,
             [
-                'total'     => $total->jumlah - $peserta->jumlah,
+                'jumlah'    => $total->jumlah - $peserta->jumlah,
                 'laki_laki' => $total->laki_laki - $peserta->laki_laki,
                 'perempuan' => $total->perempuan - $peserta->perempuan,
                 'nama'      => 'Bukan Peserta',

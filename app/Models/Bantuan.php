@@ -50,10 +50,10 @@ class Bantuan extends Model
         return [
             $peserta,
             [
-                'total' => $total->jumlah - $peserta->jumlah,
-                'laki' => $total->laki - $peserta->laki,
+                'total'     => $total->jumlah - $peserta->jumlah,
+                'laki_laki' => $total->laki_laki - $peserta->laki_laki,
                 'perempuan' => $total->perempuan - $peserta->perempuan,
-                'nama' => 'Bukan Peserta',
+                'nama'      => 'Bukan Peserta',
             ],
             $total,
         ];
@@ -63,7 +63,7 @@ class Bantuan extends Model
     {
         $query = DB::connection($this->connection)->table('program_peserta')
             ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->where('program_peserta.program_id', $id);
 
@@ -120,7 +120,7 @@ class Bantuan extends Model
         }
 
         return $query->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->first();
     }

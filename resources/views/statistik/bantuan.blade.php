@@ -29,11 +29,6 @@
                                 <i class="far fa-circle"></i> Bantuan 1
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle"></i> Bantuan 1
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -76,9 +71,9 @@
                 url: `{{ url('api/v1/statistik/bantuan') }}`,
                 method: 'get',
                 data: function(row) {
-                    return {
-                        "filter[id]": 6,
-                    };
+                    // return {
+                    //     "filter[id]": 6,
+                    // };
                 },
                 dataSrc: function(json) {
                     json.statistik = json.data[0].attributes.sasaran
@@ -144,9 +139,9 @@
 
                 daftar_bantuan.forEach(function(item, index) {
                     html += `
-                        <li class="nav-item">
-                            <a href="${item.id}" class="nav-link">
-                                <i class="far fa-circle"></i> ${item.attributes.nama}
+                        <li class="nav-item bantuan">
+                            <a data-id="${item.id}" class="nav-link bantuan">
+                                <i class="far fa-circle bantuan"></i> ${item.attributes.nama}
                             </a>
                         </li>
                     `
@@ -155,5 +150,15 @@
                 $('#daftar-bantuan').html(html)
             }
         });
+
+        // refresh tabel statistik bantuan jika tombol daftar bantuan diklik
+        $(document).on('click', '.bantuan', function(e) {
+            e.preventDefault()
+
+            var id = $(this).data('id')
+            console.log(id);
+
+            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}?filter[id]=${id}`).load()
+        })
     </script>
 @endsection

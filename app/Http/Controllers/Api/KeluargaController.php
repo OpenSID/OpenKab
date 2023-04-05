@@ -14,6 +14,6 @@ class KeluargaController extends Controller
 
     public function index()
     {
-        return $this->fractal($this->keluarga->listKeluarga(), new KeluargaTransformer, 'bantuan')->respond();
+        return $this->fractal($this->keluarga->listKeluarga(), new KeluargaTransformer, 'keluarga')->respond();
     }
 }

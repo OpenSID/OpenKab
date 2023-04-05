@@ -7,7 +7,7 @@
 @section('title', 'Data Statistik')
 
 @section('content_header')
-    <h1>Data Statistik</h1>
+    <h1>Data Statistik Bantuan</h1>
 @stop
 
 @section('content')

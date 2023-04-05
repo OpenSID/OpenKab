@@ -328,7 +328,7 @@ return [
             'icon' => 'fas fa-chart-pie',
             'submenu' => [
                 [
-                    'icon' => 'fas fa-heart',
+                    'icon' => 'fas fa-handshake',
                     'text' => 'Bantuan',
                     'url' => 'statistik/bantuan',
                 ]

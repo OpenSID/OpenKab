@@ -38,14 +38,25 @@
                         </div>
                         <div class="col-md-2">
                             <button class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
-                                href="#collapse-grafik" role="button" aria-expanded="false"
-                                aria-controls="collapse-grafik">
+                                href="#grafik-bantuan" role="button" aria-expanded="false" aria-controls="grafik-bantuan">
                                 <i class="fas fa-chart-bar"></i> Grafik
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="grafik-bantuan" class="collapse">
+                                <div class="chart">
+                                    <canvas id="barChart"
+                                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-striped cell-border" id="statistik-bantuan">
                             <thead>

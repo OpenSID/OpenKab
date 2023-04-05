@@ -30,6 +30,21 @@
         </div>
         <div class="col-lg-9">
             <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary btn-block btn-sm"><i class="fa fa-print"></i>
+                                Cetak</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
+                                href="#collapse-grafik" role="button" aria-expanded="false"
+                                aria-controls="collapse-grafik">
+                                <i class="fas fa-chart-bar"></i> Grafik
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-striped cell-border" id="statistik-bantuan">

@@ -13,6 +13,7 @@ class BantuanRepository
         return QueryBuilder::for(Bantuan::class)
             ->allowedFields('*')
             ->allowedFilters([
+                AllowedFilter::exact('id'),
                 'nama',
                 'sasaran',
             ])

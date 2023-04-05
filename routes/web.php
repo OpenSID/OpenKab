@@ -40,4 +40,11 @@ Route::middleware('auth')->group(function () {
     Route::prefix('penduduk')->group(function () {
         Route::get('/', [\App\Http\Controllers\PendudukController::class, 'index']);
     });
+
+
+    // Statistik
+    Route::controller(\App\Http\Controllers\StatistikController::class)->prefix('statistik')->group(function () {
+        // Statistik Bantuan
+        Route::get('/bantuan', 'bantuan');
+    });
 });

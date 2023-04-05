@@ -323,6 +323,17 @@ return [
                 ]
             ],
         ],
+        [
+            'text' => 'Statistik',
+            'icon' => 'fas fa-chart-pie',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-heart',
+                    'text' => 'Bantuan',
+                    'url' => 'statistik/bantuan',
+                ]
+            ],
+        ],
     ],
 
     /*

@@ -154,8 +154,6 @@
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
-
-
                         json.statistik = json.data[0].attributes.sasaran
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
@@ -167,8 +165,7 @@
                         data_grafik.push(json.data[0].attributes)
 
                         if (data_grafik.length == 1) {
-                            tampilkan_grafik(data_grafik[0])
-                            tampilkan_chart(data_grafik[0])
+                            grafik_pie();
                         }
 
                         return json.data[0].attributes.statistik
@@ -239,10 +236,15 @@
 
             $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
 
-            tampilkan_grafik(data_grafik[0])
-            tampilkan_chart(data_grafik[0])
+            grafik_pie();
+
             statistik.ajax.url(`{{ url('api/v1/statistik/bantuan/grafik') }}/?filter[id]=${id}`).load()
         })
+
+        function grafik_pie() {
+            tampilkan_grafik(data_grafik[0])
+            tampilkan_chart(data_grafik[0])
+        }
 
         function tampilkan_grafik(areaChartData) {
             var areaChartData = modifikasi_data_grafik(areaChartData);

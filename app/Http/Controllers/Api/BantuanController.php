@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Transformers\BantuanTransformer;
+use App\Http\Transformers\GrafikBantuanTransformer;
 
 class BantuanController extends Controller
 {
@@ -14,11 +15,11 @@ class BantuanController extends Controller
 
     public function index()
     {
-        return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer, 'bantuan')->respond();
+        return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer(), 'bantuan')->respond();
     }
 
-    public function show(string $id)
+    public function grafik()
     {
-        return $this->fractal($this->bantuan->findBantuan($id), new BantuanTransformer, 'detail bantuan')->respond();
+        return $this->fractal($this->bantuan->listBantuan(), new GrafikBantuanTransformer(), 'grafik')->respond();
     }
 }

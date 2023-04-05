@@ -11,7 +11,7 @@
 @stop
 
 @section('content')
-    <div class="row">
+    <div class="row" id="tampilkan-bantuan">
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-header">
@@ -102,11 +102,23 @@
 @section('js')
     <script>
         var data_grafik = [];
+        var nama_desa = `{{ session('desa.nama_desa') }}`;
 
         $.ajax({
             url: `{{ url('api/v1/statistik/bantuan') }}`,
             method: 'get',
             success: function(response) {
+                if (response.data.length == 0) {
+                    $('#tampilkan-bantuan').html(`
+                        <div class="col-lg-12">
+                            <div class="alert alert-warning">
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
+                                Tidak ada data bantuan yang tersedia untuk Desa ${nama_desa}.
+                            </div>
+                        </div>
+                    `)
+                }
+
                 var daftar_bantuan = response.data
                 var html = ''
 
@@ -141,22 +153,28 @@
                 url: `{{ url('api/v1/statistik/bantuan/grafik') }}`,
                 method: 'get',
                 dataSrc: function(json) {
-                    json.statistik = json.data[0].attributes.sasaran
-                    json.recordsTotal = json.meta.pagination.total
-                    json.recordsFiltered = json.meta.pagination.total
+                    if (json.data.length > 0) {
 
-                    $('#judul_sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
-                    $('#cetak').data('url',
-                        `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
 
-                    data_grafik.push(json.data[0].attributes)
+                        json.statistik = json.data[0].attributes.sasaran
+                        json.recordsTotal = json.meta.pagination.total
+                        json.recordsFiltered = json.meta.pagination.total
 
-                    if (data_grafik.length == 1) {
-                        tampilkan_grafik(data_grafik[0])
-                        tampilkan_chart(data_grafik[0])
+                        $('#judul_sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
+                        $('#cetak').data('url',
+                            `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
+
+                        data_grafik.push(json.data[0].attributes)
+
+                        if (data_grafik.length == 1) {
+                            tampilkan_grafik(data_grafik[0])
+                            tampilkan_chart(data_grafik[0])
+                        }
+
+                        return json.data[0].attributes.statistik
                     }
 
-                    return json.data[0].attributes.statistik
+                    return false;
                 },
             },
             columns: [{

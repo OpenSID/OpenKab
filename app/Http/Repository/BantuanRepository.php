@@ -23,20 +23,4 @@ class BantuanRepository
             ])
             ->jsonPaginate();
     }
-
-    public function findBantuan(string $id)
-    {
-        return QueryBuilder::for(Bantuan::class)
-            ->allowedFields('*')
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-                'nama',
-                'sasaran',
-            ])
-            ->allowedSorts([
-                'nama',
-                'sasaran',
-            ])
-            ->first();
-    }
 }

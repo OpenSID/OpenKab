@@ -331,6 +331,11 @@ return [
                     'icon' => 'fas fa-handshake',
                     'text' => 'Bantuan',
                     'url' => 'statistik/bantuan',
+                ],
+                [
+                    'icon' => 'fas fa-users',
+                    'text' => 'Penduduk',
+                    'url' => 'statistik/statistik_penduduk',
                 ]
             ],
         ],

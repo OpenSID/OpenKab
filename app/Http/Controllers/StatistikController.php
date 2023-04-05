@@ -21,4 +21,14 @@ class StatistikController extends Controller
     {
         return view('statistik.bantuan.cetak');
     }
+
+    public function statistik_penduduk()
+    {
+        return view('statistik.statistik_penduduk.index');
+    }
+
+    public function cetak_statistik_penduduk($tanggal = null)
+    {
+        return view('statistik.statistik_penduduk.cetak');
+    }
 }

@@ -31,5 +31,12 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::get('/', 'index');
                 Route::get('/{id}', 'show');
             });
+
+        // Statistik Penduduk
+        Route::controller(StatistikPendudukController::class)
+            ->prefix('statistik_penduduk')->group(function () {
+                Route::get('/', 'index');
+                Route::get('/{id}', 'show');
+            });
     });
 });

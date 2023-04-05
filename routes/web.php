@@ -49,5 +49,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'bantuan');
             Route::get('cetak/{id}', 'cetak_bantuan');
         });
+        // Statistik Penduduk
+        Route::prefix('statistik_penduduk')->group(function () {
+            Route::get('/', 'statistik_penduduk');
+            Route::get('cetak/{id}', 'cetak_statistik_penduduk');
+        });
     });
 });

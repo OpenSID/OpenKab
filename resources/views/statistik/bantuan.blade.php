@@ -59,6 +59,8 @@
                     json.recordsTotal = json.meta.pagination.total
                     json.recordsFiltered = json.meta.pagination.total
 
+                    $('#judul-sasaran').html(json.data[0].attributes.sasaran);
+
                     return json.data[0].attributes.statistik
                 },
             },

@@ -65,11 +65,6 @@
             ajax: {
                 url: `{{ url('api/v1/statistik/bantuan') }}`,
                 method: 'get',
-                data: function(row) {
-                    // return {
-                    //     "filter[id]": 6,
-                    // };
-                },
                 dataSrc: function(json) {
                     json.statistik = json.data[0].attributes.sasaran
                     json.recordsTotal = json.meta.pagination.total
@@ -133,9 +128,10 @@
                 var html = ''
 
                 daftar_bantuan.forEach(function(item, index) {
+                    // Jadikan batuan pertama sebagai default yang aktif dan yang lain non aktif
                     html += `
                         <li class="nav-item bantuan">
-                            <a data-id="${item.id}" class="nav-link">
+                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'text-danger' : ''}">
                                 <i class="far fa-circle"></i> ${item.attributes.nama}
                             </a>
                         </li>

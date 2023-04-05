@@ -24,11 +24,6 @@
                 </div>
                 <div class="card-body p-0">
                     <ul class="nav nav-pills flex-column" id="daftar-bantuan">
-                        <li class="nav-item active">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle"></i> Bantuan 1
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -41,7 +36,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th id="judul-sasaran"></th>
+                                    <th id="judul-sasaran" width="50%"></th>
                                     <th colspan="2" class="dt-head-center">Jumlah</th>
                                     <th colspan="2" class="dt-head-center">Laki - laki</th>
                                     <th colspan="2" class="dt-head-center">Perempuan</th>
@@ -140,8 +135,8 @@
                 daftar_bantuan.forEach(function(item, index) {
                     html += `
                         <li class="nav-item bantuan">
-                            <a data-id="${item.id}" class="nav-link bantuan">
-                                <i class="far fa-circle bantuan"></i> ${item.attributes.nama}
+                            <a data-id="${item.id}" class="nav-link">
+                                <i class="far fa-circle"></i> ${item.attributes.nama}
                             </a>
                         </li>
                     `
@@ -152,11 +147,17 @@
         });
 
         // refresh tabel statistik bantuan jika tombol daftar bantuan diklik
-        $(document).on('click', '.bantuan', function(e) {
+        $(document).on('click', '.bantuan > a', function(e) {
             e.preventDefault()
 
             var id = $(this).data('id')
-            console.log(id);
+
+            // tambahkan class text-danger pada icon ayng di klik saja
+            $('.bantuan > a').removeClass('text-danger')
+            $(this).addClass('text-danger')
+
+
+
 
             statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}?filter[id]=${id}`).load()
         })

@@ -55,19 +55,30 @@
                     };
                 },
                 dataSrc: function(json) {
-                    json.statistik = json.attributes.statistik
+                    json.statistik = json.data[0].attributes.sasaran
                     json.recordsTotal = json.meta.pagination.total
                     json.recordsFiltered = json.meta.pagination.total
 
-                    return json.data
+                    return json.data[0].attributes.statistik
                 },
             },
             columns: [{
                 data: null,
             }, {
                 data: function(data) {
-                    console.log(data);
-                    return data.attributes
+                    return data.nama
+                }
+            }, {
+                data: function(data) {
+                    return data.jumlah
+                }
+            }, {
+                data: function(data) {
+                    return data.laki_laki
+                }
+            }, {
+                data: function(data) {
+                    return data.perempuan
                 }
             }]
         })

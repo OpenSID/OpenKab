@@ -63,7 +63,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th id="judul-sasaran" width="50%"></th>
+                                    <th id="judul_sasaran" width="50%"></th>
                                     <th colspan="2" class="dt-head-center">Jumlah</th>
                                     <th colspan="2" class="dt-head-center">Laki - laki</th>
                                     <th colspan="2" class="dt-head-center">Perempuan</th>
@@ -105,9 +105,9 @@
                     json.recordsTotal = json.meta.pagination.total
                     json.recordsFiltered = json.meta.pagination.total
 
-                    $('#judul-sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
+                    $('#judul_sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
                     $('#cetak').data('url',
-                        `{{ url('statistik/bantuan/cetak') }}?filter[id]=${json.data[0].id}`);
+                        `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
 
                     data_grafik.push(json.data[0].attributes)
                     tampilkan_grafik(data_grafik[0])
@@ -190,10 +190,10 @@
             $('.bantuan > a').removeClass('text-danger')
             $(this).addClass('text-danger')
 
-            $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}${id}`);
+            $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
 
             tampilkan_grafik(data_grafik[0])
-            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}?filter[id]=${id}`).load()
+            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load()
         })
 
         function tampilkan_grafik(areaChartData) {

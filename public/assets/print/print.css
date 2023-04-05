@@ -165,3 +165,7 @@ table#ttd td {
 .underline {
 	text-decoration: underline;
 }
+
+.text-right {
+	text-align: right;
+}

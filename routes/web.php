@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
         // Statistik Bantuan
         Route::prefix('bantuan')->group(function () {
             Route::get('/', 'bantuan');
-            Route::get('/cetak', 'cetak_bantuan');
+            Route::get('cetak/{id}', 'cetak_bantuan');
         });
     });
 });

@@ -84,6 +84,8 @@
 
 @section('js')
     <script>
+        var data_grafik = [];
+
         var statistik = $('#statistik-bantuan').DataTable({
             processing: true,
             serverSide: true,
@@ -98,6 +100,9 @@
                     json.recordsFiltered = json.meta.pagination.total
 
                     $('#judul-sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
+
+                    data_grafik.push(json.data[0].attributes)
+                    tampilkan_grafik(data_grafik[0])
 
                     return json.data[0].attributes.statistik
                 },
@@ -179,54 +184,67 @@
             $('.bantuan > a').removeClass('text-danger')
             $(this).addClass('text-danger')
 
+            tampilkan_grafik(data_grafik[0])
             statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}?filter[id]=${id}`).load()
         })
 
-        //-------------
-        //- BAR CHART -
-        //-------------
-        var areaChartData = {
-            labels: ['Bantuan Kelompok'],
-            datasets: [{
-                label: 'Bukan Peserta',
-                backgroundColor: 'rgba(210, 214, 222, 1)',
-                borderColor: 'rgba(210, 214, 222, 1)',
-                pointRadius: false,
-                pointColor: 'rgba(210, 214, 222, 1)',
-                pointStrokeColor: '#c1c7d1',
-                pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(220,220,220,1)',
-                data: [93, 1]
-            }, {
-                label: 'Peserta',
-                backgroundColor: 'rgba(60,141,188,0.9)',
-                borderColor: 'rgba(60,141,188,0.8)',
-                pointRadius: false,
-                pointColor: '#3b8bba',
-                pointStrokeColor: 'rgba(60,141,188,1)',
-                pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: [4, 1]
-            }, ]
-        }
+        // load grafik saat klik tombol grafik
+        $(document).on('click', '#tombol-grafik', function(e) {
+            e.preventDefault()
 
-        var barChartCanvas = $('#barChart').get(0).getContext('2d')
-        var barChartData = $.extend(true, {}, areaChartData)
-        var temp0 = areaChartData.datasets[0]
-        var temp1 = areaChartData.datasets[1]
-        barChartData.datasets[0] = temp1
-        barChartData.datasets[1] = temp0
 
-        var barChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            datasetFill: false
-        }
-
-        new Chart(barChartCanvas, {
-            type: 'bar',
-            data: barChartData,
-            options: barChartOptions
         })
+
+        function tampilkan_grafik(areaChartData) {
+            areaChartData = modifikasiDataGrafik(areaChartData);
+
+            var barChartCanvas = $('#barChart').get(0).getContext('2d')
+            var barChartData = $.extend(true, {}, areaChartData)
+            var temp0 = areaChartData.datasets[0]
+            var temp1 = areaChartData.datasets[1]
+            barChartData.datasets[0] = temp1
+            barChartData.datasets[1] = temp0
+
+            var barChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                datasetFill: false
+            }
+
+            new Chart(barChartCanvas, {
+                type: 'bar',
+                data: barChartData,
+                options: barChartOptions
+            })
+        }
+
+
+        function modifikasiDataGrafik(data) {
+            var data_baru = []
+
+            data.statistik.forEach(function(item, index) {
+                if (index == 0 || index == 1) {
+                    let color = 'rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math
+                        .random() * 255) + ',' + Math.floor(Math.random() * 255) + ', 1)'
+
+                    data_baru.push({
+                        label: item.nama,
+                        backgroundColor: color,
+                        borderColor: color,
+                        pointRadius: false,
+                        pointColor: color,
+                        pointStrokeColor: '#c1c7d1',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: color,
+                        data: [item.jumlah, 1]
+                    })
+                }
+            })
+
+            return {
+                labels: [data.nama],
+                datasets: data_baru
+            }
+        }
     </script>
 @endsection

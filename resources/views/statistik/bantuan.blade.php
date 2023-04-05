@@ -12,7 +12,33 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Daftar Bantuan</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item active">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle"></i> Bantuan 1
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle"></i> Bantuan 1
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="table-responsive">

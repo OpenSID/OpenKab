@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BantuanController;
+use App\Http\Controllers\Api\KeluargaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,12 @@ Route::middleware('auth:sanctum')->group(function () {
             ->prefix('bantuan')->group(function () {
                 Route::get('/', 'index');
                 Route::get('/{id}', 'show');
+            });
+
+        // Statistik Keluarga
+        Route::controller(KeluargaController::class)
+            ->prefix('keluarga')->group(function () {
+                Route::get('/', 'index');
             });
     });
 });

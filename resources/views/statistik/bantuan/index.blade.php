@@ -98,7 +98,7 @@
             autoWidth: false,
             ordering: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/bantuan') }}`,
+                url: `{{ url('api/v1/statistik/bantuan/grafik') }}`,
                 method: 'get',
                 dataSrc: function(json) {
                     json.statistik = json.data[0].attributes.sasaran
@@ -172,7 +172,7 @@
                 daftar_bantuan.forEach(function(item, index) {
                     html += `
                         <li class="nav-item bantuan">
-                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'text-danger' : ''}">
+                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'active' : ''}">
                                 <i class="far fa-circle"></i> ${item.attributes.nama}
                             </a>
                         </li>
@@ -190,13 +190,13 @@
             var id = $(this).data('id')
 
             // tambahkan class text-danger pada icon ayng di klik saja
-            $('.bantuan > a').removeClass('text-danger')
-            $(this).addClass('text-danger')
+            $('.bantuan > a').removeClass('active')
+            $(this).addClass('active')
 
             $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
 
             tampilkan_grafik(data_grafik[0])
-            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load()
+            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan/grafik') }}/?filter[id]=${id}`).load()
         })
 
         function tampilkan_grafik(areaChartData) {

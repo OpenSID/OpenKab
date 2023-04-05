@@ -411,8 +411,8 @@ return [
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/chart.js',
+                    'asset' => true,
+                    'location' => 'vendor/chart.js/Chart.min.js',
                 ],
             ],
         ],

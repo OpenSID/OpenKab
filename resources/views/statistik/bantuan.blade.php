@@ -16,14 +16,14 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="statistik-bantuan">
+                        <table class="table table-striped cell-border" id="statistik-bantuan">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th id="judul-sasaran"></th>
-                                    <th>Jumlah</th>
-                                    <th>Laki - laki</th>
-                                    <th>Perempuan</th>
+                                    <th colspan="2" class="dt-head-center">Jumlah</th>
+                                    <th colspan="2" class="dt-head-center">Laki - laki</th>
+                                    <th colspan="2" class="dt-head-center">Perempuan</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -65,21 +65,35 @@
             columns: [{
                 data: null,
             }, {
-                data: function(data) {
-                    return data.nama
-                }
+                data: "nama"
+            }, {
+                data: "jumlah",
+                className: 'dt-body-right',
             }, {
                 data: function(data) {
-                    return data.jumlah
-                }
+                    return data.persentase_jumlah.toFixed(2) + '%';
+                },
+                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.laki_laki
-                }
+                },
+                className: 'dt-body-right',
+            }, {
+                data: function(data) {
+                    return data.persentase_laki_laki.toFixed(2) + '%';
+                },
+                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.perempuan
-                }
+                },
+                className: 'dt-body-right',
+            }, {
+                data: function(data) {
+                    return data.persentase_perempuan.toFixed(2) + '%';
+                },
+                className: 'dt-body-right',
             }]
         })
 

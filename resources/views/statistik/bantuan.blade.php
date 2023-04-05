@@ -47,10 +47,15 @@
             autoWidth: false,
             ordering: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/bantuan/') }}`,
+                url: `{{ url('api/v1/statistik/bantuan') }}`,
                 method: 'get',
+                data: function(row) {
+                    return {
+                        "filter[id]": 6,
+                    };
+                },
                 dataSrc: function(json) {
-                    console.log(json);
+                    json.statistik = json.attributes.statistik
                     json.recordsTotal = json.meta.pagination.total
                     json.recordsFiltered = json.meta.pagination.total
 
@@ -61,16 +66,9 @@
                 data: null,
             }, {
                 data: function(data) {
-                    return data.attributes.keluarga?.no_kk ?? null
-                },
-                orderable: false,
-                name: "keluarga.no_kk"
-            }, {
-                data: 'jumlah'
-            }, {
-                data: 'laki_laki'
-            }, {
-                data: 'perempuan'
+                    console.log(data);
+                    return data.attributes
+                }
             }]
         })
 

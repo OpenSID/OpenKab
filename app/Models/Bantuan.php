@@ -16,7 +16,8 @@ class Bantuan extends Model
 
     /** {@inheritdoc} */
     protected $appends = [
-        'statistik'
+        'statistik',
+        'nama_sasaran'
     ];
 
     /** {@inheritdoc} */
@@ -34,7 +35,18 @@ class Bantuan extends Model
         return $this->hasMany(BantuanPeserta::class, 'program_id');
     }
 
-    public function getStatistikAttribute($query)
+    public function getNamaSasaranAttribute()
+    {
+        return match($this->sasaran) {
+            1 => 'Penduduk',
+            2 => 'Keluarga',
+            3 => 'Rumah Tangga',
+            4 => 'Kelompok/Organisasi Kemasyarakatan',
+            default => null,
+        };
+    }
+
+    public function getStatistikAttribute()
     {
         return $this->getStatistik($this->id, $this->sasaran);
     }
@@ -49,18 +61,18 @@ class Bantuan extends Model
                 'jumlah'    => $peserta->jumlah,
                 'laki_laki' => $peserta->laki_laki,
                 'perempuan' => $peserta->perempuan,
-                'persentase_jumlah' => $peserta->jumlah / $total->jumlah * 100,
-                'persentase_laki_laki' => $peserta->laki_laki / $total->laki_laki * 100,
-                'persentase_perempuan' => $peserta->perempuan / $total->perempuan * 100,
+                'persentase_jumlah' => $total->jumlah > 0 ? $peserta->jumlah / $total->jumlah * 100 : 0,
+                'persentase_laki_laki' => $total->laki_laki > 0 ? $peserta->laki_laki / $total->laki_laki * 100 : 0,
+                'persentase_perempuan' => $total->perempuan > 0 ? $peserta->perempuan / $total->perempuan * 100 : 0,
                 'nama'      => 'Peserta',
             ],
             [
                 'jumlah'    => $total->jumlah - $peserta->jumlah,
                 'laki_laki' => $total->laki_laki - $peserta->laki_laki,
                 'perempuan' => $total->perempuan - $peserta->perempuan,
-                'persentase_jumlah' => ($total->jumlah - $peserta->jumlah) / $total->jumlah * 100,
-                'persentase_laki_laki' => ($total->laki_laki - $peserta->laki_laki) / $total->laki_laki * 100,
-                'persentase_perempuan' => ($total->perempuan - $peserta->perempuan) / $total->perempuan * 100,
+                'persentase_jumlah' => $total->jumlah > 0 ? ($total->jumlah - $peserta->jumlah) / $total->jumlah * 100 : 0,
+                'persentase_laki_laki' => $total->laki_laki > 0 ? ($total->laki_laki - $peserta->laki_laki) / $total->laki_laki * 100 : 0,
+                'persentase_perempuan' => $total->perempuan > 0 ? ($total->perempuan - $peserta->perempuan) / $total->perempuan * 100 : 0,
                 'nama'      => 'Bukan Peserta',
             ],
             [

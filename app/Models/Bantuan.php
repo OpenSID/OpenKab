@@ -42,16 +42,20 @@ class Bantuan extends Model
     private function getStatistik($id, $sasaran)
     {
         $peserta = $this->getPeserta($id, $sasaran);
+        $peserta->nama = 'Peserta';
+
         $total  = $this->getTotal($id, $sasaran);
+        $total->nama = 'Total';
 
         return [
-            'peserta' => $peserta,
-            'bukan_peserta' => [
+            $peserta,
+            [
                 'total' => $total->jumlah - $peserta->jumlah,
                 'laki' => $total->laki - $peserta->laki,
                 'perempuan' => $total->perempuan - $peserta->perempuan,
+                'nama' => 'Bukan Peserta',
             ],
-            'total' => $total,
+            $total,
         ];
     }
 

@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="nav nav-pills flex-column">
+                    <ul class="nav nav-pills flex-column" id="daftar-bantuan">
                         <li class="nav-item active">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle"></i> Bantuan 1
@@ -132,6 +132,28 @@
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
+        });
+
+        // tampilkan data daftar bantuan
+        $.ajax({
+            url: `{{ url('api/v1/statistik/bantuan') }}`,
+            method: 'get',
+            success: function(response) {
+                var daftar_bantuan = response.data
+                var html = ''
+
+                daftar_bantuan.forEach(function(item, index) {
+                    html += `
+                        <li class="nav-item">
+                            <a href="${item.id}" class="nav-link">
+                                <i class="far fa-circle"></i> ${item.attributes.nama}
+                            </a>
+                        </li>
+                    `
+                })
+
+                $('#daftar-bantuan').html(html)
+            }
         });
     </script>
 @endsection

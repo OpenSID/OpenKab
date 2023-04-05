@@ -88,7 +88,7 @@
         var data_grafik = [];
 
         $('#cetak').on('click', function() {
-            window.open($(this).data('url') + , '_blank');
+            window.open($(this).data('url'), '_blank');
         });
 
 
@@ -106,7 +106,8 @@
                     json.recordsFiltered = json.meta.pagination.total
 
                     $('#judul-sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
-                    $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
+                    $('#cetak').data('url',
+                        `{{ url('statistik/bantuan/cetak') }}?filter[id]=${json.data[0].id}`);
 
                     data_grafik.push(json.data[0].attributes)
                     tampilkan_grafik(data_grafik[0])
@@ -189,7 +190,7 @@
             $('.bantuan > a').removeClass('text-danger')
             $(this).addClass('text-danger')
 
-            $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
+            $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}${id}`);
 
             tampilkan_grafik(data_grafik[0])
             statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}?filter[id]=${id}`).load()

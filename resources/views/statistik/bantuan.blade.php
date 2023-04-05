@@ -70,7 +70,7 @@
                     json.recordsTotal = json.meta.pagination.total
                     json.recordsFiltered = json.meta.pagination.total
 
-                    $('#judul-sasaran').html(json.data[0].attributes.nama_sasaran);
+                    $('#judul-sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
 
                     return json.data[0].attributes.statistik
                 },

@@ -20,7 +20,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>{{ $sasaran ?? '' }}</th>
+                                    <th id="judul-sasaran"></th>
                                     <th>Jumlah</th>
                                     <th>Laki - laki</th>
                                     <th>Perempuan</th>
@@ -39,7 +39,7 @@
     <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
 @endpush
 
-{{-- @section('js')
+@section('js')
     <script>
         var statistik = $('#statistik-bantuan').DataTable({
             processing: true,
@@ -47,9 +47,10 @@
             autoWidth: false,
             ordering: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/bantuan') }}`,
+                url: `{{ url('api/v1/statistik/bantuan/') }}`,
                 method: 'get',
                 dataSrc: function(json) {
+                    console.log(json);
                     json.recordsTotal = json.meta.pagination.total
                     json.recordsFiltered = json.meta.pagination.total
 
@@ -59,7 +60,11 @@
             columns: [{
                 data: null,
             }, {
-                data: 'sasaran'
+                data: function(data) {
+                    return data.attributes.keluarga?.no_kk ?? null
+                },
+                orderable: false,
+                name: "keluarga.no_kk"
             }, {
                 data: 'jumlah'
             }, {
@@ -78,4 +83,4 @@
             });
         });
     </script>
-@endsection --}}
+@endsection

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Enums\SasaranEnum;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +29,7 @@ class Bantuan extends Model
     /**
      * Define a one-to-many relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function peserta()
     {
@@ -54,7 +55,7 @@ class Bantuan extends Model
     private function getStatistik($id, $sasaran)
     {
         $peserta = $this->getPeserta($id, $sasaran);
-        $total  = $this->getTotal($id, $sasaran);
+        $total  = $this->getTotal($sasaran);
 
         return [
             [
@@ -122,8 +123,9 @@ class Bantuan extends Model
         return $query->first();
     }
 
-    private function getTotal($id, $sasaran)
+    private function getTotal($sasaran)
     {
+        $query = null;
         switch ($sasaran) {
             case '1':
                 $query = DB::connection($this->connection)->table('tweb_penduduk');

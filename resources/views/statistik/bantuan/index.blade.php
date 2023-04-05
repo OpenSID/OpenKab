@@ -110,7 +110,10 @@
                         `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
 
                     data_grafik.push(json.data[0].attributes)
-                    tampilkan_grafik(data_grafik[0])
+
+                    if (data_grafik.length == 1) {
+                        tampilkan_grafik(data_grafik[0])
+                    }
 
                     return json.data[0].attributes.statistik
                 },

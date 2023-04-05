@@ -14,6 +14,11 @@ class StatistikController extends Controller
 
     public function bantuan()
     {
-        return view('statistik.bantuan');
+        return view('statistik.bantuan.index');
+    }
+
+    public function cetak_bantuan($tanggal = null)
+    {
+        return view('statistik.bantuan.cetak');
     }
 }

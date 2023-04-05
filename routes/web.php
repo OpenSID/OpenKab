@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     // Statistik
     Route::controller(\App\Http\Controllers\StatistikController::class)->prefix('statistik')->group(function () {
         // Statistik Bantuan
-        Route::get('/bantuan', 'bantuan');
+        Route::prefix('bantuan')->group(function () {
+            Route::get('/', 'bantuan');
+            Route::get('/cetak', 'cetak_bantuan');
+        });
     });
 });

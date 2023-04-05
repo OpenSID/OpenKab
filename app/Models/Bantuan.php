@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Enums\SasaranEnum;
 use Illuminate\Support\Facades\DB;
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bantuan extends Model
 {
+    use ConfigIdTrait;
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
@@ -27,7 +30,7 @@ class Bantuan extends Model
     ];
 
     /** {@inheritdoc} */
-    protected $dbConnection = 'openkab';
+    protected $dbConnection;
 
     /**
      * constract

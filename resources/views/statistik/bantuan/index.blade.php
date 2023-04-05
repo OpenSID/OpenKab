@@ -96,7 +96,6 @@
 
 @push('js')
     <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
-    <script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>
 @endpush
 
 @section('js')

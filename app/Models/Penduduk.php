@@ -31,6 +31,9 @@ class Penduduk extends Model
 
     /** {@inheritdoc} */
     protected $appends = [
+        'NamaTempatDilahirkan',
+        'NamaJenisKelahiran',
+        'NamaPenolongKelahiran',
         'wajibKTP',
         'statusPerkawinan',
         'statusHamil',
@@ -64,9 +67,6 @@ class Penduduk extends Model
     /** {@inheritdoc} */
     protected $casts = [
         'tanggallahir' => 'datetime',
-        'tempat_dilahirkan' => \App\Models\Enums\TempatDilahirkanEnum::class,
-        'jenis_kelahiran' => \App\Models\Enums\JenisKelahiranEnum::class,
-        'penolong_kelahiran' => \App\Models\Enums\PenolongKelahiranEnum::class,
     ];
 
     /**
@@ -232,6 +232,55 @@ class Penduduk extends Model
     public function logPerubahanPenduduk()
     {
         return $this->hasMany(LogPerubahanPenduduk::class, 'id_pend');
+    }
+
+    /**
+     * Getter tempat dilahirkan attribute.
+     *
+     * @return string
+     */
+    public function getNamaTempatDilahirkanAttribute()
+    {
+        return match($this->tempat_dilahirkan) {
+            1 => 'RS/RB',
+            2 => 'Puskesmas',
+            3 => 'Polindes',
+            4 => 'Rumah',
+            5 => 'Lainnya',
+            default => null
+        };
+    }
+
+    /**
+     * Getter tempat dilahirkan attribute.
+     *
+     * @return string
+     */
+    public function getNamaJenisKelahiranAttribute()
+    {
+        return match($this->jenis_kelahiran) {
+            1 => 'Tunggal',
+            2 => 'Kembar 2',
+            3 => 'Kembar 3',
+            4 => 'Kembar 4',
+            default => null,
+        };
+    }
+
+    /**
+     * Getter tempat dilahirkan attribute.
+     *
+     * @return string
+     */
+    public function getNamaPenolongKelahiranAttribute()
+    {
+        return match($this->penolong_kelahiran) {
+            1 => 'Dokter',
+            2 => 'Bidan Perawat',
+            3 => 'Dukun',
+            4 => 'Lainnya',
+            default => null,
+        };
     }
 
     /**

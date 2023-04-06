@@ -6,30 +6,28 @@ class StatistikRepository
 {
     public function getStatistik(array $header = [], array $footer = [])
     {
-        $setHeader = $this->getHitungFooter(
+        $footer = [
             [
-                [
-                    'nama' => 'JUMLAH',
-                    'jumlah' => 92,
-                    'laki_laki' => 45,
-                    'perempuan' => 47,
-                ],
-                [
-                    'nama' => 'BELUM MENGISI',
-                    'jumlah' => 0,
-                    'laki_laki' => 0,
-                    'perempuan' => 0,
-                ],
-                [
-                    'nama' => 'TOTAL',
-                    'jumlah' => 92,
-                    'laki_laki' => 45,
-                    'perempuan' => 47,
-                ]
+                'nama' => 'JUMLAH',
+                'jumlah' => 92,
+                'laki_laki' => 45,
+                'perempuan' => 47,
+            ],
+            [
+                'nama' => 'BELUM MENGISI',
+                'jumlah' => 0,
+                'laki_laki' => 0,
+                'perempuan' => 0,
+            ],
+            [
+                'nama' => 'TOTAL',
+                'jumlah' => 92,
+                'laki_laki' => 45,
+                'perempuan' => 47,
             ]
-        );
+        ];
 
-        $setkategori = $this->getHitungHeader([
+        $header = [
             [
                 'id' => 1,
                 'nama' => 'ISLAM',
@@ -72,14 +70,18 @@ class StatistikRepository
                 'laki_laki' => 0,
                 'perempuan' => 0,
             ]
-        ], $setHeader[0]['jumlah']);
+        ];
+
+        $setFooter = $this->getHitungFooter($footer);
+
+        $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
 
         // $setHitung = collect($hitung)->map(function ($item, $key) {
         //     $item['id'] = $key + 1;
         //     return $item;
         // });
 
-        return collect($setkategori)->merge($setHeader)->toArray();
+        return collect($setHeader)->merge($setFooter)->toArray();
     }
 
     private function getHitungHeader(array $kategori = [], int $total = 0)

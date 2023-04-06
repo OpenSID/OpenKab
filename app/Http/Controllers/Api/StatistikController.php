@@ -22,6 +22,7 @@ class StatistikController extends Controller
         $this->statistik = $statistik;
     }
 
+
     public function rtm()
     {
         return $this->fractal($this->statistik->getStatistik([], $this->rtm->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
@@ -29,8 +30,6 @@ class StatistikController extends Controller
 
     public function bantuan()
     {
-        $footer = $this->bantuan->listStatistik();
-
-        return $this->fractal($this->statistik->getStatistik([], $footer), new StatistikTransformer(), 'grafik')->respond();
+        return $this->fractal($this->statistik->getStatistik([], $this->bantuan->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
     }
 }

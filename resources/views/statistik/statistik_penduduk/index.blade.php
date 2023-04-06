@@ -127,11 +127,9 @@
                 url: `{{ url('api/v1/statistik/statistik_penduduk/grafik') }}`,
                 method: 'get',
                 dataSrc: function(json) {
-                    json.statistik = json.data[0].attributes.sasaran
                     json.recordsTotal = json.meta.pagination.total
                     json.recordsFiltered = json.meta.pagination.total
 
-                    $('#judul_sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
                     $('#cetak').data('url',
                         `{{ url('statistik/statistik_penduduk/cetak') }}/${json.data[0].id}`);
 

@@ -127,7 +127,7 @@
                     }
                     html += `
                         <li class="nav-item bantuan">
-                            <a data-id="${item.id}" data-sasaran="${item.attributes.nama_sasaran}" class="nav-link ${index == 0 ? 'active' : ''}">
+                            <a data-id="${item.id}"  data-nama="${item.attributes.nama}" data-sasaran="${item.attributes.nama_sasaran}" class="nav-link ${index == 0 ? 'active' : ''}">
                                 <i class="fas fa-angle-right"></i> ${item.attributes.nama}
                             </a>
                         </li>
@@ -159,15 +159,17 @@
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
-                        // $('#cetak').data('url',
-                        //     `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
+                        $('#cetak').data('url',
+                            `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
 
-                        // json.data.forEach(function(item, index) {
-                        //     data_grafik.push(item.attributes)
-                        // })
+                        data_grafik = [];
+                        json.data.forEach(function(item, index) {
+                            data_grafik.push(item.attributes)
+                        })
 
-                        if (data_grafik.length == 1) {
-                            // grafik_pie();
+                        if (json.data.length != $('#statistik-bantuan').data('length')) {
+                            $('#statistik-bantuan').data('length', json.data.length)
+                            grafik_pie()
                         }
 
                         return json.data;
@@ -243,17 +245,18 @@
             statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load();
             $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
 
-            // grafik_pie();
+            grafik_pie();
         })
 
         function grafik_pie() {
-            tampilkan_grafik(data_grafik[0])
-            tampilkan_chart(data_grafik[0])
+            tampilkan_grafik(data_grafik)
+            tampilkan_chart(data_grafik)
         }
 
         function tampilkan_grafik(areaChartData) {
-            console.log(areaChartData);
             var areaChartData = modifikasi_data_grafik(areaChartData);
+
+            console.log(areaChartData);
 
             var barChartCanvas = $('#barChart').get(0).getContext('2d')
             var barChartData = $.extend(true, {}, areaChartData)
@@ -275,14 +278,15 @@
             })
         }
 
-
         function modifikasi_data_grafik(data) {
-            var data_baru = []
 
-            data.statistik.forEach(function(item, index) {
+            console.log(data);
+            var data_baru = []
+            data.forEach(function(item, index) {
                 if (index == 0 || index == 1) {
                     let color = 'rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math
                         .random() * 255) + ',' + Math.floor(Math.random() * 255) + ', 1)'
+                    let colorPoint = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
                     data_baru.push({
                         label: item.nama,
@@ -290,23 +294,25 @@
                         borderColor: color,
                         pointRadius: false,
                         pointColor: color,
-                        pointStrokeColor: '#c1c7d1',
-                        pointHighlightFill: '#fff',
+                        pointStrokeColor: colorPoint,
+                        pointHighlightFill: colorPoint,
                         pointHighlightStroke: color,
                         data: [item.jumlah, 1]
                     })
                 }
             })
 
+            // ambil data bantuan yang aktif
+            var bantuan = $('#daftar-bantuan').find('.bantuan > a.active').data('nama')
+
             return {
-                labels: [data.nama],
+                labels: [bantuan],
                 datasets: data_baru
             }
         }
 
         function tampilkan_chart(areaChartData) {
             var donutData = modifikasi_data_chart(areaChartData);
-            console.log(donutData);
             var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
             var donutOptions = {
                 maintainAspectRatio: false,
@@ -324,7 +330,7 @@
             var data = [];
             var backgroundColor = [];
 
-            chart.statistik.forEach(function(item, index) {
+            chart.forEach(function(item, index) {
                 if (index == 0 || index == 1) {
                     let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
 

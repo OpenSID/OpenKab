@@ -114,7 +114,8 @@ class Bantuan extends Model
                 break;
             case '4':
                 $query->join('kelompok', 'kelompok.id', '=', 'program_peserta.peserta', 'left')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left');
+                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
+                    ->where('kelompok.tipe', 'kelompok');
 
                 break;
             default:
@@ -145,7 +146,8 @@ class Bantuan extends Model
 
             case '4':
                 $query = $this->dbConnection->table('kelompok')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left');
+                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
+                    ->where('kelompok.tipe', 'kelompok');
 
                 break;
         }

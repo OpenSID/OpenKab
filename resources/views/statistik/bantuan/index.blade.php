@@ -104,7 +104,7 @@
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
         $.ajax({
-            url: `{{ url('api/v1/statistik/bantuan') }}`,
+            url: `{{ url('api/v1/bantuan') }}`,
             method: 'get',
             success: function(response) {
                 if (response.data.length == 0) {
@@ -124,7 +124,7 @@
                 daftar_bantuan.forEach(function(item, index) {
                     html += `
                         <li class="nav-item bantuan">
-                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'active' : ''}">
+                            <a data-id="${item.id}" data-sasaran="${item.attributes.nama_sasaran}" class="nav-link ${index == 0 ? 'active' : ''}">
                                 <i class="fas fa-angle-right"></i> ${item.attributes.nama}
                             </a>
                         </li>
@@ -148,26 +148,25 @@
             serverSide: true,
             autoWidth: false,
             ordering: false,
+            searching: false,
+            paging: false,
+            info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/bantuan/grafik') }}`,
+                url: `{{ url('api/v1/statistik/bantuan') }}`,
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
-                        json.statistik = json.data[0].attributes.sasaran
-                        json.recordsTotal = json.meta.pagination.total
-                        json.recordsFiltered = json.meta.pagination.total
-
-                        $('#judul_sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
+                        // console.log(json.data[0].attributes);
                         $('#cetak').data('url',
                             `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
 
                         data_grafik.push(json.data[0].attributes)
 
                         if (data_grafik.length == 1) {
-                            grafik_pie();
+                            // grafik_pie();
                         }
 
-                        return json.data[0].attributes.statistik
+                        return json.data[0].attributes;
                     }
 
                     return false;
@@ -229,15 +228,17 @@
             e.preventDefault()
 
             var id = $(this).data('id')
+            var sasaran = $(this).data('sasaran')
 
             $('.bantuan > a').removeClass('active')
             $(this).addClass('active')
 
+            $('#judul_sasaran').html('Sasaran ' + sasaran);
             $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
 
             grafik_pie();
 
-            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan/grafik') }}/?filter[id]=${id}`).load()
+            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load()
         })
 
         function grafik_pie() {

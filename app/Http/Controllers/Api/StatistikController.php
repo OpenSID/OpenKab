@@ -31,8 +31,6 @@ class StatistikController extends Controller
     {
         $footer = $this->bantuan->listStatistik();
 
-        return response()->json($footer);
-
         return $this->fractal($this->statistik->getStatistik([], $footer), new StatistikTransformer(), 'grafik')->respond();
     }
 }

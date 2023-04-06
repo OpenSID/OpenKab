@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\RtmController;
 use App\Http\Controllers\Api\BantuanController;
 
 /*
@@ -25,6 +26,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Statistik
     Route::prefix('statistik')->group(function () {
+        // Rtm Bantuan
+        Route::controller(RtmController::class)
+            ->prefix('rtm')->group(function () {
+                Route::get('/', 'index');
+                Route::get('/grafik', 'grafik');
+            });
+
         // Statistik Bantuan
         Route::controller(BantuanController::class)
             ->prefix('bantuan')->group(function () {

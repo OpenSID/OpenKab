@@ -31,9 +31,9 @@ class Penduduk extends Model
 
     /** {@inheritdoc} */
     protected $appends = [
-        'NamaTempatDilahirkan',
-        'NamaJenisKelahiran',
-        'NamaPenolongKelahiran',
+        'namaTempatDilahirkan',
+        'namaJenisKelahiran',
+        'namaPenolongKelahiran',
         'wajibKTP',
         'statusPerkawinan',
         'statusHamil',

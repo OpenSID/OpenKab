@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Data Statistik Bantuan</title>
+    <title>Data Statistik RTM</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex">
@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <td class="text-center">
-                        <h4 id="judul_cetak" class="judul"></h4>
+                        <h4 class="judul">DATA STATISTIK BDT RTM</h4>
                     </td>
                 </tr>
                 <tr>
@@ -37,11 +37,11 @@
                 </tr>
                 <tr>
                     <td>
-                        <table class="border thick" id="tabel-bantuan">
+                        <table class="border thick" id="tabel-rtm">
                             <thead>
                                 <tr class="border thick">
                                     <th>No</th>
-                                    <th id="judul_sasaran" width="50%"></th>
+                                    <th width="50%">Jenis Kelompok</th>
                                     <th colspan="2" class="padat">Jumlah</th>
                                     <th colspan="2" class="padat">Laki - laki</th>
                                     <th colspan="2" class="padat">Perempuan</th>
@@ -56,40 +56,27 @@
         <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
         <script>
             $(document).ready(function() {
-                var id = `{{ request()->segment(count(request()->segments())) }}`
-
                 $.ajax({
-                    url: `{{ url('api/v1/bantuan/show') }}/?filter[id]=${id}`,
+                    url: `{{ url('api/v1/statistik/rtm') }}`,
                     method: 'get',
                     success: function(json) {
-                        var bantuan = json.data.attributes
+                        var statistik = json.data.attributes
+                        var no = 1;
 
-                        $('#judul_sasaran').html('Sasaran ' + bantuan.nama_sasaran);
-                        $('#judul_cetak').html('DATA STATISTIK BANTUAN ' + bantuan.nama);
+                        json.data.forEach(function(item) {
+                            var row = `<tr>
+                                <td class="padat">${no}</td>
+                                <td>${item.attributes.nama}</td>
+                                <td class="text-right" width="10%">${item.attributes.jumlah}</td>
+                                <td class="text-right" width="10%">${item.attributes.persentase_jumlah}</td>
+                                <td class="text-right" width="10%">${item.attributes.laki_laki}</td>
+                                <td class="text-right" width="10%">${item.attributes.persentase_laki_laki}</td>
+                                <td class="text-right" width="10%">${item.attributes.perempuan}</td>
+                                <td class="text-right" width="10%">${item.attributes.persentase_perempuan}</td>
+                            </tr>`
 
-                        $.ajax({
-                            url: `{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`,
-                            method: 'get',
-                            success: function(json) {
-                                var statistik = json.data.attributes
-                                var no = 1;
-
-                                json.data.forEach(function(item) {
-                                    var row = `<tr>
-                                        <td class="padat">${no}</td>
-                                        <td>${item.attributes.nama}</td>
-                                        <td class="text-right" width="10%">${item.attributes.jumlah}</td>
-                                        <td class="text-right" width="10%">${item.attributes.persentase_jumlah}</td>
-                                        <td class="text-right" width="10%">${item.attributes.laki_laki}</td>
-                                        <td class="text-right" width="10%">${item.attributes.persentase_laki_laki}</td>
-                                        <td class="text-right" width="10%">${item.attributes.perempuan}</td>
-                                        <td class="text-right" width="10%">${item.attributes.persentase_perempuan}</td>
-                                    </tr>`
-
-                                    $('#tabel-bantuan tbody').append(row)
-                                    no++;
-                                })
-                            }
+                            $('#tabel-rtm tbody').append(row)
+                            no++;
                         })
                     }
                 })

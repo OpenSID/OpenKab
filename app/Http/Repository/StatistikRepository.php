@@ -4,9 +4,9 @@ namespace App\Http\Repository;
 
 class StatistikRepository
 {
-    public function getStatistik(array $kategori = [], array $hitung = [])
+    public function getStatistik(array $header = [], array $footer = [])
     {
-        $hitung = $this->getHitungFooter(
+        $setHeader = $this->getHitungFooter(
             [
                 [
                     'nama' => 'JUMLAH',
@@ -29,9 +29,7 @@ class StatistikRepository
             ]
         );
 
-        // return $hitung;
-
-        $kategori = $this->getHitungHeader([
+        $setkategori = $this->getHitungHeader([
             [
                 'id' => 1,
                 'nama' => 'ISLAM',
@@ -74,9 +72,14 @@ class StatistikRepository
                 'laki_laki' => 0,
                 'perempuan' => 0,
             ]
-        ], $hitung[0]['jumlah']);
+        ], $setHeader[0]['jumlah']);
 
-        return collect($kategori)->merge($hitung)->toArray();
+        // $setHitung = collect($hitung)->map(function ($item, $key) {
+        //     $item['id'] = $key + 1;
+        //     return $item;
+        // });
+
+        return collect($setkategori)->merge($setHeader)->toArray();
     }
 
     private function getHitungHeader(array $kategori = [], int $total = 0)

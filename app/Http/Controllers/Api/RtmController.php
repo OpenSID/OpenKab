@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use League\Fractal\Manager;
-use Spatie\Fractal\Fractal;
 use App\Http\Repository\RtmRepository;
-use League\Fractal\Resource\Collection;
 use App\Http\Controllers\Api\Controller;
-use Spatie\Fractalistic\ArraySerializer;
-use App\Http\Transformers\RtmTransformer;
-use App\Http\Transformers\BantuanTransformer;
+use App\Http\Repository\StatistikRepository;
 use App\Http\Transformers\GrafikRtmTransformer;
+use App\Http\Transformers\StatistikTransformer;
 
 class RtmController extends Controller
 {
-    public function __construct(protected RtmRepository $rtm)
+    public function __construct(protected RtmRepository $rtm, protected StatistikRepository $statistik)
     {
     }
 
@@ -25,21 +21,22 @@ class RtmController extends Controller
 
     public function grafik()
     {
-        $data = [
+        $data = collect($this->statistik->getStatistik(
             [
-                'id' => 2,
-                'nama' => 'John Doe',
-                'email' => 'john@example.com',
-                'phone' => '555-1234',
-            ],
+                'jumlah' => 1,
+                'laki_laki' => 1,
+                'perempuan' => 1,
+        ],
             [
-                'id' => 3,
-                'nama' => 'Jane Doe',
-                'email' => 'jane@example.com',
-                'phone' => '555-5678',
+                'jumlah' => 2,
+                'laki_laki' => 2,
+                'perempuan' => 2,
             ],
-        ];
+        ))->map(function ($item, $key) {
+            $item['id'] = $key + 1;
+            return $item;
+        });
 
-        return $this->fractal($data, new GrafikRtmTransformer(), 'grafik')->respond();
+        return $this->fractal($data, new StatistikTransformer(), 'grafik')->respond();
     }
 }

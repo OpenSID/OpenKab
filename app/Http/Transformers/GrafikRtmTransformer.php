@@ -28,7 +28,7 @@ class GrafikRtmTransformer extends TransformerAbstract
         return [
             'id' => $user['id'],
             'nama' => [
-                'sy' => $user['nama'],
+                'sy' => $user,
             ],
         ];
     }

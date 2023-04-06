@@ -22,9 +22,9 @@ class StatistikRepository
         return $setFooter;
     }
 
-    private function getHitungHeader(array $kategori = [], int $total = 0)
+    private function getHitungHeader(array $dataHeader = [], int $total = 0)
     {
-        return collect($kategori)->map(function ($item, $key) use ($total) {
+        return collect($dataHeader)->map(function ($item, $key) use ($total) {
             return $this->getPresentase($item, $total);
         });
     }

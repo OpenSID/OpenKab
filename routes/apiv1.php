@@ -34,8 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Statistik
     Route::controller(StatistikController::class)
         ->prefix('statistik')->group(function () {
-            Route::get('/bantuan', 'bantuan');
-
+            Route::get('/penduduk', 'penduduk');
             Route::get('/rtm', 'rtm');
+            Route::get('/bantuan', 'bantuan');
         });
 });

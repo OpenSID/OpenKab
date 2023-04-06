@@ -30,6 +30,28 @@ class BantuanRepository
             ->jsonPaginate();
     }
 
+    public function showBantuan()
+    {
+        $query = Bantuan::query();
+
+        if (session()->has('desa')) {
+            $query->where('config_id', session('desa.id'));
+        }
+
+        return QueryBuilder::for($query)
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                'nama',
+                'sasaran',
+            ])
+            ->allowedSorts([
+                'nama',
+                'sasaran',
+            ])
+            ->first();
+    }
+
     public function listStatistik()
     {
         $query = Bantuan::query();

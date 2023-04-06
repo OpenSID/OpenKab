@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(BantuanController::class)
         ->prefix('bantuan')->group(function () {
             Route::get('/', 'index');
+            Route::get('/show', 'show');
         });
 
     // Statistik

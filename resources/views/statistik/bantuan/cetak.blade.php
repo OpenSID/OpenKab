@@ -59,31 +59,37 @@
                 var id = `{{ request()->segment(count(request()->segments())) }}`
 
                 $.ajax({
-                    url: `{{ url('api/v1/statistik/bantuan/grafik') }}/?filter[id]=${id}`,
+                    url: `{{ url('api/v1/bantuan/show') }}/?filter[id]=${id}`,
                     method: 'get',
                     success: function(json) {
-                        var statistik = json.data[0].attributes.statistik
-                        var nama_sasaran = json.data[0].attributes.nama_sasaran
-                        var nama_bantuan = json.data[0].attributes.nama
+                        var bantuan = json.data.attributes
 
-                        $('#judul_sasaran').html('Sasaran ' + nama_sasaran);
-                        $('#judul_cetak').html('DATA STATISTIK BANTUAN ' + nama_bantuan);
+                        $('#judul_sasaran').html('Sasaran ' + bantuan.nama_sasaran);
+                        $('#judul_cetak').html('DATA STATISTIK BANTUAN ' + bantuan.nama);
 
-                        var no = 1;
-                        statistik.forEach(function(item) {
-                            var row = `<tr>
-                                <td class="padat">${no}</td>
-                                <td>${item.nama}</td>
-                                <td class="text-right" width="10%">${item.jumlah}</td>
-                                <td class="text-right" width="10%">${item.persentase_jumlah.toFixed(2) + '%'}</td>
-                                <td class="text-right" width="10%">${item.laki_laki}</td>
-                                <td class="text-right" width="10%">${item.persentase_laki_laki.toFixed(2) + '%'}</td>
-                                <td class="text-right" width="10%">${item.perempuan}</td>
-                                <td class="text-right" width="10%">${item.persentase_perempuan.toFixed(2) + '%'}</td>
-                            </tr>`
+                        $.ajax({
+                            url: `{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`,
+                            method: 'get',
+                            success: function(json) {
+                                var statistik = json.data.attributes
+                                var no = 1;
 
-                            $('#tabel-bantuan tbody').append(row)
-                            no++;
+                                json.data.forEach(function(item) {
+                                    var row = `<tr>
+                                        <td class="padat">${no}</td>
+                                        <td>${item.attributes.nama}</td>
+                                        <td class="text-right" width="10%">${item.attributes.jumlah}</td>
+                                        <td class="text-right" width="10%">${item.attributes.persentase_jumlah}</td>
+                                        <td class="text-right" width="10%">${item.attributes.laki_laki}</td>
+                                        <td class="text-right" width="10%">${item.attributes.persentase_laki_laki}</td>
+                                        <td class="text-right" width="10%">${item.attributes.perempuan}</td>
+                                        <td class="text-right" width="10%">${item.attributes.persentase_perempuan}</td>
+                                    </tr>`
+
+                                    $('#tabel-bantuan tbody').append(row)
+                                    no++;
+                                })
+                            }
                         })
                     }
                 })

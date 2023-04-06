@@ -2,22 +2,22 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Keluarga;
+use App\Models\KeluargaSejahtera;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class KeluargaRepository
 {
-    public function listKeluarga()
+    public function kelasSosial()
     {
-        return QueryBuilder::for(Keluarga::class)
+        return QueryBuilder::for(KeluargaSejahtera::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'kelas_sosial',
+                'nama',
             ])
             ->allowedSorts([
-                'kelas_sosial',
+                'nama',
             ])
             ->jsonPaginate();
     }

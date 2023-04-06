@@ -4,15 +4,18 @@ namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Keluarga extends Model
+class KeluargaSejahtera extends Model
 {
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
-    /** {@inheritdoc} */
-    protected $table = 'tweb_keluarga';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'tweb_keluarga_sejahtera';
 
     /** {@inheritdoc} */
     protected $appends = [
@@ -20,20 +23,13 @@ class Keluarga extends Model
     ];
 
     /**
-     * {@inheritDoc}
-     */
-    protected $with = [
-        'kelasSosial',
-    ];
-
-    /**
-     * Define an inverse one-to-one or many relationship.
+     * Define a one-to-many relationship.
      *
-     * @return BelongsTo
+     * @return HasMany
      */
-    public function kelasSosial()
+    public function keluarga()
     {
-        return $this->belongsTo(KeluargaSejahtera::class, 'kelas_sosial')->withDefault();
+        return $this->hasMany(Keluarga::class, 'id');
     }
 
     public function getStatistikAttribute()
@@ -41,20 +37,20 @@ class Keluarga extends Model
         return $this->getStatistik($this->id, $this->kelas_sosial);
     }
 
-    private function getStatistik($id, $kelas_sosial)
+    private function getStatistik($id)
     {
-        $peserta = $this->getPeserta($id, $kelas_sosial);
-        $total  = $this->getTotal($kelas_sosial);
+        $keluarga = $this->getKeluarga($id);
+        $total  = $this->getTotal();
 
         return [
             [
-                'jumlah'    => $peserta->jumlah,
-                'persentase_jumlah' => $total->jumlah > 0 ? $peserta->jumlah / $total->jumlah * 100 : 0,
-                'nama'      => 'Jumlah',
+                'jumlah'    => $keluarga->jumlah,
+                'persentase_jumlah' => $total->jumlah > 0 ? $keluarga->jumlah / $total->jumlah * 100 : 0,
+                'nama'      => 'Keluarga',
             ],
             [
-                'jumlah'    => $total->jumlah - $peserta->jumlah,
-                'persentase_jumlah' => $total->jumlah > 0 ? ($total->jumlah - $peserta->jumlah) / $total->jumlah * 100 : 0,
+                'jumlah'    => $total->jumlah - $keluarga->jumlah,
+                'persentase_jumlah' => $total->jumlah > 0 ? ($total->jumlah - $keluarga->jumlah) / $total->jumlah * 100 : 0,
                 'nama'      => 'Belum Mengisi',
             ],
             [
@@ -65,7 +61,7 @@ class Keluarga extends Model
         ];
     }
 
-    private function getPeserta($id)
+    private function getKeluarga($id)
     {
         $query = DB::connection($this->connection)->table('tweb_keluarga_sejahtera')
             ->selectRaw('COUNT(tweb_keluarga.id) AS jumlah')

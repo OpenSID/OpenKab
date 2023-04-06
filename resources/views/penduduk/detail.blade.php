@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">Biodata Penduduk (NIK : 0150505200107066)</h3>
+                    <h3 class="card-title">Biodata Penduduk (NIK : {{ $penduduk['nik'] }})</h3>
                     <br>
                     <p class="text-sm font-italic">
                         Terdaftar pada:
@@ -37,7 +37,7 @@
                                 <tr class="text-center">
                                     <td colspan="3">
                                         <img class="penduduk"
-                                            src="https://berputar.opendesa.id/assets/images/pengguna/kuser.png"
+                                            src="{{ $penduduk['urlFoto'] }}"
                                             alt="Foto Penduduk">
                                     </td>
                                 </tr>
@@ -48,7 +48,7 @@
                                 <tr>
                                     <td>Status Dasar</td>
                                     <td>:</td>
-                                    <td><span class=""><strong>HIDUP</strong></span></td>
+                                    <td><span class=""><strong>{{ $penduduk['penduduk_status_dasar']['nama'] ?? '' }}</strong></span></td>
                                 </tr>
                                 <tr>
                                     <td width="300">Nama</td>

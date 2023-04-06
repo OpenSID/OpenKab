@@ -57,6 +57,7 @@ class Penduduk extends Model
         'statusKawin',
         'pendudukHubungan',
         'pendudukStatus',
+        'pendudukStatusDasar',
         'keluarga',
         'rtm',
         'clusterDesa',
@@ -197,6 +198,16 @@ class Penduduk extends Model
     public function pendudukStatus()
     {
         return $this->belongsTo(PendudukStatus::class, 'status')->withDefault();
+    }
+
+    /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
+    public function pendudukStatusDasar()
+    {
+        return $this->belongsTo(PendudukStatusDasar::class, 'status_dasar')->withDefault();
     }
 
     /**

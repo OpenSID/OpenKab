@@ -18,9 +18,4 @@ class RtmController extends Controller
     {
         // return $this->fractal($this->rtm->listRtm(), new RtmTransformer(), 'rtm')->respond();
     }
-
-    public function grafik()
-    {
-        return $this->fractal($this->statistik->getStatistik([], $this->rtm->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
-    }
 }

@@ -59,7 +59,7 @@
                 var id = `{{ request()->segment(count(request()->segments())) }}`
 
                 $.ajax({
-                    url: `{{ url('api/v1/statistik/statistik_penduduk') }}/?filter[id]=${id}`,
+                    url: `{{ url('api/v1/statistik/statistik_penduduk/grafik') }}/?filter[id]=${id}`,
                     method: 'get',
                     success: function(json) {
                         var statistik = json.data[0].attributes.statistik
@@ -67,20 +67,20 @@
                         var nama_bantuan = json.data[0].attributes.nama
 
                         $('#judul_sasaran').html('Sasaran ' + nama_sasaran);
-                        $('#judul_cetak').html('DATA STATISTIK PENDUDUK ' + nama_bantuan);
+                        $('#judul_cetak').html('DATA STATISTIK BANTUAN ' + nama_bantuan);
 
                         var no = 1;
                         statistik.forEach(function(item) {
                             var row = `<tr>
-                        <td class="padat">${no}</td>
-                        <td>${item.nama}</td>
-                        <td class="text-right" width="10%">${item.jumlah}</td>
-                        <td class="text-right" width="10%">${item.persentase_jumlah.toFixed(2) + '%'}</td>
-                        <td class="text-right" width="10%">${item.laki_laki}</td>
-                        <td class="text-right" width="10%">${item.persentase_laki_laki.toFixed(2) + '%'}</td>
-                        <td class="text-right" width="10%">${item.perempuan}</td>
-                        <td class="text-right" width="10%">${item.persentase_perempuan.toFixed(2) + '%'}</td>
-                    </tr>`
+                                <td class="padat">${no}</td>
+                                <td>${item.nama}</td>
+                                <td class="text-right" width="10%">${item.jumlah}</td>
+                                <td class="text-right" width="10%">${item.persentase_jumlah.toFixed(2) + '%'}</td>
+                                <td class="text-right" width="10%">${item.laki_laki}</td>
+                                <td class="text-right" width="10%">${item.persentase_laki_laki.toFixed(2) + '%'}</td>
+                                <td class="text-right" width="10%">${item.perempuan}</td>
+                                <td class="text-right" width="10%">${item.persentase_perempuan.toFixed(2) + '%'}</td>
+                            </tr>`
 
                             $('#tabel-penduduk tbody').append(row)
                             no++;

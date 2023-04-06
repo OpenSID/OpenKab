@@ -33,10 +33,10 @@ Route::middleware('auth:sanctum')->group(function () {
             });
 
         // Statistik Penduduk
-        Route::controller(StatistikPendudukController::class)
+        Route::controller(\App\Http\Controllers\API\StatistikPendudukController::class)
             ->prefix('statistik_penduduk')->group(function () {
                 Route::get('/', 'index');
-                Route::get('/{id}', 'show');
+                Route::get('/grafik', 'grafik');
             });
     });
 });

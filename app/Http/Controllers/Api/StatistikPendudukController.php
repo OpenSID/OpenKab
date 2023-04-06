@@ -3,22 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Controller;
-use App\Http\Repository\BantuanRepository;
-use App\Http\Transformers\BantuanTransformer;
+use App\Http\Repository\StatistikPendudukRepository;
+use App\Http\Transformers\StatistikPendudukTransformer;
+use App\Http\Transformers\GrafikStatistikPendudukTransformer;
 
-class BantuanController extends Controller
+class StatistikPendudukController extends Controller
 {
-    public function __construct(protected BantuanRepository $bantuan)
+    public function __construct(protected StatistikPendudukRepository $bantuan)
     {
     }
 
     public function index()
     {
-        return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer, 'bantuan')->respond();
+        return $this->fractal($this->bantuan->listBantuan(), new StatistikPendudukTransformer(), 'bantuan')->respond();
     }
 
-    public function show(string $id)
+    public function grafik()
     {
-        return $this->fractal($this->bantuan->findBantuan($id), new BantuanTransformer, 'detail bantuan')->respond();
+        return $this->fractal($this->bantuan->listBantuan(), new GrafikStatistikPendudukTransformer(), 'grafik')->respond();
     }
 }

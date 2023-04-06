@@ -15,7 +15,7 @@
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Daftar Penduduk</h3>
+                    <h3 class="card-title">Daftar Statistik Penduduk</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -38,9 +38,15 @@
                                 Cetak</button>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
+                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
                                 href="#grafik-penduduk" role="button" aria-expanded="false" aria-controls="grafik-penduduk">
                                 <i class="fas fa-chart-bar"></i> Grafik
+                            </button>
+                        </div>
+                        <div class="col-md-2">
+                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse"
+                                href="#pie-penduduk" role="button" aria-expanded="false" aria-controls="pie-penduduk">
+                                <i class="fas fa-chart-pie"></i> Chart
                             </button>
                         </div>
                     </div>
@@ -52,6 +58,16 @@
                                 <div class="chart">
                                     <canvas id="barChart"
                                         style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <hr style="margin-right: -20px; margin-left: -20px;">
+                            </div>
+
+                            <div id="pie-penduduk" class="collapse">
+                                <div class="chart">
+                                    <div class="card-body">
+                                        <canvas id="donutChart"
+                                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    </div>
                                 </div>
                                 <hr style="margin-right: -20px; margin-left: -20px;">
                             </div>
@@ -87,10 +103,34 @@
     <script>
         var data_grafik = [];
 
+        $.ajax({
+            url: `{{ url('api/v1/statistik/statistik_penduduk') }}`,
+            method: 'get',
+            success: function(response) {
+                var daftar_penduduk = response.data
+                var html = ''
+
+                daftar_penduduk.forEach(function(item, index) {
+                    html += `
+                        <li class="nav-item penduduk">
+                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'active' : ''}">
+                                <i class="fas fa-angle-right"></i> ${item.attributes.nama}
+                            </a>
+                        </li>
+                    `
+                })
+
+                $('#daftar-penduduk').html(html)
+            }
+        });
+
+        $('#daftar-penduduk').on('mouseenter', '.penduduk > a', function() {
+            $(this).css('cursor', 'pointer')
+        })
+
         $('#cetak').on('click', function() {
             window.open($(this).data('url'), '_blank');
         });
-
 
         var statistik = $('#statistik-penduduk').DataTable({
             processing: true,
@@ -98,7 +138,7 @@
             autoWidth: false,
             ordering: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/statistik_penduduk') }}`,
+                url: `{{ url('api/v1/statistik/statistik_penduduk/grafik') }}`,
                 method: 'get',
                 dataSrc: function(json) {
                     json.statistik = json.data[0].attributes.sasaran
@@ -113,6 +153,7 @@
 
                     if (data_grafik.length == 1) {
                         tampilkan_grafik(data_grafik[0])
+                        tampilkan_chart(data_grafik[0])
                     }
 
                     return json.data[0].attributes.statistik
@@ -162,45 +203,31 @@
             });
         });
 
-        $.ajax({
-            url: `{{ url('api/v1/statistik/statistik_penduduk') }}`,
-            method: 'get',
-            success: function(response) {
-                var daftar_penduduk = response.data
-                var html = ''
+        $('#btn-grafik').on('click', function() {
+            $("#pie-penduduk").collapse('hide')
+        })
 
-                daftar_penduduk.forEach(function(item, index) {
-                    html += `
-                        <li class="nav-item penduduk">
-                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'text-danger' : ''}">
-                                <i class="far fa-circle"></i> ${item.attributes.nama}
-                            </a>
-                        </li>
-                    `
-                })
+        $('#btn-pie').on('click', function() {
+            $("#grafik-penduduk").collapse('hide')
+        })
 
-                $('#daftar-penduduk').html(html)
-            }
-        });
-
-        // refresh tabel statistik penduduk jika tombol daftar penduduk diklik
         $(document).on('click', '.penduduk > a', function(e) {
             e.preventDefault()
 
             var id = $(this).data('id')
 
-            // tambahkan class text-danger pada icon ayng di klik saja
-            $('.penduduk > a').removeClass('text-danger')
-            $(this).addClass('text-danger')
+            $('.penduduk > a').removeClass('active')
+            $(this).addClass('active')
 
             $('#cetak').data('url', `{{ url('statistik/statistik_penduduk/cetak') }}/${id}`);
 
             tampilkan_grafik(data_grafik[0])
-            statistik.ajax.url(`{{ url('api/v1/statistik/statistik_penduduk') }}/?filter[id]=${id}`).load()
+            tampilkan_chart(data_grafik[0])
+            statistik.ajax.url(`{{ url('api/v1/statistik/statistik_penduduk/grafik') }}/?filter[id]=${id}`).load()
         })
 
         function tampilkan_grafik(areaChartData) {
-            areaChartData = modifikasiDataGrafik(areaChartData);
+            var areaChartData = modifikasi_data_grafik(areaChartData);
 
             var barChartCanvas = $('#barChart').get(0).getContext('2d')
             var barChartData = $.extend(true, {}, areaChartData)
@@ -223,7 +250,7 @@
         }
 
 
-        function modifikasiDataGrafik(data) {
+        function modifikasi_data_grafik(data) {
             var data_baru = []
 
             data.statistik.forEach(function(item, index) {
@@ -248,6 +275,45 @@
             return {
                 labels: [data.nama],
                 datasets: data_baru
+            }
+        }
+
+        function tampilkan_chart(areaChartData) {
+            var donutData = modifikasi_data_chart(areaChartData);
+            console.log(donutData);
+            var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+            var donutOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+            }
+            new Chart(donutChartCanvas, {
+                type: 'doughnut',
+                data: donutData,
+                options: donutOptions
+            })
+        }
+
+        function modifikasi_data_chart(chart) {
+            var labels = [];
+            var data = [];
+            var backgroundColor = [];
+
+            chart.statistik.forEach(function(item, index) {
+                if (index == 0 || index == 1) {
+                    let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+                    labels.push(item.nama)
+                    data.push(item.jumlah)
+                    backgroundColor.push(color)
+                }
+            })
+
+            return {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: backgroundColor,
+                }]
             }
         }
     </script>

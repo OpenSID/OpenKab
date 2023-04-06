@@ -4,39 +4,120 @@ namespace App\Http\Repository;
 
 class StatistikRepository
 {
-    public function getStatistik(array $peserta = [], array $total = [])
+    public function getStatistik(array $kategori = [], array $hitung = [])
+    {
+        $hitung = $this->getHitungFooter(
+            [
+                [
+                    'nama' => 'JUMLAH',
+                    'jumlah' => 92,
+                    'laki_laki' => 45,
+                    'perempuan' => 47,
+                ],
+                [
+                    'nama' => 'BELUM MENGISI',
+                    'jumlah' => 0,
+                    'laki_laki' => 0,
+                    'perempuan' => 0,
+                ],
+                [
+                    'nama' => 'TOTAL',
+                    'jumlah' => 92,
+                    'laki_laki' => 45,
+                    'perempuan' => 47,
+                ]
+            ]
+        );
+
+        // return $hitung;
+
+        $kategori = $this->getHitungHeader([
+            [
+                'id' => 1,
+                'nama' => 'ISLAM',
+                'laki_laki' => 41,
+                'perempuan' => 43,
+            ],
+            [
+                'id' => 2,
+                'nama' => 'KRISTEN',
+                'laki_laki' => 0,
+                'perempuan' => 0,
+            ],
+            [
+                'id' => 3,
+                'nama' => 'KATHOLIK',
+                'laki_laki' => 0,
+                'perempuan' => 0,
+            ],
+            [
+                'id' => 4,
+                'nama' => 'HINDU',
+                'laki_laki' => 3,
+                'perempuan' => 4,
+            ],
+            [
+                'id' => 5,
+                'nama' => 'BUDHA',
+                'laki_laki' => 1,
+                'perempuan' => 0,
+            ],
+            [
+                'id' => 6,
+                'nama' => 'KHONGHUCU',
+                'laki_laki' => 0,
+                'perempuan' => 0,
+            ],
+            [
+                'id' => 7,
+                'nama' => 'KEPERCAYAAN TERHADAP TUHAN YME / LAINNYA',
+                'laki_laki' => 0,
+                'perempuan' => 0,
+            ]
+        ], $hitung[0]['jumlah']);
+
+        return collect($kategori)->merge($hitung)->toArray();
+    }
+
+    private function getHitungHeader(array $kategori = [], int $total = 0)
+    {
+        return collect($kategori)->map(function ($item, $key) use ($total) {
+            return $this->getPresentase($item, $total);
+        });
+    }
+
+    private function getHitungFooter(array $dataFooter = [])
     {
         return [
-            [
+            $this->getPresentase([
                 'id'        => 1,
-                'nama'      => 'Peserta',
-                'jumlah'    => $peserta['jumlah'],
-                'laki_laki' => $peserta['laki_laki'],
-                'perempuan' => $peserta['perempuan'],
-                'persentase_jumlah' => persen($peserta['jumlah'], $total['jumlah']),
-                'persentase_laki_laki' => persen($peserta['laki_laki'], $total['laki_laki']),
-                'persentase_perempuan' => persen($peserta['perempuan'], $total['perempuan']),
-            ],
-            [
+                'nama'      => $dataFooter[0]['nama'],
+                'laki_laki' => $dataFooter[0]['laki_laki'],
+                'perempuan' => $dataFooter[0]['perempuan'],
+            ]),
+            $this->getPresentase([
                 'id'        => 2,
-                'nama'      => 'Bukan Peserta',
-                'jumlah'    => $total['jumlah'] - $peserta['jumlah'],
-                'laki_laki' => $total['laki_laki'] - $peserta['laki_laki'],
-                'perempuan' => $total['perempuan'] - $peserta['perempuan'],
-                'persentase_jumlah' => persen(($total['jumlah'] - $peserta['jumlah']), $total['jumlah']),
-                'persentase_laki_laki' => persen(($total['laki_laki'] - $peserta['laki_laki']), $total['laki_laki']),
-                'persentase_perempuan' => persen(($total['perempuan'] - $peserta['perempuan']), $total['perempuan']),
-            ],
-            [
+                'nama'      => $dataFooter[1]['nama'],
+                'laki_laki' => $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
+                'perempuan' => $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
+            ]),
+            $this->getPresentase([
                 'id'        => 3,
-                'nama'      => 'Total',
-                'jumlah'    => $total['jumlah'],
-                'laki_laki' => $total['laki_laki'],
-                'perempuan' => $total['perempuan'],
-                'persentase_jumlah' => persen(100, 100),
-                'persentase_laki_laki' => persen(100, 100),
-                'persentase_perempuan' => persen(100, 100),
-            ],
+                'nama'      => $dataFooter[2]['nama'],
+                'laki_laki' => $dataFooter[2]['laki_laki'],
+                'perempuan' => $dataFooter[2]['perempuan'],
+            ]),
         ];
+    }
+
+    private function getPresentase(array $data, $pembagi = null)
+    {
+        $data['jumlah'] = $data['laki_laki'] + $data['perempuan'];
+        $pembagi = $pembagi ?? $data['jumlah'];
+        $data['persentase_jumlah'] = persen($data['jumlah'], $pembagi);
+        $data['persentase_laki_laki'] = persen($data['laki_laki'], $pembagi);
+        $data['persentase_perempuan'] = persen($data['perempuan'], $pembagi);
+
+        return $data;
     }
 }

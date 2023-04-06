@@ -21,22 +21,6 @@ class RtmController extends Controller
 
     public function grafik()
     {
-        $data = collect($this->statistik->getStatistik(
-            [
-                'jumlah' => 10,
-                'laki_laki' => 5,
-                'perempuan' => 5,
-        ],
-            [
-                'jumlah' => 20,
-                'laki_laki' => 15,
-                'perempuan' => 5,
-            ],
-        ))->map(function ($item, $key) {
-            $item['id'] = $key + 1;
-            return $item;
-        });
-
-        return $this->fractal($data, new StatistikTransformer(), 'grafik')->respond();
+        return $this->fractal($this->statistik->getStatistik([], []), new StatistikTransformer(), 'grafik')->respond();
     }
 }

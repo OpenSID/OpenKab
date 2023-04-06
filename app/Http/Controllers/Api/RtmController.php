@@ -23,14 +23,14 @@ class RtmController extends Controller
     {
         $data = collect($this->statistik->getStatistik(
             [
-                'jumlah' => 1,
-                'laki_laki' => 1,
-                'perempuan' => 1,
+                'jumlah' => 10,
+                'laki_laki' => 5,
+                'perempuan' => 5,
         ],
             [
-                'jumlah' => 2,
-                'laki_laki' => 2,
-                'perempuan' => 2,
+                'jumlah' => 20,
+                'laki_laki' => 15,
+                'perempuan' => 5,
             ],
         ))->map(function ($item, $key) {
             $item['id'] = $key + 1;

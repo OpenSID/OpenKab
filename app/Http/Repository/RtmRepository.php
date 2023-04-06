@@ -9,25 +9,32 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class RtmRepository
 {
-    public function listRtm()
+    public function listStatistik()
     {
-        $query = Rtm::query();
+        $rtm = Rtm::countStatistik();
 
-        if (session()->has('desa')) {
-            $query->where('config_id', session('desa.id'));
-        }
+        $jumlah = $rtm->bdt()->first();
+        $total  = $rtm->first();
 
-        return QueryBuilder::for($query)
-            ->allowedFields('*')
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-                'nama',
-                'sasaran',
-            ])
-            ->allowedSorts([
-                'nama',
-                'sasaran',
-            ])
-            ->jsonPaginate();
+        return [
+            [
+                'nama' => 'JUMLAH',
+                'jumlah' => $jumlah->laki_laki + $jumlah->perempuan,
+                'laki_laki' => $jumlah->laki_laki,
+                'perempuan' => $jumlah->perempuan,
+            ],
+            [
+                'nama' => 'BELUM MENGISI',
+                'jumlah' => 0,
+                'laki_laki' => 0,
+                'perempuan' => 0,
+            ],
+            [
+                'nama' => 'TOTAL',
+                'jumlah' => $total->laki_laki + $total->perempuan,
+                'laki_laki' => $total->laki_laki,
+                'perempuan' => $total->perempuan,
+            ],
+        ];
     }
 }

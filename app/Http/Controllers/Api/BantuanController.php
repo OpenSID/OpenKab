@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Transformers\BantuanTransformer;
+use App\Http\Transformers\StatistikTransformer;
 use App\Http\Transformers\GrafikBantuanTransformer;
 
 class BantuanController extends Controller
@@ -20,6 +21,8 @@ class BantuanController extends Controller
 
     public function grafik()
     {
-        return $this->fractal($this->bantuan->listBantuan(), new GrafikBantuanTransformer(), 'grafik')->respond();
+        $footer = $this->bantuan->listBantuan();
+
+        return $this->fractal($this->statistik->getStatistik($header, $footer), new StatistikTransformer(), 'grafik')->respond();
     }
 }

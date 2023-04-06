@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Rtm;
 use App\Http\Repository\RtmRepository;
 use App\Http\Controllers\Api\Controller;
-use App\Http\Repository\StatistikRepository;
-use App\Http\Transformers\StatistikTransformer;
 
 class RtmController extends Controller
 {
-    public function __construct(protected RtmRepository $rtm, protected StatistikRepository $statistik)
+    public function __construct(protected RtmRepository $rtm)
     {
     }
 

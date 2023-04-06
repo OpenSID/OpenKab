@@ -2,7 +2,7 @@
 
 namespace App\Http\Transformers;
 
-use App\Models\Bantuan;
+use App\Models\LaporanPenduduk;
 use App\Models\Penduduk;
 use App\Models\BantuanPeserta;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +10,7 @@ use League\Fractal\TransformerAbstract;
 
 class StatistikPendudukTransformer extends TransformerAbstract
 {
-    public function transform(Bantuan $bantuan)
+    public function transform(LaporanPenduduk $bantuan)
     {
         // hapus data statistik pada model Bantuan
         return [

@@ -24,6 +24,13 @@
                 </div>
                 <div class="card-body p-0">
                     <ul class="nav nav-pills flex-column" id="daftar-penduduk">
+                        @foreach($data as $key => $daftar)
+                        <li class="nav-item penduduk">
+                            <a data-id="{{$data[$key]['id']}}" class="nav-link ${index == 0 ? 'active' : ''}">
+                                <i class="fas fa-angle-right"></i> {{$data[$key]['nama']}}
+                            </a>
+                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -102,27 +109,6 @@
 @section('js')
     <script>
         var data_grafik = [];
-
-        $.ajax({
-            url: `{{ url('api/v1/statistik/statistik_penduduk') }}`,
-            method: 'get',
-            success: function(response) {
-                var daftar_penduduk = response.data
-                var html = ''
-
-                daftar_penduduk.forEach(function(item, index) {
-                    html += `
-                        <li class="nav-item penduduk">
-                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'active' : ''}">
-                                <i class="fas fa-angle-right"></i> ${item.attributes.nama}
-                            </a>
-                        </li>
-                    `
-                })
-
-                $('#daftar-penduduk').html(html)
-            }
-        });
 
         $('#daftar-penduduk').on('mouseenter', '.penduduk > a', function() {
             $(this).css('cursor', 'pointer')

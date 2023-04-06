@@ -9,17 +9,17 @@ use App\Http\Transformers\GrafikStatistikPendudukTransformer;
 
 class StatistikPendudukController extends Controller
 {
-    public function __construct(protected StatistikPendudukRepository $bantuan)
+    public function __construct(protected StatistikPendudukRepository $penduduk)
     {
     }
 
     public function index()
     {
-        return $this->fractal($this->bantuan->listBantuan(), new StatistikPendudukTransformer(), 'bantuan')->respond();
+        return $this->fractal($this->penduduk->listPenduduk(), new StatistikPendudukTransformer(), 'penduduk')->respond();
     }
 
     public function grafik()
     {
-        return $this->fractal($this->bantuan->listBantuan(), new GrafikStatistikPendudukTransformer(), 'grafik')->respond();
+        return $this->fractal($this->penduduk->listPenduduk(), new GrafikStatistikPendudukTransformer(), 'grafik')->respond();
     }
 }

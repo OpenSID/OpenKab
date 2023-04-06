@@ -2,15 +2,15 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Bantuan;
+use App\Models\LaporanPenduduk;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class StatistikPendudukRepository
 {
-    public function listBantuan()
+    public function listPenduduk()
     {
-        return QueryBuilder::for(Bantuan::class)
+        return QueryBuilder::for(LaporanPenduduk::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

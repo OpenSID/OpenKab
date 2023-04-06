@@ -14,11 +14,6 @@ class Keluarga extends Model
     /** {@inheritdoc} */
     protected $table = 'tweb_keluarga';
 
-    /** {@inheritdoc} */
-    protected $appends = [
-        'statistik',
-    ];
-
     /**
      * {@inheritDoc}
      */

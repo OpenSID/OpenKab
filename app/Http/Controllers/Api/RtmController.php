@@ -21,6 +21,14 @@ class RtmController extends Controller
 
     public function grafik()
     {
-        return $this->fractal($this->rtm->listRtm(), new GrafikRtmTransformer(), 'grafik')->respond();
+        return response()->json([
+            'id' => 1,
+            'sasaran' => '1',
+        ]);
+
+        // return $this->fractal([
+        //     'id' => 1,
+        //     'sasaran' => '1',
+        // ], new GrafikRtmTransformer(), 'grafik')->respond();
     }
 }

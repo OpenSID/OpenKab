@@ -45,18 +45,14 @@ class BantuanRepository
                 'nama',
                 'sasaran',
             ])
-            ->allowedSorts([
-                'nama',
-                'sasaran',
-            ])
-            ->get();
+            ->first();
 
-        $jumlah = $result[0]->statistik[0];
+        $jumlah = $result->statistik[0];
         $jumlah_laki_laki = $jumlah['laki_laki'];
         $jumlah_perempuan = $jumlah['perempuan'];
         $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
 
-        $total  = $result[0]->statistik[1];
+        $total  = $result->statistik[1];
         $total_laki_laki = $total['laki_laki'];
         $total_perempuan = $total['perempuan'];
         $total = $total_laki_laki + $total_perempuan;

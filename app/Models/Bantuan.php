@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Enums\SasaranEnum;
 use Illuminate\Support\Facades\DB;
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bantuan extends Model
 {
+    use ConfigIdTrait;
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
@@ -26,6 +29,17 @@ class Bantuan extends Model
         // 'sasaran' => SasaranEnum::class,
     ];
 
+    /** {@inheritdoc} */
+    protected $dbConnection;
+
+    /**
+     * constract
+     */
+    public function __construct()
+    {
+        $this->dbConnection = DB::connection($this->connection);
+    }
+
     /**
      * Define a one-to-many relationship.
      *
@@ -38,7 +52,7 @@ class Bantuan extends Model
 
     public function getNamaSasaranAttribute()
     {
-        return match($this->sasaran) {
+        return match ($this->sasaran) {
             1 => 'Penduduk',
             2 => 'Keluarga',
             3 => 'Rumah Tangga',
@@ -90,7 +104,7 @@ class Bantuan extends Model
 
     private function getPeserta($id, $sasaran)
     {
-        $query = DB::connection($this->connection)->table('program_peserta')
+        $query = $this->dbConnection->table('program_peserta')
             ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
@@ -128,22 +142,22 @@ class Bantuan extends Model
         $query = null;
         switch ($sasaran) {
             case '1':
-                $query = DB::connection($this->connection)->table('tweb_penduduk');
+                $query = $this->dbConnection->table('tweb_penduduk');
 
                 break;
             case '2':
-                $query = DB::connection($this->connection)->table('tweb_keluarga')
+                $query = $this->dbConnection->table('tweb_keluarga')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left');
 
                 break;
             case '3':
-                $query = DB::connection($this->connection)->table('tweb_rtm')
+                $query = $this->dbConnection->table('tweb_rtm')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala', 'left');
 
                 break;
 
             case '4':
-                $query = DB::connection($this->connection)->table('kelompok')
+                $query = $this->dbConnection->table('kelompok')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left');
 
                 break;

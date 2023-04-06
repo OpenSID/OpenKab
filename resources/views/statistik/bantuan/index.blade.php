@@ -11,7 +11,7 @@
 @stop
 
 @section('content')
-    <div class="row">
+    <div class="row" id="tampilkan-bantuan">
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-header">
@@ -38,9 +38,15 @@
                                 Cetak</button>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
+                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
                                 href="#grafik-bantuan" role="button" aria-expanded="false" aria-controls="grafik-bantuan">
                                 <i class="fas fa-chart-bar"></i> Grafik
+                            </button>
+                        </div>
+                        <div class="col-md-2">
+                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse"
+                                href="#pie-bantuan" role="button" aria-expanded="false" aria-controls="pie-bantuan">
+                                <i class="fas fa-chart-pie"></i> Chart
                             </button>
                         </div>
                     </div>
@@ -52,6 +58,16 @@
                                 <div class="chart">
                                     <canvas id="barChart"
                                         style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <hr style="margin-right: -20px; margin-left: -20px;">
+                            </div>
+
+                            <div id="pie-bantuan" class="collapse">
+                                <div class="chart">
+                                    <div class="card-body">
+                                        <canvas id="donutChart"
+                                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    </div>
                                 </div>
                                 <hr style="margin-right: -20px; margin-left: -20px;">
                             </div>
@@ -80,17 +96,52 @@
 
 @push('js')
     <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
-    <script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>
 @endpush
 
 @section('js')
     <script>
         var data_grafik = [];
+        var nama_desa = `{{ session('desa.nama_desa') }}`;
+
+        $.ajax({
+            url: `{{ url('api/v1/statistik/bantuan') }}`,
+            method: 'get',
+            success: function(response) {
+                if (response.data.length == 0) {
+                    $('#tampilkan-bantuan').html(`
+                        <div class="col-lg-12">
+                            <div class="alert alert-warning">
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
+                                Tidak ada data bantuan yang tersedia untuk Desa ${nama_desa}.
+                            </div>
+                        </div>
+                    `)
+                }
+
+                var daftar_bantuan = response.data
+                var html = ''
+
+                daftar_bantuan.forEach(function(item, index) {
+                    html += `
+                        <li class="nav-item bantuan">
+                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'active' : ''}">
+                                <i class="fas fa-angle-right"></i> ${item.attributes.nama}
+                            </a>
+                        </li>
+                    `
+                })
+
+                $('#daftar-bantuan').html(html)
+            }
+        });
+
+        $('#daftar-bantuan').on('mouseenter', '.bantuan > a', function() {
+            $(this).css('cursor', 'pointer')
+        })
 
         $('#cetak').on('click', function() {
             window.open($(this).data('url'), '_blank');
         });
-
 
         var statistik = $('#statistik-bantuan').DataTable({
             processing: true,
@@ -98,24 +149,28 @@
             autoWidth: false,
             ordering: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/bantuan') }}`,
+                url: `{{ url('api/v1/statistik/bantuan/grafik') }}`,
                 method: 'get',
                 dataSrc: function(json) {
-                    json.statistik = json.data[0].attributes.sasaran
-                    json.recordsTotal = json.meta.pagination.total
-                    json.recordsFiltered = json.meta.pagination.total
+                    if (json.data.length > 0) {
+                        json.statistik = json.data[0].attributes.sasaran
+                        json.recordsTotal = json.meta.pagination.total
+                        json.recordsFiltered = json.meta.pagination.total
 
-                    $('#judul_sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
-                    $('#cetak').data('url',
-                        `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
+                        $('#judul_sasaran').html('Sasaran ' + json.data[0].attributes.nama_sasaran);
+                        $('#cetak').data('url',
+                            `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
 
-                    data_grafik.push(json.data[0].attributes)
+                        data_grafik.push(json.data[0].attributes)
 
-                    if (data_grafik.length == 1) {
-                        tampilkan_grafik(data_grafik[0])
+                        if (data_grafik.length == 1) {
+                            grafik_pie();
+                        }
+
+                        return json.data[0].attributes.statistik
                     }
 
-                    return json.data[0].attributes.statistik
+                    return false;
                 },
             },
             columns: [{
@@ -162,45 +217,36 @@
             });
         });
 
-        $.ajax({
-            url: `{{ url('api/v1/statistik/bantuan') }}`,
-            method: 'get',
-            success: function(response) {
-                var daftar_bantuan = response.data
-                var html = ''
+        $('#btn-grafik').on('click', function() {
+            $("#pie-bantuan").collapse('hide')
+        })
 
-                daftar_bantuan.forEach(function(item, index) {
-                    html += `
-                        <li class="nav-item bantuan">
-                            <a data-id="${item.id}" class="nav-link ${index == 0 ? 'text-danger' : ''}">
-                                <i class="far fa-circle"></i> ${item.attributes.nama}
-                            </a>
-                        </li>
-                    `
-                })
+        $('#btn-pie').on('click', function() {
+            $("#grafik-bantuan").collapse('hide')
+        })
 
-                $('#daftar-bantuan').html(html)
-            }
-        });
-
-        // refresh tabel statistik bantuan jika tombol daftar bantuan diklik
         $(document).on('click', '.bantuan > a', function(e) {
             e.preventDefault()
 
             var id = $(this).data('id')
 
-            // tambahkan class text-danger pada icon ayng di klik saja
-            $('.bantuan > a').removeClass('text-danger')
-            $(this).addClass('text-danger')
+            $('.bantuan > a').removeClass('active')
+            $(this).addClass('active')
 
             $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
 
-            tampilkan_grafik(data_grafik[0])
-            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load()
+            grafik_pie();
+
+            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan/grafik') }}/?filter[id]=${id}`).load()
         })
 
+        function grafik_pie() {
+            tampilkan_grafik(data_grafik[0])
+            tampilkan_chart(data_grafik[0])
+        }
+
         function tampilkan_grafik(areaChartData) {
-            areaChartData = modifikasiDataGrafik(areaChartData);
+            var areaChartData = modifikasi_data_grafik(areaChartData);
 
             var barChartCanvas = $('#barChart').get(0).getContext('2d')
             var barChartData = $.extend(true, {}, areaChartData)
@@ -223,7 +269,7 @@
         }
 
 
-        function modifikasiDataGrafik(data) {
+        function modifikasi_data_grafik(data) {
             var data_baru = []
 
             data.statistik.forEach(function(item, index) {
@@ -248,6 +294,45 @@
             return {
                 labels: [data.nama],
                 datasets: data_baru
+            }
+        }
+
+        function tampilkan_chart(areaChartData) {
+            var donutData = modifikasi_data_chart(areaChartData);
+            console.log(donutData);
+            var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+            var donutOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+            }
+            new Chart(donutChartCanvas, {
+                type: 'doughnut',
+                data: donutData,
+                options: donutOptions
+            })
+        }
+
+        function modifikasi_data_chart(chart) {
+            var labels = [];
+            var data = [];
+            var backgroundColor = [];
+
+            chart.statistik.forEach(function(item, index) {
+                if (index == 0 || index == 1) {
+                    let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+                    labels.push(item.nama)
+                    data.push(item.jumlah)
+                    backgroundColor.push(color)
+                }
+            })
+
+            return {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: backgroundColor,
+                }]
             }
         }
     </script>

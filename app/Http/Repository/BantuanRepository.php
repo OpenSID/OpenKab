@@ -10,7 +10,13 @@ class BantuanRepository
 {
     public function listBantuan()
     {
-        return QueryBuilder::for(Bantuan::class)
+        $query = Bantuan::query();
+
+        if (session()->has('desa')) {
+            $query->where('config_id', session('desa.id'));
+        }
+
+        return QueryBuilder::for($query)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -22,21 +28,5 @@ class BantuanRepository
                 'sasaran',
             ])
             ->jsonPaginate();
-    }
-
-    public function findBantuan(string $id)
-    {
-        return QueryBuilder::for(Bantuan::class)
-            ->allowedFields('*')
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-                'nama',
-                'sasaran',
-            ])
-            ->allowedSorts([
-                'nama',
-                'sasaran',
-            ])
-            ->first();
     }
 }

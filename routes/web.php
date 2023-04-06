@@ -28,12 +28,12 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('sesi')->group(function () {
         Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
-            return redirect('/');
+            return Redirect::back();
         });
         Route::get('hapus', function () {
             session()->remove('desa');
 
-            return redirect('/');
+            return Redirect::back();
         });
     });
 

@@ -122,6 +122,9 @@
                 var html = ''
 
                 daftar_bantuan.forEach(function(item, index) {
+                    if (index == 0) {
+                        $('#judul_sasaran').html('Sasaran ' + item.attributes.nama_sasaran)
+                    }
                     html += `
                         <li class="nav-item bantuan">
                             <a data-id="${item.id}" data-sasaran="${item.attributes.nama_sasaran}" class="nav-link ${index == 0 ? 'active' : ''}">
@@ -156,17 +159,18 @@
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
-                        // console.log(json.data[0].attributes);
-                        $('#cetak').data('url',
-                            `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
+                        // $('#cetak').data('url',
+                        //     `{{ url('statistik/bantuan/cetak') }}/${json.data[0].id}`);
 
-                        data_grafik.push(json.data[0].attributes)
+                        // json.data.forEach(function(item, index) {
+                        //     data_grafik.push(item.attributes)
+                        // })
 
                         if (data_grafik.length == 1) {
                             // grafik_pie();
                         }
 
-                        return json.data[0].attributes;
+                        return json.data;
                     }
 
                     return false;
@@ -175,33 +179,37 @@
             columns: [{
                 data: null,
             }, {
-                data: "nama"
-            }, {
-                data: "jumlah",
-                className: 'dt-body-right',
+                data: function(data) {
+                    return data.attributes.nama;
+                },
             }, {
                 data: function(data) {
-                    return data.persentase_jumlah.toFixed(2) + '%';
+                    return data.attributes.jumlah
                 },
                 className: 'dt-body-right',
             }, {
                 data: function(data) {
-                    return data.laki_laki
+                    return data.attributes.persentase_jumlah;
                 },
                 className: 'dt-body-right',
             }, {
                 data: function(data) {
-                    return data.persentase_laki_laki.toFixed(2) + '%';
+                    return data.attributes.laki_laki
                 },
                 className: 'dt-body-right',
             }, {
                 data: function(data) {
-                    return data.perempuan
+                    return data.attributes.persentase_laki_laki;
                 },
                 className: 'dt-body-right',
             }, {
                 data: function(data) {
-                    return data.persentase_perempuan.toFixed(2) + '%';
+                    return data.attributes.perempuan
+                },
+                className: 'dt-body-right',
+            }, {
+                data: function(data) {
+                    return data.attributes.persentase_perempuan;
                 },
                 className: 'dt-body-right',
             }]
@@ -224,21 +232,18 @@
             $("#grafik-bantuan").collapse('hide')
         })
 
-        $(document).on('click', '.bantuan > a', function(e) {
-            e.preventDefault()
-
+        $('#daftar-bantuan').on('click', '.bantuan > a', function() {
             var id = $(this).data('id')
             var sasaran = $(this).data('sasaran')
 
             $('.bantuan > a').removeClass('active')
             $(this).addClass('active')
+            $('#judul_sasaran').html('Sasaran ' + sasaran)
 
-            $('#judul_sasaran').html('Sasaran ' + sasaran);
+            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load();
             $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
 
-            grafik_pie();
-
-            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load()
+            // grafik_pie();
         })
 
         function grafik_pie() {
@@ -247,6 +252,7 @@
         }
 
         function tampilkan_grafik(areaChartData) {
+            console.log(areaChartData);
             var areaChartData = modifikasi_data_grafik(areaChartData);
 
             var barChartCanvas = $('#barChart').get(0).getContext('2d')
@@ -336,5 +342,8 @@
                 }]
             }
         }
+
+        // tampilkan data awal datatables sesuai bantuan yang aktif
+        $('.bantuan > a.active').trigger('click')
     </script>
 @endsection

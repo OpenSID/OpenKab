@@ -59,13 +59,13 @@ class BantuanRepository
 
         return [
             [
-                'nama' => 'JUMLAH',
+                'nama' => 'PESERTA',
                 'jumlah' => $jumlah,
                 'laki_laki' => $jumlah_laki_laki,
                 'perempuan' => $jumlah_perempuan,
             ],
             [
-                'nama' => 'BELUM MENGISI',
+                'nama' => 'BUKAN PESERTA',
                 'jumlah' => 0,
                 'laki_laki' => 0,
                 'perempuan' => 0,

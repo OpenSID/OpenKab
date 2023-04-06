@@ -75,17 +75,10 @@ class Bantuan extends Model
             [
                 'laki_laki' => $peserta->laki_laki,
                 'perempuan' => $peserta->perempuan,
-                'nama'      => 'Peserta',
-            ],
-            [
-                'laki_laki' => $total->laki_laki - $peserta->laki_laki,
-                'perempuan' => $total->perempuan - $peserta->perempuan,
-                'nama'      => 'Bukan Peserta',
             ],
             [
                 'laki_laki' => $total->laki_laki,
                 'perempuan' => $total->perempuan,
-                'nama'      => 'Total',
             ],
         ];
     }

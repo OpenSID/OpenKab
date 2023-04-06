@@ -29,8 +29,10 @@ class StatistikController extends Controller
 
     public function bantuan()
     {
-        $footer = $this->bantuan->listBantuan();
+        $footer = $this->bantuan->listStatistik();
 
-        return $this->fractal($this->statistik->getStatistik($header, $footer), new StatistikTransformer(), 'grafik')->respond();
+        return response()->json($footer);
+
+        return $this->fractal($this->statistik->getStatistik([], $footer), new StatistikTransformer(), 'grafik')->respond();
     }
 }

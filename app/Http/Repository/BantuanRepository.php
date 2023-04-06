@@ -29,4 +29,57 @@ class BantuanRepository
             ])
             ->jsonPaginate();
     }
+
+    public function listStatistik()
+    {
+        $query = Bantuan::query();
+
+        if (session()->has('desa')) {
+            $query->where('config_id', session('desa.id'));
+        }
+
+        $result = QueryBuilder::for($query)
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                'nama',
+                'sasaran',
+            ])
+            ->allowedSorts([
+                'nama',
+                'sasaran',
+            ])
+            ->get();
+
+        $jumlah = $result[0]->statistik[0];
+        $jumlah_laki_laki = $jumlah['laki_laki'];
+        $jumlah_perempuan = $jumlah['perempuan'];
+        $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
+
+        $total  = $result[0]->statistik[1];
+        $total_laki_laki = $total['laki_laki'];
+        $total_perempuan = $total['perempuan'];
+        $total = $total_laki_laki + $total_perempuan;
+
+        return [
+            [
+                'nama' => 'JUMLAH',
+                'jumlah' => $jumlah,
+                'laki_laki' => $jumlah_laki_laki,
+                'perempuan' => $jumlah_perempuan,
+            ],
+            [
+                'nama' => 'BELUM MENGISI',
+                'jumlah' => 0,
+                'laki_laki' => 0,
+                'perempuan' => 0,
+            ],
+            [
+                'nama' => 'TOTAL',
+                'jumlah' => $total,
+                'laki_laki' => $total_laki_laki,
+                'perempuan' => $total_perempuan,
+            ],
+        ];
+    }
 }

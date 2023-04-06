@@ -12,6 +12,10 @@ class Bantuan extends Model
 {
     use ConfigIdTrait;
 
+    public const KATEGORI_STATISTIK = [
+        'bdt' => 'BDT',
+    ];
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 

@@ -15,7 +15,7 @@
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Daftar RTM</h3>
+                    <h3 class="card-title">Daftar rtm</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -24,6 +24,14 @@
                 </div>
                 <div class="card-body p-0">
                     <ul class="nav nav-pills flex-column" id="daftar-rtm">
+                        @foreach ($kategori_statistik as $key => $value)
+                            <li class="nav-item rtm">
+                                <a data-id="{{ $key }}" class="nav-link {{ $loop->first ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right"></i> {{ $value }}
+                                </a>
+                            </li>
+                        @endforeach
+
                     </ul>
                 </div>
             </div>
@@ -79,7 +87,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th id="judul_sasaran" width="50%"></th>
+                                    <th width="50%">Jenis Kelompok</th>
                                     <th colspan="2" class="dt-head-center">Jumlah</th>
                                     <th colspan="2" class="dt-head-center">Laki - laki</th>
                                     <th colspan="2" class="dt-head-center">Perempuan</th>
@@ -103,41 +111,6 @@
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
-        $.ajax({
-            url: `{{ url('api/v1/rtm') }}`,
-            method: 'get',
-            success: function(response) {
-                if (response.data.length == 0) {
-                    $('#tampilkan-rtm').html(`
-                        <div class="col-lg-12">
-                            <div class="alert alert-warning">
-                                <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                                Tidak ada data rtm yang tersedia untuk Desa ${nama_desa}.
-                            </div>
-                        </div>
-                    `)
-                }
-
-                var daftar_rtm = response.data
-                var html = ''
-
-                daftar_rtm.forEach(function(item, index) {
-                    if (index == 0) {
-                        $('#judul_sasaran').html('Sasaran ' + item.attributes.nama_sasaran)
-                    }
-                    html += `
-                        <li class="nav-item rtm">
-                            <a data-id="${item.id}"  data-nama="${item.attributes.nama}" data-sasaran="${item.attributes.nama_sasaran}" class="nav-link ${index == 0 ? 'active' : ''}">
-                                <i class="fas fa-angle-right"></i> ${item.attributes.nama}
-                            </a>
-                        </li>
-                    `
-                })
-
-                $('#daftar-rtm').html(html)
-            }
-        });
-
         $('#daftar-rtm').on('mouseenter', '.rtm > a', function() {
             $(this).css('cursor', 'pointer')
         })
@@ -159,9 +132,6 @@
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
-                        $('#cetak').data('url',
-                            `{{ url('statistik/rtm/cetak') }}/${json.data[0].id}`);
-
                         data_grafik = [];
                         json.data.forEach(function(item, index) {
                             data_grafik.push(item.attributes)
@@ -240,7 +210,6 @@
 
             $('.rtm > a').removeClass('active')
             $(this).addClass('active')
-            $('#judul_sasaran').html('Sasaran ' + sasaran)
 
             statistik.ajax.url(`{{ url('api/v1/statistik/rtm') }}/?filter[id]=${id}`).load();
             $('#cetak').data('url', `{{ url('statistik/rtm/cetak') }}/${id}`);
@@ -279,8 +248,6 @@
         }
 
         function modifikasi_data_grafik(data) {
-
-            console.log(data);
             var data_baru = []
             data.forEach(function(item, index) {
                 if (index == 0 || index == 1) {
@@ -302,10 +269,8 @@
                 }
             })
 
-            var rtm = $('#daftar-rtm').find('.rtm > a.active').data('nama')
-
             return {
-                labels: [rtm],
+                labels: ['BDT'],
                 datasets: data_baru
             }
         }

@@ -302,7 +302,6 @@
                 }
             })
 
-            // ambil data bantuan yang aktif
             var bantuan = $('#daftar-bantuan').find('.bantuan > a.active').data('nama')
 
             return {
@@ -349,7 +348,6 @@
             }
         }
 
-        // tampilkan data awal datatables sesuai bantuan yang aktif
         $('.bantuan > a.active').trigger('click')
     </script>
 @endsection

@@ -13,15 +13,22 @@ class RtmRepository
     {
         $rtm = Rtm::countStatistik();
 
-        $jumlah = $rtm->bdt()->first();
-        $total  = $rtm->first();
+        $jumlah = $rtm->bdt(true)->get();
+        $jumlah_laki_laki = $jumlah->sum('laki_laki');
+        $jumlah_perempuan = $jumlah->sum('perempuan');
+        $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
+
+        $total  = $rtm->get();
+        $total_laki_laki = $total->sum('laki_laki');
+        $total_perempuan = $total->sum('perempuan');
+        $total = $total_laki_laki + $total_perempuan;
 
         return [
             [
                 'nama' => 'JUMLAH',
-                'jumlah' => $jumlah->laki_laki + $jumlah->perempuan,
-                'laki_laki' => $jumlah->laki_laki,
-                'perempuan' => $jumlah->perempuan,
+                'jumlah' => $jumlah,
+                'laki_laki' => $jumlah_laki_laki,
+                'perempuan' => $jumlah_perempuan,
             ],
             [
                 'nama' => 'BELUM MENGISI',
@@ -31,9 +38,9 @@ class RtmRepository
             ],
             [
                 'nama' => 'TOTAL',
-                'jumlah' => $total->laki_laki + $total->perempuan,
-                'laki_laki' => $total->laki_laki,
-                'perempuan' => $total->perempuan,
+                'jumlah' => $total,
+                'laki_laki' => $total_laki_laki,
+                'perempuan' => $total_perempuan,
             ],
         ];
     }

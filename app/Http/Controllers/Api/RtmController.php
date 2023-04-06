@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Rtm;
 use App\Http\Repository\RtmRepository;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\StatistikRepository;

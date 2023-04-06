@@ -28,16 +28,22 @@ class Rtm extends Model
      *
      * @return Builder
      */
-    public function scopeBdt($query, $value = null)
+    public function scopeBdt($query, $value = false)
     {
-        return $query->where('bdt', $value);
+        if ($value) {
+            return $query->where('bdt', '!=', null);
+        }
+
+        return $query->where('bdt', '=', null);
     }
 
     public function scopeCountStatistik($query)
     {
-        return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+        return $query
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala')
+            ->groupBy('tweb_rtm.id')
         ;
     }
 }

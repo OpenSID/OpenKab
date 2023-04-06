@@ -94,7 +94,10 @@
                     }
                 },
                 {
-                    data: "attributes.nik", name: "nik"
+                    data: function (data) {
+                        return `<a title="Lihat Detail Biodata Penduduk" href="penduduk/${data.id}">${data.attributes.nik}</a>`
+                    },
+                    name: "nik"
                 },
                 {
                     data: "attributes.tag_id_card", name: "tag_id_card"

@@ -86,7 +86,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th id="judul_sasaran" width="50%"></th>
+                                    <th width="50%" class="dt-head-center">Jenis Kelompok</th>
                                     <th colspan="2" class="dt-head-center">Jumlah</th>
                                     <th colspan="2" class="dt-head-center">Laki - laki</th>
                                     <th colspan="2" class="dt-head-center">Perempuan</th>

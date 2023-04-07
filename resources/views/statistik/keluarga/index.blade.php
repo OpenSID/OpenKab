@@ -211,7 +211,7 @@
             $('.keluarga > a').removeClass('active')
             $(this).addClass('active')
 
-            statistik.ajax.url(`{{ url('api/v1/statistik/keluarga') }}/?filter[id]=${id}`).load();
+            statistik.ajax.url(`{{ url('api/v1/statistik/keluarga?filter[slug]=kelas-sosial') }}`).load();
             $('#cetak').data('url', `{{ url('statistik/keluarga/cetak') }}/${id}`);
 
             grafik_pie();

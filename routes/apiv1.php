@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(StatistikController::class)
         ->prefix('statistik')->group(function () {
             Route::get('/penduduk', 'penduduk');
+            Route::get('/keluarga', 'keluarga');
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
         });

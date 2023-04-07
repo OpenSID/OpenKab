@@ -96,9 +96,6 @@ class BantuanRepository
             ],
             [
                 'nama' => 'Bukan Peserta',
-                'jumlah' => 0,
-                'laki_laki' => 0,
-                'perempuan' => 0,
             ],
             [
                 'nama' => 'Total',

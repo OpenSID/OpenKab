@@ -7,15 +7,15 @@
 @section('title', 'Data Statistik')
 
 @section('content_header')
-    <h1>Data Statistik RTM</h1>
+    <h1>Data Statistik Keluarga</h1>
 @stop
 
 @section('content')
-    <div class="row" id="tampilkan-rtm">
+    <div class="row" id="tampilkan-keluarga">
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Daftar RTM</h3>
+                    <h3 class="card-title">Daftar Keluarga</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -23,15 +23,14 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="nav nav-pills flex-column" id="daftar-rtm">
+                    <ul class="nav nav-pills flex-column" id="daftar-keluarga">
                         @foreach ($kategori_statistik as $key => $value)
-                            <li class="nav-item rtm">
+                            <li class="nav-item keluarga">
                                 <a data-id="{{ $key }}" class="nav-link {{ $loop->first ? 'active' : '' }}">
                                     <i class="fas fa-angle-right"></i> {{ $value }}
                                 </a>
                             </li>
                         @endforeach
-
                     </ul>
                 </div>
             </div>
@@ -47,13 +46,14 @@
                         </div>
                         <div class="col-md-2">
                             <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
-                                href="#grafik-rtm" role="button" aria-expanded="false" aria-controls="grafik-rtm">
+                                href="#grafik-keluarga" role="button" aria-expanded="false"
+                                aria-controls="grafik-keluarga">
                                 <i class="fas fa-chart-bar"></i> Grafik
                             </button>
                         </div>
                         <div class="col-md-2">
                             <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse"
-                                href="#pie-rtm" role="button" aria-expanded="false" aria-controls="pie-rtm">
+                                href="#pie-keluarga" role="button" aria-expanded="false" aria-controls="pie-keluarga">
                                 <i class="fas fa-chart-pie"></i> Chart
                             </button>
                         </div>
@@ -62,7 +62,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="grafik-rtm" class="collapse">
+                            <div id="grafik-keluarga" class="collapse">
                                 <div class="chart">
                                     <canvas id="barChart"
                                         style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
@@ -70,7 +70,7 @@
                                 <hr style="margin-right: -20px; margin-left: -20px;">
                             </div>
 
-                            <div id="pie-rtm" class="collapse">
+                            <div id="pie-keluarga" class="collapse">
                                 <div class="chart">
                                     <div class="card-body">
                                         <canvas id="donutChart"
@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-striped cell-border" id="statistik-rtm">
+                        <table class="table table-striped cell-border" id="statistik-keluarga">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -112,7 +112,7 @@
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
-        $('#daftar-rtm').on('mouseenter', '.rtm > a', function() {
+        $('#daftar-keluarga').on('mouseenter', '.keluarga > a', function() {
             $(this).css('cursor', 'pointer')
         })
 
@@ -120,7 +120,7 @@
             window.open($(this).data('url'), '_blank');
         });
 
-        var statistik = $('#statistik-rtm').DataTable({
+        var statistik = $('#statistik-keluarga').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -129,7 +129,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/rtm') }}`,
+                url: `{{ url('api/v1/statistik/keluarga?filter[slug]=kelas-sosial') }}`,
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
@@ -138,8 +138,8 @@
                             data_grafik.push(item.attributes)
                         })
 
-                        if (json.data.length != $('#statistik-rtm').data('length')) {
-                            $('#statistik-rtm').data('length', json.data.length)
+                        if (json.data.length != $('#statistik-keluarga').data('length')) {
+                            $('#statistik-keluarga').data('length', json.data.length)
                             grafikPie()
                         }
 
@@ -189,7 +189,7 @@
         })
 
         statistik.on('draw.dt', function() {
-            var PageInfo = $('#statistik-rtm').DataTable().page.info();
+            var PageInfo = $('#statistik-keluarga').DataTable().page.info();
             statistik.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
@@ -198,26 +198,26 @@
         });
 
         $('#btn-grafik').on('click', function() {
-            $("#pie-rtm").collapse('hide')
+            $("#pie-keluarga").collapse('hide')
         })
 
         $('#btn-pie').on('click', function() {
-            $("#grafik-rtm").collapse('hide')
+            $("#grafik-keluarga").collapse('hide')
         })
 
-        $('#daftar-rtm').on('click', '.rtm > a', function() {
+        $('#daftar-keluarga').on('click', '.keluarga > a', function() {
             var id = $(this).data('id')
             var sasaran = $(this).data('sasaran')
 
-            $('.rtm > a').removeClass('active')
+            $('.keluarga > a').removeClass('active')
             $(this).addClass('active')
 
-            statistik.ajax.url(`{{ url('api/v1/statistik/rtm') }}/?filter[id]=${id}`).load();
-            $('#cetak').data('url', `{{ url('statistik/rtm/cetak') }}/${id}`);
+            statistik.ajax.url(`{{ url('api/v1/statistik/keluarga?filter[slug]=kelas-sosial') }}`).load();
+            $('#cetak').data('url', `{{ url('statistik/keluarga/cetak') }}/${id}`);
 
             grafikPie();
         })
 
-        $('.rtm > a.active').trigger('click')
+        $('.keluarga > a.active').trigger('click')
     </script>
 @endsection

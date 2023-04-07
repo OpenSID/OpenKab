@@ -398,4 +398,17 @@ class Penduduk extends Model
         return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan');
     }
+
+    /**
+     * Scope query untuk status penduduk
+     *
+     * @param Builder $query
+     * @param mixed   $value
+     *
+     * @return Builder
+     */
+    public function scopeStatus($query, $value = 1)
+    {
+        return $query->where('status_dasar', $value);
+    }
 }

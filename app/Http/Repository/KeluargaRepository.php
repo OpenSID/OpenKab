@@ -4,6 +4,8 @@ namespace App\Http\Repository;
 
 use App\Models\Keluarga;
 use App\Models\KelasSosial;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class KeluargaRepository
 {

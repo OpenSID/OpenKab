@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\RtmRepository;
 use App\Http\Repository\BantuanRepository;
+use App\Http\Repository\KeluargaRepository;
 use App\Http\Repository\PendudukRepository;
 use App\Http\Repository\StatistikRepository;
+use App\Http\Transformers\StatistikTransformer;
 
 class StatistikController extends Controller
 {
@@ -29,7 +31,7 @@ class StatistikController extends Controller
             ], Response::HTTP_NOT_FOUND);
     }
 
-    public function keluarga(keluargaRepository $keluarga)
+    public function keluarga(KeluargaRepository $keluarga)
     {
         if ($this->kategori) {
             return $this->fractal($this->statistik->getStatistik($keluarga->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-keluarga')->respond();

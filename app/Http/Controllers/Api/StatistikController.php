@@ -31,26 +31,35 @@ class StatistikController extends Controller
 
     public function penduduk()
     {
-        switch (request()->input('filter')['slug']) {
-            case 'umur-rentang':
-                $header = Umur::countStatistik()->status()->orderBy('id')->get()->toArray();
-                $footer = [];
-                # code...
-                break;
+        $data = match (request()->input('filter')['slug']) {
+            'umur-rentang' => [
+                'header' => Umur::countStatistik()->status()->orderBy('id')->get()->toArray(),
+                'footer' => $this->contohFooter(),
+            ],
+            'umur-kategori' => [
+                'header' => Umur::countStatistik()->status(0)->orderBy('id')->get()->toArray(),
+                'footer' => $this->contohFooter(),
+            ],
+            default => null
+        };
 
-            case 'umur-kategori':
-                $header = Umur::countStatistik()->status(0)->orderBy('id')->get()->toArray();
-                $footer = [];
-                # code...
-                break;
+        return $this->fractal($this->statistik->getStatistik($data['header'], $data['footer']), new StatistikTransformer(), 'grafik')->respond();
+    }
 
-            default:
-                $header = [];
-                $footer = [];
-                break;
-        }
+    public function rtm()
+    {
+        return $this->fractal($this->statistik->getStatistik([], $this->rtm->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
+    }
 
-        $footer = [
+    public function bantuan()
+    {
+        return $this->fractal($this->statistik->getStatistik([], $this->bantuan->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
+    }
+
+    // Hanya digunakan untuk test header
+    private function contohFooter()
+    {
+        return [
             [
                 "nama" => "Peserta",
                 "jumlah" => 4,
@@ -70,17 +79,5 @@ class StatistikController extends Controller
                 "perempuan" => 51
             ]
         ];
-
-        return $this->fractal($this->statistik->getStatistik($header, $footer), new StatistikTransformer(), 'grafik')->respond();
-    }
-
-    public function rtm()
-    {
-        return $this->fractal($this->statistik->getStatistik([], $this->rtm->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
-    }
-
-    public function bantuan()
-    {
-        return $this->fractal($this->statistik->getStatistik([], $this->bantuan->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
     }
 }

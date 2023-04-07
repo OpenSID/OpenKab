@@ -360,4 +360,17 @@ class Penduduk extends Model
 
         return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
     }
+
+    /**
+     * Scope query untuk status penduduk
+     *
+     * @param Builder $query
+     * @param mixed   $value
+     *
+     * @return Builder
+     */
+    public function scopeStatus($query, $value = 1)
+    {
+        return $query->where('status_dasar', $value);
+    }
 }

@@ -81,11 +81,6 @@ class StatistikController extends Controller
 
     public function bantuan()
     {
-        return response()->json([
-                    'header' => [],
-                    'footer' => $this->bantuan->listStatistik(),
-                ]);
-
         return $this->fractal($this->statistik->getStatistik([], $this->bantuan->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
     }
 }

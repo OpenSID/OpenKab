@@ -21,6 +21,8 @@ class Penduduk extends Model
     public const KATEGORI_STATISTIK = [
         'umur-rentang' => 'Umur Rentang',
         'umur-kategori' => 'Umur Kategori',
+        'akta-kelahiran' => 'Akta Kelahiran',
+        'hamil' => 'Status Kehamilan',
     ];
 
     /** {@inheritdoc} */

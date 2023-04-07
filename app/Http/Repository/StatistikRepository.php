@@ -4,8 +4,12 @@ namespace App\Http\Repository;
 
 class StatistikRepository
 {
-    public function getStatistik(array $header = [], array $footer = [])
+    public function getStatistik(array $data = [])
     {
+        $header = $data['header'] ?? [];
+        $footer = $data['footer'] ?? [];
+
+
         if (count($footer) > 0) {
             $setFooter = $this->getHitungFooter($footer);
 
@@ -45,8 +49,8 @@ class StatistikRepository
             $this->getPresentase([
                 'id'        => 2,
                 'nama'      => $dataFooter[1]['nama'],
-                'laki_laki' => $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
-                'perempuan' => $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
+                'laki_laki' => $dataFooter[1]['laki_laki'] ?? $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
+                'perempuan' => $dataFooter[1]['perempuan'] ?? $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
             ]),
             $this->getPresentase([
                 'id'        => 3,

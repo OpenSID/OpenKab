@@ -45,6 +45,17 @@ class StatistikController extends Controller
             ], Response::HTTP_NOT_FOUND);
     }
 
+    public function keluarga(keluargaRepository $keluarga)
+    {
+        if ($this->kategori) {
+            return $this->fractal($this->statistik->getStatistik($keluarga->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-keluarga')->respond();
+        }
+        return response()->json([
+                'success' => false,
+                'message' => 'Kategori tidak ditemukan',
+            ], Response::HTTP_NOT_FOUND);
+    }
+
     public function rtm(RtmRepository $rtm)
     {
         return $this->fractal($this->statistik->getStatistik($rtm->listStatistik()), new StatistikTransformer(), 'statistik-rtm')->respond();

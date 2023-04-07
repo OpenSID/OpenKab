@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Services\HealthCheckController;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -299,7 +300,7 @@ class Penduduk extends Model
      */
     public function getWajibKTPAttribute()
     {
-        return (($this->tanggallahir->age > 16) || (! empty($this->status_kawin) && $this->status_kawin != 1))
+        return (($this->tanggallahir && $this->tanggallahir->age > 16) || (! empty($this->status_kawin) && $this->status_kawin != 1))
             ? 'WAJIB KTP'
             : 'BELUM';
     }
@@ -361,13 +362,17 @@ class Penduduk extends Model
      */
     public function getUrlFotoAttribute()
     {
-        if (empty($this->foto)) {
-            return $this->sex === 1
-                ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
-                : Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/wuser.png');
-        }
+        // TODO:: Cek ini
 
-        return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
+        return null;
+
+        // if (empty($this->foto)) {
+        //     return $this->sex === 1
+        //         ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
+        //         : Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/wuser.png');
+        // }
+
+        // return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
     }
 
     /**
@@ -381,6 +386,18 @@ class Penduduk extends Model
     public function scopeStatus($query, $value = 1)
     {
         return $query->where('status_dasar', $value);
+    }
+
+    /**
+     * Scope untuk Statistik
+     */
+    public function scopeCountStatistik($query)
+    {
+        $this->appends = [];
+        $this->with = [];
+
+        return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan');
     }
 
     public function scopeCountSukuStatistik($query)

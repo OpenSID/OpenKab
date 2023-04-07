@@ -1,102 +1,53 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
-use App\Models\Rtm;
-use App\Models\Umur;
-use App\Models\Hamil;
-use App\Models\Covid;
-use App\Models\Suku;
-use App\Models\Penduduk;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Repository\RtmRepository;
-use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\BantuanRepository;
+use App\Http\Repository\KeluargaRepository;
 use App\Http\Repository\PendudukRepository;
 use App\Http\Repository\StatistikRepository;
 use App\Http\Transformers\StatistikTransformer;
 
 class StatistikController extends Controller
 {
-    protected $penduduk;
-    protected $rtm;
-    protected $bantuan;
     protected $statistik;
+    protected $kategori;
 
-    public function __construct(PendudukRepository $penduduk, RtmRepository $rtm, BantuanRepository $bantuan, StatistikRepository $statistik)
+    public function __construct(StatistikRepository $statistik)
     {
-        $this->penduduk = $penduduk;
-        $this->rtm = $rtm;
-        $this->bantuan = $bantuan;
         $this->statistik = $statistik;
+        $this->kategori = request()->input('filter')['slug'] ?? null;
     }
 
-    public function penduduk()
+    public function penduduk(PendudukRepository $penduduk)
     {
-        $data = match (request()->input('filter')['slug']) {
-            'umur-rentang' => [
-                'header' => Umur::countStatistik()->status()->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            'umur-kategori' => [
-                'header' => Umur::countStatistik()->status(0)->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            'akta-kelahiran' => [
-                'header' => Umur::countAktaStatistik()->status()->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            'covid' => [
-                'header' => Covid::countStatistik()->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            'suku' => [
-                'header' => Penduduk::countSukuStatistik()->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            'hamil' => [
-                'header' => Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            default => null
-        };
-
-        return $this->fractal($this->statistik->getStatistik($data['header'], $data['footer']), new StatistikTransformer(), 'grafik')->respond();
+        if ($this->kategori) {
+            return $this->fractal($this->statistik->getStatistik($penduduk->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-penduduk')->respond();
+        }
+        return response()->json([
+                'success' => false,
+                'message' => 'Kategori tidak ditemukan',
+            ], Response::HTTP_NOT_FOUND);
     }
 
-    public function rtm()
+    public function keluarga(KeluargaRepository $keluarga)
     {
-        return $this->fractal($this->statistik->getStatistik([], $this->rtm->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
+        if ($this->kategori) {
+            return $this->fractal($this->statistik->getStatistik($keluarga->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-keluarga')->respond();
+        }
+        return response()->json([
+                'success' => false,
+                'message' => 'Kategori tidak ditemukan',
+            ], Response::HTTP_NOT_FOUND);
     }
 
-    public function bantuan()
+    public function rtm(RtmRepository $rtm)
     {
-        return $this->fractal($this->statistik->getStatistik([], $this->bantuan->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
+        return $this->fractal($this->statistik->getStatistik($rtm->listStatistik()), new StatistikTransformer(), 'statistik-rtm')->respond();
     }
 
-    // Hanya digunakan untuk test header
-    private function contohFooter()
+    public function bantuan(BantuanRepository $bantuan)
     {
-        return [
-            [
-                "nama" => "Peserta",
-                "jumlah" => 4,
-                "laki_laki" => 2,
-                "perempuan" => 2
-            ],
-            [
-                "nama" => "Bukan Peserta",
-                "jumlah" => 0,
-                "laki_laki" => 0,
-                "perempuan" => 0
-            ],
-            [
-                "nama" => "Total",
-                "jumlah" => 97,
-                "laki_laki" => 46,
-                "perempuan" => 51
-            ]
-        ];
+        return $this->fractal($this->statistik->getStatistik($bantuan->listStatistik()), new StatistikTransformer(), 'statistik-bantuan')->respond();
     }
 }

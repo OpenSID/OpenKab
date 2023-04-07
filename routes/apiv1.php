@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::controller(KeluargaController::class)
             ->prefix('keluarga')->group(function () {
                 Route::get('/', 'index');
+                Route::get('/grafik', 'grafik');
             });
     });
 });

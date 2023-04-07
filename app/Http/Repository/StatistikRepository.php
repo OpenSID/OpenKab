@@ -6,20 +6,24 @@ class StatistikRepository
 {
     public function getStatistik(array $header = [], array $footer = [])
     {
-        $setFooter = $this->getHitungFooter($footer);
+        if (count($footer) > 0) {
+            $setFooter = $this->getHitungFooter($footer);
 
-        if (count($header) > 0) {
-            $setFooter = collect($setFooter)->map(function ($item, $key) use ($header) {
-                $item['id'] = $key + 1 + count($header);
-                return $item;
-            });
+            if (count($header) > 0) {
+                $setFooter = collect($setFooter)->map(function ($item, $key) use ($header) {
+                    $item['id'] = $key + 1 + count($header);
+                    return $item;
+                });
 
-            $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
+                $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
 
-            return [... $setHeader, ... $setFooter];
+                return [... $setHeader, ... $setFooter];
+            }
+
+            return $setFooter;
         }
 
-        return $setFooter;
+        return [];
     }
 
     private function getHitungHeader(array $dataHeader = [], int $total = 0)

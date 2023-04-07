@@ -6,6 +6,7 @@ use App\Models\Rtm;
 use App\Models\Umur;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Repository\RtmRepository;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\BantuanRepository;
@@ -30,16 +31,54 @@ class StatistikController extends Controller
 
     public function penduduk()
     {
-        $header = Umur::countStatistik()->status()->orderBy('id')->get();
-        // $header = [
-        //     'umur-rentang' => 'Umur Rentang',
-        //     'umur-kategori' => 'Umur Kategori',
-        // ];
+        // switch (request()->input('filter')['slug']) {
+        //     case 'umur-rentang':
+        //         $header = Umur::countStatistik()->status()->orderBy('id')->get();
+        //         $footer = [];
+        //         # code...
+        //         break;
+
+        //     case 'umur-kategori':
+        //         $header = Umur::countStatistik()->status(0)->orderBy('id')->get();
+        //         $footer = [];
+        //         # code...
+        //         break;
+
+        //     default:
+        //         $header = [];
+        //         $footer = [];
+        //         break;
+        // }
+
+        $header = Umur::countStatistik()->status()->orderBy('id')->get()->toArray();
+        // $footer = [];
+
+        // return response()->json([
+        //     'header' => $header,
+        //     // 'footer' => $footer,
+        // ]);
 
         // $footer = $this->penduduk->listStatistik();
-
-        return response()->json($header);
-
+        $footer = [
+            // [
+            //     "nama" => "Peserta",
+            //     "jumlah" => 4,
+            //     "laki_laki" => 2,
+            //     "perempuan" => 2
+            // ],
+            // [
+            //     "nama" => "Bukan Peserta",
+            //     "jumlah" => 0,
+            //     "laki_laki" => 0,
+            //     "perempuan" => 0
+            // ],
+            // [
+            //     "nama" => "Total",
+            //     "jumlah" => 97,
+            //     "laki_laki" => 46,
+            //     "perempuan" => 51
+            // ]
+        ];
 
         return $this->fractal($this->statistik->getStatistik($header, $footer), new StatistikTransformer(), 'grafik')->respond();
     }
@@ -51,6 +90,11 @@ class StatistikController extends Controller
 
     public function bantuan()
     {
+        return response()->json([
+                    'header' => [],
+                    'footer' => $this->bantuan->listStatistik(),
+                ]);
+
         return $this->fractal($this->statistik->getStatistik([], $this->bantuan->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
     }
 }

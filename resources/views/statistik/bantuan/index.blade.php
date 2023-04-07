@@ -252,17 +252,7 @@
         }
 
         function tampilkan_grafik(areaChartData) {
-            var areaChartData = modifikasi_data_grafik(areaChartData); <<
-            <<
-            << < HEAD
-
-            console.log(areaChartData);
-
-            ===
-            ===
-            = >>>
-            >>>
-            > setup - api
+            var areaChartData = modifikasi_data_grafik(areaChartData);
             var barChartCanvas = $('#barChart').get(0).getContext('2d')
             var barChartData = $.extend(true, {}, areaChartData)
             var temp0 = areaChartData.datasets[0]

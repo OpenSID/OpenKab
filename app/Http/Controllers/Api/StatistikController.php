@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Rtm;
 use App\Models\Umur;
 use App\Models\Hamil;
+use App\Models\Covid;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

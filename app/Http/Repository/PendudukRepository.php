@@ -99,7 +99,7 @@ class PendudukRepository
     // Umur Kategori
     private function caseUmurKategori()
     {
-        $umur = new Umuer();
+        $umur = new Umur();
         $umur->setAppends([]);
         $umur->setWiths([]);
         $umur->countUmurStatistik()->status()->orderBy('id')->get()->toArray();

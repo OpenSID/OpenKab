@@ -12,7 +12,6 @@ class BantuanTransformer extends TransformerAbstract
 {
     public function transform(Bantuan $bantuan)
     {
-        // hapus data statistik pada model Bantuan
         return [
             'id' => $bantuan->id,
             'nama' => $bantuan->nama,

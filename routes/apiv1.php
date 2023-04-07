@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\RtmController;
 use App\Http\Controllers\Api\BantuanController;
+use App\Http\Controllers\Api\StatistikController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,12 +26,10 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Statistik
-    Route::prefix('statistik')->group(function () {
-        // Statistik Bantuan
-        Route::controller(BantuanController::class)
-            ->prefix('bantuan')->group(function () {
-                Route::get('/', 'index');
-                Route::get('/grafik', 'grafik');
-            });
-    });
+    Route::controller(StatistikController::class)
+        ->prefix('statistik')->group(function () {
+            Route::get('/bantuan', 'bantuan');
+
+            Route::get('/rtm', 'rtm');
+        });
 });

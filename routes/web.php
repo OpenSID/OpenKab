@@ -28,16 +28,26 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('sesi')->group(function () {
         Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
-            return redirect('/');
+            return Redirect::back();
         });
         Route::get('hapus', function () {
             session()->remove('desa');
 
-            return redirect('/');
+            return Redirect::back();
         });
     });
 
     Route::prefix('penduduk')->group(function () {
         Route::get('/', [\App\Http\Controllers\PendudukController::class, 'index']);
+    });
+
+
+    // Statistik
+    Route::controller(\App\Http\Controllers\StatistikController::class)->prefix('statistik')->group(function () {
+        // Statistik Bantuan
+        Route::prefix('bantuan')->group(function () {
+            Route::get('/', 'bantuan');
+            Route::get('cetak/{id}', 'cetak_bantuan');
+        });
     });
 });

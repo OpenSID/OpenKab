@@ -323,6 +323,17 @@ return [
                 ]
             ],
         ],
+        [
+            'text' => 'Statistik',
+            'icon' => 'fas fa-chart-pie',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-handshake',
+                    'text' => 'Bantuan',
+                    'url' => 'statistik/bantuan',
+                ]
+            ],
+        ],
     ],
 
     /*
@@ -366,17 +377,17 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
+                    'location' => '//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
+                    'location' => '//cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
+                    'location' => '//cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css',
                 ],
             ],
         ],
@@ -400,8 +411,8 @@ return [
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
+                    'asset' => true,
+                    'location' => 'vendor/chart.js/Chart.min.js',
                 ],
             ],
         ],

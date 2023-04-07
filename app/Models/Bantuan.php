@@ -4,10 +4,14 @@ namespace App\Models;
 
 use App\Models\Enums\SasaranEnum;
 use Illuminate\Support\Facades\DB;
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bantuan extends Model
 {
+    use ConfigIdTrait;
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
@@ -16,7 +20,8 @@ class Bantuan extends Model
 
     /** {@inheritdoc} */
     protected $appends = [
-        'statistik'
+        'statistik',
+        'nama_sasaran'
     ];
 
     /** {@inheritdoc} */
@@ -24,17 +29,39 @@ class Bantuan extends Model
         // 'sasaran' => SasaranEnum::class,
     ];
 
+    /** {@inheritdoc} */
+    protected $dbConnection;
+
+    /**
+     * constract
+     */
+    public function __construct()
+    {
+        $this->dbConnection = DB::connection($this->connection);
+    }
+
     /**
      * Define a one-to-many relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function peserta()
     {
         return $this->hasMany(BantuanPeserta::class, 'program_id');
     }
 
-    public function getStatistikAttribute($query)
+    public function getNamaSasaranAttribute()
+    {
+        return match ($this->sasaran) {
+            1 => 'Penduduk',
+            2 => 'Keluarga',
+            3 => 'Rumah Tangga',
+            4 => 'Kelompok/Organisasi Kemasyarakatan',
+            default => null,
+        };
+    }
+
+    public function getStatistikAttribute()
     {
         return $this->getStatistik($this->id, $this->sasaran);
     }
@@ -42,24 +69,44 @@ class Bantuan extends Model
     private function getStatistik($id, $sasaran)
     {
         $peserta = $this->getPeserta($id, $sasaran);
-        $total  = $this->getTotal($id, $sasaran);
+        $total  = $this->getTotal($sasaran);
 
         return [
-            'peserta' => $peserta,
-            'bukan_peserta' => [
-                'total' => $total->jumlah - $peserta->jumlah,
-                'laki' => $total->laki - $peserta->laki,
-                'perempuan' => $total->perempuan - $peserta->perempuan,
+            [
+                'jumlah'    => $peserta->jumlah,
+                'laki_laki' => $peserta->laki_laki,
+                'perempuan' => $peserta->perempuan,
+                'persentase_jumlah' => $total->jumlah > 0 ? $peserta->jumlah / $total->jumlah * 100 : 0,
+                'persentase_laki_laki' => $total->laki_laki > 0 ? $peserta->laki_laki / $total->laki_laki * 100 : 0,
+                'persentase_perempuan' => $total->perempuan > 0 ? $peserta->perempuan / $total->perempuan * 100 : 0,
+                'nama'      => 'Peserta',
             ],
-            'total' => $total,
+            [
+                'jumlah'    => $total->jumlah - $peserta->jumlah,
+                'laki_laki' => $total->laki_laki - $peserta->laki_laki,
+                'perempuan' => $total->perempuan - $peserta->perempuan,
+                'persentase_jumlah' => $total->jumlah > 0 ? ($total->jumlah - $peserta->jumlah) / $total->jumlah * 100 : 0,
+                'persentase_laki_laki' => $total->laki_laki > 0 ? ($total->laki_laki - $peserta->laki_laki) / $total->laki_laki * 100 : 0,
+                'persentase_perempuan' => $total->perempuan > 0 ? ($total->perempuan - $peserta->perempuan) / $total->perempuan * 100 : 0,
+                'nama'      => 'Bukan Peserta',
+            ],
+            [
+                'jumlah'    => $total->jumlah,
+                'laki_laki' => $total->laki_laki,
+                'perempuan' => $total->perempuan,
+                'persentase_jumlah' => 100,
+                'persentase_laki_laki' => 100,
+                'persentase_perempuan' => 100,
+                'nama'      => 'Total',
+            ],
         ];
     }
 
     private function getPeserta($id, $sasaran)
     {
-        $query = DB::connection($this->connection)->table('program_peserta')
+        $query = $this->dbConnection->table('program_peserta')
             ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->where('program_peserta.program_id', $id);
 
@@ -90,33 +137,34 @@ class Bantuan extends Model
         return $query->first();
     }
 
-    private function getTotal($id, $sasaran)
+    private function getTotal($sasaran)
     {
+        $query = null;
         switch ($sasaran) {
             case '1':
-                $query = DB::connection($this->connection)->table('tweb_penduduk');
+                $query = $this->dbConnection->table('tweb_penduduk');
 
                 break;
             case '2':
-                $query = DB::connection($this->connection)->table('tweb_keluarga')
+                $query = $this->dbConnection->table('tweb_keluarga')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left');
 
                 break;
             case '3':
-                $query = DB::connection($this->connection)->table('tweb_rtm')
+                $query = $this->dbConnection->table('tweb_rtm')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala', 'left');
 
                 break;
 
             case '4':
-                $query = DB::connection($this->connection)->table('kelompok')
+                $query = $this->dbConnection->table('kelompok')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left');
 
                 break;
         }
 
         return $query->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->first();
     }

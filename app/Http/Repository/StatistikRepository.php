@@ -4,25 +4,34 @@ namespace App\Http\Repository;
 
 class StatistikRepository
 {
+    /**
+     * @param $data array
+     *
+     * return array
+     */
     public function getStatistik(array $data = [])
     {
         $header = $data['header'] ?? [];
         $footer = $data['footer'] ?? [];
 
-        $setFooter = $this->getHitungFooter($footer);
+        if (count($footer) > 0) {
+            $setFooter = $this->getHitungFooter($footer);
 
-        if (count($header) > 0) {
-            $setFooter = collect($setFooter)->map(function ($item, $key) use ($header) {
-                $item['id'] = $key + 1 + count($header);
-                return $item;
-            });
+            if (count($header) > 0) {
+                $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
 
-            $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
+                $setFooter = collect($setFooter)->map(function ($item, $key) use ($setHeader) {
+                    $item['id'] = $key + $setHeader->pluck('id')->max();
+                    return $item;
+                });
 
-            return [... $setHeader, ... $setFooter];
+                return $setHeader->merge($setFooter);
+            }
+
+            return $setFooter;
         }
 
-        return $setFooter;
+        return [];
     }
 
     private function getHitungHeader(array $dataHeader = [], int $total = 0)
@@ -44,8 +53,8 @@ class StatistikRepository
             $this->getPresentase([
                 'id'        => 2,
                 'nama'      => $dataFooter[1]['nama'],
-                'laki_laki' => $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
-                'perempuan' => $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
+                'laki_laki' => $dataFooter[1]['laki_laki'] ?? $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
+                'perempuan' => $dataFooter[1]['perempuan'] ?? $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
             ]),
             $this->getPresentase([
                 'id'        => 3,

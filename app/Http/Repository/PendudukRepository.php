@@ -2,6 +2,7 @@
 
 namespace App\Http\Repository;
 
+use App\Models\Umur;
 use App\Models\Penduduk;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;

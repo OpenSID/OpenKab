@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->prefix('bantuan')->group(function () {
             Route::get('/', 'index');
             Route::get('/show', 'show');
+            Route::get('/peserta', 'peserta');
         });
 
     // Statistik

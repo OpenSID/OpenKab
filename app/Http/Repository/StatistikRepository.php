@@ -9,7 +9,6 @@ class StatistikRepository
         $header = $data['header'] ?? [];
         $footer = $data['footer'] ?? [];
 
-
         if (count($footer) > 0) {
             $setFooter = $this->getHitungFooter($footer);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Repository;
 
+use App\Models\Umur;
 use App\Models\Penduduk;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -30,16 +31,32 @@ class PendudukRepository
 
     public function listStatistik()
     {
-        $rtm = Umur::countStatistik();
+        return match (request()->input('filter')['slug']) {
+            'umur-rentang' => $this->caseUmurRentang(),
+            'umur-kategori' => $this->caseUmurKategori(),
+            'akta-kelahiran' => $this->caseAktaKelahiran(),
+            'hamil' => [
+                'header' => Hamil::countStatistik()->status()->orderBy('id')->get()->toArray(),
+                'footer' => $this->contohFooter(),
+            ],
+            default => null
+        };
+    }
 
-        $jumlah = $rtm->bdt(true)->get();
-        $jumlah_laki_laki = $jumlah->sum('laki_laki');
-        $jumlah_perempuan = $jumlah->sum('perempuan');
-        $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
+    private function listFooter($dataHeader, $queryFooter)
+    {
+        if (count($dataHeader) > 0) {
+            $jumlah_laki_laki = $dataHeader->sum('laki_laki');
+            $jumlah_perempuan = $dataHeader->sum('perempuan');
+            $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
+        } else {
+            $jumlah_laki_laki = 0;
+            $jumlah_perempuan = 0;
+            $jumlah = 0;
+        }
 
-        $total  = $rtm->get();
-        $total_laki_laki = $total->sum('laki_laki');
-        $total_perempuan = $total->sum('perempuan');
+        $total_laki_laki = $queryFooter->sum('laki_laki');
+        $total_perempuan = $queryFooter->sum('perempuan');
         $total = $total_laki_laki + $total_perempuan;
 
         return [
@@ -61,6 +78,52 @@ class PendudukRepository
                 'laki_laki' => $total_laki_laki,
                 'perempuan' => $total_perempuan,
             ],
+        ];
+    }
+
+    // Umur Rentang
+    private function caseUmurRentang()
+    {
+        $umur = Umur::countUmurStatistik()->status()->orderBy('id')->get()->toArray();
+        $query = Penduduk::countStatistik()->status()->get()->toArray();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur, $query),
+        ];
+    }
+
+    // Umur Kategori
+    private function caseUmurKategori()
+    {
+        $umur = Umur::countUmurStatistik()->status()->orderBy('id')->get()->toArray();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur),
+        ];
+    }
+
+    // Akta Kelahiran
+    private function caseAktaKelahiran()
+    {
+        $umur = Umur::countAktaStatistik()->status()->orderBy('id')->get()->toArray();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur),
+        ];
+    }
+
+    // Hamil
+    private function caseHamil()
+    {
+        $umur = Umur::countStatistik()->status()->orderBy('id')->get()->toArray();
+        $query = Penduduk::countStatistik()->status()->get()->toArray();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur),
         ];
     }
 }

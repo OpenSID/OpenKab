@@ -35,18 +35,29 @@ class Umur extends Model
      */
     public function scopeCountAktaStatistik($query)
     {
-        return $this->scopeCountStatistik($query, " AND akta_lahir <> '' ");
+        $where = "AND (DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= sampai AND akta_lahir <> ''";
+
+        return $this->scopeCountStatistik($query, $where);
     }
 
     /**
-     * Scope untuk Statistik Umur
+     * Scope untuk Statistik Umur Rentang dan Kategori
      */
-    public function scopeCountStatistik($query, $whereElse)
+    public function scopeCountUmurStatistik($query)
     {
-        $where = "(DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= sampai";
+        $where = "AND (DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= sampai";
+
+        return $this->scopeCountStatistik($query, $where);
+    }
+
+    /**
+     * Scope untuk Statistik
+     */
+    public function scopeCountStatistik($query, $where = '')
+    {
         return $query
             ->select(['id', 'nama'])
-            ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '1' AND $where) as laki_laki")
-            ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' AND $where) as perempuan");
+            ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '1' $where) as laki_laki")
+            ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' $where) as perempuan");
     }
 }

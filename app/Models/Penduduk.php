@@ -380,4 +380,14 @@ class Penduduk extends Model
     {
         return $query->where('status_dasar', $value);
     }
+
+    /**
+     * Scope untuk Statistik
+     */
+    public function scopeCountStatistik($query)
+    {
+        return $query
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan');
+    }
 }

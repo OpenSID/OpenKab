@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Data Statistik RTM</title>
+    <title>Data Statistik Keluarga</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex">
@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <td class="text-center">
-                        <h4 class="judul">DATA STATISTIK BDT RTM</h4>
+                        <h4 class="judul">DATA STATISTIK KELAS SOSIAL KELUARGA</h4>
                     </td>
                 </tr>
                 <tr>
@@ -37,7 +37,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <table class="border thick" id="tabel-rtm">
+                        <table class="border thick" id="tabel-keluarga">
                             <thead>
                                 <tr class="border thick">
                                     <th>No</th>
@@ -57,7 +57,7 @@
         <script>
             $(document).ready(function() {
                 $.ajax({
-                    url: `{{ url('api/v1/statistik/rtm') }}`,
+                    url: `{{ url('api/v1/statistik/keluarga?filter[slug]=kelas-sosial') }}`,
                     method: 'get',
                     success: function(json) {
                         var statistik = json.data.attributes
@@ -75,7 +75,7 @@
                                 <td class="text-right" width="10%">${item.attributes.persentase_perempuan}</td>
                             </tr>`
 
-                            $('#tabel-rtm tbody').append(row)
+                            $('#tabel-keluarga tbody').append(row)
                             no++;
                         })
                     }

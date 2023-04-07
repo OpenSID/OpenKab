@@ -317,7 +317,7 @@ return [
             'icon' => 'fa fa-users',
             'submenu' => [
                 [
-                    'icon' => 'fa fa-user',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Penduduk',
                     'url' => 'penduduk',
                 ]
@@ -328,12 +328,17 @@ return [
             'icon' => 'fas fa-chart-pie',
             'submenu' => [
                 [
-                    'icon' => 'fas fa-home',
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Keluarga',
+                    'url' => 'statistik/keluarga',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'RTM',
                     'url' => 'statistik/rtm',
                 ],
                 [
-                    'icon' => 'fas fa-handshake',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Bantuan',
                     'url' => 'statistik/bantuan',
                 ],

@@ -3,6 +3,7 @@
 namespace App\Http\Repository;
 
 use App\Models\Umur;
+use App\Models\Hamil;
 use App\Models\Penduduk;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -35,10 +36,7 @@ class PendudukRepository
             'umur-rentang' => $this->caseUmurRentang(),
             'umur-kategori' => $this->caseUmurKategori(),
             'akta-kelahiran' => $this->caseAktaKelahiran(),
-            'hamil' => [
-                'header' => Hamil::countStatistik()->status()->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
+            'hamil' => $this->caseHamil(),
             default => null
         };
     }
@@ -124,9 +122,8 @@ class PendudukRepository
     // Hamil
     private function caseHamil()
     {
-        $umur = Umur::countStatistik()->status()->orderBy('id')->get()->toArray();
+        $umur = Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get()->toArray();
         $query = Penduduk::countStatistik()->status()->get()->toArray();
-
         return [
             'header' => $umur,
             'footer' => $this->listFooter($umur),

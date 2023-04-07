@@ -19,25 +19,19 @@ use App\Http\Transformers\StatistikTransformer;
 
 class StatistikController extends Controller
 {
-    protected $penduduk;
-    protected $rtm;
-    protected $bantuan;
     protected $statistik;
     protected $kategori;
 
-    public function __construct(PendudukRepository $penduduk, RtmRepository $rtm, BantuanRepository $bantuan, StatistikRepository $statistik)
+    public function __construct(StatistikRepository $statistik)
     {
-        $this->penduduk = $penduduk;
-        $this->rtm = $rtm;
-        $this->bantuan = $bantuan;
         $this->statistik = $statistik;
         $this->kategori = request()->input('filter')['slug'] ?? null;
     }
 
-    public function penduduk()
+    public function penduduk(PendudukRepository $penduduk)
     {
         if ($this->kategori) {
-            return $this->fractal($this->statistik->getStatistik($this->penduduk->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-penduduk')->respond();
+            return $this->fractal($this->statistik->getStatistik($penduduk->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-penduduk')->respond();
         }
         return response()->json([
                 'success' => false,
@@ -45,13 +39,13 @@ class StatistikController extends Controller
             ], Response::HTTP_NOT_FOUND);
     }
 
-    public function rtm()
+    public function rtm(RtmRepository $rtm)
     {
-        return $this->fractal($this->statistik->getStatistik($this->rtm->listStatistik()), new StatistikTransformer(), 'statistik-rtm')->respond();
+        return $this->fractal($this->statistik->getStatistik($rtm->listStatistik()), new StatistikTransformer(), 'statistik-rtm')->respond();
     }
 
-    public function bantuan()
+    public function bantuan(BantuanRepository $bantuan)
     {
-        return $this->fractal($this->statistik->getStatistik($this->bantuan->listStatistik()), new StatistikTransformer(), 'statistik-bantuan')->respond();
+        return $this->fractal($this->statistik->getStatistik($bantuan->listStatistik()), new StatistikTransformer(), 'statistik-bantuan')->respond();
     }
 }

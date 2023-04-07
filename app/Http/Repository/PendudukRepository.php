@@ -29,9 +29,9 @@ class PendudukRepository
             ->jsonPaginate();
     }
 
-    public function listStatistik()
+    public function listStatistik($kategori)
     {
-        return match (request()->input('filter')['slug']) {
+        return match ($kategori) {
             'umur-rentang' => $this->caseUmurRentang(),
             'umur-kategori' => $this->caseUmurKategori(),
             'akta-kelahiran' => $this->caseAktaKelahiran(),

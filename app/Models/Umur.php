@@ -31,13 +31,16 @@ class Umur extends Model
     }
 
     /**
-     * Scope lainya untuk where
+     * Scope untuk Statistik Akta Kelahiran
      */
     public function scopeCountAktaStatistik($query)
     {
         return $this->scopeCountStatistik($query, " AND akta_lahir <> '' ");
     }
 
+    /**
+     * Scope untuk Statistik Umur
+     */
     public function scopeCountStatistik($query, $whereElse)
     {
         $where = "(DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= sampai";

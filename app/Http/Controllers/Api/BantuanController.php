@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Transformers\BantuanTransformer;
-use App\Http\Transformers\StatistikTransformer;
 use App\Http\Repository\BantuanPesertaRepository;
-use App\Http\Transformers\GrafikBantuanTransformer;
 use App\Http\Transformers\BantuanPesertaTransformer;
 
 class BantuanController extends Controller

@@ -19,6 +19,6 @@ class KeluargaRepository
             ->allowedSorts([
                 'nama',
             ])
-            ->jsonPaginate();
+            ->get();
     }
 }

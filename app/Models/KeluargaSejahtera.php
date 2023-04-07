@@ -45,40 +45,40 @@ class KeluargaSejahtera extends Model
 
         return [
             [
+                'nama'      => 'Keluarga',
                 'jumlah'    => $keluarga->jumlah,
                 'laki_laki' => $keluarga->laki_laki,
                 'perempuan' => $keluarga->perempuan,
                 'persentase_jumlah' => $total->jumlah > 0 ? $keluarga->jumlah / $total->jumlah * 100 : 0,
                 'persentase_laki_laki' => $total->laki_laki > 0 ? $keluarga->laki_laki / $total->laki_laki * 100 : 0,
                 'persentase_perempuan' => $total->perempuan > 0 ? $keluarga->perempuan / $total->perempuan * 100 : 0,
-                'nama'      => 'Keluarga',
             ],
             [
+                'nama'      => 'Jumlah',
                 'jumlah'    => $total_keluarga->jumlah,
                 'laki_laki' => $total_keluarga->laki_laki,
                 'perempuan' => $total_keluarga->perempuan,
                 'persentase_jumlah' => $total->jumlah > 0 ? $total_keluarga->jumlah / $total->jumlah * 100 : 0,
                 'persentase_laki_laki' => $total->laki_laki > 0 ? $total_keluarga->laki_laki / $total->laki_laki * 100 : 0,
                 'persentase_perempuan' => $total->perempuan > 0 ? $total_keluarga->perempuan / $total->perempuan * 100 : 0,
-                'nama'      => 'Jumlah',
             ],
             [
+                'nama'      => 'Belum Mengisi',
                 'jumlah'    => $total->jumlah - $total_keluarga->jumlah,
                 'laki_laki' => $total->laki_laki - $total_keluarga->laki_laki,
                 'perempuan' => $total->perempuan - $total_keluarga->perempuan,
                 'persentase_jumlah' => $total->jumlah > 0 ? ($total->jumlah - $total_keluarga->jumlah) / $total->jumlah * 100 : 0,
                 'persentase_laki_laki' => $total->laki_laki > 0 ? ($total->laki_laki - $total_keluarga->laki_laki) / $total->laki_laki * 100 : 0,
                 'persentase_perempuan' => $total->perempuan > 0 ? ($total->perempuan - $total_keluarga->perempuan) / $total->perempuan * 100 : 0,
-                'nama'      => 'Belum Mengisi',
             ],
             [
+                'nama'      => 'Total',
                 'jumlah'    => $total->jumlah,
                 'laki_laki' => $total->laki_laki,
                 'perempuan' => $total->perempuan,
                 'persentase_jumlah' => 100,
                 'persentase_laki_laki' => 100,
                 'persentase_perempuan' => 100,
-                'nama'      => 'Total',
             ],
         ];
     }

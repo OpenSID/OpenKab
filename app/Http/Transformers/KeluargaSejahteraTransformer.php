@@ -18,8 +18,6 @@ class KeluargaSejahteraTransformer extends TransformerAbstract
             'persentase_laki_laki' => $keluargaSejahtera->statistik[0]['persentase_laki_laki'],
             'perempuan'            => $keluargaSejahtera->statistik[0]['perempuan'],
             'persentase_perempuan' => $keluargaSejahtera->statistik[0]['persentase_perempuan'],
-            'at'         => $keluargaSejahtera->at,
-            'statistik'         => $keluargaSejahtera->statistik,
         ];
     }
 }

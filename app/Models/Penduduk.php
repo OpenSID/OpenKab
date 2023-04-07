@@ -18,6 +18,11 @@ class Penduduk extends Model
     use ConfigIdTrait;
     use HasFactory;
 
+    public const KATEGORI_STATISTIK = [
+        'umur-rentang' => 'Umur Rentang',
+        'umur-kategori' => 'Umur Kategori',
+    ];
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
@@ -241,7 +246,7 @@ class Penduduk extends Model
      */
     public function getNamaTempatDilahirkanAttribute()
     {
-        return match($this->tempat_dilahirkan) {
+        return match ($this->tempat_dilahirkan) {
             1 => 'RS/RB',
             2 => 'Puskesmas',
             3 => 'Polindes',
@@ -258,7 +263,7 @@ class Penduduk extends Model
      */
     public function getNamaJenisKelahiranAttribute()
     {
-        return match($this->jenis_kelahiran) {
+        return match ($this->jenis_kelahiran) {
             1 => 'Tunggal',
             2 => 'Kembar 2',
             3 => 'Kembar 3',
@@ -274,7 +279,7 @@ class Penduduk extends Model
      */
     public function getNamaPenolongKelahiranAttribute()
     {
-        return match($this->penolong_kelahiran) {
+        return match ($this->penolong_kelahiran) {
             1 => 'Dokter',
             2 => 'Bidan Perawat',
             3 => 'Dukun',

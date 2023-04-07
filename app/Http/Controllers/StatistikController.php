@@ -5,12 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\Bantuan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Keluarga;
 
 class StatistikController extends Controller
 {
     public function index()
     {
         // return view('statistik.bantuan');
+    }
+
+    public function keluarga()
+    {
+        return view('statistik.keluarga.index', [
+            'kategori_statistik' => Keluarga::KATEGORI_STATISTIK,
+        ]);
+    }
+
+    public function cetak_keluarga()
+    {
+        return view('statistik.keluarga.cetak');
     }
 
     public function rtm()

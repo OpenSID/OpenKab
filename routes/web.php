@@ -45,6 +45,12 @@ Route::middleware('auth')->group(function () {
     // Statistik
     Route::controller(\App\Http\Controllers\StatistikController::class)->prefix('statistik')->group(function () {
         // Statistik RTM
+        Route::prefix('keluarga')->group(function () {
+            Route::get('/', 'keluarga');
+            Route::get('cetak/{id}', 'cetak_keluarga');
+        });
+
+        // Statistik RTM
         Route::prefix('rtm')->group(function () {
             Route::get('/', 'rtm');
             Route::get('cetak/{id}', 'cetak_rtm');

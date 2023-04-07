@@ -329,6 +329,11 @@ return [
             'submenu' => [
                 [
                     'icon' => 'fas fa-home',
+                    'text' => 'Keluarga',
+                    'url' => 'statistik/keluarga',
+                ],
+                [
+                    'icon' => 'fas fa-home',
                     'text' => 'RTM',
                     'url' => 'statistik/rtm',
                 ],

@@ -323,13 +323,11 @@
             var backgroundColor = [];
 
             chart.forEach(function(item, index) {
-                if (index == 0 || index == 1) {
-                    let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
-                    labels.push(item.nama)
-                    data.push(item.jumlah)
-                    backgroundColor.push(color)
-                }
+                labels.push(item.nama)
+                data.push(item.jumlah)
+                backgroundColor.push(color)
             })
 
             return {

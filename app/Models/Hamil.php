@@ -9,9 +9,6 @@ class Hamil extends Model
 {
     use ConfigIdTrait;
 
-    public const RENTANG = 1;
-    public const KATEGORI = 0;
-
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
@@ -21,14 +18,6 @@ class Hamil extends Model
      * @var string
      */
     protected $table = 'ref_penduduk_hamil';
-
-    /**
-     * Scope status hamil
-     */
-    public function scopeStatus($query, $status = self::RENTANG)
-    {
-//        return $query->where('', '');
-    }
 
     /**
      * Scope untuk Statistik Hamil

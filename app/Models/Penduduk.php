@@ -22,6 +22,7 @@ class Penduduk extends Model
         'umur-rentang' => 'Umur Rentang',
         'umur-kategori' => 'Umur Kategori',
         'akta-kelahiran' => 'Akta Kelahiran',
+        'covid' => 'Status Covid',
         'hamil' => 'Status Kehamilan',
     ];
 

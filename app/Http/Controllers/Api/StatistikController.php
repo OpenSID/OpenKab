@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Rtm;
 use App\Models\Umur;
 use App\Models\Hamil;
+use App\Models\Covid;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -45,8 +46,12 @@ class StatistikController extends Controller
                 'header' => Umur::countAktaStatistik()->status()->orderBy('id')->get()->toArray(),
                 'footer' => $this->contohFooter(),
             ],
+            'covid' => [
+                'header' => Covid::countStatistik()->get()->toArray(),
+                'footer' => $this->contohFooter(),
+            ],
             'hamil' => [
-                'header' => Hamil::countStatistik()->status()->orderBy('id')->get()->toArray(),
+                'header' => Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get()->toArray(),
                 'footer' => $this->contohFooter(),
             ],
             default => null

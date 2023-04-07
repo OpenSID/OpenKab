@@ -9,10 +9,6 @@ use App\Http\Repository\StatistikRepository;
 
 class StatistikController extends Controller
 {
-    protected $penduduk;
-    protected $keluarga;
-    protected $rtm;
-    protected $bantuan;
     protected $statistik;
     protected $kategori;
 

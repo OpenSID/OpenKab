@@ -16,13 +16,11 @@ class BantuanController extends Controller
 
     public function index()
     {
-        return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer(), 'bantuan')->respond();
+        return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer(), 'daftar bantuan')->respond();
     }
 
-    public function grafik()
+    public function show()
     {
-        $footer = $this->bantuan->listBantuan();
-
-        return $this->fractal($this->statistik->getStatistik($header, $footer), new StatistikTransformer(), 'grafik')->respond();
+        return $this->fractal($this->bantuan->showBantuan(), new BantuanTransformer(), 'detail bantuan')->respond();
     }
 }

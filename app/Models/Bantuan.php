@@ -12,6 +12,10 @@ class Bantuan extends Model
 {
     use ConfigIdTrait;
 
+    public const KATEGORI_STATISTIK = [
+        'bdt' => 'BDT',
+    ];
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
@@ -73,31 +77,12 @@ class Bantuan extends Model
 
         return [
             [
-                'jumlah'    => $peserta->jumlah,
                 'laki_laki' => $peserta->laki_laki,
                 'perempuan' => $peserta->perempuan,
-                'persentase_jumlah' => $total->jumlah > 0 ? $peserta->jumlah / $total->jumlah * 100 : 0,
-                'persentase_laki_laki' => $total->laki_laki > 0 ? $peserta->laki_laki / $total->laki_laki * 100 : 0,
-                'persentase_perempuan' => $total->perempuan > 0 ? $peserta->perempuan / $total->perempuan * 100 : 0,
-                'nama'      => 'Peserta',
             ],
             [
-                'jumlah'    => $total->jumlah - $peserta->jumlah,
-                'laki_laki' => $total->laki_laki - $peserta->laki_laki,
-                'perempuan' => $total->perempuan - $peserta->perempuan,
-                'persentase_jumlah' => $total->jumlah > 0 ? ($total->jumlah - $peserta->jumlah) / $total->jumlah * 100 : 0,
-                'persentase_laki_laki' => $total->laki_laki > 0 ? ($total->laki_laki - $peserta->laki_laki) / $total->laki_laki * 100 : 0,
-                'persentase_perempuan' => $total->perempuan > 0 ? ($total->perempuan - $peserta->perempuan) / $total->perempuan * 100 : 0,
-                'nama'      => 'Bukan Peserta',
-            ],
-            [
-                'jumlah'    => $total->jumlah,
                 'laki_laki' => $total->laki_laki,
                 'perempuan' => $total->perempuan,
-                'persentase_jumlah' => 100,
-                'persentase_laki_laki' => 100,
-                'persentase_perempuan' => 100,
-                'nama'      => 'Total',
             ],
         ];
     }
@@ -105,7 +90,6 @@ class Bantuan extends Model
     private function getPeserta($id, $sasaran)
     {
         $query = $this->dbConnection->table('program_peserta')
-            ->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->where('program_peserta.program_id', $id);
@@ -127,7 +111,8 @@ class Bantuan extends Model
                 break;
             case '4':
                 $query->join('kelompok', 'kelompok.id', '=', 'program_peserta.peserta', 'left')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left');
+                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
+                    ->where('kelompok.tipe', 'kelompok');
 
                 break;
             default:
@@ -158,13 +143,13 @@ class Bantuan extends Model
 
             case '4':
                 $query = $this->dbConnection->table('kelompok')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left');
+                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
+                    ->where('kelompok.tipe', 'kelompok');
 
                 break;
         }
 
-        return $query->selectRaw('COUNT(tweb_penduduk.id) AS jumlah')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+        return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->first();
     }

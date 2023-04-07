@@ -7,15 +7,15 @@
 @section('title', 'Data Statistik')
 
 @section('content_header')
-    <h1>Data Statistik Bantuan</h1>
+    <h1>Data Statistik RTM</h1>
 @stop
 
 @section('content')
-    <div class="row" id="tampilkan-bantuan">
+    <div class="row" id="tampilkan-rtm">
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Daftar Bantuan</h3>
+                    <h3 class="card-title">Daftar RTM</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -23,7 +23,15 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="nav nav-pills flex-column" id="daftar-bantuan">
+                    <ul class="nav nav-pills flex-column" id="daftar-rtm">
+                        @foreach ($kategori_statistik as $key => $value)
+                            <li class="nav-item rtm">
+                                <a data-id="{{ $key }}" class="nav-link {{ $loop->first ? 'active' : '' }}">
+                                    <i class="fas fa-angle-right"></i> {{ $value }}
+                                </a>
+                            </li>
+                        @endforeach
+
                     </ul>
                 </div>
             </div>
@@ -39,13 +47,13 @@
                         </div>
                         <div class="col-md-2">
                             <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
-                                href="#grafik-bantuan" role="button" aria-expanded="false" aria-controls="grafik-bantuan">
+                                href="#grafik-rtm" role="button" aria-expanded="false" aria-controls="grafik-rtm">
                                 <i class="fas fa-chart-bar"></i> Grafik
                             </button>
                         </div>
                         <div class="col-md-2">
                             <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse"
-                                href="#pie-bantuan" role="button" aria-expanded="false" aria-controls="pie-bantuan">
+                                href="#pie-rtm" role="button" aria-expanded="false" aria-controls="pie-rtm">
                                 <i class="fas fa-chart-pie"></i> Chart
                             </button>
                         </div>
@@ -54,7 +62,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="grafik-bantuan" class="collapse">
+                            <div id="grafik-rtm" class="collapse">
                                 <div class="chart">
                                     <canvas id="barChart"
                                         style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
@@ -62,7 +70,7 @@
                                 <hr style="margin-right: -20px; margin-left: -20px;">
                             </div>
 
-                            <div id="pie-bantuan" class="collapse">
+                            <div id="pie-rtm" class="collapse">
                                 <div class="chart">
                                     <div class="card-body">
                                         <canvas id="donutChart"
@@ -75,11 +83,11 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-striped cell-border" id="statistik-bantuan">
+                        <table class="table table-striped cell-border" id="statistik-rtm">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th id="judul_sasaran" width="50%"></th>
+                                    <th width="50%">Jenis Kelompok</th>
                                     <th colspan="2" class="dt-head-center">Jumlah</th>
                                     <th colspan="2" class="dt-head-center">Laki - laki</th>
                                     <th colspan="2" class="dt-head-center">Perempuan</th>
@@ -103,43 +111,7 @@
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
-        $.ajax({
-            url: `{{ url('api/v1/bantuan') }}`,
-            method: 'get',
-            success: function(response) {
-                if (response.data.length == 0) {
-                    $('#tampilkan-bantuan').html(`
-                        <div class="col-lg-12">
-                            <div class="alert alert-warning">
-                                <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                                Tidak ada data bantuan yang tersedia untuk Desa ${nama_desa}.
-                            </div>
-                        </div>
-                    `)
-                }
-
-                var daftar_bantuan = response.data
-                var html = ''
-
-                daftar_bantuan.forEach(function(item, index) {
-                    if (index == 0) {
-                        $('#judul_sasaran').html('Sasaran ' + item.attributes.nama_sasaran)
-                        $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${item.id}`);
-                    }
-                    html += `
-                        <li class="nav-item bantuan">
-                            <a data-id="${item.id}"  data-nama="${item.attributes.nama}" data-sasaran="${item.attributes.nama_sasaran}" class="nav-link ${index == 0 ? 'active' : ''}">
-                                <i class="fas fa-angle-right"></i> ${item.attributes.nama}
-                            </a>
-                        </li>
-                    `
-                })
-
-                $('#daftar-bantuan').html(html)
-            }
-        });
-
-        $('#daftar-bantuan').on('mouseenter', '.bantuan > a', function() {
+        $('#daftar-rtm').on('mouseenter', '.rtm > a', function() {
             $(this).css('cursor', 'pointer')
         })
 
@@ -147,7 +119,7 @@
             window.open($(this).data('url'), '_blank');
         });
 
-        var statistik = $('#statistik-bantuan').DataTable({
+        var statistik = $('#statistik-rtm').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -156,7 +128,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/bantuan') }}`,
+                url: `{{ url('api/v1/statistik/rtm') }}`,
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
@@ -165,8 +137,8 @@
                             data_grafik.push(item.attributes)
                         })
 
-                        if (json.data.length != $('#statistik-bantuan').data('length')) {
-                            $('#statistik-bantuan').data('length', json.data.length)
+                        if (json.data.length != $('#statistik-rtm').data('length')) {
+                            $('#statistik-rtm').data('length', json.data.length)
                             grafik_pie()
                         }
 
@@ -216,7 +188,7 @@
         })
 
         statistik.on('draw.dt', function() {
-            var PageInfo = $('#statistik-bantuan').DataTable().page.info();
+            var PageInfo = $('#statistik-rtm').DataTable().page.info();
             statistik.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
@@ -225,23 +197,22 @@
         });
 
         $('#btn-grafik').on('click', function() {
-            $("#pie-bantuan").collapse('hide')
+            $("#pie-rtm").collapse('hide')
         })
 
         $('#btn-pie').on('click', function() {
-            $("#grafik-bantuan").collapse('hide')
+            $("#grafik-rtm").collapse('hide')
         })
 
-        $('#daftar-bantuan').on('click', '.bantuan > a', function() {
+        $('#daftar-rtm').on('click', '.rtm > a', function() {
             var id = $(this).data('id')
             var sasaran = $(this).data('sasaran')
 
-            $('.bantuan > a').removeClass('active')
+            $('.rtm > a').removeClass('active')
             $(this).addClass('active')
-            $('#judul_sasaran').html('Sasaran ' + sasaran)
 
-            statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load();
-            $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
+            statistik.ajax.url(`{{ url('api/v1/statistik/rtm') }}/?filter[id]=${id}`).load();
+            $('#cetak').data('url', `{{ url('statistik/rtm/cetak') }}/${id}`);
 
             grafik_pie();
         })
@@ -253,6 +224,9 @@
 
         function tampilkan_grafik(areaChartData) {
             var areaChartData = modifikasi_data_grafik(areaChartData);
+
+            console.log(areaChartData);
+
             var barChartCanvas = $('#barChart').get(0).getContext('2d')
             var barChartData = $.extend(true, {}, areaChartData)
             var temp0 = areaChartData.datasets[0]
@@ -295,10 +269,8 @@
                 }
             })
 
-            var bantuan = $('#daftar-bantuan').find('.bantuan > a.active').data('nama')
-
             return {
-                labels: [bantuan],
+                labels: ['BDT'],
                 datasets: data_baru
             }
         }
@@ -341,6 +313,6 @@
             }
         }
 
-        $('.bantuan > a.active').trigger('click')
+        $('.rtm > a.active').trigger('click')
     </script>
 @endsection

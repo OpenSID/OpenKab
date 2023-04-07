@@ -328,10 +328,16 @@ return [
             'icon' => 'fas fa-chart-pie',
             'submenu' => [
                 [
+                    'icon' => 'fas fa-home',
+                    'text' => 'RTM',
+                    'url' => 'statistik/rtm',
+                ],
+                [
                     'icon' => 'fas fa-handshake',
                     'text' => 'Bantuan',
                     'url' => 'statistik/bantuan',
-                ]
+                ],
+
             ],
         ],
     ],

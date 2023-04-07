@@ -4,8 +4,11 @@ namespace App\Http\Repository;
 
 class StatistikRepository
 {
-    public function getStatistik(array $header = [], array $footer = [])
+    public function getStatistik(array $data = [])
     {
+        $header = $data['header'] ?? [];
+        $footer = $data['footer'] ?? [];
+
         $setFooter = $this->getHitungFooter($footer);
 
         if (count($header) > 0) {

@@ -17,4 +17,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::prefix('penduduk')->group(function () {
+        Route::get('/', \App\Http\Controllers\Api\PendudukController::class);
+    });
 });

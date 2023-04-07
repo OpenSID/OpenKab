@@ -12,7 +12,7 @@ return [
      * may be left empty to use Fractal's default one. This can either be a
      * string or a League\Fractal\Paginator\PaginatorInterface subclass.
      */
-    'default_paginator' => '',
+    'default_paginator' => \App\Services\IlluminatePaginatorAdapter::class,
 
     /*
      * League\Fractal\Serializer\JsonApiSerializer will use this value

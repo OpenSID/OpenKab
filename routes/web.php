@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\WilayahMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,19 @@ Route::get('/', [HomeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::prefix('sesi')->group(function () {
+        Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
+            return redirect('/');
+        });
+        Route::get('hapus', function () {
+            session()->remove('desa');
+
+            return redirect('/');
+        });
+    });
+
+    Route::prefix('penduduk')->group(function () {
+        Route::get('/', [\App\Http\Controllers\PendudukController::class, 'index']);
+    });
 });

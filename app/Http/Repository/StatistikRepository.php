@@ -4,6 +4,11 @@ namespace App\Http\Repository;
 
 class StatistikRepository
 {
+    /**
+     * @param $data array
+     *
+     * return array
+     */
     public function getStatistik(array $data = [])
     {
         $header = $data['header'] ?? [];
@@ -20,7 +25,7 @@ class StatistikRepository
                     return $item;
                 });
 
-                return [... $setHeader, ... $setFooter];
+                return $setHeader->merge($setFooter);
             }
 
             return $setFooter;

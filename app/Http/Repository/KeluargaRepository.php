@@ -28,19 +28,27 @@ class KeluargaRepository
             ->jsonPaginate();
     }
 
+    /**
+     * @param $kategori string
+     *
+     * return array
+     */
     public function listStatistik($kategori)
     {
-        return match ($kategori) {
+        return collect(match ($kategori) {
             'kelas-sosial' => $this->caseKelasSosial(),
-            default => null
-        };
+            default => []
+        })->toArray();
     }
 
+    /**
+     * @param $data_header collection
+     * @param $query_footer collection
+     *
+     * return array
+     */
     private function listFooter($data_header, $query_footer)
     {
-        $data_header  = collect($data_header);
-        $query_footer = collect($query_footer);
-
         if (count($data_header) > 0) {
             $jumlah_laki_laki = $data_header->sum('laki_laki');
             $jumlah_perempuan = $data_header->sum('perempuan');
@@ -77,11 +85,13 @@ class KeluargaRepository
         ];
     }
 
-
-    private function casekelasSosial()
+    /**
+     * return array
+     */
+    private function caseKelasSosial()
     {
-        $kelas = KelasSosial::countStatistik()->get()->toArray();
-        $query = Keluarga::countStatistik()->get()->toArray();
+        $kelas = KelasSosial::countStatistik()->get();
+        $query = Keluarga::countStatistik()->get();
 
         return [
             'header' => $kelas,

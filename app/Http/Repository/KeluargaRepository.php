@@ -2,11 +2,8 @@
 
 namespace App\Http\Repository;
 
-use App\Models\KelasSosial;
-use App\Models\Umur;
 use App\Models\Keluarga;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
+use App\Models\KelasSosial;
 
 class KeluargaRepository
 {

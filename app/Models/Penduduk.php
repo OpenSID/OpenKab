@@ -23,6 +23,7 @@ class Penduduk extends Model
         'umur-kategori' => 'Umur Kategori',
         'akta-kelahiran' => 'Akta Kelahiran',
         'covid' => 'Status Covid',
+        'suku' => 'Suku / Etnis',
         'hamil' => 'Status Kehamilan',
     ];
 
@@ -380,5 +381,18 @@ class Penduduk extends Model
     public function scopeStatus($query, $value = 1)
     {
         return $query->where('status_dasar', $value);
+    }
+
+    public function scopeCountSukuStatistik($query)
+    {
+        return $query
+            ->select(['suku AS id', 'suku AS nama'])
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+            ->groupBy('suku')
+
+            ->whereNotNull('suku')
+            ->where('suku', '!=', "")
+            ;
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Rtm;
 use App\Models\Umur;
 use App\Models\Hamil;
 use App\Models\Covid;
+use App\Models\Suku;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -48,6 +49,10 @@ class StatistikController extends Controller
             ],
             'covid' => [
                 'header' => Covid::countStatistik()->get()->toArray(),
+                'footer' => $this->contohFooter(),
+            ],
+            'suku' => [
+                'header' => Penduduk::countSukuStatistik()->get()->toArray(),
                 'footer' => $this->contohFooter(),
             ],
             'hamil' => [

@@ -40,6 +40,10 @@ class StatistikController extends Controller
                 'header' => Umur::countStatistik()->status(0)->orderBy('id')->get()->toArray(),
                 'footer' => $this->contohFooter(),
             ],
+            'akta-kelahiran' => [
+                'header' => Umur::countAktaStatistik()->status()->orderBy('id')->get()->toArray(),
+                'footer' => $this->contohFooter(),
+            ],
             default => null
         };
 

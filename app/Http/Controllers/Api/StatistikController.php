@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Rtm;
 use App\Models\Umur;
-use App\Models\Hamil;
 use App\Models\Covid;
+use App\Models\Hamil;
 use App\Models\Penduduk;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Repository\RtmRepository;
@@ -22,6 +23,7 @@ class StatistikController extends Controller
     protected $rtm;
     protected $bantuan;
     protected $statistik;
+    protected $kategori;
 
     public function __construct(PendudukRepository $penduduk, RtmRepository $rtm, BantuanRepository $bantuan, StatistikRepository $statistik)
     {
@@ -29,11 +31,18 @@ class StatistikController extends Controller
         $this->rtm = $rtm;
         $this->bantuan = $bantuan;
         $this->statistik = $statistik;
+        $this->kategori = request()->input('filter')['slug'] ?? null;
     }
 
     public function penduduk()
     {
-        return $this->fractal($this->statistik->getStatistik($this->penduduk->listStatistik()), new StatistikTransformer(), 'statistik-penduduk')->respond();
+        if ($this->kategori) {
+            return $this->fractal($this->statistik->getStatistik($this->penduduk->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-penduduk')->respond();
+        }
+        return response()->json([
+                'success' => false,
+                'message' => 'Kategori tidak ditemukan',
+            ], Response::HTTP_NOT_FOUND);
     }
 
     public function rtm()

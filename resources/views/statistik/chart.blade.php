@@ -1,11 +1,12 @@
 <script>
-    function grafik_pie() {
-        tampilkan_grafik(data_grafik)
-        tampilkan_chart(data_grafik)
+    function grafikPie() {
+        var data = modifikasiData(data_grafik);
+        console.log(data_grafik);
+        tampilGrafik(data[0])
+        tampilPie(data[1])
     }
 
-    function tampilkan_grafik(areaChartData) {
-        var areaChartData = modifikasi_data_grafik(areaChartData);
+    function tampilGrafik(areaChartData) {
         var barChartCanvas = $('#barChart').get(0).getContext('2d')
         var barChartData = $.extend(true, {}, areaChartData)
         var temp0 = areaChartData.datasets[0]
@@ -26,34 +27,7 @@
         })
     }
 
-    function modifikasi_data_grafik(data) {
-        var data_baru = []
-        data.forEach(function(item, index) {
-            let color = 'rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math
-                .random() * 255) + ',' + Math.floor(Math.random() * 255) + ', 1)'
-            let colorPoint = '#' + Math.floor(Math.random() * 16777215).toString(16);
-
-            data_baru.push({
-                label: item.nama,
-                backgroundColor: color,
-                borderColor: color,
-                pointRadius: false,
-                pointColor: color,
-                pointStrokeColor: colorPoint,
-                pointHighlightFill: colorPoint,
-                pointHighlightStroke: color,
-                data: [item.jumlah, 1]
-            })
-        })
-
-        return {
-            labels: null,
-            datasets: data_baru
-        }
-    }
-
-    function tampilkan_chart(areaChartData) {
-        var donutData = modifikasi_data_chart(areaChartData);
+    function tampilPie(donutData) {
         var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
         var donutOptions = {
             maintainAspectRatio: false,
@@ -66,25 +40,45 @@
         })
     }
 
-    function modifikasi_data_chart(chart) {
-        var labels = [];
-        var data = [];
-        var backgroundColor = [];
+    function modifikasiData(data) {
+        var dataBaruGrafik = []
+        var labelsPie = [];
+        var dataPie = [];
+        var backgroundColorPie = [];
 
-        chart.forEach(function(item, index) {
-            let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        data.forEach(function(item, index) {
+            let color = 'rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math
+                .random() * 255) + ',' + Math.floor(Math.random() * 255) + ', 1)'
+            let colorPoint = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
-            labels.push(item.nama)
-            data.push(item.jumlah)
-            backgroundColor.push(color)
+            dataBaruGrafik.push({
+                label: item.nama,
+                backgroundColor: color,
+                borderColor: color,
+                pointRadius: false,
+                pointColor: color,
+                pointStrokeColor: colorPoint,
+                pointHighlightFill: colorPoint,
+                pointHighlightStroke: color,
+                data: [item.jumlah, 1]
+            })
+
+            labelsPie.push(item.nama)
+            dataPie.push(item.jumlah)
+            backgroundColorPie.push(color)
         })
 
-        return {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: backgroundColor,
-            }]
-        }
+        return [{
+                labels: null,
+                datasets: dataBaruGrafik
+            },
+            {
+                labels: labelsPie,
+                datasets: [{
+                    data: dataPie,
+                    backgroundColor: backgroundColorPie,
+                }]
+            }
+        ]
     }
 </script>

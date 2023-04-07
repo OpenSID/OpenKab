@@ -140,7 +140,7 @@
 
                         if (json.data.length != $('#statistik-rtm').data('length')) {
                             $('#statistik-rtm').data('length', json.data.length)
-                            grafik_pie()
+                            grafikPie()
                         }
 
                         return json.data;
@@ -215,7 +215,7 @@
             statistik.ajax.url(`{{ url('api/v1/statistik/rtm') }}/?filter[id]=${id}`).load();
             $('#cetak').data('url', `{{ url('statistik/rtm/cetak') }}/${id}`);
 
-            grafik_pie();
+            grafikPie();
         })
 
         $('.rtm > a.active').trigger('click')

@@ -141,7 +141,7 @@
 
                         if (json.data.length != $('#statistik-keluarga').data('length')) {
                             $('#statistik-keluarga').data('length', json.data.length)
-                            grafik_pie()
+                            grafikPie()
                         }
 
                         return json.data;
@@ -216,7 +216,7 @@
             statistik.ajax.url(`{{ url('api/v1/statistik/keluarga?filter[slug]=kelas-sosial') }}`).load();
             $('#cetak').data('url', `{{ url('statistik/keluarga/cetak') }}/${id}`);
 
-            grafik_pie();
+            grafikPie();
         })
 
         $('.keluarga > a.active').trigger('click')

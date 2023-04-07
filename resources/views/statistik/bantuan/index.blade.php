@@ -168,7 +168,7 @@
 
                         if (json.data.length != $('#statistik-bantuan').data('length')) {
                             $('#statistik-bantuan').data('length', json.data.length)
-                            grafik_pie()
+                            grafikPie()
                         }
 
                         return json.data;
@@ -244,7 +244,7 @@
             statistik.ajax.url(`{{ url('api/v1/statistik/bantuan') }}/?filter[id]=${id}`).load();
             $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
 
-            grafik_pie();
+            grafikPie();
         })
 
         $('.bantuan > a.active').trigger('click')

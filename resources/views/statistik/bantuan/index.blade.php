@@ -253,9 +253,6 @@
 
         function tampilkan_grafik(areaChartData) {
             var areaChartData = modifikasi_data_grafik(areaChartData);
-
-            console.log(areaChartData);
-
             var barChartCanvas = $('#barChart').get(0).getContext('2d')
             var barChartData = $.extend(true, {}, areaChartData)
             var temp0 = areaChartData.datasets[0]
@@ -277,8 +274,6 @@
         }
 
         function modifikasi_data_grafik(data) {
-
-            console.log(data);
             var data_baru = []
             data.forEach(function(item, index) {
                 if (index == 0 || index == 1) {

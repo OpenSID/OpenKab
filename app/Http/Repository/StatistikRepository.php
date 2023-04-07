@@ -4,24 +4,28 @@ namespace App\Http\Repository;
 
 class StatistikRepository
 {
+    /**
+     * @param $data array
+     *
+     * return array
+     */
     public function getStatistik(array $data = [])
     {
         $header = $data['header'] ?? [];
         $footer = $data['footer'] ?? [];
 
-
         if (count($footer) > 0) {
             $setFooter = $this->getHitungFooter($footer);
 
             if (count($header) > 0) {
-                $setFooter = collect($setFooter)->map(function ($item, $key) use ($header) {
-                    $item['id'] = $key + 1 + count($header);
+                $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
+
+                $setFooter = collect($setFooter)->map(function ($item, $key) use ($setHeader) {
+                    $item['id'] = $key + $setHeader->pluck('id')->max();
                     return $item;
                 });
 
-                $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
-
-                return [... $setHeader, ... $setFooter];
+                return $setHeader->merge($setFooter);
             }
 
             return $setFooter;

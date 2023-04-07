@@ -124,6 +124,7 @@ class PendudukRepository
     {
         $umur = Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get()->toArray();
         $query = Penduduk::countStatistik()->status()->get()->toArray();
+
         return [
             'header' => $umur,
             'footer' => $this->listFooter($umur),

@@ -26,6 +26,22 @@ class Penduduk extends Model
         'covid' => 'Status Covid',
         'suku' => 'Suku / Etnis',
         'hamil' => 'Status Kehamilan',
+        'pendidikan-kk' => 'Pendidikan Dalam KK',
+        'pendidikan-tempuh' => 'Pendidikan Sedang Ditempuh',
+        'kerja' => 'Pekerjaan',
+        'kawin' => 'Status Perkawinan',
+        'agama' => 'Agama',
+        'jk' => 'Jenis Kelamin',
+        'wn' => 'Warga Negara',
+        'status-penduduk' => 'Status Penduduk',
+        'darah' => 'Golongan Darah',
+        'cacat' => 'Penyandang Cacat',
+        'sakit' => 'Penyakit Menahun',
+        'kb' => 'Aseptor KB',
+        'ktp' => 'Kepemilikan KTP',
+        'asuransi' => 'Asuransi Kesehatan',
+        'bpjs_kerja' => 'BPJS Ketenagakerjaan',
+        'hubungan-kk' => 'Hubungan Dalam KK',
     ];
 
     /** {@inheritdoc} */

@@ -54,6 +54,14 @@ class BantuanRepository
 
     public function listStatistik()
     {
+        return [
+            'header' => [],
+            'footer' => $this->listFooter(),
+        ];
+    }
+
+    public function listFooter()
+    {
         $query = Bantuan::query();
 
         if (session()->has('desa')) {

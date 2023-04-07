@@ -11,6 +11,14 @@ class RtmRepository
 {
     public function listStatistik()
     {
+        return [
+            'header' => [],
+            'footer' => $this->listFooter(),
+        ];
+    }
+
+    public function listFooter()
+    {
         $rtm = Rtm::countStatistik();
 
         $jumlah = $rtm->bdt(true)->get();

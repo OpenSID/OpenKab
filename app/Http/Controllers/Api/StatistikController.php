@@ -32,61 +32,16 @@ class StatistikController extends Controller
 
     public function penduduk()
     {
-        $data = match (request()->input('filter')['slug']) {
-            'umur-rentang' => [
-                'header' => Umur::countStatistik()->status()->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            'umur-kategori' => [
-                'header' => Umur::countStatistik()->status(0)->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            'akta-kelahiran' => [
-                'header' => Umur::countAktaStatistik()->status()->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            'hamil' => [
-                'header' => Hamil::countStatistik()->status()->orderBy('id')->get()->toArray(),
-                'footer' => $this->contohFooter(),
-            ],
-            default => null
-        };
-
-        return $this->fractal($this->statistik->getStatistik($data['header'], $data['footer']), new StatistikTransformer(), 'grafik')->respond();
+        return $this->fractal($this->statistik->getStatistik($this->penduduk->listStatistik()), new StatistikTransformer(), 'statistik-penduduk')->respond();
     }
 
     public function rtm()
     {
-        return $this->fractal($this->statistik->getStatistik([], $this->rtm->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
+        return $this->fractal($this->statistik->getStatistik($this->rtm->listStatistik()), new StatistikTransformer(), 'statistik-rtm')->respond();
     }
 
     public function bantuan()
     {
-        return $this->fractal($this->statistik->getStatistik([], $this->bantuan->listStatistik()), new StatistikTransformer(), 'grafik')->respond();
-    }
-
-    // Hanya digunakan untuk test header
-    private function contohFooter()
-    {
-        return [
-            [
-                "nama" => "Peserta",
-                "jumlah" => 4,
-                "laki_laki" => 2,
-                "perempuan" => 2
-            ],
-            [
-                "nama" => "Bukan Peserta",
-                "jumlah" => 0,
-                "laki_laki" => 0,
-                "perempuan" => 0
-            ],
-            [
-                "nama" => "Total",
-                "jumlah" => 97,
-                "laki_laki" => 46,
-                "perempuan" => 51
-            ]
-        ];
+        return $this->fractal($this->statistik->getStatistik($this->bantuan->listStatistik()), new StatistikTransformer(), 'statistik-bantuan')->respond();
     }
 }

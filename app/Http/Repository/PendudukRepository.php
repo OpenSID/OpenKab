@@ -43,11 +43,14 @@ class PendudukRepository
         };
     }
 
-    private function listFooter($dataHeader, $queryFooter)
+    private function listFooter($data_header, $query_footer)
     {
-        if (count($dataHeader) > 0) {
-            $jumlah_laki_laki = $dataHeader->sum('laki_laki');
-            $jumlah_perempuan = $dataHeader->sum('perempuan');
+        $data_header  = collect($data_header);
+        $query_footer = collect($query_footer);
+
+        if (count($data_header) > 0) {
+            $jumlah_laki_laki = $data_header->sum('laki_laki');
+            $jumlah_perempuan = $data_header->sum('perempuan');
             $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
         } else {
             $jumlah_laki_laki = 0;
@@ -55,8 +58,8 @@ class PendudukRepository
             $jumlah = 0;
         }
 
-        $total_laki_laki = $queryFooter->sum('laki_laki');
-        $total_perempuan = $queryFooter->sum('perempuan');
+        $total_laki_laki = $query_footer->sum('laki_laki');
+        $total_perempuan = $query_footer->sum('perempuan');
         $total = $total_laki_laki + $total_perempuan;
 
         return [
@@ -68,9 +71,9 @@ class PendudukRepository
             ],
             [
                 'nama' => 'Belum Mengisi',
-                'jumlah' => 0,
-                'laki_laki' => 0,
-                'perempuan' => 0,
+                'jumlah' => $total - $jumlah,
+                'laki_laki' => $total_laki_laki - $jumlah_laki_laki,
+                'perempuan' => $total_perempuan - $jumlah_perempuan,
             ],
             [
                 'nama' => 'Total',

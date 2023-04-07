@@ -49,8 +49,8 @@ class StatistikRepository
             $this->getPresentase([
                 'id'        => 2,
                 'nama'      => $dataFooter[1]['nama'],
-                'laki_laki' => $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
-                'perempuan' => $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
+                'laki_laki' => $dataFooter[1]['laki_laki'] ?? $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
+                'perempuan' => $dataFooter[1]['perempuan'] ?? $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
             ]),
             $this->getPresentase([
                 'id'        => 3,

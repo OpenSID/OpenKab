@@ -105,25 +105,27 @@ class StatistikRepository
 
     private function getHitungFooter(array $dataFooter = [])
     {
+        // hitung total
+
         return [
             $this->getPresentase([
                 'id'        => 1,
                 'nama'      => $dataFooter[0]['nama'],
                 'laki_laki' => $dataFooter[0]['laki_laki'],
                 'perempuan' => $dataFooter[0]['perempuan'],
-            ]),
+            ], $dataFooter[2]['jumlah']),
             $this->getPresentase([
                 'id'        => 2,
                 'nama'      => $dataFooter[1]['nama'],
                 'laki_laki' => $dataFooter[1]['laki_laki'] ?? $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
                 'perempuan' => $dataFooter[1]['perempuan'] ?? $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
-            ]),
+            ], $dataFooter[2]['jumlah']),
             $this->getPresentase([
                 'id'        => 3,
                 'nama'      => $dataFooter[2]['nama'],
                 'laki_laki' => $dataFooter[2]['laki_laki'],
                 'perempuan' => $dataFooter[2]['perempuan'],
-            ]),
+            ], $dataFooter[2]['jumlah']),
         ];
     }
 

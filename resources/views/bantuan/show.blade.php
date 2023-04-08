@@ -146,18 +146,10 @@
                     data: "attributes.kartu_alamat", name: "kartu_alamat", searchable: false, orderable: false
                 },
                 {
-                    data: function (data) {
-                        return data.attributes.jenis_kelamin == 1 ? 'Laki-laki' : 'Perempuan'
-                    },
-                    searchable: false,
-                    orderable: false
+                    data: "attributes.jenis_kelamin.nama", name: "jenis_kelamin", searchable: false, orderable: false
                 },
                 {
-                    data: function (data) {
-                        return data.attributes.keterangan == 1 ? 'Hidup' : 'Lainnya'
-                    },
-                    searchable: false,
-                    orderable: false
+                    data: "attributes.keterangan.nama", name: "keterangan", searchable: false, orderable: false
                 },
             ]
         })

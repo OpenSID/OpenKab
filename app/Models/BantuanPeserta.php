@@ -36,12 +36,12 @@ class BantuanPeserta extends Model
 
     public function getJenisKelaminAttribute()
     {
-        return $this->penduduk->sex;
+        return $this->penduduk->jenisKelamin;
     }
 
     public function getKeteranganAttribute()
     {
-        return $this->penduduk->status_dasar;
+        return $this->penduduk->statusDasar;
     }
 
 

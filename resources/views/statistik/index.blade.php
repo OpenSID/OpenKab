@@ -130,7 +130,7 @@
                     if (index == 0) {
                         $('#judul_kolom_nama').html(judul_kolom_nama)
                         $('#cetak').data('url',
-                            `{{ url('statistik/bantuan/cetak') }}/${id}`);
+                            `{{ url('statistik/cetak') }}/${kategori}/${id}`);
                         statistik.ajax.url(
                             `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
                     }

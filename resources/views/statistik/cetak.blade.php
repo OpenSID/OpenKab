@@ -3,8 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    {{-- TODO:: Buat dinamis --}}
-    <title>Data Statistik Penduduk</title>
+    <title>Data Statistik</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex">
@@ -20,7 +19,7 @@
                 <tr>
                     <td class="padat">
                         <img class="logo" src="{{ asset('/assets/img/opensid_logo.png') }}" alt="Logo">
-                        <h3 class="judul">PEMERINTAH <br /> KABUPATEN BIMA</h3>
+                        <h3 class="judul">PEMERINTAH <br /> {{ config('app.namaKab') }}</h3>
                     </td>
                 </tr>
                 <tr>
@@ -31,7 +30,7 @@
                 <tr>
                     {{-- TODO:: Buat dinamis --}}
                     <td class="text-center">
-                        <h4 class="judul">DATA STATISTIK UMUR RENTANG</h4>
+                        <h4 class="judul" id="judul_data"></h4>
                     </td>
                 </tr>
                 <tr>
@@ -58,11 +57,11 @@
         <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
         <script>
             $(document).ready(function() {
-                {{-- TODO:: Buat dinamis --}}
-                var slug = `{{ request()->segment(count(request()->segments())) }}`;
+                var kategori = `{{ $kategori }}`;
+                var id = `{{ $id }}`;
 
                 $.ajax({
-                    url: `{{ url('api/v1/statistik/penduduk') }}/?filter[slug]=${slug}`,
+                    url: `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`,
                     method: 'get',
                     success: function(json) {
                         var statistik = json.data.attributes
@@ -71,7 +70,7 @@
                         json.data.forEach(function(item) {
                             var row = `<tr>
                                 <td class="padat">${no}</td>
-                                <td>${item.attributes.nama}</td>
+                                <th id="judul_kolom_nama" width="50%"></th>
                                 <td class="text-right" width="10%">${item.attributes.jumlah}</td>
                                 <td class="text-right" width="10%">${item.attributes.persentase_jumlah}</td>
                                 <td class="text-right" width="10%">${item.attributes.laki_laki}</td>

@@ -10,9 +10,17 @@ use App\Models\Penduduk;
 
 class StatistikController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        // return view('statistik.bantuan');
+        $this->middleware('auth');
+    }
+
+    public function cetak($kategori, $id)
+    {
+        return view('statistik.cetak', [
+            'kategori' => $kategori,
+            'id' => $id,
+        ]);
     }
 
     public function penduduk()
@@ -25,7 +33,10 @@ class StatistikController extends Controller
 
     public function cetak_penduduk()
     {
-        return view('statistik.penduduk.cetak');
+        return view('statistik.cetak', [
+            'judul' => 'Penduduk',
+            'kategori' => 'penduduk',
+        ]);
     }
 
     public function keluarga()

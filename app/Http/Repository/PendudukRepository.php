@@ -155,4 +155,16 @@ class PendudukRepository
             'footer' => $this->listFooter($umur),
         ];
     }
+
+    // Covid
+    private function caseCovid()
+    {
+        $umur = Covid::countStatistik()->orderBy('id')->get();
+        $query = Penduduk::countStatistik()->status()->get();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur),
+        ];
+    }
 }

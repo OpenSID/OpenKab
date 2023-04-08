@@ -1,7 +1,6 @@
 <script>
     function grafikPie() {
         var data = modifikasiData(data_grafik);
-        console.log(data_grafik);
         tampilGrafik(data[0])
         tampilPie(data[1])
     }

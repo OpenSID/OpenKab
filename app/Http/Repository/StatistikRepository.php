@@ -14,27 +14,23 @@ class StatistikRepository
     {
         return match ($kategori) {
             'penduduk' => [
-                'judul_tabel' => 'Jenis Kelompok',
+                'judul_kolom_nama' => 'Jenis Kelompok',
                 'parameter' => 'slug',
-                'api' => route('api/v1/penduduk'),
                 'kategori' => Penduduk::KATEGORI_STATISTIK,
             ],
             'keluarga' => [
-                'judul_tabel' => 'Jenis Kelompok',
+                'judul_kolom_nama' => 'Jenis Kelompok',
                 'parameter' => 'slug',
-                'api' => route('api/v1/keluarga'),
                 'kategori' => Keluarga::KATEGORI_STATISTIK,
             ],
             'rtm' => [
-                'judul_tabel' => 'Jenis Kelompok',
+                'judul_kolom_nama' => 'Jenis Kelompok',
                 'parameter' => 'slug',
-                'api' => route('api/v1/rtm'),
                 'kategori' => Rtm::KATEGORI_STATISTIK,
             ],
             'bantuan' => [
-                'judul_tabel' => null, // dinamis, diambil dari tabel
+                'judul_kolom_nama' => null, // dinamis, diambil dari tabel
                 'parameter' => 'slug',
-                'api' => route('api/v1/bantuan'),
                 'kategori' => Bantuan::KATEGORI_STATISTIK,
             ],
         };

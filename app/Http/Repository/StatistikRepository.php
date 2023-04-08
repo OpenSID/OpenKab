@@ -2,8 +2,44 @@
 
 namespace App\Http\Repository;
 
+use App\Models\Penduduk;
+
 class StatistikRepository
 {
+    /**
+     *
+     * return array
+     */
+    public function getKategoriStatistik($kategori)
+    {
+        return match ($kategori) {
+            'penduduk' => [
+                'judul_tabel' => 'Jenis Kelompok',
+                'parameter' => 'slug',
+                'api' => 'api/penduduk',
+                'kategori' => Penduduk::KATEGORI_STATISTIK,
+            ],
+            'keluarga' => [
+                'judul_tabel' => 'Jenis Kelompok',
+                'parameter' => 'slug',
+                'api' => 'api/keluarga',
+                'kategori' => Keluarga::KATEGORI_STATISTIK,
+            ],
+            'rtm' => [
+                'judul_tabel' => 'Jenis Kelompok',
+                'parameter' => 'slug',
+                'api' => 'api/rtm',
+                'kategori' => Rtm::KATEGORI_STATISTIK,
+            ],
+            'bantuan' => [
+                'judul_tabel' => null, // dinamis, diambil dari tabel
+                'parameter' => 'slug',
+                'api' => 'api/bantuan',
+                'kategori' => Bantuan::KATEGORI_STATISTIK,
+            ],
+        };
+    }
+
     /**
      * @param $data array
      *

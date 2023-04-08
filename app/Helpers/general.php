@@ -6,7 +6,7 @@
  * return float
  */
 
-function persen(int $pembilang = 0, int $penyebut = 0, int $desimal = 2, string $pemisah = '.')
+function persen(int $pembilang = 0, int $penyebut = 0, int $desimal = 2, string $pemisah = ',')
 {
     $hasil = 0;
 

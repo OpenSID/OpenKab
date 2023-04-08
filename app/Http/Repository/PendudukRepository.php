@@ -110,8 +110,8 @@ class PendudukRepository
      */
     private function caseRentangUmur()
     {
-        $umur = Umur::countUmurStatistik()->status()->orderBy('id')->get();
-        $query = Penduduk::countStatistik()->status()->get();
+        $umur = Umur::countStatistikUmur()->status()->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
 
         return [
             'header' => $umur,
@@ -122,8 +122,8 @@ class PendudukRepository
     // Umur Kategori
     private function caseKategoriUmur()
     {
-        $umur = Umur::countUmurStatistik()->status(0)->orderBy('id')->get();
-        $query = Penduduk::countStatistik()->status()->get();
+        $umur = Umur::countStatistikUmur()->status(0)->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
 
         return [
             'header' => $umur,
@@ -152,5 +152,15 @@ class PendudukRepository
             'header' => $umur,
             'footer' => $this->listFooter($umur),
         ];
+    }
+
+    /**
+     * Jumlah penduduk hidup
+     *
+     * return int
+     */
+    private function countStatistikPendudukHidup()
+    {
+        return Penduduk::countStatistik()->status()->get();
     }
 }

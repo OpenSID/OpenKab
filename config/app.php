@@ -18,8 +18,8 @@ return [
     'name' => env('APP_NAME', 'OpenKab'),
 
     // TODO:: hapus ini jika sudah ada pengaturan tersendiri
-    'namaKab' => env('APP_NAMA_KAB', 'Akas'),
-    'namaProv' => env('APP_NAMA_PROV', 'Nusa Tenggara Barat'),
+    'namaKab' => env('APP_NAMA_KAB', 'Nama Kabupaten'),
+    'namaProv' => env('APP_NAMA_PROV', 'Nama Provinsi'),
 
     /*
     |--------------------------------------------------------------------------

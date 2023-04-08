@@ -43,7 +43,7 @@ class Umur extends Model
     /**
      * Scope untuk Statistik Umur Rentang dan Kategori
      */
-    public function scopeCountUmurStatistik($query)
+    public function scopecountStatistikUmur($query)
     {
         $where = "AND (DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= sampai";
 

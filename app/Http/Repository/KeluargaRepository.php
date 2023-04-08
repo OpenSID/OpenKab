@@ -49,15 +49,11 @@ class KeluargaRepository
      */
     private function listFooter($data_header, $query_footer)
     {
-        if (count($data_header) > 0) {
-            $jumlah_laki_laki = $data_header->sum('laki_laki');
-            $jumlah_perempuan = $data_header->sum('perempuan');
-            $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
-        } else {
-            $jumlah_laki_laki = 0;
-            $jumlah_perempuan = 0;
-            $jumlah = 0;
-        }
+
+        $jumlah_laki_laki = $data_header->sum('laki_laki');
+        $jumlah_perempuan = $data_header->sum('perempuan');
+        $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
+
 
         $total_laki_laki = $query_footer->sum('laki_laki');
         $total_perempuan = $query_footer->sum('perempuan');
@@ -72,9 +68,6 @@ class KeluargaRepository
             ],
             [
                 'nama' => 'Belum Mengisi',
-                'jumlah' => $total - $jumlah,
-                'laki_laki' => $total_laki_laki - $jumlah_laki_laki,
-                'perempuan' => $total_perempuan - $jumlah_perempuan,
             ],
             [
                 'nama' => 'Total',

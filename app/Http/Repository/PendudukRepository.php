@@ -5,6 +5,7 @@ namespace App\Http\Repository;
 use App\Models\Umur;
 use App\Models\Hamil;
 use App\Models\Penduduk;
+use App\Models\Ktp;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -151,6 +152,18 @@ class PendudukRepository
         return [
             'header' => $umur,
             'footer' => $this->listFooter($umur),
+        ];
+    }
+
+    // Kepemilikan KTP
+    private function caseKtp()
+    {
+        $umur = Ktp::countStatistik()->orderBy('id')->get();
+        $query = Penduduk::countStatistik()->status()->get();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur, $query),
         ];
     }
 }

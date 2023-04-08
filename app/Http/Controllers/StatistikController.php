@@ -10,27 +10,35 @@ use App\Models\Penduduk;
 
 class StatistikController extends Controller
 {
-    public function index()
+    public function cetak($kategori, $id)
     {
-        // return view('statistik.bantuan');
+        return view('statistik.cetak', [
+            'kategori' => $kategori,
+            'id' => $id,
+        ]);
     }
 
     public function penduduk()
     {
-        return view('statistik.penduduk.index', [
-            'kategori_statistik' => Penduduk::KATEGORI_STATISTIK,
+        return view('statistik.index', [
+            'judul' => 'Penduduk',
+            'kategori' => 'penduduk',
         ]);
     }
 
     public function cetak_penduduk()
     {
-        return view('statistik.penduduk.cetak');
+        return view('statistik.cetak', [
+            'judul' => 'Penduduk',
+            'kategori' => 'penduduk',
+        ]);
     }
 
     public function keluarga()
     {
-        return view('statistik.keluarga.index', [
-            'kategori_statistik' => Keluarga::KATEGORI_STATISTIK,
+        return view('statistik.index', [
+            'judul' => 'Keluarga',
+            'kategori' => 'keluarga',
         ]);
     }
 
@@ -41,8 +49,9 @@ class StatistikController extends Controller
 
     public function rtm()
     {
-        return view('statistik.rtm.index', [
-            'kategori_statistik' => Bantuan::KATEGORI_STATISTIK,
+        return view('statistik.index', [
+            'judul' => 'RTM',
+            'kategori' => 'rtm',
         ]);
     }
 
@@ -53,7 +62,11 @@ class StatistikController extends Controller
 
     public function bantuan()
     {
-        return view('statistik.bantuan.index');
+        return view('statistik.index', [
+            'judul' => 'Bantuan',
+            'kategori' => 'bantuan',
+        ]);
+
     }
 
     public function cetak_bantuan()

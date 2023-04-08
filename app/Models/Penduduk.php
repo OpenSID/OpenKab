@@ -22,7 +22,7 @@ class Penduduk extends Model
     public const KATEGORI_STATISTIK = [
         'umur-rentang' => 'Umur Rentang',
         // 'umur-kategori' => 'Umur Kategori',
-        // 'akta-kelahiran' => 'Akta Kelahiran',
+         'akta-kelahiran' => 'Akta Kelahiran',
         // 'covid' => 'Status Covid',
         // 'suku' => 'Suku / Etnis',
         // 'hamil' => 'Status Kehamilan',

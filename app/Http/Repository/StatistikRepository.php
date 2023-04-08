@@ -17,30 +17,31 @@ class StatistikRepository
      */
     public function getKategoriStatistik($kategori)
     {
-        $kategori = match ($kategori) {
-            'penduduk' => $this->setKategoriFormat('Jenis Kelompok', Penduduk::KATEGORI_STATISTIK),
-            'keluarga' => $this->setKategoriFormat('Jenis Kelompok', Keluarga::KATEGORI_STATISTIK),
-            'rtm' => $this->setKategoriFormat('Jenis Kelompok', Rtm::KATEGORI_STATISTIK),
+        $daftarKategori = match ($kategori) {
+            'penduduk' => $this->setKategoriFormat('Penduduk', 'Jenis Kelompok', Penduduk::KATEGORI_STATISTIK),
+            'keluarga' => $this->setKategoriFormat('Keluarga', 'Jenis Kelompok', Keluarga::KATEGORI_STATISTIK),
+            'rtm' => $this->setKategoriFormat('RTM', 'Jenis Kelompok', Rtm::KATEGORI_STATISTIK),
             'bantuan' => $this->getKategoriBantuan(),
         };
 
         $detail = request()->input('filter')['detail'] ?? null;
 
         if ($detail) {
-            $kategori = collect($kategori)->filter(function ($item) use ($detail) {
+            $daftarKategori = collect($daftarKategori)->filter(function ($item) use ($detail) {
                 return $item['id'] == $detail;
             })->toArray();
         }
 
-        return $kategori;
+        return $daftarKategori;
     }
 
-    private function setKategoriFormat(string $judul_kolom_nama = null, array $kategori = [])
+    private function setKategoriFormat(string $judul_halaman = null, string $judul_kolom_nama = null, array $kategori = [])
     {
-        return collect($kategori)->map(function ($item, $key) use ($judul_kolom_nama) {
+        return collect($kategori)->map(function ($item, $key) use ($judul_halaman, $judul_kolom_nama) {
             return [
                 'id' => $key,
                 'nama' => $item,
+                'judul_halaman' => $judul_halaman,
                 'judul_kolom_nama' => $judul_kolom_nama,
             ];
         })
@@ -54,6 +55,7 @@ class StatistikRepository
             return [
                 'id' => $item->id,
                 'nama' => $item->nama,
+                'judul_halaman' => 'Bantuan',
                 'judul_kolom_nama' => 'Sasaran ' . $item->nama_sasaran,
             ];
         })->toArray();

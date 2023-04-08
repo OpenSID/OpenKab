@@ -30,7 +30,7 @@
                 <tr>
                     {{-- TODO:: Buat dinamis --}}
                     <td class="text-center">
-                        <h4 class="judul" id="judul_data"></h4>
+                        <h4 class="judul" id="judul_halaman"></h4>
                     </td>
                 </tr>
                 <tr>
@@ -59,6 +59,21 @@
             $(document).ready(function() {
                 var kategori = `{{ $kategori }}`;
                 var id = `{{ $id }}`;
+
+                // tampilkan data detail kategori menggunakan ajax
+                $.ajax({
+                    url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[detail]=${id}&filter[id]=${kategori}`,
+                    method: 'get',
+                    success: function(json) {
+                        console.log(json);
+                        var data = json.data[0]
+                        var judul_halaman = 'Data Statistik ' + data.judul_halaman
+                        var judul_kolom_nama = data.judul_kolom_nama
+
+                        $('#judul_halaman').html(judul_halaman)
+                        $('#judul_kolom_nama').html(judul_kolom_nama)
+                    }
+                })
 
                 $.ajax({
                     url: `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`,

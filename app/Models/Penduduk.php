@@ -25,7 +25,7 @@ class Penduduk extends Model
         // 'covid' => 'Status Covid',
         // 'suku' => 'Suku / Etnis',
         // 'hamil' => 'Status Kehamilan',
-        // 'pendidikan-kk' => 'Pendidikan Dalam KK',
+         'pendidikan-kk' => 'Pendidikan Dalam KK',
         // 'pendidikan-tempuh' => 'Pendidikan Sedang Ditempuh',
         // 'kerja' => 'Pekerjaan',
         // 'kawin' => 'Status Perkawinan',

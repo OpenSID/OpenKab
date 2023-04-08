@@ -29,7 +29,9 @@ class StatistikRepository
         if ($detail) {
             $daftarKategori = collect($daftarKategori)->filter(function ($item) use ($detail) {
                 return $item['id'] == $detail;
-            })->toArray();
+            })
+            ->values()
+            ->toArray();
         }
 
         return $daftarKategori;
@@ -105,8 +107,6 @@ class StatistikRepository
 
     private function getHitungFooter(array $dataFooter = [])
     {
-        // hitung total
-
         return [
             $this->getPresentase([
                 'id'        => 1,

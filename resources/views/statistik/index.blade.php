@@ -174,8 +174,7 @@
             $('#judul_kolom_nama').html(judul_kolom_nama)
 
             statistik.ajax.url(`{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
-            console.log(`{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`);
-            $('#cetak').data('url', `{{ url('statistik') }}/${kategori}/cetak/${id}`);
+            $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
         });
 
         var statistik = $('#tabel-data').DataTable({

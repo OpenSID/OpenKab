@@ -20,9 +20,8 @@ class Penduduk extends Model
     use HasFactory;
 
     public const KATEGORI_STATISTIK = [
-        'umur-rentang' => 'Umur Rentang',
-        // 'umur-kategori' => 'Umur Kategori',
-        // 'akta-kelahiran' => 'Akta Kelahiran',
+        'rentang-umur' => 'Rentang Umur',
+        'kategori-umur' => 'Kategori Umur',
         // 'covid' => 'Status Covid',
         // 'suku' => 'Suku / Etnis',
          'hamil' => 'Status Kehamilan',
@@ -42,6 +41,7 @@ class Penduduk extends Model
         // 'asuransi' => 'Asuransi Kesehatan',
         // 'bpjs_kerja' => 'BPJS Ketenagakerjaan',
         // 'hubungan-kk' => 'Hubungan Dalam KK',
+        'akta-kelahiran' => 'Akta Kelahiran',
     ];
 
     /** {@inheritdoc} */

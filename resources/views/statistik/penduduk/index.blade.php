@@ -26,7 +26,7 @@
                     <ul class="nav nav-pills flex-column" id="daftar-penduduk">
                         @foreach ($kategori_statistik as $key => $value)
                             <li class="nav-item penduduk">
-                                <a data-id="{{ $key }}" class="nav-link {{ $loop->first ? 'active' : '' }}">
+                                <a data-slug="{{ $key }}" class="nav-link {{ $loop->first ? 'active' : '' }}">
                                     <i class="fas fa-angle-right"></i> {{ $value }}
                                 </a>
                             </li>
@@ -46,14 +46,14 @@
                         </div>
                         <div class="col-md-2">
                             <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
-                                    href="#grafik-penduduk" role="button" aria-expanded="false"
-                                    aria-controls="grafik-penduduk">
+                                href="#grafik-penduduk" role="button" aria-expanded="false"
+                                aria-controls="grafik-penduduk">
                                 <i class="fas fa-chart-bar"></i> Grafik
                             </button>
                         </div>
                         <div class="col-md-2">
                             <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse"
-                                    href="#pie-penduduk" role="button" aria-expanded="false" aria-controls="pie-penduduk">
+                                href="#pie-penduduk" role="button" aria-expanded="false" aria-controls="pie-penduduk">
                                 <i class="fas fa-chart-pie"></i> Chart
                             </button>
                         </div>
@@ -65,7 +65,7 @@
                             <div id="grafik-penduduk" class="collapse">
                                 <div class="chart">
                                     <canvas id="barChart"
-                                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                 </div>
                                 <hr style="margin-right: -20px; margin-left: -20px;">
                             </div>
@@ -74,7 +74,7 @@
                                 <div class="chart">
                                     <div class="card-body">
                                         <canvas id="donutChart"
-                                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                     </div>
                                 </div>
                                 <hr style="margin-right: -20px; margin-left: -20px;">
@@ -85,13 +85,13 @@
                     <div class="table-responsive">
                         <table class="table table-striped cell-border" id="statistik-penduduk">
                             <thead>
-                            <tr>
-                                <th>No</th>
-                                <th width="50%">Jenis Kelompok</th>
-                                <th colspan="2" class="dt-head-center">Jumlah</th>
-                                <th colspan="2" class="dt-head-center">Laki - laki</th>
-                                <th colspan="2" class="dt-head-center">Perempuan</th>
-                            </tr>
+                                <tr>
+                                    <th>No</th>
+                                    <th width="50%">Jenis Kelompok</th>
+                                    <th colspan="2" class="dt-head-center">Jumlah</th>
+                                    <th colspan="2" class="dt-head-center">Laki - laki</th>
+                                    <th colspan="2" class="dt-head-center">Perempuan</th>
+                                </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -206,14 +206,13 @@
         })
 
         $('#daftar-penduduk').on('click', '.penduduk > a', function() {
-            var id = $(this).data('id')
-            var sasaran = $(this).data('sasaran')
+            var slug = $(this).data('slug')
 
             $('.penduduk > a').removeClass('active')
             $(this).addClass('active')
 
-            statistik.ajax.url(`{{ url('api/v1/statistik/penduduk?filter[slug]=umur-rentang') }}`).load();
-            $('#cetak').data('url', `{{ url('statistik/penduduk/cetak') }}/${id}`);
+            statistik.ajax.url(`{{ url('api/v1/statistik/penduduk') }}/?filter[slug]=${slug}`).load();
+            $('#cetak').data('url', `{{ url('statistik/penduduk/cetak') }}/${slug}`);
 
             grafikPie();
         })

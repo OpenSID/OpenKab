@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
+    {{-- TODO:: Buat dinamis --}}
     <title>Data Statistik Penduduk</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -28,6 +29,7 @@
                     </td>
                 </tr>
                 <tr>
+                    {{-- TODO:: Buat dinamis --}}
                     <td class="text-center">
                         <h4 class="judul">DATA STATISTIK UMUR RENTANG</h4>
                     </td>
@@ -56,8 +58,11 @@
         <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
         <script>
             $(document).ready(function() {
+                {{-- TODO:: Buat dinamis --}}
+                var slug = `{{ request()->segment(count(request()->segments())) }}`;
+
                 $.ajax({
-                    url: `{{ url('api/v1/statistik/penduduk?filter[slug]=umur-rentang') }}`,
+                    url: `{{ url('api/v1/statistik/penduduk') }}/?filter[slug]=${slug}`,
                     method: 'get',
                     success: function(json) {
                         var statistik = json.data.attributes

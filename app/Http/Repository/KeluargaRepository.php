@@ -86,6 +86,8 @@ class KeluargaRepository
     }
 
     /**
+     * Kelas Sosial
+     *
      * return array
      */
     private function caseKelasSosial()

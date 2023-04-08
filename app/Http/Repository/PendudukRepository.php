@@ -32,7 +32,7 @@ class PendudukRepository
 
     public function listStatistik($kategori)
     {
-        return match ($kategori) {
+        return collect(match ($kategori) {
             'umur-rentang' => $this->caseUmurRentang(),
             'umur-kategori' => $this->caseUmurKategori(),
             'akta-kelahiran' => $this->caseAktaKelahiran(),
@@ -55,15 +55,18 @@ class PendudukRepository
             'asuransi' => $this->caseAsuransi(),
             'bpjs_kerja' => $this->caseBpjsKerja(),
             'hubungan-kk' => $this->caseHubunganKk(),
-            default => null
-        };
+            default => []
+        })->toArray();
     }
 
+    /**
+     * @param $data_header collection
+     * @param $query_footer collection
+     *
+     * return array
+     */
     private function listFooter($data_header, $query_footer)
     {
-        $data_header  = collect($data_header);
-        $query_footer = collect($query_footer);
-
         if (count($data_header) > 0) {
             $jumlah_laki_laki = $data_header->sum('laki_laki');
             $jumlah_perempuan = $data_header->sum('perempuan');
@@ -100,11 +103,15 @@ class PendudukRepository
         ];
     }
 
-    // Umur Rentang
+    /**
+     * Umur Rentang
+     *
+     * return array
+     */
     private function caseUmurRentang()
     {
-        $umur = Umur::countUmurStatistik()->status()->orderBy('id')->get()->toArray();
-        $query = Penduduk::countStatistik()->status()->get()->toArray();
+        $umur = Umur::countUmurStatistik()->status()->orderBy('id')->get();
+        $query = Penduduk::countStatistik()->status()->get();
 
         return [
             'header' => $umur,
@@ -118,7 +125,7 @@ class PendudukRepository
         $umur = new Umur();
         $umur->setAppends([]);
         $umur->setWiths([]);
-        $umur->countUmurStatistik()->status()->orderBy('id')->get()->toArray();
+        $umur->countUmurStatistik()->status()->orderBy('id')->get();
 
         return [
             'header' => $umur,
@@ -129,7 +136,7 @@ class PendudukRepository
     // Akta Kelahiran
     private function caseAktaKelahiran()
     {
-        $umur = Umur::countAktaStatistik()->status()->orderBy('id')->get()->toArray();
+        $umur = Umur::countAktaStatistik()->status()->orderBy('id')->get();
 
         return [
             'header' => $umur,
@@ -140,8 +147,8 @@ class PendudukRepository
     // Hamil
     private function caseHamil()
     {
-        $umur = Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get()->toArray();
-        $query = Penduduk::countStatistik()->status()->get()->toArray();
+        $umur = Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get();
+        $query = Penduduk::countStatistik()->status()->get();
 
         return [
             'header' => $umur,

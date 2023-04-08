@@ -7,13 +7,18 @@
 @stop
 
 @section('content')
-    <div class="row">
+    <div class="row" id="tampilkan-bantuan">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <a href="{{ url('bantuan') }}" class="btn btn-primary">Kembali ke Daftar Bantuan</a>
                 </div>
                 <div class="card-body">
+                    <h5><b>Rincian Program</b></h5>
+                    <div class="table-responsive" id="bantuan-detail">
+                    </div>
+                    <br>
+                    <h5><b>Daftar Peserta</b></h5>
                     <div class="table-responsive">
                         <table class="table table-striped" id="peserta">
                             <thead>
@@ -41,6 +46,57 @@
 
 @section('js')
     <script>
+        var nama_desa = `{{ session('desa.nama_desa') }}`;
+
+        $.ajax({
+            url: `{{ url('api/v1/bantuan/show') }}?filter[id]={{ $id }}`,
+            method: 'get',
+            success: function(response) {
+                if (response.data.length == 0) {
+                    $('#tampilkan-bantuan').html(`
+                        <div class="col-lg-12">
+                            <div class="alert alert-warning">
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
+                                Tidak ada data bantuan yang tersedia untuk Desa ${nama_desa}.
+                            </div>
+                        </div>
+                    `)
+                }
+
+                var bantuan = response.data
+                var html = ''
+
+                html += `
+                    <table class="table table-bordered table-striped table-hover tabel-rincian">
+                        <tbody>
+                            <tr>
+                                <td width="20%">Nama Program</td>
+                                <td width="1">:</td>
+                                <td>${bantuan.attributes.nama}</td>
+                            </tr>
+                            <tr>
+                                <td>Sasaran Peserta</td>
+                                <td> : </td>
+                                <td>${bantuan.attributes.nama_sasaran}</td>
+                            </tr>
+                            <tr>
+                                <td>Masa Berlaku</td>
+                                <td> : </td>
+                                <td>${bantuan.attributes.sdate} - ${bantuan.attributes.edate}</td>
+                            </tr>
+                            <tr>
+                                <td>Keterangan</td>
+                                <td> : </td>
+                                <td>${bantuan.attributes.ndesc}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `
+
+                $('#bantuan-detail').html(html)
+            }
+        });
+
         var peserta = $('#peserta').DataTable({
             processing: true,
             serverSide: true,

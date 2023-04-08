@@ -20,8 +20,8 @@ class Penduduk extends Model
     use HasFactory;
 
     public const KATEGORI_STATISTIK = [
-        'umur-rentang' => 'Umur Rentang',
-        'umur-kategori' => 'Umur Kategori',
+        'rentang-umur' => 'Rentang Umur',
+        'kategori-umur' => 'Kategori Umur',
         // 'akta-kelahiran' => 'Akta Kelahiran',
         // 'covid' => 'Status Covid',
         // 'suku' => 'Suku / Etnis',

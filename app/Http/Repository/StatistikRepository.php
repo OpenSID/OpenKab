@@ -44,7 +44,7 @@ class StatistikRepository
             return [
                 'id' => $item->id,
                 'nama' => $item->nama,
-                'judul_kolom_nama' => $item->nama_sasaran,
+                'judul_kolom_nama' => 'Sasaran ' . $item->nama_sasaran,
             ];
         })->toArray();
     }

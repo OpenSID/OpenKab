@@ -19,7 +19,7 @@ class StatistikController extends Controller
     public function __construct(StatistikRepository $statistik)
     {
         $this->statistik = $statistik;
-        $this->kategori = request()->input('filter')['slug'] ?? null;
+        $this->kategori = request()->input('filter')['id'] ?? null;
     }
 
     public function kategoriStatistik()

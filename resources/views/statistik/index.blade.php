@@ -56,7 +56,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div id="grafik-statistik" class="collapse">
-                                <div class="chart">
+                                <div class="chart" id="grafik">
                                     <canvas id="barChart"
                                         style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                 </div>
@@ -64,11 +64,9 @@
                             </div>
 
                             <div id="pie-statistik" class="collapse">
-                                <div class="chart">
-                                    <div class="card-body">
-                                        <canvas id="donutChart"
-                                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                                    </div>
+                                <div class="chart" id="pie">
+                                    <canvas id="donutChart"
+                                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                 </div>
                                 <hr style="margin-right: -20px; margin-left: -20px;">
                             </div>
@@ -104,43 +102,41 @@
     <script>
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
-        var parameter;
-        var slug;
+        var kategori = `{{ $kategori }}`;
 
         $.ajax({
-            url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[slug]={{ $kategori }}`,
+            url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[id]=${kategori}`,
             method: 'get',
             success: function(response) {
                 if (response.data.length == 0) {
                     $('#tampilkan-statistik').html(`
-                    <div class="col-lg-12">
-                        <div class="alert alert-warning">
-                            <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                            Tidak ada data bantuan yang tersedia untuk Desa ${nama_desa}.
-                        </div>
-                    </div>
-                `)
+                            <div class="col-lg-12">
+                                <div class="alert alert-warning">
+                                    <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
+                                    Tidak ada data bantuan yang tersedia untuk Desa ${nama_desa}.
+                                </div>
+                            </div>
+                        `);
                 }
 
                 var daftarKategoriStatistik = response.data
                 var html = ''
 
-                console.log(daftarKategoriStatistik);
-                daftarKategoriStatistik.kategori.forEach(function(item, index) {
-                    let slug = item[0];
-                    let nama = elemen[1];
-                    let parameter = daftarKategoriStatistik.parameter;
+                daftarKategoriStatistik.forEach(function(item, index) {
+                    var id = item.id;
+                    var nama = item.nama;
+                    var judul_kolom_nama = item.judul_kolom_nama;
 
                     if (index == 0) {
-                        $('#judul_kolom_nama').html(daftarKategoriStatistik.judul_kolom_nama)
-                        $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${slug}`);
+                        $('#judul_kolom_nama').html(judul_kolom_nama)
+                        $('#cetak').data('url',
+                            `{{ url('statistik/bantuan/cetak') }}/${id}`);
                         statistik.ajax.url(
-                            `{{ url('api/v1/statistik/' . $kategori) }}/?filter[${parameter}]=${slug}`
-                        ).load();
+                            `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
                     }
                     html += `
                         <li class="nav-item pilih-kategori">
-                            <a data-parameter="${parameter}" data-${parameter}="${slug}" data-judul_kolom_nama="${daftarKategoriStatistik.judul_kolom_nama}" data-nama="${nama}" class="nav-link ${index == 0 ? 'active' : ''}">
+                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link ${index == 0 ? 'active' : ''}">
                                 <i class="fas fa-angle-right"></i> ${nama}
                             </a>
                         </li>
@@ -151,15 +147,35 @@
             }
         });
 
+        $('.pilih-kategori > a.active').trigger('click');
+
         $('#daftar-statistik').on('mouseenter', '.pilih-kategori > a', function() {
             $(this).css('cursor', 'pointer')
-        })
+        });
 
         $('#cetak').on('click', function() {
             window.open($(this).data('url'), '_blank');
         });
 
-        $('.pilih-kategori > a.active').trigger('click');
+        $('#btn-grafik').on('click', function() {
+            $("#pie-statistik").collapse('hide');
+        });
+
+        $('#btn-pie').on('click', function() {
+            $("#grafik-statistik").collapse('hide')
+        });
+
+        $('#daftar-statistik').on('click', '.pilih-kategori > a', function() {
+            var id = $(this).data('id')
+            var judul_kolom_nama = $(this).data('judul_kolom_nama')
+
+            $('.pilih-kategori > a').removeClass('active')
+            $(this).addClass('active')
+            $('#judul_kolom_nama').html(judul_kolom_nama)
+
+            statistik.ajax.url(`{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
+            $('#cetak').data('url', `{{ url('statistik') }}/${kategori}/cetak/${id}`);
+        });
 
         var statistik = $('#statistik-bantuan').DataTable({
             processing: true,
@@ -170,7 +186,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/penduduk') }}/?filter[slug]=umur-rentang`,
+                url: `{{ url('api/v1/statistik/penduduk') }}/?filter[id]=rentang-umur`,
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
@@ -227,7 +243,7 @@
                 },
                 className: 'dt-body-right',
             }]
-        })
+        });
 
         statistik.on('draw.dt', function() {
             var PageInfo = $('#statistik-bantuan').DataTable().page.info();
@@ -237,28 +253,5 @@
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
         });
-
-        $('#btn-grafik').on('click', function() {
-            $("#pie-statistik").collapse('hide')
-        })
-
-        $('#btn-pie').on('click', function() {
-            $("#grafik-statistik").collapse('hide')
-        })
-
-        $('#daftar-statistik').on('click', '.pilih-kategori > a', function() {
-            var parameter = $(this).data('parameter')
-            var slug = $(this).data('slug')
-            var judul_kolom_nama = $(this).data('judul_kolom_nama')
-
-            $('.pilih-kategori > a').removeClass('active')
-            $(this).addClass('active')
-            $('#judul_kolom_nama').html(judul_kolom_nama)
-
-            statistik.ajax.url(`{{ url('api/v1/statistik/' . $kategori) }}/?filter[${parameter}]=${slug}`).load();
-            $('#cetak').data('url', `{{ url('statistik/' . $kategori . '/cetak') }}/${slug}`);
-
-            grafikPie();
-        })
     </script>
 @endsection

@@ -67,7 +67,7 @@
                 var html = ''
 
                 html += `
-                    <table class="table table-bordered table-striped table-hover tabel-rincian">
+                    <table class="table table-bordered table-striped table-hover">
                         <tbody>
                             <tr>
                                 <td width="20%">Nama Program</td>

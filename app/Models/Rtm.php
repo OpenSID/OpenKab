@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rtm extends Model
 {
+    public const KATEGORI_STATISTIK = [
+        'bdt' => 'BDT',
+    ];
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 

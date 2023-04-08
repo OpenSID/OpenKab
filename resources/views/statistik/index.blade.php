@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-striped cell-border" id="statistik-bantuan">
+                        <table class="table table-striped cell-border" id="tabel-data">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -174,10 +174,11 @@
             $('#judul_kolom_nama').html(judul_kolom_nama)
 
             statistik.ajax.url(`{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
+            console.log(`{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`);
             $('#cetak').data('url', `{{ url('statistik') }}/${kategori}/cetak/${id}`);
         });
 
-        var statistik = $('#statistik-bantuan').DataTable({
+        var statistik = $('#tabel-data').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -195,8 +196,8 @@
                             data_grafik.push(item.attributes)
                         })
 
-                        if (json.data.length != $('#statistik-bantuan').data('length')) {
-                            $('#statistik-bantuan').data('length', json.data.length)
+                        if (json.data.length != $('#tabel-data').data('length')) {
+                            $('#tabel-data').data('length', json.data.length)
                             grafikPie()
                         }
 
@@ -246,7 +247,7 @@
         });
 
         statistik.on('draw.dt', function() {
-            var PageInfo = $('#statistik-bantuan').DataTable().page.info();
+            var PageInfo = $('#tabel-data').DataTable().page.info();
             statistik.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {

@@ -72,6 +72,7 @@
 
                         $('#judul_halaman').html(judul_halaman)
                         $('#judul_kolom_nama').html(judul_kolom_nama)
+                        document.title = judul_halaman
                     }
                 })
 

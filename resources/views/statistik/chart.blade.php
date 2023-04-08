@@ -1,5 +1,6 @@
 <script>
     function grafikPie() {
+        data = [];
         $('#barChart').remove();
         $('#donutChart').remove();
         $('#grafik').append(
@@ -9,8 +10,10 @@
             '<canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>'
         );
         var data = modifikasiData(data_grafik);
-        tampilGrafik(data[0])
-        tampilPie(data[1])
+        tampilGrafik(data[0]);
+        tampilPie(data[1]);
+
+        console.log(data[0]);
     }
 
     function tampilGrafik(areaChartData) {
@@ -27,8 +30,7 @@
             datasetFill: false
         }
 
-        // bersihkan grafik setiap pertama kali load
-        myChart = new Chart(barChartCanvas, {
+        new Chart(barChartCanvas, {
             type: 'bar',
             data: barChartData,
             options: barChartOptions

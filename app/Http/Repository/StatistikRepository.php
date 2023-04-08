@@ -60,7 +60,7 @@ class StatistikRepository
             return [
                 'id' => $item->id,
                 'nama' => $item->nama,
-                'judul_halaman' => 'Bantuan',
+                'judul_halaman' => 'Bantuan ' . $item->nama,
                 'judul_kolom_nama' => 'Sasaran ' . $item->nama_sasaran,
             ];
         })->toArray();

@@ -1,7 +1,14 @@
 <script>
     function grafikPie() {
+        $('#barChart').remove();
+        $('#donutChart').remove();
+        $('#grafik').append(
+            '<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>'
+        );
+        $('#pie').append(
+            '<canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>'
+        );
         var data = modifikasiData(data_grafik);
-        console.log(data_grafik);
         tampilGrafik(data[0])
         tampilPie(data[1])
     }
@@ -20,7 +27,8 @@
             datasetFill: false
         }
 
-        new Chart(barChartCanvas, {
+        // bersihkan grafik setiap pertama kali load
+        myChart = new Chart(barChartCanvas, {
             type: 'bar',
             data: barChartData,
             options: barChartOptions

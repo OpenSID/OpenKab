@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
             Route::get('cetak/{id}', 'cetak_keluarga');
         });
 
+        Route::get('/cetak/{kategori}/{id}', 'cetak');
+
         // RTM
         Route::prefix('rtm')->group(function () {
             Route::get('/', 'rtm');

@@ -132,6 +132,9 @@
                     if (index == 0) {
                         $('#judul_kolom_nama').html(daftarKategoriStatistik.judul_kolom_nama)
                         $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${slug}`);
+                        statistik.ajax.url(
+                            `{{ url('api/v1/statistik/' . $kategori) }}/?filter[${parameter}]=${slug}`
+                        ).load();
                     }
                     html += `
                         <li class="nav-item pilih-kategori">
@@ -247,8 +250,6 @@
             $('.pilih-kategori > a').removeClass('active')
             $(this).addClass('active')
             $('#judul_kolom_nama').html(judul_kolom_nama)
-
-            console.log(`{{ url('api/v1/statistik/' . $kategori) }}/?filter[${parameter}]=${slug}`);
 
             statistik.ajax.url(`{{ url('api/v1/statistik/' . $kategori) }}/?filter[${parameter}]=${slug}`).load();
             $('#cetak').data('url', `{{ url('statistik/' . $kategori . '/cetak') }}/${slug}`);

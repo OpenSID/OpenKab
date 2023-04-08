@@ -17,8 +17,9 @@ class StatistikController extends Controller
 
     public function penduduk()
     {
-        return view('statistik.penduduk.index', [
-            'kategori_statistik' => Penduduk::KATEGORI_STATISTIK,
+        return view('statistik.index', [
+            'judul' => 'Penduduk',
+            'kategori' => 'penduduk',
         ]);
     }
 

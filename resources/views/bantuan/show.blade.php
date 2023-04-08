@@ -27,8 +27,6 @@
                                     <th>No. KK</th>
                                     <th>Nama Penduduk</th>
                                     <th>No. Kartu Peserta</th>
-                                    <th>NIK</th>
-                                    <th>Nama</th>
                                     <th>Tempat Lahir</th>
                                     <th>Tanggal Lahir</th>
                                     <th>Jenis Kelamin</th>
@@ -89,12 +87,6 @@
                 },
                 {
                     data: "attributes.no_id_kartu", name: "no_id_kartu"
-                },
-                {
-                    data: "attributes.nik", name: "nik", searchable: false, orderable: false
-                },
-                {
-                    data: "attributes.kartu_nama", name: "kartu_nama", searchable: false, orderable: false
                 },
                 {
                     data: "attributes.kartu_tempat_lahir", name: "kartu_tempat_lahir", searchable: false, orderable: false

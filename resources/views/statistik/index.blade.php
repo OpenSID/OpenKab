@@ -195,10 +195,7 @@
                             data_grafik.push(item.attributes)
                         })
 
-                        if (json.data.length != $('#tabel-data').data('length')) {
-                            $('#tabel-data').data('length', json.data.length)
-                            grafikPie()
-                        }
+                        grafikPie()
 
                         return json.data;
                     }

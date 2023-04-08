@@ -122,7 +122,7 @@ class PendudukRepository
     // Umur Kategori
     private function caseUmurKategori()
     {
-        $umur = Umur::countUmurStatistik()->status()->orderBy('id')->get();
+        $umur = Umur::countUmurStatistik()->status(0)->orderBy('id')->get();
         $query = Penduduk::countStatistik()->status()->get();
 
         return [

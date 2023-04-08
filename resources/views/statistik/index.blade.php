@@ -104,6 +104,7 @@
     <script>
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
+        var url = null
 
         $.ajax({
             url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[slug]={{ $kategori }}`,
@@ -126,6 +127,7 @@
                 Object.entries(daftarKategoriStatistik.kategori).forEach((elemen, index) => {
                     let slug = elemen[0];
                     let nama = elemen[1];
+                    let parameter = daftarKategoriStatistik.parameter;
 
                     if (index == 0) {
                         $('#judul_kolom_nama').html(daftarKategoriStatistik.judul_kolom_nama)
@@ -133,7 +135,7 @@
                     }
                     html += `
                         <li class="nav-item pilih-kategori">
-                            <a data-parameter="${daftarKategoriStatistik.parameter}" data-${daftarKategoriStatistik.parameter}="${slug}" data-judul_kolom_nama="${daftarKategoriStatistik.judul_kolom_nama}" data-nama="${nama}" class="nav-link ${index == 0 ? 'active' : ''}">
+                            <a data-parameter="${parameter}" data-${parameter}="${slug}" data-judul_kolom_nama="${daftarKategoriStatistik.judul_kolom_nama}" data-nama="${nama}" class="nav-link ${index == 0 ? 'active' : ''}">
                                 <i class="fas fa-angle-right"></i> ${nama}
                             </a>
                         </li>
@@ -246,10 +248,12 @@
             $(this).addClass('active')
             $('#judul_kolom_nama').html(judul_kolom_nama)
 
-            statistik.ajax.url(`{{ url('api/v1/statistik/' . $kategori) }}/?filter[${parameter}]=${slug}`).load();
-            // $('#cetak').data('url', `{{ url('statistik/bantuan/cetak') }}/${id}`);
+            console.log(`{{ url('api/v1/statistik/' . $kategori) }}/?filter[${parameter}]=${slug}`);
 
-            // grafikPie();
+            statistik.ajax.url(`{{ url('api/v1/statistik/' . $kategori) }}/?filter[${parameter}]=${slug}`).load();
+            $('#cetak').data('url', `{{ url('statistik/' . $kategori . '/cetak') }}/${slug}`);
+
+            grafikPie();
         })
 
         $('.pilih-kategori > a.active').trigger('click')

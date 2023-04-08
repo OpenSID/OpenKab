@@ -104,7 +104,7 @@ class PendudukRepository
     }
 
     /**
-     * Umur Rentang
+     * Rentang Umur
      *
      * return array
      */
@@ -119,7 +119,11 @@ class PendudukRepository
         ];
     }
 
-    // Umur Kategori
+    /**
+     * Kategori Umur
+     *
+     * return array
+     */
     private function caseKategoriUmur()
     {
         $umur = Umur::countStatistikUmur()->status(0)->orderBy('id')->get();
@@ -131,14 +135,19 @@ class PendudukRepository
         ];
     }
 
-    // Akta Kelahiran
+    /**
+     * Akta Kelahiran
+     *
+     * return array
+     */
     private function caseAktaKelahiran()
     {
-        $umur = Umur::countAktaStatistik()->status()->orderBy('id')->get();
+        $umur = Umur::countStatistikAkta()->status()->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
 
         return [
             'header' => $umur,
-            'footer' => $this->listFooter($umur),
+            'footer' => $this->listFooter($umur, $query),
         ];
     }
 

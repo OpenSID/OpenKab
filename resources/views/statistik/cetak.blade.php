@@ -19,7 +19,7 @@
                 <tr>
                     <td class="padat">
                         <img class="logo" src="{{ asset('/assets/img/opensid_logo.png') }}" alt="Logo">
-                        <h3 class="judul">PEMERINTAH <br /> {{ config('app.namaKab') }}</h3>
+                        <h3 class="judul">PEMERINTAH <br /> KABUPATEN {{ config('app.namaKab') }}</h3>
                     </td>
                 </tr>
                 <tr>
@@ -42,7 +42,7 @@
                             <thead>
                                 <tr class="border thick">
                                     <th>No</th>
-                                    <th width="50%">Jenis Kelompok</th>
+                                    <th id="judul_kolom_nama" width="50%"></th>
                                     <th colspan="2" class="padat">Jumlah</th>
                                     <th colspan="2" class="padat">Laki - laki</th>
                                     <th colspan="2" class="padat">Perempuan</th>
@@ -70,7 +70,7 @@
                         json.data.forEach(function(item) {
                             var row = `<tr>
                                 <td class="padat">${no}</td>
-                                <th id="judul_kolom_nama" width="50%"></th>
+                                <td>${item.attributes.nama}</td>
                                 <td class="text-right" width="10%">${item.attributes.jumlah}</td>
                                 <td class="text-right" width="10%">${item.attributes.persentase_jumlah}</td>
                                 <td class="text-right" width="10%">${item.attributes.laki_laki}</td>

@@ -17,12 +17,22 @@ class StatistikRepository
      */
     public function getKategoriStatistik($kategori)
     {
-        return match ($kategori) {
+        $kategori = match ($kategori) {
             'penduduk' => $this->setKategoriFormat('Jenis Kelompok', Penduduk::KATEGORI_STATISTIK),
             'keluarga' => $this->setKategoriFormat('Jenis Kelompok', Keluarga::KATEGORI_STATISTIK),
             'rtm' => $this->setKategoriFormat('Jenis Kelompok', Rtm::KATEGORI_STATISTIK),
             'bantuan' => $this->getKategoriBantuan(),
         };
+
+        $detail = request()->input('filter')['detail'] ?? null;
+
+        if ($detail) {
+            $kategori = collect($kategori)->filter(function ($item) use ($detail) {
+                return $item['id'] == $detail;
+            })->toArray();
+        }
+
+        return $kategori;
     }
 
     private function setKategoriFormat(string $judul_kolom_nama = null, array $kategori = [])

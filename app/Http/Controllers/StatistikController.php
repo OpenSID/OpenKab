@@ -10,11 +10,6 @@ use App\Models\Penduduk;
 
 class StatistikController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function cetak($kategori, $id)
     {
         return view('statistik.cetak', [

@@ -6,6 +6,8 @@ use App\Models\Rtm;
 use App\Models\Bantuan;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class StatistikRepository
 {
@@ -16,27 +18,35 @@ class StatistikRepository
     public function getKategoriStatistik($kategori)
     {
         return match ($kategori) {
-            'penduduk' => [
-                'judul_kolom_nama' => 'Jenis Kelompok',
-                'parameter' => 'slug',
-                'kategori' => Penduduk::KATEGORI_STATISTIK,
-            ],
-            'keluarga' => [
-                'judul_kolom_nama' => 'Jenis Kelompok',
-                'parameter' => 'slug',
-                'kategori' => Keluarga::KATEGORI_STATISTIK,
-            ],
-            'rtm' => [
-                'judul_kolom_nama' => 'Jenis Kelompok',
-                'parameter' => 'slug',
-                'kategori' => Rtm::KATEGORI_STATISTIK,
-            ],
-            'bantuan' => [
-                'judul_kolom_nama' => null, // dinamis, diambil dari tabel
-                'parameter' => 'slug',
-                'kategori' => Bantuan::KATEGORI_STATISTIK,
-            ],
+            'penduduk' => $this->setKategoriFormat('Jenis Kelompok', Penduduk::KATEGORI_STATISTIK),
+            'keluarga' => $this->setKategoriFormat('Jenis Kelompok', Keluarga::KATEGORI_STATISTIK),
+            'rtm' => $this->setKategoriFormat('Jenis Kelompok', Rtm::KATEGORI_STATISTIK),
+            'bantuan' => $this->getKategoriBantuan(),
         };
+    }
+
+    private function setKategoriFormat(string $judul_kolom_nama = null, array $kategori = [])
+    {
+        return collect($kategori)->map(function ($item, $key) use ($judul_kolom_nama) {
+            return [
+                'id' => $key,
+                'nama' => $item,
+                'judul_kolom_nama' => $judul_kolom_nama,
+            ];
+        })
+        ->values()
+        ->toArray();
+    }
+
+    private function getKategoriBantuan()
+    {
+        return Bantuan::select('id', 'nama', 'sasaran')->get()->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'nama' => $item->nama,
+                'judul_kolom_nama' => $item->nama_sasaran,
+            ];
+        })->toArray();
     }
 
     /**

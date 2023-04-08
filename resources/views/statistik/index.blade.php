@@ -104,7 +104,8 @@
     <script>
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
-        var url = null
+        var parameter;
+        var slug;
 
         $.ajax({
             url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[slug]={{ $kategori }}`,
@@ -124,8 +125,9 @@
                 var daftarKategoriStatistik = response.data
                 var html = ''
 
-                Object.entries(daftarKategoriStatistik.kategori).forEach((elemen, index) => {
-                    let slug = elemen[0];
+                console.log(daftarKategoriStatistik);
+                daftarKategoriStatistik.kategori.forEach(function(item, index) {
+                    let slug = item[0];
                     let nama = elemen[1];
                     let parameter = daftarKategoriStatistik.parameter;
 
@@ -157,6 +159,8 @@
             window.open($(this).data('url'), '_blank');
         });
 
+        $('.pilih-kategori > a.active').trigger('click');
+
         var statistik = $('#statistik-bantuan').DataTable({
             processing: true,
             serverSide: true,
@@ -166,7 +170,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/' . $kategori) }}/?filter[slug]=umur-rentang`,
+                url: `{{ url('api/v1/statistik/penduduk') }}/?filter[slug]=umur-rentang`,
                 method: 'get',
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
@@ -256,7 +260,5 @@
 
             grafikPie();
         })
-
-        $('.pilih-kategori > a.active').trigger('click')
     </script>
 @endsection

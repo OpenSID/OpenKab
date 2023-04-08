@@ -36,7 +36,7 @@ class PendudukRepository
             'rentang-umur' => $this->caseRentangUmur(),
             'kategori-umur' => $this->caseKategoriUmur(),
             'akta-kelahiran' => $this->caseAktaKelahiran(),
-            'hamil' => $this->caseHamil(),
+            'status-kehamilan' => $this->caseStatusKehamilan(),
             'covid' => $this->caseCovid(),
             'suku' => $this->caseSuku(),
             'pendidikan-kk' => $this->casePendidikanKk(),
@@ -151,15 +151,19 @@ class PendudukRepository
         ];
     }
 
-    // Hamil
-    private function caseHamil()
+    /**
+     * Status Kehamilan
+     *
+     * return array
+     */
+    private function caseStatusKehamilan()
     {
-        $umur = Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get();
-        $query = Penduduk::countStatistik()->status()->get();
+        $hamil = Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
 
         return [
-            'header' => $umur,
-            'footer' => $this->listFooter($umur),
+            'header' => $hamil,
+            'footer' => $this->listFooter($hamil, $query),
         ];
     }
 

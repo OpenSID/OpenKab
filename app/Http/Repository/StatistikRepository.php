@@ -2,6 +2,9 @@
 
 namespace App\Http\Repository;
 
+use App\Models\Rtm;
+use App\Models\Bantuan;
+use App\Models\Keluarga;
 use App\Models\Penduduk;
 
 class StatistikRepository

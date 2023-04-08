@@ -23,7 +23,7 @@ class Penduduk extends Model
         'umur-rentang' => 'Umur Rentang',
         // 'umur-kategori' => 'Umur Kategori',
         // 'akta-kelahiran' => 'Akta Kelahiran',
-        // 'covid' => 'Status Covid',
+         'covid' => 'Status Covid',
         // 'suku' => 'Suku / Etnis',
         // 'hamil' => 'Status Kehamilan',
         // 'pendidikan-kk' => 'Pendidikan Dalam KK',

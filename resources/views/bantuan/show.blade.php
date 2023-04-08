@@ -49,7 +49,7 @@
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('api/v1/bantuan') }}`,
+                url: `{{ url('api/v1/bantuan/peserta') }}`,
                 method: 'get',
                 data: function(row) {
                     return {

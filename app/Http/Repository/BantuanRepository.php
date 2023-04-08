@@ -21,11 +21,13 @@ class BantuanRepository
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 'nama',
-                'sasaran',
+                'asaldana',
+                'nama_sasaran',
             ])
             ->allowedSorts([
                 'nama',
-                'sasaran',
+                'asaldana',
+                'nama_sasaran',
             ])
             ->jsonPaginate();
     }

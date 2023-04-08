@@ -25,7 +25,8 @@ class Bantuan extends Model
     /** {@inheritdoc} */
     protected $appends = [
         'statistik',
-        'nama_sasaran'
+        'nama_sasaran',
+        'jumlah_peserta',
     ];
 
     /** {@inheritdoc} */
@@ -63,6 +64,11 @@ class Bantuan extends Model
             4 => 'Kelompok/Organisasi Kemasyarakatan',
             default => null,
         };
+    }
+
+    public function getJumlahPesertaAttribute()
+    {
+        return $this->peserta->count();
     }
 
     public function getStatistikAttribute()

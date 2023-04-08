@@ -17,6 +17,7 @@ class BantuanTransformer extends TransformerAbstract
             'nama' => $bantuan->nama,
             'sasaran' => $bantuan->sasaran,
             'nama_sasaran' => $bantuan->nama_sasaran,
+            'jumlah_peserta' => $bantuan->jumlah_peserta,
             'ndesc' => $bantuan->ndesc,
             'sdate' => $bantuan->sdate,
             'edate' => $bantuan->edate,

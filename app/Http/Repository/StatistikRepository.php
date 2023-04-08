@@ -51,7 +51,12 @@ class StatistikRepository
 
     private function getKategoriBantuan()
     {
-        return Bantuan::select('id', 'nama', 'sasaran')->get()->map(function ($item) {
+        $query = Bantuan::query();
+        if (session()->has('desa')) {
+            $query->where('config_id', session('desa.id'));
+        }
+
+        return $query->select('id', 'nama', 'sasaran')->get()->map(function ($item) {
             return [
                 'id' => $item->id,
                 'nama' => $item->nama,

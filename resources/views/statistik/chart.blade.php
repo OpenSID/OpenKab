@@ -12,7 +12,6 @@
         var data = modifikasiData(data_grafik);
         tampilGrafik(data[0]);
         tampilPie(data[1]);
-        console.log(data[0]);
     }
 
     function tampilGrafik(areaChartData) {

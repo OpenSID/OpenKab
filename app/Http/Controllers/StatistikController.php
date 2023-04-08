@@ -6,12 +6,25 @@ use App\Models\Bantuan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Keluarga;
+use App\Models\Penduduk;
 
 class StatistikController extends Controller
 {
     public function index()
     {
         // return view('statistik.bantuan');
+    }
+
+    public function penduduk()
+    {
+        return view('statistik.penduduk.index', [
+            'kategori_statistik' => Penduduk::KATEGORI_STATISTIK,
+        ]);
+    }
+
+    public function cetak_penduduk()
+    {
+        return view('statistik.penduduk.cetak');
     }
 
     public function keluarga()

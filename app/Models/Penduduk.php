@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Services\HealthCheckController;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,6 +18,31 @@ class Penduduk extends Model
 {
     use ConfigIdTrait;
     use HasFactory;
+
+    public const KATEGORI_STATISTIK = [
+        'umur-rentang' => 'Umur Rentang',
+        // 'umur-kategori' => 'Umur Kategori',
+        // 'akta-kelahiran' => 'Akta Kelahiran',
+        // 'covid' => 'Status Covid',
+        // 'suku' => 'Suku / Etnis',
+        // 'hamil' => 'Status Kehamilan',
+        // 'pendidikan-kk' => 'Pendidikan Dalam KK',
+        // 'pendidikan-tempuh' => 'Pendidikan Sedang Ditempuh',
+        // 'kerja' => 'Pekerjaan',
+        // 'kawin' => 'Status Perkawinan',
+        // 'agama' => 'Agama',
+        // 'jk' => 'Jenis Kelamin',
+        // 'wn' => 'Warga Negara',
+        // 'status-penduduk' => 'Status Penduduk',
+        // 'darah' => 'Golongan Darah',
+        // 'cacat' => 'Penyandang Cacat',
+        // 'sakit' => 'Penyakit Menahun',
+        // 'kb' => 'Aseptor KB',
+        // 'ktp' => 'Kepemilikan KTP',
+        // 'asuransi' => 'Asuransi Kesehatan',
+        // 'bpjs_kerja' => 'BPJS Ketenagakerjaan',
+        // 'hubungan-kk' => 'Hubungan Dalam KK',
+    ];
 
     /** {@inheritdoc} */
     protected $connection = 'openkab';
@@ -241,7 +267,7 @@ class Penduduk extends Model
      */
     public function getNamaTempatDilahirkanAttribute()
     {
-        return match($this->tempat_dilahirkan) {
+        return match ($this->tempat_dilahirkan) {
             1 => 'RS/RB',
             2 => 'Puskesmas',
             3 => 'Polindes',
@@ -258,7 +284,7 @@ class Penduduk extends Model
      */
     public function getNamaJenisKelahiranAttribute()
     {
-        return match($this->jenis_kelahiran) {
+        return match ($this->jenis_kelahiran) {
             1 => 'Tunggal',
             2 => 'Kembar 2',
             3 => 'Kembar 3',
@@ -274,7 +300,7 @@ class Penduduk extends Model
      */
     public function getNamaPenolongKelahiranAttribute()
     {
-        return match($this->penolong_kelahiran) {
+        return match ($this->penolong_kelahiran) {
             1 => 'Dokter',
             2 => 'Bidan Perawat',
             3 => 'Dukun',
@@ -290,7 +316,7 @@ class Penduduk extends Model
      */
     public function getWajibKTPAttribute()
     {
-        return (($this->tanggallahir->age > 16) || (! empty($this->status_kawin) && $this->status_kawin != 1))
+        return (($this->tanggallahir && $this->tanggallahir->age > 16) || (! empty($this->status_kawin) && $this->status_kawin != 1))
             ? 'WAJIB KTP'
             : 'BELUM';
     }
@@ -352,13 +378,17 @@ class Penduduk extends Model
      */
     public function getUrlFotoAttribute()
     {
-        if (empty($this->foto)) {
-            return $this->sex === 1
-                ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
-                : Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/wuser.png');
-        }
+        // TODO:: Cek ini
 
-        return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
+        return null;
+
+        // if (empty($this->foto)) {
+        //     return $this->sex === 1
+        //         ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
+        //         : Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/wuser.png');
+        // }
+
+        // return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
     }
 
     /**
@@ -372,5 +402,30 @@ class Penduduk extends Model
     public function scopeStatus($query, $value = 1)
     {
         return $query->where('status_dasar', $value);
+    }
+
+    /**
+     * Scope untuk Statistik
+     */
+    public function scopeCountStatistik($query)
+    {
+        $this->appends = [];
+        $this->with = [];
+
+        return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan');
+    }
+
+    public function scopeCountSukuStatistik($query)
+    {
+        return $query
+            ->select(['suku AS id', 'suku AS nama'])
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+            ->groupBy('suku')
+
+            ->whereNotNull('suku')
+            ->where('suku', '!=', "")
+        ;
     }
 }

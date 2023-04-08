@@ -61,5 +61,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'bantuan');
             Route::get('cetak/{id}', 'cetak_bantuan');
         });
+
+        // Penduduk
+        Route::prefix('penduduk')->group(function () {
+            Route::get('/', 'penduduk');
+            Route::get('cetak/{id}', 'cetak_penduduk');
+        });
     });
 });

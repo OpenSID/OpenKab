@@ -12,7 +12,7 @@ class StatistikTransformer extends TransformerAbstract
     {
         return [
             'id' => $statistik['id'],
-            'nama' => $statistik['nama'],
+            'nama' => strtoupper($statistik['nama']),
             'jumlah' => $statistik['jumlah'],
             'persentase_jumlah' => $statistik['persentase_jumlah'],
             'laki_laki' => $statistik['laki_laki'],

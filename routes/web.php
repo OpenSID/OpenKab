@@ -43,23 +43,13 @@ Route::middleware('auth')->group(function () {
 
 
     // Statistik
-    Route::controller(\App\Http\Controllers\StatistikController::class)->prefix('statistik')->group(function () {
-        // Keluarga
-        Route::prefix('keluarga')->group(function () {
-            Route::get('/', 'keluarga');
-            Route::get('cetak/{id}', 'cetak_keluarga');
+    Route::controller(\App\Http\Controllers\StatistikController::class)
+        ->prefix('statistik')
+        ->group(function () {
+            Route::get('/penduduk', 'penduduk');
+            Route::get('/keluarga', 'keluarga');
+            Route::get('/rtm', 'rtm');
+            Route::get('/bantuan', 'bantuan');
+            Route::get('/cetak/{kategori}/{id}', 'cetak');
         });
-
-        // RTM
-        Route::prefix('rtm')->group(function () {
-            Route::get('/', 'rtm');
-            Route::get('cetak/{id}', 'cetak_rtm');
-        });
-
-        // Bantuan
-        Route::prefix('bantuan')->group(function () {
-            Route::get('/', 'bantuan');
-            Route::get('cetak/{id}', 'cetak_bantuan');
-        });
-    });
 });

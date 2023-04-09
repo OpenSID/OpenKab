@@ -52,7 +52,7 @@ class BantuanRepository
             ->first();
     }
 
-    public function listStatistik()
+    public function listStatistik(): array
     {
         return [
             'header' => [],
@@ -60,7 +60,7 @@ class BantuanRepository
         ];
     }
 
-    public function listFooter()
+    public function listFooter(): array
     {
         $query = Bantuan::query();
 

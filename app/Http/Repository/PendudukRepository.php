@@ -3,9 +3,10 @@
 namespace App\Http\Repository;
 
 use App\Models\Umur;
+use App\Models\Covid;
 use App\Models\Hamil;
 use App\Models\Penduduk;
-use App\Models\Covid;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -39,6 +40,7 @@ class PendudukRepository
             'akta-kelahiran' => $this->caseAktaKelahiran(),
             'status-covid' => $this->caseStatusCovid(),
             'suku' => $this->caseSuku(),
+            'ktp' => $this->caseKtp(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
         })->toArray();
@@ -113,6 +115,12 @@ class PendudukRepository
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
+            'akseptor-kb' => [
+                'idReferensi' => 'cara_kb_id',
+                'tabelReferensi' => 'tweb_cara_kb',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
             'penyakit-menahun' => [
                 'idReferensi' => 'sakit_menahun_id',
                 'tabelReferensi' => 'tweb_sakit_menahun',
@@ -135,7 +143,6 @@ class PendudukRepository
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
             // '6'           => ['idReferensi' => 'status', 'tabelReferensi' => 'tweb_penduduk_status'],
             // '9'           => ['idReferensi' => 'cacat_id', 'tabelReferensi' => 'tweb_cacat'],
-            // '16'          => ['idReferensi' => 'cara_kb_id', 'tabelReferensi' => 'tweb_cara_kb'],
             // '19'          => ['idReferensi' => 'id_asuransi', 'tabelReferensi' => 'tweb_penduduk_asuransi'],
             default => null,
         };

@@ -93,7 +93,8 @@ class PendudukRepository
             'pekerjaan' => [
                 'idReferensi' => 'pekerjaan_id',
                 'tabelReferensi' => 'tweb_penduduk_pekerjaan',
-                'where' => null,
+                'whereHeader' => null,
+                'whereFooter' => null,
             ],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],

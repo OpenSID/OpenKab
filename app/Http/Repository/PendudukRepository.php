@@ -196,17 +196,15 @@ class PendudukRepository
             $query->where('config_id', session('desa.id'));
         }
 
-        // if ($where) {
-        //     $query->whereRaw($where);
-        // }
+        if ($where) {
+            $query->whereRaw($where);
+        }
 
-        $result = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+        return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', "tweb_penduduk.{$idReferensi}", '=', "{$tabelReferensi}.id", 'left')
             ->where('tweb_penduduk.status', 1)
             ->groupBy("{$tabelReferensi}.id")
             ->get();
-
-        return collect($result)->values()->toArray();
     }
 }

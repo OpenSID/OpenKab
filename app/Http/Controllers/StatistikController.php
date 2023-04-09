@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bantuan;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Keluarga;
-use App\Models\Penduduk;
+use App\Http\Repository\PendudukRepository;
 
 class StatistikController extends Controller
 {

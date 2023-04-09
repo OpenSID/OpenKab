@@ -23,10 +23,8 @@ class Penduduk extends Model
         'rentang-umur' => 'Rentang Umur',
         'kategori-umur' => 'Kategori Umur',
         // 'covid' => 'Status Covid',
-         'suku' => 'Suku / Etnis',
-        // 'hamil' => 'Status Kehamilan',
-        // 'pendidikan-kk' => 'Pendidikan Dalam KK',
-        // 'pendidikan-tempuh' => 'Pendidikan Sedang Ditempuh',
+        'pendidikan-dalam-kk' => 'Pendidikan Dalam KK',
+        'pendidikan-sedang-ditempuh' => 'Pendidikan Sedang Ditempuh',
         // 'kerja' => 'Pekerjaan',
         // 'kawin' => 'Status Perkawinan',
         // 'agama' => 'Agama',
@@ -39,9 +37,11 @@ class Penduduk extends Model
         // 'kb' => 'Aseptor KB',
         // 'ktp' => 'Kepemilikan KTP',
         // 'asuransi' => 'Asuransi Kesehatan',
-        // 'bpjs_kerja' => 'BPJS Ketenagakerjaan',
         // 'hubungan-kk' => 'Hubungan Dalam KK',
         'akta-kelahiran' => 'Akta Kelahiran',
+        'suku' => 'Suku / Etnis',
+        'bpjs-ketenagakerjaan' => 'BPJS Ketenagakerjaan',
+        'status-kehamilan' => 'Status Kehamilan',
     ];
 
     /** {@inheritdoc} */

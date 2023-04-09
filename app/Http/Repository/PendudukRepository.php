@@ -299,7 +299,7 @@ class PendudukRepository
         return [
             'header' => $umur,
             'footer' => $this->listFooter($umur, $query),
-            ];
+        ];
     }
 
     private function caseStatusCovid(): array

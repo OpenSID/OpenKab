@@ -191,17 +191,7 @@ class PendudukRepository
      */
     private function caseWithReferensi(string $kategori)
     {
-
-
         $referensi = $this->tabelReferensi($kategori);
-
-
-        Log::info($kategori);
-        Log::info($referensi['tabelReferensi']);
-        Log::info($referensi['idReferensi']);
-
-
-
         $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['where']);
         $query = $this->countStatistikPendudukHidup($referensi['where']);
 

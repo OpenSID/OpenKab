@@ -44,7 +44,6 @@ class PendudukRepository
             'kawin' => $this->caseKawin(),
             'jk' => $this->caseJk(),
             'wn' => $this->caseWn(),
-            'status-penduduk' => $this->caseStatusPenduduk(),
             'cacat' => $this->caseCacat(),
             'sakit' => $this->caseSakit(),
             'kb' => $this->caseKb(),

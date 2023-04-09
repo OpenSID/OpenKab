@@ -27,7 +27,7 @@ class Penduduk extends Model
         'pendidikan-sedang-ditempuh' => 'Pendidikan Sedang Ditempuh',
         // 'kerja' => 'Pekerjaan',
         // 'kawin' => 'Status Perkawinan',
-        // 'agama' => 'Agama',
+         'agama' => 'Agama',
         // 'jk' => 'Jenis Kelamin',
         // 'wn' => 'Warga Negara',
         // 'status-penduduk' => 'Status Penduduk',

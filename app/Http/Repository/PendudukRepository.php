@@ -43,7 +43,6 @@ class PendudukRepository
             'pendidikan-tempuh' => $this->casePendidikanTempuh(),
             'kerja' => $this->caseKerja(),
             'kawin' => $this->caseKawin(),
-            'agama' => $this->caseAgama(),
             'jk' => $this->caseJk(),
             'wn' => $this->caseWn(),
             'status-penduduk' => $this->caseStatusPenduduk(),
@@ -85,6 +84,12 @@ class PendudukRepository
                 'whereHeader' => '(bpjs_ketenagakerjaan IS NOT NULL && bpjs_ketenagakerjaan != "")',
                 'whereFooter' => null,
             ],
+            'agama' => [
+                'idReferensi' => 'agama_id',
+                'tabelReferensi' => 'tweb_penduduk_agama',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
             'hubungan-dalam-kk' => [
                 'idReferensi' => 'kk_level',
                 'tabelReferensi' => 'tweb_penduduk_hubungan',
@@ -93,7 +98,6 @@ class PendudukRepository
             ],
             // '1'           => ['idReferensi' => 'pekerjaan_id', 'tabelReferensi' => 'tweb_penduduk_pekerjaan'],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
-            // '3'           => ['idReferensi' => 'agama_id', 'tabelReferensi' => 'tweb_penduduk_agama'],
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
             // '5'           => ['idReferensi' => 'warganegara_id', 'tabelReferensi' => 'tweb_penduduk_warganegara'],
             // '6'           => ['idReferensi' => 'status', 'tabelReferensi' => 'tweb_penduduk_status'],

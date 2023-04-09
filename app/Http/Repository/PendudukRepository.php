@@ -53,7 +53,6 @@ class PendudukRepository
             'kb' => $this->caseKb(),
             'ktp' => $this->caseKtp(),
             'asuransi' => $this->caseAsuransi(),
-            'bpjs_kerja' => $this->caseBpjsKerja(),
             'hubungan-kk' => $this->caseHubunganKk(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
@@ -66,17 +65,26 @@ class PendudukRepository
             'status-kehamilan' => [
                 'tabelReferensi' => 'ref_penduduk_hamil',
                 'idReferensi' => 'hamil',
-                'where' => 'tweb_penduduk.sex = 2',
+                'whereHeader' => 'tweb_penduduk.sex = 2',
+                'whereFooter' => 'tweb_penduduk.sex = 2',
             ],
             'pendidikan-dalam-kk' => [
                 'idReferensi' => 'pendidikan_kk_id',
                 'tabelReferensi' => 'tweb_penduduk_pendidikan_kk',
-                'where' => null,
+                'whereHeader' => null,
+                'whereFooter' => null,
             ],
             'pendidikan-sedang-ditempuh' => [
                 'idReferensi' => 'pendidikan_sedang_id',
                 'tabelReferensi' => 'tweb_penduduk_pendidikan',
-                'where' => null,
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'bpjs-ketenagakerjaan' => [
+                'idReferensi' => 'pekerjaan_id',
+                'tabelReferensi' => 'tweb_penduduk_pekerjaan',
+                'whereHeader' => '(bpjs_ketenagakerjaan IS NOT NULL && bpjs_ketenagakerjaan != "")',
+                'whereFooter' => null,
             ],
             // '1'           => ['idReferensi' => 'pekerjaan_id', 'tabelReferensi' => 'tweb_penduduk_pekerjaan'],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
@@ -196,8 +204,8 @@ class PendudukRepository
     private function caseWithReferensi(string $kategori)
     {
         $referensi = $this->tabelReferensi($kategori);
-        $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['where']);
-        $query = $this->countStatistikPendudukHidup($referensi['where']);
+        $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['whereHeader']);
+        $query = $this->countStatistikPendudukHidup($referensi['whereFooter']);
 
         return [
             'header' => $header,

@@ -113,6 +113,7 @@ class Bantuan extends BaseModel
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('program_peserta', 'program_peserta.program_id', '=', 'program.id', 'left')
             ->join('tweb_penduduk', 'program_peserta.peserta', '=', 'tweb_penduduk.nik', 'left')
+            ->where('program.sasaran', self::SASARAN_PENDUDUK)
             ->groupBy('program.id');
     }
 
@@ -121,12 +122,12 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikKeluarga($query)
     {
-        // return $this->selectCountStatistikWithCase($query)
         return $query->select(['program.id', 'program.nama, program.sasaran'])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('program_peserta', 'program_peserta.program_id', '=', 'program.id', 'left')
             ->join('tweb_penduduk', 'program_peserta.peserta', '=', 'tweb_penduduk.nik', 'left')
+            ->where('program.sasaran', self::SASARAN_KELUARGA)
             ->groupBy('program.id');
     }
 

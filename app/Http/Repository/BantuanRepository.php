@@ -121,19 +121,14 @@ class BantuanRepository
         ];
     }
 
-    public function caseKategoriBantuan($sasaran = null): array|object
+    public function caseKategoriPenduduk($id): array
     {
         $query = Bantuan::query();
         if (session()->has('desa')) {
             $query->where('program.config_id', session('desa.id'));
         }
 
-        return $query->countStatistikPenduduk()->sasaran($sasaran)->get();
-    }
-
-    public function caseKategoriPenduduk($id, $sasaran = null): array
-    {
-        $header = $this->caseKategoriBantuan($sasaran);
+        $header = $query->countStatistikPenduduk()->get();
         $footer = $this->countStatistikKategoriPenduduk();
 
         return [
@@ -155,9 +150,17 @@ class BantuanRepository
 
     public function caseKategoriKeluarga($id, $sasaran = null): array
     {
+        // $query = Bantuan::query();
+        // if (session()->has('desa')) {
+        //     $query->where('program.config_id', session('desa.id'));
+        // }
 
-        $header = $this->caseKategoriBantuan($sasaran);
-        $footer = $this->countStatistikKategoriPenduduk();
+        // $header = $query->countStatistikKeluarga()->get();
+        $footer = $this->countStatistikKategoriKeluarga();
+
+        return $footer->toArray();
+
+        $header = [];
 
         return [
             'header' => $header,

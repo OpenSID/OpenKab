@@ -58,8 +58,8 @@ class BantuanRepository
     public function listStatistik($kategori): array|object
     {
         return collect(match ($kategori) {
-            'penduduk' => $this->caseKategoriPenduduk($kategori, 1),
-            'keluarga' => $this->caseKategoriKeluarga($kategori, 2),
+            'penduduk' => $this->caseKategoriPenduduk($kategori),
+            'keluarga' => $this->caseKategoriKeluarga($kategori),
             default => $this->caseNonKategori($kategori),
         })->toArray();
     }
@@ -148,19 +148,15 @@ class BantuanRepository
         return $query->status()->get();
     }
 
-    public function caseKategoriKeluarga($id, $sasaran = null): array
+    public function caseKategoriKeluarga($id): array
     {
-        // $query = Bantuan::query();
-        // if (session()->has('desa')) {
-        //     $query->where('program.config_id', session('desa.id'));
-        // }
+        $query = Bantuan::query();
+        if (session()->has('desa')) {
+            $query->where('program.config_id', session('desa.id'));
+        }
 
-        // $header = $query->countStatistikKeluarga()->get();
+        $header = $query->countStatistikKeluarga()->get();
         $footer = $this->countStatistikKategoriKeluarga();
-
-        return $footer->toArray();
-
-        $header = [];
 
         return [
             'header' => $header,
@@ -205,7 +201,7 @@ class BantuanRepository
 
 
             $totalLakiLaki = $queryFooter[0]['laki_laki'];
-            $totalPerempuan = $queryFooter[0]['laki_laki'];
+            $totalPerempuan = $queryFooter[0]['perempuan'];
             $total = $totalLakiLaki + $totalPerempuan;
 
         } else {

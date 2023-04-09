@@ -234,12 +234,12 @@ class PendudukRepository
      *
      * return Collection
      */
-    private function countStatistikPendudukHidup(string $where = null)
+    private function countStatistikPendudukHidup(string $whereHeader = null)
     {
         $query = Penduduk::countStatistik();
 
-        if ($where) {
-            $query->whereRaw($where);
+        if ($whereHeader) {
+            $query->whereRaw($whereHeader);
         }
 
         return $query->status()->get();
@@ -250,7 +250,7 @@ class PendudukRepository
      *
      * return Collection
      */
-    public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $where = null)
+    public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $whereFooter = null)
     {
         $query = DB::connection('openkab')
             ->table("{$tabelReferensi}")
@@ -260,8 +260,8 @@ class PendudukRepository
             $query->where('tweb_penduduk.config_id', session('desa.id'));
         }
 
-        if ($where) {
-            $query->whereRaw($where);
+        if ($whereFooter) {
+            $query->whereRaw($whereFooter);
         }
 
         return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')

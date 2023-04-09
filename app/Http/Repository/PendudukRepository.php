@@ -3,10 +3,10 @@
 namespace App\Http\Repository;
 
 use App\Models\Umur;
+use App\Models\Covid;
 use App\Models\Hamil;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -38,8 +38,9 @@ class PendudukRepository
             'rentang-umur' => $this->caseRentangUmur(),
             'kategori-umur' => $this->caseKategoriUmur(),
             'akta-kelahiran' => $this->caseAktaKelahiran(),
-            'covid' => $this->caseCovid(),
+            'status-covid' => $this->caseStatusCovid(),
             'suku' => $this->caseSuku(),
+            'ktp' => $this->caseKtp(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
         })->toArray();
@@ -114,6 +115,12 @@ class PendudukRepository
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
+            'akseptor-kb' => [
+                'idReferensi' => 'cara_kb_id',
+                'tabelReferensi' => 'tweb_cara_kb',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
             'penyakit-menahun' => [
                 'idReferensi' => 'sakit_menahun_id',
                 'tabelReferensi' => 'tweb_sakit_menahun',
@@ -142,7 +149,7 @@ class PendudukRepository
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
             // '6'           => ['idReferensi' => 'status', 'tabelReferensi' => 'tweb_penduduk_status'],
             // '9'           => ['idReferensi' => 'cacat_id', 'tabelReferensi' => 'tweb_cacat'],
-            // '16'          => ['idReferensi' => 'cara_kb_id', 'tabelReferensi' => 'tweb_cara_kb'],
+            // '19'          => ['idReferensi' => 'id_asuransi', 'tabelReferensi' => 'tweb_penduduk_asuransi'],
             default => null,
         };
     }
@@ -314,6 +321,18 @@ class PendudukRepository
         return [
             'header' => $umur,
             'footer' => $this->listFooter($umur, $query),
+        ];
+    }
+
+    // Covid
+    private function caseStatusCovid()
+    {
+        $covid = Covid::countStatistik()->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
+
+        return [
+            'header' => $covid,
+            'footer' => $this->listFooter($covid, $query),
         ];
     }
 }

@@ -27,8 +27,8 @@ class Penduduk extends Model
         'pekerjaan' => 'Pekerjaan',
         'status-perkawinan' => 'Status Perkawinan',
         'agama' => 'Agama',
-        'hubungan-dalam-kk' => 'Hubungan Dalam KK',
         'jenis-kelamin' => 'Jenis Kelamin',
+        'hubungan-dalam-kk' => 'Hubungan Dalam KK',
         'warga-negara' => 'Warga Negara',
         'status-penduduk' => 'Status Penduduk',
         'golongan-darah' => 'Golongan Darah',
@@ -37,12 +37,11 @@ class Penduduk extends Model
         'akseptor-kb' => 'Akseptor KB',
         'akta-kelahiran' => 'Akta Kelahiran',
         // 'ktp' => 'Kepemilikan KTP',
-        // 'asuransi' => 'Asuransi Kesehatan',
-        // 'covid' => 'Status Covid',
+        'asuransi-kesehatan' => 'Asuransi Kesehatan',
+        'status-covid' => 'Status Covid',
         'suku' => 'Suku / Etnis',
         'bpjs-ketenagakerjaan' => 'BPJS Ketenagakerjaan',
         'status-kehamilan' => 'Status Kehamilan',
-        'status-covid' => 'Status Covid',
     ];
 
     /** {@inheritdoc} */

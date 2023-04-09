@@ -53,7 +53,6 @@ class PendudukRepository
             'kb' => $this->caseKb(),
             'ktp' => $this->caseKtp(),
             'asuransi' => $this->caseAsuransi(),
-            'bpjs_kerja' => $this->caseBpjsKerja(),
             'hubungan-kk' => $this->caseHubunganKk(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
@@ -72,6 +71,11 @@ class PendudukRepository
                 'idReferensi' => 'pendidikan_kk_id',
                 'tabelReferensi' => 'tweb_penduduk_pendidikan_kk',
                 'where' => null,
+            ],
+            'bpjs-kerja' => [
+                'idReferensi' => 'pekerjaan_id',
+                'tabelReferensi' => 'tweb_penduduk_pekerjaan',
+                'where' => '(bpjs_ketenagakerjaan IS NOT NULL && bpjs_ketenagakerjaan != "")',
             ],
             // '1'           => ['idReferensi' => 'pekerjaan_id', 'tabelReferensi' => 'tweb_penduduk_pekerjaan'],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],

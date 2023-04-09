@@ -38,7 +38,7 @@ class Penduduk extends Model
         // 'kb' => 'Aseptor KB',
         // 'ktp' => 'Kepemilikan KTP',
         // 'asuransi' => 'Asuransi Kesehatan',
-        // 'bpjs_kerja' => 'BPJS Ketenagakerjaan',
+         'bpjs-kerja' => 'BPJS Ketenagakerjaan',
         // 'hubungan-kk' => 'Hubungan Dalam KK',
         'akta-kelahiran' => 'Akta Kelahiran',
         'status-kehamilan' => 'Status Kehamilan',

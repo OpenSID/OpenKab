@@ -28,7 +28,7 @@ class Penduduk extends Model
         'pekerjaan' => 'Pekerjaan',
         // 'kawin' => 'Status Perkawinan',
         'agama' => 'Agama',
-        // 'jk' => 'Jenis Kelamin',
+        'jenis-kelamin' => 'Jenis Kelamin',
         'warga-negara' => 'Warga Negara',
         'status-penduduk' => 'Status Penduduk',
         // 'darah' => 'Golongan Darah',

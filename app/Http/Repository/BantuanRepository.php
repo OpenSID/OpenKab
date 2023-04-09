@@ -96,32 +96,6 @@ class BantuanRepository
             });
     }
 
-    public function getTotalKategoriPenduduk($id, $sasaran = null)
-    {
-        return Bantuan::when(session()->has('desa'), function ($query) {
-            return $query->where('config_id', session('desa.id'));
-        })
-            ->when($id, function ($query, $id) {
-                if (in_array($id, ['bantuan-penduduk', 'bantuan-keluarga'])) {
-                    return $query;
-                }
-                return $query->where('id', $id);
-            })
-            ->when($sasaran, function ($query, $sasaran) {
-                return $query->where('sasaran', $sasaran);
-            })
-            ->get()
-            ->pluck('statistik')
-            ->flatten(1)
-            ->map(function ($item) {
-                return [
-                    'jumlah' => $item['laki_laki'] + $item['perempuan'],
-                    'laki_laki' => $item['laki_laki'],
-                    'perempuan' => $item['perempuan'],
-                ];
-            });
-    }
-
     public function caseKategoriPenduduk($id, $sasaran = null): array
     {
         $header = Bantuan::countStatistikPenduduk()->sasaran()->get();

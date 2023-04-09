@@ -3,7 +3,7 @@
 /**
  * Menampilkan nilai persentase
  *
- * return float
+ * return decimal
  */
 
 function persen(int $pembilang = 0, int $penyebut = 0, int $desimal = 2, string $pemisah = ',')

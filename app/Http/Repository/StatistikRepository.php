@@ -11,11 +11,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class StatistikRepository
 {
-    /**
-     *
-     * return array
-     */
-    public function getKategoriStatistik($kategori)
+    public function getKategoriStatistik(string $kategori = null): array
     {
         $daftarKategori = match ($kategori) {
             'penduduk' => $this->setKategoriFormat('Penduduk', 'Jenis Kelompok', Penduduk::KATEGORI_STATISTIK),
@@ -37,21 +33,21 @@ class StatistikRepository
         return $daftarKategori;
     }
 
-    private function setKategoriFormat(string $judul_halaman = null, string $judul_kolom_nama = null, array $kategori = [])
+    private function setKategoriFormat(string $judulHalaman = null, string $judulKolomNama = null, array $kategori = []): array
     {
-        return collect($kategori)->map(function ($item, $key) use ($judul_halaman, $judul_kolom_nama) {
+        return collect($kategori)->map(function ($item, $key) use ($judulHalaman, $judulKolomNama) {
             return [
                 'id' => $key,
                 'nama' => $item,
-                'judul_halaman' => $judul_halaman,
-                'judul_kolom_nama' => $judul_kolom_nama,
+                'judul_halaman' => $judulHalaman,
+                'judul_kolom_nama' => $judulKolomNama,
             ];
         })
         ->values()
         ->toArray();
     }
 
-    private function getKategoriBantuan()
+    private function getKategoriBantuan(): array
     {
         $query = Bantuan::query();
         if (session()->has('desa')) {
@@ -68,12 +64,7 @@ class StatistikRepository
         })->toArray();
     }
 
-    /**
-     * @param $data array
-     *
-     * return array
-     */
-    public function getStatistik(array $data = [])
+    public function getStatistik(array $data = []): array|object
     {
         $header = $data['header'] ?? [];
         $footer = $data['footer'] ?? [];
@@ -98,14 +89,14 @@ class StatistikRepository
         return [];
     }
 
-    private function getHitungHeader(array $dataHeader = [], int $total = 0)
+    private function getHitungHeader(array $dataHeader = [], int $total = 0): object
     {
         return collect($dataHeader)->map(function ($item, $key) use ($total) {
             return $this->getPresentase($item, $total);
         });
     }
 
-    private function getHitungFooter(array $dataFooter = [])
+    private function getHitungFooter(array $dataFooter = []): array
     {
         return [
             $this->getPresentase([
@@ -129,7 +120,7 @@ class StatistikRepository
         ];
     }
 
-    private function getPresentase($data, $pembagi = null)
+    private function getPresentase($data, $pembagi = null): array
     {
         $data = collect($data)->toArray();
         $data['jumlah'] = $data['laki_laki'] + $data['perempuan'];

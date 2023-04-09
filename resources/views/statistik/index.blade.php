@@ -243,11 +243,19 @@
         });
 
         statistik.on('draw.dt', function() {
-            var PageInfo = $('#tabel-data').DataTable().page.info();
+            var dataTable = $('#tabel-data').DataTable();
+            var pageInfo = dataTable.page.info();
+            var recordsTotal = dataTable.data().count();
+
             statistik.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1 + PageInfo.start;
+                if ((recordsTotal - i) <= 3) {
+                    console.log(i + ' -> ' + (recordsTotal - 3));
+                    cell.innerHTML = '';
+                } else {
+                    cell.innerHTML = i + 1 + pageInfo.start;
+                }
             });
         });
     </script>

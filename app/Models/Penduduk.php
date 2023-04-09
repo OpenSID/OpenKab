@@ -26,7 +26,7 @@ class Penduduk extends Model
         // 'suku' => 'Suku / Etnis',
         'pendidikan-dalam-kk' => 'Pendidikan Dalam KK',
         'pendidikan-sedang-ditempuh' => 'Pendidikan Sedang Ditempuh',
-        // 'kerja' => 'Pekerjaan',
+        'pekerjaan' => 'Pekerjaan',
         // 'kawin' => 'Status Perkawinan',
         // 'agama' => 'Agama',
         // 'jk' => 'Jenis Kelamin',

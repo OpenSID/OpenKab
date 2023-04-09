@@ -17,8 +17,10 @@ class Bantuan extends BaseModel
     public const SASARAN_KELOMPOK = 4;
 
     public const KATEGORI_STATISTIK = [
-        'bantuan-penduduk' => 'Penerima Bantuan Penduduk',
-        'bantuan-keluarga' => 'Penerima Bantuan Keluarga',
+        'penduduk' => 'Penerima Bantuan Penduduk',
+        'keluarga' => 'Penerima Bantuan Keluarga',
+        // 'rtm' => 'Penerima Bantuan Rumah Tangga',
+        // 'kelompok' => 'Penerima Bantuan Kelompok',
     ];
 
     /** {@inheritdoc} */
@@ -26,7 +28,6 @@ class Bantuan extends BaseModel
 
     /** {@inheritdoc} */
     protected $appends = [
-        'statistik',
         'nama_sasaran'
     ];
 
@@ -121,7 +122,7 @@ class Bantuan extends BaseModel
     public function scopeCountStatistikKeluarga($query)
     {
         // return $this->selectCountStatistikWithCase($query)
-        return $query->select(['program.id', 'program.nama'])
+        return $query->select(['program.id', 'program.nama, program.sasaran'])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('program_peserta', 'program_peserta.program_id', '=', 'program.id', 'left')

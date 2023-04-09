@@ -72,6 +72,7 @@ class StatistikRepository
             ];
         })
         ->merge($bantuanNonKategori)
+        ->values()
         ->toArray();
     }
 

@@ -3,10 +3,11 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
+use App\Models\Keluarga;
+use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
-use App\Models\Penduduk;
 
 class BantuanRepository
 {
@@ -57,15 +58,21 @@ class BantuanRepository
     public function listStatistik($kategori): array|object
     {
         return collect(match ($kategori) {
-            'bantuan-penduduk' => $this->caseKategoriPenduduk($kategori, 1),
-            'bantuan-keluarga' => $this->caseKategoriKeluarga($kategori, 2),
+            'penduduk' => $this->caseKategoriPenduduk($kategori, 1),
+            'keluarga' => $this->caseKategoriKeluarga($kategori, 2),
             default => $this->caseNonKategori($kategori),
         })->toArray();
     }
 
     public function getBantuanNonKategori($id)
     {
-        $bantuan = Bantuan::where('id', $id)->first();
+        $query = Bantuan::query();
+
+        if (session()->has('desa')) {
+            $query->where('config_id', session('desa.id'));
+        }
+
+        $bantuan = $query->whereId($id)->first();
 
         return [
             [
@@ -114,9 +121,19 @@ class BantuanRepository
         ];
     }
 
+    public function caseKategoriBantuan($sasaran = null): array|object
+    {
+        $query = Bantuan::query();
+        if (session()->has('desa')) {
+            $query->where('program.config_id', session('desa.id'));
+        }
+
+        return $query->countStatistikPenduduk()->sasaran($sasaran)->get();
+    }
+
     public function caseKategoriPenduduk($id, $sasaran = null): array
     {
-        $header = Bantuan::countStatistikPenduduk()->sasaran()->get();
+        $header = $this->caseKategoriBantuan($sasaran);
         $footer = $this->countStatistikKategoriPenduduk();
 
         return [
@@ -136,13 +153,28 @@ class BantuanRepository
         return $query->status()->get();
     }
 
-    // public function caseKategoriKeluarga($id, $sasaran = null): array
-    // {
-    //     return [
-    //         'header' => [],
-    //         'footer' => ['keluarga'], // $this->listFooter(),
-    //     ];
-    // }
+    public function caseKategoriKeluarga($id, $sasaran = null): array
+    {
+
+        $header = $this->caseKategoriBantuan($sasaran);
+        $footer = $this->countStatistikKategoriPenduduk();
+
+        return [
+            'header' => $header,
+            'footer' => $this->listFooter($header, $footer),
+        ];
+    }
+
+    private function countStatistikKategoriKeluarga(string $whereHeader = null): object
+    {
+        $query = Keluarga::countStatistik();
+
+        if ($whereHeader) {
+            $query->whereRaw($whereHeader);
+        }
+
+        return $query->status()->get();
+    }
 
     public function caseNonKategori($id): array
     {

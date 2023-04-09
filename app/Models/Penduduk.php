@@ -31,7 +31,7 @@ class Penduduk extends Model
         // 'jk' => 'Jenis Kelamin',
         // 'wn' => 'Warga Negara',
         // 'status-penduduk' => 'Status Penduduk',
-        // 'darah' => 'Golongan Darah',
+         'golongan-darah' => 'Golongan Darah',
         // 'cacat' => 'Penyandang Cacat',
         // 'sakit' => 'Penyakit Menahun',
         // 'kb' => 'Aseptor KB',

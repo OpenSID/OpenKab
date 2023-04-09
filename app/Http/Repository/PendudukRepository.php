@@ -73,6 +73,11 @@ class PendudukRepository
                 'tabelReferensi' => 'tweb_penduduk_pendidikan_kk',
                 'where' => null,
             ],
+            'pendidikan-sedang-ditempuh' => [
+                'idReferensi' => 'pendidikan_sedang_id',
+                'tabelReferensi' => 'tweb_penduduk_pendidikan',
+                'where' => null,
+            ],
             // '1'           => ['idReferensi' => 'pekerjaan_id', 'tabelReferensi' => 'tweb_penduduk_pekerjaan'],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
             // '3'           => ['idReferensi' => 'agama_id', 'tabelReferensi' => 'tweb_penduduk_agama'],
@@ -83,7 +88,6 @@ class PendudukRepository
             // '7'           => ['idReferensi' => 'golongan_darah_id', 'tabelReferensi' => 'tweb_golongan_darah'],
             // '9'           => ['idReferensi' => 'cacat_id', 'tabelReferensi' => 'tweb_cacat'],
             // '10'          => ['idReferensi' => 'sakit_menahun_id', 'tabelReferensi' => 'tweb_sakit_menahun'],
-            // '14'          => ['idReferensi' => 'pendidikan_sedang_id', 'tabelReferensi' => 'tweb_penduduk_pendidikan'],
             // '16'          => ['idReferensi' => 'cara_kb_id', 'tabelReferensi' => 'tweb_cara_kb'],
             // '19'          => ['idReferensi' => 'id_asuransi', 'tabelReferensi' => 'tweb_penduduk_asuransi'],
             default => null,
@@ -229,7 +233,7 @@ class PendudukRepository
             ->select("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
 
         if (session()->has('desa')) {
-            $query->where('config_id', session('desa.id'));
+            $query->where('tweb_penduduk.config_id', session('desa.id'));
         }
 
         if ($where) {
@@ -239,7 +243,7 @@ class PendudukRepository
         return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', "tweb_penduduk.{$idReferensi}", '=', "{$tabelReferensi}.id", 'left')
-            ->where('tweb_penduduk.status', 1)
+            ->where('tweb_penduduk.status_dasar', 1)
             ->groupBy("{$tabelReferensi}.id")
             ->get();
     }

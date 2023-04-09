@@ -43,7 +43,6 @@ class PendudukRepository
             'pendidikan-tempuh' => $this->casePendidikanTempuh(),
             'kawin' => $this->caseKawin(),
             'jk' => $this->caseJk(),
-            'wn' => $this->caseWn(),
             'cacat' => $this->caseCacat(),
             'sakit' => $this->caseSakit(),
             'kb' => $this->caseKb(),
@@ -87,6 +86,12 @@ class PendudukRepository
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
+            'warga-negara' => [
+                'idReferensi' => 'warganegara_id',
+                'tabelReferensi' => 'tweb_penduduk_warganegara',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
             'pekerjaan' => [
                 'tabelReferensi' => 'tweb_penduduk_pekerjaan',
                 'idReferensi' => 'pekerjaan_id',
@@ -113,7 +118,6 @@ class PendudukRepository
             ],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
-            // '5'           => ['idReferensi' => 'warganegara_id', 'tabelReferensi' => 'tweb_penduduk_warganegara'],
             // '6'           => ['idReferensi' => 'status', 'tabelReferensi' => 'tweb_penduduk_status'],
             // '9'           => ['idReferensi' => 'cacat_id', 'tabelReferensi' => 'tweb_cacat'],
             // '10'          => ['idReferensi' => 'sakit_menahun_id', 'tabelReferensi' => 'tweb_sakit_menahun'],

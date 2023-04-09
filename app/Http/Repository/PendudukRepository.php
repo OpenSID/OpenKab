@@ -44,7 +44,6 @@ class PendudukRepository
             'kawin' => $this->caseKawin(),
             'jk' => $this->caseJk(),
             'wn' => $this->caseWn(),
-            'status-penduduk' => $this->caseStatusPenduduk(),
             'cacat' => $this->caseCacat(),
             'sakit' => $this->caseSakit(),
             'kb' => $this->caseKb(),
@@ -103,6 +102,12 @@ class PendudukRepository
             'golongan-darah' => [
                 'tabelReferensi' => 'tweb_golongan_darah',
                 'idReferensi' => 'golongan_darah_id',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'status-penduduk' => [
+                'idReferensi' => 'status',
+                'tabelReferensi' => 'tweb_penduduk_status',
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],

@@ -40,19 +40,6 @@ class PendudukRepository
             'akta-kelahiran' => $this->caseAktaKelahiran(),
             'covid' => $this->caseCovid(),
             'suku' => $this->caseSuku(),
-            'pendidikan-tempuh' => $this->casePendidikanTempuh(),
-            'kerja' => $this->caseKerja(),
-            'agama' => $this->caseAgama(),
-            'jk' => $this->caseJk(),
-            'wn' => $this->caseWn(),
-            'status-penduduk' => $this->caseStatusPenduduk(),
-            'darah' => $this->caseDarah(),
-            'cacat' => $this->caseCacat(),
-            'sakit' => $this->caseSakit(),
-            'kb' => $this->caseKb(),
-            'ktp' => $this->caseKtp(),
-            'asuransi' => $this->caseAsuransi(),
-            'hubungan-kk' => $this->caseHubunganKk(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
         })->toArray();
@@ -68,21 +55,75 @@ class PendudukRepository
                 'whereFooter' => 'tweb_penduduk.sex = 2',
             ],
             'pendidikan-dalam-kk' => [
-                'idReferensi' => 'pendidikan_kk_id',
                 'tabelReferensi' => 'tweb_penduduk_pendidikan_kk',
+                'idReferensi' => 'pendidikan_kk_id',
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
             'pendidikan-sedang-ditempuh' => [
-                'idReferensi' => 'pendidikan_sedang_id',
                 'tabelReferensi' => 'tweb_penduduk_pendidikan',
+                'idReferensi' => 'pendidikan_sedang_id',
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
             'bpjs-ketenagakerjaan' => [
-                'idReferensi' => 'pekerjaan_id',
                 'tabelReferensi' => 'tweb_penduduk_pekerjaan',
+                'idReferensi' => 'pekerjaan_id',
                 'whereHeader' => '(bpjs_ketenagakerjaan IS NOT NULL && bpjs_ketenagakerjaan != "")',
+                'whereFooter' => null,
+            ],
+            'jenis-kelamin' => [
+                'idReferensi' => 'sex',
+                'tabelReferensi' => 'tweb_penduduk_sex',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'agama' => [
+                'tabelReferensi' => 'tweb_penduduk_agama',
+                'idReferensi' => 'agama_id',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'warga-negara' => [
+                'idReferensi' => 'warganegara_id',
+                'tabelReferensi' => 'tweb_penduduk_warganegara',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'pekerjaan' => [
+                'tabelReferensi' => 'tweb_penduduk_pekerjaan',
+                'idReferensi' => 'pekerjaan_id',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'hubungan-dalam-kk' => [
+                'tabelReferensi' => 'tweb_penduduk_hubungan',
+                'idReferensi' => 'kk_level',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'golongan-darah' => [
+                'tabelReferensi' => 'tweb_golongan_darah',
+                'idReferensi' => 'golongan_darah_id',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'status-penduduk' => [
+                'idReferensi' => 'status',
+                'tabelReferensi' => 'tweb_penduduk_status',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'penyakit-menahun' => [
+                'idReferensi' => 'sakit_menahun_id',
+                'tabelReferensi' => 'tweb_sakit_menahun',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'penyandang-cacat' => [
+                'idReferensi' => 'cacat_id',
+                'tabelReferensi' => 'tweb_cacat',
+                'whereHeader' => null,
                 'whereFooter' => null,
             ],
             'status-perkawinan' => [
@@ -91,14 +132,10 @@ class PendudukRepository
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
-            // '3'           => ['idReferensi' => 'agama_id', 'tabelReferensi' => 'tweb_penduduk_agama'],
+            // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
-            // 'hubungan_kk' => ['idReferensi' => 'kk_level', 'tabelReferensi' => 'tweb_penduduk_hubungan'],
-            // '5'           => ['idReferensi' => 'warganegara_id', 'tabelReferensi' => 'tweb_penduduk_warganegara'],
             // '6'           => ['idReferensi' => 'status', 'tabelReferensi' => 'tweb_penduduk_status'],
-            // '7'           => ['idReferensi' => 'golongan_darah_id', 'tabelReferensi' => 'tweb_golongan_darah'],
             // '9'           => ['idReferensi' => 'cacat_id', 'tabelReferensi' => 'tweb_cacat'],
-            // '10'          => ['idReferensi' => 'sakit_menahun_id', 'tabelReferensi' => 'tweb_sakit_menahun'],
             // '16'          => ['idReferensi' => 'cara_kb_id', 'tabelReferensi' => 'tweb_cara_kb'],
             // '19'          => ['idReferensi' => 'id_asuransi', 'tabelReferensi' => 'tweb_penduduk_asuransi'],
             default => null,
@@ -221,12 +258,12 @@ class PendudukRepository
      *
      * return Collection
      */
-    private function countStatistikPendudukHidup(string $where = null)
+    private function countStatistikPendudukHidup(string $whereHeader = null)
     {
         $query = Penduduk::countStatistik();
 
-        if ($where) {
-            $query->whereRaw($where);
+        if ($whereHeader) {
+            $query->whereRaw($whereHeader);
         }
 
         return $query->status()->get();
@@ -237,7 +274,7 @@ class PendudukRepository
      *
      * return Collection
      */
-    public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $where = null)
+    public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $whereFooter = null)
     {
         $query = DB::connection('openkab')
             ->table("{$tabelReferensi}")
@@ -247,8 +284,8 @@ class PendudukRepository
             $query->where('tweb_penduduk.config_id', session('desa.id'));
         }
 
-        if ($where) {
-            $query->whereRaw($where);
+        if ($whereFooter) {
+            $query->whereRaw($whereFooter);
         }
 
         return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
@@ -257,5 +294,21 @@ class PendudukRepository
             ->where('tweb_penduduk.status_dasar', 1)
             ->groupBy("{$tabelReferensi}.id")
             ->get();
+    }
+
+    /**
+     * Suku / Etnis
+     *
+     * return array
+     */
+    private function caseSuku()
+    {
+        $umur = Penduduk::CountStatistikSuku()->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur, $query),
+        ];
     }
 }

@@ -22,7 +22,6 @@ class Penduduk extends Model
     public const KATEGORI_STATISTIK = [
         'rentang-umur' => 'Rentang Umur',
         'kategori-umur' => 'Kategori Umur',
-        // 'covid' => 'Status Covid',
         'pendidikan-dalam-kk' => 'Pendidikan Dalam KK',
         'pendidikan-sedang-ditempuh' => 'Pendidikan Sedang Ditempuh',
         'pekerjaan' => 'Pekerjaan',
@@ -43,6 +42,7 @@ class Penduduk extends Model
         'suku' => 'Suku / Etnis',
         'bpjs-ketenagakerjaan' => 'BPJS Ketenagakerjaan',
         'status-kehamilan' => 'Status Kehamilan',
+        'status-covid' => 'Status Covid',
     ];
 
     /** {@inheritdoc} */

@@ -10,13 +10,6 @@ use App\Models\Penduduk;
 
 class BantuanRepository
 {
-    private $filter;
-
-    public function __construct()
-    {
-        $this->filter = request()->input('filter');
-    }
-
     public function listBantuan()
     {
         $query = Bantuan::query();
@@ -61,39 +54,64 @@ class BantuanRepository
             ->first();
     }
 
-    public function listStatistik(): array|object
+    public function listStatistik($kategori): array|object
     {
-        return collect(match ($this->filter['id']) {
-            'bantuan-penduduk' => $this->caseKategoriPenduduk($this->filter['id'], 1),
-            'bantuan-keluarga' => $this->caseKategoriKeluarga($this->filter['id'], 2),
-            default => $this->caseBantuan($this->filter['id']),
+        return collect(match ($kategori) {
+            'bantuan-penduduk' => $this->caseKategoriPenduduk($kategori, 1),
+            'bantuan-keluarga' => $this->caseKategoriKeluarga($kategori, 2),
+            default => $this->caseNonKategori($kategori),
         })->toArray();
     }
 
-    public function getTotalNonKategori($id, $sasaran = null)
+    public function getBantuanNonKategori($id)
     {
-        return Bantuan::when(session()->has('desa'), function ($query) {
-            return $query->where('config_id', session('desa.id'));
-        })
-            ->when($id, function ($query, $id) {
-                if (in_array($id, ['bantuan-penduduk', 'bantuan-keluarga'])) {
-                    return $query;
-                }
-                return $query->where('id', $id);
-            })
-            ->when($sasaran, function ($query, $sasaran) {
-                return $query->where('sasaran', $sasaran);
-            })
-            ->get()
-            ->pluck('statistik')
-            ->flatten(1)
-            ->map(function ($item) {
-                return [
-                    'jumlah' => $item['laki_laki'] + $item['perempuan'],
-                    'laki_laki' => $item['laki_laki'],
-                    'perempuan' => $item['perempuan'],
-                ];
-            });
+        $bantuan = Bantuan::where('id', $id)->first();
+
+        return [
+            [
+                'nama' => 'PESERTA',
+                'laki_laki' => $bantuan->statistik['laki_laki'],
+                'perempuan' => $bantuan->statistik['perempuan'],
+            ],
+            $this->getTotal($bantuan->sasaran),
+        ];
+    }
+
+    private function getTotal($sasaran)
+    {
+        $query = null;
+        switch ($sasaran) {
+            case Bantuan::SASARAN_PENDUDUK:
+                $query = DB::connection('openkab')->table('tweb_penduduk');
+
+                break;
+            case Bantuan::SASARAN_KELUARGA:
+                $query = DB::connection('openkab')->table('tweb_keluarga')
+                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left');
+
+                break;
+            case Bantuan::SASARAN_RUMAH_TANGGA:
+                $query = DB::connection('openkab')->table('tweb_rtm')
+                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala', 'left');
+
+                break;
+
+            case Bantuan::SASARAN_KELOMPOK:
+                $query = DB::connection('openkab')->table('kelompok')
+                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
+                    ->where('kelompok.tipe', 'kelompok');
+
+                break;
+        }
+
+        $result = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+            ->first();
+
+        return [
+            'laki_laki' => $result->laki_laki,
+            'perempuan' => $result->perempuan,
+        ];
     }
 
     public function caseKategoriPenduduk($id, $sasaran = null): array
@@ -115,12 +133,7 @@ class BantuanRepository
             $query->whereRaw($whereHeader);
         }
 
-        return $query->status()->get()->map(function ($item) {
-            return [
-                'laki_laki' => $item['laki_laki'],
-                'perempuan' => $item['perempuan'],
-            ];
-        });
+        return $query->status()->get();
     }
 
     // public function caseKategoriKeluarga($id, $sasaran = null): array
@@ -131,13 +144,13 @@ class BantuanRepository
     //     ];
     // }
 
-    public function caseBantuan($id): array
+    public function caseNonKategori($id): array
     {
         $header  = [];
-        $bantuan = $this->getTotalNonKategori($id);
+        $bantuan = $this->getBantuanNonKategori($id);
 
         return [
-            'header' => [],
+            'header' => $header,
             'footer' => $this->listFooter($header, $bantuan),
         ];
     }
@@ -172,13 +185,13 @@ class BantuanRepository
 
         return [
             [
-                'nama' => 'Jumlah',
+                'nama' => 'Peserta',
                 'jumlah' => $jumlah,
                 'laki_laki' => $jumlahLakiLaki,
                 'perempuan' => $jumlahPerempuan,
             ],
             [
-                'nama' => 'Belum Mengisi',
+                'nama' => 'Bukan Peserta',
             ],
             [
                 'nama' => 'Total',

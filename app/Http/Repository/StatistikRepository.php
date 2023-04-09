@@ -129,8 +129,9 @@ class StatistikRepository
         ];
     }
 
-    private function getPresentase(array $data, $pembagi = null)
+    private function getPresentase($data, $pembagi = null)
     {
+        $data = collect($data)->toArray();
         $data['jumlah'] = $data['laki_laki'] + $data['perempuan'];
         $pembagi = $pembagi ?? $data['jumlah'];
         $data['persentase_jumlah'] = persen($data['jumlah'], $pembagi);

@@ -5,6 +5,7 @@ namespace App\Http\Repository;
 use App\Models\Umur;
 use App\Models\Hamil;
 use App\Models\Penduduk;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -67,6 +68,8 @@ class PendudukRepository
      */
     private function listFooter($data_header, $query_footer)
     {
+        $data_header = collect($data_header);
+
         if (count($data_header) > 0) {
             $jumlah_laki_laki = $data_header->sum('laki_laki');
             $jumlah_perempuan = $data_header->sum('perempuan');
@@ -158,7 +161,8 @@ class PendudukRepository
      */
     private function caseStatusKehamilan()
     {
-        $hamil = Hamil::countStatistik()->where('nama', 'Hamil')->orderBy('id')->get();
+        $where = 'tweb_penduduk.sex = 2';
+        $hamil = $this->countStatistikByKategori('ref_penduduk_hamil', 'hamil', $where);
         $query = $this->countStatistikPendudukHidup();
 
         return [
@@ -170,10 +174,39 @@ class PendudukRepository
     /**
      * Jumlah penduduk hidup
      *
-     * return int
+     * return Collection
      */
     private function countStatistikPendudukHidup()
     {
         return Penduduk::countStatistik()->status()->get();
+    }
+
+    /**
+     * Jumlah Laki-laki dan Perempuan berdasarkan kategori
+     *
+     * return array
+     */
+    public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $where = null)
+    {
+        $query = DB::connection('openkab')
+            ->table("{$tabelReferensi}")
+            ->select("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
+
+        if (session()->has('desa')) {
+            $query->where('config_id', session('desa.id'));
+        }
+
+        // if ($where) {
+        //     $query->whereRaw($where);
+        // }
+
+        $result = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+            ->join('tweb_penduduk', "tweb_penduduk.{$idReferensi}", '=', "{$tabelReferensi}.id", 'left')
+            ->where('tweb_penduduk.status', 1)
+            ->groupBy("{$tabelReferensi}.id")
+            ->get();
+
+        return collect($result)->values()->toArray();
     }
 }

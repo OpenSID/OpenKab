@@ -416,14 +416,13 @@ class Penduduk extends Model
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan');
     }
 
-    public function scopeCountSukuStatistik($query)
+    public function scopeCountStatistikSuku($query)
     {
         return $query
             ->select(['suku AS id', 'suku AS nama'])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->groupBy('suku')
-
             ->whereNotNull('suku')
             ->where('suku', '!=', "")
         ;

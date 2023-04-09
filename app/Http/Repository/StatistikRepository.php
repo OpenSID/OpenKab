@@ -82,7 +82,7 @@ class StatistikRepository
             $setFooter = $this->getHitungFooter($footer);
 
             if (count($header) > 0) {
-                $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
+                $setHeader = $this->getHitungHeader($header, $setFooter[2]['jumlah']);
 
                 $setFooter = collect($setFooter)->map(function ($item, $key) use ($setHeader) {
                     $item['id'] = $key + $setHeader->pluck('id')->max();

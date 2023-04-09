@@ -36,7 +36,7 @@ class Penduduk extends Model
         'penyakit-menahun' => 'Penyakit Menahun',
         // 'kb' => 'Aseptor KB',
         // 'ktp' => 'Kepemilikan KTP',
-        // 'asuransi' => 'Asuransi Kesehatan',
+        'asuransi-kesehatan' => 'Asuransi Kesehatan',
         'hubungan-dalam-kk' => 'Hubungan Dalam KK',
         'golongan-darah' => 'Golongan Darah',
         'akta-kelahiran' => 'Akta Kelahiran',

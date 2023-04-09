@@ -132,12 +132,17 @@ class PendudukRepository
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
+            'asuransi-kesehatan' => [
+                'idReferensi' => 'id_asuransi',
+                'tabelReferensi' => 'tweb_penduduk_asuransi',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
             // '6'           => ['idReferensi' => 'status', 'tabelReferensi' => 'tweb_penduduk_status'],
             // '9'           => ['idReferensi' => 'cacat_id', 'tabelReferensi' => 'tweb_cacat'],
             // '16'          => ['idReferensi' => 'cara_kb_id', 'tabelReferensi' => 'tweb_cara_kb'],
-            // '19'          => ['idReferensi' => 'id_asuransi', 'tabelReferensi' => 'tweb_penduduk_asuransi'],
             default => null,
         };
     }

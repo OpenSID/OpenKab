@@ -3,8 +3,10 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use App\Models\Penduduk;
 
 class BantuanRepository
 {
@@ -68,12 +70,11 @@ class BantuanRepository
         })->toArray();
     }
 
-    public function getQuery($id, $sasaran = null)
+    public function getTotalNonKategori($id, $sasaran = null)
     {
-        return Bantuan::query()
-            ->when(session()->has('desa'), function ($query) {
-                return $query->where('config_id', session('desa.id'));
-            })
+        return Bantuan::when(session()->has('desa'), function ($query) {
+            return $query->where('config_id', session('desa.id'));
+        })
             ->when($id, function ($query, $id) {
                 if (in_array($id, ['bantuan-penduduk', 'bantuan-keluarga'])) {
                     return $query;
@@ -95,13 +96,58 @@ class BantuanRepository
             });
     }
 
-    // public function caseKategoriPenduduk($id, $sasaran = null): array
-    // {
-    //     return [
-    //         'header' => [],
-    //         'footer' => $this->listFooter($id, $sasaran),
-    //     ];
-    // }
+    public function getTotalKategoriPenduduk($id, $sasaran = null)
+    {
+        return Bantuan::when(session()->has('desa'), function ($query) {
+            return $query->where('config_id', session('desa.id'));
+        })
+            ->when($id, function ($query, $id) {
+                if (in_array($id, ['bantuan-penduduk', 'bantuan-keluarga'])) {
+                    return $query;
+                }
+                return $query->where('id', $id);
+            })
+            ->when($sasaran, function ($query, $sasaran) {
+                return $query->where('sasaran', $sasaran);
+            })
+            ->get()
+            ->pluck('statistik')
+            ->flatten(1)
+            ->map(function ($item) {
+                return [
+                    'jumlah' => $item['laki_laki'] + $item['perempuan'],
+                    'laki_laki' => $item['laki_laki'],
+                    'perempuan' => $item['perempuan'],
+                ];
+            });
+    }
+
+    public function caseKategoriPenduduk($id, $sasaran = null): array
+    {
+        $header = Bantuan::countStatistikPenduduk()->sasaran()->get();
+        $footer = $this->countStatistikKategoriPenduduk();
+
+        return [
+            'header' => $header,
+            'footer' => $this->listFooter($header, $footer),
+        ];
+    }
+
+    private function countStatistikKategoriPenduduk(string $whereHeader = null): object
+    {
+        $query = Penduduk::countStatistik();
+
+        if ($whereHeader) {
+            $query->whereRaw($whereHeader);
+        }
+
+        return $query->status()->get()->map(function ($item) {
+            return [
+                'laki_laki' => $item['laki_laki'],
+                'perempuan' => $item['perempuan'],
+            ];
+        });
+    }
 
     // public function caseKategoriKeluarga($id, $sasaran = null): array
     // {
@@ -113,13 +159,13 @@ class BantuanRepository
 
     public function caseBantuan($id): array
     {
-        $bantuan = $this->getQuery($id);
+        $header  = [];
+        $bantuan = $this->getTotalNonKategori($id);
 
         return [
-            'header' => $bantuan[0],
-            'footer' => $this->listFooter($bantuan[0], $bantuan[0]),
+            'header' => [],
+            'footer' => $this->listFooter($header, $bantuan),
         ];
-
     }
 
     /**
@@ -128,34 +174,44 @@ class BantuanRepository
      *
      * return array
      */
-    private function listFooter($dataHeader, $queryFooter): array
+    private function listFooter($dataHeader, $queryFooter): array|object
     {
-        $queryFooter = collect($queryFooter);
+        if (count($dataHeader) > 0) {
+            $jumlahLakiLaki = $dataHeader->sum('laki_laki');
+            $jumlahPerempuan = $dataHeader->sum('perempuan');
+            $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
 
-        $total_laki_laki = $queryFooter->sum('laki_laki');
-        $total_perempuan = $queryFooter->sum('perempuan');
-        $total = $total_laki_laki + $total_perempuan;
+
+            $totalLakiLaki = $queryFooter[0]['laki_laki'];
+            $totalPerempuan = $queryFooter[0]['laki_laki'];
+            $total = $totalLakiLaki + $totalPerempuan;
+
+        } else {
+            $jumlahLakiLaki = $queryFooter[0]['laki_laki'];
+            $jumlahPerempuan = $queryFooter[0]['perempuan'];
+            $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
+
+            $totalLakiLaki = $queryFooter[1]['laki_laki'];
+            $totalPerempuan = $queryFooter[1]['perempuan'];
+            $total = $totalLakiLaki + $totalPerempuan;
+        }
 
         return [
-            // [
-            //     'nama' => 'Jumlah',
-            //     'jumlah' => $jumlah,
-            //     'laki_laki' => $jumlah_laki_laki,
-            //     'perempuan' => $jumlah_perempuan,
-            // ],
-            // [
-            //     'nama' => 'Belum Mengisi',
-            //     'jumlah' => $total - $jumlah,
-            //     'laki_laki' => $total_laki_laki - $jumlah_laki_laki,
-            //     'perempuan' => $total_perempuan - $jumlah_perempuan,
-            // ],
+            [
+                'nama' => 'Jumlah',
+                'jumlah' => $jumlah,
+                'laki_laki' => $jumlahLakiLaki,
+                'perempuan' => $jumlahPerempuan,
+            ],
+            [
+                'nama' => 'Belum Mengisi',
+            ],
             [
                 'nama' => 'Total',
                 'jumlah' => $total,
-                'laki_laki' => $total_laki_laki,
-                'perempuan' => $total_perempuan,
+                'laki_laki' => $totalLakiLaki,
+                'perempuan' => $totalPerempuan,
             ],
         ];
-
     }
 }

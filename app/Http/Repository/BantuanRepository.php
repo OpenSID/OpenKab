@@ -155,7 +155,7 @@ class BantuanRepository
             $query->where('program.config_id', session('desa.id'));
         }
 
-        $header = $query->countStatistikKeluarga()->status()->get();
+        $header = $query->countStatistikKeluarga()->get();
         $footer = $this->countStatistikKategoriKeluarga();
 
         return [

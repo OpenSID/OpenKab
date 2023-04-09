@@ -184,7 +184,7 @@ class PendudukRepository
     /**
      * Jumlah Laki-laki dan Perempuan berdasarkan kategori
      *
-     * return array
+     * return Collection
      */
     public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $where = null)
     {

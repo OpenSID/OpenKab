@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Cacat extends Model
+class Cacat extends BaseModel
 {
     /** {@inheritdoc} */
     protected $connection = 'openkab';

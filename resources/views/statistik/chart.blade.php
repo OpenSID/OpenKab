@@ -1,9 +1,17 @@
 <script>
     function grafikPie() {
+        data = [];
+        $('#barChart').remove();
+        $('#donutChart').remove();
+        $('#grafik').append(
+            '<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>'
+        );
+        $('#pie').append(
+            '<canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>'
+        );
         var data = modifikasiData(data_grafik);
-        console.log(data_grafik);
-        tampilGrafik(data[0])
-        tampilPie(data[1])
+        tampilGrafik(data[0]);
+        tampilPie(data[1]);
     }
 
     function tampilGrafik(areaChartData) {

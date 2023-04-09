@@ -334,6 +334,11 @@ return [
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Penduduk',
+                    'url' => 'statistik/penduduk',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Keluarga',
                     'url' => 'statistik/keluarga',
                 ],

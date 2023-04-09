@@ -43,9 +43,9 @@ class StatistikController extends Controller
             return $this->fractal($this->statistik->getStatistik($penduduk->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-penduduk')->respond();
         }
         return response()->json([
-                'success' => false,
-                'message' => 'Kategori tidak ditemukan',
-            ], Response::HTTP_NOT_FOUND);
+            'success' => false,
+            'message' => 'Kategori tidak ditemukan',
+        ], Response::HTTP_NOT_FOUND);
     }
 
     public function keluarga(KeluargaRepository $keluarga)
@@ -54,9 +54,9 @@ class StatistikController extends Controller
             return $this->fractal($this->statistik->getStatistik($keluarga->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-keluarga')->respond();
         }
         return response()->json([
-                'success' => false,
-                'message' => 'Kategori tidak ditemukan',
-            ], Response::HTTP_NOT_FOUND);
+            'success' => false,
+            'message' => 'Kategori tidak ditemukan',
+        ], Response::HTTP_NOT_FOUND);
     }
 
     public function rtm(RtmRepository $rtm)
@@ -66,6 +66,18 @@ class StatistikController extends Controller
 
     public function bantuan(BantuanRepository $bantuan)
     {
-        return $this->fractal($this->statistik->getStatistik($bantuan->listStatistik()), new StatistikTransformer(), 'statistik-bantuan')->respond();
+        return response()->json([
+            'success' => true,
+            'data' => $bantuan->listStatistik(),
+        ], Response::HTTP_OK);
+
+
+        // if ($this->kategori) {
+        //     return $this->fractal($this->statistik->getStatistik($bantuan->listStatistik()), new StatistikTransformer(), 'statistik-bantuan')->respond();
+        // }
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => 'Kategori tidak ditemukan',
+        // ], Response::HTTP_NOT_FOUND);
     }
 }

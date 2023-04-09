@@ -24,8 +24,7 @@ class Penduduk extends Model
         'kategori-umur' => 'Kategori Umur',
         // 'covid' => 'Status Covid',
         // 'suku' => 'Suku / Etnis',
-        // 'hamil' => 'Status Kehamilan',
-         'pendidikan-kk' => 'Pendidikan Dalam KK',
+        // 'pendidikan-kk' => 'Pendidikan Dalam KK',
         // 'pendidikan-tempuh' => 'Pendidikan Sedang Ditempuh',
         // 'kerja' => 'Pekerjaan',
         // 'kawin' => 'Status Perkawinan',
@@ -42,6 +41,7 @@ class Penduduk extends Model
         // 'bpjs_kerja' => 'BPJS Ketenagakerjaan',
         // 'hubungan-kk' => 'Hubungan Dalam KK',
         'akta-kelahiran' => 'Akta Kelahiran',
+        'status-kehamilan' => 'Status Kehamilan',
     ];
 
     /** {@inheritdoc} */

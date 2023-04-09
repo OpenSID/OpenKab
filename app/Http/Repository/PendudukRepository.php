@@ -42,7 +42,6 @@ class PendudukRepository
             'suku' => $this->caseSuku(),
             'pendidikan-tempuh' => $this->casePendidikanTempuh(),
             'kawin' => $this->caseKawin(),
-            'jk' => $this->caseJk(),
             'cacat' => $this->caseCacat(),
             'kb' => $this->caseKb(),
             'ktp' => $this->caseKtp(),

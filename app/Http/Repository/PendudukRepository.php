@@ -40,12 +40,7 @@ class PendudukRepository
             'akta-kelahiran' => $this->caseAktaKelahiran(),
             'covid' => $this->caseCovid(),
             'suku' => $this->caseSuku(),
-            'pendidikan-tempuh' => $this->casePendidikanTempuh(),
-            'kawin' => $this->caseKawin(),
-            'jk' => $this->caseJk(),
-            'cacat' => $this->caseCacat(),
             'ktp' => $this->caseKtp(),
-            'asuransi' => $this->caseAsuransi(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
         })->toArray();
@@ -76,6 +71,12 @@ class PendudukRepository
                 'tabelReferensi' => 'tweb_penduduk_pekerjaan',
                 'idReferensi' => 'pekerjaan_id',
                 'whereHeader' => '(bpjs_ketenagakerjaan IS NOT NULL && bpjs_ketenagakerjaan != "")',
+                'whereFooter' => null,
+            ],
+            'jenis-kelamin' => [
+                'idReferensi' => 'sex',
+                'tabelReferensi' => 'tweb_penduduk_sex',
+                'whereHeader' => null,
                 'whereFooter' => null,
             ],
             'agama' => [

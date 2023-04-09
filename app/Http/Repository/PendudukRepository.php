@@ -42,7 +42,6 @@ class PendudukRepository
             'suku' => $this->caseSuku(),
             'pendidikan-tempuh' => $this->casePendidikanTempuh(),
             'kawin' => $this->caseKawin(),
-            'agama' => $this->caseAgama(),
             'jk' => $this->caseJk(),
             'wn' => $this->caseWn(),
             'status-penduduk' => $this->caseStatusPenduduk(),
@@ -52,7 +51,6 @@ class PendudukRepository
             'kb' => $this->caseKb(),
             'ktp' => $this->caseKtp(),
             'asuransi' => $this->caseAsuransi(),
-            'bpjs_kerja' => $this->caseBpjsKerja(),
             'hubungan-kk' => $this->caseHubunganKk(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
@@ -65,17 +63,32 @@ class PendudukRepository
             'status-kehamilan' => [
                 'tabelReferensi' => 'ref_penduduk_hamil',
                 'idReferensi' => 'hamil',
-                'where' => 'tweb_penduduk.sex = 2',
+                'whereHeader' => 'tweb_penduduk.sex = 2',
+                'whereFooter' => 'tweb_penduduk.sex = 2',
             ],
             'pendidikan-dalam-kk' => [
                 'idReferensi' => 'pendidikan_kk_id',
                 'tabelReferensi' => 'tweb_penduduk_pendidikan_kk',
-                'where' => null,
+                'whereHeader' => null,
+                'whereFooter' => null,
             ],
             'pendidikan-sedang-ditempuh' => [
                 'idReferensi' => 'pendidikan_sedang_id',
                 'tabelReferensi' => 'tweb_penduduk_pendidikan',
-                'where' => null,
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
+            'bpjs-ketenagakerjaan' => [
+                'idReferensi' => 'pekerjaan_id',
+                'tabelReferensi' => 'tweb_penduduk_pekerjaan',
+                'whereHeader' => '(bpjs_ketenagakerjaan IS NOT NULL && bpjs_ketenagakerjaan != "")',
+                'whereFooter' => null,
+            ],
+            'agama' => [
+                'idReferensi' => 'agama_id',
+                'tabelReferensi' => 'tweb_penduduk_agama',
+                'whereHeader' => null,
+                'whereFooter' => null,
             ],
             'pekerjaan' => [
                 'idReferensi' => 'pekerjaan_id',
@@ -83,7 +96,6 @@ class PendudukRepository
                 'where' => null,
             ],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
-            // '3'           => ['idReferensi' => 'agama_id', 'tabelReferensi' => 'tweb_penduduk_agama'],
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
             // 'hubungan_kk' => ['idReferensi' => 'kk_level', 'tabelReferensi' => 'tweb_penduduk_hubungan'],
             // '5'           => ['idReferensi' => 'warganegara_id', 'tabelReferensi' => 'tweb_penduduk_warganegara'],
@@ -199,8 +211,8 @@ class PendudukRepository
     private function caseWithReferensi(string $kategori)
     {
         $referensi = $this->tabelReferensi($kategori);
-        $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['where']);
-        $query = $this->countStatistikPendudukHidup($referensi['where']);
+        $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['whereHeader']);
+        $query = $this->countStatistikPendudukHidup($referensi['whereFooter']);
 
         return [
             'header' => $header,
@@ -249,5 +261,21 @@ class PendudukRepository
             ->where('tweb_penduduk.status_dasar', 1)
             ->groupBy("{$tabelReferensi}.id")
             ->get();
+    }
+
+    /**
+     * Suku / Etnis
+     *
+     * return array
+     */
+    private function caseSuku()
+    {
+        $umur = Penduduk::CountStatistikSuku()->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur, $query),
+        ];
     }
 }

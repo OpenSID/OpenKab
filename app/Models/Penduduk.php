@@ -42,6 +42,7 @@ class Penduduk extends Model
         'suku' => 'Suku / Etnis',
         'bpjs-ketenagakerjaan' => 'BPJS Ketenagakerjaan',
         'status-kehamilan' => 'Status Kehamilan',
+        'status-covid' => 'Status Covid',
     ];
 
     /** {@inheritdoc} */

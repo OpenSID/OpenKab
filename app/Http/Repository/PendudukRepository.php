@@ -5,8 +5,7 @@ namespace App\Http\Repository;
 use App\Models\Umur;
 use App\Models\Hamil;
 use App\Models\Penduduk;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Models\Covid;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -38,7 +37,7 @@ class PendudukRepository
             'rentang-umur' => $this->caseRentangUmur(),
             'kategori-umur' => $this->caseKategoriUmur(),
             'akta-kelahiran' => $this->caseAktaKelahiran(),
-            'covid' => $this->caseCovid(),
+            'status-covid' => $this->caseStatusCovid(),
             'suku' => $this->caseSuku(),
             'ktp' => $this->caseKtp(),
             // Yang menggunakan tabel referensi
@@ -315,6 +314,18 @@ class PendudukRepository
         return [
             'header' => $umur,
             'footer' => $this->listFooter($umur, $query),
+        ];
+    }
+
+    // Covid
+    private function caseStatusCovid()
+    {
+        $covid = Covid::countStatistik()->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
+
+        return [
+            'header' => $covid,
+            'footer' => $this->listFooter($covid, $query),
         ];
     }
 }

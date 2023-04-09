@@ -29,7 +29,7 @@ class Penduduk extends Model
         // 'kawin' => 'Status Perkawinan',
          'agama' => 'Agama',
         // 'jk' => 'Jenis Kelamin',
-        // 'wn' => 'Warga Negara',
+         'warga-negara' => 'Warga Negara',
         // 'status-penduduk' => 'Status Penduduk',
         // 'darah' => 'Golongan Darah',
         // 'cacat' => 'Penyandang Cacat',

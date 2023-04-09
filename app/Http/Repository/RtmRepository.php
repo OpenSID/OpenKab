@@ -40,9 +40,6 @@ class RtmRepository
             ],
             [
                 'nama' => 'Belum Mengisi',
-                'jumlah' => 0,
-                'laki_laki' => 0,
-                'perempuan' => 0,
             ],
             [
                 'nama' => 'Total',

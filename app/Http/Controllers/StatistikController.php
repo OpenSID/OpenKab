@@ -2,33 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bantuan;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Keluarga;
-use App\Models\Penduduk;
+use App\Http\Repository\PendudukRepository;
 
 class StatistikController extends Controller
 {
-    public function cetak($kategori, $id)
-    {
-        return view('statistik.cetak', [
-            'kategori' => $kategori,
-            'id' => $id,
-        ]);
-    }
-
     public function penduduk()
     {
         return view('statistik.index', [
-            'judul' => 'Penduduk',
-            'kategori' => 'penduduk',
-        ]);
-    }
-
-    public function cetak_penduduk()
-    {
-        return view('statistik.cetak', [
             'judul' => 'Penduduk',
             'kategori' => 'penduduk',
         ]);
@@ -40,11 +20,6 @@ class StatistikController extends Controller
             'judul' => 'Keluarga',
             'kategori' => 'keluarga',
         ]);
-    }
-
-    public function cetak_keluarga()
-    {
-        return view('statistik.keluarga.cetak');
     }
 
     public function rtm()
@@ -66,11 +41,14 @@ class StatistikController extends Controller
             'judul' => 'Bantuan',
             'kategori' => 'bantuan',
         ]);
-
     }
 
-    public function cetak_bantuan()
+    public function cetak($kategori, $id)
     {
-        return view('statistik.bantuan.cetak');
+        return view('statistik.cetak', [
+            'kategori' => $kategori,
+            'id' => $id,
+        ]);
     }
+
 }

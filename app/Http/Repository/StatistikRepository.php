@@ -29,7 +29,9 @@ class StatistikRepository
         if ($detail) {
             $daftarKategori = collect($daftarKategori)->filter(function ($item) use ($detail) {
                 return $item['id'] == $detail;
-            })->toArray();
+            })
+            ->values()
+            ->toArray();
         }
 
         return $daftarKategori;
@@ -51,11 +53,16 @@ class StatistikRepository
 
     private function getKategoriBantuan()
     {
-        return Bantuan::select('id', 'nama', 'sasaran')->get()->map(function ($item) {
+        $query = Bantuan::query();
+        if (session()->has('desa')) {
+            $query->where('config_id', session('desa.id'));
+        }
+
+        return $query->select('id', 'nama', 'sasaran')->get()->map(function ($item) {
             return [
                 'id' => $item->id,
                 'nama' => $item->nama,
-                'judul_halaman' => 'Bantuan',
+                'judul_halaman' => 'Bantuan ' . $item->nama,
                 'judul_kolom_nama' => 'Sasaran ' . $item->nama_sasaran,
             ];
         })->toArray();
@@ -75,7 +82,7 @@ class StatistikRepository
             $setFooter = $this->getHitungFooter($footer);
 
             if (count($header) > 0) {
-                $setHeader = $this->getHitungHeader($header, $setFooter[0]['jumlah']);
+                $setHeader = $this->getHitungHeader($header, $setFooter[2]['jumlah']);
 
                 $setFooter = collect($setFooter)->map(function ($item, $key) use ($setHeader) {
                     $item['id'] = $key + $setHeader->pluck('id')->max();
@@ -106,24 +113,25 @@ class StatistikRepository
                 'nama'      => $dataFooter[0]['nama'],
                 'laki_laki' => $dataFooter[0]['laki_laki'],
                 'perempuan' => $dataFooter[0]['perempuan'],
-            ]),
+            ], $dataFooter[2]['jumlah']),
             $this->getPresentase([
                 'id'        => 2,
                 'nama'      => $dataFooter[1]['nama'],
                 'laki_laki' => $dataFooter[1]['laki_laki'] ?? $dataFooter[2]['laki_laki'] - $dataFooter[0]['laki_laki'],
                 'perempuan' => $dataFooter[1]['perempuan'] ?? $dataFooter[2]['perempuan'] - $dataFooter[0]['perempuan'],
-            ]),
+            ], $dataFooter[2]['jumlah']),
             $this->getPresentase([
                 'id'        => 3,
                 'nama'      => $dataFooter[2]['nama'],
                 'laki_laki' => $dataFooter[2]['laki_laki'],
                 'perempuan' => $dataFooter[2]['perempuan'],
-            ]),
+            ], $dataFooter[2]['jumlah']),
         ];
     }
 
-    private function getPresentase(array $data, $pembagi = null)
+    private function getPresentase($data, $pembagi = null)
     {
+        $data = collect($data)->toArray();
         $data['jumlah'] = $data['laki_laki'] + $data['perempuan'];
         $pembagi = $pembagi ?? $data['jumlah'];
         $data['persentase_jumlah'] = persen($data['jumlah'], $pembagi);

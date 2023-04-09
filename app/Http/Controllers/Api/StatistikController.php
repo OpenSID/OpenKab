@@ -66,12 +66,6 @@ class StatistikController extends Controller
 
     public function bantuan(BantuanRepository $bantuan)
     {
-        // return response()->json([
-        //     'success' => true,
-        //     'data' => $bantuan->listStatistik($this->kategori),
-        // ], Response::HTTP_OK);
-
-
         if ($this->kategori) {
             return $this->fractal($this->statistik->getStatistik($bantuan->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-bantuan')->respond();
         }

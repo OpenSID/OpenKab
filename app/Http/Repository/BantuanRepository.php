@@ -84,7 +84,7 @@ class BantuanRepository
         ];
     }
 
-    private function getTotal($sasaran)
+    private function getTotal($sasaran): array|object
     {
         $query = null;
         switch ($sasaran) {
@@ -121,7 +121,7 @@ class BantuanRepository
         ];
     }
 
-    public function caseKategoriPenduduk($id): array
+    public function caseKategoriPenduduk($id): array|object
     {
         $query = Bantuan::query();
         if (session()->has('desa')) {
@@ -137,7 +137,7 @@ class BantuanRepository
         ];
     }
 
-    private function countStatistikKategoriPenduduk(string $whereHeader = null): object
+    private function countStatistikKategoriPenduduk(string $whereHeader = null): array|object
     {
         $query = Penduduk::countStatistik();
 
@@ -148,14 +148,14 @@ class BantuanRepository
         return $query->status()->get();
     }
 
-    public function caseKategoriKeluarga($id): array
+    public function caseKategoriKeluarga($id): array|object
     {
         $query = Bantuan::query();
         if (session()->has('desa')) {
             $query->where('program.config_id', session('desa.id'));
         }
 
-        $header = $query->countStatistikKeluarga()->get();
+        $header = $query->countStatistikKeluarga()->status()->get();
         $footer = $this->countStatistikKategoriKeluarga();
 
         return [
@@ -164,7 +164,7 @@ class BantuanRepository
         ];
     }
 
-    private function countStatistikKategoriKeluarga(string $whereHeader = null): object
+    private function countStatistikKategoriKeluarga(string $whereHeader = null): array|object
     {
         $query = Keluarga::countStatistik();
 
@@ -175,7 +175,7 @@ class BantuanRepository
         return $query->status()->get();
     }
 
-    public function caseNonKategori($id): array
+    public function caseNonKategori($id): array|object
     {
         $header  = [];
         $bantuan = $this->getBantuanNonKategori($id);

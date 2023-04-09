@@ -2,6 +2,7 @@
 
 namespace App\Http\Repository;
 
+use App\Models\Ktp;
 use App\Models\Umur;
 use App\Models\Covid;
 use App\Models\Hamil;
@@ -282,6 +283,18 @@ class PendudukRepository
     {
         $umur = Penduduk::CountStatistikSuku()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur, $query),
+        ];
+    }
+
+    private function caseKtp()
+    {
+        $whereFooter = "((DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(tweb_penduduk.tanggallahir)), '%Y')+0)>=17 OR (tweb_penduduk.status_kawin IS NOT NULL AND tweb_penduduk.status_kawin <> 1))";
+        $umur = Ktp::countStatistik()->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup($whereFooter);
 
         return [
             'header' => $umur,

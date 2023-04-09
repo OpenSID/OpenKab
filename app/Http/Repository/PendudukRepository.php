@@ -2,10 +2,11 @@
 
 namespace App\Http\Repository;
 
+use App\Models\Ktp;
 use App\Models\Umur;
 use App\Models\Hamil;
 use App\Models\Penduduk;
-use App\Models\Ktp;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 

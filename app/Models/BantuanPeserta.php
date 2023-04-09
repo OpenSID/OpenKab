@@ -15,4 +15,19 @@ class BantuanPeserta extends Model
 
     /** {@inheritdoc} */
     protected $table = 'program_peserta';
+
+    /** {@inheritdoc} */
+    protected $with = [
+        'bantuan',
+    ];
+
+    /**
+     * Define a one-to-many relationship.
+     *
+     * @return BelongsTo
+     */
+    public function bantuan()
+    {
+        return $this->belongsTo(Bantuan::class, 'program_id');
+    }
 }

@@ -324,11 +324,6 @@ return [
             ],
         ],
         [
-            'text' => 'Bantuan',
-            'icon' => 'fas fa-handshake',
-            'url'  => 'bantuan',
-        ],
-        [
             'text' => 'Statistik',
             'icon' => 'fas fa-chart-pie',
             'submenu' => [
@@ -354,6 +349,11 @@ return [
                 ],
 
             ],
+        ],
+        [
+            'text' => 'Bantuan',
+            'icon' => 'fas fa-handshake',
+            'url'  => 'bantuan',
         ],
     ],
 

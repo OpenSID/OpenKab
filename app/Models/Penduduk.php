@@ -34,7 +34,7 @@ class Penduduk extends Model
         'golongan-darah' => 'Golongan Darah',
         'penyandang-cacat' => 'Penyandang Cacat',
         'penyakit-menahun' => 'Penyakit Menahun',
-        'aseptor-kb' => 'Aseptor KB',
+        'akseptor-kb' => 'Akseptor KB',
         'akta-kelahiran' => 'Akta Kelahiran',
         // 'ktp' => 'Kepemilikan KTP',
         // 'asuransi' => 'Asuransi Kesehatan',

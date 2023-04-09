@@ -115,7 +115,7 @@ class PendudukRepository
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
-            'aseptor-kb' => [
+            'akseptor-kb' => [
                 'idReferensi' => 'cara_kb_id',
                 'tabelReferensi' => 'tweb_cara_kb',
                 'whereHeader' => null,

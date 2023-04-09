@@ -6,7 +6,7 @@ use App\Http\Repository\PendudukRepository;
 
 class StatistikController extends Controller
 {
-    public function penduduk(PendudukRepository $pendudukRepository)
+    public function penduduk()
     {
         return view('statistik.index', [
             'judul' => 'Penduduk',

@@ -51,7 +51,6 @@ class PendudukRepository
             'kb' => $this->caseKb(),
             'ktp' => $this->caseKtp(),
             'asuransi' => $this->caseAsuransi(),
-            'hubungan-kk' => $this->caseHubunganKk(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
         })->toArray();
@@ -96,9 +95,14 @@ class PendudukRepository
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
+            'hubungan-dalam-kk' => [
+                'idReferensi' => 'kk_level',
+                'tabelReferensi' => 'tweb_penduduk_hubungan',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
-            // 'hubungan_kk' => ['idReferensi' => 'kk_level', 'tabelReferensi' => 'tweb_penduduk_hubungan'],
             // '5'           => ['idReferensi' => 'warganegara_id', 'tabelReferensi' => 'tweb_penduduk_warganegara'],
             // '6'           => ['idReferensi' => 'status', 'tabelReferensi' => 'tweb_penduduk_status'],
             // '7'           => ['idReferensi' => 'golongan_darah_id', 'tabelReferensi' => 'tweb_golongan_darah'],

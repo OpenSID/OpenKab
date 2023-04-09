@@ -32,7 +32,7 @@ class PendudukRepository
             ->jsonPaginate();
     }
 
-    public function listStatistik($kategori)
+    public function listStatistik($kategori): array|object
     {
         return collect(match ($kategori) {
             'rentang-umur' => $this->caseRentangUmur(),
@@ -46,7 +46,7 @@ class PendudukRepository
         })->toArray();
     }
 
-    private function tabelReferensi($kategori)
+    private function tabelReferensi($kategori): array
     {
         return match ($kategori) {
             'status-kehamilan' => [
@@ -160,7 +160,7 @@ class PendudukRepository
      *
      * return array
      */
-    private function listFooter($data_header, $query_footer)
+    private function listFooter($data_header, $query_footer): array
     {
         $data_header = collect($data_header);
 
@@ -200,12 +200,7 @@ class PendudukRepository
         ];
     }
 
-    /**
-     * Rentang Umur
-     *
-     * return array
-     */
-    private function caseRentangUmur()
+    private function caseRentangUmur(): array
     {
         $umur = Umur::countStatistikUmur()->status()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -216,12 +211,7 @@ class PendudukRepository
         ];
     }
 
-    /**
-     * Kategori Umur
-     *
-     * return array
-     */
-    private function caseKategoriUmur()
+    private function caseKategoriUmur(): array
     {
         $umur = Umur::countStatistikUmur()->status(0)->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -232,12 +222,7 @@ class PendudukRepository
         ];
     }
 
-    /**
-     * Akta Kelahiran
-     *
-     * return array
-     */
-    private function caseAktaKelahiran()
+    private function caseAktaKelahiran(): array
     {
         $umur = Umur::countStatistikAkta()->status()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -248,12 +233,7 @@ class PendudukRepository
         ];
     }
 
-    /**
-     * Menggunakan tabel referensi
-     *
-     * return array
-     */
-    private function caseWithReferensi(string $kategori)
+    private function caseWithReferensi(string $kategori): array
     {
         $referensi = $this->tabelReferensi($kategori);
         $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['whereHeader']);
@@ -265,12 +245,7 @@ class PendudukRepository
         ];
     }
 
-    /**
-     * Jumlah penduduk hidup
-     *
-     * return Collection
-     */
-    private function countStatistikPendudukHidup(string $whereHeader = null)
+    private function countStatistikPendudukHidup(string $whereHeader = null): object
     {
         $query = Penduduk::countStatistik();
 
@@ -281,12 +256,7 @@ class PendudukRepository
         return $query->status()->get();
     }
 
-    /**
-     * Jumlah Laki-laki dan Perempuan berdasarkan kategori
-     *
-     * return Collection
-     */
-    public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $whereFooter = null)
+    public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $whereFooter = null): array|object
     {
         $query = DB::connection('openkab')
             ->table("{$tabelReferensi}")
@@ -308,12 +278,7 @@ class PendudukRepository
             ->get();
     }
 
-    /**
-     * Suku / Etnis
-     *
-     * return array
-     */
-    private function caseSuku()
+    private function caseSuku(): array
     {
         $umur = Penduduk::CountStatistikSuku()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -324,8 +289,7 @@ class PendudukRepository
         ];
     }
 
-    // Covid
-    private function caseStatusCovid()
+    private function caseStatusCovid(): array
     {
         $covid = Covid::countStatistik()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();

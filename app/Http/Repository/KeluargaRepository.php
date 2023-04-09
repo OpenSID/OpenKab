@@ -28,12 +28,7 @@ class KeluargaRepository
             ->jsonPaginate();
     }
 
-    /**
-     * @param $kategori string
-     *
-     * return array
-     */
-    public function listStatistik($kategori)
+    public function listStatistik($kategori): array
     {
         return collect(match ($kategori) {
             'kelas-sosial' => $this->caseKelasSosial(),
@@ -41,30 +36,24 @@ class KeluargaRepository
         })->toArray();
     }
 
-    /**
-     * @param $data_header collection
-     * @param $query_footer collection
-     *
-     * return array
-     */
-    private function listFooter($data_header, $query_footer)
+    private function listFooter($dataHeader, $query_footer): array
     {
 
-        $jumlah_laki_laki = $data_header->sum('laki_laki');
-        $jumlah_perempuan = $data_header->sum('perempuan');
-        $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
+        $jumlahLakiLaki = $dataHeader->sum('laki_laki');
+        $jumlahJerempuan = $dataHeader->sum('perempuan');
+        $jumlah = $jumlahLakiLaki + $jumlahJerempuan;
 
 
-        $total_laki_laki = $query_footer->sum('laki_laki');
-        $total_perempuan = $query_footer->sum('perempuan');
-        $total = $total_laki_laki + $total_perempuan;
+        $totalLakiLaki = $query_footer->sum('laki_laki');
+        $totalPerempuan = $query_footer->sum('perempuan');
+        $total = $totalLakiLaki + $totalPerempuan;
 
         return [
             [
                 'nama' => 'Jumlah',
                 'jumlah' => $jumlah,
-                'laki_laki' => $jumlah_laki_laki,
-                'perempuan' => $jumlah_perempuan,
+                'laki_laki' => $jumlahLakiLaki,
+                'perempuan' => $jumlahJerempuan,
             ],
             [
                 'nama' => 'Belum Mengisi',
@@ -72,18 +61,13 @@ class KeluargaRepository
             [
                 'nama' => 'Total',
                 'jumlah' => $total,
-                'laki_laki' => $total_laki_laki,
-                'perempuan' => $total_perempuan,
+                'laki_laki' => $totalLakiLaki,
+                'perempuan' => $totalPerempuan,
             ],
         ];
     }
 
-    /**
-     * Kelas Sosial
-     *
-     * return array
-     */
-    private function caseKelasSosial()
+    private function caseKelasSosial(): array
     {
         $kelas = KelasSosial::countStatistik()->get();
         $query = Keluarga::countStatistik()->get();

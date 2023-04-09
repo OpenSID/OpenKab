@@ -54,14 +54,26 @@ class StatistikRepository
             $query->where('config_id', session('desa.id'));
         }
 
-        return $query->select('id', 'nama', 'sasaran')->get()->map(function ($item) {
+        $bantuanNonKategori = $query->select('id', 'nama', 'sasaran')->get()->map(function ($item) {
             return [
                 'id' => $item->id,
                 'nama' => $item->nama,
                 'judul_halaman' => 'Bantuan ' . $item->nama,
                 'judul_kolom_nama' => 'Sasaran ' . $item->nama_sasaran,
             ];
-        })->toArray();
+        });
+
+        return collect(Bantuan::KATEGORI_STATISTIK)->map(function ($item, $key) {
+            return [
+                'id' => $key,
+                'nama' => $item,
+                'judul_halaman' => $item,
+                'judul_kolom_nama' => 'Jenis Kelompok',
+            ];
+        })
+        ->merge($bantuanNonKategori)
+        ->values()
+        ->toArray();
     }
 
     public function getStatistik(array $data = []): array|object

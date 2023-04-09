@@ -3,28 +3,31 @@
 namespace App\Models;
 
 use App\Models\Enums\SasaranEnum;
-use Illuminate\Support\Facades\DB;
 use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Bantuan extends Model
+class Bantuan extends BaseModel
 {
     use ConfigIdTrait;
 
-    public const KATEGORI_STATISTIK = [
-        'bdt' => 'BDT',
-    ];
+    public const SASARAN_PENDUDUK = 1;
+    public const SASARAN_KELUARGA = 2;
+    public const SASARAN_RUMAH_TANGGA = 3;
+    public const SASARAN_KELOMPOK = 4;
 
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
+    public const KATEGORI_STATISTIK = [
+        'penduduk' => 'Penerima Bantuan Penduduk',
+        'keluarga' => 'Penerima Bantuan Keluarga',
+        // 'rtm' => 'Penerima Bantuan Rumah Tangga',
+        // 'kelompok' => 'Penerima Bantuan Kelompok',
+    ];
 
     /** {@inheritdoc} */
     protected $table = 'program';
 
     /** {@inheritdoc} */
     protected $appends = [
-        'statistik',
         'nama_sasaran'
     ];
 
@@ -33,19 +36,8 @@ class Bantuan extends Model
         // 'sasaran' => SasaranEnum::class,
     ];
 
-    /** {@inheritdoc} */
-    protected $dbConnection;
-
     /**
-     * constract
-     */
-    public function __construct()
-    {
-        $this->dbConnection = DB::connection($this->connection);
-    }
-
-    /**
-     * Define a one-to-many relationship.
+     * Define a one-to-many relationshitweb_penduduk.
      *
      * @return HasMany
      */
@@ -67,23 +59,11 @@ class Bantuan extends Model
 
     public function getStatistikAttribute()
     {
-        return $this->getStatistik($this->id, $this->sasaran);
-    }
-
-    private function getStatistik($id, $sasaran)
-    {
-        $peserta = $this->getPeserta($id, $sasaran);
-        $total  = $this->getTotal($sasaran);
+        $peserta = $this->getPeserta($this->id, $this->sasaran);
 
         return [
-            [
-                'laki_laki' => $peserta->laki_laki,
-                'perempuan' => $peserta->perempuan,
-            ],
-            [
-                'laki_laki' => $total->laki_laki,
-                'perempuan' => $total->perempuan,
-            ],
+            'laki_laki' => $peserta->laki_laki,
+            'perempuan' => $peserta->perempuan,
         ];
     }
 
@@ -122,35 +102,42 @@ class Bantuan extends Model
         return $query->first();
     }
 
-    private function getTotal($sasaran)
+    /**
+     * Scope untuk Statistik Sasaran Penduduk
+     */
+    public function scopeCountStatistikPenduduk($query)
     {
-        $query = null;
-        switch ($sasaran) {
-            case '1':
-                $query = $this->dbConnection->table('tweb_penduduk');
-
-                break;
-            case '2':
-                $query = $this->dbConnection->table('tweb_keluarga')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left');
-
-                break;
-            case '3':
-                $query = $this->dbConnection->table('tweb_rtm')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala', 'left');
-
-                break;
-
-            case '4':
-                $query = $this->dbConnection->table('kelompok')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
-                    ->where('kelompok.tipe', 'kelompok');
-
-                break;
-        }
-
-        return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+        return $query->select(["{$this->table}.id", "{$this->table}.nama"])
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
-            ->first();
+            ->join('program_peserta', 'program_peserta.program_id', '=', "{$this->table}.id", 'left')
+            ->join('tweb_penduduk', 'program_peserta.peserta', '=', 'tweb_penduduk.nik', 'left')
+            ->where('program.sasaran', self::SASARAN_PENDUDUK)
+            ->groupBy("{$this->table}.id");
     }
+
+    /**
+     * Scope untuk Statistik Sasaran Keluarga
+     */
+    public function scopeCountStatistikKeluarga($query)
+    {
+        return $query->select(["{$this->table}.id", "{$this->table}.nama"])
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+            ->join('program_peserta', 'program_peserta.program_id', '=', "{$this->table}.id", 'left')
+            ->join('tweb_keluarga', 'program_peserta.peserta', '=', 'tweb_keluarga.no_kk', 'left')
+            ->join('tweb_penduduk', 'tweb_keluarga.nik_kepala', '=', 'tweb_penduduk.id', 'left')
+            ->where('program.sasaran', self::SASARAN_KELUARGA)
+            ->groupBy("{$this->table}.id");
+    }
+
+    /**
+     * Scope untuk Sasaran
+     */
+    public function scopeSasaran($query, $sasaran = self::SASARAN_PENDUDUK)
+    {
+        return $query->where('sasaran', $sasaran);
+    }
+
+
 }

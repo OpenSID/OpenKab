@@ -40,12 +40,6 @@ class PendudukRepository
             'akta-kelahiran' => $this->caseAktaKelahiran(),
             'covid' => $this->caseCovid(),
             'suku' => $this->caseSuku(),
-            'pendidikan-tempuh' => $this->casePendidikanTempuh(),
-            'kawin' => $this->caseKawin(),
-            'cacat' => $this->caseCacat(),
-            'kb' => $this->caseKb(),
-            'ktp' => $this->caseKtp(),
-            'asuransi' => $this->caseAsuransi(),
             // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
         })->toArray();

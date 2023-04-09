@@ -259,4 +259,20 @@ class PendudukRepository
             ->groupBy("{$tabelReferensi}.id")
             ->get();
     }
+
+    /**
+     * Suku / Etnis
+     *
+     * return array
+     */
+    private function caseSuku()
+    {
+        $umur = Penduduk::CountStatistikSuku()->orderBy('id')->get();
+        $query = $this->countStatistikPendudukHidup();
+
+        return [
+            'header' => $umur,
+            'footer' => $this->listFooter($umur, $query),
+        ];
+    }
 }

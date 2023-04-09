@@ -251,7 +251,6 @@
                 page: 'current'
             }).nodes().each(function(cell, i) {
                 if ((recordsTotal - i) <= 3) {
-                    console.log(i + ' -> ' + (recordsTotal - 3));
                     cell.innerHTML = '';
                 } else {
                     cell.innerHTML = i + 1 + pageInfo.start;

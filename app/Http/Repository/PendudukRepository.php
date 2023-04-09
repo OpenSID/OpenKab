@@ -6,6 +6,7 @@ use App\Models\Umur;
 use App\Models\Hamil;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -37,7 +38,6 @@ class PendudukRepository
             'rentang-umur' => $this->caseRentangUmur(),
             'kategori-umur' => $this->caseKategoriUmur(),
             'akta-kelahiran' => $this->caseAktaKelahiran(),
-            'status-kehamilan' => $this->caseStatusKehamilan(),
             'covid' => $this->caseCovid(),
             'suku' => $this->caseSuku(),
             'pendidikan-tempuh' => $this->casePendidikanTempuh(),
@@ -56,14 +56,23 @@ class PendudukRepository
             'bpjs_kerja' => $this->caseBpjsKerja(),
             'hubungan-kk' => $this->caseHubunganKk(),
             // Yang menggunakan tabel referensi
-            default => []
+            default => $this->caseWithReferensi($kategori),
         })->toArray();
     }
 
     private function tabelReferensi($kategori)
     {
         return match ($kategori) {
-            'pendidikan-dalam-kk'           => ['idReferensi' => 'pendidikan_kk_id', 'tabelReferensi' => 'tweb_penduduk_pendidikan_kk'],
+            'status-kehamilan' => [
+                'tabelReferensi' => 'ref_penduduk_hamil',
+                'idReferensi' => 'hamil',
+                'where' => 'tweb_penduduk.sex = 2',
+            ],
+            'pendidikan-dalam-kk' => [
+                'idReferensi' => 'pendidikan_kk_id',
+                'tabelReferensi' => 'tweb_penduduk_pendidikan_kk',
+                'where' => null,
+            ],
             // '1'           => ['idReferensi' => 'pekerjaan_id', 'tabelReferensi' => 'tweb_penduduk_pekerjaan'],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
             // '3'           => ['idReferensi' => 'agama_id', 'tabelReferensi' => 'tweb_penduduk_agama'],
@@ -77,6 +86,7 @@ class PendudukRepository
             // '14'          => ['idReferensi' => 'pendidikan_sedang_id', 'tabelReferensi' => 'tweb_penduduk_pendidikan'],
             // '16'          => ['idReferensi' => 'cara_kb_id', 'tabelReferensi' => 'tweb_cara_kb'],
             // '19'          => ['idReferensi' => 'id_asuransi', 'tabelReferensi' => 'tweb_penduduk_asuransi'],
+            default => null,
         };
     }
 
@@ -175,35 +185,29 @@ class PendudukRepository
     }
 
     /**
-     * Status Kehamilan
-     *
-     * return array
-     */
-    private function caseStatusKehamilan()
-    {
-        $where = 'tweb_penduduk.sex = 2';
-        $hamil = $this->countStatistikByKategori('ref_penduduk_hamil', 'hamil', $where);
-        $query = $this->countStatistikPendudukHidup($where);
-
-        return [
-            'header' => $hamil,
-            'footer' => $this->listFooter($hamil, $query),
-        ];
-    }
-
-    /**
      * Menggunakan tabel referensi
      *
      * return array
      */
-    private function caseWithReferensi(string $tabelReferensi, string $idReferensi)
+    private function caseWithReferensi(string $kategori)
     {
-        $referensi = $this->countStatistikByKategori($tabelReferensi, $idReferensi);
-        $query = $this->countStatistikPendudukHidup();
+
+
+        $referensi = $this->tabelReferensi($kategori);
+
+
+        Log::info($kategori);
+        Log::info($referensi['tabelReferensi']);
+        Log::info($referensi['idReferensi']);
+
+
+
+        $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['where']);
+        $query = $this->countStatistikPendudukHidup($referensi['where']);
 
         return [
-            'header' => $referensi,
-            'footer' => $this->listFooter($referensi, $query),
+            'header' => $header,
+            'footer' => $this->listFooter($header, $query),
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\LabelStatistik;
 use App\Http\Repository\PendudukRepository;
 
 class StatistikController extends Controller
@@ -10,7 +11,6 @@ class StatistikController extends Controller
     {
         return view('statistik.index', [
             'judul' => 'Penduduk',
-            'kategori' => 'penduduk',
         ]);
     }
 
@@ -18,7 +18,6 @@ class StatistikController extends Controller
     {
         return view('statistik.index', [
             'judul' => 'Keluarga',
-            'kategori' => 'keluarga',
         ]);
     }
 
@@ -26,7 +25,6 @@ class StatistikController extends Controller
     {
         return view('statistik.index', [
             'judul' => 'RTM',
-            'kategori' => 'rtm',
         ]);
     }
 
@@ -39,7 +37,6 @@ class StatistikController extends Controller
     {
         return view('statistik.index', [
             'judul' => 'Bantuan',
-            'kategori' => 'bantuan',
         ]);
     }
 
@@ -50,5 +47,4 @@ class StatistikController extends Controller
             'id' => $id,
         ]);
     }
-
 }

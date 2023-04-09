@@ -4,11 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RtmHubungan extends Model
+class RtmHubungan extends BaseModel
 {
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
     /** {@inheritdoc} */
     protected $table = 'tweb_rtm_hubungan';
 }

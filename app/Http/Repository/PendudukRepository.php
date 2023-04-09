@@ -42,12 +42,11 @@ class PendudukRepository
             'status-covid' => $this->caseStatusCovid(),
             'suku' => $this->caseSuku(),
             'ktp' => $this->caseKtp(),
-            // Yang menggunakan tabel referensi
             default => $this->caseWithReferensi($kategori),
         })->toArray();
     }
 
-    private function tabelReferensi($kategori): array
+    private function tabelReferensi($kategori): array|object
     {
         return match ($kategori) {
             'status-kehamilan' => [
@@ -156,7 +155,7 @@ class PendudukRepository
      *
      * return array
      */
-    private function listFooter($data_header, $query_footer): array
+    private function listFooter($data_header, $query_footer): array|object
     {
         $data_header = collect($data_header);
 
@@ -196,7 +195,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseRentangUmur(): array
+    private function caseRentangUmur(): array|object
     {
         $umur = Umur::countStatistikUmur()->status()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -207,7 +206,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseKategoriUmur(): array
+    private function caseKategoriUmur(): array|object
     {
         $umur = Umur::countStatistikUmur()->status(0)->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -218,7 +217,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseAktaKelahiran(): array
+    private function caseAktaKelahiran(): array|object
     {
         $umur = Umur::countStatistikAkta()->status()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -229,7 +228,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseWithReferensi(string $kategori): array
+    private function caseWithReferensi(string $kategori): array|object
     {
         $referensi = $this->tabelReferensi($kategori);
         $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['whereHeader']);
@@ -241,7 +240,7 @@ class PendudukRepository
         ];
     }
 
-    private function countStatistikPendudukHidup(string $whereHeader = null): object
+    private function countStatistikPendudukHidup(string $whereHeader = null): array|object
     {
         $query = Penduduk::countStatistik();
 
@@ -274,7 +273,7 @@ class PendudukRepository
             ->get();
     }
 
-    private function caseSuku(): array
+    private function caseSuku(): array|object
     {
         $umur = Penduduk::CountStatistikSuku()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -297,7 +296,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseStatusCovid(): array
+    private function caseStatusCovid(): array|object
     {
         $covid = Covid::countStatistik()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();

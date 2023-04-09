@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class Rtm extends Model
+class Rtm extends BaseModel
 {
     public const KATEGORI_STATISTIK = [
         'bdt' => 'BDT',
     ];
-
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
 
     /** {@inheritdoc} */
     protected $table = 'tweb_rtm';

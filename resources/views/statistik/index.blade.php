@@ -102,7 +102,7 @@
     <script>
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
-        var kategori = `{{ $kategori }}`;
+        var kategori = `{{ strtolower($judul) }}`;
 
         $.ajax({
             url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[id]=${kategori}`,

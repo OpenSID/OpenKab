@@ -46,7 +46,6 @@ class PendudukRepository
             'wn' => $this->caseWn(),
             'cacat' => $this->caseCacat(),
             'sakit' => $this->caseSakit(),
-            'kb' => $this->caseKb(),
             'ktp' => $this->caseKtp(),
             'asuransi' => $this->caseAsuransi(),
             // Yang menggunakan tabel referensi
@@ -111,13 +110,18 @@ class PendudukRepository
                 'whereHeader' => null,
                 'whereFooter' => null,
             ],
+            'aseptor-kb' => [
+                'idReferensi' => 'cara_kb_id',
+                'tabelReferensi' => 'tweb_cara_kb',
+                'whereHeader' => null,
+                'whereFooter' => null,
+            ],
             // '2'           => ['idReferensi' => 'status_kawin', 'tabelReferensi' => 'tweb_penduduk_kawin'],
             // '4'           => ['idReferensi' => 'sex', 'tabelReferensi' => 'tweb_penduduk_sex'],
             // '5'           => ['idReferensi' => 'warganegara_id', 'tabelReferensi' => 'tweb_penduduk_warganegara'],
             // '6'           => ['idReferensi' => 'status', 'tabelReferensi' => 'tweb_penduduk_status'],
             // '9'           => ['idReferensi' => 'cacat_id', 'tabelReferensi' => 'tweb_cacat'],
             // '10'          => ['idReferensi' => 'sakit_menahun_id', 'tabelReferensi' => 'tweb_sakit_menahun'],
-            // '16'          => ['idReferensi' => 'cara_kb_id', 'tabelReferensi' => 'tweb_cara_kb'],
             // '19'          => ['idReferensi' => 'id_asuransi', 'tabelReferensi' => 'tweb_penduduk_asuransi'],
             default => null,
         };

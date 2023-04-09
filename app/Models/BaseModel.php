@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Cacat extends BaseModel
+class BaseModel extends Model
 {
     /** {@inheritdoc} */
     protected $connection = 'openkab';
-
-    /** {@inheritdoc} */
-    protected $table = 'tweb_cacat';
 }

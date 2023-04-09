@@ -20,28 +20,29 @@ class Penduduk extends Model
     use HasFactory;
 
     public const KATEGORI_STATISTIK = [
-        'umur-rentang' => 'Umur Rentang',
-        // 'umur-kategori' => 'Umur Kategori',
-        // 'akta-kelahiran' => 'Akta Kelahiran',
-         'covid' => 'Status Covid',
-        // 'suku' => 'Suku / Etnis',
-        // 'hamil' => 'Status Kehamilan',
-        // 'pendidikan-kk' => 'Pendidikan Dalam KK',
-        // 'pendidikan-tempuh' => 'Pendidikan Sedang Ditempuh',
-        // 'kerja' => 'Pekerjaan',
-        // 'kawin' => 'Status Perkawinan',
-        // 'agama' => 'Agama',
-        // 'jk' => 'Jenis Kelamin',
-        // 'wn' => 'Warga Negara',
-        // 'status-penduduk' => 'Status Penduduk',
+        'rentang-umur' => 'Rentang Umur',
+        'kategori-umur' => 'Kategori Umur',
+        'pendidikan-dalam-kk' => 'Pendidikan Dalam KK',
+        'pendidikan-sedang-ditempuh' => 'Pendidikan Sedang Ditempuh',
+        'pekerjaan' => 'Pekerjaan',
+        'status-perkawinan' => 'Status Perkawinan',
+        'agama' => 'Agama',
+        'jenis-kelamin' => 'Jenis Kelamin',
+        'warga-negara' => 'Warga Negara',
+        'status-penduduk' => 'Status Penduduk',
         // 'darah' => 'Golongan Darah',
-        // 'cacat' => 'Penyandang Cacat',
-        // 'sakit' => 'Penyakit Menahun',
+        'penyandang-cacat' => 'Penyandang Cacat',
+        'penyakit-menahun' => 'Penyakit Menahun',
         // 'kb' => 'Aseptor KB',
         // 'ktp' => 'Kepemilikan KTP',
         // 'asuransi' => 'Asuransi Kesehatan',
-        // 'bpjs_kerja' => 'BPJS Ketenagakerjaan',
-        // 'hubungan-kk' => 'Hubungan Dalam KK',
+        'hubungan-dalam-kk' => 'Hubungan Dalam KK',
+        'golongan-darah' => 'Golongan Darah',
+        'akta-kelahiran' => 'Akta Kelahiran',
+        'suku' => 'Suku / Etnis',
+        'bpjs-ketenagakerjaan' => 'BPJS Ketenagakerjaan',
+        'status-kehamilan' => 'Status Kehamilan',
+        'status-covid' => 'Status Covid',
     ];
 
     /** {@inheritdoc} */
@@ -416,14 +417,13 @@ class Penduduk extends Model
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan');
     }
 
-    public function scopeCountSukuStatistik($query)
+    public function scopeCountStatistikSuku($query)
     {
         return $query
             ->select(['suku AS id', 'suku AS nama'])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->groupBy('suku')
-
             ->whereNotNull('suku')
             ->where('suku', '!=', "")
         ;

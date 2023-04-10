@@ -108,7 +108,8 @@
                 data: function(row) {
                     return {
                         "page[size]": row.length,
-                        "page[number]": (row.start / row.length) + 1
+                        "page[number]": (row.start / row.length) + 1,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
                     };
                 },
                 dataSrc: function(json) {
@@ -125,10 +126,10 @@
                     orderable: true
                 },
                 {
-                    data: "attributes.nik", name: "nik"
+                    data: "attributes.nik", name: "nik", searchable: false, orderable: false
                 },
                 {
-                    data: "attributes.no_kk", name: "no_kk"
+                    data: "attributes.no_kk", name: "no_kk", searchable: false, orderable: false
                 },
                 {
                     data: "attributes.kartu_nama", name: "kartu_nama"
@@ -151,7 +152,8 @@
                 {
                     data: "attributes.keterangan.nama", name: "keterangan", searchable: false, orderable: false
                 },
-            ]
+            ],
+            order: [[ 3, 'asc' ]]
         })
 
         peserta.on('draw.dt', function() {

@@ -109,6 +109,8 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
+                        "filter[kartu_nama]": row.search.value,
+                        "filter[no_id_kartu]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
                     };
                 },

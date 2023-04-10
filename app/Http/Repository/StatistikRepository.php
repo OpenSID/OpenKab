@@ -24,9 +24,7 @@ class StatistikRepository
         $detail = request()->input('filter')['detail'] ?? null;
 
         if ($detail) {
-            $daftarKategori = collect($daftarKategori)->filter(function ($item) use ($detail) {
-                return $item['id'] == $detail;
-            })
+            $daftarKategori = collect($daftarKategori)->filter(fn($item) => $item['id'] == $detail)
             ->values()
             ->toArray();
         }
@@ -36,14 +34,12 @@ class StatistikRepository
 
     private function setKategoriFormat(string $judulHalaman = null, string $judulKolomNama = null, array $kategori = []): array|object
     {
-        return collect($kategori)->map(function ($item, $key) use ($judulHalaman, $judulKolomNama) {
-            return [
-                'id' => $key,
-                'nama' => $item,
-                'judul_halaman' => $judulHalaman,
-                'judul_kolom_nama' => $judulKolomNama,
-            ];
-        })
+        return collect($kategori)->map(fn($item, $key) => [
+            'id' => $key,
+            'nama' => $item,
+            'judul_halaman' => $judulHalaman,
+            'judul_kolom_nama' => $judulKolomNama,
+        ])
         ->values()
         ->toArray();
     }
@@ -55,23 +51,19 @@ class StatistikRepository
             $query->where('config_id', session('desa.id'));
         }
 
-        $bantuanNonKategori = $query->select('id', 'nama', 'sasaran')->get()->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'nama' => $item->nama,
-                'judul_halaman' => 'Bantuan ' . $item->nama,
-                'judul_kolom_nama' => 'Sasaran ' . $item->nama_sasaran,
-            ];
-        });
+        $bantuanNonKategori = $query->select('id', 'nama', 'sasaran')->get()->map(fn($item) => [
+            'id' => $item->id,
+            'nama' => $item->nama,
+            'judul_halaman' => 'Bantuan ' . $item->nama,
+            'judul_kolom_nama' => 'Sasaran ' . $item->nama_sasaran,
+        ]);
 
-        return collect(Bantuan::KATEGORI_STATISTIK)->map(function ($item, $key) {
-            return [
-                'id' => $key,
-                'nama' => $item,
-                'judul_halaman' => $item,
-                'judul_kolom_nama' => 'Jenis Kelompok',
-            ];
-        })
+        return collect(Bantuan::KATEGORI_STATISTIK)->map(fn($item, $key) => [
+            'id' => $key,
+            'nama' => $item,
+            'judul_halaman' => $item,
+            'judul_kolom_nama' => 'Jenis Kelompok',
+        ])
         ->merge($bantuanNonKategori)
         ->values()
         ->toArray();
@@ -82,10 +74,10 @@ class StatistikRepository
         $header = $data['header'] ?? [];
         $footer = $data['footer'] ?? [];
 
-        if (count($footer) > 0) {
+        if ((is_countable($footer) ? count($footer) : 0) > 0) {
             $setFooter = $this->getHitungFooter($footer);
 
-            if (count($header) > 0) {
+            if ((is_countable($header) ? count($header) : 0) > 0) {
                 $setHeader = $this->getHitungHeader($header, $setFooter[2]['jumlah']);
 
                 return $setHeader->merge($setFooter);
@@ -99,9 +91,7 @@ class StatistikRepository
 
     private function getHitungHeader(array $dataHeader = [], int $total = 0): array|object
     {
-        return collect($dataHeader)->map(function ($item, $key) use ($total) {
-            return $this->getPresentase($item, $total);
-        });
+        return collect($dataHeader)->map(fn($item, $key) => $this->getPresentase($item, $total));
     }
 
     private function getHitungFooter(array $dataFooter = []): array|object
@@ -132,7 +122,7 @@ class StatistikRepository
     {
         $data = collect($data)->toArray();
         $data['jumlah'] = $data['laki_laki'] + $data['perempuan'];
-        $pembagi = $pembagi ?? $data['jumlah'];
+        $pembagi ??= $data['jumlah'];
         $data['persentase_jumlah'] = persen($data['jumlah'], $pembagi);
         $data['persentase_laki_laki'] = persen($data['laki_laki'], $pembagi);
         $data['persentase_perempuan'] = persen($data['perempuan'], $pembagi);

@@ -194,7 +194,7 @@ class BantuanRepository
      */
     private function listFooter($dataHeader, $queryFooter): array|object
     {
-        if (count($dataHeader) > 0) {
+        if ((is_countable($dataHeader) ? count($dataHeader) : 0) > 0) {
             $jumlahLakiLaki = $dataHeader->sum('laki_laki');
             $jumlahPerempuan = $dataHeader->sum('perempuan');
             $jumlah = $jumlahLakiLaki + $jumlahPerempuan;

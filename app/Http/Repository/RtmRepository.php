@@ -9,7 +9,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class RtmRepository
 {
-    public function listStatistik(): array
+    public function listStatistik(): array|object
     {
         return [
             'header' => [],
@@ -17,7 +17,7 @@ class RtmRepository
         ];
     }
 
-    public function listFooter(): array
+    public function listFooter(): array|object
     {
         $rtm = Rtm::countStatistik();
 

@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sex extends BaseModel
 {
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
     /**
      * The table associated with the model.
      *

@@ -5,15 +5,12 @@ namespace App\Models;
 use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Umur extends Model
+class Umur extends BaseModel
 {
     use ConfigIdTrait;
 
     public const RENTANG = 1;
     public const KATEGORI = 0;
-
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
 
     /**
      * The table associated with the model.

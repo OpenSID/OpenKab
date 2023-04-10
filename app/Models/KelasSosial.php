@@ -5,12 +5,9 @@ namespace App\Models;
 use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class KelasSosial extends Model
+class KelasSosial extends BaseModel
 {
     use ConfigIdTrait;
-
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
 
     /**
      * The table associated with the model.

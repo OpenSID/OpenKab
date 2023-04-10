@@ -8,8 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class StatusKawin extends BaseModel
 {
     /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
-    /** {@inheritdoc} */
     protected $table = 'tweb_penduduk_kawin';
 }

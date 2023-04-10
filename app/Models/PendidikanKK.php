@@ -4,11 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PendidikanKK extends Model
+class PendidikanKK extends BaseModel
 {
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
     /** {@inheritdoc} */
     protected $table = 'tweb_penduduk_pendidikan_kk';
 }

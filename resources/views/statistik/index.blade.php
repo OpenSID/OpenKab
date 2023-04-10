@@ -102,7 +102,7 @@
     <script>
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
-        var kategori = `{{ $kategori }}`;
+        var kategori = `{{ strtolower($judul) }}`;
 
         $.ajax({
             url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[id]=${kategori}`,
@@ -251,7 +251,6 @@
                 page: 'current'
             }).nodes().each(function(cell, i) {
                 if ((recordsTotal - i) <= 3) {
-                    console.log(i + ' -> ' + (recordsTotal - 3));
                     cell.innerHTML = '';
                 } else {
                     cell.innerHTML = i + 1 + pageInfo.start;

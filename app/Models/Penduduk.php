@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property \App\Models\Enums\JenisKelahiranEnum $jenis_kelahiran
  * @property \App\Models\Enums\PenolongKelahiranEnum $penolong_kelahiran
  */
-class Penduduk extends Model
+class Penduduk extends BaseModel
 {
     use ConfigIdTrait;
     use HasFactory;
@@ -43,9 +43,6 @@ class Penduduk extends Model
         'bpjs-ketenagakerjaan' => 'BPJS Ketenagakerjaan',
         'status-kehamilan' => 'Status Kehamilan',
     ];
-
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
 
     /** {@inheritdoc} */
     protected $table = 'tweb_penduduk';

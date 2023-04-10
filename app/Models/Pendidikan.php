@@ -4,11 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Pendidikan extends Model
+class Pendidikan extends BaseModel
 {
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
     /**
      * The table associated with the model.
      *

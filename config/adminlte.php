@@ -324,14 +324,14 @@ return [
             ],
         ],
         [
-            'text' => 'Bantuan',
-            'icon' => 'fas fa-handshake',
-            'url'  => 'bantuan',
-        ],
-        [
             'text' => 'Statistik',
             'icon' => 'fas fa-chart-pie',
             'submenu' => [
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Penduduk',
+                    'url' => 'statistik/penduduk',
+                ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Keluarga',
@@ -349,6 +349,11 @@ return [
                 ],
 
             ],
+        ],
+        [
+            'text' => 'Bantuan',
+            'icon' => 'fas fa-handshake',
+            'url'  => 'bantuan',
         ],
     ],
 

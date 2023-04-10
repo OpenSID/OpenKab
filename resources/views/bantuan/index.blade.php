@@ -70,7 +70,8 @@
                         return `<a href="{{ url('bantuan') }}/${data.id}">
                                     ${data.attributes.nama}
                                 </a>`
-                    }
+                    },
+                    name: "nama"
                 },
                 {
                     data: "attributes.asaldana", name: "asaldana"

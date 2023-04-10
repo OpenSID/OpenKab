@@ -5,12 +5,12 @@ namespace App\Models;
 use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Pekerjaan extends BaseModel
+class Hamil extends BaseModel
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'tweb_penduduk_pekerjaan';
+    protected $table = 'ref_penduduk_hamil';
 }

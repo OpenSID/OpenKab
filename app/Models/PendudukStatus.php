@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class PendudukStatus extends Model
+class PendudukStatus extends BaseModel
 {
     /** {@inheritdoc} */
     protected $connection = 'openkab';

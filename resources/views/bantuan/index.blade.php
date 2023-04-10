@@ -48,8 +48,7 @@
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[nama]": row.search.value,
-                        "filter[asaldana]": row.search.asaldana,
-                        "filter[nama_sasaran]": row.search.nama_sasaran,
+                        "filter[asaldana]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
                     };
                 },
@@ -87,7 +86,7 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.nama_sasaran", name: "nama_sasaran"
+                    data: "attributes.nama_sasaran", name: "nama_sasaran", searchable: false, orderable: false
                 },
                 {
                     data: function (data) {
@@ -96,7 +95,8 @@
                     searchable: false,
                     orderable: false
                 },
-            ]
+            ],
+            order: [[ 1, 'asc' ]]
         })
 
         bantuan.on('draw.dt', function() {

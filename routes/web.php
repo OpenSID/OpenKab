@@ -39,6 +39,13 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('penduduk', \App\Http\Controllers\PendudukController::class)->only(['index', 'show']);
 
+    Route::controller(\App\Http\Controllers\BantuanController::class)
+        ->prefix('bantuan')
+        ->group(function () {
+            Route::get('/', 'index');
+            Route::get('/{id}', 'show');
+        });
+
     // Statistik
     Route::controller(\App\Http\Controllers\StatistikController::class)
         ->prefix('statistik')

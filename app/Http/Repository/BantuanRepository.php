@@ -9,7 +9,6 @@ use App\Models\Keluarga;
 use App\Models\Penduduk;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
 
 class BantuanRepository
 {

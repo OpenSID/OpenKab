@@ -11,4 +11,9 @@ class BantuanController extends Controller
     {
         return view('bantuan.index');
     }
+
+    public function show($id)
+    {
+        return view('bantuan.show', compact('id'));
+    }
 }

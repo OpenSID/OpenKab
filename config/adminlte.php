@@ -350,6 +350,11 @@ return [
 
             ],
         ],
+        [
+            'text' => 'Bantuan',
+            'icon' => 'fas fa-handshake',
+            'url'  => 'bantuan',
+        ],
     ],
 
     /*

@@ -42,6 +42,10 @@ Route::middleware('auth')->group(function () {
     });
 
 
+    Route::controller(\App\Http\Controllers\BantuanController::class)->prefix('bantuan')->group(function () {
+        Route::get('/', 'index');
+    });
+
     // Statistik
     Route::controller(\App\Http\Controllers\StatistikController::class)
         ->prefix('statistik')

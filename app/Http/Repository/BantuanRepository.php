@@ -14,44 +14,32 @@ class BantuanRepository
 {
     public function listBantuan()
     {
-        $query = Bantuan::query();
-
-        if (session()->has('desa')) {
-            $query->where('config_id', session('desa.id'));
-        }
+        $query = Bantuan::configId();
 
         return QueryBuilder::for($query)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'nama',
-                'sasaran',
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama', 'LIKE', '%' . $value . '%')
+                        ->orWhere('asaldana', 'LIKE', '%' . $value . '%');
+                }),
             ])
             ->allowedSorts([
                 'nama',
-                'sasaran',
+                'asaldana',
             ])
             ->jsonPaginate();
     }
 
     public function showBantuan()
     {
-        $query = Bantuan::query();
-
-        if (session()->has('desa')) {
-            $query->where('config_id', session('desa.id'));
-        }
+        $query = Bantuan::configId();
 
         return QueryBuilder::for($query)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'nama',
-                'sasaran',
-            ])
-            ->allowedSorts([
-                'nama',
-                'sasaran',
             ])
             ->first();
     }

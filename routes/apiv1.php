@@ -47,6 +47,11 @@ Route::prefix('penduduk')->group(function () {
     Route::get('/', \App\Http\Controllers\Api\PendudukController::class);
 });
 
+Route::controller(\App\Http\Controllers\Api\KeluargaController::class)
+    ->prefix('keluarga')->group(function () {
+    Route::get('/show', 'show');
+});
+
 Route::controller(BantuanController::class)
     ->prefix('bantuan')->group(function () {
         Route::get('/', 'index');

@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class GolonganDarah extends Model
+class GolonganDarah extends BaseModel
 {
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
     /** {@inheritdoc} */
     protected $table = 'tweb_golongan_darah';
 }

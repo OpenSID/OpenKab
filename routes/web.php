@@ -28,14 +28,25 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('sesi')->group(function () {
         Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
-            return redirect('/');
+            return Redirect::back();
         });
         Route::get('hapus', function () {
             session()->remove('desa');
 
-            return redirect('/');
+            return Redirect::back();
         });
     });
 
     Route::resource('penduduk', \App\Http\Controllers\PendudukController::class)->only(['index', 'show']);
+
+    // Statistik
+    Route::controller(\App\Http\Controllers\StatistikController::class)
+        ->prefix('statistik')
+        ->group(function () {
+            Route::get('/penduduk', 'penduduk');
+            Route::get('/keluarga', 'keluarga');
+            Route::get('/rtm', 'rtm');
+            Route::get('/bantuan', 'bantuan');
+            Route::get('/cetak/{kategori}/{id}', 'cetak');
+        });
 });

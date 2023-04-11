@@ -4,11 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StatusDasar extends Model
+class StatusDasar extends BaseModel
 {
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
     /** {@inheritdoc} */
     protected $table = 'tweb_status_dasar';
 }

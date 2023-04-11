@@ -25,6 +25,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', \App\Http\Controllers\Api\PendudukController::class);
     });
 
+
+    Route::controller(\App\Http\Controllers\Api\KeluargaController::class)
+        ->prefix('keluarga')->group(function () {
+            Route::get('/show', 'show');
+        });
+
+
     // Statistik
     Route::controller(StatistikController::class)
         ->prefix('statistik')->group(function () {

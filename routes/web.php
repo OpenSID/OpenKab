@@ -42,10 +42,12 @@ Route::middleware('auth')->group(function () {
     });
 
 
-    Route::controller(\App\Http\Controllers\BantuanController::class)->prefix('bantuan')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{id}', 'show');
-    });
+    Route::controller(\App\Http\Controllers\BantuanController::class)
+        ->prefix('bantuan')
+        ->group(function () {
+            Route::get('/', 'index');
+            Route::get('/{id}', 'show');
+        });
 
     // Statistik
     Route::controller(\App\Http\Controllers\StatistikController::class)

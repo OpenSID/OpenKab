@@ -8,8 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Cacat extends BaseModel
 {
     /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
-    /** {@inheritdoc} */
     protected $table = 'tweb_cacat';
 }

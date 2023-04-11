@@ -8,8 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class SakitMenahun extends BaseModel
 {
     /** {@inheritdoc} */
-    protected $connection = 'openkab';
-
-    /** {@inheritdoc} */
     protected $table = 'tweb_sakit_menahun';
 }

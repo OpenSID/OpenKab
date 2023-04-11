@@ -35,7 +35,7 @@ class KeluargaRepository
 
     }
 
-    public function listStatistik($kategori): array
+    public function listStatistik($kategori): array|object
     {
         return collect(match ($kategori) {
             'kelas-sosial' => $this->caseKelasSosial(),
@@ -43,7 +43,7 @@ class KeluargaRepository
         })->toArray();
     }
 
-    private function listFooter($dataHeader, $query_footer): array
+    private function listFooter($dataHeader, $query_footer): array|object
     {
 
         $jumlahLakiLaki = $dataHeader->sum('laki_laki');
@@ -74,7 +74,7 @@ class KeluargaRepository
         ];
     }
 
-    private function caseKelasSosial(): array
+    private function caseKelasSosial(): array|object
     {
         $kelas = KelasSosial::countStatistik()->get();
         $query = Keluarga::countStatistik()->get();

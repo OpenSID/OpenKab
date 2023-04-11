@@ -77,7 +77,7 @@
         })
 
         return [{
-                labels: null,
+                labels: ['Data'],
                 datasets: dataBaruGrafik
             },
             {

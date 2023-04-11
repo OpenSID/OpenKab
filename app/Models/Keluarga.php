@@ -18,7 +18,7 @@ class Keluarga extends BaseModel
     /** {@inheritdoc} */
     protected $table = 'tweb_keluarga';
 
-     /**
+    /**
      * {@inheritDoc}
      */
     protected $with = [
@@ -53,28 +53,6 @@ class Keluarga extends BaseModel
     public function Wilayah()
     {
         return $this->belongsTo(Wilayah::class, 'id_cluster');
-    }
-
-    /**
-     * Scope query untuk status keluarga
-     *
-     * @return Builder
-     */
-    public function scopeStatus()
-    {
-        return static::whereHas('kepalaKeluarga', static function ($query) {
-            $query->status()->where('kk_level', '1');
-        });
-    }
-
-    /**
-     * Define a one-to-one relationship.
-     *
-     * @return hasOne
-     */
-    public function kepalaKeluarga()
-    {
-        return $this->hasOne(Penduduk::class, 'id', 'nik_kepala');
     }
 
     /**

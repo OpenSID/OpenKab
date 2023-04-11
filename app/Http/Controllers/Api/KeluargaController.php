@@ -25,6 +25,6 @@ class KeluargaController extends Controller
      */
     public function show(Request $request)
     {
-        return $this->fractal($this->keluarga->rincianKeluarga( $request->no), new RincianKeluargaTransformer(), 'rincian keluarga')->respond();
+        return $this->fractal($this->keluarga->rincianKeluarga($request->no), new RincianKeluargaTransformer(), 'rincian keluarga')->respond();
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Repository;
 
+use App\Models\Rtm;
 use App\Models\Bantuan;
+use App\Models\Kelompok;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
-use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -13,68 +14,48 @@ class BantuanRepository
 {
     public function listBantuan()
     {
-        $query = Bantuan::query();
-
-        if (session()->has('desa')) {
-            $query->where('config_id', session('desa.id'));
-        }
+        $query = Bantuan::configId();
 
         return QueryBuilder::for($query)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'nama',
-                'asaldana',
-                'nama_sasaran',
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama', 'LIKE', '%' . $value . '%')
+                        ->orWhere('asaldana', 'LIKE', '%' . $value . '%');
+                }),
             ])
             ->allowedSorts([
                 'nama',
                 'asaldana',
-                'nama_sasaran',
             ])
             ->jsonPaginate();
     }
 
     public function showBantuan()
     {
-        $query = Bantuan::query();
-
-        if (session()->has('desa')) {
-            $query->where('config_id', session('desa.id'));
-        }
+        $query = Bantuan::configId();
 
         return QueryBuilder::for($query)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'nama',
-                'sasaran',
-            ])
-            ->allowedSorts([
-                'nama',
-                'sasaran',
             ])
             ->first();
     }
 
-    public function listStatistik($kategori): array|object
+    public function listStatistik($kategori): array
     {
         return collect(match ($kategori) {
-            'penduduk' => $this->caseKategoriPenduduk($kategori),
-            'keluarga' => $this->caseKategoriKeluarga($kategori),
+            'penduduk' => $this->caseKategoriPenduduk(),
+            'keluarga' => $this->caseKategoriKeluarga(),
             default => $this->caseNonKategori($kategori),
         })->toArray();
     }
 
-    public function getBantuanNonKategori($id)
+    public function getBantuanNonKategori($id): array
     {
-        $query = Bantuan::query();
-
-        if (session()->has('desa')) {
-            $query->where('config_id', session('desa.id'));
-        }
-
-        $bantuan = $query->whereId($id)->first();
+        $bantuan = Bantuan::configId()->whereId($id)->first();
 
         return [
             [
@@ -86,51 +67,25 @@ class BantuanRepository
         ];
     }
 
-    private function getTotal($sasaran): array|object
+    private function getTotal($sasaran): array
     {
-        $query = null;
-        switch ($sasaran) {
-            case Bantuan::SASARAN_PENDUDUK:
-                $query = DB::connection('openkab')->table('tweb_penduduk');
-
-                break;
-            case Bantuan::SASARAN_KELUARGA:
-                $query = DB::connection('openkab')->table('tweb_keluarga')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left');
-
-                break;
-            case Bantuan::SASARAN_RUMAH_TANGGA:
-                $query = DB::connection('openkab')->table('tweb_rtm')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala', 'left');
-
-                break;
-
-            case Bantuan::SASARAN_KELOMPOK:
-                $query = DB::connection('openkab')->table('kelompok')
-                    ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
-                    ->where('kelompok.tipe', 'kelompok');
-
-                break;
-        }
-
-        $result = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
-            ->first();
+        $total = match ($sasaran) {
+            Bantuan::SASARAN_PENDUDUK => $this->countStatistikKategoriPenduduk(),
+            Bantuan::SASARAN_KELUARGA => $this->countStatistikKategoriKeluarga(),
+            Bantuan::SASARAN_RUMAH_TANGGA => $this->countStatistikKategoriRtm(),
+            Bantuan::SASARAN_KELOMPOK => $this->countStatistikKategoriKelompok(),
+            default => [],
+        };
 
         return [
-            'laki_laki' => $result->laki_laki,
-            'perempuan' => $result->perempuan,
+            'laki_laki' => $total[0]['laki_laki'] ?? 0,
+            'perempuan' => $total[0]['perempuan'] ?? 0,
         ];
     }
 
-    public function caseKategoriPenduduk($id): array|object
+    public function caseKategoriPenduduk(): array
     {
-        $query = Bantuan::query();
-        if (session()->has('desa')) {
-            $query->where('program.config_id', session('desa.id'));
-        }
-
-        $header = $query->countStatistikPenduduk()->get();
+        $header = Bantuan::configId()->countStatistikPenduduk()->get();
         $footer = $this->countStatistikKategoriPenduduk();
 
         return [
@@ -139,25 +94,14 @@ class BantuanRepository
         ];
     }
 
-    private function countStatistikKategoriPenduduk(string $whereHeader = null): array|object
+    private function countStatistikKategoriPenduduk(): object
     {
-        $query = Penduduk::countStatistik();
-
-        if ($whereHeader) {
-            $query->whereRaw($whereHeader);
-        }
-
-        return $query->status()->get();
+        return Penduduk::configId()->countStatistik()->status()->get();
     }
 
-    public function caseKategoriKeluarga($id): array|object
+    public function caseKategoriKeluarga(): array
     {
-        $query = Bantuan::query();
-        if (session()->has('desa')) {
-            $query->where('program.config_id', session('desa.id'));
-        }
-
-        $header = $query->countStatistikKeluarga()->get();
+        $header = Bantuan::configId()->countStatistikKeluarga()->get();
         $footer = $this->countStatistikKategoriKeluarga();
 
         return [
@@ -166,18 +110,22 @@ class BantuanRepository
         ];
     }
 
-    private function countStatistikKategoriKeluarga(string $whereHeader = null): array|object
+    private function countStatistikKategoriKeluarga(): object
     {
-        $query = Keluarga::countStatistik();
-
-        if ($whereHeader) {
-            $query->whereRaw($whereHeader);
-        }
-
-        return $query->status()->get();
+        return Keluarga::configId()->countStatistik()->status()->get();
     }
 
-    public function caseNonKategori($id): array|object
+    private function countStatistikKategoriRtm(): object
+    {
+        return Rtm::configId()->countStatistik()->status()->get();
+    }
+
+    private function countStatistikKategoriKelompok(): object
+    {
+        return Kelompok::configId()->countStatistik()->status()->get();
+    }
+
+    public function caseNonKategori($id): array
     {
         $header  = [];
         $bantuan = $this->getBantuanNonKategori($id);
@@ -194,9 +142,9 @@ class BantuanRepository
      *
      * return array
      */
-    private function listFooter($dataHeader, $queryFooter): array|object
+    private function listFooter($dataHeader, $queryFooter): array
     {
-        if ((is_countable($dataHeader) ? count($dataHeader) : 0) > 0) {
+        if (count($dataHeader) > 0) {
             $jumlahLakiLaki = $dataHeader->sum('laki_laki');
             $jumlahPerempuan = $dataHeader->sum('perempuan');
             $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
@@ -207,12 +155,12 @@ class BantuanRepository
             $total = $totalLakiLaki + $totalPerempuan;
 
         } else {
-            $jumlahLakiLaki = $queryFooter[0]['laki_laki'];
-            $jumlahPerempuan = $queryFooter[0]['perempuan'];
+            $jumlahLakiLaki = $queryFooter[0]['laki_laki'] ?? 0;
+            $jumlahPerempuan = $queryFooter[0]['perempuan'] ?? 0;
             $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
 
-            $totalLakiLaki = $queryFooter[1]['laki_laki'];
-            $totalPerempuan = $queryFooter[1]['perempuan'];
+            $totalLakiLaki = $queryFooter[1]['laki_laki'] ?? 0;
+            $totalPerempuan = $queryFooter[1]['perempuan'] ?? 0;
             $total = $totalLakiLaki + $totalPerempuan;
         }
 

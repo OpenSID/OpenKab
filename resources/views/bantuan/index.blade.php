@@ -1,5 +1,9 @@
 @extends('layouts.index')
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/progressive-image/progressive-image.css') }}">
+@endpush
+
 @section('title', 'Data Bantuan')
 
 @section('content_header')
@@ -33,6 +37,10 @@
     </div>
 @endsection
 
+@push('js')
+    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+@endpush
+
 @section('js')
     <script>
         var bantuan = $('#bantuan').DataTable({
@@ -47,9 +55,9 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[nama]": row.search.value,
-                        "filter[asaldana]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name
                     };
                 },
                 dataSrc: function(json) {
@@ -59,45 +67,49 @@
                     return json.data
                 },
             },
-            columns: [
-                {
+            columns: [{
                     data: null,
                     searchable: false,
                     orderable: false
                 },
                 {
-                    data: function (data) {
-                        return `<a href="{{ url('bantuan') }}/${data.id}">
-                                    ${data.attributes.nama}
-                                </a>`
-                    },
+                    data: "attributes.nama",
                     name: "nama"
                 },
                 {
-                    data: "attributes.asaldana", name: "asaldana"
+                    data: "attributes.asaldana",
+                    name: "asaldana"
                 },
                 {
-                    data: "attributes.jumlah_peserta", name: "jumlah_peserta", searchable: false, orderable: false
-                },
-                {
-                    data: function (data) {
-                        return data.attributes.sdate + ' - ' + data.attributes.edate
-                    },
-                    searchable: false, 
+                    data: "attributes.jumlah_peserta",
+                    name: "jumlah_peserta",
+                    searchable: false,
                     orderable: false
                 },
                 {
-                    data: "attributes.nama_sasaran", name: "nama_sasaran", searchable: false, orderable: false
+                    data: function(data) {
+                        return data.attributes.sdate + ' - ' + data.attributes.edate
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: "attributes.nama_sasaran",
+                    name: "nama_sasaran",
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: function(data) {
                         return data.attributes.status == 1 ? 'Aktif' : 'Tidak Aktif'
                     },
                     searchable: false,
                     orderable: false
                 },
             ],
-            order: [[ 1, 'asc' ]]
+            order: [
+                [1, 'asc']
+            ]
         })
 
         bantuan.on('draw.dt', function() {

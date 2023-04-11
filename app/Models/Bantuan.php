@@ -145,6 +145,4 @@ class Bantuan extends BaseModel
     {
         return $query->where('sasaran', $sasaran);
     }
-
-
 }

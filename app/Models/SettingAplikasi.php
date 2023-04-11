@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SettingAplikasi extends Model
+class SettingAplikasi extends BaseModel
 {
     use HasFactory;
 
@@ -15,9 +15,6 @@ class SettingAplikasi extends Model
      * @var string
      */
     protected $table = 'setting_aplikasi';
-
-     /** {@inheritdoc} */
-     protected $connection = 'openkab';
 
     /**
      * The timestamps for the model.

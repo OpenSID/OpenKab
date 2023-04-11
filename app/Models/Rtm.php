@@ -47,4 +47,15 @@ class Rtm extends BaseModel
             ->groupBy('tweb_rtm.id')
         ;
     }
+
+    /**
+     * Scope untuk status rtm berdasarkan penduduk hidup
+     *
+     */
+    public function scopeStatus($query, $value = 1)
+    {
+        return $query->whereHas('kepalaKeluarga', static function ($query) use ($value) {
+            $query->status($value)->where('rtm_level', '1');
+        });
+    }
 }

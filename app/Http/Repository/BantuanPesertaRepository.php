@@ -20,15 +20,17 @@ class BantuanPesertaRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'peserta',
+                'no_id_kartu',
                 'program_id',
-                'kartu_nik',
+                'nik',
+                'no_kk',
                 'kartu_nama',
             ])
             ->allowedSorts([
-                'peserta',
+                'no_id_kartu',
                 'program_id',
-                'kartu_nik',
+                'nik',
+                'no_kk',
                 'kartu_nama',
             ])
             ->jsonPaginate();

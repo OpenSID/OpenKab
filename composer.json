@@ -15,7 +15,8 @@
         "league/flysystem-ftp": "^3.10",
         "spatie/laravel-fractal": "^6.0",
         "spatie/laravel-json-api-paginate": "^1.13",
-        "spatie/laravel-query-builder": "^5.2"
+        "spatie/laravel-query-builder": "^5.2",
+        "yajra/laravel-datatables": "9.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

@@ -20,6 +20,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Aksi</th>
                                     <th>Nama Program</th>
                                     <th>Asal Dana</th>
                                     <th>Jumlah Peseerta</th>
@@ -73,6 +74,15 @@
                     orderable: false
                 },
                 {
+                    data: function (data) {
+                        return `<a href="{{ url('bantuan') }}/${data.id}">
+                                    <button class="btn btn-warning">Lihat Detail</button>
+                                </a>`
+                    },
+                    searchable: false,
+                    orderable: false
+                },
+                {
                     data: "attributes.nama",
                     name: "nama"
                 },
@@ -108,7 +118,7 @@
                 },
             ],
             order: [
-                [1, 'asc']
+                [2, 'asc']
             ]
         })
 

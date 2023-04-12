@@ -58,6 +58,7 @@ class Penduduk extends BaseModel
         'namaJenisKelahiran',
         'namaPenolongKelahiran',
         'wajibKTP',
+        'elKTP',
         'statusPerkawinan',
         'statusHamil',
         'namaAsuransi',
@@ -78,6 +79,7 @@ class Penduduk extends BaseModel
         'sakitMenahun',
         'kb',
         'statusKawin',
+        'statusRekamKtp',
         'pendudukHubungan',
         'pendudukStatus',
         'pendudukStatusDasar',
@@ -208,6 +210,16 @@ class Penduduk extends BaseModel
      *
      * @return BelongsTo
      */
+    public function statusRekamKtp()
+    {
+        return $this->belongsTo(Ktp::class, 'status_rekam')->withDefault();
+    }
+
+    /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
     public function pendudukHubungan()
     {
         return $this->belongsTo(PendudukHubungan::class, 'kk_level')->withDefault();
@@ -317,6 +329,16 @@ class Penduduk extends BaseModel
         };
     }
 
+    public function getElKTPAttribute()
+    {
+        return match ($this->ktp_el) {
+            1 => 'BELUM',
+            2 => 'KTP-EL',
+            3 => 'KIA',
+            default => null,
+        };
+    }
+
     /**
      * Getter wajib ktp attribute.
      *
@@ -386,17 +408,13 @@ class Penduduk extends BaseModel
      */
     public function getUrlFotoAttribute()
     {
-        // TODO:: Cek ini
+        if (empty($this->foto)) {
+            return $this->sex === 1
+                ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
+                : Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/wuser.png');
+        }
 
-        return null;
-
-        // if (empty($this->foto)) {
-        //     return $this->sex === 1
-        //         ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
-        //         : Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/wuser.png');
-        // }
-
-        // return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
+        return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
     }
 
     /**

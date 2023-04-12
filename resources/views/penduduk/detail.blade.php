@@ -19,27 +19,16 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">Biodata Penduduk (NIK : {{ $penduduk['nik'] }})</h3>
+                    <h3 id="nik" class="card-title"></h3>
                     <br>
-                    <p class="text-sm font-italic">
-                        Terdaftar pada:
-                        <i class="fa fa-clock-o"></i>12 Maret 2023 23:25:16 <i class="fa fa-user"></i> Ketut Asmaul
-                    </p>
-                    <p class="text-sm font-italic">
-                        Terakhir diubah:
-                        <i class="fa fa-clock-o"></i>27 Maret 2023 16:21:40 <i class="fa fa-user"></i> Ketut Asmaul
-                    </p>
+                    <p id="terdaftar-pada" class="text-sm font-italic"></p>
                     <div class="table-responsive">
                         <div class="table-responsive">
                         </div>
                         <table class="table table-bordered table-striped table-hover">
                             <tbody>
                                 <tr class="text-center">
-                                    <td colspan="3">
-                                        <img class="penduduk"
-                                            src="{{ $penduduk['urlFoto'] }}"
-                                            alt="Foto Penduduk">
-                                    </td>
+                                    <td id="foto" colspan="3"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -48,12 +37,12 @@
                                 <tr>
                                     <td>Status Dasar</td>
                                     <td>:</td>
-                                    <td><span class=""><strong>{{ $penduduk['penduduk_status_dasar']['nama'] ?? '' }}</strong></span></td>
+                                    <td id="status-dasar"></td>
                                 </tr>
                                 <tr>
                                     <td width="300">Nama</td>
                                     <td width="1">:</td>
-                                    <td>ARIF SOFIYAN</td>
+                                    <td id="nama"></td>
                                 </tr>
                                 <tr>
                                     <td>Status Kepemilikan Identitas</td>
@@ -68,10 +57,10 @@
                                                     <th>Tag ID Card</th>
                                                 </tr>
                                                 <tr>
-                                                    <td>BELUM</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td id="wajib-identitas"></td>
+                                                    <td id="identitas-el"></td>
+                                                    <td id="status-rekam"></td>
+                                                    <td id="tag-id-card"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -80,33 +69,32 @@
                                 <tr>
                                     <td>Nomor Kartu Keluarga</td>
                                     <td>:</td>
-                                    <td>
-                                        7894566656565666 </td>
+                                    <td id="no-kk"></td>
                                 </tr>
                                 <tr>
                                     <td>Nomor KK Sebelumnya</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="no-kk-sebelumnya"></td>
                                 </tr>
                                 <tr>
                                     <td>Hubungan Dalam Keluarga</td>
                                     <td>:</td>
-                                    <td>KEPALA KELUARGA</td>
+                                    <td id="penduduk-hubungan"></td>
                                 </tr>
                                 <tr>
                                     <td>Jenis Kelamin</td>
                                     <td>:</td>
-                                    <td>LAKI-LAKI</td>
+                                    <td id="jk"></td>
                                 </tr>
                                 <tr>
                                     <td>Agama</td>
                                     <td>:</td>
-                                    <td>ISLAM</td>
+                                    <td id="agama"></td>
                                 </tr>
                                 <tr>
                                     <td>Status Penduduk</td>
                                     <td>:</td>
-                                    <td>TETAP</td>
+                                    <td id="penduduk-status"></td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="subtitle_head"><strong>DATA KELAHIRAN</strong></th>
@@ -114,42 +102,42 @@
                                 <tr>
                                     <td>Akta Kelahiran</td>
                                     <td>:</td>
-                                    <td>1234355466</td>
+                                    <td id="akta-lahir"></td>
                                 </tr>
                                 <tr>
                                     <td>Tempat / Tanggal Lahir</td>
                                     <td>:</td>
-                                    <td>ASD / 02-03-2023</td>
+                                    <td id="ttl"></td>
                                 </tr>
                                 <tr>
                                     <td>Tempat Dilahirkan</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="tempat-lahir"></td>
                                 </tr>
                                 <tr>
                                     <td>Jenis Kelahiran</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="jenis-lahir"></td>
                                 </tr>
                                 <tr>
                                     <td>Kelahiran Anak Ke</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="lahir-ke"></td>
                                 </tr>
                                 <tr>
                                     <td>Penolong Kelahiran</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="penolong-lahir"></td>
                                 </tr>
                                 <tr>
                                     <td>Berat Lahir</td>
                                     <td>:</td>
-                                    <td> Gram</td>
+                                    <td id="berat-lahir"></td>
                                 </tr>
                                 <tr>
                                     <td>Panjang Lahir</td>
                                     <td>:</td>
-                                    <td> cm</td>
+                                    <td id="panjang-lahir"></td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="subtitle_head"><strong>PENDIDIKAN DAN PEKERJAAN</strong></th>
@@ -157,17 +145,17 @@
                                 <tr>
                                     <td>Pendidikan dalam KK</td>
                                     <td>:</td>
-                                    <td>TIDAK / BELUM SEKOLAH</td>
+                                    <td id="pendidikan-kk"></td>
                                 </tr>
                                 <tr>
                                     <td>Pendidikan sedang ditempuh</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="pendidikan"></td>
                                 </tr>
                                 <tr>
                                     <td>Pekerjaan</td>
                                     <td>:</td>
-                                    <td>MENGURUS RUMAH TANGGA</td>
+                                    <td id="pekerjaan"></td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="subtitle_head"><strong>DATA KEWARGANEGARAAN</strong></th>
@@ -371,4 +359,45 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        $.ajax({
+            url: `{{ url('api/v1/penduduk') }}?filter[id]={{ $penduduk->id }}`,
+            method: 'get',
+        })
+        .then(function (response) {
+            var data = response.data[0].attributes
+
+            console.log(data)
+
+            $('#nik').text(`Biodata Penduduk (NIK : ${data.nik})`)
+            $('#foto').html(`<img class="penduduk" src="${data.urlFoto}"alt="Foto Penduduk">`)
+            $('#status-dasar').html(`<strong>${data.penduduk_status_dasar?.nama}</strong>`)
+            $('#nama').text(data.nama)
+            $('#terdaftar-pada').html(`Terdaftar pada: <i class="fa fa-clock-o"></i>${data.created_at}`)
+            $('#wajib-identitas').text(data.wajibKTP)
+            $('#identitas-el').text(data.elKTP)
+            $('#status-rekam').text(data.status_rekam_ktp?.nama)
+            $('#tag-id-card').text(data.tag_id_card)
+            $('#no-kk').text(data.keluarga?.no_kk)
+            $('#no-kk-sebelumnya').text(data.no_kk_sebelumnya)
+            $('#penduduk-hubungan').text(data.penduduk_hubungan?.nama)
+            $('#jk').text(data.jenis_kelamin?.nama)
+            $('#agama').text(data.agama?.nama)
+            $('#penduduk-status').text(data.penduduk_status?.nama)
+            $('#akta-lahir').text(data.akta_lahir)
+            $('#ttl').text(`${data.tempatlahir} / ${data.tanggallahir}`)
+            $('#tempat-lahir').text(data.namaTempatDilahirkan)
+            $('#jenis-lahir').text(data.namaTJenisKelahiran)
+            $('#lahir-ke').text(data.kelahiran_anak_ke)
+            $('#penolong-lahir').text(data.namaPenolongKelahiran)
+            $('#berat-lahir').text(`${data.berat_lahir ?? ''} gram`)
+            $('#panjang-lahir').text(`${data.panjang_lahir ?? ''} cm`)
+            $('#pendidikan-kk').text(data.pendidikan_k_k?.nama)
+            $('#pendidikan').text(data.pendidikan?.nama)
+            $('#pekerjaan').text(data.pekerjaan?.nama)
+        })
+    </script>
 @endsection

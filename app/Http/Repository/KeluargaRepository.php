@@ -28,6 +28,11 @@ class KeluargaRepository
             ->jsonPaginate();
     }
 
+    public function rincianKeluarga(string $no_kk)
+    {
+        return Keluarga::where('no_kk', $no_kk)->get();
+    }
+
     public function listStatistik($kategori): array|object
     {
         return collect(match ($kategori) {

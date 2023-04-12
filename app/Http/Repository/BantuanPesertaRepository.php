@@ -10,27 +10,18 @@ class BantuanPesertaRepository
 {
     public function listBantuanPeserta()
     {
-        $query = BantuanPeserta::query();
-
-        if (session()->has('desa')) {
-            $query->where('config_id', session('desa.id'));
-        }
-
-        return QueryBuilder::for($query)
+        return QueryBuilder::for(BantuanPeserta::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'no_id_kartu',
-                'program_id',
-                'nik',
-                'no_kk',
-                'kartu_nama',
+                AllowedFilter::exact('program_id'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('no_id_kartu', 'LIKE', '%' . $value . '%')
+                        ->orWhere('kartu_nama', 'LIKE', '%' . $value . '%');
+                }),
             ])
             ->allowedSorts([
                 'no_id_kartu',
-                'program_id',
-                'nik',
-                'no_kk',
                 'kartu_nama',
             ])
             ->jsonPaginate();

@@ -67,10 +67,9 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[nama]": row.search.value,
-                        "filter[nik]": row.search.value,
-                        "filter[tag_id_card]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name
                     };
                 },
                 dataSrc: function(json) {
@@ -80,14 +79,23 @@
                     return json.data
                 },
             },
-            columns: [
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
                 {
+                    targets: [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
+            columns: [{
                     data: null,
                     searchable: false,
                     orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return `<a href="${data.attributes.urlFoto}" class="progressive replace kecil">
                                     <img class="preview" loading="lazy" src="{{ asset('assets/img/img-loader.gif') }}" alt="Foto Penduduk"/>
                                 </a>`
@@ -100,17 +108,20 @@
                     name: "nik"
                 },
                 {
-                    data: "attributes.tag_id_card", name: "tag_id_card"
+                    data: "attributes.tag_id_card",
+                    name: "tag_id_card",
+                    searchable: true,
                 },
                 {
-                    data: "attributes.nama", name: "nama"
+                    data: "attributes.nama",
+                    name: "nama"
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.keluarga?.no_kk ?? null
                     },
-                    orderable: false,
-                    name: "keluarga.no_kk"
+                    name: "keluarga.no_kk",
+                    searchable: true,
                 },
                 {
                     data: "attributes.nama_ayah"
@@ -119,74 +130,59 @@
                     data: "attributes.nama_ibu"
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.rtm?.no_kk ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.keluarga?.alamat ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.cluster_desa?.dusun ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.cluster_desa?.rw ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.cluster_desa?.rt ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.pendidikan_k_k?.nama ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
                     data: "attributes.umur"
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.pekerjaan?.nama ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.status_kawin?.nama ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return data.attributes.log_penduduk?.tgl_peristiwa ?? null
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
                     data: "attributes.created_at"
                 }
+            ],
+            order: [
+                [4, 'asc']
             ]
         })
 

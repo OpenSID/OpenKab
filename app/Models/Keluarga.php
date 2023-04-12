@@ -19,13 +19,40 @@ class Keluarga extends BaseModel
     protected $table = 'tweb_keluarga';
 
     /**
+     * {@inheritDoc}
+     */
+    protected $with = [
+        'wilayah',
+    ];
+
+    /**
      * Define a one-to-one relationship.
      *
-     * @return hasOne
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
     public function kepalaKeluarga()
     {
         return $this->hasOne(Penduduk::class, 'id', 'nik_kepala');
+    }
+
+    /**
+     * Define a one-to-many relationship.
+     *
+     * @return HasMany
+     */
+    public function anggota()
+    {
+        return $this->hasMany(Penduduk::class, 'id_kk')->orderBy('kk_level')->orderBy('tanggallahir');
+    }
+
+    /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
+    public function Wilayah()
+    {
+        return $this->belongsTo(Wilayah::class, 'id_cluster');
     }
 
     /**

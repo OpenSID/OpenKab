@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Config;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,7 +25,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->bootHttps();
         $this->bootConfigFTP();
+    }
+
+    public function bootHttps()
+    {
+        if(config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 
     /**

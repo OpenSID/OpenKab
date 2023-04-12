@@ -14,9 +14,7 @@ class BantuanRepository
 {
     public function listBantuan()
     {
-        $query = Bantuan::configId();
-
-        return QueryBuilder::for($query)
+        return QueryBuilder::for(Bantuan::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -30,18 +28,6 @@ class BantuanRepository
                 'asaldana',
             ])
             ->jsonPaginate();
-    }
-
-    public function showBantuan()
-    {
-        $query = Bantuan::configId();
-
-        return QueryBuilder::for($query)
-            ->allowedFields('*')
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-            ])
-            ->first();
     }
 
     public function listStatistik($kategori): array

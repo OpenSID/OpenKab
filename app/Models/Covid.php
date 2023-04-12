@@ -30,7 +30,7 @@ class Covid extends Model
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('covid19_pemudik', 'covid19_pemudik.status_covid', '=', 'ref_status_covid.id')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'covid19_pemudik.id_terdata')
-            ->groupBy('ref_status_covid.id')
-            ;
+            ->where('tweb_penduduk.status_dasar', 1)
+            ->groupBy('ref_status_covid.id');
     }
 }

@@ -41,7 +41,7 @@ class BantuanRepository
 
     public function getBantuanNonKategori($id): array
     {
-        $bantuan = Bantuan::configId()->whereId($id)->first();
+        $bantuan = Bantuan::whereId($id)->first();
 
         return [
             [
@@ -71,7 +71,7 @@ class BantuanRepository
 
     public function caseKategoriPenduduk(): array
     {
-        $header = Bantuan::configId()->countStatistikPenduduk()->get();
+        $header = Bantuan::countStatistikPenduduk()->get();
         $footer = $this->countStatistikKategoriPenduduk();
 
         return [
@@ -82,12 +82,12 @@ class BantuanRepository
 
     private function countStatistikKategoriPenduduk(): object
     {
-        return Penduduk::configId()->countStatistik()->status()->get();
+        return Penduduk::countStatistik()->status()->get();
     }
 
     public function caseKategoriKeluarga(): array
     {
-        $header = Bantuan::configId()->countStatistikKeluarga()->get();
+        $header = Bantuan::countStatistikKeluarga()->get();
         $footer = $this->countStatistikKategoriKeluarga();
 
         return [
@@ -98,17 +98,17 @@ class BantuanRepository
 
     private function countStatistikKategoriKeluarga(): object
     {
-        return Keluarga::configId()->countStatistik()->status()->get();
+        return Keluarga::countStatistik()->status()->get();
     }
 
     private function countStatistikKategoriRtm(): object
     {
-        return Rtm::configId()->countStatistik()->status()->get();
+        return Rtm::countStatistik()->status()->get();
     }
 
     private function countStatistikKategoriKelompok(): object
     {
-        return Kelompok::configId()->countStatistik()->status()->get();
+        return Kelompok::countStatistik()->status()->get();
     }
 
     public function caseNonKategori($id): array

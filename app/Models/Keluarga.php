@@ -63,10 +63,11 @@ class Keluarga extends BaseModel
         $this->appends = [];
         $this->with = [];
 
-        return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+        return $this->scopeConfigId($query)
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', "{$this->table}.nik_kepala", 'left')
-            ->where('tweb_penduduk.status', 1);
+            ->where('tweb_penduduk.status_dasar', 1);
     }
 
     /**

@@ -420,16 +420,19 @@ class Penduduk extends BaseModel
         $this->appends = [];
         $this->with = [];
 
-        return $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan');
+        return $this->scopeConfigId($query)
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+            ->where('tweb_penduduk.status_dasar', 1);
     }
 
     public function scopeCountStatistikSuku($query)
     {
-        return $query
+        return $this->scopeConfigId($query)
             ->select(['suku AS id', 'suku AS nama'])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+            ->where('tweb_penduduk.status_dasar', 1)
             ->groupBy('suku')
             ->whereNotNull('suku')
             ->where('suku', '!=', "")

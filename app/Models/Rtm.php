@@ -40,10 +40,11 @@ class Rtm extends BaseModel
 
     public function scopeCountStatistik($query)
     {
-        return $query
+        return $this->scopeConfigId($query)
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala')
+            ->where('tweb_penduduk.status_dasar', 1)
             ->groupBy('tweb_rtm.id')
         ;
     }

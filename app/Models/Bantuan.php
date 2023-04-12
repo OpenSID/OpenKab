@@ -69,8 +69,8 @@ class Bantuan extends BaseModel
         $peserta = $this->getPeserta($this->id, $this->sasaran);
 
         return [
-            'laki_laki' => $peserta->laki_laki,
-            'perempuan' => $peserta->perempuan,
+            'laki_laki' => $peserta->laki_laki ?? 0,
+            'perempuan' => $peserta->perempuan ?? 0,
         ];
     }
 
@@ -81,22 +81,26 @@ class Bantuan extends BaseModel
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->where('program_peserta.program_id', $id);
 
+        if (session()->has('desa')) {
+            $query->where('program_peserta.config_id', session('desa.id'));
+        }
+
         switch ($sasaran) {
-            case '1':
+            case Bantuan::SASARAN_PENDUDUK:
                 $query->join('tweb_penduduk', 'tweb_penduduk.nik', '=', 'program_peserta.peserta', 'left');
 
                 break;
-            case '2':
+            case Bantuan::SASARAN_KELUARGA:
                 $query->join('tweb_keluarga', 'tweb_keluarga.no_kk', '=', 'program_peserta.peserta', 'left')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left');
 
                 break;
-            case '3':
+            case Bantuan::SASARAN_RUMAH_TANGGA:
                 $query->join('tweb_rtm', 'tweb_rtm.no_kk', '=', 'program_peserta.peserta', 'left')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala', 'left');
 
                 break;
-            case '4':
+            case Bantuan::SASARAN_KELOMPOK:
                 $query->join('kelompok', 'kelompok.id', '=', 'program_peserta.peserta', 'left')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
                     ->where('kelompok.tipe', 'kelompok');
@@ -106,7 +110,7 @@ class Bantuan extends BaseModel
                 return [];
         }
 
-        return $query->first();
+        return $query->where('tweb_penduduk.status_dasar', 1)->first();
     }
 
     /**
@@ -114,11 +118,13 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikPenduduk($query)
     {
-        return $query->select(["{$this->table}.id", "{$this->table}.nama"])
+        return $this->scopeConfigId($query)
+            ->select(["{$this->table}.id", "{$this->table}.nama"])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('program_peserta', 'program_peserta.program_id', '=', "{$this->table}.id", 'left')
             ->join('tweb_penduduk', 'program_peserta.peserta', '=', 'tweb_penduduk.nik', 'left')
+            ->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_PENDUDUK)
             ->groupBy("{$this->table}.id");
     }
@@ -128,12 +134,14 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikKeluarga($query)
     {
-        return $query->select(["{$this->table}.id", "{$this->table}.nama"])
+        return $this->scopeConfigId($query)
+            ->select(["{$this->table}.id", "{$this->table}.nama"])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('program_peserta', 'program_peserta.program_id', '=', "{$this->table}.id", 'left')
             ->join('tweb_keluarga', 'program_peserta.peserta', '=', 'tweb_keluarga.no_kk', 'left')
             ->join('tweb_penduduk', 'tweb_keluarga.nik_kepala', '=', 'tweb_penduduk.id', 'left')
+            ->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_KELUARGA)
             ->groupBy("{$this->table}.id");
     }

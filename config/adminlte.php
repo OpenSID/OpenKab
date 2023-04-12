@@ -355,6 +355,17 @@ return [
             'icon' => 'fas fa-handshake',
             'url'  => 'bantuan',
         ],
+        [
+            'text' => 'Pengaturan',
+            'icon' => 'fa fa-cog',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pengguna',
+                    'url' => 'users',
+                ]
+            ],
+        ],
     ],
 
     /*

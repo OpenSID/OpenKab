@@ -28,6 +28,10 @@ class KelasSosial extends BaseModel
             ->where('tweb_penduduk.status_dasar', '=', 1)
             ->join('tweb_keluarga', 'tweb_keluarga.kelas_sosial', '=', 'tweb_keluarga_sejahtera.id', 'left')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left')
+            ->where('tweb_penduduk.status_dasar', 1)
+            ->when(session()->has('desa'), function ($query) {
+                $query->where("tweb_penduduk.config_id", session('desa.id'));
+            })
             ->groupBy('tweb_keluarga_sejahtera.id');
     }
 }

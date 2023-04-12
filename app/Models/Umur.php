@@ -52,9 +52,24 @@ class Umur extends BaseModel
      */
     public function scopeCountStatistik($query, $where = '')
     {
-        return $query
+        if (session()->has('desa')) {
+            $where .= " AND tweb_penduduk.config_id = " . session('desa.id');
+            $query = $this->scopeConfigId($query);
+        } else {
+            $query = $query->where('config_id', 1);
+        }
+
+        $newQuery =  $query
             ->select(['id', 'nama'])
             ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '1' AND tweb_penduduk.`status_dasar` = 1 $where) as laki_laki")
-            ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' AND tweb_penduduk.`status_dasar` = 1 $where) as perempuan");
+            ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' AND tweb_penduduk.`status_dasar` = 1 $where) as perempuan")
+            // ->when(session()->has('desa'), function ($query) {
+            //     return $query->grubBy("{$this->table}.nama");
+            // })
+            // ->groupBy("{$this->table}.nama")
+        ;
+
+
+        return $newQuery;
     }
 }

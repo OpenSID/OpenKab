@@ -5,7 +5,6 @@ namespace App\Http\Repository;
 use App\Models\Ktp;
 use App\Models\Umur;
 use App\Models\Covid;
-use App\Models\Hamil;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -23,6 +22,11 @@ class PendudukRepository
                 'nama',
                 'nik',
                 'tag_id_card',
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama', 'LIKE', '%' . $value . '%')
+                        ->orWhere('nik', 'LIKE', '%' . $value . '%')
+                        ->orWhere('tag_id_card', 'LIKE', '%' . $value . '%');
+                }),
             ])
             ->allowedSorts([
                 'nik',

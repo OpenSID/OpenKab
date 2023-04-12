@@ -1,5 +1,7 @@
 @extends('layouts.index')
 
+@include('components.progressive-image')
+
 @section('title', 'Data Peserta Bantuan')
 
 @section('content_header')
@@ -11,7 +13,8 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <a href="{{ url('bantuan') }}" class="btn btn-primary">Kembali ke Daftar Bantuan</a>
+                    <a href="{{ url('bantuan') }}" class="btn btn-primary btn-sm"><i class="fas fa-arrow-circle-left"></i>
+                        Kembali ke Daftar Bantuan</a>
                 </div>
                 <div class="card-body">
                     <h5><b>Rincian Program</b></h5>
@@ -49,10 +52,10 @@
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
         $.ajax({
-            url: `{{ url('api/v1/bantuan/show') }}?filter[id]={{ $id }}`,
+            url: `{{ url('api/v1/bantuan') }}?filter[id]={{ $id }}`,
             method: 'get',
             success: function(response) {
-                if (response.data.length == 0) {
+                if (response.data[0].length == 0) {
                     $('#tampilkan-bantuan').html(`
                         <div class="col-lg-12">
                             <div class="alert alert-warning">
@@ -63,7 +66,7 @@
                     `)
                 }
 
-                var bantuan = response.data
+                var bantuan = response.data[0]
                 var html = ''
 
                 html += `
@@ -109,9 +112,9 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[kartu_nama]": row.search.value,
-                        "filter[no_id_kartu]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name
                     };
                 },
                 dataSrc: function(json) {
@@ -121,42 +124,60 @@
                     return json.data
                 },
             },
-            columns: [
+            columnDefs: [{
+                    targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                    className: 'text-nowrap',
+                },
                 {
-                    data: null,
+                    targets: [0, 1, 2, 5, 6, 7, 8, 9],
+                    orderable: false,
                     searchable: false,
-                    orderable: true
-                },
-                {
-                    data: "attributes.nik", name: "nik", searchable: false, orderable: false
-                },
-                {
-                    data: "attributes.no_kk", name: "no_kk", searchable: false, orderable: false
-                },
-                {
-                    data: "attributes.kartu_nama", name: "kartu_nama"
-                },
-                {
-                    data: "attributes.no_id_kartu", name: "no_id_kartu"
-                },
-                {
-                    data: "attributes.kartu_tempat_lahir", name: "kartu_tempat_lahir", searchable: false, orderable: false
-                },
-                {
-                    data: "attributes.kartu_tanggal_lahir", name: "kartu_tanggal_lahir", searchable: false, orderable: false
-                },
-                {
-                    data: "attributes.kartu_alamat", name: "kartu_alamat", searchable: false, orderable: false
-                },
-                {
-                    data: "attributes.jenis_kelamin.nama", name: "jenis_kelamin", searchable: false, orderable: false
-                },
-                {
-                    data: "attributes.keterangan.nama", name: "keterangan", searchable: false, orderable: false
                 },
             ],
-            order: [[ 3, 'asc' ]]
-        })
+            columns: [{
+                    data: null,
+                },
+                {
+                    data: "attributes.nik",
+                    name: "nik",
+                },
+                {
+                    data: "attributes.no_kk",
+                    name: "no_kk",
+                },
+                {
+                    data: "attributes.kartu_nama",
+                    name: "kartu_nama"
+                },
+                {
+                    data: "attributes.no_id_kartu",
+                    name: "no_id_kartu"
+                },
+                {
+                    data: "attributes.kartu_tempat_lahir",
+                    name: "kartu_tempat_lahir",
+                },
+                {
+                    data: "attributes.kartu_tanggal_lahir",
+                    name: "kartu_tanggal_lahir",
+                },
+                {
+                    data: "attributes.kartu_alamat",
+                    name: "kartu_alamat",
+                },
+                {
+                    data: "attributes.jenis_kelamin.nama",
+                    name: "jenis_kelamin",
+                },
+                {
+                    data: "attributes.keterangan.nama",
+                    name: "keterangan",
+                },
+            ],
+            order: [
+                [3, 'asc']
+            ]
+        });
 
         peserta.on('draw.dt', function() {
             var PageInfo = $('#peserta').DataTable().page.info();

@@ -1,13 +1,11 @@
 @extends('layouts.index')
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/progressive-image/progressive-image.css') }}">
-@endpush
+@include('components.progressive-image')
 
 @section('title', 'Data Bantuan')
 
 @section('content_header')
-    <h1>Data bantuan</h1>
+    <h1>Data Bantuan</h1>
 @stop
 
 @section('content')
@@ -20,6 +18,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Aksi</th>
                                     <th>Nama Program</th>
                                     <th>Asal Dana</th>
                                     <th>Jumlah Peseerta</th>
@@ -36,10 +35,6 @@
         </div>
     </div>
 @endsection
-
-@push('js')
-    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
-@endpush
 
 @section('js')
     <script>
@@ -67,10 +62,25 @@
                     return json.data
                 },
             },
+            columnDefs: [{
+                    targets: [0, 1, 2, 3, 4, 5, 6, 7],
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: [0, 1, 4, 5, 6, 7],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
             columns: [{
                     data: null,
-                    searchable: false,
-                    orderable: false
+                },
+                {
+                    data: function(data) {
+                        return `<a href="{{ url('bantuan') }}/${data.id}">
+                                    <button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                                </a>`
+                    },
                 },
                 {
                     data: "attributes.nama",
@@ -83,32 +93,25 @@
                 {
                     data: "attributes.jumlah_peserta",
                     name: "jumlah_peserta",
-                    searchable: false,
-                    orderable: false
+                    className: 'text-center'
                 },
                 {
                     data: function(data) {
                         return data.attributes.sdate + ' - ' + data.attributes.edate
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
                     data: "attributes.nama_sasaran",
                     name: "nama_sasaran",
-                    searchable: false,
-                    orderable: false
                 },
                 {
                     data: function(data) {
                         return data.attributes.status == 1 ? 'Aktif' : 'Tidak Aktif'
                     },
-                    searchable: false,
-                    orderable: false
                 },
             ],
             order: [
-                [1, 'asc']
+                [2, 'asc']
             ]
         })
 

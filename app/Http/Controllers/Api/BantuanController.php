@@ -21,11 +21,6 @@ class BantuanController extends Controller
         return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer(), 'daftar bantuan')->respond();
     }
 
-    public function show()
-    {
-        return $this->fractal($this->bantuan->showBantuan(), new BantuanTransformer(), 'detail bantuan')->respond();
-    }
-
     public function peserta()
     {
         return $this->fractal($this->bantuanPeserta->listBantuanPeserta(), new BantuanPesertaTransformer(), 'peserta bantuan')->respond();

@@ -48,8 +48,6 @@ class UserController extends Controller
                 ->rawColumns(['active'])
                 ->make();
         }
-
-        return abort(404, 'hay');
     }
 
     /**

@@ -49,10 +49,10 @@
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
         $.ajax({
-            url: `{{ url('api/v1/bantuan/show') }}?filter[id]={{ $id }}`,
+            url: `{{ url('api/v1/bantuan') }}?filter[id]={{ $id }}`,
             method: 'get',
             success: function(response) {
-                if (response.data.length == 0) {
+                if (response.data[0].length == 0) {
                     $('#tampilkan-bantuan').html(`
                         <div class="col-lg-12">
                             <div class="alert alert-warning">
@@ -63,7 +63,7 @@
                     `)
                 }
 
-                var bantuan = response.data
+                var bantuan = response.data[0]
                 var html = ''
 
                 html += `
@@ -109,9 +109,9 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[kartu_nama]": row.search.value,
-                        "filter[no_id_kartu]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name
                     };
                 },
                 dataSrc: function(json) {

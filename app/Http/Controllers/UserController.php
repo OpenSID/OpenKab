@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use DataTables;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Enums\StatusEnum;
+use Yajra\DataTables\DataTables;
 use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
@@ -48,6 +48,8 @@ class UserController extends Controller
                 ->rawColumns(['active'])
                 ->make();
         }
+
+        return abort(404, 'hay');
     }
 
     /**

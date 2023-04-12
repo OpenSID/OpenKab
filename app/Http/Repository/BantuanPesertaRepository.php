@@ -5,15 +5,12 @@ namespace App\Http\Repository;
 use App\Models\BantuanPeserta;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
-use App\Models\Bantuan;
 
 class BantuanPesertaRepository
 {
     public function listBantuanPeserta()
     {
-        $query = BantuanPeserta::configId();
-
-        return QueryBuilder::for($query)
+        return QueryBuilder::for(BantuanPeserta::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

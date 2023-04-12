@@ -1,13 +1,11 @@
 @extends('layouts.index')
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/progressive-image/progressive-image.css') }}">
-@endpush
+@include('components.progressive-image')
 
 @section('title', 'Data Bantuan')
 
 @section('content_header')
-    <h1>Data bantuan</h1>
+    <h1>Data Bantuan</h1>
 @stop
 
 @section('content')
@@ -38,10 +36,6 @@
     </div>
 @endsection
 
-@push('js')
-    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
-@endpush
-
 @section('js')
     <script>
         var bantuan = $('#bantuan').DataTable({
@@ -68,19 +62,25 @@
                     return json.data
                 },
             },
-            columns: [{
-                    data: null,
-                    searchable: false,
-                    orderable: false
+            columnDefs: [{
+                    targets: [0, 1, 2, 3, 4, 5, 6, 7],
+                    className: 'text-nowrap',
                 },
                 {
-                    data: function (data) {
+                    targets: [0, 1, 4, 5, 6, 7],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
+            columns: [{
+                    data: null,
+                },
+                {
+                    data: function(data) {
                         return `<a href="{{ url('bantuan') }}/${data.id}">
-                                    <button class="btn btn-warning">Lihat Detail</button>
+                                    <button class="btn btn-warning btn-sm">Detail</button>
                                 </a>`
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
                     data: "attributes.nama",
@@ -93,28 +93,21 @@
                 {
                     data: "attributes.jumlah_peserta",
                     name: "jumlah_peserta",
-                    searchable: false,
-                    orderable: false
+                    className: 'text-center'
                 },
                 {
                     data: function(data) {
                         return data.attributes.sdate + ' - ' + data.attributes.edate
                     },
-                    searchable: false,
-                    orderable: false
                 },
                 {
                     data: "attributes.nama_sasaran",
                     name: "nama_sasaran",
-                    searchable: false,
-                    orderable: false
                 },
                 {
                     data: function(data) {
                         return data.attributes.status == 1 ? 'Aktif' : 'Tidak Aktif'
                     },
-                    searchable: false,
-                    orderable: false
                 },
             ],
             order: [

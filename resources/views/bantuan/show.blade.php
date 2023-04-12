@@ -23,7 +23,7 @@
                     <br>
                     <h5><b>Daftar Peserta</b></h5>
                     <div class="table-responsive">
-                        <table class="table table-striped data-table" id="peserta">
+                        <table class="table table-striped" id="peserta">
                             <thead>
                                 <tr>
                                     <th>No</th>

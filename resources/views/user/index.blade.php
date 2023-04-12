@@ -47,19 +47,25 @@
             autoWidth: false,
             ordering: true,
             ajax: "{{ route('users.list') }}",
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: [0, 1],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false,
                     className: 'text-center',
                     width: '1%'
                 },
                 {
                     data: 'aksi',
                     name: 'action',
-                    orderable: false,
-                    searchable: false,
                     width: '5%',
                 },
                 {

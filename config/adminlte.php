@@ -313,11 +313,54 @@ return [
             'text' => 'search',
         ],
         [
+            'text' => 'Kependudukan',
+            'icon' => 'fa fa-users',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Penduduk',
+                    'url' => 'penduduk',
+                ]
+            ],
+        ],
+        [
+            'text' => 'Statistik',
+            'icon' => 'fas fa-chart-pie',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Penduduk',
+                    'url' => 'statistik/penduduk',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Keluarga',
+                    'url' => 'statistik/keluarga',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'RTM',
+                    'url' => 'statistik/rtm',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Bantuan',
+                    'url' => 'statistik/bantuan',
+                ],
+
+            ],
+        ],
+        [
+            'text' => 'Bantuan',
+            'icon' => 'fas fa-handshake',
+            'url'  => 'bantuan',
+        ],
+        [
             'text' => 'Pengaturan',
             'icon' => 'fa fa-cog',
             'submenu' => [
                 [
-                    'icon' => 'fa fa-user',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
                     'url' => 'users',
                 ]
@@ -366,17 +409,17 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
+                    'location' => '//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
+                    'location' => '//cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
+                    'location' => '//cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css',
                 ],
             ],
         ],
@@ -400,8 +443,8 @@ return [
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
+                    'asset' => true,
+                    'location' => 'vendor/chart.js/Chart.min.js',
                 ],
             ],
         ],

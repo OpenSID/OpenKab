@@ -12,9 +12,14 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
+        "league/flysystem-ftp": "^3.10",
+        "spatie/laravel-fractal": "^6.0",
+        "spatie/laravel-json-api-paginate": "^1.13",
+        "spatie/laravel-query-builder": "^5.2",
         "yajra/laravel-datatables": "9.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.8",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
@@ -28,7 +33,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/general.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

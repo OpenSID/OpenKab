@@ -473,6 +473,16 @@ return [
                 ],
             ],
         ],
+        'ICheck' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css',
+                ],
+            ],
+        ],
     ],
 
     /*

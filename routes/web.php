@@ -41,10 +41,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('penduduk')->group(function () {
-        Route::get('/', [\App\Http\Controllers\PendudukController::class, 'index']);
-    });
-
+    Route::resource('penduduk', \App\Http\Controllers\PendudukController::class)->only(['index', 'show']);
 
     Route::controller(\App\Http\Controllers\BantuanController::class)
         ->prefix('bantuan')

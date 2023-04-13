@@ -102,7 +102,9 @@
                     }
                 },
                 {
-                    data: "attributes.nik",
+                    data: function (data) {
+                        return `<a title="Lihat Detail Biodata Penduduk" href="penduduk/${data.id}">${data.attributes.nik}</a>`
+                    },
                     name: "nik"
                 },
                 {

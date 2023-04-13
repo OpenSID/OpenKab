@@ -38,7 +38,7 @@ class BantuanPeserta extends BaseModel
 
     public function getKeteranganAttribute()
     {
-        return $this->penduduk->statusDasar;
+        return $this->penduduk->pendudukStatusDasar;
     }
 
 

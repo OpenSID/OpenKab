@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::controller(\App\Http\Controllers\Api\KeluargaController::class)
         ->prefix('keluarga')->group(function () {
-            Route::get('/show', 'show');
+            Route::get('/show', 'show')->name('api.keluarga.detail');
         });
 
 

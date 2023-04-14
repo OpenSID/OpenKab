@@ -320,11 +320,6 @@ return [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Penduduk',
                     'url' => 'penduduk',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Keluarga',
-                    'url' => 'keluarga',
                 ]
             ],
         ],
@@ -485,6 +480,16 @@ return [
                     'type' => 'css',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css',
+                ],
+            ],
+        ],
+        'Alpine' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js',
                 ],
             ],
         ],

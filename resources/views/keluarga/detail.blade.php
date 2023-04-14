@@ -165,47 +165,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table no-border">
-                                        <tbody>
-                                            <tr>
-                                                <td width="25%">&nbsp;</td>
-                                                <td width="50%">&nbsp;</td>
-                                                <td class="text-center" width="25%">Natai Raya, 14 April 2023</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">KEPALA KELUARGA</td>
-                                                <td>&nbsp;</td>
-                                                <td class="text-center">KEPALA DESA NATAI RAYA</td>
-                                            </tr>
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">ELOK KHALISA SABRINA</td>
-                                                <td width="50%">&nbsp;</td>
-                                                <td class="text-center">WAHITO</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+
                             </div>
                         </div>
                     </div>

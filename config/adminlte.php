@@ -320,6 +320,11 @@ return [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Penduduk',
                     'url' => 'penduduk',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Keluarga',
+                    'url' => 'keluarga',
                 ]
             ],
         ],

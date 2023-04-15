@@ -70,6 +70,7 @@ class Penduduk extends BaseModel
     protected $with = [
         'jenisKelamin',
         'agama',
+        'bahasa',
         'pendidikan',
         'pendidikanKK',
         'pekerjaan',
@@ -113,6 +114,16 @@ class Penduduk extends BaseModel
     public function agama()
     {
         return $this->belongsTo(Agama::class, 'agama_id')->withDefault();
+    }
+
+    /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
+    public function bahasa()
+    {
+        return $this->belongsTo(Bahasa::class, 'bahasa_id')->withDefault();
     }
 
     /**

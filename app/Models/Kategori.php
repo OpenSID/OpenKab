@@ -41,4 +41,9 @@ class Kategori extends Model
     {
         return $query->where('enabled', static::ENABLE);
     }
+
+    public function config()
+    {
+        return $this->hasOne(config::class, 'id', 'config_id');
+    }
 }

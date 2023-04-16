@@ -355,6 +355,19 @@ return [
             'icon' => 'fas fa-handshake',
             'url'  => 'bantuan',
         ],
+
+        [
+            'text' => 'Admin Web',
+            'icon' => 'fa fa-cog',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Kategori',
+                    'url' => 'admin_web/kategori',
+                ]
+            ],
+        ],
+
         [
             'text' => 'Pengaturan',
             'icon' => 'fa fa-cog',
@@ -480,6 +493,36 @@ return [
                     'type' => 'css',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css',
+                ],
+            ],
+        ],
+        'Sweetalert2' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js',
+                ],
+            ],
+        ],
+        'Custom' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/assets/css/custom.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/assets/js/script.js',
                 ],
             ],
         ],

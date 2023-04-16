@@ -60,4 +60,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/bantuan', 'bantuan');
             Route::get('/cetak/{kategori}/{id}', 'cetak');
         });
+
+    // Admin Web
+    Route::controller(\App\Http\Controllers\AdminWebController::class)
+    ->prefix('admin_web')
+    ->group(function () {
+        Route::get('/kategori', 'kategori_index');
+    });
 });

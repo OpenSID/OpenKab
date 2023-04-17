@@ -7,6 +7,7 @@ use App\Models\Bantuan;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
 use App\Models\KelasSosial;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\Enums\JenisKelaminEnum;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -34,72 +35,58 @@ class DasborRepository
             ->orderBy('tahun', 'asc')
             ->first();
 
-        // menampilkan data penduduk berdasarkan bulan dan tahun berjalan, data yang akan ditampilkan adalah data 12 bulan terakhir dan berlanjut dari bulan sebelumnya
-        $penduduk = Penduduk::selectRaw('count(*) as jumlah, MONTH(created_at) as bulan, YEAR(created_at) as tahun')
+        // menampilkan data penduduk laki-laki dan perempuan berdasarkan bulan dan tahun berjalan, data yang akan ditampilkan adalah data 12 bulan terakhir dan berlanjut dari bulan sebelumnya
+
+
+        // return $penduduk;
+
+        // Data penambahan penduduk setiap bulan
+        $penduduk = Penduduk::selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
+            ->selectRaw('MONTH(tweb_penduduk.created_at) as bulan')
+            ->selectRaw('YEAR(tweb_penduduk.created_at) as tahun')
             ->status()
-            ->groupBy('bulan', 'tahun')
+            ->groupBy('tahun', 'bulan')
             ->orderBy('tahun', 'asc')
             ->orderBy('bulan', 'asc')
             ->get()
             ->map(function ($item) {
                 return [
-                    'jumlah' => $item->jumlah,
-                    'bulan' => $item->bulan,
-                    'tahun' => $item->tahun,
+                    'tahun' => (int) $item->tahun,
+                    'bulan' => (int) $item->bulan,
+                    'laki_laki' => (int) $item->laki_laki,
+                    'perempuan' => (int) $item->perempuan,
                 ];
             });
 
-        // return $penduduk;
-
-        // tampilkan data dari tahun_awal sampai saat ini secara continue dengan bulannya
         $data = [];
-        // force dari tahun_awal sampai tahun sekarang
-        $tahun_awal = $tahun_awal->tahun;
-        $tahun_akhir = now()->year;
+        for ($i = 0; $i < 12; $i++) {
+            $tahun = (int) now()->subMonths($i)->format('Y');
+            $bulan = (int) now()->subMonths($i)->format('m');
 
-        for ($i = $tahun_awal; $i <= $tahun_akhir; $i++) {
-            $data[$i] = [
-                'Januari' => 0,
-                'Februari' => 0,
-                'Maret' => 0,
-                'April' => 0,
-                'Mei' => 0,
-                'Juni' => 0,
-                'Juli' => 0,
-                'Agustus' => 0,
-                'September' => 0,
-                'Oktober' => 0,
-                'November' => 0,
-                'Desember' => 0,
+            $laki_laki = $penduduk->filter(function ($item) use ($tahun, $bulan) {
+                return $item['tahun'] < $tahun || ($item['tahun'] == $tahun && $item['bulan'] <= $bulan);
+            })->sum('laki_laki');
+
+            $perempuan = $penduduk->filter(function ($item) use ($tahun, $bulan) {
+                return $item['tahun'] < $tahun || ($item['tahun'] == $tahun && $item['bulan'] <= $bulan);
+            })->sum('perempuan');
+
+            $data[] = [
+                'kategori' => bulan($bulan) . ' ' . $tahun,
+                'tahun' => $tahun,
+                'bulan' => bulan($bulan),
+                'laki_laki' => $laki_laki,
+                'perempuan' => $perempuan,
             ];
         }
 
-        // ganti data bulan dengan data yang ada di database
-        // dengan konsisi
-        // 1. data berdasarkan data sebelumnya + data tambahan sekarang
-        $data = $penduduk->reduce(function ($carry, $item) use ($data) {
-            $data[$item['tahun']][bulan($item['bulan'])] = $item['jumlah'];
-            return $data;
-        }, $data);
+        $data = collect($data)->reverse();
 
-        // $data = $penduduk->reduce(function ($carry, $item) use ($data) {
-        //     $data[$item['tahun']][bulan($item['bulan'])] = $item['jumlah'];
-        //     return $data;
-        // }, $data);
-
-        // jika data bulan sebelumnya kosong, maka data bulan sebelumnya diisi dengan data bulan sekarang
-        // $tahun = now()->subYears(12)->year;
-        // for ($i = 0; $i < 12; $i++) {
-        //     $data[$tahun] = array_reduce($data[$tahun], function ($carry, $item) use ($data, $tahun) {
-        //         if ($item == 0) {
-        //             $item = $carry;
-        //         }
-        //         $carry[] = $item;
-        //         return $carry;
-        //     }, []);
-        //     $tahun++;
-        // }
-
-        return $data;
+        return [
+            'kategori' => $data->pluck('kategori'),
+            'laki_laki' => $data->pluck('laki_laki'),
+            'perempuan' => $data->pluck('perempuan'),
+        ];
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;
+use App\Http\Controllers\Api\WilayahController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,12 @@ use App\Http\Controllers\Api\StatistikController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
+    });
+
+    Route::prefix('wilayah')->group(function () {
+        Route::get('dusun', [WilayahController::class, 'dusun']);
+        Route::get('rw', [WilayahController::class, 'rw']);
+        Route::get('rt', [WilayahController::class, 'rt']);
     });
 
     Route::prefix('penduduk')->group(function () {

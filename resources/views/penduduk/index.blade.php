@@ -1,5 +1,6 @@
 @extends('layouts.index')
 @include('layouts.components.selec2_penduduk_referensi')
+@include('layouts.components.selec2_wilayah_referensi')
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/progressive-image/progressive-image.css') }}">
@@ -66,7 +67,7 @@
                                         <div class="form-group">
                                             <label>Pilih RW</label>
                                             <select class="select2 form-control-sm" id="rw" name="rw"
-                                                data-placeholder="Semua RW" style="width: 100%;">
+                                                data-placeholder="Semua RW" style="width: 100%;" disabled>
                                             </select>
                                         </div>
                                     </div>
@@ -74,7 +75,7 @@
                                         <div class="form-group">
                                             <label>Pilih RT</label>
                                             <select class="select2 form-control-sm" id="rt" name="rt"
-                                                data-placeholder="Semua RT" style="width: 100%;">
+                                                data-placeholder="Semua RT" style="width: 100%;" disabled>
                                             </select>
                                         </div>
                                     </div>
@@ -160,6 +161,9 @@
                         "filter[sex]": $('#sex').val(),
                         "filter[status]": $('#status').val(),
                         "filter[status_dasar]": $('#status-dasar').val(),
+                        "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
+                        "filter[clusterDesa.rw]": $('#rw').val(),
+                        "filter[clusterDesa.rt]": $('#rt').val(),
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
                     };
@@ -293,9 +297,12 @@
 
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
-            $('#sex').val('empty').change();
-            $('#status').val('empty').change();
-            $('#status-dasar').val('empty').change();
+            $('#sex').val('').change();
+            $('#status').val('').change();
+            $('#status-dasar').val('').change();
+            $('#dusun').val('').change();
+            $('#rw').val('').change();
+            $('#rt').val('').change();
 
             penduduk.ajax.reload();
         });

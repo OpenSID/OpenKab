@@ -37,6 +37,9 @@ class PendudukRepository
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('status_dasar'),
                 AllowedFilter::exact('keluarga.no_kk'),
+                AllowedFilter::exact('clusterDesa.dusun'),
+                AllowedFilter::exact('clusterDesa.rw'),
+                AllowedFilter::exact('clusterDesa.rt'),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where(function ($query) use ($value) {
                         $query->where('nama', 'like', "%{$value}%")

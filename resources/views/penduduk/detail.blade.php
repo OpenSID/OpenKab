@@ -13,7 +13,8 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ url('penduduk') }}" class="btn btn-sm btn-block btn-secondary"><i class="fas fa-arrow-left"></i>
+                            <a href="{{ url('penduduk') }}" class="btn btn-sm btn-block btn-secondary"><i
+                                    class="fas fa-arrow-left"></i>
                             </a>
                         </div>
                     </div>
@@ -313,7 +314,9 @@
                                 <tr>
                                     <td>
                                         <div class="table-responsive">
-                                            <table class="table table-bordered dataTable table-striped table-hover tabel-daftar" id="table-bantuan">
+                                            <table
+                                                class="table table-bordered dataTable table-striped table-hover tabel-daftar"
+                                                id="table-bantuan">
                                                 <thead class="bg-gray disabled color-palette">
                                                     <tr>
                                                         <th class="padat">No</th>
@@ -335,11 +338,13 @@
                                 <tr>
                                     <td>
                                         <div class="table-responsive">
-                                            <table class="table table-bordered dataTable table-striped table-hover tabel-daftar" id="table-dokumen">
+                                            <table
+                                                class="table table-bordered dataTable table-striped table-hover tabel-daftar"
+                                                id="table-dokumen">
                                                 <thead class="bg-gray disabled color-palette">
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Aksi</th>
+                                                        {{-- <th>Aksi</th> --}}
                                                         <th>Nama Dokumen</th>
                                                         <th>Tanggal Upload</th>
                                                     </tr>
@@ -362,66 +367,64 @@
 @section('js')
     <script>
         $.ajax({
-            url: `{{ url('api/v1/penduduk') }}?filter[id]={{ $penduduk->id }}`,
-            method: 'get',
-        })
-        .then(function (response) {
-            var data = response.data[0]?.attributes
+                url: `{{ url('api/v1/penduduk') }}?filter[id]={{ $penduduk->id }}`,
+                method: 'get',
+            })
+            .then(function(response) {
+                var data = response.data[0]?.attributes
 
-            console.log(data)
-
-            $('#nik').text(`Biodata Penduduk (NIK : ${data.nik})`)
-            $('#foto').html(`<img class="penduduk" src="${data.urlFoto}"alt="Foto Penduduk">`)
-            $('#status-dasar').html(`<strong>${data.penduduk_status_dasar?.nama}</strong>`)
-            $('#nama').text(data.nama)
-            $('#terdaftar-pada').html(`Terdaftar pada: <i class="fa fa-clock-o"></i>${data.created_at}`)
-            $('#wajib-identitas').text(data.wajibKTP)
-            $('#identitas-el').text(data.elKTP)
-            $('#status-rekam').text(data.status_rekam_ktp?.nama)
-            $('#tag-id-card').text(data.tag_id_card)
-            $('#no-kk').text(data.keluarga?.no_kk)
-            $('#no-kk-sebelumnya').text(data.no_kk_sebelumnya)
-            $('#penduduk-hubungan').text(data.penduduk_hubungan?.nama)
-            $('#jk').text(data.jenis_kelamin?.nama)
-            $('#agama').text(data.agama?.nama)
-            $('#penduduk-status').text(data.penduduk_status?.nama)
-            $('#akta-lahir').text(data.akta_lahir)
-            $('#ttl').text(`${data.tempatlahir} / ${data.tanggallahir}`)
-            $('#tempat-lahir').text(data.namaTempatDilahirkan)
-            $('#jenis-lahir').text(data.namaTJenisKelahiran)
-            $('#lahir-ke').text(data.kelahiran_anak_ke)
-            $('#penolong-lahir').text(data.namaPenolongKelahiran)
-            $('#berat-lahir').text(`${data.berat_lahir ?? ''} gram`)
-            $('#panjang-lahir').text(`${data.panjang_lahir ?? ''} cm`)
-            $('#pendidikan-kk').text(data.pendidikan_k_k?.nama)
-            $('#pendidikan').text(data.pendidikan?.nama)
-            $('#pekerjaan').text(data.pekerjaan?.nama)
-            $('#suku').text(data.suku)
-            $('#wna').text(data.warga_negara?.nama)
-            $('#no-passpor').text(data.dokumen_pasport)
-            $('#tgl-passpor').text(data.tanggal_akhir_paspor)
-            $('#no-kitas').text(data.dokumen_kitas)
-            $('#nik-ayah').text(data.ayah_nik)
-            $('#nama-ayah').text(data.nama_ayah)
-            $('#nik-ibu').text(data.ibu_nik)
-            $('#nama-ibu').text(data.nama_ibu)
-            $('#alamat').text(data.keluarga?.alamat)
-            $('#dusun').text(data.cluster_desa?.dusun)
-            $('#rt-rw').text(`${data.cluster_desa?.rt} / ${data.cluster_desa?.rw}`)
-            $('#alm-sebelum').text(data.alamat_sebelumnya)
-            $('#telepon').text(data.telepon)
-            $('#email').text(data.email)
-            $('#telegram').text(data.telegram)
-            $('#cara-hubung').text(data.hubung_warga)
-            $('#status-kawin').text(data.statusPerkawinan)
-            $('#gol-darah').text(data.golongan_darah?.nama)
-            $('#cacat').text(data.cacat?.nama)
-            $('#sakit').text(data.sakit_menahun?.nama)
-            $('#asuransi').text(data.namaAsuransi)
-            $('#bpjs').text(data.bpjs_ketenagakerjaan)
-            $('#bahasa').text(data.bahasa?.nama)
-            $('#ket').text(data.ket)
-        })
+                $('#nik').text(`Biodata Penduduk (NIK : ${data.nik})`)
+                $('#foto').html(`<img class="penduduk" src="${data.urlFoto}"alt="Foto Penduduk">`)
+                $('#status-dasar').html(`<strong>${data.penduduk_status_dasar?.nama}</strong>`)
+                $('#nama').text(data.nama)
+                $('#terdaftar-pada').html(`Terdaftar pada: <i class="fa fa-clock-o"></i>${data.created_at}`)
+                $('#wajib-identitas').text(data.wajibKTP)
+                $('#identitas-el').text(data.elKTP)
+                $('#status-rekam').text(data.status_rekam_ktp?.nama)
+                $('#tag-id-card').text(data.tag_id_card)
+                $('#no-kk').text(data.keluarga?.no_kk)
+                $('#no-kk-sebelumnya').text(data.no_kk_sebelumnya)
+                $('#penduduk-hubungan').text(data.penduduk_hubungan?.nama)
+                $('#jk').text(data.jenis_kelamin?.nama)
+                $('#agama').text(data.agama?.nama)
+                $('#penduduk-status').text(data.penduduk_status?.nama)
+                $('#akta-lahir').text(data.akta_lahir)
+                $('#ttl').text(`${data.tempatlahir} / ${data.tanggallahir}`)
+                $('#tempat-lahir').text(data.namaTempatDilahirkan)
+                $('#jenis-lahir').text(data.namaTJenisKelahiran)
+                $('#lahir-ke').text(data.kelahiran_anak_ke)
+                $('#penolong-lahir').text(data.namaPenolongKelahiran)
+                $('#berat-lahir').text(`${data.berat_lahir ?? ''} gram`)
+                $('#panjang-lahir').text(`${data.panjang_lahir ?? ''} cm`)
+                $('#pendidikan-kk').text(data.pendidikan_k_k?.nama)
+                $('#pendidikan').text(data.pendidikan?.nama)
+                $('#pekerjaan').text(data.pekerjaan?.nama)
+                $('#suku').text(data.suku)
+                $('#wna').text(data.warga_negara?.nama)
+                $('#no-passpor').text(data.dokumen_pasport)
+                $('#tgl-passpor').text(data.tanggal_akhir_paspor)
+                $('#no-kitas').text(data.dokumen_kitas)
+                $('#nik-ayah').text(data.ayah_nik)
+                $('#nama-ayah').text(data.nama_ayah)
+                $('#nik-ibu').text(data.ibu_nik)
+                $('#nama-ibu').text(data.nama_ibu)
+                $('#alamat').text(data.keluarga?.alamat)
+                $('#dusun').text(data.cluster_desa?.dusun)
+                $('#rt-rw').text(`${data.cluster_desa?.rt} / ${data.cluster_desa?.rw}`)
+                $('#alm-sebelum').text(data.alamat_sebelumnya)
+                $('#telepon').text(data.telepon)
+                $('#email').text(data.email)
+                $('#telegram').text(data.telegram)
+                $('#cara-hubung').text(data.hubung_warga)
+                $('#status-kawin').text(data.statusPerkawinan)
+                $('#gol-darah').text(data.golongan_darah?.nama)
+                $('#cacat').text(data.cacat?.nama)
+                $('#sakit').text(data.sakit_menahun?.nama)
+                $('#asuransi').text(data.namaAsuransi)
+                $('#bpjs').text(data.bpjs_ketenagakerjaan)
+                $('#bahasa').text(data.bahasa?.nama)
+                $('#ket').text(data.ket)
+            })
 
         var bantuan = $('#table-bantuan').DataTable({
             processing: true,
@@ -435,12 +438,11 @@
                 url: `{{ url('api/v1/bantuan/peserta') }}?filter[peserta]={{ $penduduk->nik }}`,
                 method: 'get',
             },
-            columns: [
-                {
+            columns: [{
                     data: null,
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return `${data.attributes.program.sdate} - ${data.attributes.program.edate}`
                     }
                 },
@@ -474,13 +476,12 @@
                 url: `{{ url('api/v1/dokumen') }}?filter[id_pend]={{ $penduduk->id }}`,
                 method: 'get',
             },
-            columns: [
-                {
+            columns: [{
                     data: null,
                 },
-                {
-                    data: "attributes.nama"
-                },
+                // {
+                //     data: "attributes.satuan"
+                // },
                 {
                     data: "attributes.nama"
                 },

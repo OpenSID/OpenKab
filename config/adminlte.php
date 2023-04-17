@@ -132,8 +132,8 @@ return [
     'usermenu_enabled' => true,
     'usermenu_header' => false,
     'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
+    'usermenu_image' => true,
+    'usermenu_desc' => true,
     'usermenu_profile_url' => false,
 
     /*
@@ -150,9 +150,9 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
+    'layout_fixed_sidebar' => true,
     'layout_fixed_navbar' => null,
-    'layout_fixed_footer' => null,
+    'layout_fixed_footer' => true,
     'layout_dark_mode' => null,
 
     /*
@@ -292,11 +292,9 @@ return [
     'menu' => [
         //Topbar items:
         [
-            'key'          => 'desa',
-            'text'         => 'Wilayah',
-            'topnav_right' => true,
+            'type'         => 'darkmode-widget',
+            'topnav_right' => true, // Or "topnav => true" to place on the left.
         ],
-        // Navbar items:
         [
             'type'         => 'navbar-search',
             'text'         => 'search',
@@ -304,6 +302,11 @@ return [
         ],
         [
             'type'         => 'fullscreen-widget',
+            'topnav_right' => true,
+        ],
+        [
+            'key'          => 'desa',
+            'text'         => 'Wilayah',
             'topnav_right' => true,
         ],
 
@@ -480,6 +483,16 @@ return [
                     'type' => 'css',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css',
+                ],
+            ],
+        ],
+        'Alpine' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js',
                 ],
             ],
         ],

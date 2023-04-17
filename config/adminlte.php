@@ -486,6 +486,16 @@ return [
                 ],
             ],
         ],
+        'Alpine' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js',
+                ],
+            ],
+        ],
     ],
 
     /*

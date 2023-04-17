@@ -291,6 +291,11 @@ class Penduduk extends BaseModel
         return $this->hasMany(LogPerubahanPenduduk::class, 'id_pend');
     }
 
+    public function dokumenHidup()
+    {
+        return $this->hasMany(DokumenHidup::class, 'id_pend');
+    }
+
     /**
      * Getter tempat dilahirkan attribute.
      *

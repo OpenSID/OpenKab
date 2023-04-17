@@ -39,12 +39,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $('#penduduk').find('.info-box-number').text('1');
-            $('#keluarga').find('.info-box-number').text('2');
-            $('#rtm').find('.info-box-number').text('3');
-            $('#bantuan').find('.info-box-number').text('4');
-
-            // tampilkan data berdsarkan api bantuan
             $.ajax({
                 url: `{{ url('api/v1/dasbor') }}`,
                 type: "GET",

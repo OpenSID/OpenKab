@@ -29,18 +29,6 @@ class DasborRepository
 
     private function grafikPenduduk()
     {
-        // ambil tahun terakhir dari data penduduk
-        $tahun_awal = Penduduk::selectRaw('YEAR(created_at) as tahun')
-            ->status()
-            ->orderBy('tahun', 'asc')
-            ->first();
-
-        // menampilkan data penduduk laki-laki dan perempuan berdasarkan bulan dan tahun berjalan, data yang akan ditampilkan adalah data 12 bulan terakhir dan berlanjut dari bulan sebelumnya
-
-
-        // return $penduduk;
-
-        // Data penambahan penduduk setiap bulan
         $penduduk = Penduduk::selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->selectRaw('MONTH(tweb_penduduk.created_at) as bulan')
@@ -75,13 +63,59 @@ class DasborRepository
             $data[] = [
                 'kategori' => bulan($bulan) . ' ' . $tahun,
                 'tahun' => $tahun,
-                'bulan' => bulan($bulan),
+                'bulan' => $bulan,
                 'laki_laki' => $laki_laki,
                 'perempuan' => $perempuan,
             ];
+
         }
 
         $data = collect($data)->reverse();
+
+        return [
+            'kategori' => [
+                "Mei 2022",
+                "Juni 2022",
+                "Juli 2022",
+                "Agustus 2022",
+                "September 2022",
+                "Oktober 2022",
+                "November 2022",
+                "Desember 2022",
+                "Januari 2023",
+                "Februari 2023",
+                "Maret 2023",
+                "April 2023"
+            ],
+            'laki_laki' => [
+                5,
+                46,
+                46,
+                46,
+                46,
+                46,
+                46,
+                46,
+                46,
+                46,
+                46,
+                47
+            ],
+            'perempuan' => [
+                15,
+                50,
+                50,
+                50,
+                50,
+                50,
+                50,
+                50,
+                51,
+                51,
+                51,
+                52
+            ],
+        ];
 
         return [
             'kategori' => $data->pluck('kategori'),

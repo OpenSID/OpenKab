@@ -364,6 +364,11 @@ return [
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Admin',
+                    'url' => 'setting-aplikasi',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
                     'url' => 'users',
                 ]

@@ -66,4 +66,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/bantuan', 'bantuan');
             Route::get('/cetak/{kategori}/{id}', 'cetak');
         });
+
+    // Setting Aplikasi
+    Route::resource('setting-aplikasi', \App\Http\Controllers\SettingAplikasiController::class);
 });

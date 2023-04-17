@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\RtmController;
 use App\Http\Controllers\Api\BantuanController;
+use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;
 
 /*
@@ -22,7 +22,13 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('penduduk')->group(function () {
-        Route::get('/', \App\Http\Controllers\Api\PendudukController::class);
+        Route::get('/', [PendudukController::class, 'index']);
+        // referensi
+        Route::prefix('referensi')->group(function () {
+            Route::get('sex', [PendudukController::class, 'pendudukSex']);
+            Route::get('status', [PendudukController::class, 'pendudukStatus']);
+            Route::get('status-dasar', [PendudukController::class, 'pendudukStatusDasar']);
+        });
     });
 
 

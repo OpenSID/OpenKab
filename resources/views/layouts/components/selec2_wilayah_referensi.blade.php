@@ -40,7 +40,7 @@
                     delay: 400,
                     data: function(params) {
                         return {
-                            "filter[subrw]": e.params.data,
+                            "filter[subrw]": e.params.data.id,
                             "filter[search]": params.term,
                             "page[number]": params.page
                         };

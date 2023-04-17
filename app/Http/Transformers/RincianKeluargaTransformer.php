@@ -6,11 +6,8 @@ use App\Models\Config;
 use App\Models\Keluarga;
 use League\Fractal\TransformerAbstract;
 
-
 class RincianKeluargaTransformer extends TransformerAbstract
 {
-
-
     /**
      * A Fractal transformer.
      *
@@ -22,7 +19,7 @@ class RincianKeluargaTransformer extends TransformerAbstract
         return [
             'no_kk' => $keluarga->no_kk,
             'id' => $keluarga->id,
-            'alamat_plus_dusun' => ($keluarga->wilayah->dusun !='' && $keluarga->wilayah->dusun != '-')? trim(ucwords(setting($keluarga->config_id, 'sebutan_desa') . ' ' .$keluarga->wilayah->dusun)) : $keluarga->wilayah->dusun,
+            'alamat_plus_dusun' => ($keluarga->wilayah->dusun !='' && $keluarga->wilayah->dusun != '-') ? trim(ucwords(setting($keluarga->config_id, 'sebutan_dusun') . ' ' .$keluarga->wilayah->dusun)) : $keluarga->wilayah->dusun,
             'rt' => $keluarga->rt?? '-',
             'rw' => $keluarga->rw?? '-',
             'kecamatan' => $identitas->nama_kecamatan,
@@ -30,7 +27,7 @@ class RincianKeluargaTransformer extends TransformerAbstract
             'provinsi' => $identitas->nama_propinsi,
             'kode_pos' => $identitas->kode_pos,
             'anggota' => $keluarga->anggota,
-            'desa' => setting($keluarga->config_id, 'sebutan_desa') .' '.  $identitas->nama_desa
+            'desa' => ucwords(setting($keluarga->config_id, 'sebutan_desa') .' '.  $identitas->nama_desa)
         ];
     }
 }

@@ -1,5 +1,27 @@
 @extends('layouts.index')
 
+@push('css')
+    <style>
+        /* ubah semua ukuran text yang ada dalam card-body */
+        .card-body {
+            font-size: 14px;
+        }
+
+        /* ubah semua ukuran h3 yang ada dalam card-body */
+        .card-body h3 {
+            font-size: 24px;
+        }
+
+        .card-body h5 {
+            font-size: 18px;
+        }
+
+        th {
+            vertical-align: middle !important;
+        }
+    </style>
+@endpush
+
 @section('title', 'Biodata Penduduk')
 
 @section('content_header')
@@ -22,19 +44,21 @@
                 <div class="card-body">
                     <div x-data="{
                         data: {},
-
+                    
                         async retrievePosts() {
                             const response = await (await fetch('{{ route('api.keluarga.detail', ['no' => $no_kk]) }}')).json();
                             this.data = response.data[0].attributes
-                            // log out all the posts to the console
-                            console.log(this.data);
                         }
                     }" x-init="retrievePosts">
-                    <div class="row">
-                        <div class="col-12"><h3 class="text-center"><strong>SALINAN KARTU KELUARGA</strong></h3></div>
-                        <div class="col-12 mb-5"><h5 class="text-center"><strong>No.  <span x-text="data.no_kk"></span></strong></h5></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="text-center"><strong>SALINAN KARTU KELUARGA</strong></h3>
+                            </div>
+                            <div class="col-12 mb-5">
+                                <h5 class="text-center"><strong>No. <span x-text="data.no_kk"></span></strong></h5>
+                            </div>
 
-                    </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-sm-8">
@@ -116,7 +140,9 @@
                                                     <td><span x-text="value.nik"></td>
                                                     <td><span x-text="value.jenis_kelamin.nama"></td>
                                                     <td><span x-text="value.tempatlahir"></td>
-                                                    <td><span x-text="new Date(value.tanggallahir).toLocaleDateString('id-id')"></td>
+                                                    <td><span
+                                                            x-text="new Date(value.tanggallahir).toLocaleDateString('id-id')">
+                                                    </td>
                                                     <td><span x-text="value.agama.nama"></td>
                                                     <td><span x-text="value.pendidikan_k_k.nama"></td>
                                                     <td><span x-text="value.pekerjaan.nama"></td>
@@ -152,7 +178,9 @@
                                                 <tr>
                                                     <td class="text-center"><span x-text="index+1"></span></td>
                                                     <td><span x-text="value.statusPerkawinan"></span></td>
-                                                    <td class="text-center"><span x-text="(value.tanggalperkawinan)? new Date(value.tanggalperkawinan).toLocaleDateString('id-id') : ''"></span></td>
+                                                    <td class="text-center"><span
+                                                            x-text="(value.tanggalperkawinan)? new Date(value.tanggalperkawinan).toLocaleDateString('id-id') : ''"></span>
+                                                    </td>
                                                     <td><span x-text="value.penduduk_hubungan.nama"></span></td>
                                                     <td><span x-text="value.warga_negara.nama"></td>
                                                     <td><span x-text="value.dokumen_pasport"></td>

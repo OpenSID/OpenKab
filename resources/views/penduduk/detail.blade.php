@@ -163,27 +163,27 @@
                                 <tr>
                                     <td>Suku/Etnis</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="suku"></td>
                                 </tr>
                                 <tr>
                                     <td>Warga Negara</td>
                                     <td>:</td>
-                                    <td>WNA</td>
+                                    <td id="wna"></td>
                                 </tr>
                                 <tr>
                                     <td>Nomor Paspor</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="no-passpor"></td>
                                 </tr>
                                 <tr>
                                     <td>Tanggal Berakhir Paspor</td>
                                     <td>:</td>
-                                    <td>-</td>
+                                    <td id="tgl-passpor">-</td>
                                 </tr>
                                 <tr>
                                     <td>Nomor KITAS/KITAP</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="no-kitas"></td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="subtitle_head"><strong>ORANG TUA</strong></th>
@@ -191,22 +191,22 @@
                                 <tr>
                                     <td>NIK Ayah</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="nik-ayah"></td>
                                 </tr>
                                 <tr>
                                     <td>Nama Ayah</td>
                                     <td>:</td>
-                                    <td>ASDASD</td>
+                                    <td id="nama-ayah"></td>
                                 </tr>
                                 <tr>
                                     <td>NIK Ibu</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="nik-ibu"></td>
                                 </tr>
                                 <tr>
                                     <td>Nama Ibu</td>
                                     <td>:</td>
-                                    <td>ASDASDAS</td>
+                                    <td id="nama-ibu"></td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="subtitle_head"><strong>ALAMAT</strong></th>
@@ -214,42 +214,42 @@
                                 <tr>
                                     <td>Alamat</td>
                                     <td>:</td>
-                                    <td>DONUJHY</td>
+                                    <td id="alamat">DONUJHY</td>
                                 </tr>
                                 <tr>
                                     <td>Dusun</td>
                                     <td>:</td>
-                                    <td>IMANUNGGAL LORI</td>
+                                    <td id="dusun"></td>
                                 </tr>
                                 <tr>
                                     <td>RT/ RW</td>
                                     <td>:</td>
-                                    <td>01 / -</td>
+                                    <td id="rt-rw"></td>
                                 </tr>
                                 <tr>
                                     <td>Alamat Sebelumnya</td>
                                     <td>:</td>
-                                    <td>JIRRR</td>
+                                    <td id="alm-sebelum">JIRRR</td>
                                 </tr>
                                 <tr>
                                     <td>Nomor Telepon</td>
                                     <td>:</td>
-                                    <td>082373040360</td>
+                                    <td id="telepon"></td>
                                 </tr>
                                 <tr>
                                     <td>Alamat Email</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="email"></td>
                                 </tr>
                                 <tr>
                                     <td>Telegram</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="telegram"></td>
                                 </tr>
                                 <tr>
                                     <td>Cara Hubung Warga</td>
                                     <td>:</td>
-                                    <td>Email</td>
+                                    <td id="cara-hubung"></td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="subtitle_head"><strong>STATUS KAWIN</strong></th>
@@ -257,7 +257,7 @@
                                 <tr>
                                     <td>Status Kawin</td>
                                     <td>:</td>
-                                    <td>BELUM KAWIN</td>
+                                    <td id="status-kawin"></td>
                                 </tr>
                                 <tr>
                                     <th colspan="3" class="subtitle_head"><strong>DATA KESEHATAN</strong></th>
@@ -265,27 +265,27 @@
                                 <tr>
                                     <td>Golongan Darah</td>
                                     <td>:</td>
-                                    <td>A</td>
+                                    <td id="gol-darah">A</td>
                                 </tr>
                                 <tr>
                                     <td>Cacat</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="cacat"></td>
                                 </tr>
                                 <tr>
                                     <td>Sakit Menahun</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="sakit"></td>
                                 </tr>
                                 <tr>
                                     <td>Nama/Nomor Asuransi Kesehatan</td>
                                     <td>:</td>
-                                    <td> / </td>
+                                    <td id="asuransi"></td>
                                 </tr>
                                 <tr>
                                     <td>Nomor BPJS Ketenagakerjaan</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="bpjs"></td>
                                 </tr>
 
                                 <tr>
@@ -294,12 +294,12 @@
                                 <tr>
                                     <td>Bahasa</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="bahasa"></td>
                                 </tr>
                                 <tr>
                                     <td>Keterangan</td>
                                     <td>:</td>
-                                    <td></td>
+                                    <td id="ket"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -398,6 +398,31 @@
             $('#pendidikan-kk').text(data.pendidikan_k_k?.nama)
             $('#pendidikan').text(data.pendidikan?.nama)
             $('#pekerjaan').text(data.pekerjaan?.nama)
+            $('#suku').text(data.suku)
+            $('#wna').text(data.warga_negara?.nama)
+            $('#no-passpor').text(data.dokumen_pasport)
+            $('#tgl-passpor').text(data.tanggal_akhir_paspor)
+            $('#no-kitas').text(data.dokumen_kitas)
+            $('#nik-ayah').text(data.ayah_nik)
+            $('#nama-ayah').text(data.nama_ayah)
+            $('#nik-ibu').text(data.ibu_nik)
+            $('#nama-ibu').text(data.nama_ibu)
+            $('#alamat').text(data.keluarga?.alamat)
+            $('#dusun').text(data.cluster_desa?.dusun)
+            $('#rt-rw').text(`${data.cluster_desa?.rt} / ${data.cluster_desa?.rw}`)
+            $('#alm-sebelum').text(data.alamat_sebelumnya)
+            $('#telepon').text(data.telepon)
+            $('#email').text(data.email)
+            $('#telegram').text(data.telegram)
+            $('#cara-hubung').text(data.hubung_warga)
+            $('#status-kawin').text(data.statusPerkawinan)
+            $('#gol-darah').text(data.golongan_darah?.nama)
+            $('#cacat').text(data.cacat?.nama)
+            $('#sakit').text(data.sakit_menahun?.nama)
+            $('#asuransi').text(data.namaAsuransi)
+            $('#bpjs').text(data.bpjs_ketenagakerjaan)
+            $('#bahasa').text(data.bahasa?.nama)
+            $('#ket').text(data.ket)
         })
     </script>
 @endsection

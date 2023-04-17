@@ -419,6 +419,7 @@ class Penduduk extends BaseModel
      */
     public function getUrlFotoAttribute()
     {
+        return null;
         if (empty($this->foto)) {
             return $this->sex === 1
                 ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')

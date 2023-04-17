@@ -25,12 +25,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', \App\Http\Controllers\Api\PendudukController::class);
     });
 
+    Route::prefix('dokumen')->group(function () {
+        Route::get('/', \App\Http\Controllers\Api\DokumenController::class);
+    });
 
     Route::controller(\App\Http\Controllers\Api\KeluargaController::class)
         ->prefix('keluarga')->group(function () {
             Route::get('/show', 'show');
         });
-
 
     // Statistik
     Route::controller(StatistikController::class)
@@ -41,7 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
         });
-
 
     Route::controller(BantuanController::class)
         ->prefix('bantuan')->group(function () {

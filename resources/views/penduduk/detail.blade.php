@@ -313,8 +313,7 @@
                                 <tr>
                                     <td>
                                         <div class="table-responsive">
-                                            <table
-                                                class="table table-bordered dataTable table-striped table-hover tabel-daftar">
+                                            <table class="table table-bordered dataTable table-striped table-hover tabel-daftar" id="table-bantuan">
                                                 <thead class="bg-gray disabled color-palette">
                                                     <tr>
                                                         <th class="padat">No</th>
@@ -336,8 +335,7 @@
                                 <tr>
                                     <td>
                                         <div class="table-responsive">
-                                            <table
-                                                class="table table-bordered dataTable table-striped table-hover tabel-daftar">
+                                            <table class="table table-bordered dataTable table-striped table-hover tabel-daftar" id="table-dokumen">
                                                 <thead class="bg-gray disabled color-palette">
                                                     <tr>
                                                         <th>No</th>
@@ -368,7 +366,7 @@
             method: 'get',
         })
         .then(function (response) {
-            var data = response.data[0].attributes
+            var data = response.data[0]?.attributes
 
             console.log(data)
 
@@ -424,5 +422,81 @@
             $('#bahasa').text(data.bahasa?.nama)
             $('#ket').text(data.ket)
         })
+
+        var bantuan = $('#table-bantuan').DataTable({
+            processing: true,
+            serverSide: false,
+            autoWidth: false,
+            ordering: false,
+            searching: false,
+            paging: false,
+            info: false,
+            ajax: {
+                url: `{{ url('api/v1/bantuan/peserta') }}?filter[peserta]={{ $penduduk->nik }}`,
+                method: 'get',
+            },
+            columns: [
+                {
+                    data: null,
+                },
+                {
+                    data: function (data) {
+                        return `${data.attributes.program.sdate} - ${data.attributes.program.edate}`
+                    }
+                },
+                {
+                    data: "attributes.program.nama"
+                },
+                {
+                    data: "attributes.program.ndesc"
+                }
+            ]
+        })
+
+        bantuan.on('draw.dt', function() {
+            var PageInfo = $('#table-bantuan').DataTable().page.info();
+            bantuan.column(0, {
+                page: 'current'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
+        });
+
+        var dokumen = $('#table-dokumen').DataTable({
+            processing: true,
+            serverSide: false,
+            autoWidth: false,
+            ordering: false,
+            searching: false,
+            paging: false,
+            info: false,
+            ajax: {
+                url: `{{ url('api/v1/dokumen') }}?filter[id_pend]={{ $penduduk->id }}`,
+                method: 'get',
+            },
+            columns: [
+                {
+                    data: null,
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.nama"
+                },
+                {
+                    data: "attributes.tgl_upload"
+                }
+            ]
+        })
+
+        dokumen.on('draw.dt', function() {
+            var PageInfo = $('#table-dokumen').DataTable().page.info();
+            dokumen.column(0, {
+                page: 'current'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
+        });
     </script>
 @endsection

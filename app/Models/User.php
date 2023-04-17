@@ -58,4 +58,11 @@ class User extends Authenticatable
             set: fn (string $value) => Hash::make($value),
         );
     }
+
+    public function adminlte_image()
+    {
+        $email = md5($this->email);
+
+        return "https://www.gravatar.com/avatar/{$email}?s=32&d=https://www.gravatar.com/avatar/00000000000000000000000000000000?s=32";
+    }
 }

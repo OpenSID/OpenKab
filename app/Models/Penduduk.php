@@ -442,6 +442,23 @@ class Penduduk extends BaseModel
     }
 
     /**
+     * Scope query untuk jenis kelamin penduduk
+     *
+     * @param Builder $query
+     * @param mixed   $value
+     *
+     * @return Builder
+     */
+    public function scopeJenisKelamin($query, $value = null)
+    {
+        if (is_null($value)) {
+            return $query;
+        }
+
+        return $query->where('sex', $value);
+    }
+
+    /**
      * Scope untuk Statistik
      */
     public function scopeCountStatistik($query)

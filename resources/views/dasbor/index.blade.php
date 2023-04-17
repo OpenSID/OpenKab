@@ -43,6 +43,22 @@
             $('#keluarga').find('.info-box-number').text('2');
             $('#rtm').find('.info-box-number').text('3');
             $('#bantuan').find('.info-box-number').text('4');
+
+            // tampilkan data berdsarkan api bantuan
+            $.ajax({
+                url: `{{ url('api/v1/dasbor') }}`,
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    jumlah = response.data;
+                    $('#penduduk').find('.info-box-number').text('L : ' + jumlah
+                        .jumlah_penduduk_laki_laki +
+                        ' | P : ' + jumlah.jumlah_penduduk_perempuan);
+                    $('#keluarga').find('.info-box-number').text(jumlah.jumlah_keluarga);
+                    $('#rtm').find('.info-box-number').text(jumlah.jumlah_rtm);
+                    $('#bantuan').find('.info-box-number').text(jumlah.jumlah_bantuan);
+                }
+            });
         });
     </script>
 @endpush

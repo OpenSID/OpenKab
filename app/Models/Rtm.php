@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\hasOne;
+use App\Models\Penduduk;
+use App\Models\BaseModel;
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\hasOne;
 
 class Rtm extends BaseModel
 {
+    use ConfigIdTrait;
+
     public const KATEGORI_STATISTIK = [
         'bdt' => 'BDT',
     ];

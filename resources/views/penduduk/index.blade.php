@@ -214,7 +214,11 @@
                 },
                 {
                     data: function(data) {
-                        return data.attributes.keluarga?.no_kk ?? null
+                        if (data.attributes.keluarga?.no_kk ) {
+                            return `<a title="Lihat Detail Biodata Keluarga" href="keluarga/detail/${data.attributes.keluarga.no_kk}">${data.attributes.keluarga.no_kk}</a>`
+                        }else{
+                            return null
+                        }
                     },
                     name: "keluarga.no_kk",
                     searchable: true,

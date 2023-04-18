@@ -51,7 +51,7 @@
                         return {
                             results: $.map(response.data, function(item) {
                                 return {
-                                    id: item.id,
+                                    id: item.attributes.rw,
                                     text: item.attributes.rw,
                                 }
                             }),
@@ -87,7 +87,7 @@
                         return {
                             results: $.map(response.data, function(item) {
                                 return {
-                                    id: item.id,
+                                    id: item.attributes.rt,
                                     text: item.attributes.rt,
                                 }
                             }),

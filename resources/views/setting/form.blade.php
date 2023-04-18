@@ -1,11 +1,7 @@
 <div class="col">
     <div class="mb-4">
-        <label for="name">Warna Tema Admin<span class="text-danger">*</span></label>
-        <select class="form-control" name="warna_tema_admin">
-            @foreach($warna_tema_admin_option as $key => $data)
-                <option value="{{$key}}" {{ ( $warna_tema_admin->value == $key) ? 'selected' : '' }}>{{$data}}</option>
-            @endforeach
-        </select>
+        <label for="name">Warna Tema<span class="text-danger">*</span></label>
+        <input type="text" class="form-control my-colorpicker1" name="warna_tema" value="{{$warna_tema->value}}">
         @error('name')
             <div class="text-danger">{{ $message }}</div>
         @enderror

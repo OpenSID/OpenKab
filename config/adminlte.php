@@ -364,7 +364,7 @@ return [
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
-                    'text' => 'Admin',
+                    'text' => 'Aplikasi',
                     'url' => 'setting-aplikasi',
                 ],
                 [
@@ -507,7 +507,12 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => 'https://cdnjs.com/libraries/bootstrap-colorpicker',
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.min.css',
                 ],
             ],
         ],

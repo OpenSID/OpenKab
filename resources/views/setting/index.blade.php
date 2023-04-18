@@ -11,8 +11,6 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
-                <div class="card-header">
-                </div>
                 <form action="{{ route('setting-aplikasi.store') }}" method="POST">
                 @csrf
                 <!-- /.card-header -->

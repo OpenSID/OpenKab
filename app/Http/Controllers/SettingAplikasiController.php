@@ -15,7 +15,9 @@ class SettingAplikasiController extends Controller
      */
     public function index(SettingAplikasi $setting)
     {
-        $warna_tema = SettingAplikasi::where('key', 'warna_tema')->first();
+        if (empty($warna_tema = SettingAplikasi::where('key', 'warna_tema')->first())){
+            $warna_tema = '';
+        }
         return view('setting.index', compact('warna_tema'));
     }
 

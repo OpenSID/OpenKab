@@ -501,6 +501,16 @@ return [
                 ],
             ],
         ],
+        'Colorpicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.com/libraries/bootstrap-colorpicker',
+                ],
+            ],
+        ],
     ],
 
     /*

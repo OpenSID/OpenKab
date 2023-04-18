@@ -12,7 +12,33 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <button id="cetak" type="button" class="btn btn-primary btn-block btn-sm" data-url=""><i
+                                    class="fa fa-print"></i>
+                                Cetak</button>
+                        </div>
+
+                    </div>
+                </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <select class="form-control" id="sasaran">
+
+                            </select>
+
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" id="tahun">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped" id="bantuan">
                             <thead>
@@ -43,6 +69,10 @@
             serverSide: true,
             autoWidth: false,
             ordering: true,
+            searchPanes: {
+                viewTotal: false,
+                columns: [0]
+            },
             ajax: {
                 url: `{{ url('api/v1/bantuan') }}`,
                 method: 'get',
@@ -52,7 +82,9 @@
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
-                            ?.name
+                            ?.name,
+                        "filter[sasaran]": $("#sasaran").val(),
+                        "filter[tahun]": $("#tahun").val(),
                     };
                 },
                 dataSrc: function(json) {
@@ -62,16 +94,7 @@
                     return json.data
                 },
             },
-            columnDefs: [{
-                    targets: '_all',
-                    className: 'text-nowrap',
-                },
-                {
-                    targets: [0, 1, 4, 5, 6, 7],
-                    orderable: false,
-                    searchable: false,
-                },
-            ],
+
             columns: [{
                     data: null,
                 },
@@ -123,5 +146,60 @@
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
         });
+
+        $('#sasaran').select2({
+            minimumResultsForSearch: -1,
+            allowClear: true,
+            theme: "bootstrap",
+            ajax: {
+                url: '{{ url('api/v1/bantuan') }}/sasaran/',
+                dataType: 'json',
+                processResults: function(data) {
+                    return {
+                        results: data.data
+                    };
+                }
+            },
+            placeholder: "Sasaran",
+        });
+
+        $('#tahun').select2({
+            minimumResultsForSearch: -1,
+            allowClear: true,
+            theme: "bootstrap",
+            ajax: {
+                url: '{{ url('api/v1/bantuan') }}/tahun/',
+                dataType: 'json',
+                processResults: function(data) {
+                    if (data.data.tahun_awal == null) {
+                        return null
+                    };
+                    const element = new Array();
+
+                    for (let index = data.data.tahun_awal; index <= data.data.tahun_akhir; index++) {
+                        element.push({
+                            id: index,
+                            text: index
+                        });
+                    }
+
+                    return {
+                        results: element
+                    };
+                }
+            },
+            placeholder: "Pilih Tahun",
+        });
+
+
+        $('#sasaran').on('change', function (e) {
+            bantuan.draw();
+        });
+
+        $('#tahun').on('change', function (e) {
+            bantuan.draw();
+        });
+
+
     </script>
 @endsection

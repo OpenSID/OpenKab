@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Enums\SasaranEnum;
+use Illuminate\Support\Facades\DB;
 use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -152,5 +153,10 @@ class Bantuan extends BaseModel
     public function scopeSasaran($query, $sasaran = self::SASARAN_PENDUDUK)
     {
         return $query->where('sasaran', $sasaran);
+    }
+
+    public function scopeTahun($query)
+    {
+        return $query->selectRaw('YEAR(MIN(sdate)) AS tahun_awal, YEAR(MAX(edate)) AS tahun_akhir');
     }
 }

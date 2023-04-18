@@ -48,5 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->prefix('bantuan')->group(function () {
             Route::get('/', 'index');
             Route::get('/peserta', 'peserta');
+            Route::get('/sasaran', 'sasaran');
+            Route::get('/tahun', 'tahun');
         });
 });

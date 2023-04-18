@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Bantuan;
+use App\Models\Enums\SasaranEnum;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Transformers\BantuanTransformer;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Transformers\StatistikTransformer;
 use App\Http\Repository\BantuanPesertaRepository;
 use App\Http\Transformers\GrafikBantuanTransformer;
@@ -24,5 +27,21 @@ class BantuanController extends Controller
     public function peserta()
     {
         return $this->fractal($this->bantuanPeserta->listBantuanPeserta(), new BantuanPesertaTransformer(), 'peserta bantuan')->respond();
+    }
+
+    public function sasaran()
+    {
+        return response()->json([
+            'success' => true,
+            'data' =>  SasaranEnum::object(),
+        ], Response::HTTP_OK);
+    }
+
+    public function tahun()
+    {
+        return response()->json([
+            'success' => true,
+            'data' =>  Bantuan::tahun()->first(),
+        ], Response::HTTP_OK);
     }
 }

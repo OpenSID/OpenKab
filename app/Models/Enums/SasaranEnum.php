@@ -2,7 +2,11 @@
 
 namespace App\Models\Enums;
 
+use App\Models\Traits\EnumToArrayTrait;
+
 enum SasaranEnum: int {
+    use EnumToArrayTrait;
+
     case PENDUDUK = 1;
     case KELUARGA = 2;
     case RUMAH_TANGGA = 3;

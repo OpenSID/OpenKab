@@ -15,6 +15,7 @@ class BantuanPesertaTransformer extends TransformerAbstract
             'nik' => $bantuanPeserta->nik,
             'no_kk' => $bantuanPeserta->no_kk,
             'program_id' => $bantuanPeserta->program_id,
+            'program' => $bantuanPeserta->bantuan,
             'no_id_kartu' => $bantuanPeserta->no_id_kartu,
             'kartu_nama' => $bantuanPeserta->kartu_nama,
             'kartu_tempat_lahir' => $bantuanPeserta->kartu_tempat_lahir,

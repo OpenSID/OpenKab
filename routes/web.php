@@ -43,6 +43,12 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('penduduk', \App\Http\Controllers\PendudukController::class)->only(['index', 'show']);
 
+    Route::controller(\App\Http\Controllers\KeluargaController::class)
+        ->prefix('keluarga')
+        ->group(function () {
+             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
+        });
+
     Route::controller(\App\Http\Controllers\BantuanController::class)
         ->prefix('bantuan')
         ->group(function () {

@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         Config::get()->each(function ($item) {
             $this->app->config["filesystems.disks.ftp_{$item->id}"] = [
                 'driver' => 'ftp',
-                'url' => env("FTP_{$item->id}_URL"),
+                'url' => env("FTP_{$item->id}_URL", $item->website),
                 'host' => env("FTP_{$item->id}_HOST"),
                 'username' => env("FTP_{$item->id}_USERNAME"),
                 'password' => env("FTP_{$item->id}_PASSWORD"),

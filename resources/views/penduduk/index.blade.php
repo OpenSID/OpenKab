@@ -55,7 +55,8 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm">
+                                    {{-- TODO: Aktifikan jika digunakan filter untuk tingkat dusun --}}
+                                    {{-- <div class="col-sm">
                                         <div class="form-group">
                                             <label>Pilih Dusun</label>
                                             <select class="select2 form-control-sm" id="dusun" name="dusun"
@@ -78,7 +79,7 @@
                                                 data-placeholder="Semua RT" style="width: 100%;" disabled>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">

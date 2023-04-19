@@ -93,6 +93,7 @@ class KategoriController extends Controller
     {
         try {
             $data = $request->validated();
+            $data->slug = url_title($data['kategori']);
             Kategori::where('id' , (int) $id)->whereNull('config_id')->update($data);
 
             return response()->json([

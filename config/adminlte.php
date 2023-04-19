@@ -526,6 +526,9 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => '/assets/js/script.js',
+                ]
+            ]
+                ],
         'Alpine' => [
             'active' => true,
             'files' => [

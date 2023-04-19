@@ -28,8 +28,7 @@
                             <thead>
                                 <tr>
                                     <th style="width: 80px">#</th>
-                                    <th style="width: 40%">Kategori</th>
-                                    <th style="width: 40%">Desa</th>
+                                    <th style="width: 80%">Kategori</th>
                                     <th style="width: 15%">Aksi</th>
                                 </tr>
                             </thead>
@@ -75,9 +74,7 @@
                         data: "attributes.kategori",
                         className: 'kategori',
                     },
-                    {
-                        data: "attributes.desa"
-                    },
+
                     {
                         data: "attributes.id",
                         className: 'aksi',
@@ -85,11 +82,16 @@
                         render: function(data, type, row) {
 
                             var id = row.id;
-                            var render = `<button type="button" class="btn btn-warning btn-sm edit" data-id="${id}" title="ubah">
+                            var render = `
+                                    <button type="button" class="btn btn-info btn-sm sub" data-id="${id}" title="Tambah Sub">
+                                        <i class="far fa-plus-square"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-warning btn-sm edit" data-id="${id}" title="Ubah">
                                         <i class="fas fa-edit"></i>
                                     </button>
 
-                                    <button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="ubah">
+                                    <button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Ubah">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                    `;
@@ -132,11 +134,7 @@
                             },
                             {
                                 data: "attributes.kategori",
-                                className: 'pl-5 w-40 kategori',
-                            },
-                            {
-                                data: "attributes.desa",
-                                className: 'w-40',
+                                className: 'pl-5 w-80 kategori',
                             },
                             {
                                 data: "attributes.id",
@@ -308,45 +306,73 @@
                                 Swal.showLoading()
                             },
                         });
-
-                        $.ajax({
-                            type: "PUT",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            dataType: "json",
-                            url: "{{ url('api/v1/kategori/buat') }}",
-                            data: {
-                                kategori: result.value
-                            },
-                            success: function(response) {
-                                if (response.success == true) {
-                                    Swal.fire(
-                                        'Berhasil!',
-                                        'Data berhasil ditambahkan',
-                                        'success'
-                                    )
-                                    location.reload();
-                                } else {
-                                    Swal.fire(
-                                        'Error!',
-                                        response.message,
-                                        'error'
-                                    )
-                                }
-                            },
-                            error: function(xhr, ajaxOptions, thrownError) {
-                                Swal.fire(
-                                    'Error!',
-                                    thrownError,
-                                    'error'
-                                )
-
-                            }
-                        });
+                        simpan(result.value);
                     }
                 });
             });
+
+            $(document).on('click', 'button.sub', function() {
+                let parrent = $(this).data('id')
+                console.log(parrent)
+                Swal.fire({
+                    title: 'Tambah Sub Kategori',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Simpan',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Menyimpan',
+                            didOpen: () => {
+                                Swal.showLoading()
+                            },
+                        });
+                        simpan(result.value, parrent);
+                    }
+                });
+            });
+
+            function simpan(value, parrent = 0) {
+                $.ajax({
+                    type: "PUT",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "json",
+                    url: "{{ url('api/v1/kategori/buat') }}",
+                    data: {
+                        kategori: value,
+                        parrent: parrent
+                    },
+                    success: function(response) {
+                        if (response.success == true) {
+                            Swal.fire(
+                                'Berhasil!',
+                                'Data berhasil ditambahkan',
+                                'success'
+                            )
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                response.message,
+                                'error'
+                            )
+                        }
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        Swal.fire(
+                            'Error!',
+                            thrownError,
+                            'error'
+                        )
+
+                    }
+                });
+            }
         });
     </script>
 @endsection

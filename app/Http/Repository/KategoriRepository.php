@@ -11,6 +11,7 @@ class KategoriRepository
     public function listKategori()
     {
         return QueryBuilder::for(Kategori::class)
+            ->whereNull('config_id')
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -30,7 +31,7 @@ class KategoriRepository
 
     public function show($id)
     {
-        return Kategori::where('id', $id)
+        return Kategori::where('id', $id)->whereNull('config_id')
         ->first();
     }
 }

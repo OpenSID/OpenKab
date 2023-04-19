@@ -12,6 +12,7 @@ use App\Http\Transformers\StatistikTransformer;
 use App\Http\Repository\BantuanPesertaRepository;
 use App\Http\Transformers\GrafikBantuanTransformer;
 use App\Http\Transformers\BantuanPesertaTransformer;
+use Illuminate\Http\Request;
 
 class BantuanController extends Controller
 {
@@ -19,9 +20,9 @@ class BantuanController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return $this->fractal($this->bantuan->listBantuan(), new BantuanTransformer(), 'daftar bantuan')->respond();
+        return $this->fractal($this->bantuan->listBantuan( (boolean) $request->cetak ?? false), new BantuanTransformer(), 'daftar bantuan')->respond();
     }
 
     public function peserta()
@@ -44,4 +45,5 @@ class BantuanController extends Controller
             'data' =>  Bantuan::tahun()->first(),
         ], Response::HTTP_OK);
     }
+
 }

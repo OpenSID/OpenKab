@@ -192,14 +192,21 @@
         });
 
 
-        $('#sasaran').on('change', function (e) {
+        $('#sasaran').on('change', function(e) {
             bantuan.draw();
         });
 
-        $('#tahun').on('change', function (e) {
+        $('#tahun').on('change', function(e) {
             bantuan.draw();
         });
 
-
+        $('#cetak').on('click', function() {
+            let url = new URL("{{ url('bantuan/cetak') }}");
+            url.searchParams.append("sasaran", $("#sasaran").val() ?? '');
+            url.searchParams.append("tahun", $("#tahun").val() ?? '');
+            url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');
+            console.log(url.href)
+            window.open(url.href, '_blank');
+        });
     </script>
 @endsection

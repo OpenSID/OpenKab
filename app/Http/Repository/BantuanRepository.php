@@ -14,7 +14,7 @@ class BantuanRepository
 {
     public function listBantuan()
     {
-        return QueryBuilder::for(Bantuan::class)
+         return  QueryBuilder::for(Bantuan::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -32,8 +32,27 @@ class BantuanRepository
             ->allowedSorts([
                 'nama',
                 'asaldana',
-            ])
-            ->jsonPaginate();
+            ])->jsonPaginate();
+
+    }
+
+    public function cetakListBantuan()
+    {
+        return  QueryBuilder::for(Bantuan::class)
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sasaran'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama', 'LIKE', '%' . $value . '%')
+                        ->orWhere('asaldana', 'LIKE', '%' . $value . '%');
+                }),
+                AllowedFilter::callback('tahun', function ($query, $value) {
+                    $query->whereYear('sdate', '<=',$value)
+                        ->whereYear('edate', '>=',$value);
+                }),
+
+            ])->get();
     }
 
     public function listStatistik($kategori): array

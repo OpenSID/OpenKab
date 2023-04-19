@@ -21,7 +21,6 @@ class BantuanController extends Controller
     public function cetak(Request $request)
     {
         $filter = array_filter($request->all());
-
         return view('bantuan.cetak', compact('filter'));
     }
 }

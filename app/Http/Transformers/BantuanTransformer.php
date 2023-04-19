@@ -12,7 +12,7 @@ class BantuanTransformer extends TransformerAbstract
 {
     public function transform(Bantuan $bantuan)
     {
-        return [
+         return [
             'id' => $bantuan->id,
             'nama' => $bantuan->nama,
             'sasaran' => $bantuan->sasaran,
@@ -22,6 +22,7 @@ class BantuanTransformer extends TransformerAbstract
             'sdate' => $bantuan->sdate,
             'edate' => $bantuan->edate,
             'status' => $bantuan->status,
+            'nama_status' => $bantuan->nama_status,
             'asaldana' => $bantuan->asaldana,
         ];
     }

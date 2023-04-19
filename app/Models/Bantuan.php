@@ -32,6 +32,7 @@ class Bantuan extends BaseModel
         'statistik',
         'nama_sasaran',
         'jumlah_peserta',
+        'nama_status'
     ];
 
     /** {@inheritdoc} */
@@ -57,6 +58,15 @@ class Bantuan extends BaseModel
             3 => 'Rumah Tangga',
             4 => 'Kelompok/Organisasi Kemasyarakatan',
             default => null,
+        };
+    }
+
+    public function getNamaStatusAttribute()
+    {
+        return match ($this->status) {
+            0 => 'Tidak Aktif',
+            1 => 'Aktif',
+            default => 0,
         };
     }
 

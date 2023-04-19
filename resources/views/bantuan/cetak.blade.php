@@ -9,6 +9,7 @@
     <meta name="robots" content="noindex">
     <link rel="shortcut icon" href="{{ asset('/assets/img/opensid_logo.png') }}" />
     <link rel="stylesheet" href="{{ asset('/assets/print/print.css') }}" />
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
 <body>
@@ -37,53 +38,55 @@
                 </tr>
                 <tr>
                     <td>
-                        <table class="border thick" id="tabel-penduduk">
-                            <thead>
-                                <tr class="border thick">
-                                    <th>No</th>
-                                    <th id="judul_kolom_nama" width="50%"></th>
-                                    <th colspan="2" class="padat">Jumlah</th>
-                                    <th colspan="2" class="padat">Laki - laki</th>
-                                    <th colspan="2" class="padat">Perempuan</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div x-data="{
+                            data: {},
+                            async retrievePosts() {
+                                let url = '{{ url('api/v1/bantuan/cetak') }}';
+                                let create_url = new URL(url);
+                                @foreach ($filter as $key => $value)
+                                create_url.searchParams.append('filter[{{ $key }}]', '{{ $value }}');
+                                @endforeach
+                                const response = await (await fetch(create_url.href)).json();
+                                this.data = response.data
+                                await $nextTick();
+                                window.print();
+                            }
+                        }" x-init="retrievePosts">
+                            <table class="border thick" id="tabel-penduduk">
+                                <thead>
+                                    <tr class="border thick">
+                                        <th style="width: 10px" class="text-center"> No</th>
+                                        <th class="padat">Nama Program</th>
+                                        <th class="padat">Asal Dana</th>
+                                        <th class="padat">Jumlah Peserta</th>
+                                        <th class="padat">Masa Berlaku</th>
+                                        <th class="padat">Sasaran</th>
+                                        <th class="padat">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="(value, index) in data">
+                                        <tr>
+                                            <td x-text="index+1"></td>
+                                            <td x-text="value.attributes.nama"></td>
+                                            <td x-text="value.attributes.asaldana"></td>
+                                            <td x-text="value.attributes.jumlah_peserta"></td>
+                                            <td x-text="value.attributes.sdate + ' s.d. ' + value.attributes.edate"></td>
+                                            <td x-text="value.attributes.nama_sasaran"></td>
+                                            <td x-text="value.attributes.nama_status"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
         <script>
-            $(document).ready(function() {
-                let url = new URL("{{ url('api/v1/bantuan') }}");
-                @foreach ($filter as $key => $value)
-                    url.searchParams.append("filter[{{ $key  }}]", '{{ $value }}');
-                @endforeach
-
-
-
-
-                console.log(url);
-
-                $.ajax({
-                    url: url,
-                    method: 'get',
-                    success: function(json) {
-
-                    }
-                })
-
-
-
-                $(document).ajaxStop(function() {
-                    window.print();
-                });
-
-                window.onafterprint = function() {
-                    window.close();
-                }
-            });
+            window.onafterprint = function() {
+                window.close();
+            }
         </script>
     </body>
 

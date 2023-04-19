@@ -50,5 +50,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/peserta', 'peserta');
             Route::get('/sasaran', 'sasaran');
             Route::get('/tahun', 'tahun');
+            Route::get('/cetak', 'cetakBantuan');
         });
 });

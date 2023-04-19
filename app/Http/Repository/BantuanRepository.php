@@ -168,4 +168,21 @@ class BantuanRepository
             ],
         ];
     }
+
+    public function listBantuanKabupaten()
+    {
+        return QueryBuilder::for(Bantuan::class)
+            ->whereNull('config_id')
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                'nama',
+                'asaldana',
+            ])
+            ->allowedSorts([
+                'nama',
+                'asaldana',
+            ])
+            ->get();
+    }
 }

@@ -43,21 +43,17 @@ class KategoriController extends Controller
     {
         try {
             $data = $request->validated();
-            $insert = Config::select('id')->get()->map(function ($value) use($data) {
-                $parrent = $data['parrent'] ?? 0;
-                $return = [
-                    'config_id' => $value->id,
-                    'kategori' => $data['kategori'],
-                    'tipe' => 1,
-                    'parrent' => (int) $parrent,
-                    'enabled' => 1,
-                    'slug' => url_title($data['kategori']),
-                    'urut' => 0
-                ];
-
-                return $return;
-            });
-            Kategori::insert($insert->toArray());
+            $parrent = $data['parrent'] ?? 0;
+            $insert = [
+                'config_id' => null,
+                'kategori' => $data['kategori'],
+                'tipe' => 1,
+                'parrent' => (int) $parrent,
+                'enabled' => 1,
+                'slug' => url_title($data['kategori']),
+                'urut' => 0
+            ];
+            Kategori::insert($insert);
 
             return response()->json([
                 'success' => true,
@@ -97,7 +93,7 @@ class KategoriController extends Controller
     {
         try {
             $data = $request->validated();
-            Kategori::where('id' , (int) $id)->update($data);
+            Kategori::where('id' , (int) $id)->whereNull('config_id')->update($data);
 
             return response()->json([
                 'success' => true,

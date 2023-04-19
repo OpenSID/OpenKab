@@ -23,7 +23,6 @@ class ListKategoriTransformer extends TransformerAbstract
             'slug' => $kategori->slug,
             'parrent' => $kategori->parrent,
             'kategori' => $kategori->kategori,
-            'desa' => $kategori->config->nama_desa
         ];
     }
 }

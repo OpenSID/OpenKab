@@ -21,7 +21,8 @@ class ListKategoriTransformer extends TransformerAbstract
             'tipe' => $kategori->tipe,
             'urut' => $kategori->urut,
             'slug' => $kategori->slug,
-            'parrent' => $kategori->parrent
+            'parrent' => $kategori->parrent,
+            'kategori' => $kategori->kategori,
         ];
     }
 }

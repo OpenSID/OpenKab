@@ -31,7 +31,7 @@ class Wilayah extends BaseModel
     protected $guarded = [];
 
     /**
-     * Scope query untuk dusun
+     * Scope query untuk dusun.
      *
      * @param Builder $query
      *
@@ -55,7 +55,7 @@ class Wilayah extends BaseModel
     }
 
     /**
-     * Scope query untuk rt
+     * Scope query untuk rt.
      *
      * @param Builder $query
      *

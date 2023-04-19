@@ -7,15 +7,15 @@ use App\Http\Controllers\Controller as BaseController;
 class Controller extends BaseController
 {
     protected function fractal(
-        $data = null, 
+        $data,
         null|callable|\League\Fractal\TransformerAbstract $transformer,
         null|string $resourceName = null,
     ): \Spatie\Fractal\Fractal {
         return fractal(
-                $data,
-                $transformer,
-                \League\Fractal\Serializer\JsonApiSerializer::class
-            )
+            $data,
+            $transformer,
+            \League\Fractal\Serializer\JsonApiSerializer::class
+        )
             ->withResourceName($resourceName);
     }
 }

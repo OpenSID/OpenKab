@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class BaseModel extends Model
 {
@@ -14,7 +14,7 @@ class BaseModel extends Model
     protected $dbConnection;
 
     /**
-     * constract
+     * constract.
      */
     public function __construct()
     {
@@ -22,7 +22,7 @@ class BaseModel extends Model
     }
 
     /**
-     * Select untuk Statistik menggunakan case
+     * Select untuk Statistik menggunakan case.
      */
     public function selectCountStatistikWithCase($query)
     {
@@ -32,13 +32,14 @@ class BaseModel extends Model
     }
 
     /**
-     * Select untuk Statistik menggunakan subquery
+     * Select untuk Statistik menggunakan subquery.
      */
     public function selectCountStatistikWithSubQuery($query, $where = null, $umur = false)
     {
         if ($umur) {
             $where = "AND (DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= sampai $where";
         }
+
         return $query
             ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '1' AND tweb_penduduk.`status_dasar` = 1 $where) as laki_laki")
             ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' AND tweb_penduduk.`status_dasar` = 1 $where) as perempuan");

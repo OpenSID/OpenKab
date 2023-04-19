@@ -2,38 +2,37 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Rtm;
 use App\Models\Bantuan;
 use App\Models\Kelompok;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
-use Spatie\QueryBuilder\QueryBuilder;
+use App\Models\Rtm;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class BantuanRepository
 {
     public function listBantuan()
     {
-         return  QueryBuilder::for(Bantuan::class)
-            ->allowedFields('*')
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-                AllowedFilter::exact('sasaran'),
-                AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where('nama', 'LIKE', '%' . $value . '%')
-                        ->orWhere('asaldana', 'LIKE', '%' . $value . '%');
-                }),
-                AllowedFilter::callback('tahun', function ($query, $value) {
-                    $query->whereYear('sdate', '<=',$value)
-                        ->whereYear('edate', '>=',$value);
-                }),
+        return  QueryBuilder::for(Bantuan::class)
+           ->allowedFields('*')
+           ->allowedFilters([
+               AllowedFilter::exact('id'),
+               AllowedFilter::exact('sasaran'),
+               AllowedFilter::callback('search', function ($query, $value) {
+                   $query->where('nama', 'LIKE', '%'.$value.'%')
+                       ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
+               }),
+               AllowedFilter::callback('tahun', function ($query, $value) {
+                   $query->whereYear('sdate', '<=', $value)
+                       ->whereYear('edate', '>=', $value);
+               }),
 
-            ])
-            ->allowedSorts([
-                'nama',
-                'asaldana',
-            ])->jsonPaginate();
-
+           ])
+           ->allowedSorts([
+               'nama',
+               'asaldana',
+           ])->jsonPaginate();
     }
 
     public function cetakListBantuan()
@@ -44,12 +43,12 @@ class BantuanRepository
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('sasaran'),
                 AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where('nama', 'LIKE', '%' . $value . '%')
-                        ->orWhere('asaldana', 'LIKE', '%' . $value . '%');
+                    $query->where('nama', 'LIKE', '%'.$value.'%')
+                        ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
                 }),
                 AllowedFilter::callback('tahun', function ($query, $value) {
-                    $query->whereYear('sdate', '<=',$value)
-                        ->whereYear('edate', '>=',$value);
+                    $query->whereYear('sdate', '<=', $value)
+                        ->whereYear('edate', '>=', $value);
                 }),
 
             ])->get();
@@ -138,7 +137,7 @@ class BantuanRepository
 
     public function caseNonKategori($id): array
     {
-        $header  = [];
+        $header = [];
         $bantuan = $this->getBantuanNonKategori($id);
 
         return [
@@ -160,11 +159,9 @@ class BantuanRepository
             $jumlahPerempuan = $dataHeader->sum('perempuan');
             $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
 
-
             $totalLakiLaki = $queryFooter[0]['laki_laki'];
             $totalPerempuan = $queryFooter[0]['perempuan'];
             $total = $totalLakiLaki + $totalPerempuan;
-
         } else {
             $jumlahLakiLaki = $queryFooter[0]['laki_laki'] ?? 0;
             $jumlahPerempuan = $queryFooter[0]['perempuan'] ?? 0;
@@ -196,6 +193,6 @@ class BantuanRepository
 
     private function tahun()
     {
-       return Bantuan::tahun()->first();
+        return Bantuan::tahun()->first();
     }
 }

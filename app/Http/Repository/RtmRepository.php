@@ -3,9 +3,6 @@
 namespace App\Http\Repository;
 
 use App\Models\Rtm;
-use App\Models\Bantuan;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
 
 class RtmRepository
 {
@@ -26,7 +23,7 @@ class RtmRepository
         $jumlah_perempuan = $jumlah->sum('perempuan');
         $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
 
-        $total  = $rtm->get();
+        $total = $rtm->get();
         $total_laki_laki = $total->sum('laki_laki');
         $total_perempuan = $total->sum('perempuan');
         $total = $total_laki_laki + $total_perempuan;

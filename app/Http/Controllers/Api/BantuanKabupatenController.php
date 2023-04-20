@@ -30,7 +30,7 @@ class BantuanKabupatenController extends Controller
      */
     public function index()
     {
-         return $this->fractal($this->bantuan->listBantuanKabupaten(), new BantuanTransformer(), 'daftar bantuan')->respond();
+         return $this->fractal($this->bantuan->listBantuanKabupaten(), new BantuanTransformer(), 'daftar bantuan kabupaten')->respond();
     }
 
     /**

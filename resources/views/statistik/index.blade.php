@@ -54,6 +54,34 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-md-2">
+                            <select class="form-control" id="tahun">
+
+                            </select>
+
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" id="bulan">
+                                <option value=""></option>
+                                <option value="1">Januari</option>
+                                <option value="2">Februari</option>
+                                <option value="3">Maret</option>
+                                <option value="4">April</option>
+                                <option value="5">Mei</option>
+                                <option value="6">Juni</option>
+                                <option value="7">Juli</option>
+                                <option value="8">Agustus</option>
+                                <option value="9">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+
+                    </div>
+                    <div class="row">
                         <div class="col-md-12">
                             <div id="grafik-statistik" class="collapse">
                                 <div class="chart" id="grafik">
@@ -188,6 +216,12 @@
             ajax: {
                 url: `{{ url('api/v1/statistik/penduduk') }}/?filter[id]=rentang-umur`,
                 method: 'get',
+                data: function(row) {
+                    return {
+                        "filter[sasaran]": $("#sasaran").val(),
+                        "filter[tahun]": $("#tahun").val(),
+                    };
+                },
                 dataSrc: function(json) {
                     if (json.data.length > 0) {
                         data_grafik = [];
@@ -255,6 +289,44 @@
                 } else {
                     cell.innerHTML = i + 1 + pageInfo.start;
                 }
+            });
+        });
+
+        $(function() {
+            $('#tahun').select2({
+                minimumResultsForSearch: -1,
+                allowClear: true,
+                theme: "bootstrap",
+                ajax: {
+                    url: '{{ url('api/v1/statistik/penduduk/reftahunpenduduk') }}',
+                    dataType: 'json',
+                    processResults: function(data) {
+                        if (data.success != true) {
+                            return null
+                        };
+
+                        const element = new Array();
+                        for (let index = 0; index < data.data.length; index++) {
+                            element.push({
+                                id: data.data[index].tahun,
+                                text: data.data[index].tahun
+                            });
+                        }
+
+                        return {
+                            results: element
+                        };
+                    }
+                },
+                placeholder: "Pilih Tahun",
+            });
+
+            $('#bulan').select2({
+                minimumResultsForSearch: -1,
+                allowClear: true,
+                theme: "bootstrap",
+
+                placeholder: "Pilih Bulan",
             });
         });
     </script>

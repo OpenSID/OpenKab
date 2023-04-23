@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Response;
 use App\Http\Repository\RtmRepository;
+use Illuminate\Support\Facades\Request;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Repository\KeluargaRepository;
 use App\Http\Repository\PendudukRepository;
@@ -40,12 +41,22 @@ class StatistikController extends Controller
     public function penduduk(PendudukRepository $penduduk)
     {
         if ($this->kategori) {
+            // dd($penduduk->listStatistik($this->kategori));
             return $this->fractal($this->statistik->getStatistik($penduduk->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-penduduk')->respond();
         }
         return response()->json([
             'success' => false,
             'message' => 'Kategori tidak ditemukan',
         ], Response::HTTP_NOT_FOUND);
+    }
+
+    public function refTahunPenduduk(PendudukRepository $penduduk)
+    {
+        $list = $penduduk->listTahun();
+        return response()->json([
+            'success' => true,
+            'data' => $list,
+        ], Response::HTTP_OK);
     }
 
     public function keluarga(KeluargaRepository $keluarga)

@@ -5,8 +5,10 @@ namespace App\Http\Repository;
 use App\Models\Ktp;
 use App\Models\Umur;
 use App\Models\Covid;
+use App\Models\LogPenduduk;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -48,6 +50,13 @@ class PendudukRepository
             'ktp' => $this->caseKtp(),
             default => $this->caseWithReferensi($kategori),
         })->toArray();
+    }
+
+    public function listTahun( )
+    {
+        return LogPenduduk::selectRaw('year(tgl_peristiwa) as tahun')->groupBy('tahun')
+            ->get();
+
     }
 
     private function tabelReferensi($kategori): array|object

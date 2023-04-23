@@ -292,6 +292,13 @@
             });
         });
 
+        $('#sasaran').on('change', function(e) {
+            statistik.draw();
+        });
+        $('#tahun').on('change', function(e) {
+            statistik.draw();
+        });
+
         $(function() {
             $('#tahun').select2({
                 minimumResultsForSearch: -1,

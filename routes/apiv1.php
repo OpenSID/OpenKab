@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RtmController;
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\StatistikController;
+use App\Http\Controllers\Api\BeritaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/peserta', 'peserta');
         });
 
-    Route::controller(BeritaController::class)
+    Route::controller(\App\Http\Controllers\Api\BeritaController::class)
         ->prefix('berita')->group(function () {
             Route::get('/', 'index');
         });

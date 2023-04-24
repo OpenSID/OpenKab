@@ -350,11 +350,6 @@ return [
                     'text' => 'Bantuan',
                     'url' => 'statistik/bantuan',
                 ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Berita',
-                    'url' => 'statistik/berita',
-                ],
 
             ],
         ],
@@ -362,6 +357,11 @@ return [
             'text' => 'Bantuan',
             'icon' => 'fas fa-handshake',
             'url'  => 'bantuan',
+        ],
+        [
+            'text' => 'Berita',
+            'icon' => 'fas fa-newspaper',
+            'url'  => 'berita',
         ],
         [
             'text' => 'Pengaturan',

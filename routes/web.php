@@ -65,9 +65,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
             Route::get('/cetak/{kategori}/{id}', 'cetak');
-            Route::get('/berita', 'berita');
         });
 
     // Setting Aplikasi
     Route::resource('setting-aplikasi', \App\Http\Controllers\SettingAplikasiController::class);
+
+    Route::controller(\App\Http\Controllers\BeritaController::class)
+        ->prefix('berita')
+        ->group(function () {
+            Route::get('/', 'index');
+        });
 });

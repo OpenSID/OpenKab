@@ -42,12 +42,16 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/keluarga', 'keluarga');
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
-            Route::get('/berita', 'berita');
         });
 
     Route::controller(BantuanController::class)
         ->prefix('bantuan')->group(function () {
             Route::get('/', 'index');
             Route::get('/peserta', 'peserta');
+        });
+
+    Route::controller(BeritaController::class)
+        ->prefix('berita')->group(function () {
+            Route::get('/', 'index');
         });
 });

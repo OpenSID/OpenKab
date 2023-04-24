@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/keluarga', 'keluarga');
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
+            Route::get('/berita', 'berita');
         });
 
     Route::controller(BantuanController::class)

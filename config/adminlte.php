@@ -350,6 +350,11 @@ return [
                     'text' => 'Bantuan',
                     'url' => 'statistik/bantuan',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Berita',
+                    'url' => 'statistik/berita',
+                ],
 
             ],
         ],

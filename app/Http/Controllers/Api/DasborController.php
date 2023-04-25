@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\DasborRepository;
-use App\Http\Transformers\RincianKeluargaTransformer;
+use Illuminate\Http\Response;
 
 class DasborController extends Controller
 {
@@ -14,7 +11,7 @@ class DasborController extends Controller
     {
         return response()->json([
             'data' => $dasbor->listDasbor(),
-            'message' => 'Berhasil mengambil data dasbor'
+            'message' => 'Berhasil mengambil data dasbor',
         ], Response::HTTP_OK);
     }
 }

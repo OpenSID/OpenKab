@@ -54,7 +54,7 @@ if (! function_exists('identitas')) {
 if (! function_exists('bulan')) {
     function bulan($bulan = null)
     {
-        return match($bulan) {
+        return match ($bulan) {
             1 => 'Januari',
             2 => 'Februari',
             3 => 'Maret',

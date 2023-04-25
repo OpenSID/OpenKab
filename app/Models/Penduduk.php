@@ -446,7 +446,7 @@ class Penduduk extends BaseModel
     }
 
     /**
-     * Scope query untuk jenis kelamin penduduk
+     * Scope query untuk jenis kelamin penduduk.
      *
      * @param Builder $query
      * @param mixed   $value
@@ -463,7 +463,7 @@ class Penduduk extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik
+     * Scope untuk Statistik.
      */
     public function scopeCountStatistik($query)
     {

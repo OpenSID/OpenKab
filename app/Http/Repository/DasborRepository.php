@@ -2,15 +2,11 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Rtm;
 use App\Models\Bantuan;
+use App\Models\Enums\JenisKelaminEnum;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
-use App\Models\KelasSosial;
-use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\QueryBuilder;
-use App\Models\Enums\JenisKelaminEnum;
-use Spatie\QueryBuilder\AllowedFilter;
+use App\Models\Rtm;
 
 class DasborRepository
 {
@@ -63,7 +59,7 @@ class DasborRepository
             })->sum('perempuan');
 
             $data[] = [
-                'kategori' => bulan($bulan) . ' ' . $tahun,
+                'kategori' => bulan($bulan).' '.$tahun,
                 'tahun' => $tahun,
                 'bulan' => $bulan,
                 'laki_laki' => $laki_laki,

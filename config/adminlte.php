@@ -323,6 +323,11 @@ return [
             'text' => 'search',
         ],
         [
+            'text' => 'Dasbor',
+            'icon' => 'fas fa-home',
+            'url'  => '/',
+        ],
+        [
             'text' => 'Kependudukan',
             'icon' => 'fa fa-users',
             'submenu' => [

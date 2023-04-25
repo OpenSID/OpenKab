@@ -2,7 +2,8 @@
 
 namespace App\Models\Enums;
 
-enum SasaranEnum: int {
+enum SasaranEnum: int
+{
     case PENDUDUK = 1;
     case KELUARGA = 2;
     case RUMAH_TANGGA = 3;
@@ -10,7 +11,7 @@ enum SasaranEnum: int {
 
     public function label(): string|null
     {
-        return match($this) {
+        return match ($this) {
             static::PENDUDUK => 'Penduduk',
             static::KELUARGA => 'Keluarga',
             static::RUMAH_TANGGA => 'Rumah Tangga',

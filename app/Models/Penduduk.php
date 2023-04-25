@@ -422,6 +422,7 @@ class Penduduk extends BaseModel
      */
     public function getUrlFotoAttribute()
     {
+        return null;
         if (empty($this->foto)) {
             return $this->sex === 1
                 ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
@@ -442,6 +443,23 @@ class Penduduk extends BaseModel
     public function scopeStatus($query, $value = 1)
     {
         return $query->where('status_dasar', $value);
+    }
+
+    /**
+     * Scope query untuk jenis kelamin penduduk.
+     *
+     * @param Builder $query
+     * @param mixed   $value
+     *
+     * @return Builder
+     */
+    public function scopeJenisKelamin($query, $value = null)
+    {
+        if (is_null($value)) {
+            return $query;
+        }
+
+        return $query->where('sex', $value);
     }
 
     /**

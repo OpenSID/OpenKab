@@ -1,11 +1,13 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BantuanController;
+use App\Http\Controllers\Api\DasborController;
+use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\WilayahController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,10 @@ use App\Http\Controllers\Api\WilayahController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
+    });
+
+    Route::prefix('dasbor')->group(function () {
+        Route::get('/', DasborController::class);
     });
 
     Route::prefix('wilayah')->group(function () {
@@ -42,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', \App\Http\Controllers\Api\DokumenController::class);
     });
 
-    Route::controller(\App\Http\Controllers\Api\KeluargaController::class)
+    Route::controller(KeluargaController::class)
         ->prefix('keluarga')->group(function () {
             Route::get('/show', 'show')->name('api.keluarga.detail');
         });

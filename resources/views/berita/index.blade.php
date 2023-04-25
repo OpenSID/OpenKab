@@ -15,6 +15,27 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
+                    <form action="/berita" method="GET">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" name="id_kategori" placeholder="Kategori" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="config_id" placeholder="Kelurahan" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="bulan" placeholder="Bulan" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="tahun" placeholder="Tahun" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mt-3 mb-3">
+                            <div class="offset-10 col-md-2">
+                                <input type="submit" value="CARI" class="form-control btn btn-primary">
+                            </div>
+                        </div>
+                    </form>
                     <div class="table-responsive">
                         <table class="table table-striped" id="berita">
                             <thead>
@@ -23,6 +44,7 @@
                                     <th>Kelurahan</th>
                                     <th>Judul</th>
                                     <th>Tanggal Diupload</th>
+                                    <th>Total Berita Perkelurahan</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -46,7 +68,7 @@
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('api/v1/berita') }}`,
+                url: @if(!empty($_GET)) `{{url('api/v1/berita?filter[id_kategori]='.$_GET['id_kategori'].'&filter[config_id]='.$_GET['config_id'].'&filter[bulan]='.$_GET['bulan'].'&filter[tahun]='.$_GET['tahun']) }}` @else `{{url('api/v1/berita')}}` @endif,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -69,7 +91,7 @@
                     className: 'text-nowrap',
                 },
                 {
-                    targets: [0, 1, 2, 3],
+                    targets: [0, 1, 2, 3, 4],
                     orderable: false,
                     searchable: false,
                 },
@@ -89,10 +111,14 @@
                 },
                 {
                     data: "attributes.tgl_upload"
+                },{
+                    data: function(data) {
+                        return `{{ App\Models\Berita::count() }}`
+                    },
                 },
             ],
             order: [
-                [3, 'asc']
+                [1, 'asc']
             ]
         })
 

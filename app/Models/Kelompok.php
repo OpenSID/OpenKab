@@ -36,7 +36,7 @@ class Kelompok extends BaseModel
     }
 
     /**
-     * Scope query untuk status kelompok
+     * Scope query untuk status kelompok.
      *
      * @param mixed $query
      * @param mixed $status
@@ -51,7 +51,7 @@ class Kelompok extends BaseModel
     }
 
     /**
-     * Scope query untuk tipe kelompok
+     * Scope query untuk tipe kelompok.
      *
      * @param mixed $query
      * @param mixed $tipe
@@ -64,7 +64,7 @@ class Kelompok extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik
+     * Scope untuk Statistik.
      */
     public function scopeCountStatistik($query)
     {

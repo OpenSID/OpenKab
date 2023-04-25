@@ -2,13 +2,13 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Ktp;
-use App\Models\Umur;
 use App\Models\Covid;
+use App\Models\Ktp;
 use App\Models\Penduduk;
+use App\Models\Umur;
 use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PendudukRepository
 {

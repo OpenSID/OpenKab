@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Str;
-use App\Models\PendudukStatus;
-use App\Models\PendudukStatusDasar;
-use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\PendudukRepository;
 use App\Http\Transformers\PendudukTransformer;
+use App\Models\PendudukStatus;
+use App\Models\PendudukStatusDasar;
 use App\Models\Sex;
+use Illuminate\Support\Str;
 
 class PendudukController extends Controller
 {

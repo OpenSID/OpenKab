@@ -10,7 +10,8 @@ class MenuListener
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param object $event
+     *
      * @return void
      */
     public function handle(BuildingMenu $event)

@@ -23,6 +23,7 @@ class ClusterDesa extends Model
      * Scope query dusun.
      *
      * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function scopeDusun($query)
@@ -33,8 +34,9 @@ class ClusterDesa extends Model
     /**
      * Scope query rw.
      *
-     * @param string|null $dusun
+     * @param string|null                                                              $dusun
      * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function scopeRW($query, string|null $dusun = null)
@@ -49,9 +51,10 @@ class ClusterDesa extends Model
     /**
      * Scope query rt.
      *
-     * @param string|null $dusun
-     * @param string|null $rw
+     * @param string|null                                                              $dusun
+     * @param string|null                                                              $rw
      * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function scopeRT($query, string|null $dusun = null, string|null $rw = null)

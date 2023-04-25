@@ -49,5 +49,4 @@ class SettingAplikasi extends BaseModel
     protected $hidden = [
         'config_id',
     ];
-
 }

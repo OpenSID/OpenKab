@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\hasOne;
-use Illuminate\Database\Eloquent\Model;
 
 class Rtm extends BaseModel
 {
@@ -25,7 +24,7 @@ class Rtm extends BaseModel
     }
 
     /**
-     * Scope query untuk bdt
+     * Scope query untuk bdt.
      *
      * @return Builder
      */
@@ -45,13 +44,11 @@ class Rtm extends BaseModel
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala')
             ->where('tweb_penduduk.status_dasar', 1)
-            ->groupBy('tweb_rtm.id')
-        ;
+            ->groupBy('tweb_rtm.id');
     }
 
     /**
-     * Scope untuk status rtm berdasarkan penduduk hidup
-     *
+     * Scope untuk status rtm berdasarkan penduduk hidup.
      */
     public function scopeStatus($query, $value = 1)
     {

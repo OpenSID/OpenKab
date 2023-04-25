@@ -2,12 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Config;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
-use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Event;
+use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 class EventServiceProvider extends ServiceProvider
 {

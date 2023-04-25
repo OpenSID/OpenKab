@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Keluarga;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Api\Controller;
 use App\Http\Repository\KeluargaRepository;
 use App\Http\Transformers\RincianKeluargaTransformer;
+use Illuminate\Http\Request;
 
 class KeluargaController extends Controller
 {

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
 class Rtm extends BaseModel
 {
+    use ConfigIdTrait;
+
     public const KATEGORI_STATISTIK = [
         'bdt' => 'BDT',
     ];

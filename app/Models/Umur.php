@@ -64,10 +64,10 @@ class Umur extends BaseModel
             ->select(['id', 'nama'])
             ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '1' AND tweb_penduduk.`status_dasar` = 1 $where) as laki_laki")
             ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' AND tweb_penduduk.`status_dasar` = 1 $where) as perempuan");
-            // ->when(session()->has('desa'), function ($query) {
+        // ->when(session()->has('desa'), function ($query) {
             //     return $query->grubBy("{$this->table}.nama");
-            // })
-            // ->groupBy("{$this->table}.nama")
+        // })
+        // ->groupBy("{$this->table}.nama")
 
         return $newQuery;
     }

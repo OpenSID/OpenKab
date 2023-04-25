@@ -19,3 +19,4 @@ yarn-error.log
 composer.lock
 package-lock.json
 composer.lock
+.php-cs-fixer.cache

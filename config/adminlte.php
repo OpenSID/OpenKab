@@ -304,9 +304,16 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        // Kecamatan
+        [
+            'key'          => 'kecamatan',
+            'text'         => 'Kecamatan',
+            'topnav_right' => true,
+        ],
+        // Desa
         [
             'key'          => 'desa',
-            'text'         => 'Wilayah',
+            'text'         => 'Desa',
             'topnav_right' => true,
         ],
 
@@ -488,6 +495,16 @@ return [
                     'type' => 'css',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css',
+                ],
+            ],
+        ],
+        'Alpine' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js',
                 ],
             ],
         ],

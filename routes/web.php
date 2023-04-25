@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\WilayahMiddleware;
+use App\Http\Middleware\KecamatanMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,18 +31,33 @@ Route::middleware('auth')->group(function () {
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
     Route::resource('users', UserController::class);
+
     Route::prefix('sesi')->group(function () {
-        Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
-            return Redirect::back();
+        // kecamatan
+        Route::middleware(KecamatanMiddleware::class)->get('kecamatan/{kodeKecamatan}', function () {
+            return redirect()->back();
         });
+
+        // desa
+        Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
+            return redirect()->back();
+        });
+
         Route::get('hapus', function () {
+            session()->remove('kecamatan');
             session()->remove('desa');
 
-            return Redirect::back();
+            return redirect()->back();
         });
     });
 
     Route::resource('penduduk', \App\Http\Controllers\PendudukController::class)->only(['index', 'show']);
+
+    Route::controller(\App\Http\Controllers\KeluargaController::class)
+        ->prefix('keluarga')
+        ->group(function () {
+             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
+        });
 
     Route::controller(\App\Http\Controllers\BantuanController::class)
         ->prefix('bantuan')

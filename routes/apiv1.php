@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\BantuanController;
+use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;
+use App\Http\Controllers\Api\WilayahController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,21 +24,34 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
     });
 
-    Route::prefix('penduduk')->group(function () {
-        Route::get('/', PendudukController::class);
+    Route::prefix('wilayah')->group(function () {
+        Route::get('dusun', [WilayahController::class, 'dusun']);
+        Route::get('rw', [WilayahController::class, 'rw']);
+        Route::get('rt', [WilayahController::class, 'rt']);
     });
 
+    Route::prefix('penduduk')->group(function () {
+        Route::get('/', [PendudukController::class, 'index']);
+        // referensi
+        Route::prefix('referensi')->group(function () {
+            Route::get('sex', [PendudukController::class, 'pendudukSex']);
+            Route::get('status', [PendudukController::class, 'pendudukStatus']);
+            Route::get('status-dasar', [PendudukController::class, 'pendudukStatusDasar']);
+        });
+    });
+
+    Route::prefix('dokumen')->group(function () {
+        Route::get('/', \App\Http\Controllers\Api\DokumenController::class);
+    });
 
     Route::controller(KeluargaController::class)
         ->prefix('keluarga')->group(function () {
-            Route::get('/show', 'show');
+            Route::get('/show', 'show')->name('api.keluarga.detail');
         });
-
 
     // Statistik
     Route::controller(StatistikController::class)
@@ -48,7 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
         });
-
 
     Route::controller(BantuanController::class)
         ->prefix('bantuan')->group(function () {

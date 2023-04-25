@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use League\Fractal\Pagination\PaginatorInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use League\Fractal\Pagination\PaginatorInterface;
 
 class IlluminatePaginatorAdapter implements PaginatorInterface
 {

@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Enums\SasaranEnum;
 use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Model;
 
 class BantuanPeserta extends BaseModel
 {
@@ -40,7 +38,6 @@ class BantuanPeserta extends BaseModel
     {
         return $this->penduduk->pendudukStatusDasar;
     }
-
 
     /**
      * Define a one-to-many relationship.

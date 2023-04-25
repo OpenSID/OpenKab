@@ -21,7 +21,7 @@
                                     <th>Aksi</th>
                                     <th>Nama Program</th>
                                     <th>Asal Dana</th>
-                                    <th>Jumlah Peseerta</th>
+                                    <th>Jumlah Peserta</th>
                                     <th>Masa Berlaku</th>
                                     <th>Sasaran</th>
                                     <th>Status</th>

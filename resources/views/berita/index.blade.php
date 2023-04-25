@@ -20,7 +20,9 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>config_id</th>
+                                    <th>Kelurahan</th>
+                                    <th>Judul</th>
+                                    <th>Tanggal Diupload</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -67,7 +69,7 @@
                     className: 'text-nowrap',
                 },
                 {
-                    targets: [0, 1],
+                    targets: [0, 1, 2, 3],
                     orderable: false,
                     searchable: false,
                 },
@@ -78,11 +80,19 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.config_id"
+                    data: function(data) {
+                        return data.attributes.config?.nama_desa ?? null
+                    },
+                },
+                {
+                    data: "attributes.judul"
+                },
+                {
+                    data: "attributes.tgl_upload"
                 },
             ],
             order: [
-                [1, 'asc']
+                [3, 'asc']
             ]
         })
 

@@ -94,7 +94,16 @@
                     return json.data
                 },
             },
-
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: [0, 1, 4, 5, 6, 7],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
             columns: [{
                     data: null,
                 },

@@ -17,26 +17,18 @@
                 <div class="card-body">
                     <form action="/berita" method="GET">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-5">
                                 <input type="text" name="id_kategori" placeholder="Kategori" class="form-control">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-5">
                                 <input type="text" name="config_id" placeholder="Kelurahan" class="form-control">
                             </div>
-                            <div class="col-md-3">
-                                <input type="text" name="bulan" placeholder="Bulan" class="form-control">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" name="tahun" placeholder="Tahun" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row mt-3 mb-3">
-                            <div class="offset-10 col-md-2">
+                            <div class="col-md-2">
                                 <input type="submit" value="CARI" class="form-control btn btn-primary">
                             </div>
                         </div>
                     </form>
-                    <div class="table-responsive">
+                    <div class="table-responsive mt-4">
                         <table class="table table-striped" id="berita">
                             <thead>
                                 <tr>
@@ -68,7 +60,7 @@
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: @if(!empty($_GET)) `{{url('api/v1/berita?filter[id_kategori]='.$_GET['id_kategori'].'&filter[config_id]='.$_GET['config_id'].'&filter[bulan]='.$_GET['bulan'].'&filter[tahun]='.$_GET['tahun']) }}` @else `{{url('api/v1/berita')}}` @endif,
+                url: @if(!empty($_GET)) `{{url('api/v1/berita?filter[config_id]='.$_GET['config_id'].'&filter[id_kategori]='.$_GET['id_kategori'].' ') }}` @else `{{url('api/v1/berita')}}` @endif,
                 method: 'get',
                 data: function(row) {
                     return {

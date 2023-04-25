@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
+use App\Http\Middleware\WilayahMiddleware;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,10 +23,8 @@ Auth::routes([
     'verify' => true,
 ]);
 
-Route::get('/', [DasborController::class, 'index']);
-
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [DasborController::class, 'index'])->name('home');
+    Route::get('/', [DasborController::class, 'index'])->name('dasbor');
 
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
@@ -56,7 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(\App\Http\Controllers\KeluargaController::class)
         ->prefix('keluarga')
         ->group(function () {
-             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
+            Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
     Route::controller(\App\Http\Controllers\BantuanController::class)

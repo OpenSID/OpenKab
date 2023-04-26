@@ -292,28 +292,28 @@ return [
     'menu' => [
         //Topbar items:
         [
-            'type'         => 'darkmode-widget',
+            'type' => 'darkmode-widget',
             'topnav_right' => true, // Or "topnav => true" to place on the left.
         ],
         [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
+            'type' => 'navbar-search',
+            'text' => 'search',
             'topnav_right' => true,
         ],
         [
-            'type'         => 'fullscreen-widget',
+            'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
         // Kecamatan
         [
-            'key'          => 'kecamatan',
-            'text'         => 'Kecamatan',
+            'key' => 'kecamatan',
+            'text' => 'Kecamatan',
             'topnav_right' => true,
         ],
         // Desa
         [
-            'key'          => 'desa',
-            'text'         => 'Desa',
+            'key' => 'desa',
+            'text' => 'Desa',
             'topnav_right' => true,
         ],
 
@@ -325,7 +325,7 @@ return [
         [
             'text' => 'Dasbor',
             'icon' => 'fas fa-home',
-            'url'  => '/',
+            'url' => '/',
         ],
         [
             'text' => 'Kependudukan',
@@ -335,7 +335,7 @@ return [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Penduduk',
                     'url' => 'penduduk',
-                ]
+                ],
             ],
         ],
         [
@@ -368,18 +368,18 @@ return [
         [
             'text' => 'Bantuan',
             'icon' => 'fas fa-handshake',
-            'url'  => 'bantuan',
+            'url' => 'bantuan',
         ],
 
         [
-            'text' => 'Admin Web',
-            'icon' => 'fa fa-cog',
+            'text' => 'Master Data',
+            'icon' => 'fa fa-tags',
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Kategori',
-                    'url' => 'admin_web/kategori',
-                ]
+                    'url' => 'admin-web/kategori',
+                ],
             ],
         ],
 
@@ -391,7 +391,7 @@ return [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
                     'url' => 'users',
-                ]
+                ],
             ],
         ],
     ],
@@ -538,9 +538,9 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => '/assets/js/script.js',
-                ]
-            ]
                 ],
+            ],
+        ],
         'Alpine' => [
             'active' => true,
             'files' => [

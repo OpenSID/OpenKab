@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Kategori extends BaseModel
 {
     use HasFactory;
-    use ConfigIdTrait;
 
     public const ENABLE = 1;
 

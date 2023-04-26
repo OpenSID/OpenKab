@@ -377,8 +377,13 @@ return [
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
-                    'text' => 'Kategori',
-                    'url' => 'admin-web/kategori',
+                    'text' => 'Bantuan',
+                    'url' => 'master/bantuan',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Kategori Artikel',
+                    'url' => 'master/kategori-artikel',
                 ],
             ],
         ],

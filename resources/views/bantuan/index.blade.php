@@ -206,7 +206,6 @@
                     };
                 }
             },
-            placeholder: "Pilih Sasaran",
         });
 
         $('#tahun').select2({
@@ -232,7 +231,6 @@
                     };
                 }
             },
-            placeholder: "Pilih Tahun",
         });
 
 

@@ -218,7 +218,7 @@
                 method: 'get',
                 data: function(row) {
                     return {
-                        "filter[sasaran]": $("#sasaran").val(),
+                        'filter[sasaran]': $("#sasaran").val(),
                         "filter[tahun]": $("#tahun").val(),
                     };
                 },

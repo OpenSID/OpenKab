@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\DasborController;
+use App\Http\Controllers\KeluargaController;
+use App\Http\Controllers\PendudukController;
+use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
@@ -31,12 +35,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
 
     Route::prefix('sesi')->group(function () {
-        // kecamatan
+        // Kecamatan
         Route::middleware(KecamatanMiddleware::class)->get('kecamatan/{kodeKecamatan}', function () {
             return redirect()->back();
         });
 
-        // desa
+        // Desa / Kelurahan
         Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
             return redirect()->back();
         });
@@ -49,24 +53,27 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::resource('penduduk', \App\Http\Controllers\PendudukController::class)->only(['index', 'show']);
+    // Penduduk
+    Route::resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
-    Route::controller(\App\Http\Controllers\KeluargaController::class)
+    // Keluarga
+    Route::controller(KeluargaController::class)
         ->prefix('keluarga')
         ->group(function () {
             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
-    Route::controller(\App\Http\Controllers\BantuanController::class)
+    // Bantuan
+    Route::controller(BantuanController::class)
         ->prefix('bantuan')
         ->group(function () {
             Route::get('/', 'index');
-            Route::get('/cetak', 'cetak');
             Route::get('/{id}', 'show');
+            Route::get('/cetak', 'cetak');
         });
 
     // Statistik
-    Route::controller(\App\Http\Controllers\StatistikController::class)
+    Route::controller(StatistikController::class)
         ->prefix('statistik')
         ->group(function () {
             Route::get('/penduduk', 'penduduk');

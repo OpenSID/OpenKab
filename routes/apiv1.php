@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\DasborController;
+use App\Http\Controllers\Api\DokumenController;
+use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;
@@ -24,10 +26,12 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    // Dasbor
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
     });
 
+    // Wilayah
     Route::prefix('wilayah')->group(function () {
         Route::get('dusun', [WilayahController::class, 'dusun']);
         Route::get('rw', [WilayahController::class, 'rw']);
@@ -36,7 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('penduduk')->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
-        // referensi
+
+        // Referensi
         Route::prefix('referensi')->group(function () {
             Route::get('sex', [PendudukController::class, 'pendudukSex']);
             Route::get('status', [PendudukController::class, 'pendudukStatus']);
@@ -44,10 +49,12 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
+    // Dokumen
     Route::prefix('dokumen')->group(function () {
-        Route::get('/', \App\Http\Controllers\Api\DokumenController::class);
+        Route::get('/', DokumenController::class);
     });
 
+    // Keluarga
     Route::controller(KeluargaController::class)
         ->prefix('keluarga')->group(function () {
             Route::get('/show', 'show')->name('api.keluarga.detail');
@@ -63,6 +70,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/bantuan', 'bantuan');
         });
 
+    // Bantuan
     Route::controller(BantuanController::class)
         ->prefix('bantuan')->group(function () {
             Route::get('/', 'index');
@@ -72,12 +80,13 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/cetak', 'cetakBantuan');
         });
 
-    Route::controller(\App\Http\Controllers\Api\KategoriController::class)
-    ->prefix('kategori')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/tampil', 'show');
-        Route::put('/buat', 'store');
-        Route::post('/perbarui/{id}', 'update');
-        Route::post('/hapus/{id}', 'delete');
-    });
+    // Kategori
+    Route::controller(KategoriController::class)
+        ->prefix('kategori')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/tampil', 'show');
+            Route::put('/buat', 'store');
+            Route::post('/perbarui/{id}', 'update');
+            Route::post('/hapus/{id}', 'delete');
+        });
 });

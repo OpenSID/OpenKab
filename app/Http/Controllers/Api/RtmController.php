@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\RtmRepository;
-use App\Http\Controllers\Api\Controller;
 
 class RtmController extends Controller
 {

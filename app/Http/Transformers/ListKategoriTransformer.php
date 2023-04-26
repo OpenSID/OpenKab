@@ -7,8 +7,6 @@ use League\Fractal\TransformerAbstract;
 
 class ListKategoriTransformer extends TransformerAbstract
 {
-
-
     /**
      * A Fractal transformer.
      *

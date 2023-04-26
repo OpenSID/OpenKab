@@ -304,9 +304,16 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        // Kecamatan
+        [
+            'key'          => 'kecamatan',
+            'text'         => 'Kecamatan',
+            'topnav_right' => true,
+        ],
+        // Desa
         [
             'key'          => 'desa',
-            'text'         => 'Wilayah',
+            'text'         => 'Desa',
             'topnav_right' => true,
         ],
 
@@ -314,6 +321,11 @@ return [
         [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
+        ],
+        [
+            'text' => 'Dasbor',
+            'icon' => 'fas fa-home',
+            'url'  => '/',
         ],
         [
             'text' => 'Kependudukan',

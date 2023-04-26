@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Models\Enums\StatusEnum;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\Enums\StatusEnum;
 use Yajra\DataTables\DataTables;
-use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -27,7 +27,7 @@ class UserController extends Controller
                 ->addIndexColumn()
                 ->addColumn('aksi', function ($row) {
                     if (! auth()->guest()) {
-                        $data['edit']   = route('users.edit', $row->id);
+                        $data['edit'] = route('users.edit', $row->id);
                         $data['delete'] = route('users.destroy', $row->id);
                         if ($row->active == StatusEnum::aktif) {
                             $data['deactive'] = route('users.status', [$row->id, StatusEnum::tidakAktif]);
@@ -58,22 +58,26 @@ class UserController extends Controller
     public function create()
     {
         $user = null;
+
         return view('user.create', compact('user'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\UserRequest  $request
+     * @param \Illuminate\Http\UserRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(UserRequest $request)
     {
         try {
             User::create($request->validated());
+
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
         } catch (\Exception $e) {
             report($e);
+
             return back()->withInput()->with('error', $e->getMessage());
         }
     }
@@ -81,7 +85,8 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -92,7 +97,8 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -103,17 +109,20 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(UserRequest $request, User $user)
     {
         try {
             $user->update($request->validated());
+
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {
             report($e);
+
             return back()->withInput()->with('error', $e->getMessage());
         }
     }
@@ -121,7 +130,8 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
@@ -130,6 +140,7 @@ class UserController extends Controller
             $user->delete();
         } catch (\Exception $e) {
             report($e);
+
             return redirect()->route('users.index')->with('error', 'Pengguna gagal dihapus!');
         }
 
@@ -139,7 +150,8 @@ class UserController extends Controller
     /**
      * Update status resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return Response
      */
     public function status($id, $status)
@@ -148,6 +160,7 @@ class UserController extends Controller
             User::findOrFail($id)->update(['active' => $status]);
         } catch (\Exception $e) {
             report($e);
+
             return redirect()->route('users.index')->with('error', 'Status gagal diubah!');
         }
 

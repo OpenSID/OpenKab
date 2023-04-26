@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\hasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Keluarga extends BaseModel
@@ -56,7 +54,7 @@ class Keluarga extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik
+     * Scope untuk Statistik.
      */
     public function scopeCountStatistik($query)
     {
@@ -71,8 +69,7 @@ class Keluarga extends BaseModel
     }
 
     /**
-     * Scope untuk status keluarga berdasarkan penduduk hidup
-     *
+     * Scope untuk status keluarga berdasarkan penduduk hidup.
      */
     public function scopeStatus($query, $value = 1)
     {

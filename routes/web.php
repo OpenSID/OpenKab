@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\DasborController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\KecamatanMiddleware;
+use App\Http\Middleware\WilayahMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
-use App\Http\Middleware\WilayahMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,22 +23,29 @@ Auth::routes([
     'verify' => true,
 ]);
 
-Route::get('/', [HomeController::class, 'index']);
-
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [DasborController::class, 'index'])->name('dasbor');
 
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
     Route::resource('users', UserController::class);
+
     Route::prefix('sesi')->group(function () {
-        Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
-            return Redirect::back();
+        // kecamatan
+        Route::middleware(KecamatanMiddleware::class)->get('kecamatan/{kodeKecamatan}', function () {
+            return redirect()->back();
         });
+
+        // desa
+        Route::middleware(WilayahMiddleware::class)->get('desa/{kodeDesa}', function () {
+            return redirect()->back();
+        });
+
         Route::get('hapus', function () {
+            session()->remove('kecamatan');
             session()->remove('desa');
 
-            return Redirect::back();
+            return redirect()->back();
         });
     });
 
@@ -46,7 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(\App\Http\Controllers\KeluargaController::class)
         ->prefix('keluarga')
         ->group(function () {
-             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
+            Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
     Route::controller(\App\Http\Controllers\BantuanController::class)

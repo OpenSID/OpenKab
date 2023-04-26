@@ -10,6 +10,7 @@ class Umur extends BaseModel
     use ConfigIdTrait;
 
     public const RENTANG = 1;
+
     public const KATEGORI = 0;
 
     /**
@@ -20,7 +21,7 @@ class Umur extends BaseModel
     protected $table = 'tweb_penduduk_umur';
 
     /**
-     * Scope status umur
+     * Scope status umur.
      */
     public function scopeStatus($query, $status = self::RENTANG)
     {
@@ -28,7 +29,7 @@ class Umur extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik Akta Kelahiran
+     * Scope untuk Statistik Akta Kelahiran.
      */
     public function scopecountStatistikAkta($query)
     {
@@ -38,7 +39,7 @@ class Umur extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik Umur Rentang dan Kategori
+     * Scope untuk Statistik Umur Rentang dan Kategori.
      */
     public function scopecountStatistikUmur($query)
     {
@@ -48,27 +49,25 @@ class Umur extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik
+     * Scope untuk Statistik.
      */
     public function scopeCountStatistik($query, $where = '')
     {
         if (session()->has('desa')) {
-            $where .= " AND tweb_penduduk.config_id = " . session('desa.id');
+            $where .= ' AND tweb_penduduk.config_id = '.session('desa.id');
             $query = $this->scopeConfigId($query);
         } else {
             $query = $query->where('config_id', 1);
         }
 
-        $newQuery =  $query
+        $newQuery = $query
             ->select(['id', 'nama'])
             ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '1' AND tweb_penduduk.`status_dasar` = 1 $where) as laki_laki")
-            ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' AND tweb_penduduk.`status_dasar` = 1 $where) as perempuan")
-            // ->when(session()->has('desa'), function ($query) {
+            ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' AND tweb_penduduk.`status_dasar` = 1 $where) as perempuan");
+        // ->when(session()->has('desa'), function ($query) {
             //     return $query->grubBy("{$this->table}.nama");
-            // })
-            // ->groupBy("{$this->table}.nama")
-        ;
-
+        // })
+        // ->groupBy("{$this->table}.nama")
 
         return $newQuery;
     }

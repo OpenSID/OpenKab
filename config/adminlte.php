@@ -451,6 +451,11 @@ return [
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
                 ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'assets/css/select2-bootstrap.min.css',
+                ],
             ],
         ],
         'chart' => [

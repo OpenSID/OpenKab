@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
         ->prefix('bantuan')
         ->group(function () {
             Route::get('/', 'index');
+            Route::get('/cetak', 'cetak');
             Route::get('/{id}', 'show');
         });
 

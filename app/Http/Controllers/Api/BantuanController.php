@@ -6,6 +6,9 @@ use App\Http\Repository\BantuanPesertaRepository;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Transformers\BantuanPesertaTransformer;
 use App\Http\Transformers\BantuanTransformer;
+use App\Models\Bantuan;
+use App\Models\Enums\SasaranEnum;
+use Symfony\Component\HttpFoundation\Response;
 
 class BantuanController extends Controller
 {
@@ -21,5 +24,26 @@ class BantuanController extends Controller
     public function peserta()
     {
         return $this->fractal($this->bantuanPeserta->listBantuanPeserta(), new BantuanPesertaTransformer(), 'peserta bantuan')->respond();
+    }
+
+    public function cetakBantuan()
+    {
+        return $this->fractal($this->bantuan->cetakListBantuan(), new BantuanTransformer(), 'daftar bantuan')->respond();
+    }
+
+    public function sasaran()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => SasaranEnum::object(),
+        ], Response::HTTP_OK);
+    }
+
+    public function tahun()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => Bantuan::tahun()->first(),
+        ], Response::HTTP_OK);
     }
 }

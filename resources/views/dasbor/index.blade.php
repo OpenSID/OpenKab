@@ -1,7 +1,6 @@
 @extends('layouts.index')
 
-@push('css')
-@endpush
+@section('plugins.chart', true)
 
 @section('title', 'Dasbor')
 
@@ -16,23 +15,24 @@
     </x-adminlte-callout>
 
     <div class="row">
-        <div class="col-12 col-sm-6 col-md-3">
+        <a href="{{ url('penduduk') }}" class="unlink  col-12 col-sm-6 col-md-3">
             <x-adminlte-info-box id="penduduk" title="Penduduk" text="L : 2999 | P : 1999" icon="fas fa-lg fa-user"
                 icon-theme="blue" />
-        </div>
+        </a>
 
-        <div class="col-12 col-sm-6 col-md-3">
-            <x-adminlte-info-box id="keluarga" title="Keluarga" text="2991" icon="fas fa-lg fa-users" icon-theme="red" />
-        </div>
+        <a href="{{ url('keluarga') }}" class="unlink  col-12 col-sm-6 col-md-3">
+            <x-adminlte-info-box id="keluarga" title="Keluarga" text="2991" icon="fas fa-lg fa-users"
+                icon-theme="red" />
+        </a>
 
-        <div class="col-12 col-sm-6 col-md-3">
+        <a href="{{ url('rtm') }}" class="unlink  col-12 col-sm-6 col-md-3">
             <x-adminlte-info-box id="rtm" title="RTM" text="221" icon="fas fa-lg fa-home" icon-theme="green" />
-        </div>
+        </a>
 
-        <div class="col-12 col-sm-6 col-md-3">
+        <a href="{{ url('bantuan') }}" class="unlink  col-12 col-sm-6 col-md-3">
             <x-adminlte-info-box id="bantuan" title="Bantuan" text="22" icon="fas fa-lg fa-handshake"
                 icon-theme="yellow" />
-        </div>
+        </a>
         <div class="col-12">
             <div class="card card-success">
                 <div class="card-header">
@@ -126,15 +126,6 @@
                 data: barChartData,
                 options: barChartOptions
             })
-        }
-
-        function randColorRGB() {
-            return 'rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(
-                Math.random() * 255) + ', 1)'
-        }
-
-        function randColorHex(params) {
-            return '#' + Math.floor(Math.random() * 16777215).toString(16);
         }
     </script>
 @endpush

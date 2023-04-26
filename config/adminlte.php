@@ -469,10 +469,15 @@ return [
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
                 ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'assets/css/select2-bootstrap.min.css',
+                ],
             ],
         ],
-        'Chartjs' => [
-            'active' => true,
+        'chart' => [
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -553,6 +558,38 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => 'https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js',
+                ],
+            ],
+        ],
+        'progressiveimage' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/assets/progressive-image/progressive-image.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/assets/progressive-image/progressive-image.js',
+                ],
+            ],
+        ],
+
+        // Pastikan ini selalu dibagian paling bawah
+        'costume' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/assets/costume/admin.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/assets/costume/admin.js',
                 ],
             ],
         ],

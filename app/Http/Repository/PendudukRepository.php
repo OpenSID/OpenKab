@@ -266,13 +266,7 @@ class PendudukRepository
 
     private function countStatistikPendudukHidup(string $whereHeader = null): array|object
     {
-        $query = Penduduk::countStatistik();
-
-        if ($whereHeader) {
-            $query->whereRaw($whereHeader);
-        }
-
-        return $query->status()->get();
+        return Penduduk::countStatistik()->whereRaws($whereHeader)->status()->get();
     }
 
     public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $whereFooter = null): array|object

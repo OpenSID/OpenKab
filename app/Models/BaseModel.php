@@ -45,7 +45,7 @@ class BaseModel extends Model
             ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '2' AND tweb_penduduk.`status_dasar` = 1 $where) as perempuan");
     }
 
-    public function scopeWhereRaw($query, $where)
+    public function scopeWhereRaws($query, $where)
     {
         return $query->when($where, function ($query) use ($where) {
             $query->whereRaw($where);

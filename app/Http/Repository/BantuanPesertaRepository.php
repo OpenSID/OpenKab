@@ -3,28 +3,32 @@
 namespace App\Http\Repository;
 
 use App\Models\BantuanPeserta;
-use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class BantuanPesertaRepository
 {
-    public function listBantuanPeserta()
+    public function listBantuanPeserta($all = false)
     {
-        return QueryBuilder::for(BantuanPeserta::class)
+        $bantuan = QueryBuilder::for(BantuanPeserta::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('program_id'),
                 AllowedFilter::exact('peserta'),
                 AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where('no_id_kartu', 'LIKE', '%' . $value . '%')
-                        ->orWhere('kartu_nama', 'LIKE', '%' . $value . '%');
+                    $query->where('no_id_kartu', 'LIKE', '%'.$value.'%')
+                        ->orWhere('kartu_nama', 'LIKE', '%'.$value.'%');
                 }),
             ])
             ->allowedSorts([
                 'no_id_kartu',
                 'kartu_nama',
-            ])
-            ->jsonPaginate();
+            ]);
+        if ($all) {
+            return $bantuan->jsonPaginate();
+        } else {
+            return $bantuan->get();
+        }
     }
 }

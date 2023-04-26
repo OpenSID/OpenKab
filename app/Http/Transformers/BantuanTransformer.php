@@ -3,9 +3,6 @@
 namespace App\Http\Transformers;
 
 use App\Models\Bantuan;
-use App\Models\Penduduk;
-use App\Models\BantuanPeserta;
-use Illuminate\Support\Facades\DB;
 use League\Fractal\TransformerAbstract;
 
 class BantuanTransformer extends TransformerAbstract
@@ -22,6 +19,7 @@ class BantuanTransformer extends TransformerAbstract
             'sdate' => $bantuan->sdate,
             'edate' => $bantuan->edate,
             'status' => $bantuan->status,
+            'nama_status' => $bantuan->nama_status,
             'asaldana' => $bantuan->asaldana,
         ];
     }

@@ -1,11 +1,15 @@
 {
     "name": "laravel/laravel",
-    "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
     "license": "MIT",
+    "type": "project",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "require": {
         "php": "^8.0.2",
+        "bensampo/laravel-enum": "^6.3",
         "guzzlehttp/guzzle": "^7.2",
         "jeroennoten/laravel-adminlte": "^3.8",
         "laravel/framework": "^9.19",
@@ -28,6 +32,8 @@
         "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "App\\": "app/",
@@ -43,13 +49,26 @@
             "Tests\\": "tests/"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        },
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
     "scripts": {
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
-        ],
-        "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -57,20 +76,5 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
-    },
-    "extra": {
-        "laravel": {
-            "dont-discover": []
-        }
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    }
 }

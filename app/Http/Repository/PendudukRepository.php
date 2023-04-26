@@ -2,32 +2,51 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Ktp;
-use App\Models\Umur;
 use App\Models\Covid;
 use App\Models\LogPenduduk;
+use App\Models\Ktp;
 use App\Models\Penduduk;
+use App\Models\Umur;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
-use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PendudukRepository
 {
+    public function pendudukReferensi(string $class)
+    {
+        return QueryBuilder::for($class)
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama', 'like', "%{$value}%");
+                    });
+                }),
+            ])
+            ->allowedSorts(['id', 'nama'])
+            ->jsonPaginate();
+    }
+
     public function listPenduduk()
     {
         return QueryBuilder::for(Penduduk::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
+                AllowedFilter::exact('sex'),
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('status_dasar'),
                 AllowedFilter::exact('keluarga.no_kk'),
-                'nama',
-                'nik',
-                'tag_id_card',
+                AllowedFilter::exact('clusterDesa.dusun'),
+                AllowedFilter::exact('clusterDesa.rw'),
+                AllowedFilter::exact('clusterDesa.rt'),
                 AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where('nama', 'LIKE', '%' . $value . '%')
-                        ->orWhere('nik', 'LIKE', '%' . $value . '%')
-                        ->orWhere('tag_id_card', 'LIKE', '%' . $value . '%');
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama', 'like', "%{$value}%")
+                            ->orWhere('nik', 'like', "%{$value}%")
+                            ->orWhere('tag_id_card', 'like', "%{$value}%");
+                    });
                 }),
             ])
             ->allowedSorts([
@@ -255,13 +274,7 @@ class PendudukRepository
 
     private function countStatistikPendudukHidup(string $whereHeader = null): array|object
     {
-        $query = Penduduk::countStatistik();
-
-        if ($whereHeader) {
-            $query->whereRaw($whereHeader);
-        }
-
-        return $query->status()->get();
+        return Penduduk::countStatistik()->whereRaws($whereHeader)->status()->get();
     }
 
     public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $whereFooter = null): array|object

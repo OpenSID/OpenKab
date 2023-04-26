@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Enums\SasaranEnum;
 use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bantuan extends BaseModel
@@ -12,8 +11,11 @@ class Bantuan extends BaseModel
     use ConfigIdTrait;
 
     public const SASARAN_PENDUDUK = 1;
+
     public const SASARAN_KELUARGA = 2;
+
     public const SASARAN_RUMAH_TANGGA = 3;
+
     public const SASARAN_KELOMPOK = 4;
 
     public const KATEGORI_STATISTIK = [
@@ -31,6 +33,7 @@ class Bantuan extends BaseModel
         'statistik',
         'nama_sasaran',
         'jumlah_peserta',
+        'nama_status',
     ];
 
     /** {@inheritdoc} */
@@ -56,6 +59,15 @@ class Bantuan extends BaseModel
             3 => 'Rumah Tangga',
             4 => 'Kelompok/Organisasi Kemasyarakatan',
             default => null,
+        };
+    }
+
+    public function getNamaStatusAttribute()
+    {
+        return match ($this->status) {
+            0 => 'Tidak Aktif',
+            1 => 'Aktif',
+            default => 0,
         };
     }
 
@@ -114,7 +126,7 @@ class Bantuan extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik Sasaran Penduduk
+     * Scope untuk Statistik Sasaran Penduduk.
      */
     public function scopeCountStatistikPenduduk($query)
     {
@@ -130,7 +142,7 @@ class Bantuan extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik Sasaran Keluarga
+     * Scope untuk Statistik Sasaran Keluarga.
      */
     public function scopeCountStatistikKeluarga($query)
     {
@@ -147,10 +159,15 @@ class Bantuan extends BaseModel
     }
 
     /**
-     * Scope untuk Sasaran
+     * Scope untuk Sasaran.
      */
     public function scopeSasaran($query, $sasaran = self::SASARAN_PENDUDUK)
     {
         return $query->where('sasaran', $sasaran);
+    }
+
+    public function scopeTahun($query)
+    {
+        return $query->selectRaw('YEAR(MIN(sdate)) AS tahun_awal, YEAR(MAX(edate)) AS tahun_akhir');
     }
 }

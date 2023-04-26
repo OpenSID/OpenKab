@@ -20,6 +20,9 @@ return [
     // TODO:: hapus ini jika sudah ada pengaturan tersendiri
     'namaKab' => env('APP_NAMA_KAB', 'Nama Kabupaten'),
     'namaProv' => env('APP_NAMA_PROV', 'Nama Provinsi'),
+    'sebutanKab' => env('APP_SEBUTAN_KAB', 'Kota'),
+
+    'namaAplikasi' => env('APP_NAMA_APLIKASI', 'Simatik'),
 
     /*
     |--------------------------------------------------------------------------

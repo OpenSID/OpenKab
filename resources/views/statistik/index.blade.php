@@ -1,8 +1,6 @@
 @extends('layouts.index')
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/progressive-image/progressive-image.css') }}">
-@endpush
+@section('plugins.chart', true)
 
 @section('title', 'Data Statistik')
 
@@ -120,10 +118,6 @@
         </div>
     </div>
 @endsection
-
-@push('js')
-    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
-@endpush
 
 @section('js')
     @include('statistik.chart')

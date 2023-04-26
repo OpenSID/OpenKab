@@ -20,7 +20,7 @@ class Covid extends Model
     protected $table = 'ref_status_covid';
 
     /**
-     * Scope untuk Statistik
+     * Scope untuk Statistik.
      */
     public function scopeCountStatistik($query)
     {

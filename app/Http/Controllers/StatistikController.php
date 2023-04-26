@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\LabelStatistik;
-use App\Http\Repository\PendudukRepository;
-
 class StatistikController extends Controller
 {
     public function penduduk()

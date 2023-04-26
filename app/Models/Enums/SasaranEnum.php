@@ -2,20 +2,33 @@
 
 namespace App\Models\Enums;
 
-enum SasaranEnum: int {
-    case PENDUDUK = 1;
-    case KELUARGA = 2;
-    case RUMAH_TANGGA = 3;
-    case KELOMPOK = 4;
+use App\Models\Traits\EnumToArrayTrait;
+use BenSampo\Enum\Enum;
 
-    public function label(): string|null
+final class SasaranEnum extends Enum
+{
+    use EnumToArrayTrait;
+
+    const PENDUDUK = 1;
+
+    const KELUARGA = 2;
+
+    const RUMAH_TANGGA = 3;
+
+    const KELOMPOK = 4;
+
+    public static function getAll(): array
     {
-        return match($this) {
+        return [
             static::PENDUDUK => 'Penduduk',
             static::KELUARGA => 'Keluarga',
             static::RUMAH_TANGGA => 'Rumah Tangga',
             static::KELOMPOK => 'Kelompok/Organisasi Kemasyarakatan',
-            default => null
-        };
+        ];
+    }
+
+    public static function getDescription($value): string
+    {
+        return self::getAll()[$value];
     }
 }

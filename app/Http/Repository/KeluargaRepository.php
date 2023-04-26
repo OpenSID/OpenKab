@@ -2,10 +2,10 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Keluarga;
 use App\Models\KelasSosial;
-use Spatie\QueryBuilder\QueryBuilder;
+use App\Models\Keluarga;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class KeluargaRepository
 {
@@ -43,11 +43,9 @@ class KeluargaRepository
 
     private function listFooter($dataHeader, $query_footer): array|object
     {
-
         $jumlahLakiLaki = $dataHeader->sum('laki_laki');
         $jumlahJerempuan = $dataHeader->sum('perempuan');
         $jumlah = $jumlahLakiLaki + $jumlahJerempuan;
-
 
         $totalLakiLaki = $query_footer->sum('laki_laki');
         $totalPerempuan = $query_footer->sum('perempuan');

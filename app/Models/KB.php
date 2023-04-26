@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Model;
-
 class KB extends BaseModel
 {
     /** {@inheritdoc} */

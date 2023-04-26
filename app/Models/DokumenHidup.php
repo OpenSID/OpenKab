@@ -15,6 +15,6 @@ class DokumenHidup extends BaseModel
 
     /** {@inheritdoc} */
     protected $casts = [
-        'attr' => 'json'
+        'attr' => 'json',
     ];
 }

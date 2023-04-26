@@ -73,8 +73,8 @@ Route::middleware('auth:sanctum')->group(function () {
     ->prefix('kategori')->group(function () {
         Route::get('/', 'index');
         Route::get('/tampil', 'show');
-        Route::put('/buat', 'store');
-        Route::post('/perbarui/{id}', 'update');
-        Route::post('/hapus/{id}', 'delete');
+        Route::post('/buat', 'store');
+        Route::put('/perbarui/{id}', 'update');
+        Route::delete('/hapus/{id}', 'delete');
     });
 });

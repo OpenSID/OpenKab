@@ -79,7 +79,6 @@ class KategoriController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -88,7 +87,7 @@ class KategoriController extends Controller
         try {
             $data = $request->validated();
             $data['slug'] = url_title($data['kategori']);
-            Kategori::where('id', (int) $id)->whereNull('config_id')->update($data);
+            Kategori::where('id', $id)->whereNull('config_id')->update($data);
 
             return response()->json([
                 'success' => true,
@@ -106,14 +105,12 @@ class KategoriController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         try {
-            Kategori::where('id', (int) $id)->delete();
+            Kategori::where('id', $id)->delete();
 
             return response()->json([
                 'success' => true,

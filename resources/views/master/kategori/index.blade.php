@@ -94,7 +94,7 @@
                                     <button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Ubah">
                                         <i class="fas fa-trash"></i>
                                     </button>
-                                   `;
+                                `;
 
                             return render;
                         }
@@ -141,14 +141,14 @@
                                 className: 'w-15',
                                 "render": function(data, type, row) {
                                     data = `
-                                   <button type="button" class="btn btn-warning btn-sm edit" data-id="${row.id}" title="ubah">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
+                                    <button type="button" class="btn btn-warning btn-sm edit" data-id="${row.id}" title="ubah">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
 
-                                    <button type="button" class="btn btn-danger btn-sm hapus" data-id="${row.id}" title="ubah">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                   `;
+                                        <button type="button" class="btn btn-danger btn-sm hapus" data-id="${row.id}" title="ubah">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    `;
 
                                     return data;
                                 }
@@ -337,12 +337,12 @@
 
             function simpan(value, parrent = 0) {
                 $.ajax({
-                    type: "PUT",
+                    type: "POST",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     dataType: "json",
-                    url: "{{ url('api/v1/kategori/buat') }}",
+                    url: `{{ url('api/v1/kategori/buat') }}`,
                     data: {
                         kategori: value,
                         parrent: parrent

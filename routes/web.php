@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminWebController;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\KecamatanMiddleware;
@@ -76,7 +77,7 @@ Route::middleware('auth')->group(function () {
         });
 
     // Master Data
-    Route::controller(\App\Http\Controllers\AdminWebController::class)
+    Route::controller(AdminWebController::class)
         ->prefix('master')
         ->group(function () {
             Route::get('/kategori', 'kategori_index');

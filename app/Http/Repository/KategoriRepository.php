@@ -15,10 +15,9 @@ class KategoriRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
+                AllowedFilter::exact('parrent'),
                 'kategori',
-                'parrent',
                 'tipe',
-                'parrent',
             ])
             ->allowedSorts([
                 'kategori',
@@ -31,7 +30,6 @@ class KategoriRepository
 
     public function show($id)
     {
-        return Kategori::where('id', $id)->whereNull('config_id')
-        ->first();
+        return Kategori::where('id', $id)->whereNull('config_id')->first();
     }
 }

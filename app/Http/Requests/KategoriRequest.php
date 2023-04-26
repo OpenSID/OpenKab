@@ -24,8 +24,8 @@ class KategoriRequest extends FormRequest
     public function rules()
     {
         return [
-            'kategori'       => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
-            'parrent' =>  'digits'
+            'kategori' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
+            'parrent' => 'digits',
         ];
     }
 }

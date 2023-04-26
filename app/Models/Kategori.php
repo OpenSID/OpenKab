@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Kategori extends Model
 {
@@ -13,8 +13,8 @@ class Kategori extends Model
 
     public const ENABLE = 1;
 
-     /** {@inheritdoc} */
-     protected $connection = 'openkab';
+    /** {@inheritdoc} */
+    protected $connection = 'openkab';
 
     /**
      * The table associated with the model.

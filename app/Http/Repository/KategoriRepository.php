@@ -3,8 +3,8 @@
 namespace App\Http\Repository;
 
 use App\Models\Kategori;
-use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class KategoriRepository
 {
@@ -18,7 +18,7 @@ class KategoriRepository
                 'kategori',
                 'parrent',
                 'tipe',
-                'parrent'
+                'parrent',
             ])
             ->allowedSorts([
                 'kategori',

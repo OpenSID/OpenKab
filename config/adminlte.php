@@ -292,28 +292,28 @@ return [
     'menu' => [
         //Topbar items:
         [
-            'type'         => 'darkmode-widget',
+            'type' => 'darkmode-widget',
             'topnav_right' => true, // Or "topnav => true" to place on the left.
         ],
         [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
+            'type' => 'navbar-search',
+            'text' => 'search',
             'topnav_right' => true,
         ],
         [
-            'type'         => 'fullscreen-widget',
+            'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
         // Kecamatan
         [
-            'key'          => 'kecamatan',
-            'text'         => 'Kecamatan',
+            'key' => 'kecamatan',
+            'text' => 'Kecamatan',
             'topnav_right' => true,
         ],
         // Desa
         [
-            'key'          => 'desa',
-            'text'         => 'Desa',
+            'key' => 'desa',
+            'text' => 'Desa',
             'topnav_right' => true,
         ],
 
@@ -325,7 +325,7 @@ return [
         [
             'text' => 'Dasbor',
             'icon' => 'fas fa-home',
-            'url'  => '/',
+            'url' => '/',
         ],
         [
             'text' => 'Kependudukan',
@@ -335,7 +335,7 @@ return [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Penduduk',
                     'url' => 'penduduk',
-                ]
+                ],
             ],
         ],
         [
@@ -368,7 +368,7 @@ return [
         [
             'text' => 'Bantuan',
             'icon' => 'fas fa-handshake',
-            'url'  => 'bantuan',
+            'url' => 'bantuan',
         ],
         [
             'text' => 'Pengaturan',
@@ -378,7 +378,7 @@ return [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
                     'url' => 'users',
-                ]
+                ],
             ],
         ],
     ],
@@ -458,8 +458,8 @@ return [
                 ],
             ],
         ],
-        'Chartjs' => [
-            'active' => true,
+        'chart' => [
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -510,6 +510,38 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => 'https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js',
+                ],
+            ],
+        ],
+        'progressiveimage' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/assets/progressive-image/progressive-image.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/assets/progressive-image/progressive-image.js',
+                ],
+            ],
+        ],
+
+        // Pastikan ini selalu dibagian paling bawah
+        'costume' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/assets/costume/admin.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/assets/costume/admin.js',
                 ],
             ],
         ],

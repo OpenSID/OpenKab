@@ -71,4 +71,13 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/tahun', 'tahun');
             Route::get('/cetak', 'cetakBantuan');
         });
+
+    Route::controller(\App\Http\Controllers\Api\KategoriController::class)
+    ->prefix('kategori')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/tampil', 'show');
+        Route::put('/buat', 'store');
+        Route::post('/perbarui/{id}', 'update');
+        Route::post('/hapus/{id}', 'delete');
+    });
 });

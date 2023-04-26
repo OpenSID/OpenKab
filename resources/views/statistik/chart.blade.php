@@ -55,9 +55,8 @@
         var backgroundColorPie = [];
 
         data.forEach(function(item, index) {
-            let color = 'rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math
-                .random() * 255) + ',' + Math.floor(Math.random() * 255) + ', 1)'
-            let colorPoint = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            let color = randColorRGB();
+            let colorPoint = randColorHex();
 
             dataBaruGrafik.push({
                 label: item.nama,

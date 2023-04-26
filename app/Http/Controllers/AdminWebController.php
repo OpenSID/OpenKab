@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class AdminWebController extends Controller
 {
     public function kategori_index()

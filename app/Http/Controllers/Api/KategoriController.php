@@ -107,8 +107,9 @@ class KategoriController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = (int) $request->id;
         try {
             Kategori::where('id', $id)->delete();
 

@@ -16,6 +16,9 @@ class KategoriRepository
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('parrent'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('kategori', 'LIKE', '%'.$value.'%');
+                }),
                 'kategori',
                 'tipe',
             ])
@@ -25,7 +28,7 @@ class KategoriRepository
                 'id',
                 'parrent',
             ])
-            ->get();
+            ->jsonPaginate();
     }
 
     public function show($id)

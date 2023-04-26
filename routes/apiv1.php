@@ -86,6 +86,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/tampil', 'show');
         Route::post('/buat', 'store');
         Route::put('/perbarui/{id}', 'update');
-        Route::delete('/hapus/{id}', 'delete');
+        Route::post('/hapus', 'destroy');
     });
 });

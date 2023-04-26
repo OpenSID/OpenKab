@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table">
                         <table class="table " id="kategori">
                             <thead>
                                 <tr>
@@ -57,22 +57,46 @@
 
             // Main table
             var table = $('#kategori').DataTable({
-                dom: 't',
+
                 ajax: {
-                    url: '{{ url('api/v1/kategori') }}?filter[parrent]=0',
-                    dataSrc: 'data'
+                    url: '{{ url('api/v1/kategori') }}',
+                    dataSrc: function(json) {
+                        json.recordsTotal = json.meta.pagination.total
+                        json.recordsFiltered = json.meta.pagination.total
+                        return json.data
+                    },
+                    data: function(row) {
+                        return {
+                            "page[size]": row.length,
+                            "page[number]": (row.start / row.length) + 1,
+                            "page[size]": row.length,
+                            "page[number]": (row.start / row.length) + 1,
+                            "filter[parrent]": 0,
+                            "filter[search]": row.search.value,
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
+                                ?.column]?.name
+                        };
+                    },
                 },
-                pageLength: 20,
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                ordering: true,
+                lengthChange: false,
+                order: [
+                    [1, 'asc']
+                ],
                 columns: [{
                         className: 'details-control',
                         orderable: false,
                         data: null,
                         defaultContent: ''
                     },
-
                     {
                         data: "attributes.kategori",
                         className: 'kategori',
+                        orderable: true,
+                        name: "kategori"
                     },
 
                     {
@@ -101,6 +125,16 @@
                     },
                 ],
             });
+
+            table.on('draw.dt', function() {
+                var PageInfo = $('#kategori').DataTable().page.info();
+                table.column(0, {
+                    page: 'current'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1 + PageInfo.start;
+                });
+            });
+
 
             // Add event listener for opening and closing first level childdetails
             $('#kategori tbody').on('click', 'td.details-control', function() {
@@ -186,7 +220,7 @@
                         })
 
                         $.ajax({
-                            type: "POST",
+                            type: "PUT",
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
@@ -250,7 +284,7 @@
                             },
                         })
                         $.ajax({
-                            type: "POST",
+                            type: "post",
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
@@ -262,11 +296,13 @@
                             success: function(response) {
 
                                 if (response.success == true) {
-                                    Swal.fire(
-                                        'Hapus!',
-                                        'Data berhasil dihapus',
-                                        'success'
-                                    )
+                                    Swal.fire({
+                                        title: 'Hapus!',
+                                        text: 'Data berhasil dihapus',
+                                        icon: 'success',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
                                     that.parent().parent().remove();
                                 } else {
                                     Swal.fire(
@@ -349,11 +385,13 @@
                     },
                     success: function(response) {
                         if (response.success == true) {
-                            Swal.fire(
-                                'Berhasil!',
-                                'Data berhasil ditambahkan',
-                                'success'
-                            )
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'Data berhasil ditambahkan',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
                             location.reload();
                         } else {
                             Swal.fire(

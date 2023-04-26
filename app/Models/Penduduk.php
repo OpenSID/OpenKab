@@ -3,15 +3,13 @@
 namespace App\Models;
 
 use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use App\Services\HealthCheckController;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 /**
- * @property \App\Models\Enums\TempatDilahirkanEnum $tempat_dilahirkan
- * @property \App\Models\Enums\JenisKelahiranEnum $jenis_kelahiran
+ * @property \App\Models\Enums\TempatDilahirkanEnum  $tempat_dilahirkan
+ * @property \App\Models\Enums\JenisKelahiranEnum    $jenis_kelahiran
  * @property \App\Models\Enums\PenolongKelahiranEnum $penolong_kelahiran
  */
 class Penduduk extends BaseModel
@@ -291,6 +289,11 @@ class Penduduk extends BaseModel
         return $this->hasMany(LogPerubahanPenduduk::class, 'id_pend');
     }
 
+    public function dokumenHidup()
+    {
+        return $this->hasMany(DokumenHidup::class, 'id_pend');
+    }
+
     /**
      * Getter tempat dilahirkan attribute.
      *
@@ -419,6 +422,7 @@ class Penduduk extends BaseModel
      */
     public function getUrlFotoAttribute()
     {
+        return null;
         if (empty($this->foto)) {
             return $this->sex === 1
                 ? Storage::disk("ftp_{$this->config_id}")?->url('assets/images/pengguna/kuser.png')
@@ -429,7 +433,7 @@ class Penduduk extends BaseModel
     }
 
     /**
-     * Scope query untuk status penduduk
+     * Scope query untuk status penduduk.
      *
      * @param Builder $query
      * @param mixed   $value
@@ -442,7 +446,24 @@ class Penduduk extends BaseModel
     }
 
     /**
-     * Scope untuk Statistik
+     * Scope query untuk jenis kelamin penduduk.
+     *
+     * @param Builder $query
+     * @param mixed   $value
+     *
+     * @return Builder
+     */
+    public function scopeJenisKelamin($query, $value = null)
+    {
+        if (is_null($value)) {
+            return $query;
+        }
+
+        return $query->where('sex', $value);
+    }
+
+    /**
+     * Scope untuk Statistik.
      */
     public function scopeCountStatistik($query)
     {
@@ -464,7 +485,6 @@ class Penduduk extends BaseModel
             ->where('tweb_penduduk.status_dasar', 1)
             ->groupBy('suku')
             ->whereNotNull('suku')
-            ->where('suku', '!=', "")
-        ;
+            ->where('suku', '!=', '');
     }
 }

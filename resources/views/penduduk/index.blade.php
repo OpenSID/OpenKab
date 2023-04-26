@@ -1,4 +1,6 @@
 @extends('layouts.index')
+@include('layouts.components.selec2_penduduk_referensi')
+@include('layouts.components.selec2_wilayah_referensi')
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/progressive-image/progressive-image.css') }}">
@@ -14,7 +16,97 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                                aria-expanded="false" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="collapse-filter" class="collapse">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Status Penduduk</label>
+                                            <select class="select2 form-control-sm" id="status" name="status"
+                                                data-placeholder="Semua Status" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Status Dasar</label>
+                                            <select class="select2 form-control-sm" id="status-dasar" name="status-dasar"
+                                                data-placeholder="Semua Status Dasar" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Jenis Kelamin</label>
+                                            <select class="select2 form-control-sm" id="sex" name="sex"
+                                                data-placeholder="Semua Jenis Kelamin" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {{-- TODO: Aktifikan jika digunakan filter untuk tingkat dusun --}}
+                                    {{-- <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Pilih Dusun</label>
+                                            <select class="select2 form-control-sm" id="dusun" name="dusun"
+                                                data-placeholder="Semua Dusun" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Pilih RW</label>
+                                            <select class="select2 form-control-sm" id="rw" name="rw"
+                                                data-placeholder="Semua RW" style="width: 100%;" disabled>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Pilih RT</label>
+                                            <select class="select2 form-control-sm" id="rt" name="rt"
+                                                data-placeholder="Semua RT" style="width: 100%;" disabled>
+                                            </select>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped" id="penduduk">
                             <thead>
@@ -67,9 +159,14 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
+                        "filter[sex]": $('#sex').val(),
+                        "filter[status]": $('#status').val(),
+                        "filter[status_dasar]": $('#status-dasar').val(),
+                        "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
+                        "filter[clusterDesa.rw]": $('#rw').val(),
+                        "filter[clusterDesa.rt]": $('#rt').val(),
                         "filter[search]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
-                            ?.name
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
                     };
                 },
                 dataSrc: function(json) {
@@ -118,7 +215,11 @@
                 },
                 {
                     data: function(data) {
-                        return data.attributes.keluarga?.no_kk ?? null
+                        if (data.attributes.keluarga?.no_kk ) {
+                            return `<a title="Lihat Detail Biodata Keluarga" href="keluarga/detail/${data.attributes.keluarga.no_kk}">${data.attributes.keluarga.no_kk}</a>`
+                        }else{
+                            return null
+                        }
                     },
                     name: "keluarga.no_kk",
                     searchable: true,
@@ -193,6 +294,22 @@
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
+        });
+
+        $('#filter').on('click', function(e) {
+            penduduk.draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#sex').val('').change();
+            $('#status').val('').change();
+            $('#status-dasar').val('').change();
+            $('#dusun').val('').change();
+            $('#rw').val('').change();
+            $('#rt').val('').change();
+
+            penduduk.ajax.reload();
         });
     </script>
 @endsection

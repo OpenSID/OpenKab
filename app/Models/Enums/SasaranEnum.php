@@ -2,16 +2,17 @@
 
 namespace App\Models\Enums;
 
+use BenSampo\Enum\Enum;
 use App\Models\Traits\EnumToArrayTrait;
 
-enum SasaranEnum: int
+final class SasaranEnum extends Enum
 {
     use EnumToArrayTrait;
 
-    case PENDUDUK = 1;
-    case KELUARGA = 2;
-    case RUMAH_TANGGA = 3;
-    case KELOMPOK = 4;
+    const PENDUDUK = 1;
+    const KELUARGA = 2;
+    const RUMAH_TANGGA = 3;
+    const KELOMPOK = 4;
 
     public function label(): string|null
     {

@@ -17,14 +17,18 @@ final class SasaranEnum extends Enum
 
     const KELOMPOK = 4;
 
-    public function label(): string|null
+    public static function getAll(): array
     {
-        return match ($this) {
+        return [
             static::PENDUDUK => 'Penduduk',
             static::KELUARGA => 'Keluarga',
             static::RUMAH_TANGGA => 'Rumah Tangga',
             static::KELOMPOK => 'Kelompok/Organisasi Kemasyarakatan',
-            default => null
-        };
+        ];
+    }
+
+    public static function getDescription($value): string
+    {
+        return self::getAll()[$value];
     }
 }

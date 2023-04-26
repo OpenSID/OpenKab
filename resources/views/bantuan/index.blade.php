@@ -14,30 +14,64 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-auto">
-                            <button id="cetak" type="button" class="btn btn-primary btn-block btn-sm" data-url=""><i
+                        <div class="col-sm-3">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                                aria-expanded="false" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url=""><i
                                     class="fa fa-print"></i>
                                 Cetak</button>
                         </div>
-
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-2">
-                            <select class="form-control" id="sasaran">
-
-                            </select>
-
+                        <div class="col-md-12">
+                            <div id="collapse-filter" class="collapse">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Sasaran</label>
+                                            <select class="select2 form-control-sm" id="sasaran" name="sasaran"
+                                                data-placeholder="Semua Sasaran" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Tahun</label>
+                                            <select class="select2 form-control-sm" id="tahun" name="tahun"
+                                                data-placeholder="Semua Tahun" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <select class="form-control" id="tahun">
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped" id="bantuan">
@@ -158,24 +192,25 @@
 
         $('#sasaran').select2({
             minimumResultsForSearch: -1,
-            allowClear: true,
-            theme: "bootstrap",
             ajax: {
                 url: '{{ url('api/v1/bantuan') }}/sasaran/',
                 dataType: 'json',
-                processResults: function(data) {
+                processResults: function(response) {
                     return {
-                        results: data.data
+                        results: response.data.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.nama
+                            }
+                        })
                     };
                 }
             },
-            placeholder: "Sasaran",
+            placeholder: "Pilih Sasaran",
         });
 
         $('#tahun').select2({
             minimumResultsForSearch: -1,
-            allowClear: true,
-            theme: "bootstrap",
             ajax: {
                 url: '{{ url('api/v1/bantuan') }}/tahun/',
                 dataType: 'json',
@@ -201,12 +236,16 @@
         });
 
 
-        $('#sasaran').on('change', function(e) {
+        $('#filter').on('click', function(e) {
             bantuan.draw();
         });
 
-        $('#tahun').on('change', function(e) {
-            bantuan.draw();
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#sasaran').val('').change();
+            $('#tahun').val('').change();
+
+            bantuan.ajax.reload();
         });
 
         $('#cetak').on('click', function() {

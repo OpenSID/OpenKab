@@ -8,9 +8,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class BantuanPesertaRepository
 {
-    public function listBantuanPeserta()
+    public function listBantuanPeserta($all = false)
     {
-        return QueryBuilder::for(BantuanPeserta::class)
+        $bantuan = QueryBuilder::for(BantuanPeserta::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -24,7 +24,11 @@ class BantuanPesertaRepository
             ->allowedSorts([
                 'no_id_kartu',
                 'kartu_nama',
-            ])
-            ->jsonPaginate();
+            ]);
+        if ($all) {
+            return $bantuan->jsonPaginate();
+        } else {
+            return $bantuan->get();
+        }
     }
 }

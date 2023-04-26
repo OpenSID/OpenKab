@@ -1,0 +1,11 @@
+a,
+a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.unlink  a,
+.unlink  a:hover {
+    text-decoration: none;
+    color: inherit;
+}

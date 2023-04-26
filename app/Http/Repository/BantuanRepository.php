@@ -14,20 +14,44 @@ class BantuanRepository
 {
     public function listBantuan()
     {
-        return QueryBuilder::for(Bantuan::class)
+        return  QueryBuilder::for(Bantuan::class)
+           ->allowedFields('*')
+           ->allowedFilters([
+               AllowedFilter::exact('id'),
+               AllowedFilter::exact('sasaran'),
+               AllowedFilter::callback('search', function ($query, $value) {
+                   $query->where('nama', 'LIKE', '%'.$value.'%')
+                       ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
+               }),
+               AllowedFilter::callback('tahun', function ($query, $value) {
+                   $query->whereYear('sdate', '<=', $value)
+                       ->whereYear('edate', '>=', $value);
+               }),
+
+           ])
+           ->allowedSorts([
+               'nama',
+               'asaldana',
+           ])->jsonPaginate();
+    }
+
+    public function cetakListBantuan()
+    {
+        return  QueryBuilder::for(Bantuan::class)
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
+                AllowedFilter::exact('sasaran'),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where('nama', 'LIKE', '%'.$value.'%')
                         ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
                 }),
-            ])
-            ->allowedSorts([
-                'nama',
-                'asaldana',
-            ])
-            ->jsonPaginate();
+                AllowedFilter::callback('tahun', function ($query, $value) {
+                    $query->whereYear('sdate', '<=', $value)
+                        ->whereYear('edate', '>=', $value);
+                }),
+
+            ])->get();
     }
 
     public function listStatistik($kategori): array
@@ -165,5 +189,10 @@ class BantuanRepository
                 'perempuan' => $totalPerempuan,
             ],
         ];
+    }
+
+    private function tahun()
+    {
+        return Bantuan::tahun()->first();
     }
 }

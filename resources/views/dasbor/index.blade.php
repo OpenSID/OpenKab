@@ -46,8 +46,6 @@
                         <canvas id="barChart"
                             style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%; display: block; width: 379px;"
                             width="758" height="500" class="chartjs-render-monitor"></canvas>
-                        <canvas id="lineChart"
-                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                     </div>
                 </div>
             </div>

@@ -11,11 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class KategoriController extends Controller
 {
-    public function __construct(protected KategoriRepository $keluarga)
-    {
-    }
-
-    public function __invoke()
+    public function __construct(protected KategoriRepository $kategori)
     {
     }
 
@@ -26,7 +22,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        return $this->fractal($this->keluarga->listKategori(), new ListKategoriTransformer(), 'daftar kategori')->respond();
+        return $this->fractal($this->kategori->listKategori(), new ListKategoriTransformer(), 'daftar kategori')->respond();
     }
 
     /**
@@ -75,7 +71,7 @@ class KategoriController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => $this->keluarga->show($request->id),
+            'data' => $this->kategori->show($request->id),
         ], Response::HTTP_OK);
     }
 
@@ -83,7 +79,6 @@ class KategoriController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -92,7 +87,7 @@ class KategoriController extends Controller
         try {
             $data = $request->validated();
             $data['slug'] = url_title($data['kategori']);
-            Kategori::where('id', (int) $id)->whereNull('config_id')->update($data);
+            Kategori::where('id', $id)->whereNull('config_id')->update($data);
 
             return response()->json([
                 'success' => true,
@@ -110,14 +105,13 @@ class KategoriController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = (int) $request->id;
         try {
-            Kategori::where('id', (int) $id)->delete();
+            Kategori::where('id', $id)->delete();
 
             return response()->json([
                 'success' => true,

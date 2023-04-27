@@ -80,13 +80,12 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/cetak', 'cetakBantuan');
         });
 
-    // Kategori
-    Route::controller(KategoriController::class)
-        ->prefix('kategori')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/tampil', 'show');
-            Route::put('/buat', 'store');
-            Route::post('/perbarui/{id}', 'update');
-            Route::post('/hapus/{id}', 'delete');
-        });
+    Route::controller(\App\Http\Controllers\Api\KategoriController::class)
+    ->prefix('kategori')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/tampil', 'show');
+        Route::post('/buat', 'store');
+        Route::put('/perbarui/{id}', 'update');
+        Route::post('/hapus', 'destroy');
+    });
 });

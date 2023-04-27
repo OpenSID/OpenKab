@@ -2,19 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Kategori extends Model
+class Kategori extends BaseModel
 {
     use HasFactory;
-    use ConfigIdTrait;
 
     public const ENABLE = 1;
-
-    /** {@inheritdoc} */
-    protected $connection = 'openkab';
 
     /**
      * The table associated with the model.
@@ -40,5 +35,10 @@ class Kategori extends Model
     public function scopeEnable($query)
     {
         return $query->where('enabled', static::ENABLE);
+    }
+
+    public function config()
+    {
+        return $this->hasOne(Config::class, 'id', 'config_id');
     }
 }

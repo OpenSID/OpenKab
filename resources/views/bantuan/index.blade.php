@@ -143,7 +143,7 @@
                 },
                 {
                     data: function(data) {
-                        return `<a href="{{ url('bantuan') }}/${data.id}">
+                        return `<a href="{{ url('bantuan/detail') }}/${data.id}">
                                     <button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Detail</button>
                                 </a>`
                     },
@@ -251,7 +251,6 @@
             url.searchParams.append("sasaran", $("#sasaran").val() ?? '');
             url.searchParams.append("tahun", $("#tahun").val() ?? '');
             url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');
-            console.log(url.href)
             window.open(url.href, '_blank');
         });
     </script>

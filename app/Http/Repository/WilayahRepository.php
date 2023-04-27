@@ -30,7 +30,7 @@ class WilayahRepository
         return QueryBuilder::for(ClusterDesa::class)
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                AllowedFilter::callback('subrw', function ($query, $value) {
+                AllowedFilter::callback('subDusun', function ($query, $value) {
                     $query->where('dusun', function ($query) use ($value) {
                         $query->from('tweb_wil_clusterdesa')->select('dusun')->where('id', $value);
                     });
@@ -53,7 +53,7 @@ class WilayahRepository
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('rw'),
-                AllowedFilter::callback('subdusun', function ($query, $value) {
+                AllowedFilter::callback('subRW', function ($query, $value) {
                     $query->where('dusun', function ($query) use ($value) {
                         $query->from('tweb_wil_clusterdesa')->select('dusun')->where('id', $value);
                     });

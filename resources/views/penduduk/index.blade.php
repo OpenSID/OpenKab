@@ -23,6 +23,18 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
+                            <div class="btn-group" role="group">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Pilih Aksi Lainnya
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" data-toggle="modal" data-target="#modal-mutasi">Mutasi
+                                            Penduduk</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -139,6 +151,43 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal-mutasi" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mutasi Penduduk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Penduduk</label>
+                            <select class="select2 form-control-sm" id="select2-penduduk" name="penduduk"
+                                data-placeholder="Semua Penduduk" style="width: 100%;">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status Dasar Baru</label>
+                            <select class="select2 form-control-sm" id="status-dasar" name="status-dasar"
+                                data-placeholder="Semua Status Dasar" style="width: 100%;">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Catatan Peristiwa</label>
+                            <textarea class="form-control" name="catatan"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-sm btn-primary">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
@@ -166,7 +215,8 @@
                         "filter[clusterDesa.rw]": $('#rw').val(),
                         "filter[clusterDesa.rt]": $('#rt').val(),
                         "filter[search]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name
                     };
                 },
                 dataSrc: function(json) {
@@ -199,7 +249,7 @@
                     }
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return `<a title="Lihat Detail Biodata Penduduk" href="penduduk/${data.id}">${data.attributes.nik}</a>`
                     },
                     name: "nik"
@@ -215,9 +265,9 @@
                 },
                 {
                     data: function(data) {
-                        if (data.attributes.keluarga?.no_kk ) {
+                        if (data.attributes.keluarga?.no_kk) {
                             return `<a title="Lihat Detail Biodata Keluarga" href="keluarga/detail/${data.attributes.keluarga.no_kk}">${data.attributes.keluarga.no_kk}</a>`
-                        }else{
+                        } else {
                             return null
                         }
                     },

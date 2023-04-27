@@ -1,5 +1,34 @@
 @push('js')
     <script>
+        $('#select2-penduduk').select2({
+            ajax: {
+                url: `{{ url('api/v1/penduduk') }}`,
+                dataType: 'json',
+                delay: 400,
+                data: function(params) {
+                    return {
+                        "filter[search]": params.term,
+                        "page[number]": params.page
+                    };
+                },
+                processResults: function(response, params) {
+                    params.page = params.page || 1;
+
+                    return {
+                        results: $.map(response.data, function(item) {
+                            return {
+                                id: item.id,
+                                text: `${item.attributes.nama} | ${item.attributes.nik}`,
+                            }
+                        }),
+                        pagination: {
+                            more: params.page < response.meta.pagination.total_pages
+                        }
+                    };
+                }
+            }
+        })
+
         $('#status').select2({
             ajax: {
                 url: `{{ url('api/v1/penduduk/referensi/status') }}`,

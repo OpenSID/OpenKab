@@ -40,7 +40,7 @@
                     delay: 400,
                     data: function(params) {
                         return {
-                            "filter[subrw]": e.params.data.id,
+                            "filter[subDusun]": e.params.data.id,
                             "filter[search]": params.term,
                             "page[number]": params.page
                         };
@@ -76,7 +76,7 @@
                     data: function(params) {
                         return {
                             "filter[rw]": e.params.data.id,
-                            "filter[subdusun]": $('#dusun').val(),
+                            "filter[subRW]": $('#dusun').val(),
                             "filter[search]": params.term,
                             "page[number]": params.page
                         };

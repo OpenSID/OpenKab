@@ -12,8 +12,8 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-2">
-                            <button id="tambah" type="button" class="btn btn-primary btn-block btn-sm" data-url=""><i
+                        <div class="col-md-3">
+                            <button id="tambah" type="button" class="btn btn-primary btn-sm" data-url=""><i
                                     class="far fa-plus-square"></i>
                                 Tambah</button>
                         </div>

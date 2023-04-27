@@ -1,8 +1,6 @@
 @extends('layouts.index')
 
-@include('components.progressive-image')
-
-@section('title', 'Data Peserta Bantuan')
+@section('title', 'Data Kategori Artikel')
 
 @section('content_header')
     <h1>Data Kategori Artikel</h1>
@@ -23,13 +21,14 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table">
+                    <div class="table-responsive">
                         <table class="table " id="kategori">
                             <thead>
                                 <tr>
-                                    <th style="width: 80px">#</th>
-                                    <th style="width: 80%">Kategori</th>
-                                    <th style="width: 15%">Aksi</th>
+                                    <th class="padat">#</th>
+                                    <th class="padat">No</th>
+                                    <th class="padat">Aksi</th>
+                                    <th>Kategori</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -44,18 +43,14 @@
 @section('js')
     <script>
         $(function() {
-            let nama_desa = `{{ session('desa.nama_desa') }}`;
-
-            // Return table with id generated from row's name field
             function format(rowData) {
                 var childTable = '<table id="cl' + rowData.id +
-                    '" class="display compact nowrap w-100 table-striped"   style="margin:0px !important">' +
+                    '" class="display compact nowrap w-100 table-striped" style="margin:0px !important">' +
                     '<thead style="display:none"></thead >' +
                     '</table>';
                 return $(childTable).toArray();
             }
 
-            // Main table
             var table = $('#kategori').DataTable({
 
                 ajax: {
@@ -69,8 +64,6 @@
                         return {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
-                            "page[size]": row.length,
-                            "page[number]": (row.start / row.length) + 1,
                             "filter[parrent]": 0,
                             "filter[search]": row.search.value,
                             "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
@@ -82,29 +75,32 @@
                 stateSave: true,
                 serverSide: true,
                 ordering: true,
-                lengthChange: false,
                 order: [
-                    [1, 'asc']
+                    [4, 'asc']
+                ],
+                columnDefs: [{
+                        targets: '_all',
+                        className: 'text-nowrap',
+                    },
+                    {
+                        targets: [0, 1, 2],
+                        orderable: false,
+                        searchable: false,
+                    },
                 ],
                 columns: [{
-                        className: 'details-control',
-                        orderable: false,
                         data: null,
+                        className: 'details-control padat',
                         defaultContent: ''
                     },
                     {
-                        data: "attributes.kategori",
-                        className: 'kategori',
-                        orderable: true,
-                        name: "kategori"
+                        data: null,
+                        className: 'padat',
                     },
-
                     {
                         data: "attributes.id",
                         className: 'aksi',
-                        orderable: false,
                         render: function(data, type, row) {
-
                             var id = row.id;
                             var render = `
                                     <button type="button" class="btn btn-info btn-sm sub" data-id="${id}" title="Tambah Sub">
@@ -123,18 +119,23 @@
                             return render;
                         }
                     },
+                    {
+                        data: "attributes.kategori",
+                        className: 'kategori',
+                        orderable: true,
+                        name: "kategori"
+                    },
                 ],
             });
 
             table.on('draw.dt', function() {
                 var PageInfo = $('#kategori').DataTable().page.info();
-                table.column(0, {
+                table.column(1, {
                     page: 'current'
                 }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1 + PageInfo.start;
                 });
             });
-
 
             // Add event listener for opening and closing first level childdetails
             $('#kategori tbody').on('click', 'td.details-control', function() {
@@ -161,18 +162,24 @@
                             url: '{{ url('api/v1/kategori') }}?filter[parrent]=' + rowData.id,
                             dataSrc: 'data'
                         },
-                        columns: [{
-                                data: null,
-                                defaultContent: '',
-                                className: 'w-56px',
+                        columnDefs: [{
+                                targets: '_all',
+                                className: 'text-nowrap',
                             },
                             {
-                                data: "attributes.kategori",
-                                className: 'pl-5 w-80 kategori',
+                                targets: [0, 1, 2],
+                                orderable: false,
+                                searchable: false,
+                            },
+                        ],
+                        columns: [{
+                                data: null,
+                                className: 'w-70px',
+                                defaultContent: '',
                             },
                             {
                                 data: "attributes.id",
-                                className: 'w-15',
+                                className: 'aksi w-100px',
                                 "render": function(data, type, row) {
                                     data = `
                                     <button type="button" class="btn btn-warning btn-sm edit" data-id="${row.id}" title="ubah">
@@ -187,11 +194,11 @@
                                     return data;
                                 }
                             },
+                            {
+                                data: "attributes.kategori",
+                                className: 'kategori',
+                            },
                         ],
-                        "columnDefs": [{
-                            "width": "20%",
-                            "targets": 0
-                        }]
                     });
 
                     tr.addClass('shown');
@@ -238,27 +245,27 @@
                                         'Data berhasil diperbarui',
                                         'success'
                                     )
-                                    console.log(that.parent().parent().find(
-                                        '.kategori'))
                                     that.parent().parent().find('.kategori').text(result
                                         .value)
                                 } else {
-                                    Swal.fire(
-                                        'Error!',
-                                        response.message,
-                                        'error'
-                                    )
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: response.message,
+                                        icon: 'error',
+                                        timer: 1500,
+                                        showConfirmButton: true,
+                                    })
                                 }
 
                             },
                             error: function(xhr, ajaxOptions, thrownError) {
-                                console.log(thrownError);
-                                Swal.fire(
-                                    'Error!',
-                                    thrownError,
-                                    'error'
-                                )
-
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: thrownError,
+                                    icon: 'error',
+                                    timer: 1500,
+                                    showConfirmButton: true,
+                                })
                             }
                         });
 
@@ -300,25 +307,28 @@
                                         title: 'Hapus!',
                                         text: 'Data berhasil dihapus',
                                         icon: 'success',
-                                        showConfirmButton: false,
+                                        showConfirmButton: true,
                                         timer: 1500
                                     })
                                     that.parent().parent().remove();
                                 } else {
-                                    Swal.fire(
-                                        'Error!',
-                                        response.message,
-                                        'error'
-                                    )
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: response.message,
+                                        icon: 'error',
+                                        timer: 1500,
+                                        showConfirmButton: true,
+                                    })
                                 }
                             },
                             error: function(xhr, ajaxOptions, thrownError) {
-                                Swal.fire(
-                                    'Error!',
-                                    thrownError,
-                                    'error'
-                                )
-
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: thrownError,
+                                    icon: 'error',
+                                    timer: 1500,
+                                    showConfirmButton: true,
+                                })
                             }
                         });
                     }
@@ -349,7 +359,6 @@
 
             $(document).on('click', 'button.sub', function() {
                 let parrent = $(this).data('id')
-                console.log(parrent)
                 Swal.fire({
                     title: 'Tambah Sub Kategori',
                     input: 'text',
@@ -389,7 +398,7 @@
                                 title: 'Berhasil!',
                                 text: 'Data berhasil ditambahkan',
                                 icon: 'success',
-                                showConfirmButton: false,
+                                showConfirmButton: true,
                                 timer: 1500
                             })
                             location.reload();

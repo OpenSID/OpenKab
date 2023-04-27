@@ -10,6 +10,19 @@ a:hover {
     color: inherit;
 }
 
+th.padat,
+td.padat {
+    width: 1%;
+    white-space: nowrap;
+    text-align: center;
+}
+
+td.aksi {
+    width: 1%;
+    white-space: nowrap;
+    text-align: left;
+}
+
 td.details-control {
     background: url(/assets/costume/img/details_open.png) no-repeat center center;
     cursor: pointer;
@@ -23,15 +36,27 @@ tr.shown td.details-control {
     transition: .5s;
 }
 
-.w-56px {
-    width: 56px!important;
-}
 .w-40 {
     width: 40%!important;
 }
-.w-80 {
-    width: 80%!important;
-}
+
 .w-42 {
     width: 42%!important;
 }
+
+.w-80 {
+    width: 80%!important;
+}
+
+.w-56px {
+    width: 56px!important;
+}
+
+.w-70px {
+    width: 70px!important;
+}
+
+.w-100px {
+    width: 100px!important;
+}
+

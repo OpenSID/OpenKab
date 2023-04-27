@@ -25,10 +25,11 @@ class BantuanPesertaRepository
                 'no_id_kartu',
                 'kartu_nama',
             ]);
+
         if ($all) {
             return $bantuan->jsonPaginate();
-        } else {
-            return $bantuan->get();
         }
+
+        return $bantuan->get();
     }
 }

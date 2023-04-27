@@ -23,7 +23,7 @@ class BantuanController extends Controller
 
     public function peserta()
     {
-        return $this->fractal($this->bantuanPeserta->listBantuanPeserta(), new BantuanPesertaTransformer(), 'peserta bantuan')->respond();
+        return $this->fractal($this->bantuanPeserta->listBantuanPeserta(true), new BantuanPesertaTransformer(), 'peserta bantuan')->respond();
     }
 
     public function cetakBantuan()

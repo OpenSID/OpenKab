@@ -370,6 +370,24 @@ return [
             'icon' => 'fas fa-handshake',
             'url' => 'bantuan',
         ],
+
+        [
+            'text' => 'Master Data',
+            'icon' => 'fa fa-tags',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Bantuan',
+                    'url' => 'master/bantuan',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Kategori Artikel',
+                    'url' => 'master/kategori',
+                ],
+            ],
+        ],
+
         [
             'text' => 'Pengaturan',
             'icon' => 'fa fa-cog',
@@ -503,6 +521,21 @@ return [
                 ],
             ],
         ],
+        'Sweetalert2' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js',
+                ],
+            ],
+        ],
         'Alpine' => [
             'active' => true,
             'files' => [
@@ -536,12 +569,12 @@ return [
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => '/assets/costume/admin.css',
+                    'location' => '/assets/costume/css/admin.css',
                 ],
                 [
                     'type' => 'js',
                     'asset' => true,
-                    'location' => '/assets/costume/admin.js',
+                    'location' => '/assets/costume/js/admin.js',
                 ],
             ],
         ],

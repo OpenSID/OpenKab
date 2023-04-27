@@ -25,7 +25,7 @@ class KategoriRequest extends FormRequest
     {
         return [
             'kategori' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
-            'parrent' => 'digits',
+            'parrent' => 'sometimes|integer',
         ];
     }
 }

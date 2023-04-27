@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminWebController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\KeluargaController;
@@ -68,8 +69,8 @@ Route::middleware('auth')->group(function () {
         ->prefix('bantuan')
         ->group(function () {
             Route::get('/', 'index');
-            Route::get('/{id}', 'show');
             Route::get('/cetak', 'cetak');
+            Route::get('/detail/{id}', 'show');
         });
 
     // Statistik
@@ -81,5 +82,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
             Route::get('/cetak/{kategori}/{id}', 'cetak');
+        });
+
+    // Master Data
+    Route::controller(AdminWebController::class)
+        ->prefix('master')
+        ->group(function () {
+            Route::get('/kategori', 'kategori_index');
         });
 });

@@ -536,21 +536,6 @@ return [
                 ],
             ],
         ],
-        'Custom' => [
-            'active' => true,
-            'files' => [
-                [
-                    'type' => 'css',
-                    'asset' => true,
-                    'location' => '/assets/css/custom.css',
-                ],
-                [
-                    'type' => 'js',
-                    'asset' => true,
-                    'location' => '/assets/js/script.js',
-                ],
-            ],
-        ],
         'Alpine' => [
             'active' => true,
             'files' => [
@@ -584,12 +569,12 @@ return [
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => '/assets/costume/admin.css',
+                    'location' => '/assets/costume/css/admin.css',
                 ],
                 [
                     'type' => 'js',
                     'asset' => true,
-                    'location' => '/assets/costume/admin.js',
+                    'location' => '/assets/costume/js/admin.js',
                 ],
             ],
         ],

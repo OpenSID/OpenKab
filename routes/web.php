@@ -1,16 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\DasborController;
-use App\Http\Middleware\WilayahMiddleware;
-use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\BantuanController;
+use App\Http\Controllers\DasborController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\PendudukController;
-use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Controllers\StatistikController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\KecamatanMiddleware;
+use App\Http\Middleware\WilayahMiddleware;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,8 +69,8 @@ Route::middleware('auth')->group(function () {
         ->prefix('bantuan')
         ->group(function () {
             Route::get('/', 'index');
-            Route::get('/{id}', 'show');
             Route::get('/cetak', 'cetak');
+            Route::get('/detail/{id}', 'show');
         });
 
     // Statistik

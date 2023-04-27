@@ -3,8 +3,8 @@
 namespace App\Http\Repository;
 
 use App\Models\Covid;
-use App\Models\LogPenduduk;
 use App\Models\Ktp;
+use App\Models\LogPenduduk;
 use App\Models\Penduduk;
 use App\Models\Umur;
 use Illuminate\Support\Facades\DB;
@@ -71,11 +71,10 @@ class PendudukRepository
         })->toArray();
     }
 
-    public function listTahun( )
+    public function listTahun()
     {
         return LogPenduduk::selectRaw('year(tgl_peristiwa) as tahun')->groupBy('tahun')
             ->get();
-
     }
 
     private function tabelReferensi($kategori): array|object
@@ -273,20 +272,21 @@ class PendudukRepository
 
     private function countStatistikPendudukHidup(string $whereHeader = null): array|object
     {
-         $penduduk =  Penduduk::countStatistik()->whereRaws($whereHeader)->whereHas('logPenduduk', function ($q) {
-            $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=' , '2')->groupBy('log_penduduk.id');
+        $penduduk = Penduduk::countStatistik()->whereRaws($whereHeader)->whereHas('logPenduduk', function ($q) {
+            $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=', '2')->groupBy('log_penduduk.id');
 
             if (isset(request('filter')['tahun'])) {
-                $q->whereYear('tgl_peristiwa', '<=',  request('filter')['tahun']);
+                $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
             }
 
             if (isset(request('filter')['bulan'])) {
-                $q->whereMonth('tgl_peristiwa', '<=' ,request('filter')['bulan']);
+                $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
             }
-         });
-         if (!isset(request('filter')['tahun']) && !isset(request('filter')['bulan'])) {
+        });
+        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
             $penduduk->status();
-         }
+        }
+
         return $penduduk->get();
     }
 
@@ -307,17 +307,17 @@ class PendudukRepository
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
             $log_penduduk = LogPenduduk::select('log_penduduk.id')
             ->selectRaw('Max(log_penduduk.id) as max')
-            ->where('kode_peristiwa', '!=',2)
+            ->where('kode_peristiwa', '!=', 2)
             ->whereRaw('tweb_penduduk.id = log_penduduk.id_pend')
-            ->when(isset(request('filter')['tahun']), function ($q){
-              return $q->whereYear('tgl_peristiwa', '<=',  request('filter')['tahun']);
+            ->when(isset(request('filter')['tahun']), function ($q) {
+                return $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
             })
-            ->when(isset(request('filter')['bulan']), function ($q){
-             return $q->whereMonth('tgl_peristiwa', '<=',  request('filter')['bulan']);
-           })
+            ->when(isset(request('filter')['bulan']), function ($q) {
+                return $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
+            })
            ->groupBy('log_penduduk.id')
            ->toBoundSql();
-         }
+        }
 
         $sql = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
@@ -327,6 +327,7 @@ class PendudukRepository
         if (isset($log_penduduk)) {
             $sql->whereRaw("EXISTS($log_penduduk)");
         }
+
         return $sql->get();
     }
 

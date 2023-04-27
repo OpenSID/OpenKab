@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class MacroServiceProvider extends ServiceProvider
 {

@@ -15,10 +15,12 @@ class KategoriRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
+                AllowedFilter::exact('parrent'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('kategori', 'LIKE', '%'.$value.'%');
+                }),
                 'kategori',
-                'parrent',
                 'tipe',
-                'parrent',
             ])
             ->allowedSorts([
                 'kategori',
@@ -26,12 +28,11 @@ class KategoriRepository
                 'id',
                 'parrent',
             ])
-            ->get();
+            ->jsonPaginate();
     }
 
     public function show($id)
     {
-        return Kategori::where('id', $id)->whereNull('config_id')
-        ->first();
+        return Kategori::where('id', $id)->whereNull('config_id')->first();
     }
 }

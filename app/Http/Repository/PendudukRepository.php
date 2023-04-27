@@ -190,7 +190,6 @@ class PendudukRepository
     private function listFooter($data_header, $query_footer): array|object
     {
         $data_header = collect($data_header);
-
         if (count($data_header) > 0) {
             $jumlah_laki_laki = $data_header->sum('laki_laki');
             $jumlah_perempuan = $data_header->sum('perempuan');
@@ -274,7 +273,21 @@ class PendudukRepository
 
     private function countStatistikPendudukHidup(string $whereHeader = null): array|object
     {
-        return Penduduk::countStatistik()->whereRaws($whereHeader)->status()->get();
+         $penduduk =  Penduduk::countStatistik()->whereRaws($whereHeader)->whereHas('logPenduduk', function ($q) {
+            $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=' , '2')->groupBy('log_penduduk.id');
+
+            if (isset(request('filter')['tahun'])) {
+                $q->whereYear('tgl_peristiwa', '<=',  request('filter')['tahun']);
+            }
+
+            if (isset(request('filter')['bulan'])) {
+                $q->whereMonth('tgl_peristiwa', '<=' ,request('filter')['bulan']);
+            }
+         });
+         if (!isset(request('filter')['tahun']) && !isset(request('filter')['bulan'])) {
+            $penduduk->status();
+         }
+        return $penduduk->get();
     }
 
     public function countStatistikByKategori(string $tabelReferensi, string $idReferensi, string $whereFooter = null): array|object

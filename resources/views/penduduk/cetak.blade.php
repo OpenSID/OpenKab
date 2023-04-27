@@ -44,8 +44,11 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+            var str = `{{ $filter }}`
+            var filter = str.replace(/&amp;/g, '&')
+
             $.ajax({
-                url: `{{ url('api/v1/penduduk') }}?{{ $filter }}`,
+                url: `{{ url('api/v1/penduduk') }}?${filter}`,
                 method: 'get',
                 success: function(json) {
                     var no = 1;

@@ -319,7 +319,6 @@
 
         $('#cetak').on('click', function() {
             window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
-            console.log(decodeURIComponent($.param(penduduk.ajax.params())))
         });
     </script>
 @endsection

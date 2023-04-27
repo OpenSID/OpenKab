@@ -22,7 +22,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table " id="kategori">
+                        <table class="table table-striped" id="kategori">
                             <thead>
                                 <tr>
                                     <th class="padat">#</th>
@@ -310,7 +310,7 @@
                                         showConfirmButton: true,
                                         timer: 1500
                                     })
-                                    that.parent().parent().remove();
+                                    table.ajax.reload(null, false);
                                 } else {
                                     Swal.fire({
                                         title: 'Error!',
@@ -401,7 +401,7 @@
                                 showConfirmButton: true,
                                 timer: 1500
                             })
-                            location.reload();
+                            table.ajax.reload(null, false);
                         } else {
                             Swal.fire(
                                 'Error!',
@@ -416,7 +416,6 @@
                             thrownError,
                             'error'
                         )
-
                     }
                 });
             }

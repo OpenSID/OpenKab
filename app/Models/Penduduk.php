@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
  * @property \App\Models\Enums\TempatDilahirkanEnum  $tempat_dilahirkan
  * @property \App\Models\Enums\JenisKelahiranEnum    $jenis_kelahiran
  * @property \App\Models\Enums\PenolongKelahiranEnum $penolong_kelahiran
- * @property \Carbon\Carbon $tanggallahir
+ * @property \Carbon\Carbon                          $tanggallahir
  */
 class Penduduk extends BaseModel
 {

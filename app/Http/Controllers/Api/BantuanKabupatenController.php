@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Config;
-
+use App\Http\Repository\BantuanRepository;
+use App\Http\Requests\BantuanRequest;
+use App\Http\Transformers\BantuanTransformer;
 use App\Models\Bantuan;
 use Illuminate\Http\Request;
-use App\Http\Requests\BantuanRequest;
-use App\Http\Controllers\Api\Controller;
-use App\Http\Repository\BantuanRepository;
-use App\Http\Transformers\BantuanTransformer;
 use Symfony\Component\HttpFoundation\Response;
 
 class BantuanKabupatenController extends Controller
 {
-
     public function __construct(protected BantuanRepository $bantuan)
     {
     }
@@ -30,13 +26,14 @@ class BantuanKabupatenController extends Controller
      */
     public function index()
     {
-         return $this->fractal($this->bantuan->listBantuanKabupaten(), new BantuanTransformer(), 'daftar bantuan kabupaten')->respond();
+        return $this->fractal($this->bantuan->listBantuanKabupaten(), new BantuanTransformer(), 'daftar bantuan kabupaten')->respond();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(BantuanRequest $request)
@@ -45,13 +42,13 @@ class BantuanKabupatenController extends Controller
             $data = $request->validated();
             $insert = [
                 'config_id' => null,
-                'nama'      => $data['nama'],
-                'sasaran'   => $data['sasaran'],
-                'ndesc'     => $data['ndesc'],
-                'sdate'     => $data['sdate'],
-                'edate'     => $data['edate'],
-                'asaldana'  => $data['asaldana'],
-                'userid'    => 1,
+                'nama' => $data['nama'],
+                'sasaran' => $data['sasaran'],
+                'ndesc' => $data['ndesc'],
+                'sdate' => $data['sdate'],
+                'edate' => $data['edate'],
+                'asaldana' => $data['asaldana'],
+                'userid' => 1,
             ];
             Bantuan::insert($insert);
 
@@ -60,6 +57,7 @@ class BantuanKabupatenController extends Controller
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -69,8 +67,9 @@ class BantuanKabupatenController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(BantuanRequest $request, $id)
@@ -79,24 +78,25 @@ class BantuanKabupatenController extends Controller
             $data = $request->validated();
             $update = [
                 'config_id' => null,
-                'nama'      => $data['nama'],
-                'sasaran'   => $data['sasaran'],
-                'ndesc'     => $data['ndesc'],
-                'sdate'     => $data['sdate'],
-                'edate'     => $data['edate'],
-                'asaldana'  => $data['asaldana'],
-                'userid'    => 1,
+                'nama' => $data['nama'],
+                'sasaran' => $data['sasaran'],
+                'ndesc' => $data['ndesc'],
+                'sdate' => $data['sdate'],
+                'edate' => $data['edate'],
+                'asaldana' => $data['asaldana'],
+                'userid' => 1,
             ];
-            Bantuan::where('id' , (int) $id)->whereNull('config_id')->update($update);
+            Bantuan::where('id', (int) $id)->whereNull('config_id')->update($update);
 
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -104,23 +104,25 @@ class BantuanKabupatenController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
         $id = (int) $request->id;
         try {
-            Bantuan::where('id' , $id)->delete();
+            Bantuan::where('id', $id)->delete();
 
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

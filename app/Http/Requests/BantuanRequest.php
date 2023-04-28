@@ -24,11 +24,11 @@ class BantuanRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama'     => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
-            'sasaran'  => 'required|integer',
-            'ndesc'    => 'required|string',
-            'sdate'    => 'required|date',
-            'edate'    => 'required|date',
+            'nama' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
+            'sasaran' => 'required|integer',
+            'ndesc' => 'required|string',
+            'sdate' => 'required|date',
+            'edate' => 'required|date',
             'asaldana' => 'required|string',
         ];
     }

@@ -49,6 +49,16 @@ class StatistikController extends Controller
         ], Response::HTTP_NOT_FOUND);
     }
 
+    public function refTahunPenduduk(PendudukRepository $penduduk)
+    {
+        $list = $penduduk->listTahun();
+
+        return response()->json([
+            'success' => true,
+            'data' => $list,
+        ], Response::HTTP_OK);
+    }
+
     public function keluarga(KeluargaRepository $keluarga)
     {
         if ($this->kategori) {

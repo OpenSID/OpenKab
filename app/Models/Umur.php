@@ -60,6 +60,25 @@ class Umur extends BaseModel
             $query = $query->where('config_id', 1);
         }
 
+        if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
+            $log_penduduk = LogPenduduk::select('log_penduduk.id')
+            ->selectRaw('Max(log_penduduk.id) as max')
+            ->where('kode_peristiwa', '!=', 2)
+            ->whereRaw('tweb_penduduk.id = log_penduduk.id_pend')
+            ->when(isset(request('filter')['tahun']), function ($q) {
+                return $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
+            })
+            ->when(isset(request('filter')['bulan']), function ($q) {
+                return $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
+            })
+          ->groupBy('log_penduduk.id')
+          ->toBoundSql();
+        }
+
+        if (isset($log_penduduk)) {
+            $where .= " AND EXISTS($log_penduduk)";
+        }
+
         $newQuery = $query
             ->select(['id', 'nama'])
             ->selectRaw("(SELECT COUNT(tweb_penduduk.id) FROM tweb_penduduk WHERE tweb_penduduk.`sex` = '1' AND tweb_penduduk.`status_dasar` = 1 $where) as laki_laki")

@@ -46,10 +46,12 @@ class BantuanKabupatenController extends Controller
             $insert = [
                 'config_id' => null,
                 'nama'      => $data['nama'],
+                'sasaran'   => $data['sasaran'],
                 'ndesc'     => $data['ndesc'],
                 'sdate'     => $data['sdate'],
-                'ndate'     => $data['ndate'],
+                'edate'     => $data['edate'],
                 'asaldana'  => $data['asaldana'],
+                'userid'    => 1,
             ];
             Bantuan::insert($insert);
 
@@ -78,10 +80,12 @@ class BantuanKabupatenController extends Controller
             $update = [
                 'config_id' => null,
                 'nama'      => $data['nama'],
+                'sasaran'   => $data['sasaran'],
                 'ndesc'     => $data['ndesc'],
                 'sdate'     => $data['sdate'],
-                'ndate'     => $data['ndate'],
+                'edate'     => $data['edate'],
                 'asaldana'  => $data['asaldana'],
+                'userid'    => 1,
             ];
             Bantuan::where('id' , (int) $id)->whereNull('config_id')->update($update);
 
@@ -105,8 +109,9 @@ class BantuanKabupatenController extends Controller
      */
     public function destroy(Request $request)
     {
+        $id = (int) $request->id;
         try {
-            Bantuan::where('id' , (int) $request->id)->delete();
+            Bantuan::where('id' , $id)->delete();
 
             return response()->json([
                 'success' => true,

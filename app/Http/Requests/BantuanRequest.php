@@ -28,7 +28,7 @@ class BantuanRequest extends FormRequest
             'sasaran'  => 'required|integer',
             'ndesc'    => 'required|string',
             'sdate'    => 'required|date',
-            'ndate'    => 'required|date',
+            'edate'    => 'required|date',
             'asaldana' => 'required|string',
         ];
     }

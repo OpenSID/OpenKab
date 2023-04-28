@@ -14,7 +14,7 @@ class BantuanKabupatenController extends Controller
      */
     public function index()
     {
-        
+        return view('master.bantuan.index');
     }
 
     /**
@@ -24,7 +24,7 @@ class BantuanKabupatenController extends Controller
      */
     public function create()
     {
-        //
+        dd('a');
     }
 
     /**

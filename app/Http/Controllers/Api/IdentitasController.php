@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\KategoriRequest;
 use App\Http\Repository\IdentitasRepository;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Transformers\ListKategoriTransformer;
+use App\Http\Transformers\IdentitasTransformer;
 
 class IdentitasController extends Controller
 {
@@ -22,7 +22,7 @@ class IdentitasController extends Controller
      */
     public function index()
     {
-        return $this->fractal($this->identitas->identitas(), new ListKategoriTransformer(), 'identitas')->respond();
+        return $this->fractal($this->identitas->identitas(), new IdentitasTransformer(), 'identitas')->respond();
     }
 
     /**

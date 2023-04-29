@@ -2,6 +2,7 @@
 
 namespace App\Http\Transformers;
 
+use App\Models\Bantuan;
 use App\Models\Identitas;
 use App\Models\Kategori;
 use League\Fractal\TransformerAbstract;

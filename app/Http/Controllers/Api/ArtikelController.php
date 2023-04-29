@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\ArtikelRepository;
 use App\Models\Artikel;
+use App\Models\Config;
+use App\Models\Kategori;
 use App\Models\Enums\SasaranEnum;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,11 +19,19 @@ class ArtikelController extends Controller
         ], \Illuminate\Http\Response::HTTP_OK);
     }
 
-    public function sasaran()
+    public function nama_desa()
     {
         return response()->json([
             'success' => true,
-            'data' => SasaranEnum::object(),
+            'data' => Config::select('id', 'nama_desa')->get(),
+        ], Response::HTTP_OK);
+    }
+
+    public function kategori()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => Kategori::select('id', 'kategori')->get(),
         ], Response::HTTP_OK);
     }
 

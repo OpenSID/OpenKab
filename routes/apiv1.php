@@ -94,7 +94,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->prefix('artikel')->group(function () {
             Route::get('/', 'index');
             Route::get('/kategori', 'kategori');
-            Route::get('/kelurahan', 'kelurahan');
+            Route::get('/nama_desa', 'nama_desa');
             Route::get('/tahun', 'tahun');
             Route::get('/bulan', 'bulan');
         });

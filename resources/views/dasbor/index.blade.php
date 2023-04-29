@@ -106,7 +106,7 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Kategori</label>
-                                            <select class="select2 form-control-sm" id="id_kategori" name="id_kategori"
+                                            <select class="select2 form-control-sm" id="kategori" name="id_kategori"
                                                     data-placeholder="Semua Kategori" style="width: 100%;">
                                             </select>
                                         </div>
@@ -259,7 +259,7 @@
                         "filter[nama_desa]": $("#nama_desa").val(),
                         "filter[tahun]": $("#tahun").val(),
                         "filter[bulan]": $("#bulan").val(),
-                        "filter[id_kategori]": $("#id_kategori").val(),
+                        "filter[id_kategori]": $("#kategori").val(),
                     };
                 },
                 dataSrc: function(json) {
@@ -306,10 +306,10 @@
             });
         });
 
-        $('#id_kategori').select2({
+        $('#kategori').select2({
             minimumResultsForSearch: -1,
             ajax: {
-                url: '{{ url('api/v1/artikel') }}/id_kategori/',
+                url: '{{ url('api/v1/artikel') }}/kategori/',
                 dataType: 'json',
                 processResults: function(response) {
                     return {
@@ -359,7 +359,7 @@
                         results: response.data.map(function(item) {
                             return {
                                 id: item.id,
-                                text: item.kategori
+                                text: item.nama_desa
                             }
                         })
                     };
@@ -376,7 +376,7 @@
             $('#nama_desa').val('').change();
             $('#tahun').val('').change();
             $('#bulan').val('').change();
-            $('#id_kategori').val('').change();
+            $('#kategori').val('').change();
 
             berita.ajax.reload();
         });

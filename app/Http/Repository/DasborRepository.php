@@ -88,7 +88,6 @@ class DasborRepository
             ->join('artikel', 'config.id', '=', 'artikel.config_id')
             ->groupBy('config.id');
 
-
         return QueryBuilder::for($query)
             ->allowedFilters([
                 AllowedFilter::exact('nama_desa'),

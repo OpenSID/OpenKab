@@ -92,6 +92,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Bantuan
     Route::controller(\App\Http\Controllers\Api\ArtikelController::class)
         ->prefix('artikel')->group(function () {
+            Route::get('/', 'index');
             Route::get('/kategori', 'kategori');
             Route::get('/kelurahan', 'kelurahan');
             Route::get('/tahun', 'tahun');

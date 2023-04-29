@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Kategori;
+use App\Models\Identitas;
 use Illuminate\Http\Request;
-use App\Http\Requests\KategoriRequest;
+use App\Http\Requests\IdentitasRequest;
 use App\Http\Repository\IdentitasRepository;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Transformers\IdentitasTransformer;
@@ -32,12 +32,11 @@ class IdentitasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(KategoriRequest $request, $id)
+    public function update(IdentitasRequest $request, $id)
     {
         try {
-            $data = $request->validated();
-            $data['slug'] = url_title($data['kategori']);
-            Kategori::where('id', $id)->whereNull('config_id')->update($data);
+            $data = $request->all();
+            Identitas::where('id', $id)->update($data);
 
             return response()->json([
                 'success' => true,

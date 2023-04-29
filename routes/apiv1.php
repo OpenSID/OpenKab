@@ -88,4 +88,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/perbarui/{id}', 'update');
         Route::post('/hapus', 'destroy');
     });
+
+    // Bantuan
+    Route::controller(\App\Http\Controllers\Api\ArtikelController::class)
+        ->prefix('artikel')->group(function () {
+            Route::get('/kategori', 'kategori');
+            Route::get('/kelurahan', 'kelurahan');
+            Route::get('/tahun', 'tahun');
+            Route::get('/bulan', 'bulan');
+        });
 });

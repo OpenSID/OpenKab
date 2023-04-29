@@ -394,6 +394,11 @@ return [
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Identitas',
+                    'url' => 'identitas',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
                     'url' => 'users',
                 ],

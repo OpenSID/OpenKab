@@ -50,6 +50,97 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                               aria-expanded="false" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="collapse-filter" class="collapse">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Kelurahan</label>
+                                            <select class="select2 form-control-sm" id="nama_desa" name="nama_desa"
+                                                    data-placeholder="Nama Kelurahan" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Tahun</label>
+                                            <select class="select2 form-control-sm" id="tahun" name="tahun"
+                                                    data-placeholder="Semua Tahun" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Bulan</label>
+                                            <select class="select2 form-control-sm" id="bulan" name="bulan"
+                                                    data-placeholder="Semua Bulan" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Kategori</label>
+                                            <select class="select2 form-control-sm" id="id_kategori" name="id_kategori"
+                                                    data-placeholder="Semua Kategori" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="berita">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kelurahan</th>
+                                <th>Jumlah Artikel Perkelurahan</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -63,6 +154,7 @@
                 success: function(response) {
                     res = response.data;
                     dataGrafik = res.grafik_penduduk;
+                    dataBerita = res.statistik_berita;
                     $('#penduduk').find('.info-box-number').text('L : ' + res
                         .jumlah_penduduk_laki_laki +
                         ' | P : ' + res.jumlah_penduduk_perempuan);
@@ -127,5 +219,177 @@
                 options: barChartOptions
             })
         }
+    </script>
+    <script>
+        var berita = $('#berita').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: true,
+            searchPanes: {
+                viewTotal: false,
+                columns: [0]
+            },
+            ajax: {
+                url: `{{ url('api/v1/dasbor') }}`,
+                method: 'get',
+                data: function(response) {
+                    res = response.data;
+                    row = res.statistik_berita;
+                    return {
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name,
+                        "filter[nama_desa]": $("#nama_desa").val(),
+                        "filter[tahun]": $("#tahun").val(),
+                        "filter[bulan]": $("#bulan").val(),
+                        "filter[id_kategori]": $("#id_kategori").val(),
+                    };
+                },
+                dataSrc: function(json) {
+                    json.recordsTotal = json.meta.pagination.total
+                    json.recordsFiltered = json.meta.pagination.total
+
+                    return json.data
+                },
+            },
+            columnDefs: [{
+                targets: '_all',
+                className: 'text-nowrap',
+            },
+                {
+                    targets: [0, 1, 2],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
+            columns: [{
+                data: null,
+            },
+                {
+                    data: "attributes.nama_desa",
+                    name: "nama_desa"
+                },
+                {
+                    data: "attributes.jumlah",
+                    name: "jumlah",
+                    className: 'text-center'
+                },
+            ],
+            order: [
+                [1, 'asc']
+            ]
+        })
+
+        berita.on('draw.dt', function() {
+            var PageInfo = $('#berita').DataTable().page.info();
+            berita.column(0, {
+                page: 'current'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
+        });
+
+        $('#id_kategori').select2({
+            minimumResultsForSearch: -1,
+            ajax: {
+                url: '{{ url('api/v1/artikel') }}/id_kategori/',
+                dataType: 'json',
+                processResults: function(response) {
+                    return {
+                        results: response.data.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.kategori
+                            }
+                        })
+                    };
+                }
+            },
+        });
+
+        $('#tahun').select2({
+            minimumResultsForSearch: -1,
+            ajax: {
+                url: '{{ url('api/v1/artikel') }}/tahun/',
+                dataType: 'json',
+                processResults: function(data) {
+                    if (data.data.tahun_awal == null) {
+                        return null
+                    };
+                    const element = new Array();
+
+                    for (let index = data.data.tahun_awal; index <= data.data.tahun_akhir; index++) {
+                        element.push({
+                            id: index,
+                            text: index
+                        });
+                    }
+
+                    return {
+                        results: element
+                    };
+                }
+            },
+        });
+
+        $('#bulan').select2({
+            minimumResultsForSearch: -1,
+            ajax: {
+                url: '{{ url('api/v1/artikel') }}/bulan/',
+                dataType: 'json',
+                processResults: function(data) {
+                    if (data.data.tahun_awal == null) {
+                        return null
+                    };
+                    const element = new Array();
+
+                    for (let index = data.data.tahun_awal; index <= data.data.tahun_akhir; index++) {
+                        element.push({
+                            id: index,
+                            text: index
+                        });
+                    }
+
+                    return {
+                        results: element
+                    };
+                }
+            },
+        });
+
+        $('#nama_desa').select2({
+            minimumResultsForSearch: -1,
+            ajax: {
+                url: '{{ url('api/v1/artikel') }}/nama_desa/',
+                dataType: 'json',
+                processResults: function(response) {
+                    return {
+                        results: response.data.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.kategori
+                            }
+                        })
+                    };
+                }
+            },
+        });
+
+        $('#filter').on('click', function(e) {
+            berita.draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#nama_desa').val('').change();
+            $('#tahun').val('').change();
+            $('#bulan').val('').change();
+            $('#id_kategori').val('').change();
+
+            berita.ajax.reload();
+        });
     </script>
 @endpush

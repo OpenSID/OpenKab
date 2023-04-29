@@ -3,11 +3,11 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
+use App\Models\Config;
 use App\Models\Enums\JenisKelaminEnum;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
 use App\Models\Rtm;
-use App\Models\Config;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -87,6 +87,8 @@ class DasborRepository
             ->selectRaw('count(artikel.id) as jumlah')
             ->join('artikel', 'config.id', '=', 'artikel.config_id')
             ->groupBy('config.id');
+
+
         return QueryBuilder::for($query)
             ->allowedFilters([
                 AllowedFilter::exact('nama_desa'),

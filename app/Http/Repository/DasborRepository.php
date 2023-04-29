@@ -8,6 +8,8 @@ use App\Models\Keluarga;
 use App\Models\Penduduk;
 use App\Models\Rtm;
 use App\Models\Config;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class DasborRepository
 {
@@ -85,6 +87,26 @@ class DasborRepository
             ->selectRaw('count(artikel.id) as jumlah')
             ->join('artikel', 'config.id', '=', 'artikel.config_id')
             ->groupBy('config.id');
-        return $query->get();
+        return QueryBuilder::for($query)
+            ->allowedFilters([
+                AllowedFilter::exact('nama_desa'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama_desa', 'LIKE', '%'.$value.'%')
+                        ->orWhere('tgl_upload', 'LIKE', '%'.$value.'%');
+                }),
+                AllowedFilter::callback('tahun', function ($query, $value) {
+                    $query->whereYear('tgl_upload', '<=', $value)
+                        ->whereYear('tgl_upload', '>=', $value);
+                }),
+                AllowedFilter::callback('bulan', function ($query, $value) {
+                    $query->whereMonth('tgl_upload', '<=', $value)
+                        ->whereMonth('tgl_upload', '>=', $value);
+                }),
+                AllowedFilter::callback('id_kategori', function ($query, $value) {
+                    $query->where('id_kategori', $value);
+                }),
+
+            ])
+            ->get();
     }
 }

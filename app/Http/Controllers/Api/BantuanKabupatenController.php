@@ -40,6 +40,7 @@ class BantuanKabupatenController extends Controller
     {
         try {
             $data = $request->validated();
+            
             $insert = [
                 'config_id' => null,
                 'nama' => $data['nama'],

@@ -14,8 +14,7 @@
                     <a href="{{ route('bantuan.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Bantuan</a>
                 </div>
-                <form action="{{ route('bantuan.store') }}" method="POST" id="form-user">
-                    @csrf
+                <form id="bantuan-form">
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="col">
@@ -97,7 +96,7 @@
                     <div class="card-footer">
                         <button type="button" id="reset" class="btn btn-danger btn-sm"><i
                                 class="fas fa-times"></i>&nbsp; Batal</button>
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i>&nbsp;
+                        <button id="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i>&nbsp;
                             Simpan</button>
                     </div>
                 </form>
@@ -107,3 +106,63 @@
 @endsection
 
 @include('partials.reset_form')
+
+@section('js')
+    <script>
+        $(document).on('click', 'button#submit', function(e) {
+                e.preventDefault();
+                formData = $('#bantuan-form').serialize();
+                
+                Swal.fire({
+                    title: 'Tambah',
+                    text: "Apakah anda yakin menambah data ini?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Hapus'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Menyimpan',
+                            didOpen: () => {
+                                Swal.showLoading()
+                            },
+                        })
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            dataType: "json",
+                            url: `{{ url('api/v1/bantuan-kabupaten/buat') }}`,
+                            data: formData,
+                            success: function(response, data) {
+                                if (response.success == true) {
+                                    Swal.fire({
+                                        title: 'Berhasil!',
+                                        text: 'Data berhasil ditambahkan',
+                                        icon: 'success',
+                                        showConfirmButton: true,
+                                        timer: 1500
+                                    })
+                                    window.location = `{{ url('master/bantuan') }}`
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        response.message,
+                                        'error'
+                                    )
+                                }
+                            },
+                            error: function(xhr, ajaxOptions, thrownError) {
+                                Swal.fire(
+                                    'Error!',
+                                    thrownError,
+                                    'error'
+                                )
+                            }
+                        });
+                    }
+                })
+            });
+    </script>
+@endsection

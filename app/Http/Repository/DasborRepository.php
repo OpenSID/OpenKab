@@ -7,12 +7,14 @@ use App\Models\Enums\JenisKelaminEnum;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
 use App\Models\Rtm;
+use App\Models\Config;
 
 class DasborRepository
 {
     public function listDasbor()
     {
         return [
+            'statistik_berita' => $this->statistikBerita(),
             'jumlah_penduduk_laki_laki' => Penduduk::status()->jenisKelamin(JenisKelaminEnum::laki_laki)->count(),
             'jumlah_penduduk_perempuan' => Penduduk::status()->jenisKelamin(JenisKelaminEnum::perempuan)->count(),
             'jumlah_penduduk' => Penduduk::status()->count(),
@@ -74,5 +76,15 @@ class DasborRepository
             'laki_laki' => $data->pluck('laki_laki'),
             'perempuan' => $data->pluck('perempuan'),
         ];
+    }
+
+    private function statistikBerita()
+    {
+        $query = Config::query()
+            ->select('nama_desa')
+            ->selectRaw('count(artikel.id) as jumlah')
+            ->join('artikel', 'config.id', '=', 'artikel.config_id')
+            ->groupBy('config.id');
+        return $query->get();
     }
 }

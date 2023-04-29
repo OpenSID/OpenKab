@@ -88,4 +88,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/perbarui/{id}', 'update');
         Route::post('/hapus', 'destroy');
     });
+
+    Route::controller(\App\Http\Controllers\Api\IdentitasController::class)
+    ->prefix('identitas')->group(function () {
+        Route::get('/', 'index');
+        Route::put('/perbarui/{id}', 'update');
+    });
 });

@@ -6,7 +6,6 @@ use App\Http\Repository\ArtikelRepository;
 use App\Models\Artikel;
 use App\Models\Config;
 use App\Models\Kategori;
-use App\Models\Enums\SasaranEnum;
 use Symfony\Component\HttpFoundation\Response;
 
 class ArtikelController extends Controller

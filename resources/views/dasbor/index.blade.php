@@ -166,7 +166,6 @@
                 success: function(response) {
                     res = response.data;
                     dataGrafik = res.grafik_penduduk;
-                    dataBerita = res.statistik_berita;
                     $('#penduduk').find('.info-box-number').text('L : ' + res
                         .jumlah_penduduk_laki_laki +
                         ' | P : ' + res.jumlah_penduduk_perempuan);
@@ -243,7 +242,7 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/dasbor') }}`,
+                url: `{{ url('api/v1/artikel') }}`,
                 method: 'get',
                 data: function(response) {
                     res = response.data;

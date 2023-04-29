@@ -3,13 +3,10 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
-use App\Models\Config;
 use App\Models\Enums\JenisKelaminEnum;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
 use App\Models\Rtm;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class DasborRepository
 {

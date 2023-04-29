@@ -88,6 +88,7 @@
                                             <label>Bulan</label>
                                             <select class="select2 form-control-sm" id="bulan" name="bulan"
                                                     data-placeholder="Semua Bulan" style="width: 100%;">
+                                                <option value="01"></option>
                                             </select>
                                         </div>
                                     </div>
@@ -314,31 +315,6 @@
             minimumResultsForSearch: -1,
             ajax: {
                 url: '{{ url('api/v1/artikel') }}/tahun/',
-                dataType: 'json',
-                processResults: function(data) {
-                    if (data.data.tahun_awal == null) {
-                        return null
-                    };
-                    const element = new Array();
-
-                    for (let index = data.data.tahun_awal; index <= data.data.tahun_akhir; index++) {
-                        element.push({
-                            id: index,
-                            text: index
-                        });
-                    }
-
-                    return {
-                        results: element
-                    };
-                }
-            },
-        });
-
-        $('#bulan').select2({
-            minimumResultsForSearch: -1,
-            ajax: {
-                url: '{{ url('api/v1/artikel') }}/bulan/',
                 dataType: 'json',
                 processResults: function(data) {
                     if (data.data.tahun_awal == null) {

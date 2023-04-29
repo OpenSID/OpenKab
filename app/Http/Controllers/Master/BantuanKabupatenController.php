@@ -36,6 +36,6 @@ class BantuanKabupatenController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('master.bantuan.edit', compact('id'));
     }
 }

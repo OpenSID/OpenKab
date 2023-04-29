@@ -98,9 +98,11 @@
 
                             var id = row.id;
                             var render = `
-                                    <button type="button" class="btn btn-warning btn-sm edit" data-id="${id}" title="Ubah">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
+                                    <a href="{{ url('master/bantuan/${id}/edit') }}">
+                                        <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </a>
 
                                     <button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Hapus">
                                         <i class="fas fa-trash"></i>

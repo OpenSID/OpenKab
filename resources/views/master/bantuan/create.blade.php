@@ -118,7 +118,7 @@
                     text: "Apakah anda yakin menambah data ini?",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Hapus'
+                    confirmButtonText: 'Simpan'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Swal.fire({
@@ -135,7 +135,7 @@
                             dataType: "json",
                             url: `{{ url('api/v1/bantuan-kabupaten/buat') }}`,
                             data: formData,
-                            success: function(response, data) {
+                            success: function(response) {
                                 if (response.success == true) {
                                     Swal.fire({
                                         title: 'Berhasil!',
@@ -156,7 +156,7 @@
                             error: function(xhr, ajaxOptions, thrownError) {
                                 Swal.fire(
                                     'Error!',
-                                    thrownError,
+                                    xhr.responseJSON.message,
                                     'error'
                                 )
                             }

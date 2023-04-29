@@ -24,15 +24,15 @@ class IdentitasRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama_aplikasi'  => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
-            'deskripsi'      => 'nullable',
-            'favicon'        => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
-            'logo'           => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
+            'nama_aplikasi' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
+            'deskripsi' => 'nullable',
+            'favicon' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
             'nama_kabupaten' => 'required|string',
             'kode_kabupaten' => 'required|string',
-            'nama_provinsi'  => 'required|string',
-            'kode_provinsi'  => 'required|string',
-            'sebutan_kab'    => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
+            'nama_provinsi' => 'required|string',
+            'kode_provinsi' => 'required|string',
+            'sebutan_kab' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
         ];
     }
 }

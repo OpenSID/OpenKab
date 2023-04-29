@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Identitas;
-use Illuminate\Http\Request;
-use App\Http\Requests\IdentitasRequest;
 use App\Http\Repository\IdentitasRepository;
-use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\IdentitasRequest;
 use App\Http\Transformers\IdentitasTransformer;
+use App\Models\Identitas;
+use Symfony\Component\HttpFoundation\Response;
 
 class IdentitasController extends Controller
 {

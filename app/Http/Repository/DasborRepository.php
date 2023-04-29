@@ -109,6 +109,12 @@ class DasborRepository
                 }),
 
             ])
-            ->get();
+            ->allowedSorts([
+                'nik',
+                'nama',
+                'umur',
+                'created_at',
+            ])
+            ->jsonPaginate();
     }
 }

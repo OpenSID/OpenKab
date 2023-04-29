@@ -159,6 +159,7 @@
 @push('js')
     <script>
         $(document).ready(function() {
+            $('#bulan').select2();
             $.ajax({
                 url: `{{ url('api/v1/dasbor') }}`,
                 type: "GET",
@@ -230,8 +231,10 @@
                 options: barChartOptions
             })
         }
-    </script>
-    <script>
+
+        $(document).ready(function() {
+            $('#bulan').select2();
+        });
         var berita = $('#berita').DataTable({
             processing: true,
             serverSide: true,

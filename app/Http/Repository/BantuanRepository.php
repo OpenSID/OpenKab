@@ -106,7 +106,24 @@ class BantuanRepository
 
     private function countStatistikKategoriPenduduk(): object
     {
-        return Penduduk::countStatistik()->status()->get();
+        $penduduk =  Penduduk::countStatistik()
+        ->whereHas('logPenduduk', function ($q) {
+            $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=', '2')->groupBy('log_penduduk.id');
+
+            if (isset(request('filter')['tahun'])) {
+                $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
+            }
+
+            if (isset(request('filter')['bulan'])) {
+                $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
+            }
+        });
+
+        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
+            $penduduk->status();
+        }
+
+        return $penduduk->get();
     }
 
     public function caseKategoriKeluarga(): array
@@ -154,6 +171,7 @@ class BantuanRepository
      */
     private function listFooter($dataHeader, $queryFooter): array
     {
+        // dd($dataHeader);
         if (count($dataHeader) > 0) {
             $jumlahLakiLaki = $dataHeader->sum('laki_laki');
             $jumlahPerempuan = $dataHeader->sum('perempuan');

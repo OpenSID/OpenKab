@@ -195,4 +195,21 @@ class BantuanRepository
     {
         return Bantuan::tahun()->first();
     }
+
+    public function listBantuanKabupaten()
+    {
+        return QueryBuilder::for(Bantuan::class)
+            ->whereNull('config_id')
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                'nama',
+                'asaldana',
+            ])
+            ->allowedSorts([
+                'nama',
+                'asaldana',
+            ])
+            ->get();
+    }
 }

@@ -23,6 +23,10 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
+                            <button id="cetak" type="button" class="btn btn-primary btn-sm">
+                                <i class="fa fa-print"></i>
+                                Cetak
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -166,7 +170,8 @@
                         "filter[clusterDesa.rw]": $('#rw').val(),
                         "filter[clusterDesa.rt]": $('#rt').val(),
                         "filter[search]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name
                     };
                 },
                 dataSrc: function(json) {
@@ -199,7 +204,7 @@
                     }
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         return `<a title="Lihat Detail Biodata Penduduk" href="penduduk/${data.id}">${data.attributes.nik}</a>`
                     },
                     name: "nik"
@@ -215,9 +220,9 @@
                 },
                 {
                     data: function(data) {
-                        if (data.attributes.keluarga?.no_kk ) {
+                        if (data.attributes.keluarga?.no_kk) {
                             return `<a title="Lihat Detail Biodata Keluarga" href="keluarga/detail/${data.attributes.keluarga.no_kk}">${data.attributes.keluarga.no_kk}</a>`
-                        }else{
+                        } else {
                             return null
                         }
                     },
@@ -310,6 +315,10 @@
             $('#rt').val('').change();
 
             penduduk.ajax.reload();
+        });
+
+        $('#cetak').on('click', function() {
+            window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
         });
     </script>
 @endsection

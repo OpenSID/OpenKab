@@ -42,11 +42,11 @@ class StatistikController extends Controller
     public function cetak($kategori, $id, Request $request)
     {
         $filter = array_filter($request->all());
-     
+
         return view('statistik.cetak', [
             'kategori' => $kategori,
             'id' => $id,
-            'filter' => $filter['filter']
+            'filter' => $filter['filter'],
         ]);
     }
 }

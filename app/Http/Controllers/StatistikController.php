@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class StatistikController extends Controller
 {
     public function penduduk()
@@ -37,11 +39,14 @@ class StatistikController extends Controller
         ]);
     }
 
-    public function cetak($kategori, $id)
+    public function cetak($kategori, $id, Request $request)
     {
+        $filter = array_filter($request->all());
+     
         return view('statistik.cetak', [
             'kategori' => $kategori,
             'id' => $id,
+            'filter' => $filter['filter']
         ]);
     }
 }

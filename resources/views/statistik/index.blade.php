@@ -213,7 +213,13 @@
         });
 
         $('#cetak').on('click', function() {
-            window.open($(this).data('url'), '_blank');
+            var id = $('#daftar-statistik .active').data('id');
+            var judul_kolom_nama = $(this).data('judul_kolom_nama')
+
+            let url = new URL(`{{ url('statistik/cetak') }}/${kategori}/${id}`);
+            url.searchParams.append("filter[tahun]", $("#tahun").val() ?? '');
+            url.searchParams.append("filter[bulan]", $("#bulan").val() ?? '');
+            window.open(url, '_blank');
         });
 
         $('#btn-grafik').on('click', function() {

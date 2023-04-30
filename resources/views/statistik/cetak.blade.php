@@ -59,6 +59,13 @@
                 var kategori = `{{ $kategori }}`;
                 var id = `{{ $id }}`;
 
+                let url = `{{ url('api/v1/statistik') }}/${kategori}/`;
+                let create_cetak = new URL(url);
+                @foreach ($filter as $key => $value)
+                    create_cetak.searchParams.append('filter[{{ $key }}]', '{{ $value }}');
+                @endforeach
+                create_cetak.searchParams.append('filter[id]', id);
+
                 $.ajax({
                     url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[detail]=${id}&filter[id]=${kategori}`,
                     method: 'get',
@@ -74,7 +81,7 @@
                 })
 
                 $.ajax({
-                    url: `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`,
+                    url: create_cetak,
                     method: 'get',
                     success: function(json) {
                         var statistik = json.data.attributes

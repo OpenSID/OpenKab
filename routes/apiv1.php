@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -69,7 +70,10 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::get('/reftahunpenduduk', 'refTahunPenduduk');
             });
             Route::get('/keluarga', 'keluarga');
-            Route::get('/rtm', 'rtm');
+            Route::prefix('rtm')->group(function () {
+                Route::get('/', 'rtm');
+                Route::get('/reftahunrtm', 'refTahunRtm');
+            });
             Route::get('/bantuan', 'bantuan');
         });
 
@@ -84,11 +88,11 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
     Route::controller(\App\Http\Controllers\Api\KategoriController::class)
-    ->prefix('kategori')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/tampil', 'show');
-        Route::post('/buat', 'store');
-        Route::put('/perbarui/{id}', 'update');
-        Route::post('/hapus', 'destroy');
-    });
+        ->prefix('kategori')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/tampil', 'show');
+            Route::post('/buat', 'store');
+            Route::put('/perbarui/{id}', 'update');
+            Route::post('/hapus', 'destroy');
+        });
 });

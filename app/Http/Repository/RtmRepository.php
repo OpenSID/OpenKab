@@ -6,12 +6,18 @@ use App\Models\Rtm;
 
 class RtmRepository
 {
-    public function listStatistik(): array|object
+    public function listStatistik($kategori): array|object
     {
-        return [
-            'header' => [],
-            'footer' => $this->listFooter(),
-        ];
+        return collect(match ($kategori) {
+            'bdt' => $this->caseBdt(),
+            default => []
+        })->toArray();
+    }
+
+    public function listTahun()
+    {
+        return Rtm::selectRaw('year(tgl_daftar) as tahun')->groupBy('tahun')
+            ->get();
     }
 
     public function listFooter(): array|object
@@ -37,6 +43,9 @@ class RtmRepository
             ],
             [
                 'nama' => 'Belum Mengisi',
+                'jumlah' => $total - $jumlah,
+                'laki_laki' => $total_laki_laki - $jumlah_laki_laki,
+                'perempuan' => $total_perempuan - $jumlah_perempuan,
             ],
             [
                 'nama' => 'Total',
@@ -44,6 +53,32 @@ class RtmRepository
                 'laki_laki' => $total_laki_laki,
                 'perempuan' => $total_perempuan,
             ],
+        ];
+    }
+
+    private function caseBdt(): array|object
+    {
+        $bdt = RTM::countStatistik()->get();
+        $query = RTM::configId()->countStatistik()->get();
+        $query = RTM::configId()->countStatistik()->where('tgl_daftar', function ($q) {
+            if (isset(request('filter')['tahun'])) {
+                $q->whereYear('tgl_daftar', '<=', request('filter')['tahun']);
+            }
+
+            if (isset(request('filter')['bulan'])) {
+                $q->whereMonth('tgl_daftar', '<=', request('filter')['bulan']);
+            }
+        });
+
+        if (!isset(request('filter')['tahun']) && !isset(request('filter')['bulan'])) {
+            $query->status();
+        }
+
+        $query->get();
+
+        return [
+            'header' => $bdt,
+            'footer' => $this->listFooter($bdt, $query),
         ];
     }
 }

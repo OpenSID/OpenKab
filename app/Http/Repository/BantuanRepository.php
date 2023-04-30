@@ -106,7 +106,7 @@ class BantuanRepository
 
     private function countStatistikKategoriPenduduk(): object
     {
-        $penduduk =  Penduduk::countStatistik()
+        $penduduk = Penduduk::countStatistik()
         ->whereHas('logPenduduk', function ($q) {
             $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=', '2')->groupBy('log_penduduk.id');
 

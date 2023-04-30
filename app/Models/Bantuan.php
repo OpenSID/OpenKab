@@ -145,7 +145,7 @@ class Bantuan extends BaseModel
            ->toBoundSql();
         }
 
-        $statistik =  $this->scopeConfigId($query)
+        $statistik = $this->scopeConfigId($query)
             ->select(["{$this->table}.id", "{$this->table}.nama"])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
@@ -158,6 +158,7 @@ class Bantuan extends BaseModel
         if (isset($log_penduduk)) {
             $statistik->whereRaw("EXISTS($log_penduduk)");
         }
+
         return $statistik;
     }
 

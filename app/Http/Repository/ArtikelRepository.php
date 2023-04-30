@@ -3,6 +3,7 @@
 namespace App\Http\Repository;
 
 use App\Models\Config;
+use App\Models\Artikel;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -10,20 +11,11 @@ class ArtikelRepository
 {
     public function listArtikel()
     {
-        return [
-            'statistik_berita' => $this->statistikBerita(),
-        ];
-    }
-
-    private function statistikBerita()
-    {
-        $query = Config::query()
-            ->select('nama_desa')
+        return QueryBuilder::for(Config::class)
+            ->select('config.id','nama_desa')
             ->selectRaw('count(artikel.id) as jumlah')
             ->join('artikel', 'config.id', '=', 'artikel.config_id')
-            ->groupBy('config.id');
-
-        return QueryBuilder::for($query)
+            ->groupBy('config.id')
             ->allowedFilters([
                 AllowedFilter::exact('nama_desa'),
                 AllowedFilter::callback('search', function ($query, $value) {
@@ -42,12 +34,6 @@ class ArtikelRepository
                     $query->where('id_kategori', $value);
                 }),
 
-            ])
-            ->allowedSorts([
-                'nik',
-                'nama',
-                'umur',
-                'created_at',
             ])
             ->jsonPaginate();
     }

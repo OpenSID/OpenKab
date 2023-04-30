@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\ArtikelRepository;
+use App\Http\Transformers\ArtikelTransformer;
 use App\Models\Artikel;
 use App\Models\Config;
 use App\Models\Kategori;
@@ -11,13 +12,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ArtikelController extends Controller
 {
-    public function index(ArtikelRepository $artikel)
+
+    public function __construct(protected ArtikelRepository $artikel)
     {
-        return response()->json([
-            'data' => $artikel->listArtikel(),
-            'message' => 'Berhasil mengambil data artikel',
-        ], \Illuminate\Http\Response::HTTP_OK);
     }
+
+    public function index()
+    {
+        return $this->fractal($this->artikel->listArtikel(), new ArtikelTransformer(), 'daftar artikel')->respond();
+    }
+
+//    public function index(ArtikelRepository $artikel)
+//    {
+//        return response()->json([
+//            'data' => $artikel->listArtikel(),
+//            'message' => 'Berhasil mengambil data artikel',
+//        ], \Illuminate\Http\Response::HTTP_OK);
+//    }
 
     public function nama_desa()
     {

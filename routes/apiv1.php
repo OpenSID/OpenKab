@@ -88,8 +88,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/perbarui/{id}', 'update');
         Route::post('/hapus', 'destroy');
     });
-
-    // Bantuan
+        
+    Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
+    ->prefix('bantuan-kabupaten')->group(function () {
+        Route::get('/', 'index');
+        Route::post('/buat', 'store');
+        Route::put('/perbarui/{id}', 'update');
+        Route::post('/hapus', 'destroy');
+    });
+   
+    // artikel
     Route::controller(\App\Http\Controllers\Api\ArtikelController::class)
         ->prefix('artikel')->group(function () {
             Route::get('/', 'index');

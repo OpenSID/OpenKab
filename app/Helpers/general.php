@@ -9,7 +9,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2304.0.0';
+        return 'v2305.0.0';
     }
 }
 

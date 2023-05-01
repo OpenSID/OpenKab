@@ -82,7 +82,7 @@
                                 <div class="col">
                                     <div class="mb-4">
                                         <label for="sdate">Tanggal Mulai<span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control @error('sdate') is-invalid @enderror" x-model="data.sdate" name="sdate">
+                                        <input type="text" class="form-control datepicker @error('sdate') is-invalid @enderror" x-model="data.sdate" name="sdate">
                                         @error('sdate')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -91,7 +91,7 @@
                                 <div class="col">
                                     <div class="mb-4">
                                         <label for="edate">Tanggal Berakhir<span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control @error('edate') is-invalid @enderror" x-model="data.edate" name="edate">
+                                        <input type="text" class="form-control datepicker @error('edate') is-invalid @enderror" x-model="data.edate" name="edate">
                                         @error('edate')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -115,6 +115,7 @@
 @endsection
 
 @include('partials.reset_form')
+@include('partials.asset_datepicker')
 
 @section('js')
     <script>

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Repository\BantuanRepository;
-use App\Http\Requests\BantuanRequest;
-use App\Http\Transformers\BantuanTransformer;
+use Carbon\Carbon;
 use App\Models\Bantuan;
 use Illuminate\Http\Request;
+use App\Http\Requests\BantuanRequest;
+use App\Http\Repository\BantuanRepository;
+use App\Http\Transformers\BantuanTransformer;
 use Symfony\Component\HttpFoundation\Response;
 
 class BantuanKabupatenController extends Controller
@@ -46,8 +47,8 @@ class BantuanKabupatenController extends Controller
                 'nama' => $data['nama'],
                 'sasaran' => $data['sasaran'],
                 'ndesc' => $data['ndesc'],
-                'sdate' => $data['sdate'],
-                'edate' => $data['edate'],
+                'sdate' => Carbon::parse($data['sdate']),
+                'edate' => Carbon::parse($data['edate']),
                 'asaldana' => $data['asaldana'],
                 'userid' => 1,
             ];
@@ -82,8 +83,8 @@ class BantuanKabupatenController extends Controller
                 'nama' => $data['nama'],
                 'sasaran' => $data['sasaran'],
                 'ndesc' => $data['ndesc'],
-                'sdate' => $data['sdate'],
-                'edate' => $data['edate'],
+                'sdate' => Carbon::parse($data['sdate']),
+                'edate' => Carbon::parse($data['edate']),
                 'asaldana' => $data['asaldana'],
                 'userid' => 1,
             ];

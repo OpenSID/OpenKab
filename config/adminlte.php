@@ -394,6 +394,11 @@ return [
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Aplikasi',
+                    'url' => 'setting-aplikasi',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
                     'url' => 'users',
                 ],
@@ -562,6 +567,22 @@ return [
             ],
         ],
 
+        'Colorpicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.min.css',
+                ],
+            ],
+        ],
+
         // Pastikan ini selalu dibagian paling bawah
         'costume' => [
             'active' => true,
@@ -575,7 +596,7 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => '/assets/costume/js/admin.js',
-                ],
+                    ],
             ],
         ],
     ],

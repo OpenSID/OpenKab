@@ -91,4 +91,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/kategori', 'kategori_index');
         });
+
+    // Setting Aplikasi
+    Route::resource('setting-aplikasi', \App\Http\Controllers\SettingAplikasiController::class);
 });

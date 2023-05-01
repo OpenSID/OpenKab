@@ -21,19 +21,11 @@ class ArtikelController extends Controller
         return $this->fractal($this->artikel->listArtikel(), new ArtikelTransformer(), 'daftar artikel')->respond();
     }
 
-//    public function index(ArtikelRepository $artikel)
-//    {
-//        return response()->json([
-//            'data' => $artikel->listArtikel(),
-//            'message' => 'Berhasil mengambil data artikel',
-//        ], \Illuminate\Http\Response::HTTP_OK);
-//    }
-
     public function nama_desa()
     {
         return response()->json([
             'success' => true,
-            'data' => Config::select('id', 'nama_desa')->get(),
+            'data' => Config::select('nama_desa')->get(),
         ], Response::HTTP_OK);
     }
 

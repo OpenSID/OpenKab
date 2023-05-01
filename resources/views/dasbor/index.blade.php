@@ -50,15 +50,19 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
                             <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
                                aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
+                            Statistik Berita
                         </div>
                     </div>
                 </div>
@@ -88,6 +92,7 @@
                                             <label>Bulan</label>
                                             <select class="select2 form-control-sm" id="bulan" name="bulan"
                                                     data-placeholder="Semua Bulan" style="width: 100%;">
+                                                <option value=""></option>
                                                 <option value="01">Januari</option>
                                                 <option value="02">Februari</option>
                                                 <option value="03">Maret</option>
@@ -106,7 +111,7 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Kategori</label>
-                                            <select class="select2 form-control-sm" id="kategori" name="id_kategori"
+                                            <select class="select2 form-control-sm" id="kategori" name="kategori"
                                                     data-placeholder="Semua Kategori" style="width: 100%;">
                                             </select>
                                         </div>
@@ -231,10 +236,9 @@
                 options: barChartOptions
             })
         }
+    </script>
 
-        $(document).ready(function() {
-            $('#bulan').select2();
-        });
+    <script>
         var berita = $('#berita').DataTable({
             processing: true,
             serverSide: true,
@@ -247,9 +251,7 @@
             ajax: {
                 url: `{{ url('api/v1/artikel') }}`,
                 method: 'get',
-                data: function(response) {
-                    res = response.data;
-                    row = res.statistik_berita;
+                data: function(row) {
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
@@ -257,9 +259,9 @@
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
                             ?.name,
                         "filter[nama_desa]": $("#nama_desa").val(),
-                        "filter[tahun]": $("#tahun").val(),
-                        "filter[bulan]": $("#bulan").val(),
                         "filter[id_kategori]": $("#kategori").val(),
+                        "filter[bulan]": $("#bulan").val(),
+                        "filter[tahun]": $("#tahun").val(),
                     };
                 },
                 dataSrc: function(json) {
@@ -287,8 +289,8 @@
                     name: "nama_desa"
                 },
                 {
-                    data: "attributes.jumlah",
-                    name: "jumlah",
+                    data: "attributes.jumlah_artikel",
+                    name: "jumlah_artikel",
                     className: 'text-center'
                 },
             ],
@@ -358,7 +360,7 @@
                     return {
                         results: response.data.map(function(item) {
                             return {
-                                id: item.id,
+                                id: item.nama_desa,
                                 text: item.nama_desa
                             }
                         })

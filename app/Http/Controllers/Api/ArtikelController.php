@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ArtikelController extends Controller
 {
-
     public function __construct(protected ArtikelRepository $artikel)
     {
     }

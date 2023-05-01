@@ -2,7 +2,6 @@
 
 namespace App\Http\Transformers;
 
-use App\Models\Artikel;
 use App\Models\Config;
 use League\Fractal\TransformerAbstract;
 

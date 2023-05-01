@@ -24,7 +24,7 @@ class SettingAplikasiRequest extends FormRequest
     public function rules()
     {
         return [
-            'warna_tema'      => 'required'
+            'warna_tema' => 'required',
         ];
     }
 }

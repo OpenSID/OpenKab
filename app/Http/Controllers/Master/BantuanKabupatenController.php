@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Master;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BantuanRequest;
 
 class BantuanKabupatenController extends Controller
 {
@@ -31,7 +29,8 @@ class BantuanKabupatenController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)

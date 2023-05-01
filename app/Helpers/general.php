@@ -5,7 +5,7 @@ use App\Models\SettingAplikasi;
 
 if (! function_exists('openkab_versi')) {
     /**
-     * OpenKab database gabungan versi
+     * OpenKab database gabungan versi.
      */
     function openkab_versi()
     {

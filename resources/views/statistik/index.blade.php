@@ -1,4 +1,5 @@
 @extends('layouts.index')
+@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/penduduk/reftahunpenduduk')])
 
 @section('plugins.chart', true)
 
@@ -31,12 +32,12 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                            <div class="col-auto">
-                                <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                    aria-expanded="true" aria-controls="collapse-filter">
-                                    <i class="fas fa-filter"></i>
-                                </a>
-                            </div>
+                        <div class="col-auto">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
+                                role="button" aria-expanded="true" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                        </div>
 
                         <div class="col-md-2">
                             <button id="cetak" type="button" class="btn btn-primary btn-block btn-sm" data-url=""><i
@@ -77,7 +78,7 @@
                                             <select class="form-control" id="bulan">
                                                 <option value=""></option>
                                                 @for ($x = 1; $x <= 12; $x++)
-                                                    <option value="{{$x}}">{{ bulan($x) }}</option>
+                                                    <option value="{{ $x }}">{{ bulan($x) }}</option>
                                                 @endfor
                                             </select>
                                         </div>
@@ -90,7 +91,8 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="reset" class="btn btn-secondary"><span class="fas fa-ban"></span></button>
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -99,7 +101,8 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="filter" class="btn btn-primary"><span class="fas fa-search"></span></button>
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -273,6 +276,15 @@
                     return false;
                 },
             },
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: [2, 3, 4, 5, 6, 7],
+                    className: 'dt-body-right',
+                },
+            ],
             columns: [{
                 data: null,
             }, {
@@ -283,32 +295,26 @@
                 data: function(data) {
                     return data.attributes.jumlah
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.persentase_jumlah;
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.laki_laki
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.persentase_laki_laki;
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.perempuan
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.persentase_perempuan;
                 },
-                className: 'dt-body-right',
             }]
         });
 
@@ -335,46 +341,16 @@
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
             $('#tahun').val('').change();
-            $('#sasaran').val('').change();
+            $('#bulan').val('').change();
             statistik.ajax.reload();
         });
 
-        $(function() {
-            $('#tahun').select2({
-                minimumResultsForSearch: -1,
-                allowClear: true,
-                theme: "bootstrap",
-                ajax: {
-                    url: '{{ url('api/v1/statistik/penduduk/reftahunpenduduk') }}',
-                    dataType: 'json',
-                    processResults: function(data) {
-                        if (data.success != true) {
-                            return null
-                        };
+        $('#bulan').select2({
+            minimumResultsForSearch: -1,
+            allowClear: true,
+            theme: "bootstrap",
 
-                        const element = new Array();
-                        for (let index = 0; index < data.data.length; index++) {
-                            element.push({
-                                id: data.data[index].tahun,
-                                text: data.data[index].tahun
-                            });
-                        }
-
-                        return {
-                            results: element
-                        };
-                    }
-                },
-                placeholder: "Pilih Tahun",
-            });
-
-            $('#bulan').select2({
-                minimumResultsForSearch: -1,
-                allowClear: true,
-                theme: "bootstrap",
-
-                placeholder: "Pilih Bulan",
-            });
+            placeholder: "Pilih Bulan",
         });
     </script>
 @endsection

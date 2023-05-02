@@ -26,4 +26,9 @@ class LogPenduduk extends Model
      * {@inheritdoc}
      */
     public $timestamps = false;
+
+    public function scopeTahun($query)
+    {
+        return $query->selectRaw('YEAR(MIN(tgl_peristiwa)) AS tahun_awal, YEAR(MAX(tgl_peristiwa)) AS tahun_akhir');
+    }
 }

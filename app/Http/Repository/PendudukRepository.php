@@ -73,8 +73,7 @@ class PendudukRepository
 
     public function listTahun()
     {
-        return LogPenduduk::selectRaw('year(tgl_peristiwa) as tahun')->groupBy('tahun')
-            ->get();
+        return LogPenduduk::tahun()->first();
     }
 
     private function tabelReferensi($kategori): array|object

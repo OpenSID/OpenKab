@@ -16,8 +16,7 @@ class RtmRepository
 
     public function listTahun()
     {
-        return Rtm::selectRaw('year(tgl_daftar) as tahun')->groupBy('tahun')
-            ->get();
+        return Rtm::tahun()->first();
     }
 
     public function listFooter(): array|object
@@ -70,7 +69,7 @@ class RtmRepository
             }
         });
 
-        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
+        if (!isset(request('filter')['tahun']) && !isset(request('filter')['bulan'])) {
             $query->status();
         }
 

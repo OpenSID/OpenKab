@@ -23,13 +23,20 @@
             var kategori = `{{ $kategori }}`;
             var id = `{{ $id }}`;
 
-            $.ajax({
-                url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[detail]=${id}&filter[id]=${kategori}`,
-                method: 'get',
-                success: function(json) {
-                    var data = json.data[0];
-                    var judul_halaman = 'Data Statistik ' + data.judul_halaman
-                    var judul_kolom_nama = data.judul_kolom_nama
+                let url = `{{ url('api/v1/statistik') }}/${kategori}/`;
+                let create_cetak = new URL(url);
+                @foreach ($filter as $key => $value)
+                    create_cetak.searchParams.append('filter[{{ $key }}]', '{{ $value }}');
+                @endforeach
+                create_cetak.searchParams.append('filter[id]', id);
+
+                $.ajax({
+                    url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[detail]=${id}&filter[id]=${kategori}`,
+                    method: 'get',
+                    success: function(json) {
+                        var data = json.data[0];
+                        var judul_halaman = 'Data Statistik ' + data.judul_halaman
+                        var judul_kolom_nama = data.judul_kolom_nama
 
                     $('#judul_halaman').html(judul_halaman)
                     $('#judul_kolom_nama').html(judul_kolom_nama)
@@ -37,12 +44,12 @@
                 }
             })
 
-            $.ajax({
-                url: `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`,
-                method: 'get',
-                success: function(json) {
-                    var no = 1;
-
+                $.ajax({
+                    url: create_cetak,
+                    method: 'get',
+                    success: function(json) {
+                        var statistik = json.data.attributes
+                        var no = 1;
                     json.data.forEach(function(item) {
                         var row = `<tr>
                                 // jangan tampilkan nomor 3 data terakhir

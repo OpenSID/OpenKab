@@ -212,7 +212,7 @@ class BantuanRepository
                     $query->whereYear('sdate', '<=', $value)
                         ->whereYear('edate', '>=', $value);
                 }),
- 
+
             ])
             ->allowedSorts([
                 'nama',

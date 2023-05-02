@@ -95,4 +95,12 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/perbarui/{id}', 'update');
             Route::post('/hapus', 'destroy');
         });
+
+    Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
+        ->prefix('bantuan-kabupaten')->group(function () {
+            Route::get('/', 'index');
+            Route::post('/buat', 'store');
+            Route::put('/perbarui/{id}', 'update');
+            Route::post('/hapus', 'destroy');
+        });
 });

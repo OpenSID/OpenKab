@@ -282,7 +282,7 @@ class PendudukRepository
                 $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
             }
         });
-        if (!isset(request('filter')['tahun']) && !isset(request('filter')['bulan'])) {
+        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
             $penduduk->status();
         }
 

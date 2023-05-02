@@ -94,7 +94,7 @@ class KeluargaRepository
             }
         });
 
-        if (!isset(request('filter')['tahun']) && !isset(request('filter')['bulan'])) {
+        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
             $query->status();
         }
 

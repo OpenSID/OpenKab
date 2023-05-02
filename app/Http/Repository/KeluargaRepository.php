@@ -44,8 +44,7 @@ class KeluargaRepository
 
     public function listTahun()
     {
-        return LogKeluarga::selectRaw('year(tgl_peristiwa) as tahun')->groupBy('tahun')
-            ->get();
+        return LogKeluarga::tahun()->first();
     }
 
     private function listFooter($dataHeader, $query_footer): array|object
@@ -95,7 +94,7 @@ class KeluargaRepository
             }
         });
 
-        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
+        if (!isset(request('filter')['tahun']) && !isset(request('filter')['bulan'])) {
             $query->status();
         }
 

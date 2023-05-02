@@ -1,6 +1,5 @@
 @extends('layouts.index')
-@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/penduduk/reftahunpenduduk')])
-@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/penduduk/reftahunkeluarga')])
+@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/'.strtolower($judul).'/reftahun'.strtolower($judul).'')])
 
 @section('plugins.chart', true)
 

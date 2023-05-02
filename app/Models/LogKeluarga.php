@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LogPenduduk extends Model
+class LogKeluarga extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,7 @@ class LogPenduduk extends Model
     /**
      * {@inheritdoc}
      */
-    protected $table = 'log_penduduk';
+    protected $table = 'log_keluarga';
 
     /**
      * {@inheritdoc}

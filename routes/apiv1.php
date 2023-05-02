@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DokumenController;
-use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;
@@ -69,7 +68,10 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::get('/', 'penduduk');
                 Route::get('/reftahunpenduduk', 'refTahunPenduduk');
             });
-            Route::get('/keluarga', 'keluarga');
+            Route::prefix('keluarga')->group(function () {
+                Route::get('/', 'keluarga');
+                Route::get('/reftahunkeluarga', 'refTahunKeluarga');
+            });
             Route::prefix('rtm')->group(function () {
                 Route::get('/', 'rtm');
                 Route::get('/reftahunrtm', 'refTahunRtm');

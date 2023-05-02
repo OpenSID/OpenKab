@@ -3,16 +3,28 @@
 use App\Models\Config;
 use App\Models\SettingAplikasi;
 
-/**
- * Menampilkan nilai persentase.
- *
- * return decimal
- */
-function persen(int $pembilang = 0, int $penyebut = 0, int $desimal = 2, string $pemisah = ',')
-{
-    $hasil = ($penyebut == 0) ? 0 : $pembilang / $penyebut * 100;
+if (! function_exists('openkab_versi')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function openkab_versi()
+    {
+        return 'v2305.0.0';
+    }
+}
 
-    return number_format($hasil, $desimal, $pemisah).'%';
+if (! function_exists('persen')) {
+    /**
+     * Menampilkan nilai persentase.
+     *
+     * return decimal
+     */
+    function persen(int $pembilang = 0, int $penyebut = 0, int $desimal = 2, string $pemisah = ',')
+    {
+        $hasil = ($penyebut == 0) ? 0 : $pembilang / $penyebut * 100;
+
+        return number_format($hasil, $desimal, $pemisah).'%';
+    }
 }
 
 // setting('sebutan_desa');

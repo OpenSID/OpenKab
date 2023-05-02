@@ -3,6 +3,9 @@
 @section('footer')
     <strong>Hak cipta © <?= date('Y') ?> <a href="https://opendesa.id">OpenDesa</a>.</strong>
     Seluruh hak cipta dilindungi.
+    <div class="float-right d-none d-sm-inline-block">
+        <b>Versi</b> {{ openkab_versi() }}
+    </div>
 @endsection
 
 @push('js')

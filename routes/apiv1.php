@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DokumenController;
-use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;

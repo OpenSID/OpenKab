@@ -82,21 +82,28 @@
 @stop
 
 @section('auth_footer')
-    {{-- Password reset link --}}
-    @if ($password_reset_url)
-        <p class="my-0">
-            <a href="{{ $password_reset_url }}">
-                {{ __('adminlte::adminlte.i_forgot_my_password') }}
-            </a>
-        </p>
-    @endif
+    <div class="d-flex justify-content-between">
+        {{-- Password reset link --}}
+        @if ($password_reset_url)
+            <p class="my-0">
+                <a href="{{ $password_reset_url }}">
+                    {{ __('adminlte::adminlte.i_forgot_my_password') }}
+                </a>
+            </p>
+        @endif
 
-    {{-- Register link --}}
-    @if ($register_url)
-        <p class="my-0">
-            <a href="{{ $register_url }}">
-                {{ __('adminlte::adminlte.register_a_new_membership') }}
-            </a>
-        </p>
-    @endif
+        {{-- Register link --}}
+        @if ($register_url)
+            <p class="my-0">
+                <a href="{{ $register_url }}">
+                    {{ __('adminlte::adminlte.register_a_new_membership') }}
+                </a>
+            </p>
+        @endif
+
+        <a href="https://github.com/OpenSID/OpenKab" target="_blank">
+            Versi {{ openkab_versi() }}
+        </a>
+    </div>
 @stop
+

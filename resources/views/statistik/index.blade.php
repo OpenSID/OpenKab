@@ -347,7 +347,6 @@
 
         $('#bulan').select2({
             minimumResultsForSearch: -1,
-            allowClear: true,
             theme: "bootstrap",
 
             placeholder: "Pilih Bulan",

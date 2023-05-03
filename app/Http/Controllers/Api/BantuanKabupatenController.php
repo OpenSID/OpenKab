@@ -41,17 +41,10 @@ class BantuanKabupatenController extends Controller
     {
         try {
             $data = $request->validated();
-            $insert = [
-                'config_id' => null,
-                'nama' => $data['nama'],
-                'sasaran' => $data['sasaran'],
-                'ndesc' => $data['ndesc'],
-                'sdate' => Carbon::parse($data['sdate']),
-                'edate' => Carbon::parse($data['edate']),
-                'asaldana' => $data['asaldana'],
-                'userid' => 1,
-            ];
-            Bantuan::insert($insert);
+            $data['sdate'] = Carbon::parse($data['sdate']);
+            $data['edate'] = Carbon::parse($data['edate']);
+            $data['userid'] = 0;
+            Bantuan::insert($data);
 
             return response()->json([
                 'success' => true,
@@ -77,17 +70,10 @@ class BantuanKabupatenController extends Controller
     {
         try {
             $data = $request->validated();
-            $update = [
-                'config_id' => null,
-                'nama' => $data['nama'],
-                'sasaran' => $data['sasaran'],
-                'ndesc' => $data['ndesc'],
-                'sdate' => Carbon::parse($data['sdate']),
-                'edate' => Carbon::parse($data['edate']),
-                'asaldana' => $data['asaldana'],
-                'userid' => 1,
-            ];
-            Bantuan::where('id', (int) $id)->whereNull('config_id')->update($update);
+            $data['sdate'] = Carbon::parse($data['sdate']);
+            $data['edate'] = Carbon::parse($data['edate']);
+            $data['userid'] = 0;
+            Bantuan::where('id', (int) $id)->whereNull('config_id')->update($data);
 
             return response()->json([
                 'success' => true,
@@ -105,15 +91,13 @@ class BantuanKabupatenController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
         $id = (int) $request->id;
         try {
-            Bantuan::where('id', $id)->delete();
+            Bantuan::where('id', $id)->whereNull('config_id')->delete();
 
             return response()->json([
                 'success' => true,

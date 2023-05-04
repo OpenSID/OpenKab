@@ -158,7 +158,6 @@ class Bantuan extends BaseModel
         if (isset($log_penduduk)) {
             $statistik->whereRaw("EXISTS($log_penduduk)");
         }
-
         return $statistik;
     }
 

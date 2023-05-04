@@ -171,7 +171,6 @@ class BantuanRepository
      */
     private function listFooter($dataHeader, $queryFooter): array
     {
-        // dd($dataHeader);
         if (count($dataHeader) > 0) {
             $jumlahLakiLaki = $dataHeader->sum('laki_laki');
             $jumlahPerempuan = $dataHeader->sum('perempuan');

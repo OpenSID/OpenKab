@@ -339,7 +339,6 @@
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
             $('#tahun').val('').change();
-            $('#sasaran').val('').change();
             $('#bulan').val('').change(); $('#bulan').val('').change();
             statistik.ajax.reload();
         });
@@ -377,7 +376,6 @@
                 minimumResultsForSearch: -1,
                 allowClear: true,
                 theme: "bootstrap",
-
                 placeholder: "Pilih Bulan",
             });
         });

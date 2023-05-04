@@ -221,13 +221,20 @@ class BantuanRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'nama',
-                'asaldana',
+                AllowedFilter::exact('sasaran'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama', 'LIKE', '%'.$value.'%')
+                        ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
+                }),
+                AllowedFilter::callback('tahun', function ($query, $value) {
+                    $query->whereYear('sdate', '<=', $value)
+                        ->whereYear('edate', '>=', $value);
+                }),
+
             ])
             ->allowedSorts([
                 'nama',
                 'asaldana',
-            ])
-            ->get();
+            ])->jsonPaginate();
     }
 }

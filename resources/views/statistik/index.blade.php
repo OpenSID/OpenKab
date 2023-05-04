@@ -1,4 +1,5 @@
 @extends('layouts.index')
+@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/penduduk/reftahunpenduduk')])
 
 @section('plugins.chart', true)
 
@@ -31,12 +32,12 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                            <div class="col-auto">
-                                <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                    aria-expanded="true" aria-controls="collapse-filter">
-                                    <i class="fas fa-filter"></i>
-                                </a>
-                            </div>
+                        <div class="col-auto">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
+                                role="button" aria-expanded="true" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                        </div>
 
                         <div class="col-md-2">
                             <button id="cetak" type="button" class="btn btn-primary btn-block btn-sm" data-url=""><i
@@ -77,7 +78,7 @@
                                             <select class="form-control" id="bulan">
                                                 <option value=""></option>
                                                 @for ($x = 1; $x <= 12; $x++)
-                                                    <option value="{{$x}}">{{ bulan($x) }}</option>
+                                                    <option value="{{ $x }}">{{ bulan($x) }}</option>
                                                 @endfor
                                             </select>
                                         </div>
@@ -214,7 +215,6 @@
 
         $('#cetak').on('click', function() {
             var id = $('#daftar-statistik .active').data('id');
-            var judul_kolom_nama = $(this).data('judul_kolom_nama')
 
             let url = new URL(`{{ url('statistik/cetak') }}/${kategori}/${id}`);
             url.searchParams.append("filter[tahun]", $("#tahun").val() ?? '');
@@ -274,6 +274,15 @@
                     return false;
                 },
             },
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: [2, 3, 4, 5, 6, 7],
+                    className: 'dt-body-right',
+                },
+            ],
             columns: [{
                 data: null,
             }, {
@@ -284,32 +293,26 @@
                 data: function(data) {
                     return data.attributes.jumlah
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.persentase_jumlah;
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.laki_laki
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.persentase_laki_laki;
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.perempuan
                 },
-                className: 'dt-body-right',
             }, {
                 data: function(data) {
                     return data.attributes.persentase_perempuan;
                 },
-                className: 'dt-body-right',
             }]
         });
 
@@ -337,6 +340,7 @@
             e.preventDefault();
             $('#tahun').val('').change();
             $('#sasaran').val('').change();
+            $('#bulan').val('').change(); $('#bulan').val('').change();
             statistik.ajax.reload();
         });
 
@@ -377,5 +381,6 @@
                 placeholder: "Pilih Bulan",
             });
         });
+
     </script>
 @endsection

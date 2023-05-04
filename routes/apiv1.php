@@ -64,7 +64,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(StatistikController::class)
         ->prefix('statistik')->group(function () {
             Route::get('/kategori-statistik', 'kategoriStatistik');
-            Route::get('/penduduk', 'penduduk');
+            Route::prefix('penduduk')->group(function () {
+                Route::get('/', 'penduduk');
+                Route::get('/reftahunpenduduk', 'refTahunPenduduk');
+            });
             Route::get('/keluarga', 'keluarga');
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
@@ -84,6 +87,14 @@ Route::middleware('auth:sanctum')->group(function () {
     ->prefix('kategori')->group(function () {
         Route::get('/', 'index');
         Route::get('/tampil', 'show');
+        Route::post('/buat', 'store');
+        Route::put('/perbarui/{id}', 'update');
+        Route::post('/hapus', 'destroy');
+    });
+
+    Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
+    ->prefix('bantuan-kabupaten')->group(function () {
+        Route::get('/', 'index');
         Route::post('/buat', 'store');
         Route::put('/perbarui/{id}', 'update');
         Route::post('/hapus', 'destroy');

@@ -1,17 +1,18 @@
 <?php
 
+use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\BantuanController;
+use App\Http\Controllers\DasborController;
+use App\Http\Controllers\IdentitasController;
+use App\Http\Controllers\KeluargaController;
+use App\Http\Controllers\Master\BantuanKabupatenController;
+use App\Http\Controllers\PendudukController;
+use App\Http\Controllers\StatistikController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\KecamatanMiddleware;
+use App\Http\Middleware\WilayahMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\DasborController;
-use App\Http\Middleware\WilayahMiddleware;
-use App\Http\Controllers\BantuanController;
-use App\Http\Controllers\AdminWebController;
-use App\Http\Controllers\KeluargaController;
-use App\Http\Controllers\PendudukController;
-use App\Http\Middleware\KecamatanMiddleware;
-use App\Http\Controllers\IdentitasController;
-use App\Http\Controllers\StatistikController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,5 +93,6 @@ Route::middleware('auth')->group(function () {
         ->prefix('master')
         ->group(function () {
             Route::get('/kategori', 'kategori_index');
+            Route::resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });

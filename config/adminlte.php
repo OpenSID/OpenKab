@@ -385,6 +385,11 @@ return [
                     'text' => 'Kategori Artikel',
                     'url' => 'master/kategori',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pengaturan Aplikasi',
+                    'url' => 'master/pengaturan',
+                ],
             ],
         ],
 

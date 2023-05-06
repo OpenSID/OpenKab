@@ -6,7 +6,6 @@ use App\Http\Repository\PengaturanRepository;
 use App\Http\Requests\PengaturanRequest;
 use App\Http\Transformers\PengaturanTransformer;
 use App\Models\Pengaturan;
-use GuzzleHttp\Psr7\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PengaturanController extends Controller
@@ -31,6 +30,7 @@ class PengaturanController extends Controller
     {
         try {
             Pengaturan::where('key', 'warna_tema')->update(['value' => $request->warna_tema]);
+
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);

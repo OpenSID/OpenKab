@@ -133,6 +133,7 @@
                             <thead>
                             <tr>
                                 <th class="padat">No</th>
+                                <th>Kecamatan</th>
                                 <th>Kelurahan</th>
                                 <th class="padat">Jumlah Artikel Perkelurahan</th>
                             </tr>
@@ -260,7 +261,7 @@
                 className: 'text-nowrap',
             },
                 {
-                    targets: [0, 1, 2],
+                    targets: [0, 1, 2, 3],
                     orderable: false,
                     searchable: false,
                 },
@@ -268,6 +269,10 @@
             columns: [{
                 data: null,
             },
+                {
+                    data: "attributes.nama_kecamatan",
+                    name: "nama_kecamatan"
+                },
                 {
                     data: "attributes.nama_desa",
                     name: "nama_desa"
@@ -279,7 +284,7 @@
                 },
             ],
             order: [
-                [1, 'asc']
+                [2, 'asc']
             ]
         })
 

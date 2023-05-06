@@ -11,7 +11,7 @@ class ArtikelRepository
     public function listArtikel()
     {
         return QueryBuilder::for(Config::class)
-            ->select('config.id', 'nama_desa')
+            ->select('config.id', 'nama_desa', 'nama_kecamatan')
             ->selectRaw('count(artikel.id) as jumlah')
             ->join('artikel', 'config.id', '=', 'artikel.config_id')
             ->groupBy('config.id')

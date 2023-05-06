@@ -116,4 +116,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/perbarui/{id}', 'update');
     });
 
+    // Pengaturan Aplikasi
+    Route::controller(\App\Http\Controllers\Api\PengaturanController::class)
+        ->prefix('pengaturan')->group(function () {
+            Route::get('/', 'index');
+        });
+
 });

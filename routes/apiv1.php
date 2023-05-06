@@ -21,8 +21,9 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->group(function () {});
+
+Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
@@ -120,6 +121,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(\App\Http\Controllers\Api\PengaturanController::class)
         ->prefix('pengaturan')->group(function () {
             Route::get('/', 'index');
+            Route::post('/update', 'update');
         });
 
-});

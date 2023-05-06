@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pengaturan extends Model
 {
+    public $timestamps = false;
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 

@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\PengaturanRepository;
 use App\Http\Transformers\PengaturanTransformer;
-use App\Models\Pengaturan;
-use Symfony\Component\HttpFoundation\Response;
 
 class PengaturanController extends Controller
 {

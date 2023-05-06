@@ -64,7 +64,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(StatistikController::class)
         ->prefix('statistik')->group(function () {
             Route::get('/kategori-statistik', 'kategoriStatistik');
-            Route::get('/penduduk', 'penduduk');
+            Route::prefix('penduduk')->group(function () {
+                Route::get('/', 'penduduk');
+                Route::get('/reftahunpenduduk', 'refTahunPenduduk');
+            });
             Route::get('/keluarga', 'keluarga');
             Route::get('/rtm', 'rtm');
             Route::get('/bantuan', 'bantuan');
@@ -88,7 +91,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/perbarui/{id}', 'update');
         Route::post('/hapus', 'destroy');
     });
-        
+
     Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
     ->prefix('bantuan-kabupaten')->group(function () {
         Route::get('/', 'index');
@@ -96,7 +99,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/perbarui/{id}', 'update');
         Route::post('/hapus', 'destroy');
     });
-   
+
     // artikel
     Route::controller(\App\Http\Controllers\Api\ArtikelController::class)
         ->prefix('artikel')->group(function () {
@@ -106,4 +109,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/tahun', 'tahun');
             Route::get('/bulan', 'bulan');
         });
+
+    Route::controller(\App\Http\Controllers\Api\IdentitasController::class)
+    ->prefix('identitas')->group(function () {
+        Route::get('/', 'index');
+        Route::put('/perbarui/{id}', 'update');
+    });
+
 });

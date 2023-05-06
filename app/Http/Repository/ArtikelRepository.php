@@ -16,7 +16,7 @@ class ArtikelRepository
             ->join('artikel', 'config.id', '=', 'artikel.config_id')
             ->groupBy('config.id')
             ->allowedFilters([
-                AllowedFilter::exact('nama_desa'),
+                AllowedFilter::exact('id'),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where('nama_desa', 'LIKE', '%'.$value.'%')
                         ->orWhere('tgl_upload', 'LIKE', '%'.$value.'%');

@@ -71,14 +71,7 @@
                         <div class="col-md-12">
                             <div id="collapse-filter" class="collapse">
                                 <div class="row">
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Kelurahan</label>
-                                            <select class="select2 form-control-sm" id="nama_desa" name="nama_desa"
-                                                    data-placeholder="Nama Kelurahan" style="width: 100%;">
-                                            </select>
-                                        </div>
-                                    </div>
+                                    <input type="hidden" name="id" id="id" value="@if (session()->has('desa')) {{session('desa.id')}} @endif">
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>
@@ -105,14 +98,6 @@
                                                 <option value="10">Oktober</option>
                                                 <option value="11">November</option>
                                                 <option value="12">Desember</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Kategori</label>
-                                            <select class="select2 form-control-sm" id="kategori" name="kategori"
-                                                    data-placeholder="Semua Kategori" style="width: 100%;">
                                             </select>
                                         </div>
                                     </div>
@@ -258,8 +243,7 @@
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
                             ?.name,
-                        "filter[nama_desa]": $("#nama_desa").val(),
-                        "filter[id_kategori]": $("#kategori").val(),
+                        "filter[id]": $("#id").val(),
                         "filter[bulan]": $("#bulan").val(),
                         "filter[tahun]": $("#tahun").val(),
                     };
@@ -375,10 +359,8 @@
 
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
-            $('#nama_desa').val('').change();
             $('#tahun').val('').change();
             $('#bulan').val('').change();
-            $('#kategori').val('').change();
 
             berita.ajax.reload();
         });

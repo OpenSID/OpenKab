@@ -132,9 +132,9 @@
                         <table class="table table-striped" id="berita">
                             <thead>
                             <tr>
-                                <th>No</th>
+                                <th class="padat">No</th>
                                 <th>Kelurahan</th>
-                                <th>Jumlah Artikel Perkelurahan</th>
+                                <th class="padat">Jumlah Artikel Perkelurahan</th>
                             </tr>
                             </thead>
                             <tbody></tbody>

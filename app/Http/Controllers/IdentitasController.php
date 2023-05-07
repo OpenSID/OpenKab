@@ -11,7 +11,7 @@ class IdentitasController extends Controller
      */
     public function index()
     {
-        dd('a');
-        // return view('identitas.index');
+
+        return view('identitas.index');
     }
 }

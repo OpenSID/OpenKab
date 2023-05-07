@@ -392,15 +392,15 @@ return [
             'text' => 'Pengaturan',
             'icon' => 'fa fa-cog',
             'submenu' => [
-                // [
-                //     'icon' => 'fas fa-angle-right',
-                //     'text' => 'Identitas',
-                //     'url' => 'identitas',
-                // ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Identitas',
+                    'url' => 'pengaturan/identitas',
+                ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
-                    'url' => 'users',
+                    'url' => 'pengaturan/users',
                 ],
             ],
         ],

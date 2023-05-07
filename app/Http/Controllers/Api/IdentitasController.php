@@ -56,20 +56,21 @@ class IdentitasController extends Controller
     public function upload(UploadImageRequest $request)
     {
         try {
-            $path = public_path('/assets/img');
+            $path = storage_path('app/public/img');
+
             if (!file_exists($path)) {
                 mkdir($path, 755, true);
             }
             $filename = uniqid('img_');
             $file = $request->file('file');
 
-            Image::make($file->path())->resize(16, 16)->save(public_path().'/'.$filename.'.png');
-            copy(public_path().'/'.$filename.'.png', public_path().'/'.$filename.'.ico'); //create favicon
+            Image::make($file->path())->resize(16, 16)->save(storage_path('app/public').'/'.$filename.'.png');
+            copy(storage_path('app/public/').$filename.'.png', storage_path('app/public/').$filename.'.ico'); //create favicon
             Image::make($file->path())->resize(150, 150)->save($path.'/'.$filename.'.png'); //create logo
 
             return response()->json([
                 'success' => true,
-                'data' => asset('/assets/img/'.$filename.'.png')
+                'data' => asset('/storage/img/'.$filename.'.png')
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             report($e);

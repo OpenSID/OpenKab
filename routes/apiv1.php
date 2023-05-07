@@ -104,5 +104,6 @@ Route::middleware('auth:sanctum')->group(function () {
     ->prefix('identitas')->group(function () {
         Route::get('/', 'index');
         Route::put('/perbarui/{id}', 'update');
+        Route::post('/upload', 'upload');
     });
 });

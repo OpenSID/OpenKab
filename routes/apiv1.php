@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DokumenController;
-use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;
@@ -67,7 +66,7 @@ Route::get('/user', function (Request $request) {
             Route::get('/kategori-statistik', 'kategoriStatistik');
             Route::prefix('penduduk')->group(function () {
                 Route::get('/', 'penduduk');
-                Route::get('/reftahunpenduduk', 'refTahunPenduduk');
+                Route::get('/tahun', 'refTahunPenduduk');
             });
             Route::get('/keluarga', 'keluarga');
             Route::get('/rtm', 'rtm');
@@ -84,6 +83,7 @@ Route::get('/user', function (Request $request) {
             Route::get('/cetak', 'cetakBantuan');
         });
 
+    // Master Data Kategori Artikel
     Route::controller(\App\Http\Controllers\Api\KategoriController::class)
     ->prefix('kategori')->group(function () {
         Route::get('/', 'index');
@@ -93,6 +93,7 @@ Route::get('/user', function (Request $request) {
         Route::post('/hapus', 'destroy');
     });
 
+    // Master Data Bantuan
     Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
     ->prefix('bantuan-kabupaten')->group(function () {
         Route::get('/', 'index');
@@ -101,16 +102,14 @@ Route::get('/user', function (Request $request) {
         Route::post('/hapus', 'destroy');
     });
 
-    // artikel
+    // Artikel
     Route::controller(\App\Http\Controllers\Api\ArtikelController::class)
-        ->prefix('artikel')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/kategori', 'kategori');
-            Route::get('/nama_desa', 'nama_desa');
-            Route::get('/tahun', 'tahun');
-            Route::get('/bulan', 'bulan');
-        });
+    ->prefix('artikel')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/tahun', 'tahun');
+    });
 
+    // Identitas
     Route::controller(\App\Http\Controllers\Api\IdentitasController::class)
     ->prefix('identitas')->group(function () {
         Route::get('/', 'index');

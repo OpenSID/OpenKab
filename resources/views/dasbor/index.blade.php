@@ -1,4 +1,5 @@
 @extends('layouts.index')
+@include('layouts.components.select2_tahun', ['url' => url('api/v1/artikel/tahun')])
 
 @section('plugins.chart', true)
 
@@ -71,18 +72,28 @@
                         <div class="col-md-12">
                             <div id="collapse-filter" class="collapse">
                                 <div class="row">
+<<<<<<< HEAD
                                     <input type="hidden" name="id" id="id" value="@if (session()->has('desa')) {{session('desa.id')}} @endif">
+=======
+                                    <input type="hidden" name="id" id="id"
+                                        value="@if (session()->has('desa')) {{ session('desa.id') }} @endif">
+>>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>
                                             <select class="select2 form-control-sm" id="tahun" name="tahun"
+<<<<<<< HEAD
                                                     data-placeholder="Semua Tahun" style="width: 100%;">
+=======
+                                                data-placeholder="Semua Tahun" style="width: 100%;">
+>>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Bulan</label>
+<<<<<<< HEAD
                                             <select class="select2 form-control-sm" id="bulan" name="bulan"
                                                     data-placeholder="Semua Bulan" style="width: 100%;">
                                                 <option value=""></option>
@@ -98,6 +109,13 @@
                                                 <option value="10">Oktober</option>
                                                 <option value="11">November</option>
                                                 <option value="12">Desember</option>
+=======
+                                            <select class="form-control" id="bulan">
+                                                <option value=""></option>
+                                                @for ($x = 1; $x <= 12; $x++)
+                                                    <option value="{{ $x }}">{{ bulan($x) }}</option>
+                                                @endfor
+>>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
                                             </select>
                                         </div>
                                     </div>
@@ -131,12 +149,21 @@
                     <div class="table-responsive">
                         <table class="table table-striped" id="berita">
                             <thead>
+<<<<<<< HEAD
                             <tr>
                                 <th class="padat">No</th>
                                 <th>Kecamatan</th>
                                 <th>Kelurahan</th>
                                 <th class="padat">Jumlah Artikel Perkelurahan</th>
                             </tr>
+=======
+                                <tr>
+                                    <th class="padat">No</th>
+                                    <th>Kecamatan</th>
+                                    <th>Kelurahan</th>
+                                    <th class="padat">Jumlah Artikel Perkelurahan</th>
+                                </tr>
+>>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -222,6 +249,94 @@
                 options: barChartOptions
             })
         }
+
+        var berita = $('#berita').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: false,
+            searchPanes: {
+                viewTotal: false,
+                columns: [0]
+            },
+            ajax: {
+                url: `{{ url('api/v1/artikel') }}`,
+                method: 'get',
+                data: function(row) {
+                    return {
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name,
+                        "filter[id]": $("#id").val(),
+                        "filter[bulan]": $("#bulan").val(),
+                        "filter[tahun]": $("#tahun").val(),
+                    };
+                },
+                dataSrc: function(json) {
+                    json.recordsTotal = json.meta.pagination.total
+                    json.recordsFiltered = json.meta.pagination.total
+
+                    return json.data
+                },
+            },
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: [0, 1, 2, 3],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
+            columns: [{
+                    data: null,
+                },
+                {
+                    data: "attributes.nama_kecamatan",
+                    name: "nama_kecamatan"
+                },
+                {
+                    data: "attributes.nama_desa",
+                    name: "nama_desa"
+                },
+                {
+                    data: "attributes.jumlah_artikel",
+                    name: "jumlah_artikel",
+                    className: 'text-center'
+                },
+            ],
+        })
+
+        berita.on('draw.dt', function() {
+            var PageInfo = $('#berita').DataTable().page.info();
+            berita.column(0, {
+                page: 'current'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
+        });
+
+        $('#bulan').select2({
+            minimumResultsForSearch: -1,
+            theme: "bootstrap",
+
+            placeholder: "Pilih Bulan",
+        });
+
+        $('#filter').on('click', function(e) {
+            berita.draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#tahun').val('').change();
+            $('#bulan').val('').change();
+
+            berita.ajax.reload();
+        });
     </script>
 
     <script>

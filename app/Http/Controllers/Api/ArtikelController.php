@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Repository\ArtikelRepository;
 use App\Http\Transformers\ArtikelTransformer;
 use App\Models\Artikel;
+<<<<<<< HEAD
 use App\Models\Config;
 use App\Models\Kategori;
+=======
+>>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
 use Symfony\Component\HttpFoundation\Response;
 
 class ArtikelController extends Controller
@@ -20,6 +23,7 @@ class ArtikelController extends Controller
         return $this->fractal($this->artikel->listArtikel(), new ArtikelTransformer(), 'daftar artikel')->respond();
     }
 
+<<<<<<< HEAD
     public function nama_desa()
     {
         return response()->json([
@@ -47,6 +51,13 @@ class ArtikelController extends Controller
                 'tahun_awal' => date('Y', strtotime($tahun_awal->tgl_upload)),
                 'tahun_akhir' => date('Y', strtotime($tahun_akhir->tgl_upload)),
             ],
+=======
+    public function tahun()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => Artikel::tahun()->first(),
+>>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
         ], Response::HTTP_OK);
     }
 }

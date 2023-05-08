@@ -21,6 +21,8 @@ return [
     'namaKab' => env('APP_NAMA_KAB', 'Nama Kabupaten'),
     'namaProv' => env('APP_NAMA_PROV', 'Nama Provinsi'),
     'sebutanKab' => env('APP_SEBUTAN_KAB', 'Kota'),
+    'serverPantau' => env('APP_PANTAU', 'https://pantau.opensid.my.id/'),
+    'tokenPantau' => env('TOKEN_PANTAU', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6bnVsbCwidGltZXN0YW1wIjoxNjAzNDY2MjM5fQ.HVCNnMLokF2tgHwjQhSIYo6-2GNXB4-Kf28FSIeXnZw'),
 
     'namaAplikasi' => env('APP_NAMA_APLIKASI', 'Simatik'),
 

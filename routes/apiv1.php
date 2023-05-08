@@ -66,7 +66,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/kategori-statistik', 'kategoriStatistik');
             Route::prefix('penduduk')->group(function () {
                 Route::get('/', 'penduduk');
-                Route::get('/reftahunpenduduk', 'refTahunPenduduk');
+                Route::get('/tahun', 'refTahunPenduduk');
             });
             Route::prefix('keluarga')->group(function () {
                 Route::get('/', 'keluarga');
@@ -86,6 +86,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/cetak', 'cetakBantuan');
         });
 
+    // Master Data Kategori Artikel
     Route::controller(\App\Http\Controllers\Api\KategoriController::class)
         ->prefix('kategori')->group(function () {
             Route::get('/', 'index');
@@ -95,11 +96,26 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/hapus', 'destroy');
         });
 
+    // Master Data Bantuan
     Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
         ->prefix('bantuan-kabupaten')->group(function () {
             Route::get('/', 'index');
             Route::post('/buat', 'store');
             Route::put('/perbarui/{id}', 'update');
             Route::post('/hapus', 'destroy');
+        });
+
+    // Artikel
+    Route::controller(\App\Http\Controllers\Api\ArtikelController::class)
+        ->prefix('artikel')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/tahun', 'tahun');
+        });
+
+    // Identitas
+    Route::controller(\App\Http\Controllers\Api\IdentitasController::class)
+        ->prefix('identitas')->group(function () {
+            Route::get('/', 'index');
+            Route::put('/perbarui/{id}', 'update');
         });
 });

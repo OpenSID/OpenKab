@@ -30,7 +30,12 @@ class PengaturanController extends Controller
     public function update(PengaturanRequest $request)
     {
         try {
-            Pengaturan::where('key', 'warna_tema')->update(['value' => $request->warna_tema]);
+            foreach ($this->pengaturan->listPengaturan() as $data){
+                if ($request->{$data->key}){
+                    Pengaturan::where('key', $data->key)->update(['value' => $request->{$data->key}]);
+                }
+            }
+
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);

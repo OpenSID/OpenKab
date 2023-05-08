@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('guest')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -45,6 +45,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('sex', [PendudukController::class, 'pendudukSex']);
             Route::get('status', [PendudukController::class, 'pendudukStatus']);
             Route::get('status-dasar', [PendudukController::class, 'pendudukStatusDasar']);
+        });
+
+        Route::prefix('aksi')->group(function () {
+            Route::post('pindah', [PendudukController::class, 'pindah']);
         });
     });
 

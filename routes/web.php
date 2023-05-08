@@ -93,6 +93,7 @@ Route::middleware('auth')->group(function () {
         ->prefix('master')
         ->group(function () {
             Route::get('/kategori', 'kategori_index');
+            Route::get('/pengaturan', 'pengaturan_index');
             Route::resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });

@@ -34,10 +34,10 @@ class PengaturanController extends Controller
                     Pengaturan::where('key', $data->key)->update(['value' => $request->{$data->key}]);
                 }
             }
-
-            return response()->json([
-                'success' => true,
-            ], Response::HTTP_OK);
+            return back()->withInput()->with('success', 'Data berhasil diubah!');
+//            return response()->json([
+//                'success' => true,
+//            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             report($e);
 

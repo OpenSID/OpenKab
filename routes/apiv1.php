@@ -120,7 +120,7 @@ Route::get('/user', function (Request $request) {
     // Pengaturan Aplikasi
     Route::controller(\App\Http\Controllers\Api\PengaturanController::class)
         ->prefix('pengaturan')->group(function () {
-            Route::get('/', 'index');
+            Route::get('/', 'index')->name('api.pengaturan_aplikasi');;
             Route::post('/update', 'update');
         });
 

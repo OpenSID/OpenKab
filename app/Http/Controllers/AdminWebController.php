@@ -13,4 +13,9 @@ class AdminWebController extends Controller
     {
         return view('master.kategori.show', compact('id'));
     }
+
+    public function pengaturan_index()
+    {
+        return view('master.pengaturan.index');
+    }
 }

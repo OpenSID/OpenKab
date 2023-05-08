@@ -6,7 +6,6 @@ use App\Http\Repository\PengaturanRepository;
 use App\Http\Requests\PengaturanRequest;
 use App\Http\Transformers\PengaturanTransformer;
 use App\Models\Pengaturan;
-use GuzzleHttp\Psr7\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PengaturanController extends Controller

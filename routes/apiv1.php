@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DokumenController;
-use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\StatistikController;
@@ -98,6 +97,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/buat', 'store');
         Route::put('/perbarui/{id}', 'update');
         Route::post('/hapus', 'destroy');
+    });
+
+    // artikel
+    Route::controller(\App\Http\Controllers\Api\ArtikelController::class)
+    ->prefix('artikel')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/tahun', 'tahun');
     });
 
     Route::controller(\App\Http\Controllers\Api\IdentitasController::class)

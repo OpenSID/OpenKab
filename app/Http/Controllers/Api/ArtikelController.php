@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Repository\ArtikelRepository;
 use App\Http\Transformers\ArtikelTransformer;
 use App\Models\Artikel;
-use App\Models\Config;
-use App\Models\Kategori;
 use Symfony\Component\HttpFoundation\Response;
 
 class ArtikelController extends Controller

@@ -29,11 +29,12 @@ class PengaturanController extends Controller
     public function update(PengaturanRequest $request)
     {
         try {
-            foreach ($this->pengaturan->listPengaturan() as $data){
-                if ($request->{$data->key}){
+            foreach ($this->pengaturan->listPengaturan() as $data) {
+                if ($request->{$data->key}) {
                     Pengaturan::where('key', $data->key)->update(['value' => $request->{$data->key}]);
                 }
             }
+
             return back()->withInput()->with('success', 'Data berhasil diubah!');
 //            return response()->json([
 //                'success' => true,

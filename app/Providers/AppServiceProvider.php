@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Config;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -67,6 +67,7 @@ class AppServiceProvider extends ServiceProvider
             if ($contains) {
                 return false;
             }
+
             return true;
         });
     }

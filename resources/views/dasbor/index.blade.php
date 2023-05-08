@@ -72,50 +72,24 @@
                         <div class="col-md-12">
                             <div id="collapse-filter" class="collapse">
                                 <div class="row">
-<<<<<<< HEAD
-                                    <input type="hidden" name="id" id="id" value="@if (session()->has('desa')) {{session('desa.id')}} @endif">
-=======
                                     <input type="hidden" name="id" id="id"
-                                        value="@if (session()->has('desa')) {{ session('desa.id') }} @endif">
->>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
+                                        value="@if (session()->has('desa')) {{ session('desa.id') }} @endif">4
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>
                                             <select class="select2 form-control-sm" id="tahun" name="tahun"
-<<<<<<< HEAD
-                                                    data-placeholder="Semua Tahun" style="width: 100%;">
-=======
                                                 data-placeholder="Semua Tahun" style="width: 100%;">
->>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Bulan</label>
-<<<<<<< HEAD
-                                            <select class="select2 form-control-sm" id="bulan" name="bulan"
-                                                    data-placeholder="Semua Bulan" style="width: 100%;">
-                                                <option value=""></option>
-                                                <option value="01">Januari</option>
-                                                <option value="02">Februari</option>
-                                                <option value="03">Maret</option>
-                                                <option value="04">April</option>
-                                                <option value="05">Mei</option>
-                                                <option value="06">Juni</option>
-                                                <option value="07">Juli</option>
-                                                <option value="08">Agustus</option>
-                                                <option value="09">September</option>
-                                                <option value="10">Oktober</option>
-                                                <option value="11">November</option>
-                                                <option value="12">Desember</option>
-=======
                                             <select class="form-control" id="bulan">
                                                 <option value=""></option>
                                                 @for ($x = 1; $x <= 12; $x++)
                                                     <option value="{{ $x }}">{{ bulan($x) }}</option>
                                                 @endfor
->>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
                                             </select>
                                         </div>
                                     </div>
@@ -149,21 +123,12 @@
                     <div class="table-responsive">
                         <table class="table table-striped" id="berita">
                             <thead>
-<<<<<<< HEAD
-                            <tr>
-                                <th class="padat">No</th>
-                                <th>Kecamatan</th>
-                                <th>Kelurahan</th>
-                                <th class="padat">Jumlah Artikel Perkelurahan</th>
-                            </tr>
-=======
                                 <tr>
                                     <th class="padat">No</th>
                                     <th>Kecamatan</th>
                                     <th>Kelurahan</th>
                                     <th class="padat">Jumlah Artikel Perkelurahan</th>
                                 </tr>
->>>>>>> 9d877b828ce1bb099dda6c8a36f21dd6716748d8
                             </thead>
                             <tbody></tbody>
                         </table>

@@ -53,7 +53,7 @@ class IdentitasController extends Controller
         }
     }
 
-    public function upload(UploadImageRequest $request)
+    public function upload(UploadImageRequest $request, $id)
     {
         try {
             $path = storage_path('app/public/img');
@@ -67,6 +67,11 @@ class IdentitasController extends Controller
             Image::make($file->path())->resize(16, 16)->save(storage_path('app/public').'/'.$filename.'.png');
             copy(storage_path('app/public/').$filename.'.png', storage_path('app/public/').$filename.'.ico'); //create favicon
             Image::make($file->path())->resize(150, 150)->save($path.'/'.$filename.'.png'); //create logo
+
+            Identitas::where('id', $id)->update([
+                'logo' => $filename.'.png',
+                'favicon' => $filename
+            ]);
 
             return response()->json([
                 'success' => true,

@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('pengaturan')->group(function () {
         Route::resource('users', UserController::class);
         Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
+        Route::get('/logo', [IdentitasController::class, 'logo']);
     });
 
 

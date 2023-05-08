@@ -58,7 +58,9 @@
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input-color>
-
+                                                @error('value.attributes.key')
+                                                <div class="text-danger">{{ $message }}</div>
+                                                @enderror
 {{--                                                <x-adminlte-input name="data" x-bind:name="value.attributes.key" x-model="value.attributes.value">--}}
 {{--                                                </x-adminlte-input>--}}
                                         </div>

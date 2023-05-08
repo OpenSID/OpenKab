@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Identitas;
-use Intervention\Image\Facades\Image;
-use App\Http\Requests\IdentitasRequest;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\UploadImageRequest;
 use App\Http\Repository\IdentitasRepository;
-use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\IdentitasRequest;
+use App\Http\Requests\UploadImageRequest;
 use App\Http\Transformers\IdentitasTransformer;
+use App\Models\Identitas;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use Symfony\Component\HttpFoundation\Response;
 
 class IdentitasController extends Controller
 {
@@ -58,7 +58,7 @@ class IdentitasController extends Controller
         try {
             $path = storage_path('app/public/img');
 
-            if (!file_exists($path)) {
+            if (! file_exists($path)) {
                 mkdir($path, 755, true);
             }
             $filename = uniqid('img_');
@@ -70,15 +70,16 @@ class IdentitasController extends Controller
 
             Identitas::where('id', $id)->update([
                 'logo' => $filename.'.png',
-                'favicon' => $filename
+                'favicon' => $filename,
             ]);
 
             return response()->json([
                 'success' => true,
-                'data' => asset('/storage/img/'.$filename.'.png')
+                'data' => asset('/storage/img/'.$filename.'.png'),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),

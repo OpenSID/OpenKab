@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Config;
-use Illuminate\Support\Str;
 use App\Models\SettingAplikasi;
+use Illuminate\Support\Str;
 
 if (! function_exists('openkab_versi')) {
     /**
@@ -133,7 +133,7 @@ if (! function_exists('url_title')) {
     }
 }
 
-function ambilBerkas($pathBerkas,  $tampil = true)
+function ambilBerkas($pathBerkas, $tampil = true)
 {
     if (! file_exists($pathBerkas)) {
         $pathBerkas = public_path('assets/img/opensid_logo.png');
@@ -141,8 +141,8 @@ function ambilBerkas($pathBerkas,  $tampil = true)
 
     // Kalau $tampil, tampilkan secara inline.
     if ($tampil) {
-        $pathinfo =pathinfo($pathBerkas);
-         // Set the default MIME type to send
+        $pathinfo = pathinfo($pathBerkas);
+        // Set the default MIME type to send
         switch ($pathinfo['extension']) {
             case 'gif':
                 $mime = 'image/gif';
@@ -174,11 +174,11 @@ function ambilBerkas($pathBerkas,  $tampil = true)
         }
 
         // Generate the server headers
-        header('Content-Type: ' . $mime);
-        header('Content-Disposition: inline; filename="' . Str::random(10) . '"');
+        header('Content-Type: '.$mime);
+        header('Content-Disposition: inline; filename="'.Str::random(10).'"');
         header('Expires: 0');
         header('Content-Transfer-Encoding: binary');
-        header('Content-Length: ' . filesize($pathBerkas));
+        header('Content-Length: '.filesize($pathBerkas));
         header('Cache-Control: private, no-transform, no-store, must-revalidate');
 
         return readfile($pathBerkas);

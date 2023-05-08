@@ -42,10 +42,11 @@ class PengaturanController extends Controller
         } catch (\Exception $e) {
             report($e);
 
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return back()->withInput()->with('error', $e->getMessage());
+//            return response()->json([
+//                'success' => false,
+//                'message' => $e->getMessage(),
+//            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

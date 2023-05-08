@@ -73,7 +73,7 @@
                             <div id="collapse-filter" class="collapse">
                                 <div class="row">
                                     <input type="hidden" name="id" id="id"
-                                        value="@if (session()->has('desa')) {{ session('desa.id') }} @endif">4
+                                        value="@if (session()->has('desa')) {{ session('desa.id') }} @endif">
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>

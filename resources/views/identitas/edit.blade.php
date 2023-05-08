@@ -200,6 +200,13 @@
                 },
 
                 simpan() {
+                    Swal.fire({
+                                title: 'Sedang Menyimpan',
+                                didOpen: () => {
+                                    Swal.showLoading()
+                                },
+                                allowOutsideClick: false
+                            })
                     $.ajax({
                         type: "Put",
                         url: '{{ url('api/v1/identitas/perbarui') }}/' + this.id,
@@ -207,7 +214,36 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         data: this.dataIdentitas,
-                        success: function (response) {
+                        success: function(response) {
+                            if (response.success == true) {
+                                this.data.logo = response.data
+                                Swal.fire({
+                                    title: 'Simpan!',
+                                    text: 'Data berhasil tersimpan',
+                                    icon: 'success',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                })
+                                location.reload();
+
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: response.message,
+                                    icon: 'error',
+                                    showConfirmButton: true,
+                                    allowOutsideClick: false
+                                })
+                            }
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: xhr.responseText,
+                                icon: 'error',
+                                showConfirmButton: true,
+                                allowOutsideClick: false
+                            })
 
                         }
                     });

@@ -1,4 +1,5 @@
 @extends('layouts.index')
+@include('layouts.components.select2_tahun', ['url' => url('api/v1/artikel/tahun')])
 
 @section('plugins.chart', true)
 
@@ -58,8 +59,8 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-6">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                               aria-expanded="false" aria-controls="collapse-filter">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
+                                role="button" aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
                             Statistik Berita
@@ -71,33 +72,24 @@
                         <div class="col-md-12">
                             <div id="collapse-filter" class="collapse">
                                 <div class="row">
-                                    <input type="hidden" name="id" id="id" value="@if (session()->has('desa')) {{session('desa.id')}} @endif">
+                                    <input type="hidden" name="id" id="id"
+                                        value="@if (session()->has('desa')) {{ session('desa.id') }} @endif">
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>
                                             <select class="select2 form-control-sm" id="tahun" name="tahun"
-                                                    data-placeholder="Semua Tahun" style="width: 100%;">
+                                                data-placeholder="Semua Tahun" style="width: 100%;">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Bulan</label>
-                                            <select class="select2 form-control-sm" id="bulan" name="bulan"
-                                                    data-placeholder="Semua Bulan" style="width: 100%;">
+                                            <select class="form-control" id="bulan">
                                                 <option value=""></option>
-                                                <option value="01">Januari</option>
-                                                <option value="02">Februari</option>
-                                                <option value="03">Maret</option>
-                                                <option value="04">April</option>
-                                                <option value="05">Mei</option>
-                                                <option value="06">Juni</option>
-                                                <option value="07">Juli</option>
-                                                <option value="08">Agustus</option>
-                                                <option value="09">September</option>
-                                                <option value="10">Oktober</option>
-                                                <option value="11">November</option>
-                                                <option value="12">Desember</option>
+                                                @for ($x = 1; $x <= 12; $x++)
+                                                    <option value="{{ $x }}">{{ bulan($x) }}</option>
+                                                @endfor
                                             </select>
                                         </div>
                                     </div>
@@ -131,12 +123,12 @@
                     <div class="table-responsive">
                         <table class="table table-striped" id="berita">
                             <thead>
-                            <tr>
-                                <th class="padat">No</th>
-                                <th>Kecamatan</th>
-                                <th>Kelurahan</th>
-                                <th class="padat">Jumlah Artikel Perkelurahan</th>
-                            </tr>
+                                <tr>
+                                    <th class="padat">No</th>
+                                    <th>Kecamatan</th>
+                                    <th>Kelurahan</th>
+                                    <th class="padat">Jumlah Artikel Perkelurahan</th>
+                                </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -150,7 +142,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $('#bulan').select2();
             $.ajax({
                 url: `{{ url('api/v1/dasbor') }}`,
                 type: "GET",
@@ -222,14 +213,12 @@
                 options: barChartOptions
             })
         }
-    </script>
 
-    <script>
         var berita = $('#berita').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ordering: true,
+            ordering: false,
             searchPanes: {
                 viewTotal: false,
                 columns: [0]
@@ -257,9 +246,9 @@
                 },
             },
             columnDefs: [{
-                targets: '_all',
-                className: 'text-nowrap',
-            },
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
                 {
                     targets: [0, 1, 2, 3],
                     orderable: false,
@@ -267,8 +256,8 @@
                 },
             ],
             columns: [{
-                data: null,
-            },
+                    data: null,
+                },
                 {
                     data: "attributes.nama_kecamatan",
                     name: "nama_kecamatan"
@@ -283,9 +272,6 @@
                     className: 'text-center'
                 },
             ],
-            order: [
-                [2, 'asc']
-            ]
         })
 
         berita.on('draw.dt', function() {
@@ -297,65 +283,11 @@
             });
         });
 
-        $('#kategori').select2({
+        $('#bulan').select2({
             minimumResultsForSearch: -1,
-            ajax: {
-                url: '{{ url('api/v1/artikel') }}/kategori/',
-                dataType: 'json',
-                processResults: function(response) {
-                    return {
-                        results: response.data.map(function(item) {
-                            return {
-                                id: item.id,
-                                text: item.kategori
-                            }
-                        })
-                    };
-                }
-            },
-        });
+            theme: "bootstrap",
 
-        $('#tahun').select2({
-            minimumResultsForSearch: -1,
-            ajax: {
-                url: '{{ url('api/v1/artikel') }}/tahun/',
-                dataType: 'json',
-                processResults: function(data) {
-                    if (data.data.tahun_awal == null) {
-                        return null
-                    };
-                    const element = new Array();
-
-                    for (let index = data.data.tahun_awal; index <= data.data.tahun_akhir; index++) {
-                        element.push({
-                            id: index,
-                            text: index
-                        });
-                    }
-
-                    return {
-                        results: element
-                    };
-                }
-            },
-        });
-
-        $('#nama_desa').select2({
-            minimumResultsForSearch: -1,
-            ajax: {
-                url: '{{ url('api/v1/artikel') }}/nama_desa/',
-                dataType: 'json',
-                processResults: function(response) {
-                    return {
-                        results: response.data.map(function(item) {
-                            return {
-                                id: item.nama_desa,
-                                text: item.nama_desa
-                            }
-                        })
-                    };
-                }
-            },
+            placeholder: "Pilih Bulan",
         });
 
         $('#filter').on('click', function(e) {

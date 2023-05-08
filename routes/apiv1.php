@@ -74,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
             });
             Route::prefix('rtm')->group(function () {
                 Route::get('/', 'rtm');
-                Route::get('/reftahunrtm', 'refTahunRtm');
+                Route::get('/tahun', 'refTahunRtm');
             });
             Route::get('/bantuan', 'bantuan');
         });

@@ -24,7 +24,7 @@ class PengaturanRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => 'required',
+            'warna_tema' => 'required',
         ];
     }
 }

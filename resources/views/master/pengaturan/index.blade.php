@@ -50,7 +50,7 @@
                                     <template x-for="(value, index) in data">
                                         <div class="mb-4">
                                             <label x-text="value.attributes.judul"></label>
-                                                <x-adminlte-input-color name="color" x-bind:name="value.attributes.key" x-bind:data-color="value.attributes.value" x-model="value.attributes.value" data-color="" data-format='hex'
+                                                <x-adminlte-input-color class="@error('warna_tema') is-invalid  @enderror" name="color" x-bind:name="value.attributes.key" x-bind:data-color="value.attributes.value" x-model="value.attributes.value" data-color="" data-format='hex'
                                                                         data-horizontal=true>
                                                     <x-slot name="appendSlot">
                                                         <div class="input-group-text">
@@ -58,7 +58,7 @@
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input-color>
-                                                @error('value.attributes.key')
+                                                @error('warna_tema')
                                                 <div class="text-danger">{{ $message }}</div>
                                                 @enderror
 {{--                                                <x-adminlte-input name="data" x-bind:name="value.attributes.key" x-model="value.attributes.value">--}}

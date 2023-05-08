@@ -64,8 +64,8 @@ class IdentitasController extends Controller
             $filename = uniqid('img_');
             $file = $request->file('file');
 
-            Image::make($file->path())->resize(16, 16)->save( public_path().'/favicon.png');
-            copy(public_path().'/favicon.png',  public_path().'/favicon.ico'); //create favicon
+            Image::make($file->path())->resize(16, 16)->save(public_path().'/favicon.png');
+            copy(public_path().'/favicon.png', public_path().'/favicon.ico'); //create favicon
             Image::make($file->path())->resize(150, 150)->save($path.'/'.$filename.'.png'); //create logo
 
             Identitas::where('id', $id)->update([

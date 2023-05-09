@@ -32,7 +32,7 @@ class PindahRequest extends FormRequest
             'status' => 'required|integer',
             'tgl_lapor' => 'require|date',
             'tgl_peristiwa' => 'require|date',
-            'catatan' => 'sometimes|string'
+            'catatan' => 'sometimes|string',
         ];
     }
 }

@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Sex;
-use App\Models\Penduduk;
-use App\Models\LogPenduduk;
-use Illuminate\Support\Str;
-use App\Models\PendudukStatus;
-use PhpParser\Node\Stmt\TryCatch;
-use App\Models\PendudukStatusDasar;
-use App\Http\Requests\PindahRequest;
 use App\Http\Repository\PendudukRepository;
+use App\Http\Requests\PindahRequest;
 use App\Http\Transformers\PendudukTransformer;
 use App\Models\LogKeluarga;
+use App\Models\LogPenduduk;
+use App\Models\Penduduk;
+use App\Models\PendudukStatus;
+use App\Models\PendudukStatusDasar;
+use App\Models\Sex;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class PendudukController extends Controller
@@ -73,7 +72,7 @@ class PendudukController extends Controller
     {
         try {
             $data = $request->validated();
-            $penduduk_lama =  Penduduk::where('nik',  $data['nik'])->where('config_id', $data['config_asal'])->first();
+            $penduduk_lama = Penduduk::where('nik', $data['nik'])->where('config_id', $data['config_asal'])->first();
             $penduduk_lama->status_dasar = 3;
             $penduduk_lama->save();
 
@@ -92,17 +91,17 @@ class PendudukController extends Controller
                 'catatan' => $request->catatan,
             ]);
 
-             // LOG keluarga
+            // LOG keluarga
             LogKeluarga::create([
                 'id_kk' => $penduduk_lama->keluarga->id,
                 'config_id' => $penduduk_lama->config_id,
                 'id_peristiwa' => 3,
                 'updated_by' => 1,
-                'id_log_penduduk' => $penduduk_lama->id
+                'id_log_penduduk' => $penduduk_lama->id,
             ]);
 
             // cek data di desa tujuan
-            $penduduk_tujuan = Penduduk::where('nik',  $data['nik'])->where('config_id', $data['config_tujuan'])->first();
+            $penduduk_tujuan = Penduduk::where('nik', $data['nik'])->where('config_id', $data['config_tujuan'])->first();
             if ($penduduk_tujuan) {
                 $penduduk_tujuan->status_dasar = 1;
                 $penduduk_tujuan->save();
@@ -146,7 +145,6 @@ class PendudukController extends Controller
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);
-
         } catch (\Exception $e) {
             report($e);
 

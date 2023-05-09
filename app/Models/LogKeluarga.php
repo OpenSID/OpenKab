@@ -23,5 +23,4 @@ class LogKeluarga extends Model
     public $timestamps = false;
 
     protected $fillable = ['config_id', 'id_kk', 'id_peristiwa', 'id_pend', 'updated_by', 'id_log_penduduk'];
-
 }

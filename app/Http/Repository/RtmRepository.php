@@ -19,16 +19,12 @@ class RtmRepository
         return Rtm::tahun()->first();
     }
 
-    public function listFooter(): array|object
+    public function listFooter($jumlah, $total): array|object
     {
-        $rtm = Rtm::countStatistik();
-
-        $jumlah = $rtm->bdt(true)->get();
         $jumlah_laki_laki = $jumlah->sum('laki_laki');
         $jumlah_perempuan = $jumlah->sum('perempuan');
         $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
 
-        $total = $rtm->get();
         $total_laki_laki = $total->sum('laki_laki');
         $total_perempuan = $total->sum('perempuan');
         $total = $total_laki_laki + $total_perempuan;
@@ -57,27 +53,13 @@ class RtmRepository
 
     private function caseBdt(): array|object
     {
-        $bdt = RTM::countStatistik()->get();
-        $query = RTM::configId()->countStatistik()->get();
-        $query = RTM::configId()->countStatistik()->where('tgl_daftar', function ($q) {
-            if (isset(request('filter')['tahun'])) {
-                $q->whereYear('tgl_daftar', '<=', request('filter')['tahun']);
-            }
-
-            if (isset(request('filter')['bulan'])) {
-                $q->whereMonth('tgl_daftar', '<=', request('filter')['bulan']);
-            }
-        });
-
-        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
-            $query->status();
-        }
-
-        $query->get();
+        $bdt = Rtm::CountStatistik();
+        $jumlah = $bdt->bdt(true)->get();
+        $total = $bdt->get();
 
         return [
-            'header' => $bdt,
-            'footer' => $this->listFooter($bdt, $query),
+            'header' => [],
+            'footer' => $this->listFooter($jumlah, $total),
         ];
     }
 }

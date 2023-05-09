@@ -8,7 +8,7 @@
     </style>
 @endpush
 
-@section('title', 'Biodata Penduduk')
+@section('title', 'Pengaturan Identitas')
 
 @section('content_header')
     <h1>Identitas </h1>
@@ -233,7 +233,7 @@
                                     showConfirmButton: false,
                                     timer: 1500,
                                 })
-                                location.reload();
+                                window.location.href = '{{ url('pengaturan/identitas') }}';
 
                             } else {
                                 Swal.fire({

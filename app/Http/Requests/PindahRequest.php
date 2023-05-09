@@ -25,6 +25,8 @@ class PindahRequest extends FormRequest
     {
         return [
             'nik' => 'required|regex:/[0-9]{9}/u',
+            'alamat_tujuan' => 'required|string',
+            'ref_pindah' => 'required|integer',
             'config_asal' => 'required|integer',
             'config_tujuan' => 'required|integer',
             'status' => 'required|integer',

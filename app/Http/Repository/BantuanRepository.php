@@ -208,7 +208,7 @@ class BantuanRepository
         ];
     }
 
-    private function tahun()
+    public function tahun()
     {
         return Bantuan::tahun()->first();
     }

@@ -70,7 +70,10 @@ Route::middleware('auth:sanctum')->group(function () {
             });
             Route::get('/keluarga', 'keluarga');
             Route::get('/rtm', 'rtm');
-            Route::get('/bantuan', 'bantuan');
+            Route::prefix('bantuan')->group(function () {
+                Route::get('/', 'bantuan');
+                Route::get('/reftahunbantuan', 'refTahunBantuan');
+            });
         });
 
     // Bantuan

@@ -1,5 +1,5 @@
 @extends('layouts.index')
-@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/penduduk/reftahunpenduduk')])
+@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/bantuan/reftahunbantuan')])
 
 @section('plugins.chart', true)
 
@@ -344,34 +344,6 @@
         });
 
         $(function() {
-            $('#tahun').select2({
-                minimumResultsForSearch: -1,
-                allowClear: true,
-                theme: "bootstrap",
-                ajax: {
-                    url: '{{ url('api/v1/statistik/penduduk/reftahunpenduduk') }}',
-                    dataType: 'json',
-                    processResults: function(data) {
-                        if (data.success != true) {
-                            return null
-                        };
-
-                        const element = new Array();
-                        for (let index = 0; index < data.data.length; index++) {
-                            element.push({
-                                id: data.data[index].tahun,
-                                text: data.data[index].tahun
-                            });
-                        }
-
-                        return {
-                            results: element
-                        };
-                    }
-                },
-                placeholder: "Pilih Tahun",
-            });
-
             $('#bulan').select2({
                 minimumResultsForSearch: -1,
                 allowClear: true,

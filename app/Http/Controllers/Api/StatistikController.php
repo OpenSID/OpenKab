@@ -59,6 +59,16 @@ class StatistikController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function refTahunBantuan(BantuanRepository $bantuan)
+    {
+        $list = $bantuan->tahun();
+
+        return response()->json([
+            'success' => true,
+            'data' => $list,
+        ], Response::HTTP_OK);
+    }
+
     public function keluarga(KeluargaRepository $keluarga)
     {
         if ($this->kategori) {

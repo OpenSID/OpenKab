@@ -23,7 +23,8 @@
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <img class="img-identitas img-responsive"
-                            :src="dataIdentitas.logo ?? '{{ asset('assets/img/opensid_logo.png') }}'"
+                            :src="dataIdentitas.logo ? '{{ asset('storage/img') }}/' + dataIdentitas.logo :
+                            '{{ asset('assets/img/opensid_logo.png') }}'"
                                 alt="logo-Aplikasi">
                             <h3 class="text-identitas"><span x-text="dataIdentitas.nama_kabupaten"></span> </h3>
                         </div>

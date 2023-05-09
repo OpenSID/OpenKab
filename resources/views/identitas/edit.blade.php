@@ -21,7 +21,7 @@
                 <div class="widget-user-header text-center  p-4">
                     <img :src="dataIdentitas.logo ? '{{ asset('storage/img') }}/' + dataIdentitas.logo :
                         '{{ asset('assets/img/opensid_logo.png') }}'"
-                        alt="Logo" width="150pxxx">
+                        alt="Logo" width="150px">
                     <h5 class="mt-3" x-text="'Logo ' + dataIdentitas.nama_aplikasi">Logo OpenKAB</h5>
                 </div>
                 <div class="card-footer">

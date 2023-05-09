@@ -1,4 +1,5 @@
 @extends('layouts.index')
+@include('layouts.components.select2_tahun', ['url' => url('api/v1/artikel/tahun')])
 
 @section('plugins.chart', true)
 
@@ -46,6 +47,91 @@
                         <canvas id="barChart"
                             style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%; display: block; width: 379px;"
                             width="758" height="500" class="chartjs-render-monitor"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
+                                role="button" aria-expanded="false" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                            Statistik Berita
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="collapse-filter" class="collapse">
+                                <div class="row">
+                                    <input type="hidden" name="id" id="id"
+                                        value="@if (session()->has('desa')) {{ session('desa.id') }} @endif">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Tahun</label>
+                                            <select class="select2 form-control-sm" id="tahun" name="tahun"
+                                                data-placeholder="Semua Tahun" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Bulan</label>
+                                            <select class="form-control" id="bulan">
+                                                <option value=""></option>
+                                                @for ($x = 1; $x <= 12; $x++)
+                                                    <option value="{{ $x }}">{{ bulan($x) }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="berita">
+                            <thead>
+                                <tr>
+                                    <th class="padat">No</th>
+                                    <th>Kecamatan</th>
+                                    <th>Kelurahan</th>
+                                    <th class="padat">Jumlah Artikel Perkelurahan</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -127,5 +213,93 @@
                 options: barChartOptions
             })
         }
+
+        var berita = $('#berita').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: false,
+            searchPanes: {
+                viewTotal: false,
+                columns: [0]
+            },
+            ajax: {
+                url: `{{ url('api/v1/artikel') }}`,
+                method: 'get',
+                data: function(row) {
+                    return {
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name,
+                        "filter[id]": $("#id").val(),
+                        "filter[bulan]": $("#bulan").val(),
+                        "filter[tahun]": $("#tahun").val(),
+                    };
+                },
+                dataSrc: function(json) {
+                    json.recordsTotal = json.meta.pagination.total
+                    json.recordsFiltered = json.meta.pagination.total
+
+                    return json.data
+                },
+            },
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: [0, 1, 2, 3],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
+            columns: [{
+                    data: null,
+                },
+                {
+                    data: "attributes.nama_kecamatan",
+                    name: "nama_kecamatan"
+                },
+                {
+                    data: "attributes.nama_desa",
+                    name: "nama_desa"
+                },
+                {
+                    data: "attributes.jumlah_artikel",
+                    name: "jumlah_artikel",
+                    className: 'text-center'
+                },
+            ],
+        })
+
+        berita.on('draw.dt', function() {
+            var PageInfo = $('#berita').DataTable().page.info();
+            berita.column(0, {
+                page: 'current'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
+        });
+
+        $('#bulan').select2({
+            minimumResultsForSearch: -1,
+            theme: "bootstrap",
+
+            placeholder: "Pilih Bulan",
+        });
+
+        $('#filter').on('click', function(e) {
+            berita.draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#tahun').val('').change();
+            $('#bulan').val('').change();
+
+            berita.ajax.reload();
+        });
     </script>
 @endpush

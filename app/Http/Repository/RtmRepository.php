@@ -57,6 +57,7 @@ class RtmRepository
         $jumlah = $bdt->bdt(true)->get();
         $total = $bdt->get();
 
+
         return [
             'header' => [],
             'footer' => $this->listFooter($jumlah, $total),

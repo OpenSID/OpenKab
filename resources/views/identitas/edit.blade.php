@@ -193,6 +193,15 @@
                                             allowOutsideClick: false
                                         })
                                     }
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: XMLHttpRequest.responseJSON['message'],
+                                        icon: 'error',
+                                        showConfirmButton: true,
+                                        allowOutsideClick: false
+                                    })
                                 }
                             });
                         }
@@ -201,12 +210,12 @@
 
                 simpan() {
                     Swal.fire({
-                                title: 'Sedang Menyimpan',
-                                didOpen: () => {
-                                    Swal.showLoading()
-                                },
-                                allowOutsideClick: false
-                            })
+                        title: 'Sedang Menyimpan',
+                        didOpen: () => {
+                            Swal.showLoading()
+                        },
+                        allowOutsideClick: false
+                    })
                     $.ajax({
                         type: "Put",
                         url: '{{ url('api/v1/identitas/perbarui') }}/' + this.id,
@@ -239,12 +248,11 @@
                         error: function(XMLHttpRequest, textStatus, errorThrown) {
                             Swal.fire({
                                 title: 'Error!',
-                                text: xhr.responseText,
+                                text: XMLHttpRequest.responseJSON['message'],
                                 icon: 'error',
                                 showConfirmButton: true,
                                 allowOutsideClick: false
                             })
-
                         }
                     });
                 }

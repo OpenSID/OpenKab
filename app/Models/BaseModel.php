@@ -59,7 +59,7 @@ class BaseModel extends Model
         });
     }
 
-    public function scopeFilters($query, array $filters = [], $column = CREATED_AT)
+    public function scopeFilters($query, array $filters = [], $column = self::CREATED_AT)
     {
         return $query->when($filters['tahun'], function ($query) use ($filters, $column) {
             $query->whereYear($column, '<=', $filters['tahun'])
@@ -69,7 +69,7 @@ class BaseModel extends Model
         });
     }
 
-    public function scopeMinMaxTahun($query, $column = CREATED_AT)
+    public function scopeMinMaxTahun($query, $column = self::CREATED_AT)
     {
         return $query->selectRaw("YEAR(MIN({$column})) AS tahun_awal, YEAR(MAX({$column})) AS tahun_akhir");
     }

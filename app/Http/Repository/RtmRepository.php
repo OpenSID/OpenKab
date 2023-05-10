@@ -6,34 +6,35 @@ use App\Models\Rtm;
 
 class RtmRepository
 {
-    public function listStatistik(): array|object
+    public function listStatistik($kategori): array|object
     {
-        return [
-            'header' => [],
-            'footer' => $this->listFooter(),
-        ];
+        return collect(match ($kategori) {
+            'bdt' => $this->caseBdt(),
+            default => []
+        })->toArray();
     }
 
-    public function listFooter(): array|object
+    public function listTahun()
     {
-        $rtm = Rtm::countStatistik();
+        return Rtm::minMaxTahun('tgl_daftar')->first();
+    }
 
-        $jumlah = $rtm->bdt(true)->get();
-        $jumlah_laki_laki = $jumlah->sum('laki_laki');
-        $jumlah_perempuan = $jumlah->sum('perempuan');
-        $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
+    private function listFooter($dataHeader, $queryFooter): array|object
+    {
+        $jumlahLakiLaki = $dataHeader->sum('laki_laki');
+        $jumlahJerempuan = $dataHeader->sum('perempuan');
+        $jumlah = $jumlahLakiLaki + $jumlahJerempuan;
 
-        $total = $rtm->get();
-        $total_laki_laki = $total->sum('laki_laki');
-        $total_perempuan = $total->sum('perempuan');
-        $total = $total_laki_laki + $total_perempuan;
+        $totalLakiLaki = $queryFooter->sum('laki_laki');
+        $totalPerempuan = $queryFooter->sum('perempuan');
+        $total = $totalLakiLaki + $totalPerempuan;
 
         return [
             [
                 'nama' => 'Jumlah',
                 'jumlah' => $jumlah,
-                'laki_laki' => $jumlah_laki_laki,
-                'perempuan' => $jumlah_perempuan,
+                'laki_laki' => $jumlahLakiLaki,
+                'perempuan' => $jumlahJerempuan,
             ],
             [
                 'nama' => 'Belum Mengisi',
@@ -41,9 +42,21 @@ class RtmRepository
             [
                 'nama' => 'Total',
                 'jumlah' => $total,
-                'laki_laki' => $total_laki_laki,
-                'perempuan' => $total_perempuan,
+                'laki_laki' => $totalLakiLaki,
+                'perempuan' => $totalPerempuan,
             ],
+        ];
+    }
+
+    private function caseBdt(): array|object
+    {
+        $bdt = Rtm::CountStatistik()->filters(request()->input('filter'), 'tgl_daftar');
+        $queryFooter = $bdt->get();
+        $dataHeader = $bdt->bdt(true)->get();
+
+        return [
+            'header' => [],
+            'footer' => $this->listFooter($dataHeader, $queryFooter),
         ];
     }
 }

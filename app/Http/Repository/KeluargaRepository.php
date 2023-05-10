@@ -41,6 +41,11 @@ class KeluargaRepository
         })->toArray();
     }
 
+    public function listTahun()
+    {
+        return Keluarga::minMaxTahun('tgl_daftar')->first();
+    }
+
     private function listFooter($dataHeader, $query_footer): array|object
     {
         $jumlahLakiLaki = $dataHeader->sum('laki_laki');
@@ -73,7 +78,7 @@ class KeluargaRepository
     private function caseKelasSosial(): array|object
     {
         $kelas = KelasSosial::countStatistik()->get();
-        $query = Keluarga::configId()->countStatistik()->get();
+        $query = Keluarga::configId()->filters(request()->input('filter'), 'tgl_daftar')->countStatistik()->get();
 
         return [
             'header' => $kelas,

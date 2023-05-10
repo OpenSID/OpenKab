@@ -78,7 +78,7 @@ class KeluargaRepository
     private function caseKelasSosial(): array|object
     {
         $kelas = KelasSosial::countStatistik()->get();
-        $query = Keluarga::configId()->countStatistik()->get();
+        $query = Keluarga::configId()->filters(request()->input('filter'), 'tgl_daftar')->countStatistik()->get();
 
         return [
             'header' => $kelas,

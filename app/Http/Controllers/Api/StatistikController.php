@@ -69,6 +69,14 @@ class StatistikController extends Controller
         ], Response::HTTP_NOT_FOUND);
     }
 
+    public function refTahunKeluarga(KeluargaRepository $keluarga)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $keluarga->listTahun(),
+        ], Response::HTTP_OK);
+    }
+
     public function rtm(RtmRepository $rtm)
     {
         return $this->fractal($this->statistik->getStatistik($rtm->listStatistik()), new StatistikTransformer(), 'statistik-rtm')->respond();

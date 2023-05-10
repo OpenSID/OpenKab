@@ -72,7 +72,10 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::get('/', 'keluarga');
                 Route::get('/tahun', 'refTahunKeluarga');
             });
-            Route::get('/rtm', 'rtm');
+            Route::prefix('rtm')->group(function () {
+                Route::get('/', 'rtm');
+                Route::get('/tahun', 'refTahunRtm');
+            });
             Route::get('/bantuan', 'bantuan');
         });
 

@@ -59,13 +59,18 @@ class BaseModel extends Model
         });
     }
 
-    public function scopeFilters($query, array $filters = [], $columns = CREATED_AT)
+    public function scopeFilters($query, array $filters = [], $column = CREATED_AT)
     {
-        return $query->when($filters['tahun'], function ($query) use ($filters, $columns) {
-            $query->whereYear($columns, '<=', $filters['tahun'])
-                ->when($filters['bulan'], function ($query) use ($filters, $columns) {
-                    $query->whereMonth($columns, '<=', $filters['bulan']);
+        return $query->when($filters['tahun'], function ($query) use ($filters, $column) {
+            $query->whereYear($column, '<=', $filters['tahun'])
+                ->when($filters['bulan'], function ($query) use ($filters, $column) {
+                    $query->whereMonth($column, '<=', $filters['bulan']);
                 });
         });
+    }
+
+    public function scopeMinMaxTahun($query, $column = CREATED_AT)
+    {
+        return $query->selectRaw("YEAR(MIN({$column})) AS tahun_awal, YEAR(MAX({$column})) AS tahun_akhir");
     }
 }

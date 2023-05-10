@@ -71,11 +71,9 @@ class StatistikController extends Controller
 
     public function refTahunKeluarga(KeluargaRepository $keluarga)
     {
-        $list = $keluarga->listTahun();
-
         return response()->json([
             'success' => true,
-            'data' => $list,
+            'data' => $keluarga->listTahun(),
         ], Response::HTTP_OK);
     }
 

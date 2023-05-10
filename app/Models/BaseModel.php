@@ -58,4 +58,14 @@ class BaseModel extends Model
             $query->where("{$this->table}.config_id", session('desa.id'));
         });
     }
+
+    public function scopeFilters($query, array $filters = [], $columns = CREATED_AT)
+    {
+        return $query->when($filters['tahun'], function ($query) use ($filters, $columns) {
+            $query->whereYear($columns, '<=', $filters['tahun'])
+                ->when($filters['bulan'], function ($query) use ($filters, $columns) {
+                    $query->whereMonth($columns, '<=', $filters['bulan']);
+                });
+        });
+    }
 }

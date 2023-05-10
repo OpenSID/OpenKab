@@ -51,11 +51,9 @@ class StatistikController extends Controller
 
     public function refTahunPenduduk(PendudukRepository $penduduk)
     {
-        $list = $penduduk->listTahun();
-
         return response()->json([
             'success' => true,
-            'data' => $list,
+            'data' => $penduduk->listTahun(),
         ], Response::HTTP_OK);
     }
 
@@ -69,6 +67,14 @@ class StatistikController extends Controller
             'success' => false,
             'message' => 'Kategori tidak ditemukan',
         ], Response::HTTP_NOT_FOUND);
+    }
+
+    public function refTahunKeluarga(KeluargaRepository $keluarga)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $keluarga->listTahun(),
+        ], Response::HTTP_OK);
     }
 
     public function rtm(RtmRepository $rtm)

@@ -1,5 +1,5 @@
 @extends('layouts.index')
-@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/penduduk/reftahunpenduduk')])
+@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/'.strtolower($judul).'/tahun')])
 
 @section('plugins.chart', true)
 
@@ -91,8 +91,9 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="reset" class="btn btn-secondary"><span
-                                                            class="fas fa-ban"></span></button>
+                                                    <button type="button" id="reset" class="btn btn-secondary">
+                                                        <span class="fas fa-ban"></span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -101,8 +102,9 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="filter" class="btn btn-primary"><span
-                                                            class="fas fa-search"></span></button>
+                                                    <button type="button" id="filter" class="btn btn-primary">
+                                                        <span class="fas fa-search"></span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>

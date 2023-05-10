@@ -43,7 +43,7 @@ class KeluargaRepository
 
     public function listTahun()
     {
-        return Keluarga::tahun()->first();
+        return Keluarga::minMaxTahun('tgl_daftar')->first();
     }
 
     private function listFooter($dataHeader, $query_footer): array|object

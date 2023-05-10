@@ -19,14 +19,14 @@ class RtmRepository
         return Rtm::tahun()->first();
     }
 
-    public function listFooter($jumlah, $total): array|object
+    public function listFooter($dataHeader, $query_footer): array|object
     {
-        $jumlah_laki_laki = $jumlah->sum('laki_laki');
-        $jumlah_perempuan = $jumlah->sum('perempuan');
+        $jumlah_laki_laki = $dataHeader->sum('laki_laki');
+        $jumlah_perempuan = $dataHeader->sum('perempuan');
         $jumlah = $jumlah_laki_laki + $jumlah_perempuan;
 
-        $total_laki_laki = $total->sum('laki_laki');
-        $total_perempuan = $total->sum('perempuan');
+        $total_laki_laki = $query_footer->sum('laki_laki');
+        $total_perempuan = $query_footer->sum('perempuan');
         $total = $total_laki_laki + $total_perempuan;
 
         return [
@@ -54,12 +54,12 @@ class RtmRepository
     private function caseBdt(): array|object
     {
         $bdt = Rtm::CountStatistik();
-        $jumlah = $bdt->bdt(true)->get();
-        $total = $bdt->get();
+        $dataHeader = $bdt->bdt(true)->get();
+        $query_footer = $bdt->filters(request()->input('filter'), 'tgl_daftar')->get();
 
         return [
-            'header' => [],
-            'footer' => $this->listFooter($jumlah, $total),
+            'header' => $bdt,
+            'footer' => $this->listFooter($dataHeader, $query_footer),
         ];
     }
 }

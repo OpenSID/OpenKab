@@ -117,8 +117,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Identitas
     Route::controller(\App\Http\Controllers\Api\IdentitasController::class)
-        ->prefix('identitas')->group(function () {
-            Route::get('/', 'index');
-            Route::put('/perbarui/{id}', 'update');
-        });
+    ->prefix('identitas')->group(function () {
+        Route::get('/', 'index');
+        Route::put('/perbarui/{id}', 'update');
+        Route::post('/upload/{id}', 'upload');
+    });
 });

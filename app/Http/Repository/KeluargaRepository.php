@@ -4,7 +4,6 @@ namespace App\Http\Repository;
 
 use App\Models\KelasSosial;
 use App\Models\Keluarga;
-use App\Models\LogKeluarga;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -44,7 +43,7 @@ class KeluargaRepository
 
     public function listTahun()
     {
-        return LogKeluarga::tahun()->first();
+        return Keluarga::tahun()->first();
     }
 
     private function listFooter($dataHeader, $query_footer): array|object
@@ -66,9 +65,6 @@ class KeluargaRepository
             ],
             [
                 'nama' => 'Belum Mengisi',
-                'jumlah' => $total - $jumlah,
-                'laki_laki' => $totalLakiLaki - $jumlahLakiLaki,
-                'perempuan' => $totalPerempuan - $jumlahJerempuan,
             ],
             [
                 'nama' => 'Total',
@@ -82,23 +78,7 @@ class KeluargaRepository
     private function caseKelasSosial(): array|object
     {
         $kelas = KelasSosial::countStatistik()->get();
-        $query = Keluarga::configId()->countStatistik()->whereHas('logKeluarga', function ($q) {
-            $q->select('log_keluarga.id')->selectRaw('Max(log_keluarga.id) as max')->where('log_keluarga.id_peristiwa', '!=', '2')->groupBy('log_keluarga.id');
-
-            if (isset(request('filter')['tahun'])) {
-                $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
-            }
-
-            if (isset(request('filter')['bulan'])) {
-                $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
-            }
-        });
-
-        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
-            $query->status();
-        }
-
-        $query->get();
+        $query = Keluarga::configId()->countStatistik()->get();
 
         return [
             'header' => $kelas,

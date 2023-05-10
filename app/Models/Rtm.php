@@ -59,9 +59,4 @@ class Rtm extends BaseModel
             $query->status($value)->where('rtm_level', '1');
         });
     }
-
-    public function scopeTahun($query)
-    {
-        return $query->selectRaw('YEAR(MIN(tgl_daftar)) AS tahun_awal, YEAR(MAX(tgl_daftar)) AS tahun_akhir');
-    }
 }

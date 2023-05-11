@@ -12,9 +12,15 @@ class PendudukController extends Controller
         return view('penduduk.index');
     }
 
+
     public function show(Penduduk $penduduk)
     {
         return view('penduduk.detail', compact('penduduk'));
+    }
+
+    public function pindah($id)
+    {
+        return view('penduduk.pindah');
     }
 
     public function cetak(Request $request)

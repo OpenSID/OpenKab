@@ -116,6 +116,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Aksi</th>
                                     <th>Foto</th>
                                     <th>NIK</th>
                                     <th>Tag ID Card</th>
@@ -186,7 +187,7 @@
                     className: 'text-nowrap',
                 },
                 {
-                    targets: [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+                    targets: [0, 1, 3, 5, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
                     orderable: false,
                     searchable: false,
                 },
@@ -195,6 +196,21 @@
                     data: null,
                     searchable: false,
                     orderable: false
+                },
+                {
+                    searchable: false,
+                    name: "aksi",
+                    orderable: false,
+                    data: function(data) {
+                        return `<div class="btn-group open">
+                            <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
+                            <ul class="dropdown-menu" role="menu" style="">
+                                <li>
+                                    <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm"><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
+                                </li>
+                            </ul>
+                        </div>`
+                    }
                 },
                 {
                     data: function(data) {
@@ -212,7 +228,7 @@
                 {
                     data: "attributes.tag_id_card",
                     name: "tag_id_card",
-                    searchable: true,
+                    searchable: false,
                 },
                 {
                     data: "attributes.nama",
@@ -288,7 +304,7 @@
                 }
             ],
             order: [
-                [4, 'asc']
+                [5, 'asc']
             ]
         })
 

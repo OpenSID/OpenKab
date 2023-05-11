@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Config;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bootHttps();
         $this->bootConfigFTP();
+        $this->addValidation();
     }
 
     public function bootHttps()
@@ -54,6 +57,18 @@ class AppServiceProvider extends ServiceProvider
                 'root' => env("FTP_{$item->id}_ROOT"),
                 'timeout' => (int) env("FTP_{$item->id}_TIMEOUT", 30),
             ];
+        });
+    }
+
+    protected function addValidation()
+    {
+        Validator::extend('valid_file', function ($attributes, $value, $parameters) {
+            $contains = preg_match('/<\?php|<script|function|__halt_compiler|<html/i', File::get($value));
+            if ($contains) {
+                return false;
+            }
+
+            return true;
         });
     }
 }

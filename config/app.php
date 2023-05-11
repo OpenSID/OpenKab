@@ -21,6 +21,8 @@ return [
     'namaKab' => env('APP_NAMA_KAB', 'Nama Kabupaten'),
     'namaProv' => env('APP_NAMA_PROV', 'Nama Provinsi'),
     'sebutanKab' => env('APP_SEBUTAN_KAB', 'Kota'),
+    'serverPantau' => env('APP_PANTAU', 'https://pantau.opensid.my.id/'),
+    'tokenPantau' => env('TOKEN_PANTAU', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6bnVsbCwidGltZXN0YW1wIjoxNjAzNDY2MjM5fQ.HVCNnMLokF2tgHwjQhSIYo6-2GNXB4-Kf28FSIeXnZw'),
 
     'namaAplikasi' => env('APP_NAMA_APLIKASI', 'Simatik'),
 
@@ -188,6 +190,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -218,6 +221,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Image' => Intervention\Image\Facades\Image::class
     ])->toArray(),
 
 ];

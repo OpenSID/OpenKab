@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '<b>Open</b>KAB',
-    'logo_img' => 'assets/img/opensid_logo.png',
+    'logo_img' => '/pengaturan/logo',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -392,15 +392,15 @@ return [
             'text' => 'Pengaturan',
             'icon' => 'fa fa-cog',
             'submenu' => [
-                // [
-                //     'icon' => 'fas fa-angle-right',
-                //     'text' => 'Identitas',
-                //     'url' => 'identitas',
-                // ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Identitas',
+                    'url' => 'pengaturan/identitas',
+                ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
-                    'url' => 'users',
+                    'url' => 'pengaturan/users',
                 ],
             ],
         ],

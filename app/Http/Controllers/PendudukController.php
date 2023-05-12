@@ -12,7 +12,6 @@ class PendudukController extends Controller
         return view('penduduk.index');
     }
 
-
     public function show(Penduduk $penduduk)
     {
         return view('penduduk.detail', compact('penduduk'));

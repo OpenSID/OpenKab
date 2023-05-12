@@ -119,7 +119,6 @@ class PendudukController extends Controller
                     'catatan' => $request->catatan,
                 ];
             } else {
-
                 //update penduduk baru
                 $penduduk_baru = $penduduk_lama->replicate();
                 $penduduk_baru->config_id = $data['kelurahan_tujuan'];

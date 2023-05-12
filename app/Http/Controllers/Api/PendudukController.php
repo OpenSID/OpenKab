@@ -72,11 +72,12 @@ class PendudukController extends Controller
     {
         try {
             $data = $request->validated();
-            $penduduk_lama = Penduduk::where('nik', $data['nik'])->where('config_id', $data['config_asal'])->first();
+            $penduduk_lama = Penduduk::where('id', $data['id'])->where('config_id', $data['config_asal'])->first();
             $penduduk_lama->status_dasar = 3;
             $penduduk_lama->save();
 
             // LOG penduduk
+
             LogPenduduk::create([
                 'id_pend' => $penduduk_lama->id,
                 'kode_peristiwa' => 3,
@@ -101,13 +102,13 @@ class PendudukController extends Controller
             ]);
 
             // cek data di desa tujuan
-            $penduduk_tujuan = Penduduk::where('nik', $data['nik'])->where('config_id', $data['config_tujuan'])->first();
+            $penduduk_tujuan = Penduduk::where('config_id', $data['kelurahan_tujuan'])->first();
             if ($penduduk_tujuan) {
                 $penduduk_tujuan->status_dasar = 1;
                 $penduduk_tujuan->save();
                 $log_penduduk = [
                     'id_pend' => $penduduk_tujuan->id,
-                    'config_id' => $data['config_tujuan'],
+                    'config_id' => $data['kelurahan_tujuan'],
                     'kode_peristiwa' => 1,
                     'tgl_lapor' => $request->tgl_lapor,
                     'tgl_peristiwa' => $request->tgl_peristiwa,
@@ -118,16 +119,17 @@ class PendudukController extends Controller
                     'catatan' => $request->catatan,
                 ];
             } else {
+
                 //update penduduk baru
                 $penduduk_baru = $penduduk_lama->replicate();
-                $penduduk_baru->config_id = $data['config_tujuan'];
+                $penduduk_baru->config_id = $data['kelurahan_tujuan'];
                 $penduduk_baru->id_kk = null;
                 $penduduk_baru->status_dasar = 1;
                 $penduduk_baru->save();
 
                 $log_penduduk = [
                     'id_pend' => $penduduk_baru->id,
-                    'config_id' => $data['config_tujuan'],
+                    'config_id' => $data['kelurahan_tujuan'],
                     'kode_peristiwa' => 1,
                     'tgl_lapor' => $request->tgl_lapor,
                     'tgl_peristiwa' => $request->tgl_peristiwa,
@@ -138,7 +140,6 @@ class PendudukController extends Controller
                     'catatan' => $request->catatan,
                 ];
             }
-
             // LOG penduduk Desa Tujuan
             LogPenduduk::create($log_penduduk);
 

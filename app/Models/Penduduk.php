@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Config;
 use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property \App\Models\Enums\TempatDilahirkanEnum  $tempat_dilahirkan
@@ -71,6 +72,7 @@ class Penduduk extends BaseModel
         'jenisKelamin',
         'agama',
         'bahasa',
+        'config',
         'pendidikan',
         'pendidikanKK',
         'pekerjaan',
@@ -204,6 +206,14 @@ class Penduduk extends BaseModel
     public function kb()
     {
         return $this->belongsTo(KB::class, 'cara_kb_id')->withDefault();
+    }
+
+    /**
+     * Get the phone associated with the config.
+     */
+    public function config()
+    {
+        return $this->hasOne(Config::class, 'id', 'config_id');
     }
 
     /**

@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Wilayah
     Route::prefix('wilayah')->group(function () {
+        Route::get('desa', [WilayahController::class, 'desa']);
         Route::get('dusun', [WilayahController::class, 'dusun']);
         Route::get('rw', [WilayahController::class, 'rw']);
         Route::get('rt', [WilayahController::class, 'rt']);

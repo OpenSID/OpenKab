@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Config;
 use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @property \App\Models\Enums\TempatDilahirkanEnum  $tempat_dilahirkan

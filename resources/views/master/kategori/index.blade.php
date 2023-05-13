@@ -29,6 +29,7 @@
                                     <th class="padat">No</th>
                                     <th class="padat">Aksi</th>
                                     <th>Kategori</th>
+                                    <th>Jumlah artikel</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -76,7 +77,7 @@
                 serverSide: true,
                 ordering: true,
                 order: [
-                    [4, 'asc']
+                    [3, 'asc']
                 ],
                 columnDefs: [{
                         targets: '_all',
@@ -124,6 +125,12 @@
                         className: 'kategori',
                         orderable: true,
                         name: "kategori"
+                    },
+                    {
+                        data: "attributes.jml_artikel",
+                        className: 'w-56px text-center',
+                        orderable: false,
+                        name: "jml_artikel"
                     },
                 ],
             });
@@ -197,6 +204,11 @@
                             {
                                 data: "attributes.kategori",
                                 className: 'kategori',
+                            },
+                            {
+                                data: "attributes.jml_artikel",
+                                className: 'w-56px',
+                                width: "30%",
                             },
                         ],
                     });

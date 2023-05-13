@@ -2,6 +2,7 @@
 
 namespace App\Http\Repository;
 
+use App\Models\Artikel;
 use App\Models\Kategori;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -12,6 +13,12 @@ class KategoriRepository
     {
         return QueryBuilder::for(Kategori::class)
             ->whereNull('config_id')
+            ->select('*')
+            ->addSelect([
+                'jml_artikel' => Artikel::selectRaw('count(artikel.id_kategori)')
+                    ->whereRaw('artikel.id_kategori = kategori.id')
+                    ->orWhereRaw("artikel.id_kategori IN (SELECT a.id FROM kategori AS a WHERE a.parrent = kategori.id)")
+                ])
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -34,5 +41,10 @@ class KategoriRepository
     public function show($id)
     {
         return Kategori::where('id', $id)->whereNull('config_id')->first();
+    }
+
+    public function FunctionName(Type $var = null)
+    {
+        # code...
     }
 }

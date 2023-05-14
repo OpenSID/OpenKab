@@ -145,7 +145,7 @@ return [
     'url' => 'Format isian :attribute tidak sah.',
     'ulid' =>  'Isian :attribute harus berupa ULID yang sah.',
     'uuid' =>  'Isian :attribute harus berupa UUID yang sah.',
-
+    'valid_file' => 'Format :Jenis berkas yang anda unggah berbahaya.',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

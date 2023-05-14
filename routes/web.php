@@ -35,8 +35,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
-    Route::resource('users', UserController::class);
-    // Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
+    Route::prefix('pengaturan')->group(function () {
+        Route::resource('users', UserController::class);
+        Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
+        Route::get('/logo', [IdentitasController::class, 'logo']);
+    });
+
 
     Route::prefix('sesi')->group(function () {
         // Kecamatan

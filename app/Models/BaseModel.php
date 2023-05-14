@@ -58,4 +58,19 @@ class BaseModel extends Model
             $query->where("{$this->table}.config_id", session('desa.id'));
         });
     }
+
+    public function scopeFilters($query, array $filters = [], $column = self::CREATED_AT)
+    {
+        return $query->when($filters['tahun'], function ($query) use ($filters, $column) {
+            $query->whereYear($column, '<=', $filters['tahun'])
+                ->when($filters['bulan'], function ($query) use ($filters, $column) {
+                    $query->whereMonth($column, '<=', $filters['bulan']);
+                });
+        });
+    }
+
+    public function scopeMinMaxTahun($query, $column = self::CREATED_AT)
+    {
+        return $query->selectRaw("YEAR(MIN({$column})) AS tahun_awal, YEAR(MAX({$column})) AS tahun_akhir");
+    }
 }

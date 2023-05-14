@@ -11,13 +11,19 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
+                    <div class="float-left">
+                        <div class="btn-group">
+                            @if(request()->route('parrent') != 0)
+                            <a href="{{ url('master/kategori/0') }}" class="btn btn-sm btn-block btn-secondary"><i
+                                    class="fas fa-arrow-left"></i>
+                            </a>
+                            @endif
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <button id="tambah" type="button" class="btn btn-primary btn-sm" data-url=""><i
-                                    class="far fa-plus-square"></i>
-                                Tambah</button>
+                            <a   class="btn btn-primary btn-sm" href="{{ url("master/kategori/tambah/").'/'.request()->route('parrent') }}"><i class="far fa-plus-square"></i> Tambah</a>
                         </div>
-
                     </div>
                 </div>
                 <div class="card-body">
@@ -25,7 +31,6 @@
                         <table class="table table-striped" id="kategori">
                             <thead>
                                 <tr>
-                                    <th class="padat">#</th>
                                     <th class="padat">No</th>
                                     <th class="padat">Aksi</th>
                                     <th>Kategori</th>
@@ -44,13 +49,6 @@
 @section('js')
     <script>
         $(function() {
-            function format(rowData) {
-                var childTable = '<table id="cl' + rowData.id +
-                    '" class="display compact nowrap w-100 table-striped" style="margin:0px !important">' +
-                    '<thead style="display:none"></thead >' +
-                    '</table>';
-                return $(childTable).toArray();
-            }
 
             var table = $('#kategori').DataTable({
 
@@ -65,7 +63,7 @@
                         return {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
-                            "filter[parrent]": 0,
+                            "filter[parrent]": {{ request()->route('parrent') }},
                             "filter[search]": row.search.value,
                             "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
                                 ?.column]?.name
@@ -77,7 +75,7 @@
                 serverSide: true,
                 ordering: true,
                 order: [
-                    [3, 'asc']
+                    [2, 'asc']
                 ],
                 columnDefs: [{
                         targets: '_all',
@@ -91,11 +89,6 @@
                 ],
                 columns: [{
                         data: null,
-                        className: 'details-control padat',
-                        defaultContent: ''
-                    },
-                    {
-                        data: null,
                         className: 'padat',
                     },
                     {
@@ -103,15 +96,12 @@
                         className: 'aksi',
                         render: function(data, type, row) {
                             var id = row.id;
+                            var sub = (row.attributes.parrent == 0)? `<a href="{{ url('master/kategori/') }}/${id}" class="btn btn-info btn-sm edit" data-id="${id}" title="Ubah"><i class="fas fa-bars"></i></a>`: '';
                             var render = `
-                                    <button type="button" class="btn btn-info btn-sm sub" data-id="${id}" title="Tambah Sub">
-                                        <i class="far fa-plus-square"></i>
-                                    </button>
-
-                                    <button type="button" class="btn btn-warning btn-sm edit" data-id="${id}" title="Ubah">
+                                    ${sub}
+                                    <a href="{{ url('master/kategori/edit') }}/${id}/{{ (int) request()->route('parrent')}}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
                                         <i class="fas fa-edit"></i>
-                                    </button>
-
+                                    </a>
                                     <button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Ubah">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -137,85 +127,13 @@
 
             table.on('draw.dt', function() {
                 var PageInfo = $('#kategori').DataTable().page.info();
-                table.column(1, {
+                table.column(0, {
                     page: 'current'
                 }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1 + PageInfo.start;
                 });
             });
 
-            // Add event listener for opening and closing first level childdetails
-            $('#kategori tbody').on('click', 'td.details-control', function() {
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
-                var rowData = row.data();
-
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-
-                    // Destroy the Child Datatable
-                    $('#cl' + rowData.id).DataTable().destroy();
-                } else {
-
-                    row.child(format(rowData)).show();
-                    var id = rowData.id;
-
-                    $('#cl' + id).parent().addClass('p-0')
-                    childTable = $('#cl' + id).DataTable({
-                        dom: "t",
-                        ajax: {
-                            url: '{{ url('api/v1/kategori') }}?filter[parrent]=' + rowData.id,
-                            dataSrc: 'data'
-                        },
-                        columnDefs: [{
-                                targets: '_all',
-                                className: 'text-nowrap',
-                            },
-                            {
-                                targets: [0, 1, 2],
-                                orderable: false,
-                                searchable: false,
-                            },
-                        ],
-                        columns: [{
-                                data: null,
-                                className: 'w-70px',
-                                defaultContent: '',
-                            },
-                            {
-                                data: "attributes.id",
-                                className: 'aksi w-100px',
-                                "render": function(data, type, row) {
-                                    data = `
-                                    <button type="button" class="btn btn-warning btn-sm edit" data-id="${row.id}" title="ubah">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                        <button type="button" class="btn btn-danger btn-sm hapus" data-id="${row.id}" title="ubah">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    `;
-
-                                    return data;
-                                }
-                            },
-                            {
-                                data: "attributes.kategori",
-                                className: 'kategori',
-                            },
-                            {
-                                data: "attributes.jml_artikel",
-                                className: 'w-56px',
-                                width: "30%",
-                            },
-                        ],
-                    });
-
-                    tr.addClass('shown');
-                }
-            });
 
             $(document).on('click', 'button.edit', function() {
                 var id = $(this).data('id')

@@ -103,7 +103,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
         ->prefix('bantuan-kabupaten')->group(function () {
             Route::get('/', 'index');
-            Route::post('/buat', 'store');
+            Route::post('/tambah', 'store');
             Route::put('/perbarui/{id}', 'update');
             Route::post('/hapus', 'destroy');
         });

@@ -96,7 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::controller(AdminWebController::class)
         ->prefix('master')
         ->group(function () {
-            Route::get('/kategori', 'kategori_index');
+            Route::get('/kategori/{parrent}', 'kategori_index');
+            Route::get('/kategori/edit/{id}/{parrent}', 'kategori_edit');
+            Route::get('/kategori/tambah/{parrent}', 'kategori_create');
             Route::resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });

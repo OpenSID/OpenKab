@@ -39,32 +39,32 @@
                     <div class="card-body">
                         <div class="col">
                             <div x-data="{
-                            data: {},
-                            async retrievePosts() {
-                                let url = '{{ route('api.pengaturan_aplikasi', ['filter[key][]' => 'warna_tema']) }}';
-                                let create_url = new URL(url);
-                                const response = await (await fetch(create_url.href)).json();
-                                this.data = response.data
-                            }
-                        }" x-init="retrievePosts">
-                                    <template x-for="(value, index) in data">
-                                        <div class="mb-4">
-                                            <label x-text="value.attributes.judul"></label>
-                                                <x-adminlte-input-color class="@error('warna_tema') is-invalid  @enderror" name="color" x-bind:name="value.attributes.key" x-bind:data-color="value.attributes.value" x-model="value.attributes.value" data-color="" data-format='hex'
-                                                                        data-horizontal=true>
-                                                    <x-slot name="appendSlot">
-                                                        <div class="input-group-text">
-                                                            <i class="fas fa-lg fa-square"></i>
-                                                        </div>
-                                                    </x-slot>
-                                                </x-adminlte-input-color>
-                                                @error('warna_tema')
-                                                <div class="text-danger">{{ $message }}</div>
-                                                @enderror
-{{--                                                <x-adminlte-input name="data" x-bind:name="value.attributes.key" x-model="value.attributes.value">--}}
-{{--                                                </x-adminlte-input>--}}
-                                        </div>
-                                    </template>
+                        data: {},
+
+                        async retrievePosts() {
+                            const response = await (await fetch('{{ route('api.pengaturan_aplikasi', ['filter[key][]' => 'warna_tema']) }}')).json();
+                            this.data = response.data[0].attributes
+                        }
+                    }" x-init="retrievePosts">
+                                <div class="mb-4">
+                                    <label x-text="data.judul"></label>
+                                    <x-adminlte-input-color name="color" x-bind:name="data.key" x-bind:data-color="data.value" x-model="data.value" data-format='hex'
+                                                            data-horizontal=true>
+                                        <x-slot name="appendSlot">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-lg fa-square"></i>
+                                            </div>
+                                        </x-slot>
+                                    </x-adminlte-input-color>
+                                    @error('warna_tema')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    <style>
+                                        #color{
+                                            border-color: red;
+                                        }
+                                    </style>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                     </div>

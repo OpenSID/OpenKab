@@ -11,7 +11,7 @@ class AdminWebController extends Controller
 
     public function kategori_aksi()
     {
-         return view('master.kategori.aksi');
+        return view('master.kategori.aksi');
     }
 
     public function kategori_create($id)

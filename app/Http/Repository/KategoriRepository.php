@@ -16,8 +16,8 @@ class KategoriRepository
             ->addSelect([
                 'jml_artikel' => Artikel::selectRaw('count(artikel.id_kategori)')
                     ->whereRaw('artikel.id_kategori = kategori.id')
-                    ->orWhereRaw("artikel.id_kategori IN (SELECT a.id FROM kategori AS a WHERE a.parrent = kategori.id)")
-                ])
+                    ->orWhereRaw('artikel.id_kategori IN (SELECT a.id FROM kategori AS a WHERE a.parrent = kategori.id)'),
+            ])
             ->whereNull('config_id')
             ->allowedFields('*')
             ->allowedFilters([
@@ -45,6 +45,6 @@ class KategoriRepository
 
     public function FunctionName(Type $var = null)
     {
-        # code...
+        // code...
     }
 }

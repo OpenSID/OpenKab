@@ -128,6 +128,7 @@
                                 return {
                                     'page[number]': params.page || 1,
                                     'filter[search]': params.term || '',
+                                    'filter[asal]': dataPenduduk.config_id,
                                     'filter[kode_kecamatan]': (dataPindah.ref_pindah == 1) ? '' : dataPenduduk.config.kode_kecamatan,
                                 };
                             },

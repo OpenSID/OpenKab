@@ -383,7 +383,7 @@ return [
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Kategori Artikel',
-                    'url' => 'master/kategori',
+                    'url' => 'master/kategori/0',
                 ],
                 [
                     'icon' => 'fas fa-angle-right',

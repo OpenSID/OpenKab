@@ -65,4 +65,23 @@ class User extends Authenticatable
 
         return "https://www.gravatar.com/avatar/{$email}?s=32&d=https://www.gravatar.com/avatar/00000000000000000000000000000000?s=32";
     }
+
+    /**
+     * super admin ditandakan dengan id pertama yang dibuat karena belum ada grup/role.
+     */
+    public static function superAdmin()
+    {
+        return self::first()->id;
+    }
+
+    // selft::delete agar tidak bisa menghapus superadmin
+    // return Exception gagal hapus
+    public function delete()
+    {
+        if ($this->id == self::superAdmin()) {
+            throw new \Exception('Tidak bisa menghapus superadmin');
+        }
+
+        return parent::delete();
+    }
 }

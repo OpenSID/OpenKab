@@ -77,6 +77,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::get('/tahun', 'refTahunRtm');
             });
             Route::get('/bantuan', 'bantuan');
+            Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
         });
 
     // Bantuan

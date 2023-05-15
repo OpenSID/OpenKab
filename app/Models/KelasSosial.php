@@ -21,7 +21,7 @@ class KelasSosial extends BaseModel
      */
     public function scopeCountStatistik($query)
     {
-        return $query
+        return $this->scopeFilters($query, request()->input('filter'), 'tgl_daftar')
             ->select(['tweb_keluarga_sejahtera.id', 'tweb_keluarga_sejahtera.nama'])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')

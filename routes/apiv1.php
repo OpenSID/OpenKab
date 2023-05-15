@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -72,8 +73,14 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::get('/', 'penduduk');
                 Route::get('/tahun', 'refTahunPenduduk');
             });
-            Route::get('/keluarga', 'keluarga');
-            Route::get('/rtm', 'rtm');
+            Route::prefix('keluarga')->group(function () {
+                Route::get('/', 'keluarga');
+                Route::get('/tahun', 'refTahunKeluarga');
+            });
+            Route::prefix('rtm')->group(function () {
+                Route::get('/', 'rtm');
+                Route::get('/tahun', 'refTahunRtm');
+            });
             Route::get('/bantuan', 'bantuan');
         });
 
@@ -89,34 +96,42 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Master Data Kategori Artikel
     Route::controller(\App\Http\Controllers\Api\KategoriController::class)
-    ->prefix('kategori')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/tampil', 'show');
-        Route::post('/buat', 'store');
-        Route::put('/perbarui/{id}', 'update');
-        Route::post('/hapus', 'destroy');
-    });
+        ->prefix('kategori')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/tampil', 'show');
+            Route::post('/buat', 'store');
+            Route::put('/perbarui/{id}', 'update');
+            Route::post('/hapus', 'destroy');
+        });
 
     // Master Data Bantuan
     Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
-    ->prefix('bantuan-kabupaten')->group(function () {
-        Route::get('/', 'index');
-        Route::post('/buat', 'store');
-        Route::put('/perbarui/{id}', 'update');
-        Route::post('/hapus', 'destroy');
-    });
+        ->prefix('bantuan-kabupaten')->group(function () {
+            Route::get('/', 'index');
+            Route::post('/tambah', 'store');
+            Route::put('/perbarui/{id}', 'update');
+            Route::post('/hapus', 'destroy');
+        });
 
     // Artikel
     Route::controller(\App\Http\Controllers\Api\ArtikelController::class)
-    ->prefix('artikel')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/tahun', 'tahun');
-    });
+        ->prefix('artikel')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/tahun', 'tahun');
+        });
 
     // Identitas
     Route::controller(\App\Http\Controllers\Api\IdentitasController::class)
-    ->prefix('identitas')->group(function () {
-        Route::get('/', 'index');
-        Route::put('/perbarui/{id}', 'update');
-    });
+        ->prefix('identitas')->group(function () {
+            Route::get('/', 'index');
+            Route::put('/perbarui/{id}', 'update');
+            Route::post('/upload/{id}', 'upload');
+        });
+
+    // Pengaturan Aplikasi
+    Route::controller(\App\Http\Controllers\Api\PengaturanController::class)
+        ->prefix('pengaturan')->group(function () {
+            Route::get('/', 'index')->name('api.pengaturan_aplikasi');
+            Route::post('/update', 'update');
+        });
 });

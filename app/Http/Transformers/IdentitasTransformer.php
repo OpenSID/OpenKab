@@ -18,7 +18,7 @@ class IdentitasTransformer extends TransformerAbstract
             'id' => $identitas->id,
             'nama_aplikasi' => $identitas->nama_aplikasi,
             'deskripsi' => $identitas->deskripsi,
-            'favicon' => $identitas->favicon,
+            'logo' => $identitas->logo,
             'nama_kabupaten' => $identitas->nama_kabupaten,
             'kode_kabupaten' => $identitas->kode_kabupaten,
             'nama_provinsi' => $identitas->nama_provinsi,

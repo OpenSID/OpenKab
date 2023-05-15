@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '<b>Open</b>KAB',
-    'logo_img' => 'assets/img/opensid_logo.png',
+    'logo_img' => '/pengaturan/logo',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -253,7 +253,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => false,
@@ -383,7 +383,12 @@ return [
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Kategori Artikel',
-                    'url' => 'master/kategori',
+                    'url' => 'master/kategori/0',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pengaturan Aplikasi',
+                    'url' => 'master/pengaturan',
                 ],
             ],
         ],
@@ -392,15 +397,15 @@ return [
             'text' => 'Pengaturan',
             'icon' => 'fa fa-cog',
             'submenu' => [
-                // [
-                //     'icon' => 'fas fa-angle-right',
-                //     'text' => 'Identitas',
-                //     'url' => 'identitas',
-                // ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Identitas',
+                    'url' => 'pengaturan/identitas',
+                ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
-                    'url' => 'users',
+                    'url' => 'pengaturan/users',
                 ],
             ],
         ],
@@ -591,6 +596,22 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => '/assets/progressive-image/progressive-image.js',
+                ],
+            ],
+        ],
+
+        'Colorpicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.min.css',
                 ],
             ],
         ],

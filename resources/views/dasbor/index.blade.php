@@ -59,8 +59,8 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-6">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
-                                role="button" aria-expanded="false" aria-controls="collapse-filter">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                               aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
                             Statistik Berita

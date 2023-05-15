@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Models\Enums\SasaranEnum;
-use App\Models\Traits\ConfigIdTrait;
+use App\Models\Traits\FilterKecamatanDesaTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bantuan extends BaseModel
 {
-    use ConfigIdTrait;
+    use FilterKecamatanDesaTrait;
 
     public const SASARAN_PENDUDUK = 1;
 

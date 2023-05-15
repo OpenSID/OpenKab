@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\ConfigIdTrait;
+use App\Models\Traits\FilterKecamatanDesaTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Keluarga extends BaseModel
 {
-    use ConfigIdTrait;
+    use FilterKecamatanDesaTrait;
 
     public const KATEGORI_STATISTIK = [
         'kelas-sosial' => 'Kelas Sosial',

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
+
+use App\Models\Traits\FilterKecamatanDesaTrait;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
 class Rtm extends BaseModel
 {
-    use ConfigIdTrait;
+    use FilterKecamatanDesaTrait;
 
     public const KATEGORI_STATISTIK = [
         'bdt' => 'BDT',

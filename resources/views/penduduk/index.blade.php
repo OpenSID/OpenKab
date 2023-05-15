@@ -169,6 +169,8 @@
                         "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
                         "filter[clusterDesa.rw]": $('#rw').val(),
                         "filter[clusterDesa.rt]": $('#rt').val(),
+                        "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
+                        "config_desa": "{{ session('desa.id') ?? '' }}",
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
                             ?.name

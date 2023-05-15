@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Traits\FilterKecamatanDesaTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property \App\Models\Enums\TempatDilahirkanEnum  $tempat_dilahirkan
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class Penduduk extends BaseModel
 {
-    use ConfigIdTrait;
+    use FilterKecamatanDesaTrait;
     use HasFactory;
 
     public const KATEGORI_STATISTIK = [

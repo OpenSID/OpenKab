@@ -13,11 +13,11 @@ class DasborRepository
     public function listDasbor()
     {
         return [
-            'jumlah_penduduk_laki_laki' => Penduduk::status()->jenisKelamin(JenisKelaminEnum::laki_laki)->count(),
-            'jumlah_penduduk_perempuan' => Penduduk::status()->jenisKelamin(JenisKelaminEnum::perempuan)->count(),
-            'jumlah_penduduk' => Penduduk::status()->count(),
-            'jumlah_keluarga' => Keluarga::status()->count(),
-            'jumlah_rtm' => Rtm::status()->count(),
+            'jumlah_penduduk_laki_laki' => Penduduk::status()->FilterKecamatan()->FilterDesa()->jenisKelamin(JenisKelaminEnum::laki_laki)->count(),
+            'jumlah_penduduk_perempuan' => Penduduk::status()->FilterKecamatan()->FilterDesa()->jenisKelamin(JenisKelaminEnum::perempuan)->count(),
+            'jumlah_penduduk' => Penduduk::status()->FilterKecamatan()->FilterDesa()->count(),
+            'jumlah_keluarga' => Keluarga::status()->FilterKecamatan()->FilterDesa()->count(),
+            'jumlah_rtm' => Rtm::status()->FilterKecamatan()->FilterDesa()->count(),
             'jumlah_bantuan' => Bantuan::count(),
             'grafik_penduduk' => $this->grafikPenduduk(),
         ];
@@ -35,6 +35,8 @@ class DasborRepository
             ->groupBy('tahun', 'bulan')
             ->orderBy('tahun', 'asc')
             ->orderBy('bulan', 'asc')
+            ->FilterKecamatan()
+            ->FilterDesa()
             ->get()
             ->map(function ($item) {
                 return [

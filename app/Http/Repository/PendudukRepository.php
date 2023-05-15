@@ -31,6 +31,8 @@ class PendudukRepository
     public function listPenduduk()
     {
         return QueryBuilder::for(Penduduk::class)
+            ->FilterKecamatan()
+            ->FilterDesa()
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

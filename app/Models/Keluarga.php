@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
 use App\Models\Traits\FilterKecamatanDesaTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 

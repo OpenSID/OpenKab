@@ -25,7 +25,7 @@ class WilayahRepository
                     });
                 }),
                 AllowedFilter::callback('asal', function ($query, $value) {
-                    $query->where('id', '!=' , $value);
+                    $query->where('id', '!=', $value);
                 }),
             ])
             ->allowedSorts(['id', 'dusun'])

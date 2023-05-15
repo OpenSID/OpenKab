@@ -77,7 +77,6 @@ class PendudukController extends Controller
             $penduduk_lama->save();
 
             // LOG penduduk
-
             LogPenduduk::create([
                 'id_pend' => $penduduk_lama->id,
                 'kode_peristiwa' => 3,

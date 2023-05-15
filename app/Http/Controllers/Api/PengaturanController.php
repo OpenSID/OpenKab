@@ -6,7 +6,6 @@ use App\Http\Repository\PengaturanRepository;
 use App\Http\Requests\PengaturanRequest;
 use App\Http\Transformers\PengaturanTransformer;
 use App\Models\Pengaturan;
-use Symfony\Component\HttpFoundation\Response;
 
 class PengaturanController extends Controller
 {
@@ -36,17 +35,10 @@ class PengaturanController extends Controller
             }
 
             return back()->withInput()->with('success', 'Data berhasil diubah!');
-//            return response()->json([
-//                'success' => true,
-//            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             report($e);
 
             return back()->withInput()->with('error', $e->getMessage());
-//            return response()->json([
-//                'success' => false,
-//                'message' => $e->getMessage(),
-//            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

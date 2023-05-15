@@ -41,7 +41,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/logo', [IdentitasController::class, 'logo']);
     });
 
-
     Route::prefix('sesi')->group(function () {
         // Kecamatan
         Route::middleware(KecamatanMiddleware::class)->get('kecamatan/{kodeKecamatan}', function () {
@@ -99,6 +98,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/kategori/{parrent}', 'kategori_index');
             Route::get('/kategori/edit/{id}/{parrent}', 'kategori_edit');
             Route::get('/kategori/tambah/{parrent}', 'kategori_create');
+            Route::get('/pengaturan', 'pengaturan_index');
             Route::resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });

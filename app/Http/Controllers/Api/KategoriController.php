@@ -111,7 +111,7 @@ class KategoriController extends Controller
     {
         $id = (int) $request->id;
         try {
-            Kategori::where('id', $id)->delete();
+            Kategori::where('id', $id)->orWhere('parrent', $id)->delete();
 
             return response()->json([
                 'success' => true,

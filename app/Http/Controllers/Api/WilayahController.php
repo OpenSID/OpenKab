@@ -30,4 +30,11 @@ class WilayahController extends Controller
             return $wilayah->toArray();
         }, 'rt')->respond();
     }
+
+    public function desa()
+    {
+        return $this->fractal($this->wilayah->listDesa(), function ($wilayah) {
+            return $wilayah->toArray();
+        }, 'desa')->respond();
+    }
 }

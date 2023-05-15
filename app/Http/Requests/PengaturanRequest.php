@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class PengaturanRequest extends FormRequest
 {
@@ -23,6 +24,8 @@ class PengaturanRequest extends FormRequest
      */
     public function rules()
     {
+        Log::info(request()->warna_tema);
+
         return [
             'warna_tema' => 'required',
         ];

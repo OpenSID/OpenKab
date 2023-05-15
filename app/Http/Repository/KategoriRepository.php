@@ -42,9 +42,4 @@ class KategoriRepository
     {
         return Kategori::where('id', $id)->whereNull('config_id')->first();
     }
-
-    public function FunctionName(Type $var = null)
-    {
-        // code...
-    }
 }

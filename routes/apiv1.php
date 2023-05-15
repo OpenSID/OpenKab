@@ -108,7 +108,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(\App\Http\Controllers\Api\BantuanKabupatenController::class)
         ->prefix('bantuan-kabupaten')->group(function () {
             Route::get('/', 'index');
-            Route::post('/buat', 'store');
+            Route::post('/tambah', 'store');
             Route::put('/perbarui/{id}', 'update');
             Route::post('/hapus', 'destroy');
         });
@@ -122,9 +122,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Identitas
     Route::controller(\App\Http\Controllers\Api\IdentitasController::class)
-    ->prefix('identitas')->group(function () {
-        Route::get('/', 'index');
-        Route::put('/perbarui/{id}', 'update');
-        Route::post('/upload/{id}', 'upload');
-    });
+        ->prefix('identitas')->group(function () {
+            Route::get('/', 'index');
+            Route::put('/perbarui/{id}', 'update');
+            Route::post('/upload/{id}', 'upload');
+        });
+
+    // Pengaturan Aplikasi
+    Route::controller(\App\Http\Controllers\Api\PengaturanController::class)
+        ->prefix('pengaturan')->group(function () {
+            Route::get('/', 'index')->name('api.pengaturan_aplikasi');
+            Route::post('/update', 'update');
+        });
 });

@@ -43,6 +43,7 @@ class BantuanKabupatenController extends Controller
             $data = $request->validated();
             $data['sdate'] = Carbon::parse($data['sdate']);
             $data['edate'] = Carbon::parse($data['edate']);
+            $data['status'] = $data['sdate'] < now() && $data['edate'] < now() ? 0 : 1;
             $data['userid'] = 0;
             Bantuan::insert($data);
 
@@ -72,6 +73,7 @@ class BantuanKabupatenController extends Controller
             $data = $request->validated();
             $data['sdate'] = Carbon::parse($data['sdate']);
             $data['edate'] = Carbon::parse($data['edate']);
+            $data['status'] = $data['sdate'] < now() && $data['edate'] < now() ? 0 : 1;
             $data['userid'] = 0;
             Bantuan::where('id', (int) $id)->whereNull('config_id')->update($data);
 

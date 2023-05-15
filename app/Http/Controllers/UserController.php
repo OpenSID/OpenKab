@@ -28,11 +28,13 @@ class UserController extends Controller
                 ->addColumn('aksi', function ($row) {
                     if (! auth()->guest()) {
                         $data['edit'] = route('users.edit', $row->id);
-                        $data['delete'] = route('users.destroy', $row->id);
-                        if ($row->active == StatusEnum::aktif) {
-                            $data['deactive'] = route('users.status', [$row->id, StatusEnum::tidakAktif]);
-                        } else {
-                            $data['active'] = route('users.status', [$row->id, StatusEnum::aktif]);
+                        if ($row->id !== User::superAdmin()) {
+                            $data['delete'] = route('users.destroy', $row->id);
+                            if ($row->active == StatusEnum::aktif) {
+                                $data['deactive'] = route('users.status', [$row->id, StatusEnum::tidakAktif]);
+                            } else {
+                                $data['active'] = route('users.status', [$row->id, StatusEnum::aktif]);
+                            }
                         }
                     }
 
@@ -154,10 +156,10 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function status($id, $status)
+    public function status($id, $status, User $user)
     {
         try {
-            User::findOrFail($id)->update(['active' => $status]);
+            $user->where('id', '!=', $user->superAdmin())->findOrFail($id)->update(['active' => $status]);
         } catch (\Exception $e) {
             report($e);
 

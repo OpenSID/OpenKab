@@ -253,7 +253,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => false,
@@ -383,7 +383,12 @@ return [
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Kategori Artikel',
-                    'url' => 'master/kategori',
+                    'url' => 'master/kategori/0',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pengaturan Aplikasi',
+                    'url' => 'master/pengaturan',
                 ],
             ],
         ],
@@ -563,6 +568,22 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => '/assets/progressive-image/progressive-image.js',
+                ],
+            ],
+        ],
+
+        'Colorpicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.min.css',
                 ],
             ],
         ],

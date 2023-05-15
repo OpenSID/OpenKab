@@ -35,8 +35,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
-    Route::resource('users', UserController::class);
-    // Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
+    Route::prefix('pengaturan')->group(function () {
+        Route::resource('users', UserController::class);
+        Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
+        Route::get('/logo', [IdentitasController::class, 'logo']);
+    });
 
     Route::prefix('sesi')->group(function () {
         // Kecamatan
@@ -92,7 +95,10 @@ Route::middleware('auth')->group(function () {
     Route::controller(AdminWebController::class)
         ->prefix('master')
         ->group(function () {
-            Route::get('/kategori', 'kategori_index');
+            Route::get('/kategori/{parrent}', 'kategori_index');
+            Route::get('/kategori/edit/{id}/{parrent}', 'kategori_edit');
+            Route::get('/kategori/tambah/{parrent}', 'kategori_create');
+            Route::get('/pengaturan', 'pengaturan_index');
             Route::resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });

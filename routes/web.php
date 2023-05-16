@@ -29,6 +29,7 @@ Auth::routes([
     'register' => false,
     'verify' => true,
 ]);
+Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DasborController::class, 'index'])->name('dasbor');
@@ -38,7 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::prefix('pengaturan')->group(function () {
         Route::resource('users', UserController::class);
         Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
-        Route::get('/logo', [IdentitasController::class, 'logo']);
     });
 
     Route::prefix('sesi')->group(function () {

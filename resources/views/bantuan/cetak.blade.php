@@ -8,6 +8,8 @@
         async retrievePosts() {
             let url = '{{ url('api/v1/bantuan/cetak') }}';
             let create_url = new URL(url);
+            create_url.searchParams.set('kode_kecamatan', '{{ session('kecamatan.kode_kecamatan') ?? '' }}');
+            create_url.searchParams.set('config_desa', '{{ session('desa.id') ?? '' }}');
             @foreach ($filter as $key => $value)
                 create_url.searchParams.append('filter[{{ $key }}]', '{{ $value }}'); @endforeach
             const response = await (await fetch(create_url.href)).json();

@@ -142,8 +142,11 @@
 @push('js')
     <script>
         $(document).ready(function() {
+            var url = new URL("{{ url('api/v1/dasbor') }}");
+            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
             $.ajax({
-                url: `{{ url('api/v1/dasbor') }}`,
+                url: url.href,
                 type: "GET",
                 dataType: "json",
                 success: function(response) {

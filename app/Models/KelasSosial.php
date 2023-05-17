@@ -32,6 +32,6 @@ class KelasSosial extends BaseModel
             ->when(session()->has('desa'), function ($query) {
                 $query->where('tweb_penduduk.config_id', session('desa.id'));
             })
-            ->groupBy('tweb_keluarga_sejahtera.id');
+            ->groupBy('tweb_keluarga_sejahtera.id', 'tweb_keluarga_sejahtera.nama');
     }
 }

@@ -1,5 +1,7 @@
 @extends('layouts.index')
-@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/'.strtolower($judul).'/tahun')])
+@include('layouts.components.select2_tahun', [
+    'url' => url('api/v1/statistik/' . strtolower($judul) . '/tahun'),
+])
 
 @section('plugins.chart', true)
 
@@ -167,6 +169,7 @@
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
         var kategori = `{{ strtolower($judul) }}`;
+        var default_id = `{{ $default_kategori }}`;
 
         $.ajax({
             url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[id]=${kategori}`,
@@ -255,7 +258,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/penduduk') }}/?filter[id]=rentang-umur`,
+                url: `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${default_id}`,
                 method: 'get',
                 data: function(row) {
                     return {

@@ -10,6 +10,7 @@ class StatistikController extends Controller
     {
         return view('statistik.index', [
             'judul' => 'Penduduk',
+            'default_kategori' => 'rentang-umur',
         ]);
     }
 
@@ -17,6 +18,7 @@ class StatistikController extends Controller
     {
         return view('statistik.index', [
             'judul' => 'Keluarga',
+            'default_kategori' => 'kelas-sosial',
         ]);
     }
 
@@ -24,6 +26,7 @@ class StatistikController extends Controller
     {
         return view('statistik.index', [
             'judul' => 'RTM',
+            'default_kategori' => 'bdt',
         ]);
     }
 
@@ -36,6 +39,7 @@ class StatistikController extends Controller
     {
         return view('statistik.index', [
             'judul' => 'Bantuan',
+            'default_kategori' => 'penduduk',
         ]);
     }
 

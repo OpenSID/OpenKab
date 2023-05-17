@@ -44,7 +44,7 @@ class StatistikRepository
 
     private function getKategoriBantuan(): array|object
     {
-        $query = Bantuan::FilterKecamatan()->FilterDesa();
+        $query = Bantuan::filterWilayah();
         if (session()->has('desa')) {
             $query->where('config_id', session('desa.id'));
         }

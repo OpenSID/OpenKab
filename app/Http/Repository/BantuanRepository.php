@@ -15,33 +15,31 @@ class BantuanRepository
     public function listBantuan()
     {
         return  QueryBuilder::for(Bantuan::class)
-            ->FilterKecamatan()
-            ->FilterDesa()
-           ->allowedFields('*')
-           ->allowedFilters([
-               AllowedFilter::exact('id'),
-               AllowedFilter::exact('sasaran'),
-               AllowedFilter::callback('search', function ($query, $value) {
-                   $query->where('nama', 'LIKE', '%'.$value.'%')
-                       ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
-               }),
-               AllowedFilter::callback('tahun', function ($query, $value) {
-                   $query->whereYear('sdate', '<=', $value)
-                       ->whereYear('edate', '>=', $value);
-               }),
+            ->filterWilayah()
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sasaran'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama', 'LIKE', '%'.$value.'%')
+                        ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
+                }),
+                AllowedFilter::callback('tahun', function ($query, $value) {
+                    $query->whereYear('sdate', '<=', $value)
+                        ->whereYear('edate', '>=', $value);
+                }),
 
-           ])
-           ->allowedSorts([
-               'nama',
-               'asaldana',
-           ])->jsonPaginate();
+            ])
+            ->allowedSorts([
+                'nama',
+                'asaldana',
+            ])->jsonPaginate();
     }
 
     public function cetakListBantuan()
     {
         return  QueryBuilder::for(Bantuan::class)
-            ->FilterKecamatan()
-            ->FilterDesa()
+            ->filterWilayah()
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

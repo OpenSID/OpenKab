@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Traits\FilterKecamatanDesaTrait;
+use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class Penduduk extends BaseModel
 {
-    use FilterKecamatanDesaTrait;
+    use FilterWilayahTrait;
     use HasFactory;
 
     public const KATEGORI_STATISTIK = [

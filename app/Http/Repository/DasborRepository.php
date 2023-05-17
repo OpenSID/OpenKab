@@ -13,11 +13,11 @@ class DasborRepository
     public function listDasbor()
     {
         return [
-            'jumlah_penduduk_laki_laki' => Penduduk::status()->FilterKecamatan()->FilterDesa()->jenisKelamin(JenisKelaminEnum::laki_laki)->count(),
-            'jumlah_penduduk_perempuan' => Penduduk::status()->FilterKecamatan()->FilterDesa()->jenisKelamin(JenisKelaminEnum::perempuan)->count(),
-            'jumlah_penduduk' => Penduduk::status()->FilterKecamatan()->FilterDesa()->count(),
-            'jumlah_keluarga' => Keluarga::status()->FilterKecamatan()->FilterDesa()->count(),
-            'jumlah_rtm' => Rtm::status()->FilterKecamatan()->FilterDesa()->count(),
+            'jumlah_penduduk_laki_laki' => Penduduk::status()->filterWilayah()->jenisKelamin(JenisKelaminEnum::laki_laki)->count(),
+            'jumlah_penduduk_perempuan' => Penduduk::status()->filterWilayah()->jenisKelamin(JenisKelaminEnum::perempuan)->count(),
+            'jumlah_penduduk' => Penduduk::status()->filterWilayah()->count(),
+            'jumlah_keluarga' => Keluarga::status()->filterWilayah()->count(),
+            'jumlah_rtm' => Rtm::status()->filterWilayah()->count(),
             'jumlah_bantuan' => Bantuan::count(),
             'grafik_penduduk' => $this->grafikPenduduk(),
         ];
@@ -32,11 +32,10 @@ class DasborRepository
             ->selectRaw('MONTH(tweb_penduduk.created_at) as bulan')
             ->selectRaw('YEAR(tweb_penduduk.created_at) as tahun')
             ->status()
+            ->filterWilayah()
             ->groupBy('tahun', 'bulan')
             ->orderBy('tahun', 'asc')
             ->orderBy('bulan', 'asc')
-            ->FilterKecamatan()
-            ->FilterDesa()
             ->get()
             ->map(function ($item) {
                 return [

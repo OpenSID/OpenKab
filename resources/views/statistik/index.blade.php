@@ -176,7 +176,7 @@
             method: 'get',
             success: function(response) {
                 if (response.data.length == 0) {
-                    $('#tampilkan-st atistik').html(`
+                    $('#tampilkan-statistik').html(`
                             <div class="col-lg-12">
                                 <div class="alert alert-warning">
                                     <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
@@ -357,40 +357,6 @@
                 theme: "bootstrap",
                 placeholder: "Pilih Bulan",
             });
-        });
-
-        $('#tahun').select2({
-            minimumResultsForSearch: -1,
-            theme: "bootstrap",
-            ajax: {
-                url: '',
-                dataType: 'json',
-                beforeSend: function(jqXHR, settings) {
-                    let bantuantahun = '{{ url('api/v1/statistik/bantuan/tahun') }}';
-                    let create_url = new URL(bantuantahun);
-                    create_url.searchParams.set('id', $('#daftar-statistik .active').data('id'));
-                    settings.url =create_url;
-                },
-                processResults: function(data) {
-                    if (data.success != true) {
-                        return null
-                    };
-                    const element = new Array();
-
-                    for (let index = data.data.tahun_akhir; index >= data.data
-                        .tahun_awal; index--) {
-                        element.push({
-                            id: index,
-                            text: index
-                        });
-                    }
-
-                    return {
-                        results: element
-                    };
-                }
-            },
-            placeholder: "Pilih Tahun",
         });
 
     </script>

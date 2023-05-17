@@ -6,7 +6,6 @@ use App\Http\Repository\BantuanPesertaRepository;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Transformers\BantuanPesertaTransformer;
 use App\Http\Transformers\BantuanTransformer;
-use App\Models\Bantuan;
 use App\Models\Enums\SasaranEnum;
 use Symfony\Component\HttpFoundation\Response;
 

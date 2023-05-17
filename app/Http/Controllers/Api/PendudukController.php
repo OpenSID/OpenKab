@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Sex;
-use App\Models\Penduduk;
+use App\Http\Repository\PendudukRepository;
+use App\Http\Requests\PindahRequest;
+use App\Http\Transformers\PendudukTransformer;
 use App\Models\LogKeluarga;
 use App\Models\LogPenduduk;
-use Illuminate\Support\Str;
+use App\Models\Penduduk;
 use App\Models\PendudukStatus;
-use Illuminate\Support\Facades\DB;
 use App\Models\PendudukStatusDasar;
-use App\Http\Requests\PindahRequest;
-use App\Http\Repository\PendudukRepository;
-use App\Http\Transformers\PendudukTransformer;
+use App\Models\Sex;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class PendudukController extends Controller
@@ -84,16 +84,17 @@ class PendudukController extends Controller
             // cek log penduduk lama
             // jika sudah pernah pindah, tidak bisa melakukan pindah
             $log_penduduk_lama = LogPenduduk::where('config_id', $data['config_asal'])
-                ->where('id_pend',  $data['id'])
+                ->where('id_pend', $data['id'])
                 ->where('kode_peristiwa', 3)
                 ->where('tgl_peristiwa', $data['tgl_peristiwa'])
                 ->exists();
 
             if ($log_penduduk_lama) {
                 DB::rollback();
+
                 return response()->json([
                     'success' => false,
-                    'message' => 'Penduduk Sudah tercatat Pindah di tanggal tersebut.'
+                    'message' => 'Penduduk Sudah tercatat Pindah di tanggal tersebut.',
                 ], Response::HTTP_OK);
             }
 
@@ -108,9 +109,10 @@ class PendudukController extends Controller
 
                 if ($log_penduduk_tujuan) {
                     DB::rollback();
+
                     return response()->json([
                         'success' => false,
-                        'message' => 'Penduduk Sudah tercatat Pindah di tanggal tersebut.'
+                        'message' => 'Penduduk Sudah tercatat Pindah di tanggal tersebut.',
                     ], Response::HTTP_OK);
                 }
 
@@ -180,6 +182,7 @@ class PendudukController extends Controller
             // LOG penduduk Desa Tujuan
             LogPenduduk::create($log_penduduk);
             DB::commit();
+
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);

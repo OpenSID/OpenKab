@@ -30,7 +30,7 @@ class PendudukRepository
 
     public function listPenduduk()
     {
-        return QueryBuilder::for(Penduduk::filterWilayah())
+        return QueryBuilder::for(Penduduk::withRef()->filterWilayah())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

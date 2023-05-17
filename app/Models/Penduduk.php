@@ -67,34 +67,10 @@ class Penduduk extends BaseModel
     ];
 
     /** {@inheritdoc} */
-    protected $with = [
-        'jenisKelamin',
-        'agama',
-        'bahasa',
-        'config',
-        'pendidikan',
-        'pendidikanKK',
-        'pekerjaan',
-        'wargaNegara',
-        'golonganDarah',
-        'cacat',
-        'sakitMenahun',
-        'kb',
-        'statusKawin',
-        'statusRekamKtp',
-        'pendudukHubungan',
-        'pendudukStatus',
-        'pendudukStatusDasar',
-        'keluarga',
-        'rtm',
-        'clusterDesa',
-        'logPenduduk',
-        'logPerubahanPenduduk',
-    ];
-
-    /** {@inheritdoc} */
     protected $casts = [
-        'tanggallahir' => 'datetime',
+        'tanggallahir' => 'datetime:d-m-Y',
+        'tanggal_peristiwa' => 'datetime:d-m-Y',
+        'created_at' => 'datetime:d-m-Y',
     ];
 
     /**
@@ -507,5 +483,36 @@ class Penduduk extends BaseModel
             ->groupBy('suku')
             ->whereNotNull('suku')
             ->where('suku', '!=', '');
+    }
+
+    /**
+     * Scope untuk memanggil relasi tabel referensi.
+     */
+    public function scopeWithRef($query)
+    {
+        return $query->with([
+            'jenisKelamin',
+            'agama',
+            'bahasa',
+            'config',
+            'pendidikan',
+            'pendidikanKK',
+            'pekerjaan',
+            'wargaNegara',
+            'golonganDarah',
+            'cacat',
+            'sakitMenahun',
+            'kb',
+            'statusKawin',
+            'statusRekamKtp',
+            'pendudukHubungan',
+            'pendudukStatus',
+            'pendudukStatusDasar',
+            'keluarga',
+            'rtm',
+            'clusterDesa',
+            'logPenduduk',
+            'logPerubahanPenduduk',
+        ]);
     }
 }

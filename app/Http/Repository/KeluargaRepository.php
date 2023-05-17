@@ -11,7 +11,7 @@ class KeluargaRepository
 {
     public function listKeluarga()
     {
-        return QueryBuilder::for(Keluarga::class)
+        return QueryBuilder::for(Keluarga::filterWilayah())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

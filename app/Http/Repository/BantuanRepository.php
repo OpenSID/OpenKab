@@ -14,7 +14,7 @@ class BantuanRepository
 {
     public function listBantuan()
     {
-        return  QueryBuilder::for(Bantuan::class)
+        return  QueryBuilder::for(Bantuan::filterWilayah())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -37,7 +37,7 @@ class BantuanRepository
 
     public function cetakListBantuan()
     {
-        return  QueryBuilder::for(Bantuan::class)
+        return  QueryBuilder::for(Bantuan::filterWilayah())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

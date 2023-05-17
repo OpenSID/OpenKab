@@ -322,7 +322,7 @@ class PendudukRepository
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', "tweb_penduduk.{$idReferensi}", '=', "{$tabelReferensi}.id", 'left')
             ->where('tweb_penduduk.status_dasar', 1)
-            ->groupBy("{$tabelReferensi}.id");
+            ->groupBy("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
         if (isset($log_penduduk)) {
             $sql->whereRaw("EXISTS($log_penduduk)");
         }

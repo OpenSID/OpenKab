@@ -11,10 +11,10 @@ class ArtikelRepository
     public function listArtikel()
     {
         return QueryBuilder::for(Config::class)
-            ->select('config.id', 'nama_desa', 'nama_kecamatan')
+            ->select('nama_kecamatan', 'nama_desa')
             ->selectRaw('count(artikel.id) as jumlah')
             ->join('artikel', 'config.id', '=', 'artikel.config_id')
-            ->groupBy('config.id')
+            ->groupBy('config.nama_desa', 'config.nama_kecamatan')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::callback('search', function ($query, $value) {

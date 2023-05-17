@@ -210,7 +210,13 @@ class BantuanRepository
 
     public function tahun()
     {
-        return Bantuan::minMaxTahun('sdate')->first();
+        return Bantuan::when(request('id'), function ($query) {
+            collect(match (request('id')) {
+                'penduduk' => $query->where('sasaran', 1),
+                'keluarga' => $query->where('sasaran', 2),
+                default =>  $query->where('id', request('id')),
+            });
+        })->minMaxTahun('sdate')->first();
     }
 
     public function listBantuanKabupaten()

@@ -43,7 +43,7 @@ class BantuanController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Bantuan::tahun()->first(),
+            'data' => $this->bantuan->tahun(),
         ], Response::HTTP_OK);
     }
 }

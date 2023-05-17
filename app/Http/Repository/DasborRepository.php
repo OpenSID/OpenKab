@@ -3,7 +3,6 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
-use App\Models\Enums\JenisKelaminEnum;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
 use App\Models\Rtm;
@@ -12,9 +11,11 @@ class DasborRepository
 {
     public function listDasbor()
     {
+        $penduduk = Penduduk::countStatistik()->filterWilayah()->first();
+
         return [
-            'jumlah_penduduk_laki_laki' => Penduduk::status()->filterWilayah()->jenisKelamin(JenisKelaminEnum::laki_laki)->count(),
-            'jumlah_penduduk_perempuan' => Penduduk::status()->filterWilayah()->jenisKelamin(JenisKelaminEnum::perempuan)->count(),
+            'jumlah_penduduk_laki_laki' => $penduduk->laki_laki,
+            'jumlah_penduduk_perempuan' => $penduduk->perempuan,
             'jumlah_penduduk' => Penduduk::status()->filterWilayah()->count(),
             'jumlah_keluarga' => Keluarga::status()->filterWilayah()->count(),
             'jumlah_rtm' => Rtm::status()->filterWilayah()->count(),

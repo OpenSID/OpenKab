@@ -153,7 +153,7 @@ class Bantuan extends BaseModel
             ->join('tweb_penduduk', 'program_peserta.peserta', '=', 'tweb_penduduk.nik', 'left')
             ->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_PENDUDUK)
-            ->groupBy("{$this->table}.id");
+            ->groupBy("{$this->table}.id", "{$this->table}.nama");
 
         if (isset($log_penduduk)) {
             $statistik->whereRaw("EXISTS($log_penduduk)");
@@ -176,7 +176,7 @@ class Bantuan extends BaseModel
             ->join('tweb_penduduk', 'tweb_keluarga.nik_kepala', '=', 'tweb_penduduk.id', 'left')
             ->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_KELUARGA)
-            ->groupBy("{$this->table}.id");
+            ->groupBy("{$this->table}.id", "{$this->table}.nama");
     }
 
     /**

@@ -48,6 +48,7 @@
                                             <label>Status Dasar</label>
                                             <select class="select2 form-control-sm" id="status-dasar" name="status-dasar"
                                                 data-placeholder="Semua Status Dasar" style="width: 100%;">
+                                                <option value="1" selected>Hidup</option>
                                             </select>
                                         </div>
                                     </div>
@@ -202,11 +203,12 @@
                     name: "aksi",
                     orderable: false,
                     data: function(data) {
+                        var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';
                         return `<div class="btn-group open">
                             <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
                             <ul class="dropdown-menu" role="menu" style="">
                                 <li>
-                                    <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm"><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
+                                    <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
                                 </li>
                             </ul>
                         </div>`

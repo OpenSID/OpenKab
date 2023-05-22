@@ -156,13 +156,15 @@ class PendudukController extends Controller
             $penduduk_lama->save();
 
             // LOG keluarga
-            LogKeluarga::create([
-                'id_kk' => $penduduk_lama->keluarga->id,
-                'config_id' => $penduduk_lama->config_id,
-                'id_peristiwa' => 3,
-                'updated_by' => 1,
-                'id_log_penduduk' => $penduduk_lama->id,
-            ]);
+            if ($penduduk_lama->keluarga->id) {
+                LogKeluarga::create([
+                    'id_kk' => $penduduk_lama->keluarga->id,
+                    'config_id' => $penduduk_lama->config_id,
+                    'id_peristiwa' => 3,
+                    'updated_by' => 1,
+                    'id_log_penduduk' => $penduduk_lama->id,
+                ]);
+            }
 
             // LOG penduduk
             LogPenduduk::create([

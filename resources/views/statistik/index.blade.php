@@ -172,7 +172,7 @@
         var default_id = `{{ $default_kategori }}`;
 
         $.ajax({
-            url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[id]=${kategori}`,
+            url: `{{ url('api/v1/statistik/kategori-statistik') }}?filter[id]=${kategori}`,
             method: 'get',
             success: function(response) {
                 if (response.data.length == 0) {
@@ -199,7 +199,7 @@
                         $('#cetak').data('url',
                             `{{ url('statistik/cetak') }}/${kategori}/${id}`);
                         statistik.ajax.url(
-                            `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
+                            `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${id}`).load();
                     }
                     html += `
                         <li class="nav-item pilih-kategori">
@@ -245,7 +245,7 @@
             $(this).addClass('active')
             $('#judul_kolom_nama').html(judul_kolom_nama)
 
-            statistik.ajax.url(`{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
+            statistik.ajax.url(`{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${id}`).load();
             $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
         });
 
@@ -258,7 +258,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${default_id}`,
+                url: `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${default_id}`,
                 method: 'get',
                 data: function(row) {
                     return {

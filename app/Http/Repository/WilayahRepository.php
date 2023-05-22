@@ -17,12 +17,17 @@ class WilayahRepository
                 AllowedFilter::exact('nama_desa'),
                 AllowedFilter::exact('kode_desa'),
                 AllowedFilter::exact('nama_kecamatan'),
-                AllowedFilter::exact('kode_kecamatan'),
+                AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
+                    $query->where('kode_kecamatan', '!=', $value);
+                }),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where(function ($query) use ($value) {
                         $query->where('nama_desa', 'like', "%{$value}%");
-                        $query->where('nama_kecamatan', 'like', "%{$value}%");
+                        $query->orWhere('nama_kecamatan', 'like', "%{$value}%");
                     });
+                }),
+                AllowedFilter::callback('asal', function ($query, $value) {
+                    $query->where('id', '!=', $value);
                 }),
             ])
             ->allowedSorts(['id', 'dusun'])

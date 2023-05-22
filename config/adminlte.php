@@ -546,6 +546,34 @@ return [
                 ],
             ],
         ],
+
+        'moment js' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
+                ],
+            ],
+        ],
+
+        'bootstrap-datepicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js',
+                ],
+            ],
+        ],
+
         'Alpine' => [
             'active' => true,
             'files' => [

@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
 
     // Penduduk
     Route::get('penduduk/cetak', [PendudukController::class, 'cetak']);
+    Route::get('penduduk/pindah/{id}', [PendudukController::class, 'pindah']);
     Route::resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
     // Keluarga

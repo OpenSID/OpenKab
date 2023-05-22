@@ -24,14 +24,14 @@ class PindahRequest extends FormRequest
     public function rules()
     {
         return [
-            'nik' => 'required|regex:/[0-9]{9}/u',
+            'id' => 'integer',
             'alamat_tujuan' => 'required|string',
             'ref_pindah' => 'required|integer',
             'config_asal' => 'required|integer',
-            'config_tujuan' => 'required|integer',
+            'kelurahan_tujuan' => 'required|integer',
             'status' => 'required|integer',
-            'tgl_lapor' => 'require|date',
-            'tgl_peristiwa' => 'require|date',
+            'tgl_lapor' => 'required|date',
+            'tgl_peristiwa' => 'required|date',
             'catatan' => 'sometimes|string',
         ];
     }

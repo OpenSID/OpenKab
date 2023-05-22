@@ -4,8 +4,14 @@
             minimumResultsForSearch: -1,
             theme: "bootstrap",
             ajax: {
-                url: `{{ $url }}`,
+                url: ``,
                 dataType: 'json',
+                beforeSend: function(jqXHR, settings) {
+                    let url = '{{ $url }}';
+                    let create_url = new URL(url);
+                    create_url.searchParams.set('id', $('#daftar-statistik .active').data('id'));
+                    settings.url =create_url;
+                },
                 processResults: function(data) {
                     if (data.success != true) {
                         return null

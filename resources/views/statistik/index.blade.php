@@ -346,15 +346,18 @@
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
             $('#tahun').val('').change();
-            $('#bulan').val('').change();
+            $('#bulan').val('').change(); $('#bulan').val('').change();
             statistik.ajax.reload();
         });
 
-        $('#bulan').select2({
-            minimumResultsForSearch: -1,
-            theme: "bootstrap",
-
-            placeholder: "Pilih Bulan",
+        $(function() {
+            $('#bulan').select2({
+                minimumResultsForSearch: -1,
+                allowClear: true,
+                theme: "bootstrap",
+                placeholder: "Pilih Bulan",
+            });
         });
+
     </script>
 @endsection

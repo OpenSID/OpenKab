@@ -6,7 +6,6 @@ use App\Http\Repository\BantuanPesertaRepository;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Transformers\BantuanPesertaTransformer;
 use App\Http\Transformers\BantuanTransformer;
-use App\Models\Bantuan;
 use App\Models\Enums\SasaranEnum;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -43,7 +42,7 @@ class BantuanController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Bantuan::tahun()->first(),
+            'data' => $this->bantuan->tahun(),
         ], Response::HTTP_OK);
     }
 }

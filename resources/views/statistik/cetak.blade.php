@@ -31,7 +31,7 @@
                 create_cetak.searchParams.append('filter[id]', id);
 
                 $.ajax({
-                    url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[detail]=${id}&filter[id]=${kategori}`,
+                    url: `{{ url('api/v1/statistik/kategori-statistik') }}?filter[detail]=${id}&filter[id]=${kategori}`,
                     method: 'get',
                     success: function(json) {
                         var data = json.data[0];

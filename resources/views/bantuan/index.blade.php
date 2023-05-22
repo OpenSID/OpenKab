@@ -119,6 +119,8 @@
                             ?.name,
                         "filter[sasaran]": $("#sasaran").val(),
                         "filter[tahun]": $("#tahun").val(),
+                        "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
+                        "config_desa": "{{ session('desa.id') ?? '' }}",
                     };
                 },
                 dataSrc: function(json) {

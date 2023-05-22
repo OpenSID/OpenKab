@@ -29,6 +29,7 @@ Auth::routes([
     'register' => false,
     'verify' => true,
 ]);
+
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware('auth')->group(function () {

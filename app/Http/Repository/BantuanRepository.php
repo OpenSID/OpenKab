@@ -14,30 +14,30 @@ class BantuanRepository
 {
     public function listBantuan()
     {
-        return  QueryBuilder::for(Bantuan::class)
-           ->allowedFields('*')
-           ->allowedFilters([
-               AllowedFilter::exact('id'),
-               AllowedFilter::exact('sasaran'),
-               AllowedFilter::callback('search', function ($query, $value) {
-                   $query->where('nama', 'LIKE', '%'.$value.'%')
-                       ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
-               }),
-               AllowedFilter::callback('tahun', function ($query, $value) {
-                   $query->whereYear('sdate', '<=', $value)
-                       ->whereYear('edate', '>=', $value);
-               }),
+        return  QueryBuilder::for(Bantuan::filterWilayah())
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sasaran'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama', 'LIKE', '%'.$value.'%')
+                        ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
+                }),
+                AllowedFilter::callback('tahun', function ($query, $value) {
+                    $query->whereYear('sdate', '<=', $value)
+                        ->whereYear('edate', '>=', $value);
+                }),
 
-           ])
-           ->allowedSorts([
-               'nama',
-               'asaldana',
-           ])->jsonPaginate();
+            ])
+            ->allowedSorts([
+                'nama',
+                'asaldana',
+            ])->jsonPaginate();
     }
 
     public function cetakListBantuan()
     {
-        return  QueryBuilder::for(Bantuan::class)
+        return  QueryBuilder::for(Bantuan::filterWilayah())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -106,7 +106,24 @@ class BantuanRepository
 
     private function countStatistikKategoriPenduduk(): object
     {
-        return Penduduk::countStatistik()->status()->get();
+        $penduduk = Penduduk::countStatistik()
+        ->whereHas('logPenduduk', function ($q) {
+            $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=', '2')->groupBy('log_penduduk.id');
+
+            if (isset(request('filter')['tahun'])) {
+                $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
+            }
+
+            if (isset(request('filter')['bulan'])) {
+                $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
+            }
+        });
+
+        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
+            $penduduk->status();
+        }
+
+        return $penduduk->get();
     }
 
     public function caseKategoriKeluarga(): array
@@ -191,9 +208,15 @@ class BantuanRepository
         ];
     }
 
-    private function tahun()
+    public function tahun()
     {
-        return Bantuan::tahun()->first();
+        return Bantuan::when(request('id'), function ($query) {
+            collect(match (request('id')) {
+                'penduduk' => $query->where('sasaran', 1),
+                'keluarga' => $query->where('sasaran', 2),
+                default => $query->where('id', request('id')),
+            });
+        })->minMaxTahun('sdate')->first();
     }
 
     public function listBantuanKabupaten()

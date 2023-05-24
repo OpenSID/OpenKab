@@ -20,6 +20,9 @@ class MenuListener
             'text' => 'Semua',
             'url' => 'sesi/hapus',
             'active' => ! session()->has('kecamatan'),
+            'data' => [
+                'kecamatan' => 'Kecamatan',
+            ],
         ]);
 
         // list menu daftar kecamatan
@@ -33,6 +36,9 @@ class MenuListener
                     'text' => $item->nama_kecamatan,
                     'url' => "sesi/kecamatan/{$item->kode_kecamatan}",
                     'active' => session()->has('kecamatan') ? session('kecamatan.kode_kecamatan') === $item->kode_kecamatan : false,
+                    'data' => [
+                        'kecamatan' => $item->nama_kecamatan,
+                    ],
                 ]);
             });
 
@@ -42,6 +48,9 @@ class MenuListener
                 'text' => 'Semua',
                 'url' => 'sesi/hapus',
                 'active' => ! session()->has('desa'),
+                'data' => [
+                    'desa' => 'Desa',
+                ],
             ]);
 
             // list menu daftar desa
@@ -56,6 +65,9 @@ class MenuListener
                         'text' => $item->nama_desa,
                         'url' => "sesi/desa/{$item->kode_desa}",
                         'active' => session()->has('desa') ? session('desa.kode_desa') === $item->kode_desa : false,
+                        'data' => [
+                            'desa' => $item->nama_desa,
+                        ],
                     ]);
                 });
         }

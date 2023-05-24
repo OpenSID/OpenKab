@@ -309,12 +309,14 @@ return [
             'key' => 'kecamatan',
             'text' => 'Kecamatan',
             'topnav_right' => true,
+            'id' => 'kecamatan'
         ],
         // Desa
         [
             'key' => 'desa',
             'text' => 'Desa',
             'topnav_right' => true,
+            'id' => 'desa'
         ],
 
         // Sidebar items:

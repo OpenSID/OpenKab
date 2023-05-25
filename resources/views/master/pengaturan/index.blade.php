@@ -34,18 +34,10 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <form id="pengaturan-form">
-
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="col">
-                            <div x-data="{
-                                data: {},
-                            
-                                async retrievePosts() {
-                                    const response = await (await fetch('{{ route('api.pengaturan_aplikasi', ['filter[key][]' => 'warna_tema']) }}')).json();
-                                    this.data = response.data[0].attributes
-                                }
-                            }" x-init="retrievePosts">
+                            <div x-data="warna()" x-init="retriveData()" x-init="retrievePosts">
                                 <div class="mb-4">
                                     <label x-text="data.judul"></label>
                                     <x-adminlte-input-color name="color" x-bind:name="data.key"
@@ -57,14 +49,14 @@
                                             </div>
                                         </x-slot>
                                     </x-adminlte-input-color>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <button type="button" id="reset" class="btn btn-danger btn-sm"><i
-                                class="fas fa-times"></i>&nbsp; Batal</button>
+                        <button type="button" id="reset" class="btn btn-danger btn-sm"><i class="fas fa-times"></i>&nbsp; Batal</button>
                         <button id="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i>&nbsp;
                             Simpan</button>
                     </div>
@@ -72,11 +64,50 @@
             </div>
         </div>
     </div>
+
+    <script>
+         function warna() {
+            return {
+                data: {
+                    value: '#000000',
+                    key : 'warna_tema'
+                },
+
+                retriveData() {
+                    fetch(`{{ route('api.pengaturan_aplikasi', ['filter[key][]' => 'warna_tema']) }}`)
+                        .then(res => res.json())
+                        .then(response => {
+                            if (response.data.length != 0) {
+                                this.data.value = response.data[0].attributes.value;
+                                this.data.key = response.data[0].attributes.key
+                            }
+                        }).catch(err => {
+                            Swal.fire(
+                                'Error!',
+                                err,
+                                'error'
+                            )
+                        }); // Catch errors;
+                },
+            }
+        }
+    </script>
 @endsection
 @include('partials.reset_form')
 
 @section('js')
     <script>
+        $(function () {
+            $("#color").on("paste",function(){
+                setTimeout(function(){
+                    let color = $('#color').data('colorpicker').getValue();
+
+                    $('#color').closest('.input-group')
+                        .find('.input-group-text > i')
+                        .css('color', color);
+                },100);
+            });
+        });
         $(document).on('click', 'button#submit', function(e) {
             e.preventDefault();
             formData = $('#pengaturan-form').serialize();

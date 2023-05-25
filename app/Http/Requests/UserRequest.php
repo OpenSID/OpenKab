@@ -23,11 +23,13 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+
         if ($this->isMethod('put')) {
-            $id = ','.$this->user->id;
+            $id = ','.$this->id;
         } else {
             $id = '';
         }
+
 
         return [
             'name' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',

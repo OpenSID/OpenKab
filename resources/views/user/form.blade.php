@@ -11,10 +11,21 @@
 
 <div class="col">
     <div class="mb-4">
-        <label for="username">Nama Pengguna<span class="text-danger">*</span></label>
+        <label for="username">Username<span class="text-danger">*</span></label>
         <input type="text" class="form-control @error('username') is-invalid @enderror" name="username"
             value="{{ old('username', $user->username ?? '') }}">
         @error('username')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
+
+<div class="col">
+    <div class="mb-4">
+        <label for="user">Nama Pengguna<span class="text-danger">*</span></label>
+        <input type="text" class="form-control @error('user') is-invalid @enderror" name="user"
+            value="{{ old('user', $user->username ?? '') }}">
+        @error('user')
             <div class="text-danger">{{ $message }}</div>
         @enderror
     </div>

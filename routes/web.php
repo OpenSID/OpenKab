@@ -30,6 +30,8 @@ Auth::routes([
     'verify' => true,
 ]);
 
+Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
+
 Route::middleware('auth')->group(function () {
     Route::get('/', [DasborController::class, 'index'])->name('dasbor');
 
@@ -38,9 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('pengaturan')->group(function () {
         Route::resource('users', UserController::class);
         Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
-        Route::get('/logo', [IdentitasController::class, 'logo']);
     });
-
 
     Route::prefix('sesi')->group(function () {
         // Kecamatan
@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
 
     // Penduduk
     Route::get('penduduk/cetak', [PendudukController::class, 'cetak']);
+    Route::get('penduduk/pindah/{id}', [PendudukController::class, 'pindah']);
     Route::resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
     // Keluarga
@@ -99,6 +100,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/kategori/{parrent}', 'kategori_index');
             Route::get('/kategori/edit/{id}/{parrent}', 'kategori_edit');
             Route::get('/kategori/tambah/{parrent}', 'kategori_create');
+            Route::get('/pengaturan', 'pengaturan_index');
             Route::resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });

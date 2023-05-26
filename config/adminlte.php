@@ -309,12 +309,14 @@ return [
             'key' => 'kecamatan',
             'text' => 'Kecamatan',
             'topnav_right' => true,
+            'id' => 'kecamatan'
         ],
         // Desa
         [
             'key' => 'desa',
             'text' => 'Desa',
             'topnav_right' => true,
+            'id' => 'desa'
         ],
 
         // Sidebar items:
@@ -384,6 +386,11 @@ return [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Kategori Artikel',
                     'url' => 'master/kategori/0',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pengaturan Aplikasi',
+                    'url' => 'master/pengaturan',
                 ],
             ],
         ],
@@ -541,6 +548,34 @@ return [
                 ],
             ],
         ],
+
+        'moment js' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
+                ],
+            ],
+        ],
+
+        'bootstrap-datepicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js',
+                ],
+            ],
+        ],
+
         'Alpine' => [
             'active' => true,
             'files' => [
@@ -563,6 +598,22 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => '/assets/progressive-image/progressive-image.js',
+                ],
+            ],
+        ],
+
+        'Colorpicker' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.min.css',
                 ],
             ],
         ],

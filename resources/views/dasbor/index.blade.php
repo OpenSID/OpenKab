@@ -59,8 +59,8 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-6">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
-                                role="button" aria-expanded="false" aria-controls="collapse-filter">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                               aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
                             Statistik Berita
@@ -142,8 +142,11 @@
 @push('js')
     <script>
         $(document).ready(function() {
+            var url = new URL("{{ url('api/v1/dasbor') }}");
+            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
             $.ajax({
-                url: `{{ url('api/v1/dasbor') }}`,
+                url: url.href,
                 type: "GET",
                 dataType: "json",
                 success: function(response) {

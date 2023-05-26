@@ -10,6 +10,13 @@
 
 @push('js')
     <script type="application/javascript">
+        // ganti text navbar kecamatan dan desa
+        var nama_kecamatan = $('#kecamatan').children().find('a.active').data('kecamatan');
+        $('#kecamatan').children('a.active').text(nama_kecamatan);
+
+        var nama_desa = $('#desa').children().find('a.active').data('desa');
+        $('#desa').children('a.active').text(nama_desa);
+
         $.extend($.fn.dataTable.defaults, {
             language: {url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/id.json"}
         });

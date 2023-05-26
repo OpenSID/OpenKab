@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
+use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class Penduduk extends BaseModel
 {
-    use ConfigIdTrait;
+    use FilterWilayahTrait;
     use HasFactory;
 
     public const KATEGORI_STATISTIK = [
@@ -67,33 +67,10 @@ class Penduduk extends BaseModel
     ];
 
     /** {@inheritdoc} */
-    protected $with = [
-        'jenisKelamin',
-        'agama',
-        'bahasa',
-        'pendidikan',
-        'pendidikanKK',
-        'pekerjaan',
-        'wargaNegara',
-        'golonganDarah',
-        'cacat',
-        'sakitMenahun',
-        'kb',
-        'statusKawin',
-        'statusRekamKtp',
-        'pendudukHubungan',
-        'pendudukStatus',
-        'pendudukStatusDasar',
-        'keluarga',
-        'rtm',
-        'clusterDesa',
-        'logPenduduk',
-        'logPerubahanPenduduk',
-    ];
-
-    /** {@inheritdoc} */
     protected $casts = [
-        'tanggallahir' => 'datetime',
+        'tanggallahir' => 'datetime:d-m-Y',
+        'tanggal_peristiwa' => 'datetime:d-m-Y',
+        'created_at' => 'datetime:d-m-Y',
     ];
 
     /**
@@ -204,6 +181,14 @@ class Penduduk extends BaseModel
     public function kb()
     {
         return $this->belongsTo(KB::class, 'cara_kb_id')->withDefault();
+    }
+
+    /**
+     * Get the phone associated with the config.
+     */
+    public function config()
+    {
+        return $this->hasOne(Config::class, 'id', 'config_id');
     }
 
     /**
@@ -498,5 +483,36 @@ class Penduduk extends BaseModel
             ->groupBy('suku')
             ->whereNotNull('suku')
             ->where('suku', '!=', '');
+    }
+
+    /**
+     * Scope untuk memanggil relasi tabel referensi.
+     */
+    public function scopeWithRef($query)
+    {
+        return $query->with([
+            'jenisKelamin',
+            'agama',
+            'bahasa',
+            'config',
+            'pendidikan',
+            'pendidikanKK',
+            'pekerjaan',
+            'wargaNegara',
+            'golonganDarah',
+            'cacat',
+            'sakitMenahun',
+            'kb',
+            'statusKawin',
+            'statusRekamKtp',
+            'pendudukHubungan',
+            'pendudukStatus',
+            'pendudukStatusDasar',
+            'keluarga',
+            'rtm',
+            'clusterDesa',
+            'logPenduduk',
+            'logPerubahanPenduduk',
+        ]);
     }
 }

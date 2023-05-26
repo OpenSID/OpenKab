@@ -1,5 +1,7 @@
 @extends('layouts.index')
-@include('layouts.components.select2_tahun', ['url' => url('api/v1/statistik/'.strtolower($judul).'/tahun')])
+@include('layouts.components.select2_tahun', [
+    'url' => url('api/v1/statistik/' . strtolower($judul) . '/tahun'),
+])
 
 @section('plugins.chart', true)
 
@@ -167,9 +169,10 @@
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
         var kategori = `{{ strtolower($judul) }}`;
+        var default_id = `{{ $default_kategori }}`;
 
         $.ajax({
-            url: `{{ url('api/v1/statistik/kategori-statistik') }}/?filter[id]=${kategori}`,
+            url: `{{ url('api/v1/statistik/kategori-statistik') }}?filter[id]=${kategori}`,
             method: 'get',
             success: function(response) {
                 if (response.data.length == 0) {
@@ -196,7 +199,7 @@
                         $('#cetak').data('url',
                             `{{ url('statistik/cetak') }}/${kategori}/${id}`);
                         statistik.ajax.url(
-                            `{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
+                            `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${id}`).load();
                     }
                     html += `
                         <li class="nav-item pilih-kategori">
@@ -242,7 +245,7 @@
             $(this).addClass('active')
             $('#judul_kolom_nama').html(judul_kolom_nama)
 
-            statistik.ajax.url(`{{ url('api/v1/statistik') }}/${kategori}/?filter[id]=${id}`).load();
+            statistik.ajax.url(`{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${id}`).load();
             $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
         });
 
@@ -255,7 +258,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik/penduduk') }}/?filter[id]=rentang-umur`,
+                url: `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${default_id}`,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -343,15 +346,18 @@
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
             $('#tahun').val('').change();
-            $('#bulan').val('').change();
+            $('#bulan').val('').change(); $('#bulan').val('').change();
             statistik.ajax.reload();
         });
 
-        $('#bulan').select2({
-            minimumResultsForSearch: -1,
-            theme: "bootstrap",
-
-            placeholder: "Pilih Bulan",
+        $(function() {
+            $('#bulan').select2({
+                minimumResultsForSearch: -1,
+                allowClear: true,
+                theme: "bootstrap",
+                placeholder: "Pilih Bulan",
+            });
         });
+
     </script>
 @endsection

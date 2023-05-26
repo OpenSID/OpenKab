@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
+use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
 class Rtm extends BaseModel
 {
-    use ConfigIdTrait;
+    use FilterWilayahTrait;
 
     public const KATEGORI_STATISTIK = [
         'bdt' => 'BDT',

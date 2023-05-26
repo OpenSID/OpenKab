@@ -48,6 +48,7 @@
                                             <label>Status Dasar</label>
                                             <select class="select2 form-control-sm" id="status-dasar" name="status-dasar"
                                                 data-placeholder="Semua Status Dasar" style="width: 100%;">
+                                                <option value="1" selected>Hidup</option>
                                             </select>
                                         </div>
                                     </div>
@@ -116,6 +117,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Aksi</th>
                                     <th>Foto</th>
                                     <th>NIK</th>
                                     <th>Tag ID Card</th>
@@ -169,6 +171,8 @@
                         "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
                         "filter[clusterDesa.rw]": $('#rw').val(),
                         "filter[clusterDesa.rt]": $('#rt').val(),
+                        "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
+                        "config_desa": "{{ session('desa.id') ?? '' }}",
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
                             ?.name
@@ -186,7 +190,7 @@
                     className: 'text-nowrap',
                 },
                 {
-                    targets: [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+                    targets: [0, 1, 3, 5, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
                     orderable: false,
                     searchable: false,
                 },
@@ -195,6 +199,22 @@
                     data: null,
                     searchable: false,
                     orderable: false
+                },
+                {
+                    searchable: false,
+                    name: "aksi",
+                    orderable: false,
+                    data: function(data) {
+                        var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';
+                        return `<div class="btn-group open">
+                            <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
+                            <ul class="dropdown-menu" role="menu" style="">
+                                <li>
+                                    <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
+                                </li>
+                            </ul>
+                        </div>`
+                    }
                 },
                 {
                     data: function(data) {
@@ -212,7 +232,7 @@
                 {
                     data: "attributes.tag_id_card",
                     name: "tag_id_card",
-                    searchable: true,
+                    searchable: false,
                 },
                 {
                     data: "attributes.nama",
@@ -288,7 +308,7 @@
                 }
             ],
             order: [
-                [4, 'asc']
+                [5, 'asc']
             ]
         })
 

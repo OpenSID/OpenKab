@@ -3,11 +3,40 @@
 namespace App\Http\Repository;
 
 use App\Models\ClusterDesa;
+use App\Models\Config;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class WilayahRepository
 {
+    public function listDesa()
+    {
+        return QueryBuilder::for(Config::class)
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('nama_desa'),
+                AllowedFilter::exact('kode_desa'),
+                AllowedFilter::exact('nama_kecamatan'),
+                AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
+                    $query->where('kode_kecamatan', '!=', $value);
+                }),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama_desa', 'like', "%{$value}%");
+                        $query->orWhere('nama_kecamatan', 'like', "%{$value}%");
+                    });
+                }),
+                AllowedFilter::callback('asal', function ($query, $value) {
+                    $query->where('id', '!=', $value);
+                }),
+            ])
+            ->allowedSorts(['id', 'dusun'])
+
+            ->whereRaw('nama_desa != ""')
+            ->orderBy('kode_desa')
+            ->jsonPaginate();
+    }
+
     public function listDusun()
     {
         return QueryBuilder::for(ClusterDesa::class)

@@ -5,15 +5,19 @@ namespace App\Http\Transformers;
 use App\Models\Config;
 use League\Fractal\TransformerAbstract;
 
-class ArtikelTransformer extends TransformerAbstract
+class ConfigTransformer extends TransformerAbstract
 {
+    /**
+     * A Fractal transformer.
+     *
+     * @return array
+     */
     public function transform(Config $config)
     {
         return [
-            'id' => null,
+            'id' => $config->id,
             'nama_desa' => $config->nama_desa,
             'nama_kecamatan' => $config->nama_kecamatan,
-            'jumlah_artikel' => $config->jumlah,
         ];
     }
 }

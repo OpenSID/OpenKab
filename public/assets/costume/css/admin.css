@@ -60,3 +60,6 @@ tr.shown td.details-control {
     width: 100px!important;
 }
 
+.select2-container .select2-selection--single {
+    height: 35px;
+}

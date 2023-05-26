@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Models\Enums\SasaranEnum;
-use App\Models\Traits\ConfigIdTrait;
+use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bantuan extends BaseModel
 {
-    use ConfigIdTrait;
+    use FilterWilayahTrait;
 
     public const SASARAN_PENDUDUK = 1;
 
@@ -130,7 +130,22 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikPenduduk($query)
     {
-        return $this->scopeConfigId($query)
+        if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
+            $log_penduduk = LogPenduduk::select('log_penduduk.id')
+            ->selectRaw('Max(log_penduduk.id) as max')
+            ->where('kode_peristiwa', '!=', 2)
+            ->whereRaw('tweb_penduduk.id = log_penduduk.id_pend')
+            ->when(isset(request('filter')['tahun']), function ($q) {
+                return $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
+            })
+            ->when(isset(request('filter')['bulan']), function ($q) {
+                return $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
+            })
+           ->groupBy('log_penduduk.id')
+           ->toBoundSql();
+        }
+
+        $statistik = $this->scopeConfigId($query)
             ->select(["{$this->table}.id", "{$this->table}.nama"])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
@@ -138,7 +153,13 @@ class Bantuan extends BaseModel
             ->join('tweb_penduduk', 'program_peserta.peserta', '=', 'tweb_penduduk.nik', 'left')
             ->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_PENDUDUK)
-            ->groupBy("{$this->table}.id");
+            ->groupBy("{$this->table}.id", "{$this->table}.nama");
+
+        if (isset($log_penduduk)) {
+            $statistik->whereRaw("EXISTS($log_penduduk)");
+        }
+
+        return $statistik;
     }
 
     /**
@@ -155,7 +176,7 @@ class Bantuan extends BaseModel
             ->join('tweb_penduduk', 'tweb_keluarga.nik_kepala', '=', 'tweb_penduduk.id', 'left')
             ->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_KELUARGA)
-            ->groupBy("{$this->table}.id");
+            ->groupBy("{$this->table}.id", "{$this->table}.nama");
     }
 
     /**

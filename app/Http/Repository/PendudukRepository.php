@@ -30,7 +30,7 @@ class PendudukRepository
 
     public function listPenduduk()
     {
-        return QueryBuilder::for(Penduduk::class)
+        return QueryBuilder::for(Penduduk::withRef()->filterWilayah())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -305,24 +305,24 @@ class PendudukRepository
 
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
             $log_penduduk = LogPenduduk::select('log_penduduk.id')
-            ->selectRaw('Max(log_penduduk.id) as max')
-            ->where('kode_peristiwa', '!=', 2)
-            ->whereRaw('tweb_penduduk.id = log_penduduk.id_pend')
-            ->when(isset(request('filter')['tahun']), function ($q) {
-                return $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
-            })
-            ->when(isset(request('filter')['bulan']), function ($q) {
-                return $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
-            })
-           ->groupBy('log_penduduk.id')
-           ->toBoundSql();
+                ->selectRaw('Max(log_penduduk.id) as max')
+                ->where('kode_peristiwa', '!=', 2)
+                ->whereRaw('tweb_penduduk.id = log_penduduk.id_pend')
+                ->when(isset(request('filter')['tahun']), function ($q) {
+                    return $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
+                })
+                ->when(isset(request('filter')['bulan']), function ($q) {
+                    return $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
+                })
+            ->groupBy('log_penduduk.id')
+            ->toBoundSql();
         }
 
         $sql = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', "tweb_penduduk.{$idReferensi}", '=', "{$tabelReferensi}.id", 'left')
             ->where('tweb_penduduk.status_dasar', 1)
-            ->groupBy("{$tabelReferensi}.id");
+            ->groupBy("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
         if (isset($log_penduduk)) {
             $sql->whereRaw("EXISTS($log_penduduk)");
         }

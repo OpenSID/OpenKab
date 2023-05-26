@@ -23,4 +23,9 @@ class AdminWebController extends Controller
     {
         return view('master.kategori.edit');
     }
+
+    public function pengaturan_index()
+    {
+        return view('master.pengaturan.index');
+    }
 }

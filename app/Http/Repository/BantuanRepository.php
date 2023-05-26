@@ -164,7 +164,7 @@ class BantuanRepository
     }
 
     /**
-     * @param $dataHeader collection
+     * @param $dataHeader  collection
      * @param $queryFooter collection
      *
      * return array

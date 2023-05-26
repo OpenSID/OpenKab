@@ -67,9 +67,9 @@ class IdentitasController extends Controller
             Image::make($file->path())->resize(16, 16)->save(public_path().'/favicon.png');
             copy(public_path().'/favicon.png', public_path().'/favicon.ico'); //create favicon
             Image::make($file->path())->resize(150, 150,
-            function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($path.'/'.$filename.'.png'); //create logo
+                function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path.'/'.$filename.'.png'); //create logo
 
             Identitas::where('id', $id)->update([
                 'logo' => $filename.'.png',

@@ -37,3 +37,17 @@ function get_xsrf() {
         return $('meta[name="csrf-token"]').attr("content");
     }
 }
+
+// ganti data profil
+$(function () {
+    $.ajax({
+        type: "get",
+        url: "../../api/v1/identitas",
+        success: function (response) {
+            var data = response.data.attributes;
+            $('.brand-link').children('img').attr('alt', data.nama_aplikasi);
+            $('.brand-link').children('span').text(data.nama_aplikasi);
+            console.log(response)
+        }
+    });
+});

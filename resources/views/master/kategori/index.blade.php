@@ -22,7 +22,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <a   class="btn btn-primary btn-sm" href="{{ url("master/kategori/tambah/").'/'.request()->route('parrent') }}"><i class="far fa-plus-square"></i> Tambah</a>
+                            <a class="btn btn-primary btn-sm" href="{{ url("master/kategori/tambah/").'/'.request()->route('parrent') }}"><i class="far fa-plus-square"></i> Tambah</a>
                         </div>
                     </div>
                 </div>

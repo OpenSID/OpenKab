@@ -65,7 +65,7 @@ return [
 
     'logo' => '<b>Open</b>KAB',
     'logo_img' => '/pengaturan/logo',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo_img_class' => 'brand-image elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'OpenKAB',
@@ -293,16 +293,16 @@ return [
         //Topbar items:
         [
             'type' => 'darkmode-widget',
-            'topnav_right' => true, // Or "topnav => true" to place on the left.
+            'topnav_right' => false, // Or "topnav => true" to place on the left.
         ],
         [
             'type' => 'navbar-search',
             'text' => 'search',
-            'topnav_right' => true,
+            'topnav_right' => false,
         ],
         [
             'type' => 'fullscreen-widget',
-            'topnav_right' => true,
+            'topnav_right' => false,
         ],
         // Kecamatan
         [

@@ -26,7 +26,7 @@
                             :src="dataIdentitas.logo ? '{{ asset('storage/img') }}/' + dataIdentitas.logo :
                             '{{ asset('assets/img/opensid_logo.png') }}'"
                                 alt="logo-Aplikasi">
-                            <h3 class="text-identitas"><span x-text="dataIdentitas.nama_kabupaten"></span> </h3>
+                            <h3 class="text-identitas"><span x-text="dataIdentitas.nama_aplikasi"></span> </h3>
                         </div>
                     </div>
                     <hr>

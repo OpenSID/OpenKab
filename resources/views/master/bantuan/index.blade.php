@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-md-2">
                             <a href="{{ route('bantuan.create') }}">
-                                <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i>Tambah</button>
+                                <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
                             </a>
                         </div>
 

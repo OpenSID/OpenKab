@@ -42,7 +42,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="col">
                             <div class="mb-4">
                                 <label for="ndesc">Keterangan<span class="text-danger">*</span></label>
@@ -69,7 +69,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col">
                                 <div class="mb-4">
@@ -90,7 +90,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -113,7 +113,7 @@
         $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();
                 formData = $('#bantuan-form').serialize();
-                
+
                 Swal.fire({
                     title: 'Tambah',
                     text: "Apakah anda yakin menambah data ini?",
@@ -134,7 +134,7 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             dataType: "json",
-                            url: `{{ url('api/v1/bantuan-kabupaten/buat') }}`,
+                            url: `{{ url('api/v1/bantuan-kabupaten/tambah') }}`,
                             data: formData,
                             success: function(response) {
                                 if (response.success == true) {

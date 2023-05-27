@@ -3,11 +3,11 @@
 @section('title', ' Kategori Artikel')
 
 @section('content_header')
-    <h1>{{ ucfirst(request()->route('aksi')) }} Kategori Artikel</h1>
+    <h1 id="judul_kategori">{{ ucfirst(request()->route('aksi')) }} Kategori Artikel</h1>
 @stop
 
 @section('content')
-    <div class="row" x-data="kategori()">
+    <div class="row" x-data="kategori()" x-init="retriveData()">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
@@ -22,9 +22,9 @@
                 <div class="card-body">
                     <form class="form-horizontal">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Nama Kategori</label>
+                            <label class="col-sm-2 col-form-label" id="kategori" x-text="dataKategori.label_kategori"></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" placeholder="Nama Aplikasi" x-model="dataKategori.kategori">
+                                <input type="text" class="form-control" x-bind:placeholder="dataKategori.label_kategori" x-model="dataKategori.kategori">
                             </div>
                         </div>
                     </form>
@@ -41,6 +41,30 @@
                 dataKategori: {
                     'kategori': null,
                     'parrent': {{ (int) request()->route('parrent') }},
+                    'label_kategori' : ''
+                },
+
+                retriveData() {
+                    fetch(`{{ url('api/v1/kategori/tampil') }}?id=${this.dataKategori.parrent}`)
+                        .then(res => res.json())
+                        .then(response => {
+
+
+                            if (response.data != null) {
+                                this.dataKategori.label_kategori = 'Nama Sub Kategori'
+                                $('#judul_kategori').text(`Sub Kategori ${response.data.kategori}`)
+                            }else{
+                                this.dataKategori.label_kategori = 'Nama Kategori'
+                            }
+                            // console.log*
+
+                        }).catch(err => {
+                            Swal.fire(
+                                'Error!',
+                                err,
+                                'error'
+                            )
+                        }); // Catch errors;
                 },
 
                 simpan() {

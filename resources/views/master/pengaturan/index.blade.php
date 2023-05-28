@@ -80,6 +80,9 @@
                             if (response.data.length != 0) {
                                 this.data.value = response.data[0].attributes.value;
                                 this.data.key = response.data[0].attributes.key
+                                setTimeout(function(){
+                                    $('#color').trigger('change')
+                                },100);
                             }
                         }).catch(err => {
                             Swal.fire(

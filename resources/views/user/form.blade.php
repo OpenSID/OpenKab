@@ -22,17 +22,6 @@
 
 <div class="col">
     <div class="mb-4">
-        <label for="user">Nama Pengguna<span class="text-danger">*</span></label>
-        <input type="text" class="form-control @error('user') is-invalid @enderror" name="user"
-            value="{{ old('user', $user->username ?? '') }}">
-        @error('user')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
-    </div>
-</div>
-
-<div class="col">
-    <div class="mb-4">
         <label for="email">Surel<span class="text-danger">*</span></label>
         <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
             value="{{ old('email', $user->email ?? '') }}">

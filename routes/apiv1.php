@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\ArtikelController;
+use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\WilayahController;
@@ -26,7 +27,11 @@ use App\Http\Controllers\Api\BantuanKabupatenController;
 |
 */
 
+Route::post('/signin', [AuthController::class,'login']);
+
+
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class,'logOut']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });

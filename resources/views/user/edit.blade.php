@@ -16,6 +16,7 @@
                                 class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Pengguna</a>
                     </div>
                     <form action="{{ route('users.update', $user->id) }}" method="POST">
+                        <input type="hidden" name="id" value="{{ $user->id }}">
                         @csrf
                         @method('PUT')
                         <!-- /.card-header -->

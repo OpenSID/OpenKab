@@ -3,27 +3,25 @@
 @section('title', 'Data Kategori Artikel')
 
 @section('content_header')
-    <h1>Data Kategori Artikel</h1>
+<h1 id="subjudul">Data Kategori Artikel</h1>
 @stop
 
 @section('content')
-    <div class="row" id="tampilkan-bantuan">
-        <div class="col-lg-12">
-            <div class="card card-outline card-primary">
-                <div class="card-header">
-                    <div class="float-left">
-                        <div class="btn-group">
-                            @if(request()->route('parrent') != 0)
-                            <a href="{{ url('master/kategori/0') }}" class="btn btn-sm btn-block btn-secondary"><i
-                                    class="fas fa-arrow-left"></i>
-                            </a>
-                            @endif
-                        </div>
+<div class="row" id="tampilkan-bantuan">
+    <div class="col-lg-12">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <div class="float-left">
+                    <div class="btn-group">
+                        @if (request()->route('parrent') != 0)
+                        <a href="{{ url('master/kategori/0') }}" class="btn btn-sm btn-block btn-secondary"><i class="fas fa-arrow-left"></i>
+                        </a>
+                        @endif
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <a   class="btn btn-primary btn-sm" href="{{ url("master/kategori/tambah/").'/'.request()->route('parrent') }}"><i class="far fa-plus-square"></i> Tambah</a>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <a class="btn btn-primary btn-sm" href="{{ url('master/kategori/tambah/') . '/' . request()->route('parrent') }}"><i class="far fa-plus-square"></i> Tambah</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -44,16 +42,34 @@
             </div>
         </div>
     </div>
-@endsection
+    @endsection
 
-@section('js')
+    @section('js')
     <script>
         $(function() {
-
+            $.ajax({
+                type: "get",
+                url: "{{ url('api/v1/kategori/tampil') }}",
+                data: {
+                    id: {
+                        {
+                            request() - > route('parrent')
+                        }
+                    }
+                },
+                success: function(response) {
+                    if (response.data != null) {
+                        $('#subjudul').text(`Data sub kategori ${response.data.kategori}`)
+                    } else {
+                        $('#subjudul').text(`Data Kategori Artikel`)
+                    }
+                }
+            });
             var table = $('#kategori').DataTable({
 
                 ajax: {
-                    url: '{{ url('api/v1/kategori') }}',
+                    url: '{{ url('
+                    api / v1 / kategori ') }}',
                     dataSrc: function(json) {
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
@@ -63,7 +79,11 @@
                         return {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
-                            "filter[parrent]": {{ request()->route('parrent') }},
+                            "filter[parrent]": {
+                                {
+                                    request() - > route('parrent')
+                                }
+                            },
                             "filter[search]": row.search.value,
                             "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
                                 ?.column]?.name
@@ -96,10 +116,10 @@
                         className: 'aksi',
                         render: function(data, type, row) {
                             var id = row.id;
-                            var sub = (row.attributes.parrent == 0)? `<a href="{{ url('master/kategori/') }}/${id}" class="btn btn-info btn-sm edit" data-id="${id}" title="Ubah"><i class="fas fa-bars"></i></a>`: '';
+                            var sub = (row.attributes.parrent == 0) ? `<a href="{{ url('master/kategori/') }}/${id}" class="btn btn-info btn-sm edit" data-id="${id}" title="Ubah"><i class="fas fa-bars"></i></a>` : '';
                             var render = `
                                     ${sub}
-                                    <a href="{{ url('master/kategori/edit') }}/${id}/{{ (int) request()->route('parrent')}}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
+                                    <a href="{{ url('master/kategori/edit') }}/${id}/{{ (int) request()->route('parrent') }}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Ubah">
@@ -351,4 +371,4 @@
             }
         });
     </script>
-@endsection
+    @endsection

@@ -10,6 +10,16 @@
 
 @push('js')
     <script type="application/javascript">
+        var base_url = '{{ url('/') }}';
+        $.ajax({
+        type: "get",
+        url: base_url + "/api/v1/identitas",
+        success: function (response) {
+            var data = response.data.attributes;
+            $('.brand-link').children('img').attr('alt', data.nama_aplikasi);
+            $('.brand-link').children('span').text(data.nama_aplikasi);
+        }
+    });
         // ganti text navbar kecamatan dan desa
         var nama_kecamatan = $('#kecamatan').children().find('a.active').data('kecamatan');
         $('#kecamatan').children('a.active').text(nama_kecamatan);

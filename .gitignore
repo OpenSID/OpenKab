@@ -2,8 +2,7 @@
 /public/build
 /public/hot
 /public/storage
-public/dist/*
-!public/dist/favicon.ico
+#/public/dist/favicon.ico
 /public/favicon.png
 /storage/*.key
 /vendor

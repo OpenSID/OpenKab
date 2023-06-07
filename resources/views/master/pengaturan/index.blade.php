@@ -38,19 +38,36 @@
                     <div class="card-body">
                         <div class="col">
                             <div x-data="warna()" x-init="retriveData()" x-init="retrievePosts">
-                                <div class="mb-4">
-                                    <label x-text="data.judul"></label>
-                                    <x-adminlte-input-color name="color" x-bind:name="data.key"
-                                        x-bind:data-color="data.value" x-model="data.value" data-format='hex'
-                                        data-horizontal=true>
-                                        <x-slot name="appendSlot">
-                                            <div class="input-group-text">
-                                                <i class="fas fa-lg fa-square"></i>
+                                <template x-for="pengaturan in data">
+                                    <div>
+                                        <template x-if="pengaturan.attributes.jenis == 'select'">
+                                            <div class="mb-1">
+                                                <label x-text="pengaturan.attributes.judul"></label>
+                                                <select class="form-control" x-model="pengaturan.attributes.value" x-bind:name="pengaturan.attributes.key">
+                                                    <template x-for="(option, index) in JSON.parse(pengaturan.attributes.option)">
+                                                        <option :value="index" x-text="option" :selected="index == pengaturan.attributes.value"></option>
+                                                    </template>
+                                                </select>
                                             </div>
-                                        </x-slot>
-                                    </x-adminlte-input-color>
+                                        </template>
 
-                                </div>
+                                        <template x-if="pengaturan.attributes.jenis == 'color'">
+                                            <div class="mb-1">
+                                                <label x-text="pengaturan.attributes.judul"></label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input class="form-control" x-on:change.debounce="setAddonColor($event)" x-bind:cek="cek($el, pengaturan.attributes.value)" x-bind:name="pengaturan.attributes.key" x-bind:data-color="pengaturan.attributes.value" x-model="pengaturan.attributes.value">
+                                                        <div class="input-group-append">
+                                                            <div class="input-group-text">
+                                                                <i class="fas fa-lg fa-square"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -66,23 +83,16 @@
     </div>
 
     <script>
-         function warna() {
+        function warna() {
             return {
-                data: {
-                    value: '#000000',
-                    key : 'warna_tema'
-                },
+                data: {},
 
                 retriveData() {
                     fetch(`{{ route('api.pengaturan_aplikasi', ['filter[key][]' => 'warna_tema']) }}`)
                         .then(res => res.json())
                         .then(response => {
                             if (response.data.length != 0) {
-                                this.data.value = response.data[0].attributes.value;
-                                this.data.key = response.data[0].attributes.key
-                                setTimeout(function(){
-                                    $('#color').trigger('change')
-                                },100);
+                                this.data = response.data
                             }
                         }).catch(err => {
                             Swal.fire(
@@ -92,6 +102,24 @@
                             )
                         }); // Catch errors;
                 },
+
+                cek($el, value) {
+                    $($el).colorpicker([]).on('change', this.setAddonColor);
+                    $($el).closest('.input-group')
+                        .find('.input-group-text > i')
+                        .css('color', value);
+                },
+
+                setAddonColor(vr) {
+                    $(vr.target).closest('.input-group')
+                        .find('.input-group-text > i')
+                        .css('color', vr.target.value);
+                },
+
+                color() {
+                    $('#color').colorpicker([])
+                        .on('change', this.setAddonColor);
+                },
             }
         }
     </script>
@@ -100,17 +128,6 @@
 
 @section('js')
     <script>
-        $(function () {
-            $("#color").on("paste",function(){
-                setTimeout(function(){
-                    let color = $('#color').data('colorpicker').getValue();
-
-                    $('#color').closest('.input-group')
-                        .find('.input-group-text > i')
-                        .css('color', color);
-                },100);
-            });
-        });
         $(document).on('click', 'button#submit', function(e) {
             e.preventDefault();
             formData = $('#pengaturan-form').serialize();
@@ -138,7 +155,6 @@
                         url: `{{ url('api/v1/pengaturan/update') }}`,
                         data: formData,
                         success: function(response) {
-                            console.log(response);
                             if (response.success == true) {
                                 Swal.fire({
                                     title: 'Berhasil!',

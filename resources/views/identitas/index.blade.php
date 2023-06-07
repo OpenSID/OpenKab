@@ -1,6 +1,6 @@
 @extends('layouts.index')
 
-@section('title', 'Identitas OpenKAB')
+@section('title', 'Identitas')
 
 @section('content_header')
     <div class="row" x-data="identitas()" x-init="retrieveData()">

@@ -2,6 +2,8 @@
 /public/build
 /public/hot
 /public/storage
+/public/favicon.ico
+/public/favicon.png
 /storage/*.key
 /vendor
 .env

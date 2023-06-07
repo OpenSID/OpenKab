@@ -2,8 +2,6 @@
 /public/build
 /public/hot
 /public/storage
-/public/dist/favicon.ico
-/public/dist/*
 /public/favicon.png
 /storage/*.key
 /vendor

@@ -3,7 +3,9 @@
 @section('title', 'Identitas OpenKAB')
 
 @section('content_header')
-    <h1>Identitas OpenKAB</h1>
+    <div class="row" x-data="identitas()" x-init="retrieveData()">
+        <h1 class="text-identitas"><span x-text="dataIdentitas.nama_aplikasi"></span> </h1>
+    </div>
 @stop
 
 @section('content')

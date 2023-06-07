@@ -40,7 +40,7 @@
                             <div x-data="warna()" x-init="retriveData()" x-init="retrievePosts">
                                 <template x-for="pengaturan in data">
                                     <div>
-                                        <template x-if="pengaturan.attributes.jenis == 'select'">
+                                        <template x-if="pengaturan.attributes.jenis == 'option'">
                                             <div class="mb-1">
                                                 <label x-text="pengaturan.attributes.judul"></label>
                                                 <select class="form-control" x-model="pengaturan.attributes.value" x-bind:name="pengaturan.attributes.key">

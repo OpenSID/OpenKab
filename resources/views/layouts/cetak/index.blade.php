@@ -7,8 +7,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex">
-    <link rel="shortcut icon" href="{{ asset('/assets/img/opensid_logo.png') }}" />
     <link rel="stylesheet" href="{{ asset('/assets/print/print.css') }}" />
+    <p x-data="identitas()" x-init="retrieveData()">
+        <link rel="shortcut icon" href="dataIdentitas.logo ? '{{ asset('storage/img') }}/' + dataIdentitas.logo :
+                            '{{ asset('assets/img/opensid_logo.png') }}'" />
+    </p>
     @stack('css')
 </head>
 
@@ -16,9 +19,12 @@
     <table>
         <tbody>
             <tr>
-                <td class="padat">
-                    <img class="logo" src="{{ asset('/assets/img/opensid_logo.png') }}" alt="Logo">
-                    <h3 class="judul">PEMERINTAH <br /> KABUPATEN {{ config('app.namaKab') }}</h3>
+                <td class="padat" x-data="identitas()" x-init="retrieveData()">
+                    <img class="img-identitas logo"
+                         :src="dataIdentitas.logo ? '{{ asset('storage/img') }}/' + dataIdentitas.logo :
+                            '{{ asset('assets/img/opensid_logo.png') }}'"
+                         alt="logo-Aplikasi">
+                    <h3 class="judul">PEMERINTAH <br /> KABUPATEN <span x-text="dataIdentitas.nama_aplikasi"></span></h3>
                 </td>
             </tr>
             <tr>
@@ -56,6 +62,22 @@
                 window.close();
             }
         });
+
+        function identitas() {
+            return {
+                id: 1,
+                edit: '',
+                dataIdentitas: {},
+                retrieveData() {
+                    fetch('{{ url('api/v1/identitas') }}')
+                        .then(res => res.json())
+                        .then(response => {
+                            this.dataIdentitas = response.data.attributes;
+                            this.id = response.data.id
+                        });
+                },
+            }
+        }
     </script>
 </body>
 

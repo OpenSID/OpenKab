@@ -19,6 +19,7 @@ class PengaturanRepository
                 }),
             ])
             ->orWhere('kategori', 'openkab')
-            ->get();
+            ->get()
+            ->unique('key');
     }
 }

@@ -3,6 +3,7 @@
 /public/hot
 /public/storage
 /public/favicon.png
+/public/favicon.ico
 /storage/*.key
 /vendor
 .env

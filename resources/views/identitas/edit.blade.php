@@ -59,7 +59,7 @@
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Nama Aplikasi</label>
                             <div class="col-sm-10">
-                                <input type="email" class="form-control" placeholder="Nama Aplikasi"
+                                <input type="text" class="form-control" placeholder="Nama Aplikasi"
                                     x-model="dataIdentitas.nama_aplikasi">
                             </div>
                         </div>

@@ -1,9 +1,12 @@
 <?php
 
-use App\Models\Team;
+
+use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+
 
 return new class extends Migration
 {
@@ -14,15 +17,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('team', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 100);
-            $table->timestamps();
-        });
-
-        Team::create([
-            'name' => 'Administrator',
-        ]);
+        // Role::create(['name' => 'Admin', 'team_id' => 1, 'guard_name' => 'web']);
+        $user = User::find(1);
+        setPermissionsTeamId(1);
+        // $user->guard_name = 'web';
+// dd($user->guard_name);
+        // dd(Role::findByName('Admin', 'web'));
+        dd($user->assignRole('Admin'));
     }
 
     /**
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('team');
+
     }
 };

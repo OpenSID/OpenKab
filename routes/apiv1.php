@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('rt', [WilayahController::class, 'rt']);
     });
 
-    Route::prefix('penduduk')->group(function () {
+    Route::prefix('penduduk')->middleware(['teams_permission' ])->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 
         // Referensi

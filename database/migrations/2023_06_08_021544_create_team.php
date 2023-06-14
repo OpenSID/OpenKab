@@ -17,12 +17,15 @@ return new class extends Migration
         Schema::create('team', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
+            $table->json('menu');
             $table->timestamps();
         });
 
-        Team::create([
-            'name' => 'Administrator',
-        ]);
+        Schema::create('user_team', function (Blueprint $table) {
+            $table->integer('id_user');
+            $table->integer('id_team');
+        });
+
     }
 
     /**

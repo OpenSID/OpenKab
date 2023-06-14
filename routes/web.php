@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminWebController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\DasborController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
@@ -32,7 +33,7 @@ Auth::routes([
 
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::get('/', [DasborController::class, 'index'])->name('dasbor');
 
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
@@ -40,6 +41,11 @@ Route::middleware('auth')->group(function () {
     Route::prefix('pengaturan')->group(function () {
         Route::resource('users', UserController::class);
         Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
+        Route::middleware(['role:pengaturan-group'])->prefix('groups')->group(function () {
+            Route::get('/', [GroupController::class, 'index']);
+            Route::get('/tambah', [GroupController::class, 'create']);
+        });
+
     });
 
     Route::prefix('sesi')->group(function () {

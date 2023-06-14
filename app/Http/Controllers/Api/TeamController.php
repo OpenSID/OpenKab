@@ -61,25 +61,32 @@ class TeamController extends Controller
         setPermissionsTeamId($team->id);
 
         foreach ($menu as $main_menu) {
+
             // buat role
             Role::create(
                 [
-                    'name' => $main_menu->rule,
-                    'team_id' => $team->id,
+                    'name' => $main_menu['rule'],
+                    'team_id' => $team['id'],
                     'guard_name' => 'web',
                 ]
             );
 
-            foreach ($main_menu->sub_menu as $sub_menu) {
-                Role::create(
-                    [
-                        'name' => $sub_menu->rule,
-                        'team_id' => $team->id,
-                        'guard_name' => 'web',
-                    ]
-                );
+            if (isset($main_menu['sub_menu'])) {
+                foreach ($main_menu['sub_menu'] as $sub_menu) {
+                    Role::create(
+                        [
+                            'name' => $sub_menu['rule'],
+                            'team_id' => $team['id'],
+                            'guard_name' => 'web',
+                        ]
+                    );
+                }
             }
         }
+
+        return response()->json([
+            'success' => true,
+        ], Response::HTTP_OK);
     }
 
     public function update(Request $request, $id)

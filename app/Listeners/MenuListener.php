@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Models\Team;
 use App\Models\Config;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
@@ -70,6 +71,14 @@ class MenuListener
                         ],
                     ]);
                 });
+        }
+
+        // tambahkan menu dari group
+        $id_team = auth()->user()->getTeamIdFromToken();
+        $team = Team::where('id', $id_team)->first();
+
+        foreach ($team->menu as $menu) {
+            $event->menu->add($menu);
         }
     }
 }

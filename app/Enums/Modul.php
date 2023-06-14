@@ -127,6 +127,12 @@ final class Modul extends Enum
                     'url' => 'pengaturan/users',
                     'rule' => 'pengaturan-users',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Group',
+                    'url' => 'pengaturan/groups',
+                    'rule' => 'pengaturan-group',
+                ],
             ],
         ],
     ];

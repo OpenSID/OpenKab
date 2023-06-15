@@ -38,7 +38,7 @@ class User extends Authenticatable
 
      /** {@inheritdoc} */
      protected $appends = [
-        'team',
+        'team'
     ];
 
 
@@ -97,12 +97,19 @@ class User extends Authenticatable
 
     public function team()
     {
-        return $this->hasOne(Team::class, 'id', 'id');
+        return $this->hasOne(UserTeam::class, 'id_user', 'id');
     }
 
     public function getTeamIdFromToken()
     {
+        // dd($this);
         return $this->team->id;
 
+    }
+
+    public function getTeamAttribute()
+    {
+        return null;
+        return $this->team->menu;
     }
 }

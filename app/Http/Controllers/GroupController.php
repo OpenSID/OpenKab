@@ -13,11 +13,11 @@ class GroupController extends Controller
 
     public function create()
     {
-        return view('group.create');
+        return view('group.form');
     }
 
     public function edit($id)
     {
-        return view('group.index');
+        return view('group.form');
     }
 }

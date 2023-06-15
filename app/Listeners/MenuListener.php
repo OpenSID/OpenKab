@@ -4,6 +4,8 @@ namespace App\Listeners;
 
 use App\Models\Team;
 use App\Models\Config;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 class MenuListener
@@ -72,7 +74,8 @@ class MenuListener
                     ]);
                 });
         }
-
+        // dd(User::with('team')->get()->toArray());
+        dd(auth('web')->user()->toArray());
         // tambahkan menu dari group
         $id_team = auth()->user()->getTeamIdFromToken();
         $team = Team::where('id', $id_team)->first();

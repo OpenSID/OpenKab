@@ -16,7 +16,10 @@ class TeamsPermission
      */
     public function handle(Request $request, Closure $next)
     {
-        setPermissionsTeamId(auth()->user()->getTeamIdFromToken());
+        if (isset(auth()->user()->team->id)) {
+            setPermissionsTeamId(auth()->user()->team->id);
+        }
+
 
         return $next($request);
     }

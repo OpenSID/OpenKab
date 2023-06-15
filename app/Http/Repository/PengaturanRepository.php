@@ -17,6 +17,9 @@ class PengaturanRepository
                 AllowedFilter::callback('key', function ($query, $value) {
                     $query->whereIn('key', $value);
                 }),
-            ])->get();
+            ])
+            ->orWhere('kategori', 'openkab')
+            ->get()
+            ->unique('key');
     }
 }

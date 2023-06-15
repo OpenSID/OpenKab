@@ -29,9 +29,15 @@ class PengaturanController extends Controller
     public function update(PengaturanRequest $request)
     {
         try {
-            foreach ($this->pengaturan->listPengaturan() as $data) {
-                if ($request->{$data->key}) {
-                    Pengaturan::where('key', $data->key)->update(['value' => $request->{$data->key}]);
+            foreach ($request->validated() as $key => $value) {
+                Pengaturan::where('key', $key)->update(['value' => $value]);
+                if ($key == 'lock_theme') {
+                    // udpate class tema
+                    if(!$value){
+                        Pengaturan::where('key', 'web_theme')->update(['attribute' => 'class="disabled" disabled']);
+                    }else{
+                        Pengaturan::where('key', 'web_theme')->update(['attribute' => null]);
+                    }
                 }
             }
 

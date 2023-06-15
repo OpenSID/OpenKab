@@ -9,12 +9,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
+    use HasRoles;
+
+    protected $guard  = 'web';
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +35,12 @@ class User extends Authenticatable
         'phone',
         'foto',
     ];
+
+     /** {@inheritdoc} */
+     protected $appends = [
+        'team',
+    ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -83,5 +93,16 @@ class User extends Authenticatable
         }
 
         return parent::delete();
+    }
+
+    public function team()
+    {
+        return $this->hasOne(Team::class, 'id', 'id');
+    }
+
+    public function getTeamIdFromToken()
+    {
+        return $this->team->id;
+
     }
 }

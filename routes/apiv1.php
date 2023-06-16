@@ -29,7 +29,7 @@ use App\Http\Controllers\Api\TeamController;
 */
 
 Route::post('/signin', [AuthController::class,'login']);
-
+Route::get('/identitas', [IdentitasController::class,'index']);
 
 Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
     Route::post('/logout', [AuthController::class,'logOut']);
@@ -135,7 +135,6 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
     // Identitas
     Route::controller(IdentitasController::class)
         ->prefix('identitas')->group(function () {
-            Route::get('/', 'index');
             Route::put('/perbarui/{id}', 'update');
             Route::post('/upload/{id}', 'upload');
         });

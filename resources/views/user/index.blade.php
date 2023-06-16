@@ -78,8 +78,8 @@
                     name: 'username'
                 },
                 {
-                    data: 'team',
-                    name: 'team'
+                    data: 'team[0].name',
+                    name: 'team[0].name'
                 },
                 {
                     data: 'email',

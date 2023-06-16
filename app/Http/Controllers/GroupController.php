@@ -18,6 +18,6 @@ class GroupController extends Controller
 
     public function edit($id)
     {
-        return view('group.form');
+        return view('group.form', ['id' => $id]);
     }
 }

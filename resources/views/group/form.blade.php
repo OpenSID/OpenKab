@@ -3,7 +3,7 @@
 @section('title', 'Tambah Bantuan')
 
 @section('content_header')
-    <h1>Tambah Group</h1>
+    <h1>Managemen Group</h1>
 @stop
 
 @section('content')
@@ -11,7 +11,7 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <a href="{{ route('bantuan.index') }}" class="btn btn-primary btn-sm"><i class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Bantuan</a>
+                    <a href="{{ url('pengaturan/groups') }}" class="btn btn-primary btn-sm"><i class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Bantuan</a>
                 </div>
                 <form id="bantuan-form">
                     <!-- /.card-header -->
@@ -35,13 +35,11 @@
 
                                 <template x-for="(value, index) in menu">
                                     <tbody>
-
-
                                         <tr>
                                             <td><input type="checkbox" name="menu" x-model="value.selected" @input.debounce.100ms="selected(value)"></td>
                                             <td x-text="(index +1)" colspan="2" width=40 class="text-center"></td>
                                             <td x-text="value.text"></td>
-                                            <td></td>
+
                                         </tr>
 
                                         <template x-for="(submenu, index2) in value.submenu">
@@ -64,14 +62,19 @@
                     <div class="card-footer">
                         <button type="button" id="reset" class="btn btn-danger btn-sm"><i class="fas fa-times"></i>&nbsp; Batal</button>
                         <button x-on:click="simpan()" type="button" class="btn btn-primary btn-sm"><i class="fas fa-save"></i>&nbsp;
-                            Simpan</button>
+                            Simpan {{ isset($id)}}</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    @if(isset($id))
+    sdfsd
+        @include('group.edit_js', ['id' => $id])
+    @else
+        @include('group.create_js')
+    @endif
 
-    @include('group.create_js')
 
 @endsection
 

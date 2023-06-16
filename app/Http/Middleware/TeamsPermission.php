@@ -3,7 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Team;
+use App\Models\UserTeam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeamsPermission
 {
@@ -16,10 +19,8 @@ class TeamsPermission
      */
     public function handle(Request $request, Closure $next)
     {
-        if (isset(auth()->user()->team->id)) {
-            setPermissionsTeamId(auth()->user()->team->id);
-        }
-
+        $user = Auth::user()->load(['team']);
+        setPermissionsTeamId($user->getTeamId());
 
         return $next($request);
     }

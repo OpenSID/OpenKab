@@ -97,19 +97,19 @@ class User extends Authenticatable
 
     public function team()
     {
-        return $this->hasOne(UserTeam::class, 'id_user', 'id');
+        return $this->belongsToMany(
+            Team::class,
+            'user_team',
+            'id_user',
+            'id_team',
+        );
+        // return $this->hasOne(UserTeam::class, 'id_user', 'id');
     }
 
-    public function getTeamIdFromToken()
+    public function getTeamId()
     {
-        // dd($this);
-        return $this->team->id;
-
+      return $this->team()->first()->id;
     }
 
-    public function getTeamAttribute()
-    {
-        return null;
-        return $this->team->menu;
-    }
+
 }

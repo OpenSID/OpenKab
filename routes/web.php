@@ -39,11 +39,12 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
     Route::prefix('pengaturan')->group(function () {
-        Route::resource('users', UserController::class);
+        Route::middleware(['role:pengaturan-users'])->resource('users', UserController::class);
         Route::resource('identitas', IdentitasController::class)->only(['index', 'edit']);
         Route::middleware(['role:pengaturan-group'])->prefix('groups')->group(function () {
             Route::get('/', [GroupController::class, 'index']);
             Route::get('/tambah', [GroupController::class, 'create']);
+            Route::get('/edit/{id}', [GroupController::class, 'edit']);
         });
 
     });

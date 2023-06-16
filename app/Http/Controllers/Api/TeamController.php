@@ -121,11 +121,10 @@ class TeamController extends Controller
                     'guard_name' => 'web',
                 ]
             );
+
             foreach ($users as $user) {
                 $user->assignRole($role->id);
             }
-
-
 
             if (isset($main_menu['submenu'])) {
                 foreach ($main_menu['submenu'] as $sub_menu) {

@@ -36,12 +36,6 @@ class User extends Authenticatable
         'foto',
     ];
 
-     /** {@inheritdoc} */
-     protected $appends = [
-        'team'
-    ];
-
-
     /**
      * The attributes that should be hidden for serialization.
      *

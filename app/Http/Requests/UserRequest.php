@@ -36,6 +36,7 @@ class UserRequest extends FormRequest
             'password' => 'sometimes|min:8|max:32',
             'company' => 'nullable|string',
             'phone' => 'nullable|numeric|digits_between:10,13',
+            'group' =>' required|exists:App\Models\Team,id'
         ];
     }
 }

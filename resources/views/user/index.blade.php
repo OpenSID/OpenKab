@@ -24,6 +24,7 @@
                                     <th>Aksi</th>
                                     <th>Nama</th>
                                     <th>Nama Pengguna</th>
+                                    <th>Group</th>
                                     <th>Surel</th>
                                     <th>Instansi</th>
                                     <th>Nomor HP</th>
@@ -75,6 +76,10 @@
                 {
                     data: 'username',
                     name: 'username'
+                },
+                {
+                    data: 'team',
+                    name: 'team'
                 },
                 {
                     data: 'email',

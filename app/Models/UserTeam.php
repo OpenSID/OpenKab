@@ -21,7 +21,7 @@ class UserTeam extends Model
      */
     protected $fillable = [
         'id_user',
-        'id_team'
+        'id_team',
     ];
 
     public $timestamps = false;

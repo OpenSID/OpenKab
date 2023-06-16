@@ -2,11 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Models\Team;
 use App\Models\Config;
-use App\Models\User;
-use App\Models\UserTeam;
-use Illuminate\Support\Facades\Auth;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 class MenuListener

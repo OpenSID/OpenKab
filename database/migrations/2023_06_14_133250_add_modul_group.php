@@ -3,10 +3,8 @@
 use App\Enums\Modul;
 use App\Models\Team;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
@@ -18,15 +16,17 @@ return new class extends Migration
     public function up()
     {
         $team = Team::where('name', 'administrator')->first();
-        $team->menu =collect(Modul::Menu)->map(function($menu) {
+        $team->menu = collect(Modul::Menu)->map(function ($menu) {
             if (isset($menu['submenu'])) {
-                $submenu = collect($menu['submenu'])->map(function($submenu) {
+                $submenu = collect($menu['submenu'])->map(function ($submenu) {
                     $submenu['selected'] = true;
+
                     return $submenu;
                 });
                 $menu['submenu'] = $submenu;
             }
             $menu['selected'] = true;
+
             return $menu;
         });
         $team->save();
@@ -35,7 +35,7 @@ return new class extends Migration
         $role = Role::create(
             [
                 'name' => 'pengaturan-group',
-                'team_id' =>  $team->id,
+                'team_id' => $team->id,
                 'guard_name' => 'web',
             ]
         );

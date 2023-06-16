@@ -3,8 +3,8 @@
 namespace App\Http\Repository;
 
 use App\Models\Team;
-use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TeamRepository
 {
@@ -17,5 +17,4 @@ class TeamRepository
         ])
         ->allowedSorts(['name']);
     }
-
 }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Models\Enums\StatusEnum;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
 use Illuminate\Http\Request;
-use App\Models\Enums\StatusEnum;
 use Yajra\DataTables\DataTables;
-use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -81,17 +81,17 @@ class UserController extends Controller
             $data = $request->validated();
 
             $user = User::create([
-                "name" => $data['name'],
-                "username" => $data['username'],
-                "email" => $data['email'],
-                "company" => $data['company'],
-                "phone" => $data['phone'],
+                'name' => $data['name'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'company' => $data['company'],
+                'phone' => $data['phone'],
             ]);
 
             // joinkan user ke group
             UserTeam::create([
                 'id_user' => $user->id,
-                'id_team' => $data['group']
+                'id_team' => $data['group'],
             ]);
 
             // assign role berdasarkan team
@@ -103,7 +103,6 @@ class UserController extends Controller
                         $user->assignRole($submenu['role']);
                     }
                 }
-
             }
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
@@ -156,11 +155,11 @@ class UserController extends Controller
             $data = $request->validated();
 
             $user->update([
-                "name" => $data['name'],
-                "username" => $data['username'],
-                "email" => $data['email'],
-                "company" => $data['company'],
-                "phone" => $data['phone'],
+                'name' => $data['name'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'company' => $data['company'],
+                'phone' => $data['phone'],
             ]);
 
             // update user team

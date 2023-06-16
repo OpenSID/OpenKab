@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -28,7 +30,7 @@ final class Modul extends Enum
         'master-data-pengaturan',
         'pengaturan',
         'pengaturan-identitas',
-        'pengaturan-users'
+        'pengaturan-users',
     ];
 
     const Menu = [
@@ -41,7 +43,7 @@ final class Modul extends Enum
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Penduduk',
                     'url' => 'penduduk',
-                    'role' => 'penduduk'
+                    'role' => 'penduduk',
                 ],
             ],
         ],
@@ -136,5 +138,4 @@ final class Modul extends Enum
             ],
         ],
     ];
-
 }

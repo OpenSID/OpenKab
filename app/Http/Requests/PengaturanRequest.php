@@ -28,7 +28,7 @@ class PengaturanRequest extends FormRequest
 
         return [
             'warna_tema' => 'required',
-            'lock_theme' => 'required'
+            'lock_theme' => 'required',
         ];
     }
 }

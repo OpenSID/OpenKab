@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\Modul;
+use App\Http\Repository\TeamRepository;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-use App\Http\Repository\TeamRepository;
 use Symfony\Component\HttpFoundation\Response;
 
 class TeamController extends Controller
@@ -62,7 +62,6 @@ class TeamController extends Controller
         setPermissionsTeamId($team->id);
 
         foreach ($menu as $main_menu) {
-
             // buat role
             Role::create(
                 [
@@ -95,10 +94,9 @@ class TeamController extends Controller
         // ambil
 
         $users = User::with('team')
-        ->whereHas('team', function ($q) use($id) {
+        ->whereHas('team', function ($q) use ($id) {
             return $q->where('id', $id);
         })->get();
-
 
         $data = $request->all();
         Team::where('id', $id)->update([
@@ -159,18 +157,19 @@ class TeamController extends Controller
         $id = (int) $request->id;
         // cek user pada team tersebut
         $hitung_pengguna = User::with('team')
-        -> whereHas('team', function ($q) use($id) {
+        ->whereHas('team', function ($q) use ($id) {
             return $q->where('id', $id);
         })->count();
 
         if ($hitung_pengguna > 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Group tidak kosong, Silahkan kosongkan terlebih dahulu.'
+                'message' => 'Group tidak kosong, Silahkan kosongkan terlebih dahulu.',
             ], Response::HTTP_OK);
         }
 
         Team::Where('id', $id)->delete();
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);

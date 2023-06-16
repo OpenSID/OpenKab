@@ -9,21 +9,21 @@ class Team extends Model
 {
     use HasFactory;
 
-     /** {@inheritdoc} */
-     protected $table = 'team';
+    /** {@inheritdoc} */
+    protected $table = 'team';
 
-      /**
+    /**
      * The fillable with the model.
      *
      * @var array
      */
     protected $fillable = [
-         'name',
-         'menu'
+        'name',
+        'menu',
     ];
 
-     /** {@inheritdoc} */
-     protected $casts = [
+    /** {@inheritdoc} */
+    protected $casts = [
         'menu' => 'json',
     ];
 }

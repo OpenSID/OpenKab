@@ -18,7 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasRoles;
 
-    protected $guard  = 'web';
+    protected $guard = 'web';
 
     /**
      * The attributes that are mass assignable.
@@ -102,8 +102,6 @@ class User extends Authenticatable
 
     public function getTeamId()
     {
-      return $this->team()->first()->id;
+        return $this->team()->first()->id;
     }
-
-
 }

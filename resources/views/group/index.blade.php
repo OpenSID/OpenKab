@@ -14,7 +14,7 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <a x-bind:href="'{{ url('pengaturan/groups/tambah') }}'">
-                        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus"></i> Tambah </button>
+                        <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah </button>
                     </a>
                 </div>
 
@@ -71,48 +71,68 @@
                         .then(res => res.json())
                         .then(response => {
                             this.dataGroups = response.data;
-                            console.log(this.dataGroups);
                         });
                 },
 
                 hapus(id) {
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{ url('api/v1/pengaturan/group/delete') }}',
-                        data: {
-                            id: id
-                        },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success == true) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Data berhasil ditambahkan',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                                window.location.replace("{{ url('pengaturan/groups') }}");
-                            } else {
-                                Swal.fire(
-                                    'Error!',
-                                    response.message,
-                                    'error'
-                                )
-                            }
-                        },
-                        error: function(xhr, ajaxOptions, thrownError) {
-                            console.log('erer')
-                            Swal.fire(
-                                'Error!  ' + xhr.status,
-                                JSON.parse(xhr.responseText).message,
-                                'error'
-                            )
 
+                    Swal.fire({
+                        title: 'Hapus group',
+                        text: "Data yang dihapus tidak bisa dikembalikan. Yakin untuk menghapus?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Hapus',
+                        cancelButtonText: 'Batal'
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Menyimpan',
+                                didOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            })
+                            $.ajax({
+                                type: "POST",
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                url: '{{ url('api/v1/pengaturan/group/delete') }}',
+                                data: {
+                                    id: id
+                                },
+                                dataType: "json",
+                                success: function(response) {
+                                    if (response.success == true) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Data berhasil dihapus',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        })
+                                        window.location.replace("{{ url('pengaturan/groups') }}");
+                                    } else {
+                                        Swal.fire(
+                                            'Error!',
+                                            response.message,
+                                            'error'
+                                        )
+                                    }
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    Swal.fire(
+                                        'Error!  ' + xhr.status,
+                                        JSON.parse(xhr.responseText).message,
+                                        'error'
+                                    )
+
+                                }
+                            });
                         }
-                    });
+                    })
+                    return;
+
                 }
             }
         }

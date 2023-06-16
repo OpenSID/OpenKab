@@ -170,9 +170,7 @@ class TeamController extends Controller
             ], Response::HTTP_OK);
         }
 
-        dd ($hitung_pengguna);
-
-        // Team::Where('id', $id)->delete();
+        Team::Where('id', $id)->delete();
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);

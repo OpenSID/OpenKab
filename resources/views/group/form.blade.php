@@ -62,14 +62,13 @@
                     <div class="card-footer">
                         <button type="button" id="reset" class="btn btn-danger btn-sm"><i class="fas fa-times"></i>&nbsp; Batal</button>
                         <button x-on:click="simpan()" type="button" class="btn btn-primary btn-sm"><i class="fas fa-save"></i>&nbsp;
-                            Simpan {{ isset($id)}}</button>
+                            Simpan </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     @if(isset($id))
-    sdfsd
         @include('group.edit_js', ['id' => $id])
     @else
         @include('group.create_js')

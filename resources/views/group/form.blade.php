@@ -48,7 +48,7 @@
                                                 <td width=20></td>
                                                 <td x-text="(index+1)+ '.' + (index2+1)"  width=20 class="text-center"></td>
                                                 <td x-text="submenu.text" class="ps-5" style="padding-left: 50px;"></td>
-                                                <td></td>
+
                                             <tr>
                                         </template>
                                     </tbody>

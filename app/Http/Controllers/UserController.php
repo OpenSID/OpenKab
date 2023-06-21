@@ -80,14 +80,13 @@ class UserController extends Controller
         try {
             $data = $request->validated();
 
-
             $user = User::create([
                 'name' => $data['name'],
                 'username' => $data['username'],
                 'email' => $data['email'],
                 'company' => $data['company'],
                 'phone' => $data['phone'],
-                'password' => bcrypt($data['password']),
+                'password' => $data['password'],
                 'active' => 1
             ]);
 

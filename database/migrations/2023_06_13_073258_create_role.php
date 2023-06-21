@@ -1,15 +1,11 @@
 <?php
 
-
 use App\Enums\Modul;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
@@ -22,11 +18,11 @@ return new class extends Migration
     {
         $team = Team::create([
             'name' => 'administrator',
-            'menu' => Modul::Menu
+            'menu' => Modul::Menu,
         ]);
         setPermissionsTeamId($team->id);
 
-        $user = User::where('name', 'admin')->first();
+        $user = User::where('username', 'admin')->first();
         $user->guard_name = 'web';
 
         UserTeam::create([
@@ -38,7 +34,7 @@ return new class extends Migration
             $role = Role::create(
                 [
                     'name' => $value,
-                    'team_id' =>  $team->id,
+                    'team_id' => $team->id,
                     'guard_name' => 'web',
                 ]
             );
@@ -53,6 +49,5 @@ return new class extends Migration
      */
     public function down()
     {
-
     }
 };

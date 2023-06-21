@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\Modul;
 use App\Http\Repository\TeamRepository;
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +37,7 @@ class TeamController extends Controller
         foreach ($data['menu'] as $menu1) {
             Role::create(
                 [
-                    'name' => $menu1['rule'],
+                    'name' => $menu1['role'],
                     'team_id' => $team->id,
                     'guard_name' => 'web',
                 ]
@@ -64,26 +65,40 @@ class TeamController extends Controller
             // buat role
             Role::create(
                 [
-                    'name' => $main_menu->rule,
-                    'team_id' => $team->id,
+                    'name' => $main_menu['role'],
+                    'team_id' => $team['id'],
                     'guard_name' => 'web',
                 ]
             );
 
-            foreach ($main_menu->sub_menu as $sub_menu) {
-                Role::create(
-                    [
-                        'name' => $sub_menu->rule,
-                        'team_id' => $team->id,
-                        'guard_name' => 'web',
-                    ]
-                );
+            if (isset($main_menu['submenu'])) {
+                foreach ($main_menu['submenu'] as $sub_menu) {
+
+                    Role::create(
+                        [
+                            'name' => $sub_menu['role'],
+                            'team_id' => $team['id'],
+                            'guard_name' => 'web',
+                        ]
+                    );
+                }
             }
         }
+
+        return response()->json([
+            'success' => true,
+        ], Response::HTTP_OK);
     }
 
     public function update(Request $request, $id)
     {
+        // ambil
+
+        $users = User::with('team')
+        ->whereHas('team', function ($q) use ($id) {
+            return $q->where('id', $id);
+        })->get();
+
         $data = $request->all();
         Team::where('id', $id)->update([
             'name' => $data['name'],
@@ -91,28 +106,44 @@ class TeamController extends Controller
         ]);
 
         // hapus role
-        Role::where('id', $id)->delete();
+        Role::where('team_id', $id)->delete();
+
+        // set team
+        setPermissionsTeamId($id);
 
         foreach ($data['menu'] as $main_menu) {
             // buat role
-            Role::create(
+            $role = Role::create(
                 [
-                    'name' => $main_menu->rule,
+                    'name' => $main_menu['role'],
                     'team_id' => $id,
                     'guard_name' => 'web',
                 ]
             );
 
-            foreach ($main_menu->sub_menu as $sub_menu) {
-                Role::create(
-                    [
-                        'name' => $sub_menu->rule,
-                        'team_id' => $id,
-                        'guard_name' => 'web',
-                    ]
-                );
+            foreach ($users as $user) {
+                $user->assignRole($role->id);
+            }
+
+            if (isset($main_menu['submenu'])) {
+                foreach ($main_menu['submenu'] as $sub_menu) {
+                    $role = Role::create(
+                        [
+                            'name' => $sub_menu['role'],
+                            'team_id' => $id,
+                            'guard_name' => 'web',
+                        ]
+                    );
+                    foreach ($users as $user) {
+                        $user->assignRole($role->id);
+                    }
+                }
             }
         }
+
+        return response()->json([
+            'success' => true,
+        ], Response::HTTP_OK);
     }
 
     public function show($id)
@@ -125,7 +156,21 @@ class TeamController extends Controller
     public function delete(Request $request)
     {
         $id = (int) $request->id;
+        // cek user pada team tersebut
+        $hitung_pengguna = User::with('team')
+        ->whereHas('team', function ($q) use ($id) {
+            return $q->where('id', $id);
+        })->count();
+
+        if ($hitung_pengguna > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Group tidak kosong, Silahkan kosongkan terlebih dahulu.',
+            ], Response::HTTP_OK);
+        }
+
         Team::Where('id', $id)->delete();
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);

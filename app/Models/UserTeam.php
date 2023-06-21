@@ -9,21 +9,20 @@ class UserTeam extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_user';
 
-     /** {@inheritdoc} */
-     protected $table = 'user_team';
+    /** {@inheritdoc} */
+    protected $table = 'user_team';
 
-     /**
+    /**
      * The fillable with the model.
      *
      * @var array
      */
     protected $fillable = [
         'id_user',
-        'id_team'
-   ];
+        'id_team',
+    ];
 
-   public $timestamps = false;
-
-
+    public $timestamps = false;
 }

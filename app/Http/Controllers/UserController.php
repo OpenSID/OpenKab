@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\Enums\StatusEnum;
+use App\Models\Team;
 use App\Models\User;
+use App\Models\UserTeam;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -23,7 +25,7 @@ class UserController extends Controller
     public function getUsers(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(User::get())
+            return DataTables::of(User::with('team')->get())
                 ->addIndexColumn()
                 ->addColumn('aksi', function ($row) {
                     if (! auth()->guest()) {
@@ -60,8 +62,10 @@ class UserController extends Controller
     public function create()
     {
         $user = null;
+        $groups = Team::get();
+        $team = false;
 
-        return view('user.create', compact('user'));
+        return view('user.create', compact('user', 'groups', 'team'));
     }
 
     /**
@@ -74,7 +78,34 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try {
-            User::create($request->validated());
+            $data = $request->validated();
+
+            $user = User::create([
+                'name' => $data['name'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'company' => $data['company'],
+                'phone' => $data['phone'],
+                'password' => $data['password'],
+                'active' => 1
+            ]);
+
+            // joinkan user ke group
+            UserTeam::create([
+                'id_user' => $user->id,
+                'id_team' => $data['group'],
+            ]);
+
+            // assign role berdasarkan team
+            setPermissionsTeamId($request['group']);
+            foreach ($user->team->first()->menu as $menu) {
+                $user->assignRole($menu['role']);
+                if (isset($menu['submenu'])) {
+                    foreach ($menu['submenu'] as $submenu) {
+                        $user->assignRole($submenu['role']);
+                    }
+                }
+            }
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -103,9 +134,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
-        return view('user.edit', compact('user'));
+        $user = User::with('team')->where('id', $id)->first();
+        $groups = Team::get();
+        $team = $user->team->first()->id ?? false;
+
+        return view('user.edit', compact('user', 'groups', 'team'));
     }
 
     /**
@@ -119,10 +154,38 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         try {
-            $user->update($request->validated());
+            $data = $request->validated();
+
+            $user->update([
+                'name' => $data['name'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'company' => $data['company'],
+                'phone' => $data['phone'],
+            ]);
+
+            // update user team
+            $user_team = UserTeam::find($user->id);
+            setPermissionsTeamId($user_team->id_team);
+            $user->roles()->detach();
+            $user_team->id_team = $data['group'];
+            $user_team->save();
+
+            setPermissionsTeamId($request['group']);
+            // assign role berdasarkan team
+
+            foreach ($user->team->first()->menu as $menu) {
+                $user->assignRole($menu['role']);
+                if (isset($menu['submenu'])) {
+                    foreach ($menu['submenu'] as $submenu) {
+                        $user->assignRole($submenu['role']);
+                    }
+                }
+            }
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {
+
             report($e);
 
             return back()->withInput()->with('error', $e->getMessage());

@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\PermissionRegistrar;
 
 class AddTeamsFields extends Migration
@@ -60,7 +60,7 @@ class AddTeamsFields extends Migration
 
         if (! Schema::hasColumn($tableNames['model_has_roles'], $columnNames['team_foreign_key'])) {
             Schema::table($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames) {
-                $table->unsignedBigInteger($columnNames['team_foreign_key'])->default('1');;
+                $table->unsignedBigInteger($columnNames['team_foreign_key'])->default('1');
                 $table->index($columnNames['team_foreign_key'], 'model_has_roles_team_foreign_key_index');
 
                 if (DB::getDriverName() !== 'sqlite') {
@@ -89,6 +89,5 @@ class AddTeamsFields extends Migration
      */
     public function down()
     {
-
     }
 }

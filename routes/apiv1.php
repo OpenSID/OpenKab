@@ -151,8 +151,8 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
                 Route::get('/show/{id}', 'show');
                 Route::post('/delete', 'delete');
                 Route::post('/', 'store');
+                Route::put('/{id}', 'update');
                 Route::get('/menu', 'menu');
-
             });
         });
 });

@@ -18,7 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasRoles;
 
-    protected $guard  = 'web';
+    protected $guard = 'web';
 
     /**
      * The attributes that are mass assignable.
@@ -35,12 +35,6 @@ class User extends Authenticatable
         'phone',
         'foto',
     ];
-
-     /** {@inheritdoc} */
-     protected $appends = [
-        'team',
-    ];
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -97,12 +91,17 @@ class User extends Authenticatable
 
     public function team()
     {
-        return $this->hasOne(Team::class, 'id', 'id');
+        return $this->belongsToMany(
+            Team::class,
+            'user_team',
+            'id_user',
+            'id_team',
+        );
+        // return $this->hasOne(UserTeam::class, 'id_user', 'id');
     }
 
-    public function getTeamIdFromToken()
+    public function getTeamId()
     {
-        return $this->team->id;
-
+        return $this->team()->first()->id;
     }
 }

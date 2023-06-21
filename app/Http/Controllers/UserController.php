@@ -80,12 +80,15 @@ class UserController extends Controller
         try {
             $data = $request->validated();
 
+
             $user = User::create([
                 'name' => $data['name'],
                 'username' => $data['username'],
                 'email' => $data['email'],
                 'company' => $data['company'],
                 'phone' => $data['phone'],
+                'password' => bcrypt($data['password']),
+                'active' => 1
             ]);
 
             // joinkan user ke group
@@ -107,6 +110,7 @@ class UserController extends Controller
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
         } catch (\Exception $e) {
+            dd($e);
             report($e);
 
             return back()->withInput()->with('error', $e->getMessage());

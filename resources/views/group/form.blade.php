@@ -39,7 +39,6 @@
                                             <td><input type="checkbox" name="menu" x-model="value.selected" @input.debounce.100ms="selected(value)"></td>
                                             <td x-text="(index +1)" colspan="2" width=40 class="text-center"></td>
                                             <td x-text="value.text"></td>
-
                                         </tr>
 
                                         <template x-for="(submenu, index2) in value.submenu">
@@ -48,15 +47,12 @@
                                                 <td width=20></td>
                                                 <td x-text="(index+1)+ '.' + (index2+1)"  width=20 class="text-center"></td>
                                                 <td x-text="submenu.text" class="ps-5" style="padding-left: 50px;"></td>
-
                                             <tr>
                                         </template>
                                     </tbody>
                                 </template>
                             </table>
                         </div>
-
-
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">

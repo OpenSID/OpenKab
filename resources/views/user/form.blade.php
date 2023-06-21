@@ -23,7 +23,7 @@
         <label for="group">Group<span class="text-danger">*</span></label>
         <select class="form-control @error('group') is-invalid @enderror" name="group" required>
             @foreach ($groups as $group)
-                <option value="{{ $group->id }}" @selected($group->id == $team )>{{ $group->name }}</option>
+                <option value="{{ $group->id }}" @selected($group->id == old('group', $user->group ?? $team)  )>{{ $group->name }}</option>
             @endforeach
         </select>
         @error('group')

@@ -7,16 +7,20 @@
                 return _.map(arr1, function(item) {
                     criteria[key] = item[key];
                     let find = _.find(arr2, criteria)
+                    console.log(find)
                     if (find) {
-                        find.selected = true;
+                        item.selected = true;
                         if (find.submenu != undefined) {
-                            let submenu = _.map(find.submenu, function (submenu) {
-                                submenu.selected = true;
-                                return submenu
+                            var merged = _.merge(_.keyBy(item.submenu, 'role'), _.keyBy(find.submenu, 'role'));
+                            let submenu = _.values(merged);
+                            let submenu_selected = _.map(submenu, function (value) {
+                                if (value.selected == 'true') {
+                                    value.selected = true;
+                                }
+                                return value
                             })
-                            find.submenu= submenu
+                            item.submenu= submenu_selected
                         }
-                        return find;
                     }
                     return item;
                 });
@@ -52,7 +56,7 @@
                     });
             },
             simpan() {
-                let menu = _.chain(this.menu).filter(function(menu) {
+                let menu = _.chain(this.menu).map(function(menu) {
                     if (menu.submenu && menu.selected) {
                         let submenu = _.chain(menu.submenu).filter(function(_submenu) {
                             if (_submenu.selected) {
@@ -60,13 +64,22 @@
                             }
                         }).value();
                         if (submenu.length > 0) {
-                            return submenu;
+                            menu.submenu = submenu
                         }
-
-                    } else if (menu.selected) {
+                    }
+                    return menu;
+                }).filter(function(menu) {
+                    if (menu.submenu  && menu.submenu.length > 0 && menu.selected) {
                         return menu
+                        if (submenu.length > 0) {
+                            menu.submenu = submenu
+                            return menu.selected = false
+                        }
+                    } else if (menu.selected) {
+                        return menu;
                     }
                 }).value()
+
                 this.dataGroup.menu = menu;
                 Swal.fire({
                     title: 'Menyimpan',

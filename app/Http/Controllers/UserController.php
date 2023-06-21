@@ -109,7 +109,6 @@ class UserController extends Controller
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
         } catch (\Exception $e) {
-            dd($e);
             report($e);
 
             return back()->withInput()->with('error', $e->getMessage());
@@ -186,6 +185,7 @@ class UserController extends Controller
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {
+
             report($e);
 
             return back()->withInput()->with('error', $e->getMessage());

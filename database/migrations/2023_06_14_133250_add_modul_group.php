@@ -32,7 +32,7 @@ return new class extends Migration
         $team->save();
 
         // add role ke admin
-        $role = Role::create(
+        $role = Role::firstOrCreate(
             [
                 'name' => 'pengaturan-group',
                 'team_id' => $team->id,

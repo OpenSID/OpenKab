@@ -10,16 +10,28 @@
                     console.log(find)
                     if (find) {
                         item.selected = true;
+                        _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
+                            if (find[find.role + '-' + value] == 'true') {
+                                item[item.role + '-' + value] = true;
+                            }
+                        })
+
                         if (find.submenu != undefined) {
+
                             var merged = _.merge(_.keyBy(item.submenu, 'role'), _.keyBy(find.submenu, 'role'));
                             let submenu = _.values(merged);
-                            let submenu_selected = _.map(submenu, function (value) {
+                            let submenu_selected = _.map(submenu, function(value) {
+                                _.forEach(['read', 'write', 'edit', 'delete'], function(permision) {
+                                    if (value[value.role + '-' + permision] == 'true') {
+                                        value[value.role + '-' + permision] = true;
+                                    }
+                                })
                                 if (value.selected == 'true') {
                                     value.selected = true;
                                 }
                                 return value
                             })
-                            item.submenu= submenu_selected
+                            item.submenu = submenu_selected
                         }
                     }
                     return item;
@@ -69,7 +81,7 @@
                     }
                     return menu;
                 }).filter(function(menu) {
-                    if (menu.submenu  && menu.submenu.length > 0 && menu.selected) {
+                    if (menu.submenu && menu.submenu.length > 0 && menu.selected) {
                         return menu
                         if (submenu.length > 0) {
                             menu.submenu = submenu
@@ -126,23 +138,39 @@
                 });
             },
             selected(data) {
+                _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
+                    data[data.role + '-' + value] = data.selected;
+                })
                 if (data.submenu) {
-                    data.submenu = _.chain(data.submenu).map(function(value) {
-                        value.selected = data.selected;
-                        return value;
+                    data.submenu = _.chain(data.submenu).map(function(submenu) {
+                        _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
+                            submenu[submenu.role + '-' + value] = data.selected;
+                        })
+                        submenu.selected = data.selected;
+                        return submenu;
                     }).value();
                 }
             },
             selected_sub(data) {
                 let selected = _.chain(data.submenu).filter(function(menu) {
+                    _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
+                        menu[menu.role + '-' + value] = menu.selected;
+                    })
                     if (menu.selected) {
 
                         return menu
                     }
                 }).value();
                 if (selected.length == 0) {
+                    _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
+                        data[data.role + '-' + value] = false;
+                    })
                     data.selected = false;
                 } else {
+                    _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
+                        data[data.role + '-' + value] = true;
+                    })
+
                     data.selected = true;
                 }
             }

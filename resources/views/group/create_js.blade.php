@@ -18,9 +18,9 @@
                     });
             },
             simpan() {
-                let menu = _.chain(this.menu).filter(function (menu) {
+                let menu = _.chain(this.menu).filter(function(menu) {
                     if (menu.submenu && menu.selected) {
-                        let submenu = _.chain(menu.submenu).filter(function (_submenu) {
+                        let submenu = _.chain(menu.submenu).filter(function(_submenu) {
                             if (_submenu.selected) {
                                 return _submenu;
                             }
@@ -29,7 +29,7 @@
                             return submenu;
                         }
 
-                    }else if(menu.selected) {
+                    } else if (menu.selected) {
                         return menu
                     }
                 }).value()
@@ -68,7 +68,6 @@
                         }
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
-                        console.log('erer')
                         Swal.fire(
                             'Error!  ' + xhr.status,
                             JSON.parse(xhr.responseText).message,
@@ -78,24 +77,29 @@
                     }
                 });
             },
-            selected(data){
+            selected(data) {
+                _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
+                    data[data.role + '-' + value] = data.selected;
+                })
                 if (data.submenu) {
-                    data.submenu = _.chain(data.submenu).map(function (value) {
-                        value.selected = data.selected;
-                        return value;
+                    data.submenu = _.chain(data.submenu).map(function(submenu) {
+                        _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
+                            submenu[submenu.role + '-' + value] = data.selected;
+                        })
+                        submenu.selected = data.selected;
+                        return submenu;
                     }).value();
                 }
             },
             selected_sub(data) {
-                let selected = _.chain(data.submenu).filter(function (menu) {
+                let selected = _.chain(data.submenu).filter(function(menu) {
                     if (menu.selected) {
-
                         return menu
                     }
                 }).value();
-                if (selected.length == 0 ) {
+                if (selected.length == 0) {
                     data.selected = false;
-                }else{
+                } else {
                     data.selected = true;
                 }
 

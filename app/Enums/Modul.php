@@ -13,24 +13,8 @@ use BenSampo\Enum\Enum;
  */
 final class Modul extends Enum
 {
-    const Data = [
-        'wilayah',
-        'kependudukan',
-        'penduduk',
-        'dokumen',
-        'bantuan',
-        'statistik',
-        'statistik-penduduk',
-        'statistik-keluarga',
-        'statistik-rtm',
-        'statistik-bantuan',
-        'master-data',
-        'master-data-bantuan',
-        'master-data-artikel',
-        'master-data-pengaturan',
-        'pengaturan',
-        'pengaturan-identitas',
-        'pengaturan-users',
+    const permision = [
+        'read', 'write', 'edit', 'delete'
     ];
 
     const Menu = [

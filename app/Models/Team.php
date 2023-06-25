@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Models\Role;
 
 class Team extends Model
 {
@@ -26,4 +28,9 @@ class Team extends Model
     protected $casts = [
         'menu' => 'json',
     ];
+
+    public function role(): HasMany
+    {
+        return $this->hasMany(Role::class, 'team_id', 'id');
+    }
 }

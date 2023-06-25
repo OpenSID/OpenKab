@@ -30,15 +30,29 @@ return new class extends Migration
             'id_team' => $team->id,
         ]);
 
-        foreach (Modul::Data as $value) {
-            $role = Role::create(
+        foreach (Modul::Menu as $main_menu) {
+            // buat role
+            $role= Role::create(
                 [
-                    'name' => $value,
+                    'name' => $main_menu['role'],
                     'team_id' => $team->id,
                     'guard_name' => 'web',
                 ]
             );
             $user->assignRole($role->id);
+
+            if (isset($main_menu['submenu'])) {
+                foreach ($main_menu['submenu'] as $sub_menu) {
+                    $role = Role::create(
+                        [
+                            'name' => $sub_menu['role'],
+                            'team_id' => $team->id,
+                            'guard_name' => 'web',
+                        ]
+                    );
+                    $user->assignRole($role->id);
+                }
+            }
         }
     }
 

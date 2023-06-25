@@ -14,7 +14,7 @@ use BenSampo\Enum\Enum;
 final class Modul extends Enum
 {
     const permision = [
-        'read', 'write', 'edit', 'delete'
+        'read', 'write', 'edit', 'delete',
     ];
 
     const Menu = [

@@ -32,7 +32,7 @@ return new class extends Migration
 
         foreach (Modul::Menu as $main_menu) {
             // buat role
-            $role= Role::create(
+            $role = Role::create(
                 [
                     'name' => $main_menu['role'],
                     'team_id' => $team->id,

@@ -36,15 +36,15 @@ Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::get('/', [DasborController::class, 'index'])->name('dasbor');
 
-    Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
-    Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
+    Route::middleware(['role:pengaturan-users','permission:pengaturan-users-read'])->get('users/list', [UserController::class, 'getUsers'])->name('users.list');
+    Route::middleware(['role:pengaturan-users','permission:pengaturan-users-edit'])->get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
     Route::prefix('pengaturan')->group(function () {
-        Route::middleware(['role:pengaturan-users'])->resource('users', UserController::class);
-        Route::middleware(['role:pengaturan-identitas'])->resource('identitas', IdentitasController::class)->only(['index', 'edit']);
-        Route::middleware(['role:pengaturan-group'])->prefix('groups')->group(function () {
+        Route::middleware(['role:pengaturan-users','permission:pengaturan-users-read'])->resource('users', UserController::class);
+        Route::middleware(['role:pengaturan-identitas', 'permission:pengaturan-identitas-read'])->resource('identitas', IdentitasController::class)->only(['index', 'edit']);
+        Route::middleware(['role:pengaturan-group', 'permission:pengaturan-group-read'])->prefix('groups')->group(function () {
             Route::get('/', [GroupController::class, 'index']);
-            Route::get('/tambah', [GroupController::class, 'create']);
-            Route::get('/edit/{id}', [GroupController::class, 'edit']);
+            Route::middleware(['permission:pengaturan-group-create'])->get('/tambah', [GroupController::class, 'create']);
+            Route::middleware(['permission:pengaturan-group-edit'])->get('/edit/{id}', [GroupController::class, 'edit']);
         });
 
     });
@@ -69,19 +69,19 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
     });
 
     // Penduduk
-    Route::middleware(['role:penduduk'])->get('penduduk/cetak', [PendudukController::class, 'cetak']);
-    Route::middleware(['role:penduduk'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah']);
-    Route::middleware(['role:penduduk'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
+    Route::middleware(['role:penduduk', 'permission:penduduk-read'])->get('penduduk/cetak', [PendudukController::class, 'cetak']);
+    Route::middleware(['role:penduduk', 'permission:penduduk-edit'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah']);
+    Route::middleware(['role:penduduk', 'permission:penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
     // Keluarga
     Route::middleware(['role:penduduk'])->controller(KeluargaController::class)
         ->prefix('keluarga')
         ->group(function () {
-            Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
+            Route::middleware(['permission:penduduk-read'])->get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
     // Bantuan
-    Route::middleware(['role:bantuan'])->controller(BantuanController::class)
+    Route::middleware(['role:bantuan', 'permission:bantuan-read'])->controller(BantuanController::class)
         ->prefix('bantuan')
         ->group(function () {
             Route::get('/', 'index');
@@ -90,24 +90,24 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
         });
 
     // Statistik
-    Route::middleware(['role:statistik'])->controller(StatistikController::class)
+    Route::middleware(['role:statistik', 'permission:statistik-read'])->controller(StatistikController::class)
         ->prefix('statistik')
         ->group(function () {
-            Route::middleware(['role:statistik-penduduk'])->get('/penduduk', 'penduduk');
-            Route::middleware(['role:statistik-keluarga'])->get('/keluarga', 'keluarga');
-            Route::middleware(['role:statistik-rtm'])->get('/rtm', 'rtm');
-            Route::middleware(['role:statistik-bantuan'])->get('/bantuan', 'bantuan');
+            Route::middleware(['role:statistik-penduduk', 'permission:statistik-penduduk-read'])->get('/penduduk', 'penduduk');
+            Route::middleware(['role:statistik-keluarga', 'permission:statistik-keluarga-read'])->get('/keluarga', 'keluarga');
+            Route::middleware(['role:statistik-rtm', 'permission:statistik-rtm-read'])->get('/rtm', 'rtm');
+            Route::middleware(['role:statistik-bantuan', 'permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan');
             Route::middleware(['role:statistik'])->get('/cetak/{kategori}/{id}', 'cetak');
         });
 
     // Master Data
-    Route::middleware(['role:master-data'])->controller(AdminWebController::class)
+    Route::middleware(['role:master-data', 'permission:master-data-read'])->controller(AdminWebController::class)
         ->prefix('master')
         ->group(function () {
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/{parrent}', 'kategori_index');
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit');
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/tambah/{parrent}', 'kategori_create');
-            Route::middleware(['role:master-data-pengaturan'])->get('/pengaturan', 'pengaturan_index');
-            Route::middleware(['role:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/{parrent}', 'kategori_index');
+            Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit');
+            Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/tambah/{parrent}', 'kategori_create');
+            Route::middleware(['role:master-data-pengaturan', 'permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index');
+            Route::middleware(['role:master-data-bantuan', 'permission:master-data-artikel-read'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });

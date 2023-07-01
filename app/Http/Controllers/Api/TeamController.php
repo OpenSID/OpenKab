@@ -73,7 +73,6 @@ class TeamController extends Controller
 
             if (isset($main_menu['submenu'])) {
                 foreach ($main_menu['submenu'] as $sub_menu) {
-
                     Role::create(
                         [
                             'name' => $sub_menu['role'],

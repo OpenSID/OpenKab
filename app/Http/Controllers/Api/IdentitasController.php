@@ -7,7 +7,6 @@ use App\Http\Requests\IdentitasRequest;
 use App\Http\Requests\UploadImageRequest;
 use App\Http\Transformers\IdentitasTransformer;
 use App\Models\Identitas;
-use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\Response;
 

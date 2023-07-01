@@ -87,7 +87,7 @@ class UserController extends Controller
                 'company' => $data['company'],
                 'phone' => $data['phone'],
                 'password' => $data['password'],
-                'active' => 1
+                'active' => 1,
             ]);
 
             // joinkan user ke group
@@ -185,7 +185,6 @@ class UserController extends Controller
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {
-
             report($e);
 
             return back()->withInput()->with('error', $e->getMessage());

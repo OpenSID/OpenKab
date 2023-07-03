@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Traits\ConfigIdTrait;
-use Illuminate\Database\Eloquent\Model;
 
 class Umur extends BaseModel
 {

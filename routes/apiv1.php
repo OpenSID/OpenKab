@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
+use App\Http\Controllers\Api\TeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ use App\Http\Controllers\Api\BantuanKabupatenController;
 Route::post('/signin', [AuthController::class,'login']);
 Route::get('/identitas', [IdentitasController::class,'index']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
     Route::post('/logout', [AuthController::class,'logOut']);
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -42,14 +43,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Wilayah
-    Route::prefix('wilayah')->group(function () {
+    Route::prefix('wilayah')->middleware(['role:wilayah'])->group(function () {
         Route::get('desa', [WilayahController::class, 'desa']);
         Route::get('dusun', [WilayahController::class, 'dusun']);
         Route::get('rw', [WilayahController::class, 'rw']);
         Route::get('rt', [WilayahController::class, 'rt']);
     });
 
-    Route::prefix('penduduk')->group(function () {
+    Route::prefix('penduduk')->middleware(['role:penduduk'])->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 
         // Referensi
@@ -65,7 +66,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Dokumen
-    Route::prefix('dokumen')->group(function () {
+    Route::prefix('dokumen')->middleware(['role:penduduk'])->group(function () {
         Route::get('/', DokumenController::class);
     });
 
@@ -143,5 +144,15 @@ Route::middleware('auth:sanctum')->group(function () {
         ->prefix('pengaturan')->group(function () {
             Route::get('/', 'index')->name('api.pengaturan_aplikasi');
             Route::post('/update', 'update');
+
+            Route::controller(TeamController::class)
+            ->prefix('group')->group(function () {
+                Route::get('/', 'index');
+                Route::get('/show/{id}', 'show');
+                Route::post('/delete', 'delete');
+                Route::post('/', 'store');
+                Route::put('/{id}', 'update');
+                Route::get('/menu', 'menu');
+            });
         });
 });

@@ -329,88 +329,7 @@ return [
             'icon' => 'fas fa-home',
             'url' => '/',
         ],
-        [
-            'text' => 'Kependudukan',
-            'icon' => 'fa fa-users',
-            'submenu' => [
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Penduduk',
-                    'url' => 'penduduk',
-                ],
-            ],
-        ],
-        [
-            'text' => 'Statistik',
-            'icon' => 'fas fa-chart-pie',
-            'submenu' => [
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Penduduk',
-                    'url' => 'statistik/penduduk',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Keluarga',
-                    'url' => 'statistik/keluarga',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'RTM',
-                    'url' => 'statistik/rtm',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Bantuan',
-                    'url' => 'statistik/bantuan',
-                ],
 
-            ],
-        ],
-        [
-            'text' => 'Bantuan',
-            'icon' => 'fas fa-handshake',
-            'url' => 'bantuan',
-        ],
-
-        [
-            'text' => 'Master Data',
-            'icon' => 'fa fa-tags',
-            'submenu' => [
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Bantuan',
-                    'url' => 'master/bantuan',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Kategori Artikel',
-                    'url' => 'master/kategori/0',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Pengaturan Aplikasi',
-                    'url' => 'master/pengaturan',
-                ],
-            ],
-        ],
-
-        [
-            'text' => 'Pengaturan',
-            'icon' => 'fa fa-cog',
-            'submenu' => [
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Identitas',
-                    'url' => 'pengaturan/identitas',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Pengguna',
-                    'url' => 'pengaturan/users',
-                ],
-            ],
-        ],
     ],
 
     /*
@@ -572,6 +491,17 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js',
+                ],
+            ],
+        ],
+
+        'Lodash' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js',
                 ],
             ],
         ],

@@ -147,7 +147,7 @@ class TeamController extends Controller
 
     public function show($id)
     {
-        return $this->fractal($this->team->listTeam()->where('id', $id)->first(), function ($team) {
+        return $this->fractal($this->team->listTeam()->with(['role', 'role.permissions'])->where('id', $id)->first(), function ($team) {
             return $team->toArray();
         }, 'team')->respond();
     }

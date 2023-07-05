@@ -12,7 +12,7 @@
 @section('content')
     <x-adminlte-callout theme="warning">
         Selamat datang <b>{{ Auth::user()->username ?? '' }}</b> di Dasbor Utama
-        <b>{{ config('app.namaAplikasi') . ' ' . config('app.sebutanKab') . ' ' . config('app.namaKab') }}</b>.
+        <b>{{ ucwords(strtolower($data['nama_aplikasi']))  . ' ' . ucwords(strtolower($data['nama_kabupaten'])) }}</b>.
     </x-adminlte-callout>
 
     <div class="row">

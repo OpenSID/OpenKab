@@ -21,12 +21,12 @@
                 icon-theme="blue" />
         </a>
 
-        <a href="{{ url('keluarga') }}" class="unlink  col-12 col-sm-6 col-md-3">
+        <a href="#" class="unlink  col-12 col-sm-6 col-md-3">
             <x-adminlte-info-box id="keluarga" title="Keluarga" text="2991" icon="fas fa-lg fa-users"
                 icon-theme="red" />
         </a>
 
-        <a href="{{ url('rtm') }}" class="unlink  col-12 col-sm-6 col-md-3">
+        <a href="#" class="unlink  col-12 col-sm-6 col-md-3">
             <x-adminlte-info-box id="rtm" title="RTM" text="221" icon="fas fa-lg fa-home" icon-theme="green" />
         </a>
 

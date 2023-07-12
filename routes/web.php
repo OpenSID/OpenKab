@@ -43,7 +43,7 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
         Route::middleware(['role:pengaturan-identitas', 'permission:pengaturan-identitas-read'])->resource('identitas', IdentitasController::class)->only(['index', 'edit']);
         Route::middleware(['role:pengaturan-group', 'permission:pengaturan-group-read'])->prefix('groups')->group(function () {
             Route::get('/', [GroupController::class, 'index']);
-            Route::middleware(['permission:pengaturan-group-create'])->get('/tambah', [GroupController::class, 'create']);
+            Route::middleware(['permission:pengaturan-group-write'])->get('/tambah', [GroupController::class, 'create']);
             Route::middleware(['permission:pengaturan-group-edit'])->get('/edit/{id}', [GroupController::class, 'edit']);
         });
 

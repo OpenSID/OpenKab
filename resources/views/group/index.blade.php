@@ -1,9 +1,9 @@
 @extends('layouts.index')
 
-@section('title', 'Identitas OpenKab')
+@section('title', $nama_aplikasi)
 
 @section('content_header')
-    <h1>Group {{ config('app.namaAplikasi') }}</h1>
+    <h1>{{ $nama_aplikasi }}</h1>
 @stop
 
 @section('content')

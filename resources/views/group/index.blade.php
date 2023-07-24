@@ -1,9 +1,9 @@
 @extends('layouts.index')
 
-@section('title', 'Identitas OpenKAB')
+@section('title', 'Identitas OpenKab')
 
 @section('content_header')
-    <h1>Group OpenKAB</h1>
+    <h1>Group OpenKab</h1>
 @stop
 
 @section('content')

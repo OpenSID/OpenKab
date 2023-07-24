@@ -3,7 +3,7 @@
 @section('title', 'Identitas OpenKab')
 
 @section('content_header')
-    <h1>Group OpenKab</h1>
+    <h1>Group {{ config('app.namaAplikasi') }}</h1>
 @stop
 
 @section('content')

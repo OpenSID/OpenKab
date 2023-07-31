@@ -4,17 +4,17 @@ use App\Models\Config;
 use App\Models\SettingAplikasi;
 use Illuminate\Support\Str;
 
-if (! function_exists('openkab_versi')) {
+if (!function_exists('openkab_versi')) {
     /**
      * OpenKab database gabungan versi.
      */
     function openkab_versi()
     {
-        return 'v2307.0.0';
+        return 'v2308.0.0';
     }
 }
 
-if (! function_exists('persen')) {
+if (!function_exists('persen')) {
     /**
      * Menampilkan nilai persentase.
      *
@@ -24,12 +24,12 @@ if (! function_exists('persen')) {
     {
         $hasil = ($penyebut == 0) ? 0 : $pembilang / $penyebut * 100;
 
-        return number_format($hasil, $desimal, $pemisah).'%';
+        return number_format($hasil, $desimal, $pemisah) . '%';
     }
 }
 
 // setting('sebutan_desa');
-if (! function_exists('setting')) {
+if (!function_exists('setting')) {
     function setting($config_id = null, $params = null)
     {
         if ($params && $config_id) {
@@ -43,7 +43,7 @@ if (! function_exists('setting')) {
     }
 }
 
-if (! function_exists('identitas')) {
+if (!function_exists('identitas')) {
     /**
      * Get identitas desa.
      *
@@ -62,7 +62,7 @@ if (! function_exists('identitas')) {
     }
 }
 
-if (! function_exists('bulan')) {
+if (!function_exists('bulan')) {
     /**
      * Nama bulan dalam bahasa Indonesia.
      */
@@ -86,7 +86,7 @@ if (! function_exists('bulan')) {
     }
 }
 
-if (! function_exists('url_title')) {
+if (!function_exists('url_title')) {
     /**
      * Create URL Title.
      *
@@ -117,12 +117,12 @@ if (! function_exists('url_title')) {
             '&.+?;' => '',
             '[^\w\d _-]' => '',
             '\s+' => $separator,
-            '('.$q_separator.')+' => $separator,
+            '(' . $q_separator . ')+' => $separator,
         ];
 
         $str = strip_tags($str);
         foreach ($trans as $key => $val) {
-            $str = preg_replace('#'.$key.'#i', $val, $str);
+            $str = preg_replace('#' . $key . '#i', $val, $str);
         }
 
         if ($lowercase === true) {
@@ -135,7 +135,7 @@ if (! function_exists('url_title')) {
 
 function ambilBerkas($pathBerkas, $tampil = true)
 {
-    if (! file_exists($pathBerkas)) {
+    if (!file_exists($pathBerkas)) {
         $pathBerkas = public_path('assets/img/opensid_logo.png');
     }
 
@@ -174,11 +174,11 @@ function ambilBerkas($pathBerkas, $tampil = true)
         }
 
         // Generate the server headers
-        header('Content-Type: '.$mime);
-        header('Content-Disposition: inline; filename="'.Str::random(10).'"');
+        header('Content-Type: ' . $mime);
+        header('Content-Disposition: inline; filename="' . Str::random(10) . '"');
         header('Expires: 0');
         header('Content-Transfer-Encoding: binary');
-        header('Content-Length: '.filesize($pathBerkas));
+        header('Content-Length: ' . filesize($pathBerkas));
         header('Cache-Control: private, no-transform, no-store, must-revalidate');
 
         return readfile($pathBerkas);

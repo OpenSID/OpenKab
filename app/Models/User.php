@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -67,7 +68,7 @@ class User extends Authenticatable
     {
         $email = md5($this->email);
 
-        return "https://www.gravatar.com/avatar/{$email}?s=32&d=https://www.gravatar.com/avatar/00000000000000000000000000000000?s=32";
+        return $this->foto ? Storage::url($this->foto) : "https://www.gravatar.com/avatar/{$email}?s=32&d=https://www.gravatar.com/avatar/00000000000000000000000000000000?s=32";
     }
 
     /**
@@ -102,6 +103,18 @@ class User extends Authenticatable
 
     public function getTeamId()
     {
-        return $this->team()->first()->id;
+        return $this->team()->first()?->id;
+    }
+
+    public function adminlte_profile_url(){
+        return route('users.edit', $this->id);
+    }
+
+    public function adminlte_desc(){
+        return $this->team()->first()->name;
+    }
+
+    public function isSuperAdmin(){
+        return $this->id == self::superAdmin();
     }
 }

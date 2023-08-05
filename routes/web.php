@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\GroupController;
@@ -35,6 +36,8 @@ Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::get('/', [DasborController::class, 'index'])->name('dasbor');
+    Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
+    Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
 
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');

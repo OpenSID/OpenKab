@@ -15,9 +15,10 @@ Breadcrumbs::for('master-data.pengaturan', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('bantuan', function (BreadcrumbTrail $trail) {
     $trail->push('Bantuan', route('bantuan'));
 });
-Breadcrumbs::for('bantuan.detail', function (BreadcrumbTrail $trail, String $id) {
+Breadcrumbs::for('bantuan.detail', function (BreadcrumbTrail $trail, $id) {
+    $bantuan = Bantuan::find($id)?->nama ?? '-';
     $trail->parent('bantuan');
-    $trail->push($id);
+    $trail->push($bantuan);
 });
 
 Breadcrumbs::for('bantuan.index', function (BreadcrumbTrail $trail) {
@@ -28,8 +29,9 @@ Breadcrumbs::for('bantuan.create', function (BreadcrumbTrail $trail) {
     $trail->push('Baru');
 });
 Breadcrumbs::for('bantuan.edit', function (BreadcrumbTrail $trail, $id) {
+    $bantuan = Bantuan::find($id)?->nama ?? '-';
     $trail->parent('bantuan.index');
-    $trail->push($id);
+    $trail->push($bantuan);
 });
 Breadcrumbs::for('master-data-artikel.kategori', function (BreadcrumbTrail $trail, $parent) {
     $name = Kategori::find($parent)?->kategori ?? 'Artikel';

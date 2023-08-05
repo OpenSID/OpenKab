@@ -29,6 +29,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -44,7 +45,7 @@
                 <div class="card-body">
                     <div x-data="{
                         data: {},
-                    
+
                         async retrievePosts() {
                             const response = await (await fetch('{{ route('api.keluarga.detail', ['no' => $no_kk]) }}')).json();
                             this.data = response.data[0].attributes

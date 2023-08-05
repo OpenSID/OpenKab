@@ -15,6 +15,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row" x-data="identitas()" x-init="retrieveData()">
         <div class="col-lg-3 col-md-4">
             <div class="card card-widget">

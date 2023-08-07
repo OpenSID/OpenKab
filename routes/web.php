@@ -9,6 +9,7 @@ use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
+use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\KecamatanMiddleware;
@@ -49,6 +50,7 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
             Route::get('/tambah', [GroupController::class, 'create']);
             Route::get('/edit/{id}', [GroupController::class, 'edit']);
         });
+        Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show']);
 
     });
 

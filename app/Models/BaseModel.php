@@ -4,20 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class BaseModel extends Model
 {
+    use LogsActivity;
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
     /** {@inheritdoc} */
     protected $dbConnection;
 
+    protected $guarded = [];
+
     /**
      * constract.
      */
     public function __construct()
     {
+        parent::__construct();
         $this->dbConnection = DB::connection($this->connection);
     }
 
@@ -72,5 +78,11 @@ class BaseModel extends Model
     public function scopeMinMaxTahun($query, $column = self::CREATED_AT)
     {
         return $query->selectRaw("YEAR(MIN({$column})) AS tahun_awal, YEAR(MAX({$column})) AS tahun_akhir");
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('data-log');;
+        // Chain fluent methods for configuration options
     }
 }

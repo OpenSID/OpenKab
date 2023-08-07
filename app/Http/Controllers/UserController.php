@@ -183,22 +183,25 @@ class UserController extends Controller
 
             // update user team
             $user_team = UserTeam::find($user->id);
-            setPermissionsTeamId($user_team->id_team);
-            $user->roles()->detach();
-            $user_team->id_team = $data['group'];
-            $user_team->save();
+            if($user_team){
+                setPermissionsTeamId($user_team->id_team);
+                $user->roles()->detach();
+                $user_team->id_team = $data['group'];
+                $user_team->save();
 
-            setPermissionsTeamId($request['group']);
-            // assign role berdasarkan team
-
-            foreach ($user->team->first()->menu as $menu) {
-                $user->assignRole($menu['role']);
-                if (isset($menu['submenu'])) {
-                    foreach ($menu['submenu'] as $submenu) {
-                        $user->assignRole($submenu['role']);
+                foreach ($user->team->first()->menu as $menu) {
+                    $user->assignRole($menu['role']);
+                    if (isset($menu['submenu'])) {
+                        foreach ($menu['submenu'] as $submenu) {
+                            $user->assignRole($submenu['role']);
+                        }
                     }
                 }
             }
+
+
+            setPermissionsTeamId($request['group']);
+            // assign role berdasarkan team
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {

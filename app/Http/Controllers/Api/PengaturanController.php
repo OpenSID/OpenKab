@@ -31,13 +31,17 @@ class PengaturanController extends Controller
         try {
             foreach ($request->validated() as $key => $value) {
                 Pengaturan::where('key', $key)->update(['value' => $value]);
+                activity('data-log')->event('updated')->withProperties($request)->log('Pengaturan Aplikasi');
                 if ($key == 'lock_theme') {
                     // udpate class tema
-                    if (! $value) {
-                        Pengaturan::where('key', 'web_theme')->update(['attribute' => 'class="disabled" disabled']);
+                    $attributeValue = null;
+                    if ($value) {
+                        $attributeValue = 'class="disabled" disabled';
+                        Pengaturan::where('key', 'web_theme')->update(['attribute' => $attributeValue]);
                     } else {
-                        Pengaturan::where('key', 'web_theme')->update(['attribute' => null]);
+                        Pengaturan::where('key', 'web_theme')->update(['attribute' => $attributeValue]);
                     }
+                    activity('data-log')->event('updated')->withProperties(['key' => 'web_theme', 'attribute' => $attributeValue])->log('Pengaturan Aplikasi');
                 }
             }
 

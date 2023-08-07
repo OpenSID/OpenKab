@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Base\User;
 use App\Models\User as ModelsUser;
+use App\Rules\MatchOldPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 
 class ChangePasswordController extends ResetPasswordController
 {
@@ -22,8 +23,8 @@ class ChangePasswordController extends ResetPasswordController
     protected function rules()
     {
         return [
-            // 'email' => 'required|email',
-            'password' => 'required|confirmed|min:8'
+            'password_old' => ['required', new MatchOldPassword],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()]
         ];
     }
 
@@ -49,8 +50,7 @@ class ChangePasswordController extends ResetPasswordController
 
     public function resetByAdmin(ModelsUser  $user ,Request $request)
     {
-        $password = $user->email;
-        $this->setUserPassword($user, $password);
+        $user->password = $user->email;
         $user->save();
 
         return $this->sendResetResponse($request, 'password user reset succesfull with new password '. $password);
@@ -65,7 +65,7 @@ class ChangePasswordController extends ResetPasswordController
      */
     protected function changePassword($user, $password)
     {
-        $this->setUserPassword($user, $password);
+        $user->password = $password;
         $user->save();
     }
 

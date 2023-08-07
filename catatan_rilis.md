@@ -2,7 +2,8 @@ Di rilis v2308.0.2 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 
 #### Penambahan Fitur
 
-1. [#235](https://github.com/OpenSID/OpenKab/issues/235) Tambahkan datatable pada pengaturan group.
+1. [#235](https://github.com/OpenSID/OpenKab/issues/235) Menerapkan datatable pada pengaturan group.
+2. [#237](https://github.com/OpenSID/OpenKab/issues/237) Menerapkan penggunaan breadcrumb pada setiap halaman.
 
 #### Perbaikan BUG
 

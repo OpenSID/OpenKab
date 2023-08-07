@@ -7,14 +7,15 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
 
-    <div class="row" x-data="group()" x-init="retrieveData()">
+    <div class="row">
 
         <div class="col-sm-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <a x-bind:href="'{{ url('pengaturan/groups/tambah') }}'">
-                        <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah </button>
+                    <a href="{{ url('pengaturan/groups/tambah') }}">
+                        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
                     </a>
                 </div>
 
@@ -22,7 +23,7 @@
 
                     <div class="row">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped" id="user">
+                            <table class="table table-bordered table-striped" id="grup">
                                 <thead>
                                     <tr>
                                         <th width="50">No</th>
@@ -30,27 +31,7 @@
                                         <th>Group</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <template x-for="(value, index) in dataGroups">
-                                        <tr>
-                                            <td class="text-center"><span x-text="index+1"></span></td>
-                                            <td class="text-center">
-                                                <template x-if="value.attributes.name != 'administrator'">
-                                                    <a x-bind:href="'{{ url('pengaturan/groups/edit') }}/' + value.id">
-                                                        <button type="button" title="edit" class="btn btn-info btn-sm btn-flat"><i class="fas fa-edit"></i></button>
-                                                    </a>
-                                                </template>
-
-                                                <template x-if="value.attributes.name != 'administrator'">
-                                                    <button type="button" title="hapus" class="btn btn-danger btn-sm btn-flat" x-on:click="hapus(value.id)"> <i class="fas fa-trash-alt"></i></button>
-                                                </template>
-
-                                            </td>
-                                            <td x-text="value.attributes.name"></td>
-                                        </tr>
-                                    </template>
-
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -60,23 +41,78 @@
             </div>
         </div>
     </div>
+@endsection
+@section('js')
     <script>
-        function group() {
-            return {
-                id: 1,
-
-                dataGroups: {},
-                retrieveData() {
-                    fetch('{{ url('api/v1/pengaturan/group/') }}')
-                        .then(res => res.json())
-                        .then(response => {
-                            this.dataGroups = response.data;
-                        });
+        $(function() {
+            var grup = $('#grup').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: true,
+            ajax: {
+                url: `{{ url('api/v1/pengaturan/group') }}`,
+                method: 'get',
+                data: function(row) {
+                    return {
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[name]": row.search.value
+                    };
                 },
+                dataSrc: function(json) {
+                    json.recordsTotal = json.meta.pagination.total
+                    json.recordsFiltered = json.meta.pagination.total
 
-                hapus(id) {
+                    return json.data
+                },
+            },
 
-                    Swal.fire({
+            columns: [{
+                    data: null,
+                },
+                {
+                    data: function(data) {
+                        if (data.attributes.name == 'administrator') {
+                            return ``;
+                        }
+                        return `
+                                <a href="{{ url('pengaturan/groups/edit/${data.id}') }}">
+                                    <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </a>
+
+                                <button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                `;
+                    },
+                },
+                {
+                    data: "attributes.name",
+                    name: "nama"
+                },
+            ],
+            order: [
+                [2, 'asc']
+            ]
+        })
+
+        grup.on('draw.dt', function() {
+            var PageInfo = $('#grup').DataTable().page.info();
+            grup.column(0, {
+                page: 'current'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
+        });
+
+
+        $(document).on('click', 'button.hapus', function() {
+                var id = $(this).data('id')
+                var that = $(this);
+                Swal.fire({
                         title: 'Hapus group',
                         text: "Data yang dihapus tidak bisa dikembalikan. Yakin untuk menghapus?",
                         icon: 'warning',
@@ -131,10 +167,7 @@
                             });
                         }
                     })
-                    return;
-
-                }
-            }
-        }
+            });
+        });
     </script>
 @endsection

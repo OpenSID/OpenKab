@@ -12,7 +12,7 @@ class TeamRepository
     {
         return QueryBuilder::for(Team::class)
         ->allowedFilters([
-            AllowedFilter::exact('name'),
+            AllowedFilter::partial('name'),
 
         ])
         ->allowedSorts(['name']);

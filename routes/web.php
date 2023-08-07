@@ -46,9 +46,9 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
         Route::middleware(['role:pengaturan-users'])->resource('users', UserController::class);
         Route::middleware(['role:pengaturan-identitas'])->resource('identitas', IdentitasController::class)->only(['index', 'edit']);
         Route::middleware(['role:pengaturan-group'])->prefix('groups')->group(function () {
-            Route::get('/', [GroupController::class, 'index']);
-            Route::get('/tambah', [GroupController::class, 'create']);
-            Route::get('/edit/{id}', [GroupController::class, 'edit']);
+            Route::get('/', [GroupController::class, 'index'])->name('groups.index');
+            Route::get('/tambah', [GroupController::class, 'create'])->name('groups.create');
+            Route::get('/edit/{id}', [GroupController::class, 'edit'])->name('groups.edit');
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show']);
 
@@ -75,7 +75,7 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
 
     // Penduduk
     Route::middleware(['role:penduduk'])->get('penduduk/cetak', [PendudukController::class, 'cetak']);
-    Route::middleware(['role:penduduk'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah']);
+    Route::middleware(['role:penduduk'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah'])->name('penduduk.edit');
     Route::middleware(['role:penduduk'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
     // Keluarga
@@ -89,9 +89,9 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::middleware(['role:bantuan'])->controller(BantuanController::class)
         ->prefix('bantuan')
         ->group(function () {
-            Route::get('/', 'index');
+            Route::get('/', 'index')->name('bantuan');
             Route::get('/cetak', 'cetak');
-            Route::get('/detail/{id}', 'show');
+            Route::get('/detail/{id}', 'show')->name('bantuan.detail');
         });
 
     // Statistik
@@ -109,10 +109,10 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::middleware(['role:master-data'])->controller(AdminWebController::class)
         ->prefix('master')
         ->group(function () {
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/{parrent}', 'kategori_index');
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit');
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/tambah/{parrent}', 'kategori_create');
-            Route::middleware(['role:master-data-pengaturan'])->get('/pengaturan', 'pengaturan_index');
+            Route::middleware(['role:master-data-artikel'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
+            Route::middleware(['role:master-data-artikel'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
+            Route::middleware(['role:master-data-artikel'])->get('/kategori/tambah/{parrent}', 'kategori_create')->name('master-data-artikel.kategori-create');
+            Route::middleware(['role:master-data-pengaturan'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
             Route::middleware(['role:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });

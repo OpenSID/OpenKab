@@ -8,6 +8,7 @@
 
 @section('content')
     @include('partials.flash_message')
+    @include('partials.breadcrumbs')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">

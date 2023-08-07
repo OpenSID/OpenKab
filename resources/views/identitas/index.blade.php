@@ -9,6 +9,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
 
     <div class="row" x-data="identitas()" x-init="retrieveData()">
 

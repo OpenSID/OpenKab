@@ -12,6 +12,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row" id="tampilkan-statistik">
         <div class="col-lg-3">
             <div class="card">

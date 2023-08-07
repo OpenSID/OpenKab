@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
 
     <div class="row">
 

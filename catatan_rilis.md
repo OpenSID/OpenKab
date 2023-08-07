@@ -1,4 +1,4 @@
-Di rilis v2308.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pelayanan ke pelanggan.
+Di rilis v2308.0.2 berisi penambahan fitur dan perbaikan lain sesuai dengan pelayanan ke pelanggan.
 
 #### Penambahan Fitur
 

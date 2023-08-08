@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.0.2",
         "bensampo/laravel-enum": "^6.3",
+        "diglactic/laravel-breadcrumbs": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
         "jeroennoten/laravel-adminlte": "^3.8",

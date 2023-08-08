@@ -3,6 +3,7 @@
 @section('title', 'Data Statistik')
 
 @section('content')
+    @include('partials.breadcrumbs')
     <table class="border thick" id="tabel-penduduk">
         <thead>
             <tr class="border thick">

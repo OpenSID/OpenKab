@@ -12,10 +12,16 @@ class ActivityRepository
     {
         return QueryBuilder::for(Activity::class)
             ->allowedFields('*')
-            // ->allowedFilters([
-            //     // AllowedFilter::exact('id'),
-            //     // AllowedFilter::exact('id_pend'),
-            // ])
+            ->allowedFilters([
+                AllowedFilter::callback('created_at', function($query, $value, $property) {
+                    return $query->whereBetween('created_at', $value);
+                }),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('properties', 'LIKE', '%'.$value.'%');
+                }),
+            ])->allowedSorts([
+                'created_at'
+            ])
             ->jsonPaginate();
     }
 }

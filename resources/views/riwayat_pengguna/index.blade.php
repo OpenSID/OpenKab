@@ -31,8 +31,12 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <div class="form-group">
-                                            <label>created_at</label>
-
+                                            <label>Tanggal Aktifitas</label>
+                                            <div class="input-group input-daterange">
+                                                <input type="text" class="form-control" data-date-format="dd-mm-yyyy" value="{{ \Carbon\Carbon::now()->startOfMonth()->format('d-m-Y') }}" name="start" >
+                                                <div class="input-group-addon">sd</div>
+                                                <input type="text" class="form-control" data-date-format="dd-mm-yyyy" value="{{ \Carbon\Carbon::now()->endOfMonth()->format('d-m-Y') }}" name="end">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -69,11 +73,11 @@
                                     <th>No</th>
                                     <th>Riwayat</th>
                                     <th>Event</th>
-                                    <th>Keterangan</th>
-                                    <th>Subjek</th>
+                                    <th>Subjek Tipe</th>
+                                    <th>Subjek Id</th>
+                                    <th>Pengguna Tipe</th>
+                                    <th>Pengguna Id</th>
                                     <th>Data</th>
-                                    <th>Even</th>
-                                    <th>Pengguna</th>
                                     <th>Waktu</th>
                                 </tr>
                             </thead>
@@ -92,7 +96,14 @@
 
 @section('js')
     <script>
+        let awalBulan = '{{ \Carbon\Carbon::now()->startOfMonth()->format('d-m-Y') }}'
+        let akhirBulan = '{{ \Carbon\Carbon::now()->endOfMonth()->format('d-m-Y') }}'
+        function getDateStr(elm){
+            let obj = $(elm).datepicker('getDate')
+            return [obj.getFullYear(), obj.getMonth() + 1, obj.getDate()].join('-')
+        }
         var riwayat_pengguna = $('#riwayat_pengguna').DataTable({
+
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -104,10 +115,10 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[created_at]": $('#created_at').val(),
+                        "filter[created_at]": [getDateStr($('input[name=start]')), getDateStr($('input[name=end]'))],
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
-                            ?.name
+                            ?.name,
                     };
                 },
                 dataSrc: function(json) {
@@ -117,43 +128,46 @@
                     return json.data
                 },
             },
-            columnDefs: [{
-                    targets: '_all',
-                    className: 'text-nowrap',
-                },
-                {
-                    targets: [0, 5],
-                    orderable: false,
-                    searchable: false,
-                },
-            ],
             columns: [{
                     data: null,
                     searchable: false,
                     orderable: false
                 },
                 {
-                    data: "attributes.log_name"
+                    data: "attributes.log_name",
+                    orderable: false
                 },
                 {
-                    data: "attributes.event"
+                    data: "attributes.event",
+                    orderable: false
                 },
                 {
-                    data: "attributes.subject"
+                    data: "attributes.subject_type",
+                    orderable: false
                 },
                 {
-                    data: "attributes.causer"
+                    data: "attributes.subject_id",
+                    orderable: false
+                },
+                {
+                    data: "attributes.causer_type",
+                    orderable: false
+                },
+                {
+                    data: "attributes.causer_id",
+                    orderable: false
                 },
                 {
                     data: "attributes.properties",
-                    width: "100px"
+                    orderable: false
                 },
                 {
-                    data: "attributes.created_at"
+                    data: "attributes.created_at",
+                    name: 'created_at'
                 }
             ],
             order: [
-                [5, 'asc']
+                [8, 'desc']
             ]
         })
 
@@ -172,9 +186,9 @@
 
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
-            $('#created_at').val('').change();
-
-            riwayat_pengguna.ajax.reload();
+            $('input[name=start]').datepicker('setDate',awalBulan);
+            $('input[name=end]').datepicker('setDate',akhirBulan);
+            riwayat_pengguna.draw();
         });
     </script>
 @endsection

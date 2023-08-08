@@ -16,6 +16,11 @@
                 format: 'dd-mm-yyyy',
                 autoclose: true
             });
+
+            $('.input-daterange').datepicker({
+                language:'id',
+                format: 'dd-mm-yyyy',
+            });
         });
     </script>
 @endpush

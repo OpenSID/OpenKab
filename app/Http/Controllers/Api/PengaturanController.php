@@ -35,7 +35,7 @@ class PengaturanController extends Controller
                 if ($key == 'lock_theme') {
                     // udpate class tema
                     $attributeValue = null;
-                    if ($value) {
+                    if (! $value) {
                         $attributeValue = 'class="disabled" disabled';
                         Pengaturan::where('key', 'web_theme')->update(['attribute' => $attributeValue]);
                     } else {

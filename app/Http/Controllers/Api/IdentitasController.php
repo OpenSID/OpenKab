@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\IdentitasRepository;
 use App\Http\Requests\IdentitasRequest;
-use App\Http\Requests\UploadFaviconImageRequest;
 use App\Http\Requests\UploadImageRequest;
 use App\Http\Transformers\IdentitasTransformer;
 use App\Models\Identitas;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -70,7 +70,6 @@ class IdentitasController extends Controller
 
             Identitas::where('id', $id)->update([
                 'logo' => $filename.'.png',
-                // 'favicon' => $filename.'.ico',
             ]);
 
             return response()->json([
@@ -94,7 +93,6 @@ class IdentitasController extends Controller
             if (! file_exists($path)) {
                 mkdir($path, 755, true);
             }
-            $filename = 'favicon.ico';
             $file = $request->file('file');
 
             $this->generateFaviconsFromImagePath($file->path(), $path);
@@ -127,7 +125,56 @@ class IdentitasController extends Controller
         Image::make($filePath)->resize(32, 32)->save($distPath . "/favicon-32x32.png", '100', 'png');
         Image::make($filePath)->resize(96, 96)->save($distPath . "/favicon-96x96.png", '100', 'png');
         Image::make($filePath)->resize(150, 150)->save($distPath . "/mstile-150x150.png", '100', 'png');
+        copy($distPath . "/favicon-16x16.png", $distPath . "/favicon.ico");
 
+        $dataManifest = [
+                    "name" => "Favicon",
+                    "icons" => [
+                        [
+                            "src" => "/android-chrome-192x192.png",
+                            "sizes" => "192x192",
+                            "type" => "image/png",
+                            "density" => 0.75
+                        ],
+                        [
+                            "src" => "/android-chrome-512x512.png",
+                            "sizes" => "512x512",
+                            "type" => "image/png",
+                            "density" => .75
+                        ],
+                        [
+                            "src" => "/apple-touch-icon.png",
+                            "sizes" => "180x180",
+                            "type" => "image/png",
+                            "density" => 0.75
+                        ],
+                        [
+                            "src" => "/favicon-16x16.png",
+                            "sizes" => "16x16",
+                            "type" => "image/png",
+                            "density" => 1
+                        ],
+                        [
+                            "src" => "/favicon-32x32.png",
+                            "sizes" => "32x32",
+                            "type" => "image/png",
+                            "density" => 1
+                        ],
+                        [
+                            "src" => "/favicon-96x96.png",
+                            "sizes" => "96x96",
+                            "type" => "image/png",
+                            "density" => 1
+                        ],
+                        [
+                            "src" => "/mstile-150x150.png",
+                            "sizes" => "150x150",
+                            "type" => "image/png",
+                            "density" => 1
+                        ]
+                    ]
+                ];
+            file_put_contents($distPath.'/manifest.json', json_encode($dataManifest));
         // favicon.ico
         // $icon = new \Imagick();
         // $icon->addImage(new \Imagick($distPath . "/favicon-16x16.png"));

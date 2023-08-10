@@ -178,7 +178,7 @@ class UserController extends Controller
             $user->update($updateData);
 
             if (! Auth::user()->isSuperAdmin()){
-                return redirect()->route('users.edit', Auth::id())->with('success', 'Pengguna berhasil diubah!');
+                return redirect()->route('users.edit', Auth::id())->with('success', 'Data profil berhasil diubah!');
             }
 
             // update user team

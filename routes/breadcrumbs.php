@@ -8,6 +8,7 @@ use App\Models\Team;
 use App\Models\User;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
+use Illuminate\Support\Facades\Auth;
 
 Breadcrumbs::for('master-data.pengaturan', function (BreadcrumbTrail $trail) {
      $trail->push('Pengaturan Aplikasi');
@@ -59,6 +60,13 @@ Breadcrumbs::for('users.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->parent('users.index');
     $trail->push($user);
 });
+Breadcrumbs::for('password.change', function (BreadcrumbTrail $trail) {
+    $id = Auth::id();
+    $trail->push('Profil Pengguna', route('users.edit', $id));
+    $trail->push('Ganti Password');
+});
+
+
 Breadcrumbs::for('identitas.index', function (BreadcrumbTrail $trail) {
     $trail->push('Pengaturan Identitas', route('identitas.index'));
 });

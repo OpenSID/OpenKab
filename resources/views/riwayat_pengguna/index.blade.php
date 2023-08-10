@@ -71,14 +71,15 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Waktu</th>
+                                    <!--
                                     <th>Riwayat</th>
+                                    -->
                                     <th>Event</th>
                                     <th>Subjek Tipe</th>
                                     <th>Subjek Id</th>
-                                    <th>Pengguna Tipe</th>
-                                    <th>Pengguna Id</th>
+                                    <th>Pelaku</th>
                                     <th>Data</th>
-                                    <th>Waktu</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -92,7 +93,24 @@
 @include('partials.asset_datepicker')
 @push('js')
     <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+    <script src="{{ asset('assets/jsonview/jsonview.js') }}"></script>
 @endpush
+@section('css')
+<style>
+    .fa-caret-right:before {
+        content: "";
+    }
+    .fa-caret-down:before {
+        content: "";
+    }
+    .text-wrap{
+        white-space:normal;
+    }
+    .width-600{
+        width:600px;
+    }
+</style>
+@endsection
 
 @section('js')
     <script>
@@ -108,6 +126,8 @@
             serverSide: true,
             autoWidth: false,
             ordering: true,
+            autoWidth: false,
+            fixedColumns: true,
             ajax: {
                 url: ``,
                 method: 'get',
@@ -134,9 +154,13 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.log_name",
-                    orderable: false
+                    data: "attributes.created_at",
+                    name: 'created_at'
                 },
+                // {
+                //     data: "attributes.log_name",
+                //     orderable: false
+                // },
                 {
                     data: "attributes.event",
                     orderable: false
@@ -150,24 +174,28 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.causer_type",
+                    data: "attributes.causer_name",
+                    defaultContent: "",
                     orderable: false
                 },
                 {
-                    data: "attributes.causer_id",
+                    data: "",
+                    defaultContent: "<div class='tree text-wrap width-600'></div>",
                     orderable: false
                 },
-                {
-                    data: "attributes.properties",
-                    orderable: false
-                },
-                {
-                    data: "attributes.created_at",
-                    name: 'created_at'
-                }
             ],
+            rowCallback: function( row, data ) {
+                const dataJson = Array.isArray(data.attributes.properties) ? {} : data.attributes.properties
+                console.log(data.attributes.properties)
+                const tree = jsonview.create(dataJson);
+                jsonview.render(tree, row.querySelector('.tree'));
+                jsonview.expand(tree);
+            },
             order: [
-                [8, 'desc']
+                [1, 'desc']
+            ],
+            columnDefs: [
+                { "width": "150px", "targets": [6] },
             ]
         })
 

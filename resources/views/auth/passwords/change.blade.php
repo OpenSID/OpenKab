@@ -1,24 +1,26 @@
 @extends('layouts.index')
 
-@include('components.progressive-image')
-
 @section('title', 'Ganti Password')
 
+@section('content_header')
+    <h1>Ganti Password</h1>
+@stop
+
 @section('content')
+@include('partials.flash_message')
+@include('partials.breadcrumbs')
 <div class="container p-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card mx-4">
+        <div class="col-lg-12">
+            <div class="card card-outline card-primary">
                 <div class="card-body p-4">
                     <form method="post" action="{{ route('password.change') }}">
                         @csrf
-                        <h1>Ganti Password</h1>
-
                         <div class="input-group mb-3">
                             <span class="input-group-text">
                               <i class="fa fa-lock"></i>
                             </span>
-                          <input type="password" class="form-control {{ $errors->has('password_old')?'is-invalid':''}}" name="password_old" placeholder="Password lama" required >
+                          <input type="password" class="form-control {{ $errors->has('password_old')?'is-invalid':''}}" name="password_old" placeholder="Password lama" required autocomplete="off" >
                           @if ($errors->has('password_old'))
                               <span class="invalid-feedback">
                                   <strong>{{ $errors->first('password_old') }}</strong>

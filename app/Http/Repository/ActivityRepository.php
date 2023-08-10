@@ -2,7 +2,7 @@
 
 namespace App\Http\Repository;
 
-use Spatie\Activitylog\Models\Activity;
+use App\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -10,7 +10,7 @@ class ActivityRepository
 {
     public function listActivity()
     {
-        return QueryBuilder::for(Activity::class)
+        return QueryBuilder::for(Activity::with(['user']))
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::callback('created_at', function($query, $value, $property) {

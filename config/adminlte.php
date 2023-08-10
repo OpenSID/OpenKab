@@ -291,19 +291,12 @@ return [
 
     'menu' => [
         // navbar-user
-        [
-            'type'         => 'navbar-user',
-            'text'         => 'Pengaturan Pengguna',
-            'route'        => 'users.index',
-            'can'          => 'pengaturan-identitas-write',
-            'topnav_user'  => true
-        ],
-        [
-            'type'         => 'navbar-user',
-            'text'         => 'Ganti Password',
-            'route'        => 'password.change',
-            'topnav_user'  => true
-        ],
+        // [
+        //     'type'         => 'navbar-user',
+        //     'text'         => 'Ganti Password',
+        //     'route'        => 'password.change',
+        //     'topnav_user'  => true
+        // ],
         //Topbar items:
         [
             'type' => 'darkmode-widget',

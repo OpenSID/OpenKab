@@ -69,9 +69,7 @@ class User extends Authenticatable
 
     public function adminlte_image()
     {
-        $email = md5($this->email);
-
-        return $this->foto ? Storage::url($this->foto) : "https://www.gravatar.com/avatar/{$email}?s=32&d=https://www.gravatar.com/avatar/00000000000000000000000000000000?s=32";
+        return $this->foto ? Storage::url($this->foto) : asset('assets/img/avatar.png');
     }
 
     /**

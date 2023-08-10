@@ -19,9 +19,8 @@ class ActivityTransformer extends TransformerAbstract
             'subject_id' =>  $activity->subject_id,
             'subject_type' =>  $activity->subject_type,
             'event' => $activity->event,
-            'causer_type' => $activity->causer_type,
-            'causer_id' => $activity->causer_id,
-            'properties' => $activity->changes()->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'causer_name' => $activity->user?->name,
+            'properties' => ! $activity->changes->isEmpty() ?  $activity->changes->toJson() : ((object) $activity->changes) ,
             'created_at' => $date->locale('id')->format('l, j F Y H:i:s')
         ];
     }

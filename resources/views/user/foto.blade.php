@@ -1,6 +1,6 @@
 <div class="card card-widget">
     <div class="widget-user-header text-center">
-        <img id="imageResult" src="{{ $user->foto ? Storage::url($user->foto) : asset('storage/img/profile/avatar.png') }}"
+        <img id="imageResult" src="{{ $user->foto ? Storage::url($user->foto) : asset('assets/img/avatar.png') }}"
             alt="Foto" width="200px">
     </div>
     <div class="card-footer">

@@ -45,7 +45,9 @@ class ChangePasswordController extends ResetPasswordController
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
 
-        return $this->sendResetResponse($request, 'password changed succesfull');
+        // return $this->sendResetResponse($request, 'password changed succesfull');
+        Auth::logout();
+        return redirect(route('login'))->with('success', 'Password berhasil diubah, silakan login kembali');
     }
 
     public function resetByAdmin(ModelsUser  $user ,Request $request)

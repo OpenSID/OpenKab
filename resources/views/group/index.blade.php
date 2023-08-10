@@ -28,7 +28,7 @@
                                     <tr>
                                         <th width="50">No</th>
                                         <th width="150">Aksi</th>
-                                        <th>Group</th>
+                                        <th>Grup</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

@@ -115,7 +115,7 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
-                    'text' => 'Group',
+                    'text' => 'Grup',
                     'url' => 'pengaturan/groups',
                     'role' => 'pengaturan-group',
                 ],

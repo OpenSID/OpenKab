@@ -3,7 +3,7 @@
 @section('title', 'Tambah Bantuan')
 
 @section('content_header')
-    <h1>Managemen Group</h1>
+    <h1>Managemen Grup</h1>
 @stop
 
 @section('content')
@@ -19,7 +19,7 @@
                     <div class="card-body">
                         <div class="col">
                             <div class="mb-4">
-                                <label for="sasaran">Nama Group </label>
+                                <label for="sasaran">Nama Grup </label>
                                 <input type="text" class="form-control" name="name" x-model="dataGroup.name">
                             </div>
                         </div>

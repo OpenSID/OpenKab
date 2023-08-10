@@ -8,7 +8,7 @@ class GroupController extends Controller
 
     public function __construct()
     {
-        $this->nama_aplikasi = 'Group '.config('app.namaAplikasi');
+        $this->nama_aplikasi = 'Pengaturan Grup Pengguna';
     }
 
     public function index()

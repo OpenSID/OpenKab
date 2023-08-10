@@ -16,27 +16,33 @@ class SettingTemaSeeder extends Seeder
     public function run()
     {
         $configId = Config::first()->id;
-        SettingAplikasi::create([
-            'config_id' => $configId,
-            'judul' => 'Warna Tema',
-            'key' => 'warna_tema',
-            'value' => null,
-            'keterangan' => 'Warna tema untuk halaman website',
-            'jenis' => 'color',
-            'option' => null,
-            'attribute' => null,
-            'kategori' => 'openkab'
-        ]);
-        SettingAplikasi::create([
-            'config_id' => $configId,
-            'judul' => 'Kunci Tema',
-            'key' => 'lock_theme',
-            'value' => 0,
-            'keterangan' => 'Setting kunci tema website',
-            'jenis' => 'option',
-            'option' => '{"1":"Aktif","0":"Tidak Aktif"}',
-            'attribute' => null,
-            'kategori' => 'openkab'
-        ]);
+        $warnaTema = SettingAplikasi::where(['config_id' => $configId, 'key' => 'warna_tema'])->count();
+        if (!$warnaTema){
+            SettingAplikasi::create([
+                'config_id' => $configId,
+                'judul' => 'Warna Tema',
+                'key' => 'warna_tema',
+                'value' => null,
+                'keterangan' => 'Warna tema untuk halaman website',
+                'jenis' => 'color',
+                'option' => null,
+                'attribute' => null,
+                'kategori' => 'openkab'
+            ]);
+        }
+        $lockTheme = SettingAplikasi::where(['config_id' => $configId, 'key' => 'lock_theme'])->count();
+        if (! $lockTheme){
+            SettingAplikasi::create([
+                'config_id' => $configId,
+                'judul' => 'Kunci Tema',
+                'key' => 'lock_theme',
+                'value' => 0,
+                'keterangan' => 'Setting kunci tema website',
+                'jenis' => 'option',
+                'option' => '{"1":"Aktif","0":"Tidak Aktif"}',
+                'attribute' => null,
+                'kategori' => 'openkab'
+            ]);
+        }
     }
 }

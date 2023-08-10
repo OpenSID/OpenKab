@@ -11,3 +11,4 @@ Di rilis v2308.0.2 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 #### Perubahan Teknis
 
 1. [#239](https://github.com/OpenSID/OpenKab/issues/239) Non-aktifkan preload tema adminlte.
+2. [#246](https://github.com/OpenSID/OpenKab/issues/246) Penyesuaian penulisan group menjadi grup.

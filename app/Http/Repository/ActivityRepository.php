@@ -16,6 +16,7 @@ class ActivityRepository
                 AllowedFilter::callback('created_at', function($query, $value, $property) {
                     return $query->whereBetween('created_at', $value);
                 }),
+                AllowedFilter::exact('causer_id'),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where('properties', 'LIKE', '%'.$value.'%');
                 }),

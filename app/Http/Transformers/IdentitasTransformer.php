@@ -14,11 +14,17 @@ class IdentitasTransformer extends TransformerAbstract
      */
     public function transform(Identitas $identitas)
     {
+        if (! $identitas->favicon) {
+            $identitas->favicon = 'favicon-96x96.png';
+        }
+        default_favicon($identitas->favicon);
+
         return [
             'id' => $identitas->id,
             'nama_aplikasi' => $identitas->nama_aplikasi,
             'deskripsi' => $identitas->deskripsi,
             'logo' => $identitas->logo,
+            'favicon' => $identitas->favicon,
             'nama_kabupaten' => $identitas->nama_kabupaten,
             'kode_kabupaten' => $identitas->kode_kabupaten,
             'nama_provinsi' => $identitas->nama_provinsi,

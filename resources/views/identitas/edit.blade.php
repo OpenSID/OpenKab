@@ -32,7 +32,21 @@
                                 Logo</button>
                         </div>
                     </div>
-
+                </div>
+            </div>
+            <div class="card card-widget">
+                <div class="widget-user-header text-center  p-4">
+                    <img :src="dataIdentitas.favicon ? '{{ asset('favicons') }}/' + dataIdentitas.favicon :
+                        '{{ asset('favicons/favicon-96x96.png') }}'"
+                        alt="Logo" width="50px">
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-block btn-primary btn-sm" @click="uploadFavicon()">Ganti
+                                Favicon</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -151,6 +165,9 @@
                     Swal.fire({
                         title: 'Unggah gambar',
                         input: 'file',
+                        inputAttributes: {
+                            'accept': 'image/*',
+                        },
                         confirmButtonText: 'Unggah',
                         showLoaderOnConfirm: true,
                     }).then((result) => {
@@ -184,6 +201,72 @@
                                             timer: 1500,
                                         })
                                         location.reload();
+
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: response.message,
+                                            icon: 'error',
+                                            showConfirmButton: true,
+                                            allowOutsideClick: false
+                                        })
+                                    }
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: XMLHttpRequest.responseJSON['message'],
+                                        icon: 'error',
+                                        showConfirmButton: true,
+                                        allowOutsideClick: false
+                                    })
+                                }
+                            });
+                        }
+                    });
+                },
+
+                uploadFavicon() {
+                    Swal.fire({
+                        title: 'Unggah favicon',
+                        input: 'file',
+                        inputAttributes: {
+                            'accept': 'image/*',
+                        },
+                        confirmButtonText: 'Unggah',
+                        showLoaderOnConfirm: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Sedang Mengunggah',
+                                didOpen: () => {
+                                    Swal.showLoading()
+                                },
+                                allowOutsideClick: false
+                            })
+                            var formData = new FormData();
+                            formData.append('file', result.value);
+                            $.ajax({
+                                url: '{{ url('api/v1/identitas/uploadFavicon') }}/' + this.id,
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                type: 'POST',
+                                data: formData,
+                                processData: false, // tell jQuery not to process the data
+                                contentType: false, // tell jQuery not to set contentType
+                                success: function(response) {
+                                    if (response.success == true) {
+                                        this.data.logo = response.data
+                                        Swal.fire({
+                                            title: 'Simpan!',
+                                            text: 'Data berhasil tersimpan',
+                                            icon: 'success',
+                                            showConfirmButton: true,
+                                            timer: 1500,
+                                        }).then(function(){
+                                            window.location.reload()
+                                        })
 
                                     } else {
                                         Swal.fire({

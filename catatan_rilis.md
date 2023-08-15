@@ -2,9 +2,10 @@ Di rilis v2308.0.2 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 
 #### Penambahan Fitur
 
-1. [#235](https://github.com/OpenSID/OpenKab/issues/235) Menerapkan datatable pada pengaturan group.
-2. [#237](https://github.com/OpenSID/OpenKab/issues/237) Menerapkan penggunaan breadcrumb pada setiap halaman.
-3. [#247](https://github.com/OpenSID/OpenKab/issues/247) Menerapkan fungsi upload favicon.
+1. [#235](https://github.com/OpenSID/OpenKab/issues/235) Penambahan datatable pada pengaturan group.
+2. [#237](https://github.com/OpenSID/OpenKab/issues/237) Penambahan penggunaan breadcrumb pada setiap halaman.
+3. [#247](https://github.com/OpenSID/OpenKab/issues/247) Penambahan fungsi upload favicon.
+4. [#229](https://github.com/OpenSID/OpenKab/issues/229) Penambahan fungsi profil pengguna, ubah password dan riwayat pengguna.
 
 #### Perbaikan BUG
 1. [#248](https://github.com/OpenSID/OpenKab/issues/248) Perbaikan script migrasi.

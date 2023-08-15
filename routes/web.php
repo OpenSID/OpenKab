@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\GroupController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
+use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\KecamatanMiddleware;
@@ -35,6 +37,8 @@ Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::get('/', [DasborController::class, 'index'])->name('dasbor');
+    Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
+    Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
 
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
@@ -46,6 +50,7 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
             Route::get('/tambah', [GroupController::class, 'create'])->name('groups.create');
             Route::get('/edit/{id}', [GroupController::class, 'edit'])->name('groups.edit');
         });
+        Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show']);
 
     });
 

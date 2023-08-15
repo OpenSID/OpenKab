@@ -134,7 +134,7 @@ return [
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => true,
     'usermenu_desc' => true,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -290,6 +290,13 @@ return [
     */
 
     'menu' => [
+        // navbar-user
+        // [
+        //     'type'         => 'navbar-user',
+        //     'text'         => 'Ganti Password',
+        //     'route'        => 'password.change',
+        //     'topnav_user'  => true
+        // ],
         //Topbar items:
         [
             'type' => 'darkmode-widget',
@@ -322,7 +329,7 @@ return [
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'cari',
         ],
         [
             'text' => 'Dasbor',

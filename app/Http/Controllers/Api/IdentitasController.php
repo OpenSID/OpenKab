@@ -38,7 +38,8 @@ class IdentitasController extends Controller
     {
         try {
             $data = $request->all();
-            Identitas::where('id', $id)->update($data);
+            $identitas = Identitas::find($id);
+            $identitas->update($data);
 
             return response()->json([
                 'success' => true,

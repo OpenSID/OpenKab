@@ -17,6 +17,7 @@
 @section('auth_header', __('adminlte::adminlte.login_message'))
 
 @section('auth_body')
+    @include('partials.flash_message')
     <form action="{{ $login_url }}" method="post">
         @csrf
 

@@ -119,7 +119,7 @@
 @include('partials.asset_datepicker')
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();
                 formData = $('#bantuan-form').serialize();

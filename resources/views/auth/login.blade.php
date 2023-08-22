@@ -112,7 +112,8 @@
     <span x-data="identitas()" x-init="retrieveData()">
         <b x-text="dataIdentitas.nama_aplikasi"></b>
     </span>
-   <script>
+   <script nonce="{{ csp_nonce() }}"  type="text/javscript">
+    // document.addEventListener("DOMContentLoaded", function(event) {
        function identitas() {
            return {
                id: 1,
@@ -128,6 +129,7 @@
                },
            }
        }
+    // })
    </script>
 @stop
 

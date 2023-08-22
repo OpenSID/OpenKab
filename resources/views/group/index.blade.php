@@ -43,7 +43,7 @@
     </div>
 @endsection
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $(function() {
             var grup = $('#grup').DataTable({
             processing: true,

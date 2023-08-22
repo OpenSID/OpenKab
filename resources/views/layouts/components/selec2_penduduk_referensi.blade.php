@@ -1,5 +1,5 @@
 @push('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $('#status').select2({
             ajax: {
                 url: `{{ url('api/v1/penduduk/referensi/status') }}`,

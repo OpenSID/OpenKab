@@ -34,16 +34,16 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Sasaran</label>
-                                            <select class="select2 form-control-sm" id="sasaran" name="sasaran"
-                                                data-placeholder="Semua Sasaran" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="sasaran" name="sasaran"
+                                                data-placeholder="Semua Sasaran">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>
-                                            <select class="select2 form-control-sm" id="tahun" name="tahun"
-                                                data-placeholder="Semua Tahun" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="tahun" name="tahun"
+                                                data-placeholder="Semua Tahun">
                                             </select>
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         var bantuan = $('#bantuan').DataTable({
             processing: true,
             serverSide: true,

@@ -19,7 +19,7 @@
 @stop
 
 @push('scripts')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $(document).ready(function() {
             var kategori = `{{ $kategori }}`;
             var id = `{{ $id }}`;

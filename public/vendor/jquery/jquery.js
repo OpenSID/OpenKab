@@ -10170,7 +10170,7 @@ jQuery.ajaxTransport( "script", function( s ) {
 		var script, callback;
 		return {
 			send: function( _, complete ) {
-				script = jQuery( "<script>" )
+				script = jQuery( "<script nonce="{{ csp_nonce() }}"  type="text/javscript">" )
 					.attr( s.scriptAttrs || {} )
 					.prop( { charset: s.scriptCharset, src: s.url } )
 					.on( "load error", callback = function( evt ) {

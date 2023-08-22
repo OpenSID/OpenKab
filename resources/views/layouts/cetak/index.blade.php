@@ -48,10 +48,8 @@
         </tbody>
     </table>
 
-    <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
     @stack('scripts')
-    <script>
+    <script nonce="{{ nonce_csp() }}">
         $(document).ready(function() {
 
             $(document).ajaxStop(function() {

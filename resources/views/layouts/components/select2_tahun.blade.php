@@ -1,5 +1,5 @@
 @push('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $('#tahun').select2({
             minimumResultsForSearch: -1,
             theme: "bootstrap",

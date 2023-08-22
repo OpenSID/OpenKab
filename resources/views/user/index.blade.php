@@ -42,7 +42,7 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         var user = $('#user').DataTable({
             processing: true,
             serverSide: true,

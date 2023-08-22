@@ -128,18 +128,16 @@
                         <div class="col-md-12">
                             <div id="grafik-statistik" class="collapse">
                                 <div class="chart" id="grafik">
-                                    <canvas id="barChart"
-                                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    <canvas id="barChart"></canvas>
                                 </div>
-                                <hr style="margin-right: -20px; margin-left: -20px;">
+                                <hr class="hr-chart">
                             </div>
 
                             <div id="pie-statistik" class="collapse">
                                 <div class="chart" id="pie">
-                                    <canvas id="donutChart"
-                                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    <canvas id="donutChart"></canvas>
                                 </div>
-                                <hr style="margin-right: -20px; margin-left: -20px;">
+                                <hr class="hr-chart">
                             </div>
                         </div>
                     </div>
@@ -166,7 +164,7 @@
 
 @section('js')
     @include('statistik.chart')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         var data_grafik = [];
         var nama_desa = `{{ session('desa.nama_desa') }}`;
         var kategori = `{{ strtolower($judul) }}`;
@@ -362,3 +360,24 @@
 
     </script>
 @endsection
+@push('css')
+    <style nonce="{{ csp_nonce() }}" >
+        #barChart {
+            min-height: 250px;
+            height: 250px;
+            max-height: 250px;
+            max-width: 100%;
+        }
+        #donutChart {
+            min-height: 250px;
+            height: 250px;
+            max-height: 250px;
+            max-width: 100%;
+        }
+
+        hr.hr-chart {
+            margin-right: -20px;
+            margin-left: -20px;
+        }
+    </style>
+@endpush

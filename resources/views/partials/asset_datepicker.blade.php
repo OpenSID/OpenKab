@@ -3,10 +3,10 @@
 @endpush
 
 @push('js')
-    <script src="{{ asset('assets/datepicker/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/datepicker/bootstrap-datepicker.id.min.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/datepicker/bootstrap-datepicker.id.min.js') }}"></script>
 
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $(document).ready(function(){
             //Fortmat Tanggal dan Jam
             $('.datepicker').datepicker(

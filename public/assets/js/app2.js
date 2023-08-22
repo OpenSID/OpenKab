@@ -1,0 +1,1 @@
+import{_ as o,$ as w,b as a,p as i,S as s,a as e}from"./vendor.js";window._=o;window.$=w;window.jQuery=jQuery;window.bootstrap=a;window.popper=i;window.Swal=s;window.axios=e;window.axios.defaults.headers.common["X-Requested-With"]="XMLHttpRequest";

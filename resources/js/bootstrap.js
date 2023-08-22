@@ -1,4 +1,22 @@
-import 'bootstrap';
+import _ from 'lodash';
+import $ from 'jquery';
+import * as bootstrap from 'bootstrap';
+import 'admin-lte/dist/js/adminlte.min';
+// import {popper} from "@popperjs/core";
+// import 'alpinejs/dist/cdn.min';
+// import Alpine from 'alpinejs';
+// import './alpinejs-csp/csp';
+import Swal from 'sweetalert2/dist/sweetalert2.min';
+// import 'select2/dist/js/select2.full.min';
+// import 'datatables.net/js/jquery.dataTables.min';
+// import 'datatables.net-bs5/js/dataTables.bootstrap5.min';
+// import 'datatables.net-responsive-bs5/js/responsive.bootstrap5.min';
+
+window._ = _;
+window.$ = $;
+window.jQuery = $;
+window.bootstrap = bootstrap
+window.Swal = Swal;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

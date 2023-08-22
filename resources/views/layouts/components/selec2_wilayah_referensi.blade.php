@@ -1,5 +1,5 @@
 @push('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $('#dusun').select2({
             ajax: {
                 url: `{{ url('api/v1/wilayah/dusun') }}`,

@@ -48,7 +48,7 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $(function() {
             let nama_desa = `{{ session('desa.nama_desa') }}`;
 

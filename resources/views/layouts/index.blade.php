@@ -9,7 +9,7 @@
 @endsection
 
 @push('js')
-    <script type="application/javascript">
+    <script nonce="{{ csp_nonce() }}" type="application/javascript">
         var base_url = '{{ url('/') }}';
         $.ajax({
         type: "get",

@@ -46,7 +46,6 @@
                 <div class="card-body">
                     <div class="chart">
                         <canvas id="barChart"
-                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%; display: block; width: 379px;"
                             width="758" height="500" class="chartjs-render-monitor"></canvas>
                     </div>
                 </div>
@@ -78,8 +77,8 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>
-                                            <select class="select2 form-control-sm" id="tahun" name="tahun"
-                                                data-placeholder="Semua Tahun" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="tahun" name="tahun"
+                                                data-placeholder="Semua Tahun">
                                             </select>
                                         </div>
                                     </div>
@@ -141,7 +140,7 @@
 @endsection
 
 @push('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $(document).ready(function() {
             var url = new URL("{{ url('api/v1/dasbor') }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
@@ -306,4 +305,16 @@
             berita.ajax.reload();
         });
     </script>
+@endpush
+@push('css')
+    <style nonce="{{ csp_nonce() }}" >
+        #barChart {
+            min-height: 300px;
+            height: 300px;
+            max-height: 300px;
+            max-width: 100%;
+            display: block;
+            width: 379px;
+        }
+    </style>
 @endpush

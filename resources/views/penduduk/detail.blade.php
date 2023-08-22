@@ -366,7 +366,7 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         $.ajax({
                 url: `{{ url('api/v1/penduduk') }}?filter[id]={{ $penduduk->id }}`,
                 method: 'get',

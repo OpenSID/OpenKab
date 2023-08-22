@@ -21,7 +21,7 @@
         </div>
     </div>
 </div>
-<script type="module">
+<script nonce="{{ csp_nonce() }}" type="module">
     $(document).ready(function() {
         $(document).on('click', '#deleteModal', function(e) {
             var url = $(this).attr('data-href');

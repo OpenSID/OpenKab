@@ -52,11 +52,11 @@
 @endsection
 @include('partials.asset_datepicker')
 @push('js')
-    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
-    <script src="{{ asset('assets/jsonview/jsonview.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/jsonview/jsonview.js') }}"></script>
 @endpush
 @section('css')
-<style>
+<style nonce="{{ csp_nonce() }}" >
     .fa-caret-right:before {
         content: "";
     }
@@ -73,7 +73,7 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
         let awalBulan = '{{ \Carbon\Carbon::now()->startOfMonth()->format('d-m-Y') }}'
         let akhirBulan = '{{ \Carbon\Carbon::now()->endOfMonth()->format('d-m-Y') }}'
         function getDateStr(elm){

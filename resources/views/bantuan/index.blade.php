@@ -98,7 +98,8 @@
 @endsection
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         var bantuan = $('#bantuan').DataTable({
             processing: true,
             serverSide: true,
@@ -256,5 +257,6 @@
             url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');
             window.open(url.href, '_blank');
         });
+    })
     </script>
 @endsection

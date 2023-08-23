@@ -13,6 +13,7 @@
                             '{{ asset('assets/img/opensid_logo.png') }}'" />
     </p>
     @stack('css')
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>
@@ -49,8 +50,8 @@
     </table>
 
     @stack('scripts')
-    <script nonce="{{ nonce_csp() }}">
-        $(document).ready(function() {
+    <script nonce="{{ csp_nonce() }}">
+        document.addEventListener("DOMContentLoaded", function(event) {
 
             $(document).ajaxStop(function() {
                 window.print();

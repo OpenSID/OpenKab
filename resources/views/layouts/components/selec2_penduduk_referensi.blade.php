@@ -1,5 +1,6 @@
 @push('js')
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         $('#status').select2({
             ajax: {
                 url: `{{ url('api/v1/penduduk/referensi/status') }}`,
@@ -86,5 +87,6 @@
                 }
             }
         })
+    })
     </script>
 @endpush

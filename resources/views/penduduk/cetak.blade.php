@@ -43,8 +43,8 @@
 @stop
 
 @push('scripts')
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
-        $(document).ready(function() {
+    <script nonce="{{ csp_nonce() }}"  >
+        document.addEventListener("DOMContentLoaded", function(event) {
             var str = `{{ $filter }}`
             var filter = str.replace(/&amp;/g, '&')
 

@@ -140,8 +140,8 @@
 @endsection
 
 @push('js')
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
-        $(document).ready(function() {
+    <script nonce="{{ csp_nonce() }}"  >
+        document.addEventListener("DOMContentLoaded", function(event) {
             var url = new URL("{{ url('api/v1/dasbor') }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
             url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
@@ -162,7 +162,6 @@
                     grafik(dataGrafik);
                 }
             });
-        });
 
         function grafik(dataGrafik) {
             rgb_l = randColorRGB();
@@ -304,6 +303,7 @@
 
             berita.ajax.reload();
         });
+    });
     </script>
 @endpush
 @push('css')

@@ -84,7 +84,7 @@
         </div>
     </div>
 
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
+    <script nonce="{{ csp_nonce() }}"  >
         function warna() {
             return {
                 data: {},
@@ -129,7 +129,7 @@
 @include('partials.reset_form')
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
+    <script nonce="{{ csp_nonce() }}"  >
         $(document).on('click', 'button#submit', function(e) {
             e.preventDefault();
             formData = $('#pengaturan-form').serialize();

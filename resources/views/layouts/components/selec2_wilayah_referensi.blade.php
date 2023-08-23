@@ -1,5 +1,6 @@
 @push('js')
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         $('#dusun').select2({
             ajax: {
                 url: `{{ url('api/v1/wilayah/dusun') }}`,
@@ -99,5 +100,6 @@
                 }
             })
         })
+    })
     </script>
 @endpush

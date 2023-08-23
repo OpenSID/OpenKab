@@ -164,11 +164,12 @@
 
 @section('js')
     @include('statistik.chart')
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
-        var data_grafik = [];
-        var nama_desa = `{{ session('desa.nama_desa') }}`;
-        var kategori = `{{ strtolower($judul) }}`;
-        var default_id = `{{ $default_kategori }}`;
+    <script nonce="{{ csp_nonce() }}"  >
+    let data_grafik = [];
+    let nama_desa = `{{ session('desa.nama_desa') }}`;
+    let kategori = `{{ strtolower($judul) }}`;
+    let default_id = `{{ $default_kategori }}`;
+    document.addEventListener("DOMContentLoaded", function(event) {
 
         $.ajax({
             url: `{{ url('api/v1/statistik/kategori-statistik') }}?filter[id]=${kategori}`,
@@ -349,7 +350,7 @@
             statistik.ajax.reload();
         });
 
-        $(function() {
+        document.addEventListener("DOMContentLoaded", function(event) {
             $('#bulan').select2({
                 minimumResultsForSearch: -1,
                 allowClear: true,
@@ -357,7 +358,7 @@
                 placeholder: "Pilih Bulan",
             });
         });
-
+    });
     </script>
 @endsection
 @push('css')

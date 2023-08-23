@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
+    <script nonce="{{ csp_nonce() }}"  >
         function kategori() {
             return {
                 dataKategori: {

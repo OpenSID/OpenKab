@@ -414,7 +414,7 @@ return [
                 ],
             ],
         ],
-        'chart' => [
+        'Chart' => [
             'active' => false,
             'files' => [
                 [
@@ -514,7 +514,7 @@ return [
         ],
 
         'Alpine' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',

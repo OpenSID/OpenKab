@@ -153,7 +153,8 @@
 @endpush
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  type="text/javscript">
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         var penduduk = $('#penduduk').DataTable({
             processing: true,
             serverSide: true,
@@ -341,5 +342,6 @@
         $('#cetak').on('click', function() {
             window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
         });
+    });
     </script>
 @endsection

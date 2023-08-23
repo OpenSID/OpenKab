@@ -5,7 +5,7 @@
     </div>
     <div class="card-footer">
         <div class="input-group mb-3 px-2 py-2 bg-white shadow-sm">
-            <input id="upload" name="foto" type="file" onchange="readURL(this);" class="form-control border-0 fade">
+            <input id="upload" name="foto" type="file" accept="image/*" class="form-control border-0 fade">
             <div class="input-group-append col-12">
                 <label for="upload" class="btn  col-12 btn-primary m-0 rounded-pill"> <i
                         class="fa fa-cloud-upload mr-2 text-muted"></i><small
@@ -29,9 +29,9 @@
         }
     }
 
-    $(function () {
+    document.addEventListener("DOMContentLoaded", function(event) {
         $('#upload').on('change', function () {
-            readURL(input);
+            readURL(this);
         });
     });
     </script>

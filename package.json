@@ -5,7 +5,7 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "admin-lte": "3.1.0",
+        "admin-lte": "3.2.0",
         "axios": "^1.1.2",
         "jquery": "^3.6",
         "laravel-vite-plugin": "^0.7.2",

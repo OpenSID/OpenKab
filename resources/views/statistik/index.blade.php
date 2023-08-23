@@ -354,7 +354,7 @@
             $('#bulan').select2({
                 minimumResultsForSearch: -1,
                 allowClear: true,
-                theme: "bootstrap",
+                theme: "bootstrap4",
                 placeholder: "Pilih Bulan",
             });
         });

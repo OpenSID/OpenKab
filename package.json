@@ -23,6 +23,7 @@
         "bootstrap": "^4.6.2",
         "bootstrap-colorpicker": "^3.4.0",
         "bootstrap-datepicker": "^1.10.0",
+        "select2-bootstrap4-theme": "^1.0.0",
         "sweetalert2": "^11.7.27"
     }
 }

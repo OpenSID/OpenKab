@@ -2,6 +2,7 @@
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
         $('#dusun').select2({
+            theme: 'bootstrap4',
             ajax: {
                 url: `{{ url('api/v1/wilayah/dusun') }}`,
                 dataType: 'json',
@@ -35,6 +36,7 @@
             $('#rw').val('').trigger('change');
 
             $('#rw').select2({
+                theme: 'bootstrap4',
                 ajax: {
                     url: `{{ url('api/v1/wilayah/rw') }}`,
                     dataType: 'json',
@@ -70,6 +72,7 @@
             $('#rt').val('').trigger('change');
 
             $('#rt').select2({
+                theme: 'bootstrap4',
                 ajax: {
                     url: `{{ url('api/v1/wilayah/rt') }}`,
                     dataType: 'json',

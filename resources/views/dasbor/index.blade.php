@@ -142,6 +142,13 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}"  >
         document.addEventListener("DOMContentLoaded", function(event) {
+            $('#bulan').select2({
+                minimumResultsForSearch: -1,
+                theme: "bootstrap4",
+
+                placeholder: "Pilih Bulan",
+            });
+
             var url = new URL("{{ url('api/v1/dasbor') }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
             url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
@@ -283,13 +290,6 @@
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
-        });
-
-        $('#bulan').select2({
-            minimumResultsForSearch: -1,
-            theme: "bootstrap",
-
-            placeholder: "Pilih Bulan",
         });
 
         $('#filter').on('click', function(e) {

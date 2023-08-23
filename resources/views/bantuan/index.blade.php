@@ -195,6 +195,7 @@
         });
 
         $('#sasaran').select2({
+            theme: 'bootstrap4',
             minimumResultsForSearch: -1,
             ajax: {
                 url: '{{ url('api/v1/bantuan') }}/sasaran/',
@@ -214,6 +215,7 @@
 
         $('#tahun').select2({
             minimumResultsForSearch: -1,
+            theme: 'bootstrap4',
             ajax: {
                 url: '{{ url('api/v1/bantuan') }}/tahun/',
                 dataType: 'json',

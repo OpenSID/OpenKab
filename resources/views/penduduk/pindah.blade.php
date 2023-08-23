@@ -122,6 +122,7 @@
                     var dataPenduduk = this.dataPenduduk;
                     var dataPindah = this.dataPindah;
                     this.select2 = $(this.$refs.selectDesa).select2({
+                        theme: 'bootstrap4',
                         ajax: {
                             url: function() {
                                 return "{{ url('api/v1/wilayah/desa/') }}";

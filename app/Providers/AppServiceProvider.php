@@ -6,6 +6,7 @@ use App\Models\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
         $this->bootHttps();
         $this->bootConfigFTP();
         $this->addValidation();
+        // daftarkan manual karena gagal install infyomlabs/adminlte-templates terkendala depedency
+        View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
     }
 
     public function bootHttps()

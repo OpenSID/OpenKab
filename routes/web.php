@@ -35,7 +35,7 @@ Auth::routes([
 
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
-Route::middleware(['auth', 'teams_permission'])->group(function () {
+Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {
     Route::get('/', [DasborController::class, 'index'])->name('dasbor');
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');

@@ -16,3 +16,4 @@ Di rilis v2308.0.2 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 1. [#239](https://github.com/OpenSID/OpenKab/issues/239) Non-aktifkan preload tema adminlte.
 2. [#246](https://github.com/OpenSID/OpenKab/issues/246) Penyesuaian penulisan group menjadi grup.
 3. [#240](https://github.com/OpenSID/OpenKab/issues/240) Penyesuaian seeder untuk default pengaturan tema OpenKab.
+4. [#258](https://github.com/OpenSID/OpenKab/issues/258) Perubahan aturan password yang kuat.

@@ -18,3 +18,4 @@ Di rilis v2308.0.2 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 3. [#240](https://github.com/OpenSID/OpenKab/issues/240) Penyesuaian seeder untuk default pengaturan tema OpenKab.
 4. [#258](https://github.com/OpenSID/OpenKab/issues/258) Perubahan aturan password yang kuat.
 5. [#262](https://github.com/OpenSID/OpenKab/issues/262) Perubahan cara query pengambilan data mengikuti OpenSID serta permintaan request ajax 2 kali.
+6. [#264](https://github.com/OpenSID/OpenKab/issues/264) Perubahan cara query pengambilan data fitur statistik penduduk.

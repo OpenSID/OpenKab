@@ -11,6 +11,9 @@
                         class="fa fa-cloud-upload mr-2 text-muted"></i><small
                         class="text-uppercase text-white font-weight-bold text-muted">Ganti Foto</small></label>
             </div>
+            @error('foto')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
     </div>
 </div>

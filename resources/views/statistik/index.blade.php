@@ -199,7 +199,7 @@
                         $('#cetak').data('url',
                             `{{ url('statistik/cetak') }}/${kategori}/${id}`);
                         statistik.ajax.url(
-                            `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${id}`).load();
+                            `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${id}`);
                     }
                     html += `
                         <li class="nav-item pilih-kategori">

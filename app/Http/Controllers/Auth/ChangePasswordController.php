@@ -24,7 +24,7 @@ class ChangePasswordController extends ResetPasswordController
     {
         return [
             'password_old' => ['required', new MatchOldPassword],
-            'password' => ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()]
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()->uncompromised()]
         ];
     }
 

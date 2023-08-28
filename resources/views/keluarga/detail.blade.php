@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @push('css')
-    <style>
+    <style nonce="{{ csp_nonce() }}" >
         /* ubah semua ukuran text yang ada dalam card-body */
         .card-body {
             font-size: 14px;

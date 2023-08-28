@@ -1,8 +1,18 @@
 // Fonts
 @import url('https://fonts.bunny.net/css?family=Nunito');
+// Bootstrap
+@import "admin-lte/dist/css/adminlte.min.css";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+// @import 'bootstrap/scss/bootstrap';
+@import "sweetalert2/dist/sweetalert2.min.css";
+@import "select2/dist/css/select2.min.css";
+@import "daterangepicker/daterangepicker.css";
+@import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+@import "datatables.net-select-bs4/css/select.bootstrap4.min.css";
+@import "chart.js/dist/Chart.min.css";
+@import "bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css";
+@import "select2-bootstrap4-theme/dist/select2-bootstrap4.min.css";
 
+@import 'functions';
 // Variables
 @import 'variables';
-
-// Bootstrap
-@import 'bootstrap/scss/bootstrap';

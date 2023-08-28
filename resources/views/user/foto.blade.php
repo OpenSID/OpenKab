@@ -19,7 +19,7 @@
 </div>
 
 @push('js')
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce() }}" type="text/javascript">
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -32,7 +32,7 @@
         }
     }
 
-    $(function () {
+    document.addEventListener("DOMContentLoaded", function(event) {
         $('#upload').on('change', function () {
             readURL(this);
         });

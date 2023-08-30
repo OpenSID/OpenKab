@@ -114,7 +114,7 @@ return [
     |
     */
 
-    'model_extend_class' => 'Illuminate\Database\Eloquent\Model',
+    'model_extend_class' => 'App\Models\OpenKabModel',
 
     /*
     |--------------------------------------------------------------------------

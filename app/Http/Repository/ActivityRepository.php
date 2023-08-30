@@ -13,7 +13,7 @@ class ActivityRepository
         return QueryBuilder::for(Activity::with(['user']))
             ->allowedFields('*')
             ->allowedFilters([
-                AllowedFilter::callback('created_at', function($query, $value, $property) {
+                AllowedFilter::callback('created_at', function($query, $value) {
                     return $query->whereBetween('created_at', $value);
                 }),
                 AllowedFilter::exact('causer_id'),

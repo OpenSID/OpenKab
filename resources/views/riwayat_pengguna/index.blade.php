@@ -95,7 +95,7 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[created_at]": [getDateStr($('input[name=start]')), getDateStr($('input[name=end]'))],
+                        "filter[created_at]": [getDateStr($('input[name=start]'))+' 00:00:00', getDateStr($('input[name=end]'))+' 23:59:59'],
                         "filter[causer_id]": $('select[name=causer_id]').val(),
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]

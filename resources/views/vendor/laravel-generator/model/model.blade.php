@@ -4,7 +4,7 @@
 
 namespace {{ $config->namespaces->model }};
 
-use Illuminate\Database\Eloquent\Model;
+use {{ config('laravel_generator.model_extend_class', 'Illuminate\Database\Eloquent\Model') }} as Model;
 @if($config->options->softDelete) {{ 'use Illuminate\Database\Eloquent\SoftDeletes;' }}@endif
 @if($config->options->tests or $config->options->factory) {{ 'use Illuminate\Database\Eloquent\Factories\HasFactory;' }}@endif
 

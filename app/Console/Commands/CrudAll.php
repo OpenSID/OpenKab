@@ -111,7 +111,7 @@ class CrudAll extends Command
                     'model' => $model,
                     '--fromTable' => true,
                     '--table' => $t,
-                    '--ignoreFields' => 'created_at,updated_at,deleted_at,created_by,updated_by,iId,dtmCreated,dtmLastUpdated',
+                    '--ignoreFields' => 'created_at,updated_at,deleted_at,_lft,_rgt',
                     '--skip' => 'dump-autoload,migration',
                     //'--paginate' => 10,
                     //'--jqueryDT' => true,

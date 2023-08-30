@@ -1,8 +1,7 @@
-@@extends('layouts.index')
+@extends('layouts.index')
 
-@@section('content')
-    @@include('partials.breadcrumbs')
-
+@section('content')
+    @include('partials.breadcrumbs')
     <div class="container-fluid">
         @include('flash::message')
 
@@ -12,30 +11,26 @@
                     <div class="card-header">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <a
-                           href="{{ '{{' }} route('{!! $config->prefixes->getRoutePrefixWith('.') !!}{!! $config->modelNames->camelPlural !!}.create') }} ">
-    @if($config->options->localized)
-                             @@lang('crud.add_new')
-    @else
-            <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
-    @endif
-                        </a>
+                                <a href="{{ route('employees.create') }} ">
+                                    <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i>
+                                        Tambah</button>
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        {!! $table !!}
+                        @include('employees.table')
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@@endsection
+@endsection
 
-@@section('js')
+@section('js')
     <script>
             $(function() {
-                let {{ $config->modelNames->dashedPlural }} = $('#{{ $config->modelNames->dashedPlural }}-table').DataTable({
+                let employees = $('#employees-table').DataTable({
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -45,7 +40,7 @@
                     columns: [0]
                 },
                 ajax: {
-                    url: `{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}`,
+                    url: `{{ route('employees.index') }}`,
                     method: 'get',
                     data: function(row) {
                         return {
@@ -71,17 +66,43 @@
                 columns: [{
                         data: null,
                     },
-                    @foreach ($config->fields as $field)
-                    @if ( $config->primaryName == $field->name ) @continue; @endif
-                    {
-                        data: "attributes.{{ $field->name }}",
-                        name: "{{ $field->name }}"
+                                                                                 {
+                        data: "attributes.name",
+                        name: "name"
                     },
-                    @endforeach
-                    {
+                                                            {
+                        data: "attributes.identity_number",
+                        name: "identity_number"
+                    },
+                                                            {
+                        data: "attributes.email",
+                        name: "email"
+                    },
+                                                            {
+                        data: "attributes.description",
+                        name: "description"
+                    },
+                                                            {
+                        data: "attributes.phone",
+                        name: "phone"
+                    },
+                                                            {
+                        data: "attributes.foto",
+                        name: "foto"
+                    },
+                                                            {
+                        data: "attributes.position_id",
+                        name: "position_id"
+                    },
+                                                            {
+                        data: "attributes.department_id",
+                        name: "department_id"
+                    },
+
+                                        {
                         data: function(data) {
                             return `
-                                    <a href="{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}/${data.id}/edit">
+                                    <a href="{{ route('employees.index') }}/${data.id}/edit">
                                         <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -99,9 +120,9 @@
                 ]
             })
 
-            {{ $config->modelNames->dashedPlural }}.on('draw.dt', function() {
-                var PageInfo = $('#{{ $config->modelNames->dashedPlural }}-table').DataTable().page.info();
-                {{ $config->modelNames->dashedPlural }}.column(0, {
+            employees.on('draw.dt', function() {
+                var PageInfo = $('#employees-table').DataTable().page.info();
+                employees.column(0, {
                     page: 'current'
                 }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1 + PageInfo.start;
@@ -131,7 +152,7 @@
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 dataType: "json",
-                                url: `{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}/${id}`,
+                                url: `{{ route('employees.index') }}/${id}`,
                                 data: {
                                     id: id
                                 },
@@ -167,4 +188,4 @@
             });
 
     </script>
-@@endsection
+@endsection

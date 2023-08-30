@@ -107,12 +107,18 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
 
     // Master Data
     Route::middleware(['role:master-data'])->controller(AdminWebController::class)
-        ->prefix('master')
         ->group(function () {
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/tambah/{parrent}', 'kategori_create')->name('master-data-artikel.kategori-create');
-            Route::middleware(['role:master-data-pengaturan'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
-            Route::middleware(['role:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            Route::resource('departments', App\Http\Controllers\DepartmentController::class)->except(['show']);
+            Route::resource('positions', App\Http\Controllers\PositionController::class)->except(['show']);
+            Route::resource('employees', App\Http\Controllers\EmployeeController::class)->except(['show']);
+
+            Route::prefix('master')->group(function () {
+                Route::middleware(['role:master-data-artikel'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
+                Route::middleware(['role:master-data-artikel'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
+                Route::middleware(['role:master-data-artikel'])->get('/kategori/tambah/{parrent}', 'kategori_create')->name('master-data-artikel.kategori-create');
+                Route::middleware(['role:master-data-pengaturan'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
+                Route::middleware(['role:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            });
         });
 });
+

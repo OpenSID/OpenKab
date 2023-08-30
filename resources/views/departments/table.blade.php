@@ -1,19 +1,17 @@
-
+<div class="card-body p-0">
     <div class="table-responsive">
-        <table class="table" id="{{ $config->modelNames->dashedPlural }}-table">
+        <table class="table" id="departments-table">
             <thead>
             <tr>
                 <th>No</th>
-                {!! $fieldHeaders !!}
-@if($config->options->localized)
-                <th colspan="3">@lang('crud.action')</th>
-@else
+                <th>Nama</th>
+                <th>Deskripsi</th>
+                <th>Dibawah Departemen</th>
                 <th>Aksi</th>
-@endif
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
     </div>
-
+</div>

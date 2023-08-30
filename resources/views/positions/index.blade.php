@@ -1,8 +1,7 @@
-@@extends('layouts.index')
+@extends('layouts.index')
 
-@@section('content')
-    @@include('partials.breadcrumbs')
-
+@section('content')
+    @include('partials.breadcrumbs')
     <div class="container-fluid">
         @include('flash::message')
 
@@ -12,30 +11,26 @@
                     <div class="card-header">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <a
-                           href="{{ '{{' }} route('{!! $config->prefixes->getRoutePrefixWith('.') !!}{!! $config->modelNames->camelPlural !!}.create') }} ">
-    @if($config->options->localized)
-                             @@lang('crud.add_new')
-    @else
-            <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
-    @endif
-                        </a>
+                                <a href="{{ route('positions.create') }} ">
+                                    <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i>
+                                        Tambah</button>
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        {!! $table !!}
+                        @include('positions.table')
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@@endsection
+@endsection
 
-@@section('js')
+@section('js')
     <script>
             $(function() {
-                let {{ $config->modelNames->dashedPlural }} = $('#{{ $config->modelNames->dashedPlural }}-table').DataTable({
+                let positions = $('#positions-table').DataTable({
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -45,7 +40,7 @@
                     columns: [0]
                 },
                 ajax: {
-                    url: `{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}`,
+                    url: `{{ route('positions.index') }}`,
                     method: 'get',
                     data: function(row) {
                         return {
@@ -71,17 +66,22 @@
                 columns: [{
                         data: null,
                     },
-                    @foreach ($config->fields as $field)
-                    @if ( $config->primaryName == $field->name ) @continue; @endif
-                    {
-                        data: "attributes.{{ $field->name }}",
-                        name: "{{ $field->name }}"
+                                                                                 {
+                        data: "attributes.name",
+                        name: "name"
                     },
-                    @endforeach
-                    {
+                                                            {
+                        data: "attributes.description",
+                        name: "description"
+                    },
+                                                            {
+                        data: "attributes.parent_id",
+                        name: "parent_id"
+                    },
+                                        {
                         data: function(data) {
                             return `
-                                    <a href="{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}/${data.id}/edit">
+                                    <a href="{{ route('positions.index') }}/${data.id}/edit">
                                         <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -99,9 +99,9 @@
                 ]
             })
 
-            {{ $config->modelNames->dashedPlural }}.on('draw.dt', function() {
-                var PageInfo = $('#{{ $config->modelNames->dashedPlural }}-table').DataTable().page.info();
-                {{ $config->modelNames->dashedPlural }}.column(0, {
+            positions.on('draw.dt', function() {
+                var PageInfo = $('#positions-table').DataTable().page.info();
+                positions.column(0, {
                     page: 'current'
                 }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1 + PageInfo.start;
@@ -131,7 +131,7 @@
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 dataType: "json",
-                                url: `{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}/${id}`,
+                                url: `{{ route('positions.index') }}/${id}`,
                                 data: {
                                     id: id
                                 },
@@ -167,4 +167,4 @@
             });
 
     </script>
-@@endsection
+@endsection

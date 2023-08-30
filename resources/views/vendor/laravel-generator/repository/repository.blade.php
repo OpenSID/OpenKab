@@ -38,9 +38,7 @@ class {{ $config->modelNames->name }}Repository extends BaseRepository
                     @endforeach
                     });
                 }),
-            ])->allowedSorts([
-                'created_at'
-            ])
+            ])->allowedSorts($this->getFieldsSearchable())
             ->jsonPaginate();
     }
 }

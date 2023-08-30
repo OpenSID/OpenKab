@@ -76,6 +76,24 @@ final class Modul extends Enum
             'role' => 'master-data',
             'submenu' => [
                 [
+                    'icon' => 'fa fa-building',
+                    'text' => 'Departemen',
+                    'url' => 'departments',
+                    'role' => '',
+                ],
+                [
+                    'icon' => 'fa fa-chart-bar',
+                    'text' => 'Jabatan',
+                    'url' => 'positions',
+                    'role' => '',
+                ],
+                [
+                    'icon' => 'fa fa-users',
+                    'text' => 'Pegawai',
+                    'url' => 'employees',
+                    'role' => '',
+                ],
+                [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Bantuan',
                     'url' => 'master/bantuan',

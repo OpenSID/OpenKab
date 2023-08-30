@@ -2,28 +2,11 @@
 
 @@section('content')
     @@include('partials.breadcrumbs')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-12">
-                    <h1>
-@if($config->options->localized)
-                    @@lang('crud.create') @@lang('models/{!! $config->modelNames->camelPlural !!}.singular')
-@else
-                    Create {{ $config->modelNames->humanPlural }}
-@endif
-                    </h1>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="content px-3">
-
-        @@include('adminlte-templates::common.errors')
-
-        <div class="card">
-            <div class="card-header">
+    <div class="row">
+        <div class="col-lg-12">
+            @@include('adminlte-templates::common.errors')
+            <div class="card card-outline card-primary">
+                <div class="card-header">
                 <a href="{{ '{{' }} route('{!! $config->prefixes->getRoutePrefixWith('.') !!}{!! $config->modelNames->camelPlural !!}.index') }}" class="btn btn-primary btn-sm"><i
                         class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar {{ $config->modelNames->name }}</a>
             </div>
@@ -46,4 +29,5 @@
 
         </div>
     </div>
+</div>
 @@endsection

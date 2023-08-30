@@ -1,4 +1,4 @@
-<div class="card-body p-0">
+
     <div class="table-responsive">
         <table class="table" id="{{ $config->modelNames->dashedPlural }}-table">
             <thead>
@@ -8,7 +8,7 @@
 @if($config->options->localized)
                 <th colspan="3">@lang('crud.action')</th>
 @else
-                <th colspan="3">Action</th>
+                <th>Aksi</th>
 @endif
             </tr>
             </thead>
@@ -16,4 +16,4 @@
             </tbody>
         </table>
     </div>
-</div>
+

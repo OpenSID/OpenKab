@@ -35,7 +35,7 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
      */
     public function create()
     {
-        return view('{{ $config->prefixes->getViewPrefixForInclude() }}{{ $config->modelNames->snakePlural }}.create');
+        return view('{{ $config->prefixes->getViewPrefixForInclude() }}{{ $config->modelNames->snakePlural }}.create', $this->getOptionItems());
     }
 
     /**
@@ -73,7 +73,7 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
 
         @include('laravel-generator::scaffold.controller.messages.not_found')
 
-        return view('{{ $config->prefixes->getViewPrefixForInclude() }}{{ $config->modelNames->snakePlural }}.edit')->with('{{ $config->modelNames->camel }}', ${{ $config->modelNames->camel }});
+        return view('{{ $config->prefixes->getViewPrefixForInclude() }}{{ $config->modelNames->snakePlural }}.edit', $this->getOptionItems($id))->with('{{ $config->modelNames->camel }}', ${{ $config->modelNames->camel }});
     }
 
     /**
@@ -110,5 +110,10 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
         @include('laravel-generator::scaffold.controller.messages.delete_success')
 
         return redirect(route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'));
+    }
+
+    protected function getOptionItems($id = null)
+    {
+        return [];
     }
 }

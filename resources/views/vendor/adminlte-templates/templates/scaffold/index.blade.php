@@ -2,34 +2,34 @@
 
 @@section('content')
     @@include('partials.breadcrumbs')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <a
-                       href="{{ '{{' }} route('{!! $config->prefixes->getRoutePrefixWith('.') !!}{!! $config->modelNames->camelPlural !!}.create') }} ">
-@if($config->options->localized)
-                         @@lang('crud.add_new')
-@else
-        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
-@endif
-                    </a>
+
+    <div class="container-fluid">
+        @include('flash::message')
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-outline card-primary">
+                    <div class="card-header">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <a
+                           href="{{ '{{' }} route('{!! $config->prefixes->getRoutePrefixWith('.') !!}{!! $config->modelNames->camelPlural !!}.create') }} ">
+    @if($config->options->localized)
+                             @@lang('crud.add_new')
+    @else
+            <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
+    @endif
+                        </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {!! $table !!}
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <div class="content px-3">
-
-        @@include('flash::message')
-
-        <div class="clearfix"></div>
-
-        <div class="card">
-            {!! $table !!}
-        </div>
     </div>
-
 @@endsection
 
 @@section('js')

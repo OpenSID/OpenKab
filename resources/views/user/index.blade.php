@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     @include('partials.flash_message')
     <div class="row">
         <div class="col-lg-12">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 class Agama extends BaseModel
 {
+    public $timestamps = false;
     /**
      * The table associated with the model.
      *

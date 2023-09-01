@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Permission\Models\Role;
 
-class Team extends Model
+class Team extends OpenKabModel
 {
     use HasFactory;
 

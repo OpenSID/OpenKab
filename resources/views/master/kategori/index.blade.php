@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
 <div class="row" id="tampilkan-bantuan">
     <div class="col-lg-12">
         <div class="card card-outline card-primary">
@@ -51,11 +52,7 @@
                 type: "get",
                 url: "{{ url('api/v1/kategori/tampil') }}",
                 data: {
-                    id: {
-                        {
-                            request() - > route('parrent')
-                        }
-                    }
+                    id: {{ request()->route('parrent') }}
                 },
                 success: function(response) {
                     if (response.data != null) {
@@ -68,8 +65,7 @@
             var table = $('#kategori').DataTable({
 
                 ajax: {
-                    url: '{{ url('
-                    api / v1 / kategori ') }}',
+                    url: '{{ url('api/v1/kategori') }}',
                     dataSrc: function(json) {
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
@@ -79,11 +75,7 @@
                         return {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
-                            "filter[parrent]": {
-                                {
-                                    request() - > route('parrent')
-                                }
-                            },
+                            "filter[parrent]": {{ request()->route('parrent') }},
                             "filter[search]": row.search.value,
                             "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
                                 ?.column]?.name

@@ -10,6 +10,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <x-adminlte-callout theme="warning">
         Selamat datang <b>{{ Auth::user()->username ?? '' }}</b> di Dasbor Utama
         <b>{{ ucwords(strtolower($data['nama_aplikasi']))  . ' ' . ucwords(strtolower($data['nama_kabupaten'])) }}</b>.

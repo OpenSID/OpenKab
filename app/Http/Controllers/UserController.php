@@ -7,11 +7,14 @@ use App\Models\Enums\StatusEnum;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
+use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
+    use UploadedFile;
     /**
      * Display a listing of the resource.
      *
@@ -79,8 +82,7 @@ class UserController extends Controller
     {
         try {
             $data = $request->validated();
-
-            $user = User::create([
+            $insertData = [
                 'name' => $data['name'],
                 'username' => $data['username'],
                 'email' => $data['email'],
@@ -88,7 +90,13 @@ class UserController extends Controller
                 'phone' => $data['phone'],
                 'password' => $data['password'],
                 'active' => 1,
-            ]);
+            ];
+
+            if($request->file('foto')){
+                $this->pathFolder .= '/profile';
+                $insertData['foto'] = $this->uploadFile($request, 'foto');
+            }
+            $user = User::create($insertData);
 
             // joinkan user ke group
             UserTeam::create([
@@ -156,32 +164,44 @@ class UserController extends Controller
         try {
             $data = $request->validated();
 
-            $user->update([
+            $updateData = [
                 'name' => $data['name'],
                 'username' => $data['username'],
                 'email' => $data['email'],
                 'company' => $data['company'],
                 'phone' => $data['phone'],
-            ]);
+            ];
+            if($request->file('foto')){
+                $this->pathFolder .= '/profile';
+                $updateData['foto'] = $this->uploadFile($request, 'foto');
+            }
+            $user->update($updateData);
+
+            if (! Auth::user()->isSuperAdmin()){
+                return redirect()->route('users.edit', Auth::id())->with('success', 'Data profil berhasil diubah!');
+            }
 
             // update user team
             $user_team = UserTeam::find($user->id);
-            setPermissionsTeamId($user_team->id_team);
-            $user->roles()->detach();
-            $user_team->id_team = $data['group'];
-            $user_team->save();
+            if($user_team){
+                setPermissionsTeamId($user_team->id_team);
+                $user->roles()->detach();
+                $user_team->id_team = $data['group'];
+                $user_team->save();
 
-            setPermissionsTeamId($request['group']);
-            // assign role berdasarkan team
-
-            foreach ($user->team->first()->menu as $menu) {
-                $user->assignRole($menu['role']);
-                if (isset($menu['submenu'])) {
-                    foreach ($menu['submenu'] as $submenu) {
-                        $user->assignRole($submenu['role']);
+                foreach ($user->team->first()->menu as $menu) {
+                    $user->assignRole($menu['role']);
+                    if (isset($menu['submenu'])) {
+                        foreach ($menu['submenu'] as $submenu) {
+                            $user->assignRole($submenu['role']);
+                        }
                     }
                 }
             }
+
+
+            setPermissionsTeamId($request['group']);
+            // assign role berdasarkan team
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {

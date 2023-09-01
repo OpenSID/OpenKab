@@ -3,6 +3,7 @@
 use App\Models\Config;
 use App\Models\SettingAplikasi;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 if (! function_exists('openkab_versi')) {
     /**
@@ -10,7 +11,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2308.0.0';
+        return 'v2309.0.0';
     }
 }
 
@@ -185,4 +186,23 @@ function ambilBerkas($pathBerkas, $tampil = true)
     }
 
     response()->download(storage_path($pathBerkas));
+}
+
+if (! function_exists('default_favicon')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function default_favicon($favicon)
+    {
+        $path = public_path('favicons');
+        if (! file_exists($path)) {
+            mkdir($path, 0755, true);
+            $pathFavicon = public_path('favicons/'.$favicon);
+            if (! file_exists($pathFavicon)) {
+                $filePath = public_path('assets/img/opensid_logo.png');
+                Image::make($filePath)->resize(96, 96)->save($pathFavicon, '100', 'png');
+            }
+
+        }
+    }
 }

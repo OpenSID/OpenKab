@@ -45,7 +45,7 @@ class BantuanKabupatenController extends Controller
             $data['edate'] = Carbon::parse($data['edate']);
             $data['status'] = $data['sdate'] < now() && $data['edate'] < now() ? 0 : 1;
             $data['userid'] = 0;
-            Bantuan::insert($data);
+            Bantuan::create($data);
 
             return response()->json([
                 'success' => true,
@@ -75,7 +75,8 @@ class BantuanKabupatenController extends Controller
             $data['edate'] = Carbon::parse($data['edate']);
             $data['status'] = $data['sdate'] < now() && $data['edate'] < now() ? 0 : 1;
             $data['userid'] = 0;
-            Bantuan::where('id', (int) $id)->whereNull('config_id')->update($data);
+            $bantuan = Bantuan::find((int) $id);
+            $bantuan->update($data);
 
             return response()->json([
                 'success' => true,
@@ -99,7 +100,8 @@ class BantuanKabupatenController extends Controller
     {
         $id = (int) $request->id;
         try {
-            Bantuan::where('id', $id)->whereNull('config_id')->delete();
+            $bantuan = Bantuan::find($id);
+            $bantuan->delete();
 
             return response()->json([
                 'success' => true,

@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row" x-data="pindah()" x-init="$nextTick(() => { retrieveData() })">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">

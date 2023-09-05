@@ -5,10 +5,8 @@
                 <div class="col-sm">
                     <div class="form-group">
                         <label>Tanggal Aktifitas</label>
-                        <div class="input-group input-daterange">
-                            <input type="text" class="form-control" data-date-format="dd-mm-yyyy" value="{{ \Carbon\Carbon::now()->startOfMonth()->format('d-m-Y') }}" name="start" >
-                            <div class="input-group-addon">sd</div>
-                            <input type="text" class="form-control" data-date-format="dd-mm-yyyy" value="{{ \Carbon\Carbon::now()->endOfMonth()->format('d-m-Y') }}" name="end">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-daterange" data-date-format="dd-mm-yyyy" value="{{ \Carbon\Carbon::now()->startOfMonth()->format('d-m-Y') }} - {{ \Carbon\Carbon::now()->endOfMonth()->format('d-m-Y') }}" name="start" >
                         </div>
                     </div>
                 </div>
@@ -17,7 +15,7 @@
                 <div class="col-sm">
                     <div class="form-group">
                         <label>Pengguna</label>
-                        {{ Form::select('causer_id', $pengguna, null, ['class' => 'select2 form-control', 'style' => 'width:100%']) }}
+                        {{ Form::select('causer_id', $pengguna, null, ['class' => 'select2 form-control width-100']) }}
                     </div>
                 </div>
             </div>

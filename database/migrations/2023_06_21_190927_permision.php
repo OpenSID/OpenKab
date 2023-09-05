@@ -23,7 +23,7 @@ return new class extends Migration
 
             foreach (Modul::permision as $permision) {
                 $name_permision = $main_menu['role'].'-'.$permision;
-                $permision = Permission::create(['name' => $name_permision]);
+                $permision = Permission::firstOrCreate(['name' => $name_permision]);
                 foreach ($roles as $role) {
                     $role->givePermissionTo($name_permision);
                 }
@@ -34,7 +34,7 @@ return new class extends Migration
                     $roles = Role::where('name', $sub_menu['role'])->get();
                     foreach (Modul::permision as $permision) {
                         $name_permision = $sub_menu['role'].'-'.$permision;
-                        Permission::create(['name' => $name_permision]);
+                        Permission::firstOrCreate(['name' => $name_permision]);
                         foreach ($roles as $role) {
                             $role->givePermissionTo($name_permision);
                         }

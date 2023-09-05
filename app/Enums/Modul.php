@@ -125,6 +125,12 @@ final class Modul extends Enum
                     'url' => 'pengaturan/activities',
                     'role' => 'pengaturan-users',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Aplikasi',
+                    'url' => 'pengaturan/settings',
+                    'role' => 'pengaturan-settings',
+                ],
             ],
         ],
     ];

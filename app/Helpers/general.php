@@ -206,3 +206,16 @@ if (! function_exists('default_favicon')) {
         }
     }
 }
+
+if (! function_exists('generate_input_value')) {
+    function generate_input_value($item)
+    {
+        $type = $item['type'] ?? 'dropdown';
+        $attribute = $item['attribute'];
+        $value = $item['value'];
+        switch($type){
+            case 'dropdown':
+                return Form::select('value', $attribute, $value);
+        }
+    }
+}

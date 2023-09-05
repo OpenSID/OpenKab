@@ -48,8 +48,8 @@
 @endsection
 
 @section('js')
-    <script>
-        $(function() {
+    <script nonce="{{ csp_nonce() }}"  >
+        document.addEventListener("DOMContentLoaded", function(event) {
             let nama_desa = `{{ session('desa.nama_desa') }}`;
 
             var bantuan = $('#bantuan').DataTable({

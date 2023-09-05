@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         $this->addValidation();
         // daftarkan manual karena gagal install infyomlabs/adminlte-templates terkendala depedency
         View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
+        $this->addLogQuery();
     }
 
     public function bootHttps()
@@ -73,5 +75,16 @@ class AppServiceProvider extends ServiceProvider
 
             return true;
         });
+    }
+
+    private function addLogQuery(){
+        if (config('app.debug')) {
+            DB::listen(function ($query) {
+                File::append(
+                    storage_path('/logs/query.log'),
+                    $query->sql.' ['.implode(', ', $query->bindings).']'.PHP_EOL
+                );
+            });
+        }
     }
 }

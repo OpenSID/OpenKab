@@ -18,10 +18,6 @@
                         <a href="{{ route('users.index') }}" class="btn btn-primary btn-sm"><i
                                 class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Pengguna</a>
                         @endif
-                        @if ($user->id == Auth::id())
-                        <a href="{{ route('password.change') }}" class="btn btn-danger btn-sm"><i
-                            class="fas fa-lock"></i></i>&ensp;Ganti Password</a>
-                        @endif
                     </div>
                     <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="{{ $user->id }}">

@@ -4,5 +4,5 @@
 @endpush
 
 @push('js')
-    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
 @endpush

@@ -13,6 +13,7 @@
                             '{{ asset('assets/img/opensid_logo.png') }}'" />
     </p>
     @stack('css')
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>
@@ -48,11 +49,9 @@
         </tbody>
     </table>
 
-    <script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
     @stack('scripts')
-    <script>
-        $(document).ready(function() {
+    <script nonce="{{ csp_nonce() }}">
+        document.addEventListener("DOMContentLoaded", function(event) {
 
             $(document).ajaxStop(function() {
                 window.print();

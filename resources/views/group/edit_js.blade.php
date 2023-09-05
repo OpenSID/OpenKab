@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce() }}"  >
     function group() {
         _.mixin({
             'mergeByKey': function(arr1, arr2, key) {

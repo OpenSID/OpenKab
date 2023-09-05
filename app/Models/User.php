@@ -108,7 +108,7 @@ class User extends Authenticatable
     }
 
     public function adminlte_profile_url(){
-        return route('profile.edit', $this->id);
+        return route('users.edit', $this->id);
     }
 
     public function adminlte_desc(){

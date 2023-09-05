@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @push('css')
-    <style nonce="{{ csp_nonce() }}" >
+    <style>
         .select2-container .select2-selection--single {
             height: 34px;
         }
@@ -93,7 +93,7 @@
             </div>
         </div>
     </div>
-    <script nonce="{{ csp_nonce() }}"  >
+    <script>
         function identitas() {
             return {
                 dataIdentitas: {},

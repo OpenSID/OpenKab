@@ -35,14 +35,13 @@ Auth::routes([
 
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
-Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {
+Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::get('/', [DasborController::class, 'index'])->name('dasbor');
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
+
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
-    Route::get('users/{user}', [UserController::class, 'profile'])->name('profile.edit');
-    Route::put('users/{user}', [UserController::class, 'update'])->name('profile.update');
     Route::prefix('pengaturan')->group(function () {
         Route::middleware(['role:pengaturan-users'])->resource('users', UserController::class);
         Route::middleware(['role:pengaturan-identitas'])->resource('identitas', IdentitasController::class)->only(['index', 'edit']);

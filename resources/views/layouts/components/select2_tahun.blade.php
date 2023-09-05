@@ -1,9 +1,8 @@
 @push('js')
-    <script nonce="{{ csp_nonce() }}"  >
-    document.addEventListener("DOMContentLoaded", function(event) {
+    <script>
         $('#tahun').select2({
             minimumResultsForSearch: -1,
-            theme: "bootstrap4",
+            theme: "bootstrap",
             ajax: {
                 url: ``,
                 dataType: 'json',
@@ -34,6 +33,5 @@
             },
             placeholder: "Pilih Tahun",
         });
-    });
     </script>
 @endpush

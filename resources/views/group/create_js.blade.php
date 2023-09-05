@@ -1,4 +1,4 @@
-<script nonce="{{ csp_nonce() }}"  >
+<script>
     function group() {
         return {
             dataGroup: {

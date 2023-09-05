@@ -46,8 +46,8 @@
     @endsection
 
     @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
-        document.addEventListener("DOMContentLoaded", function(event) {
+    <script>
+        $(function() {
             $.ajax({
                 type: "get",
                 url: "{{ url('api/v1/kategori/tampil') }}",

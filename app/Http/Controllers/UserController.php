@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\UserTeam;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
@@ -153,20 +152,6 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function profile($id)
-    {
-        $user = User::find($id);
-
-        return view('user.profile', compact('user'));
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -177,12 +162,14 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         try {
+            $data = $request->validated();
+
             $updateData = [
-                'name' => $request->get('name'),
-                'username' => $request->get('username') ?? $user->username,
-                'email' => $request->get('email'),
-                'company' => $request->get('company'),
-                'phone' => $request->get('phone'),
+                'name' => $data['name'],
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'company' => $data['company'],
+                'phone' => $data['phone'],
             ];
             if($request->file('foto')){
                 $this->pathFolder .= '/profile';
@@ -190,9 +177,8 @@ class UserController extends Controller
             }
             $user->update($updateData);
 
-            $routeCurrent = Route::currentRouteName();
-            if ( $routeCurrent == 'profile.update') {
-                return redirect()->route('profile.edit', Auth::id())->with('success', 'Data profil berhasil diubah!');
+            if (! Auth::user()->isSuperAdmin()){
+                return redirect()->route('users.edit', Auth::id())->with('success', 'Data profil berhasil diubah!');
             }
 
             // update user team

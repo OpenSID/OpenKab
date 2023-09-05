@@ -49,8 +49,7 @@
 @endsection
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
-    document.addEventListener("DOMContentLoaded", function(event) {
+    <script>
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
         $.ajax({
@@ -189,6 +188,5 @@
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
         });
-    })
     </script>
 @endsection

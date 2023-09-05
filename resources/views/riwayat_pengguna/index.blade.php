@@ -52,10 +52,11 @@
 @endsection
 @include('partials.asset_datepicker')
 @push('js')
-    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/jsonview/jsonview.js') }}"></script>
+    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+    <script src="{{ asset('assets/jsonview/jsonview.js') }}"></script>
 @endpush
 @section('css')
-<style nonce="{{ csp_nonce() }}" >
+<style>
     .fa-caret-right:before {
         content: "";
     }
@@ -72,11 +73,13 @@
 @endsection
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
-    document.addEventListener("DOMContentLoaded", function(event) {
+    <script>
         let awalBulan = '{{ \Carbon\Carbon::now()->startOfMonth()->format('d-m-Y') }}'
         let akhirBulan = '{{ \Carbon\Carbon::now()->endOfMonth()->format('d-m-Y') }}'
-
+        function getDateStr(elm){
+            let obj = $(elm).datepicker('getDate')
+            return [obj.getFullYear(), obj.getMonth() + 1, obj.getDate()].join('-')
+        }
         var riwayat_pengguna = $('#riwayat_pengguna').DataTable({
 
             processing: true,
@@ -92,7 +95,7 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[created_at]": [$('input[name=start]').data('daterangepicker').startDate.format('YYYY-MM-DD'), $('input[name=start]').data('daterangepicker').endDate.format('YYYY-MM-DD')],
+                        "filter[created_at]": [getDateStr($('input[name=start]')), getDateStr($('input[name=end]'))],
                         "filter[causer_id]": $('select[name=causer_id]').val(),
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
@@ -171,11 +174,10 @@
 
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
-            $('input[name=start]').data('daterangepicker').setStartDate(awalBulan);
-            $('input[name=start]').data('daterangepicker').setEndDate(akhirBulan);
+            $('input[name=start]').datepicker('setDate',awalBulan);
+            $('input[name=end]').datepicker('setDate',akhirBulan);
             $('select[name=causer_id]').val('').change();
             riwayat_pengguna.draw();
         });
-    })
     </script>
 @endsection

@@ -43,8 +43,8 @@
     </div>
 @endsection
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
-        document.addEventListener("DOMContentLoaded", function(event) {
+    <script>
+        $(function() {
             var grup = $('#grup').DataTable({
             processing: true,
             serverSide: true,

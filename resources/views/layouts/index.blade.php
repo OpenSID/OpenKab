@@ -9,8 +9,7 @@
 @endsection
 
 @push('js')
-    <script nonce="{{ csp_nonce() }}" type="application/javascript">
-    document.addEventListener("DOMContentLoaded", function(event) {
+    <script type="application/javascript">
         var base_url = '{{ url('/') }}';
         $.ajax({
         type: "get",
@@ -29,22 +28,21 @@
         $('#desa').children('a.active').text(nama_desa);
 
         $.extend($.fn.dataTable.defaults, {
-            language: {url: "{{ asset('vendor/datatable/id.json') }}"}
+            language: {url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/id.json"}
         });
 
-
-        window.setTimeout(function() {
-            $("#notifikasi").fadeTo(500, 0).slideUp(500, function() {
-                $(this).remove();
-            });
-        }, 5000);
-
+        $(document).ready(function() {
+            window.setTimeout(function() {
+                $("#notifikasi").fadeTo(500, 0).slideUp(500, function() {
+                    $(this).remove();
+                });
+            }, 5000);
+        });
 
         function filter_open () {
             if ($('a[href="#collapse-filter"]').attr('aria-expanded') == 'false') {
                 $('a[href="#collapse-filter"]').trigger('click')
             }
         }
-    })
     </script>
 @endpush

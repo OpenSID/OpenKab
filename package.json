@@ -5,8 +5,10 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "admin-lte": "3.2.0",
+        "@popperjs/core": "^2.11.6",
+        "admin-lte": "3.1.0",
         "axios": "^1.1.2",
+        "bootstrap": "^5.2.3",
         "jquery": "^3.6",
         "laravel-vite-plugin": "^0.7.2",
         "lodash": "^4.17.19",
@@ -15,15 +17,5 @@
         "sass": "^1.56.1",
         "sass-loader": "^8.0.0",
         "vite": "^4.0.0"
-    },
-    "dependencies": {
-        "@fortawesome/fontawesome-free": "^6.4.2",
-        "@rollup/plugin-inject": "^5.0.3",
-        "alpinejs": "^3.12.3",
-        "bootstrap": "^4.6.2",
-        "bootstrap-colorpicker": "^3.4.0",
-        "bootstrap-datepicker": "^1.10.0",
-        "select2-bootstrap4-theme": "^1.0.0",
-        "sweetalert2": "^11.7.27"
     }
 }

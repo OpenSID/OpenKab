@@ -74,7 +74,7 @@
             </div>
         </div>
     </div>
-    <script nonce="{{ csp_nonce() }}"  >
+    <script>
         function identitas() {
             return {
                 id: 1,

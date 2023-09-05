@@ -82,9 +82,7 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('vendor/moment/moment.js') }}"></script>
-    <script src="{{ asset('vendor/moment/id.js') }}"></script>
-    <script nonce="{{ csp_nonce() }}"  >
+    <script>
         function pindah() {
             return {
                 dataPindah: {
@@ -122,7 +120,6 @@
                     var dataPenduduk = this.dataPenduduk;
                     var dataPindah = this.dataPindah;
                     this.select2 = $(this.$refs.selectDesa).select2({
-                        theme: 'bootstrap4',
                         ajax: {
                             url: function() {
                                 return "{{ url('api/v1/wilayah/desa/') }}";
@@ -167,34 +164,25 @@
 
                 dateTglLapor() {
                     var data = this.dataPindah;
-                    this.tglLapor = $(this.$refs.tgl_lapor).daterangepicker({
-                        autoApply: true,
+                    this.tglLapor = $(this.$refs.tgl_lapor).datepicker({
+                        language: "id",
+                        autoclose: true,
                         format: "dd/mm/yyyy",
-                        singleDatePicker: true,
-                        locale: {
-                            firstDay: 1
-                        }
-                    })
-                    // .datepicker("setDate", 'now');;
-                    this.tglLapor.on('apply.daterangepicker', function(event, picker) {
-                        data.tgl_lapor = picker.startDate.format('yyyy-mm-dd')
+                    }).datepicker("setDate", 'now');;
+                    this.tglLapor.on('change', function(event) {
+                        data.tgl_lapor = $(this).data('datepicker').getFormattedDate('yyyy-mm-dd')
                     });
                 },
 
                 dateTglPeristiwa() {
                     var data = this.dataPindah;
-                    this.tglPeristiwa = $(this.$refs.tgl_peristiwa).daterangepicker({
-                        autoApply: true,
+                    this.tglPeristiwa = $(this.$refs.tgl_peristiwa).datepicker({
+                        language: "id",
+                        autoclose: true,
                         format: "dd/mm/yyyy",
-                        singleDatePicker: true,
-                        locale: {
-                            firstDay: 1
-                        }
-
-                    });
-                    // .datepicker("setDate", 'now');;
-                    this.tglPeristiwa.on('apply.daterangepicker', function(event, picker) {
-                        data.tgl_peristiwa = picker.startDate.format('yyyy-mm-dd');
+                    }).datepicker("setDate", 'now');;
+                    this.tglPeristiwa.on('change', function(event) {
+                        data.tgl_peristiwa = $(this).data('datepicker').getFormattedDate('yyyy-mm-dd')
                     });
 
 

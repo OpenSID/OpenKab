@@ -19,8 +19,8 @@
 @stop
 
 @push('scripts')
-    <script nonce="{{ csp_nonce() }}"  >
-        document.addEventListener("DOMContentLoaded", function(event) {
+    <script>
+        $(document).ready(function() {
             var kategori = `{{ $kategori }}`;
             var id = `{{ $id }}`;
 

@@ -112,8 +112,7 @@
     <span x-data="identitas()" x-init="retrieveData()">
         <b x-text="dataIdentitas.nama_aplikasi"></b>
     </span>
-
-   <script nonce="{{ csp_nonce() }}"  >
+   <script>
        function identitas() {
            return {
                id: 1,

@@ -5,14 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    protected $decayMinutes = 3;
-    protected $maxAttempts = 5;
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -74,36 +69,5 @@ class LoginController extends Controller
     public function username()
     {
         return $this->username;
-    }
-
-    /**
-     * Attempt to log the user into the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    protected function attemptLogin(Request $request)
-    {
-        $successLogin = $this->guard()->attempt(
-            $this->credentials($request), $request->boolean('remember')
-        );
-
-        if ($successLogin) {
-            try {
-                $request->validate(['password' => ['required', Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised()
-                    ]
-                ]);
-                session(['weak_password' => false]);
-            } catch (ValidationException  $th) {
-                session(['weak_password' => true]);
-                return redirect(route('password.change'))->with('success-login', 'Ganti password dengan yang lebih kuat');
-            }
-        }
-        return $successLogin;
     }
 }

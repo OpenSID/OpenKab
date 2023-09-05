@@ -7,7 +7,7 @@
         @enderror
     </div>
 </div>
-@isset($groups)
+@if (Auth::user()->isSuperAdmin())
 <div class="col">
     <div class="mb-4">
         <label for="username">Username<span class="text-danger">*</span></label>
@@ -31,7 +31,7 @@
         @enderror
     </div>
 </div>
-@endisset
+@endif
 
 <div class="col">
     <div class="mb-4">

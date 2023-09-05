@@ -31,6 +31,6 @@ class Covid extends Model
             ->join('covid19_pemudik', 'covid19_pemudik.status_covid', '=', 'ref_status_covid.id')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'covid19_pemudik.id_terdata')
             ->where('tweb_penduduk.status_dasar', 1)
-            ->groupBy(['ref_status_covid.id', 'ref_status_covid.nama']);
+            ->groupBy('ref_status_covid.id');
     }
 }

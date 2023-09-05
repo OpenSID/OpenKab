@@ -47,7 +47,7 @@
                                                 <td><input type="checkbox" name="menu" x-model="submenu.selected" @input.debounce.100ms="selected_sub(value)"></td>
                                                 <td width=20></td>
                                                 <td x-text="(index+1)+ '.' + (index2+1)"  width=20 class="text-center"></td>
-                                                <td x-text="submenu.text" class="ps-5 pl-50"></td>
+                                                <td x-text="submenu.text" class="ps-5" style="padding-left: 50px;"></td>
                                             <tr>
                                         </template>
                                     </tbody>

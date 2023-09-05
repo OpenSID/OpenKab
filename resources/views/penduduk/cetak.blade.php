@@ -3,7 +3,7 @@
 @section('title', 'Data Penduduk')
 
 @push('css')
-    <style nonce="{{ csp_nonce() }}"  type="text/css" media="print">
+    <style type="text/css" media="print">
         @page {
             size: landscape;
         }
@@ -43,8 +43,8 @@
 @stop
 
 @push('scripts')
-    <script nonce="{{ csp_nonce() }}"  >
-        document.addEventListener("DOMContentLoaded", function(event) {
+    <script>
+        $(document).ready(function() {
             var str = `{{ $filter }}`
             var filter = str.replace(/&amp;/g, '&')
 

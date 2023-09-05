@@ -42,8 +42,7 @@
 @endsection
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
-    document.addEventListener("DOMContentLoaded", function(event) {
+    <script>
         var user = $('#user').DataTable({
             processing: true,
             serverSide: true,
@@ -105,7 +104,6 @@
                 [2, 'asc']
             ]
         })
-    })
     </script>
     @include('partials.delete_modal')
 @endsection

@@ -1,5 +1,9 @@
 @@extends('layouts.index')
 
+@@section('content_header')
+    <h1>Edit {{ $config->modelNames->name }}</h1>
+@@stop
+
 @@section('content')
     @@include('partials.breadcrumbs')
 

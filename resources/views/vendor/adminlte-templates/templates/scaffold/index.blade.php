@@ -1,13 +1,17 @@
 @@extends('layouts.index')
 
+@@section('content_header')
+    <h1>Data {{ $config->modelNames->name }}</h1>
+@@stop
+
 @@section('content')
     @@include('partials.breadcrumbs')
 
     <div class="container-fluid">
-        @include('flash::message')
 
         <div class="row">
             <div class="col-lg-12">
+                @@include('adminlte-templates::common.alerts')
                 <div class="card card-outline card-primary">
                     <div class="card-header">
                         <div class="row mb-2">
@@ -33,8 +37,8 @@
 @@endsection
 
 @@section('js')
-    <script>
-            $(function() {
+    <script nonce="{{ '{{ ' }} csp_nonce() }}">
+	document.addEventListener("DOMContentLoaded", function(event) {
                 let {{ $config->modelNames->dashedPlural }} = $('#{{ $config->modelNames->dashedPlural }}-table').DataTable({
                 processing: true,
                 serverSide: true,

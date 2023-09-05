@@ -273,9 +273,9 @@ return [
     |
     */
 
-    'enabled_laravel_mix' => false,
-    'laravel_mix_css_path' => 'css/app.css',
-    'laravel_mix_js_path' => 'js/app.js',
+    'enabled_laravel_mix' => true,
+    'laravel_mix_css_path' => 'app.css',
+    'laravel_mix_js_path' => 'app.js',
 
     /*
     |--------------------------------------------------------------------------
@@ -375,7 +375,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -395,7 +395,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -414,7 +414,7 @@ return [
                 ],
             ],
         ],
-        'chart' => [
+        'Chart' => [
             'active' => false,
             'files' => [
                 [
@@ -425,7 +425,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -450,7 +450,7 @@ return [
             ],
         ],
         'ICheck' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'css',
@@ -460,7 +460,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'css',
@@ -476,7 +476,7 @@ return [
         ],
 
         'moment js' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -487,7 +487,7 @@ return [
         ],
 
         'bootstrap-datepicker' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'css',
@@ -503,7 +503,7 @@ return [
         ],
 
         'Lodash' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -514,7 +514,7 @@ return [
         ],
 
         'Alpine' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -540,7 +540,7 @@ return [
         ],
 
         'Colorpicker' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',

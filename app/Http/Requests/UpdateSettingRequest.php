@@ -28,6 +28,7 @@ class UpdateSettingRequest extends FormRequest
         // $rules['key'] .= ','.$this->id;
         unset($rules['key']);
         unset($rules['value']);
+
         return $rules;
     }
 }

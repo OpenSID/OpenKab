@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repository\SettingRepository;
 use App\Http\Requests\CreateSettingRequest;
 use App\Http\Requests\UpdateSettingRequest;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Repository\SettingRepository;
 use App\Http\Transformers\SettingTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class SettingController extends AppBaseController
 {
-    /** @var SettingRepository $settingRepository*/
+    /** @var SettingRepository */
     private $settingRepository;
 
     public function __construct(SettingRepository $settingRepo)
@@ -25,14 +24,14 @@ class SettingController extends AppBaseController
      */
     public function index(Request $request)
     {
-        if ($request->ajax()){
+        if ($request->ajax()) {
             $settings = $this->settingRepository->paginate(10);
+
             return $this->fractal($this->settingRepository->listSetting(), new SettingTransformer, 'settings')->respond();
         }
 
         return view('settings.index');
     }
-
 
     /**
      * Show the form for creating a new Setting.
@@ -63,7 +62,7 @@ class SettingController extends AppBaseController
         $setting = $this->settingRepository->find($id);
 
         if (empty($setting)) {
-            Session::flash('error','Setting tidak ditemukan');
+            Session::flash('error', 'Setting tidak ditemukan');
 
             return redirect(route('settings.index'));
         }
@@ -79,7 +78,7 @@ class SettingController extends AppBaseController
         $setting = $this->settingRepository->find($id);
 
         if (empty($setting)) {
-            Session::flash('error','Setting tidak ditemukan');
+            Session::flash('error', 'Setting tidak ditemukan');
 
             return redirect(route('settings.index'));
         }
@@ -95,14 +94,14 @@ class SettingController extends AppBaseController
         $setting = $this->settingRepository->find($id);
 
         if (empty($setting)) {
-            Session::flash('error','Setting tidak ditemukan');
+            Session::flash('error', 'Setting tidak ditemukan');
 
             return redirect(route('settings.index'));
         }
 
         $setting = $this->settingRepository->update($request->all(), $id);
 
-        Session::flash('success','Setting berhasil diupdate.');
+        Session::flash('success', 'Setting berhasil diupdate.');
 
         return redirect(route('settings.index'));
     }
@@ -117,16 +116,16 @@ class SettingController extends AppBaseController
         $setting = $this->settingRepository->find($id);
 
         if (empty($setting)) {
-            Session::flash('error','Setting tidak ditemukan');
+            Session::flash('error', 'Setting tidak ditemukan');
 
             return redirect(route('settings.index'));
         }
 
         $this->settingRepository->delete($id);
-        if(request()->ajax()){
+        if (request()->ajax()) {
             return $this->sendSuccess('Setting berhasil dihapus.');
         }
-        Session::flash('success','Setting berhasil dihapus.');
+        Session::flash('success', 'Setting berhasil dihapus.');
 
         return redirect(route('settings.index'));
     }

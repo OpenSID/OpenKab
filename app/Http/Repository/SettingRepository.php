@@ -3,7 +3,6 @@
 namespace App\Http\Repository;
 
 use App\Models\Setting;
-use App\Http\Repository\BaseRepository;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -15,7 +14,7 @@ class SettingRepository extends BaseRepository
         'value',
         'type',
         'attribute',
-        'description'
+        'description',
     ];
 
     public function getFieldsSearchable(): array
@@ -34,14 +33,14 @@ class SettingRepository extends BaseRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where(function($q) use ($value) {
-                                                                                                 $q->orWhere('key', 'LIKE', '%'.$value.'%');
-                                                                    $q->orWhere('name', 'LIKE', '%'.$value.'%');
-                                                                    $q->orWhere('value', 'LIKE', '%'.$value.'%');
-                                                                    $q->orWhere('type', 'LIKE', '%'.$value.'%');
-                                                                    $q->orWhere('attribute', 'LIKE', '%'.$value.'%');
-                                                                    $q->orWhere('description', 'LIKE', '%'.$value.'%');
-                                        });
+                    $query->where(function ($q) use ($value) {
+                        $q->orWhere('key', 'LIKE', '%'.$value.'%');
+                        $q->orWhere('name', 'LIKE', '%'.$value.'%');
+                        $q->orWhere('value', 'LIKE', '%'.$value.'%');
+                        $q->orWhere('type', 'LIKE', '%'.$value.'%');
+                        $q->orWhere('attribute', 'LIKE', '%'.$value.'%');
+                        $q->orWhere('description', 'LIKE', '%'.$value.'%');
+                    });
                 }),
             ])->allowedSorts($this->getFieldsSearchable())
             ->jsonPaginate();

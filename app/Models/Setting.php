@@ -14,7 +14,7 @@ class Setting extends Model
         'value',
         'type',
         'attribute',
-        'description'
+        'description',
     ];
 
     protected $casts = [
@@ -23,7 +23,7 @@ class Setting extends Model
         'value' => 'string',
         'type' => 'string',
         'attribute' => 'array',
-        'description' => 'string'
+        'description' => 'string',
     ];
 
     public static array $rules = [
@@ -32,8 +32,6 @@ class Setting extends Model
         'value' => 'required|string|max:255',
         'type' => 'nullable|string|max:255',
         'attribute' => 'nullable|string|max:255',
-        'description' => 'nullable|string|max:255'
+        'description' => 'nullable|string|max:255',
     ];
-
-
 }

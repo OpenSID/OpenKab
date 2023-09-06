@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\Modul;
 use App\Http\Repository\TeamRepository;
+use App\Http\Requests\TeamRequest;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class TeamController extends Controller
         }, 'team')->respond();
     }
 
-    public function create(Request $request)
+    public function create(TeamRequest $request)
     {
         $data = $request->all();
         // buat team
@@ -35,7 +36,7 @@ class TeamController extends Controller
         setPermissionsTeamId($team->id);
 
         foreach ($data['menu'] as $menu1) {
-            Role::create(
+            Role::firstOrCreate(
                 [
                     'name' => $menu1['role'],
                     'team_id' => $team->id,
@@ -63,7 +64,7 @@ class TeamController extends Controller
 
         foreach ($menu as $main_menu) {
             // buat role
-            Role::create(
+            Role::firstOrCreate(
                 [
                     'name' => $main_menu['role'],
                     'team_id' => $team['id'],
@@ -73,7 +74,7 @@ class TeamController extends Controller
 
             if (isset($main_menu['submenu'])) {
                 foreach ($main_menu['submenu'] as $sub_menu) {
-                    Role::create(
+                    Role::firstOrCreate(
                         [
                             'name' => $sub_menu['role'],
                             'team_id' => $team['id'],
@@ -112,7 +113,7 @@ class TeamController extends Controller
 
         foreach ($data['menu'] as $main_menu) {
             // buat role
-            $role = Role::create(
+            $role = Role::firstOrCreate(
                 [
                     'name' => $main_menu['role'],
                     'team_id' => $id,

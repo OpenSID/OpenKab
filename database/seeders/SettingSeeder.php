@@ -19,13 +19,16 @@ class SettingSeeder extends Seeder
             ['text' => 'Tidak Aktif', 'value' => 0],
             ['text' => 'Aktif', 'value' => 1],
         ];
-        Setting::firstOrCreate([
-            'key' => 'website_enable',
-            'name' => 'Pengaturan aktivasi website',
-            'value' => 1,
-            'type' => 'dropdown',
-            'attribute' => json_encode($attribute),
-            'description' => 'Pengaturan apakah website aktif atau tidak'
-        ]);
+        $website = Setting::where(['key' => 'website_enable'])->first();
+        if (!$website) {
+            Setting::create([
+                'key' => 'website_enable',
+                'name' => 'Pengaturan aktivasi website',
+                'value' => 1,
+                'type' => 'dropdown',
+                'attribute' => $attribute,
+                'description' => 'Pengaturan apakah website aktif atau tidak'
+            ]);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Models\Config;
 use App\Models\SettingAplikasi;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
@@ -204,5 +205,16 @@ if (! function_exists('default_favicon')) {
             }
 
         }
+    }
+}
+
+if (! function_exists('date_from_format')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function date_from_format($value, $format = null)
+    {
+        \Log::error($value);
+        return Carbon::createFromFormat($format ?? config('app.format.date'), $value);
     }
 }

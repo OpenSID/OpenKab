@@ -12,34 +12,30 @@ use Symfony\Component\HttpFoundation\Response;
 class CustomCSPPolicy extends Basic
 {
     // exclude karena livewire tidak jalan ketika csp enable
-    private $excludeRoute = [];
-    // contoh generate sha256 nama function
-    // echo -n 'showBatalBayarModal(this)' | openssl sha256 -binary | openssl base64
+    private $excludeRoute = ['fm.tinymce5', 'fm.initialize', 'fm.content', 'fm.tree'];
+    private $hasTinyMCE = ['articles.create', 'articles.edit'];
     public function configure()
     {
         parent::configure();
-
-        $this->addDirective(Directive::IMG, ['data:;'])
+        $currentRoute = Route::getCurrentRoute()->getName();
+        if (in_array($currentRoute, $this->hasTinyMCE)) {
+            $this->addDirective(Directive::IMG, ['blob:'])
+                ->addDirective(Directive::STYLE, ['unsafe-inline']);
+        }
+        $this->addDirective(Directive::IMG, ['data:'])
         ->addDirective(Directive::STYLE, [
             // 'unsafe-inline',
             'https://fonts.googleapis.com/',
             'https://fonts.bunny.net/',
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
+            'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css',
             'sha256-z7zcnw/4WalZqx+PrNaRnoeLz/G9WXuFqV1WCJ129sg=',
             'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
             'sha256-hIQQk/yoM15mwdqWhaRQ/qiDh22AXD54o7w5fUsss+w=',
-            // 'sha256-TsVIN7SQps98aly1gmseL0Zta8mas2ihwfacnZ8U8oc=',
-            // debugbar
-            // 'sha256-mT0LzWo7jBuKW1L9vBycTgNsK1MOZ7UYxTECKp064I0='
+            'sha256-wXDqcLlNCfwz7CniAXnDuBVLmG9xeJRAiHkMrCetfeQ='
         ])->addDirective(Directive::SCRIPT, [
+            // karena banyak yang menggunakan alpine js
             'unsafe-eval',
-            // debugbar
-            // 'sha256-FhudaH+D1DhcOfC3dGgEcvkNWiujsnNBXvpOnYT+asw=',
-            // 'sha256-oBnKxExdoFf5vSDBcXrSGKL8XqKENXywdyGOWTtcDWg=',
-            // 'sha256-nPBmwyxKQjiS904cW3n9Xh3ihVOPuWLLO11gRFWnnRM=',
-            // 'sha256-H1en7E/ZhgBswieGw1Zri1PWW+/m/QMDwwBbkXq8xTY=',
-            // 'sha256-4EUx5PEnUfDZ2Ru+KoJ9J5B9MwlceuHsfGscJ/FMRv8=',
-            // 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
-            // 'sha256-TsVIN7SQps98aly1gmseL0Zta8mas2ihwfacnZ8U8oc='
         ])->addDirective(Directive::FONT, [
             Keyword::SELF,
             'data:',

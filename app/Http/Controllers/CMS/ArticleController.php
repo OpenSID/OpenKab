@@ -32,8 +32,6 @@ class ArticleController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $articles = $this->articleRepository->paginate(10);
-
             return $this->fractal($this->articleRepository->listArticle(), new ArticleTransformer, 'articles')->respond();
         }
 
@@ -55,7 +53,6 @@ class ArticleController extends AppBaseController
     {
         $input = $request->all();
         if($request->file('foto')){
-            $this->pathFolder .= '/profile';
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
         $this->articleRepository->create($input);
@@ -111,7 +108,6 @@ class ArticleController extends AppBaseController
         $input = $request->all();
         $removeThumbnail = $request->get('remove_thumbnail');
         if($request->file('foto')){
-            $this->pathFolder .= '/profile';
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         } else {
             if ($removeThumbnail){

@@ -2,29 +2,25 @@
 
 namespace App\Models\CMS;
 
+use App\Models\Enums\StatusEnum;
 use Carbon\Carbon;
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Article extends SluggableModel
+class Page extends SluggableModel
 {
-    use HasFactory;
     use SoftDeletes;
-    public $table = 'articles';
 
-    const DRAFT = 0;
-    const PUBLISH = 1;
-    const STATE_STRING = [self::DRAFT => 'Draft', self::PUBLISH => 'Terbitkan'];
+    public $table = 'pages';
 
+    const STATE_STRING = [ StatusEnum::aktif => 'Aktif', StatusEnum::tidakAktif => 'Tidak Aktif'];
     public $fillable = [
-        'category_id',
         'published_at',
         'slug',
         'title',
         'thumbnail',
         'content',
-        'state'
+        'state',
     ];
 
     protected $casts = [
@@ -32,17 +28,16 @@ class Article extends SluggableModel
         'slug' => 'string',
         'title' => 'string',
         'thumbnail' => 'string',
-        'content' => 'string'
+        'content' => 'string',
+        'state' => 'boolean',
     ];
 
     public static array $rules = [
-        'category_id' => 'required',
         'published_at' => 'required',
-        'slug' => 'string|max:255',
-        'title' => 'required|string|max:200|min:5',
+        'title' => 'required|string|max:255',
+        'thumbnail' => 'nullable|string|max:255',
         'content' => 'required|string|max:65535',
-        'state' => 'required|numeric|digits_between:0,1',
-        'foto'  => 'nullable|image|max:1024|mimes:png,jpg'
+        'state' => 'required|boolean',
     ];
 
     public static array $errorMessages = [
@@ -51,23 +46,7 @@ class Article extends SluggableModel
             'max' => 'Judul minimal :max karakter',
         ]
     ];
-
-    /**
-     * Carbon instance fields
-     *
-     * @var array
-     */
-    protected $dates = ['published_at'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    /**
+/**
      * @param $query
      *
      * @return mixed
@@ -106,7 +85,7 @@ class Article extends SluggableModel
      */
     public function getLinkAttribute(): string
     {
-        return route('article', ['aSlug' => $this->slug]);
+        return route('page', ['aSlug' => $this->slug]);
     }
 
     public function getLabelStateAttribute(): string
@@ -114,3 +93,4 @@ class Article extends SluggableModel
         return self::STATE_STRING[$this->state] ?? '-';
     }
 }
+

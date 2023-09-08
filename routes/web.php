@@ -124,6 +124,9 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 });
 
-Route::middleware(['website.enable'])->group(function(){
-    Route::get('/', [PageController::class, 'index']);
+// Route::middleware(['website.enable'])->group(function(){
+//     Route::get('/', [PageController::class, 'index']);
+// });
+Route::get('/', function(){
+    return '<h3>Halaman publik</h3><a href="/login">Login</a>';
 });

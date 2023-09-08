@@ -45,9 +45,13 @@ class Category extends SluggableModel
      */
     public function articles(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Article::class)->published();
+        return $this->hasMany(Article::class);
     }
 
+    public function publishArticles(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Article::class)->published();
+    }
     /**
      * Prepare a date for array / JSON serialization.
      *

@@ -9,18 +9,18 @@
             $('.datepicker').daterangepicker(
             {
                 autoApply: true,
-                format: "dd/mm/yyyy",
                 singleDatePicker: true,
                 locale: {
+                    format: "{{ config('app.format.date_js') }}",
                     firstDay: 1
                 }
             });
 
             $('.input-daterange').daterangepicker({
                 autoApply: true,
-                format: "dd/mm/yyyy",
                 singleDatePicker: false,
                 locale: {
+                    format: "{{ config('app.format.date_js') }}",
                     firstDay: 1
                 }
             });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Bantuan;
+use App\Models\CMS\Article;
 use App\Models\CMS\Category;
 use App\Models\Identitas;
 use App\Models\Kategori;
@@ -102,7 +103,7 @@ Breadcrumbs::for('penduduk.edit', function (BreadcrumbTrail $trail, $id) {
 });
 
 Breadcrumbs::for('categories.index', function (BreadcrumbTrail $trail) {
-    $trail->push('Kategori', route('categories.index'));
+    $trail->push('Artikel', route('categories.index'));
 });
 Breadcrumbs::for('categories.create', function (BreadcrumbTrail $trail) {
     $trail->parent('categories.index');
@@ -113,3 +114,18 @@ Breadcrumbs::for('categories.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->parent('categories.index');
     $trail->push($item);
 });
+
+Breadcrumbs::for('articles.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Artikel', route('articles.index'));
+});
+Breadcrumbs::for('articles.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('articles.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('articles.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Article::find($id)?->slug ?? '-';
+    $trail->parent('articles.index');
+    $trail->push($item);
+});
+
+

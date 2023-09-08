@@ -225,4 +225,8 @@ return [
         'Image' => Intervention\Image\Facades\Image::class
     ])->toArray(),
 
+    'format' => [
+        'date' => env('FORMAT_DATE','d/m/Y'),
+        'date_js' => env('FORMAT_DATE_JS','DD/MM/YYYY')
+    ]
 ];

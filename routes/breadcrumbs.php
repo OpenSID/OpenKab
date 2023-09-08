@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Bantuan;
+use App\Models\CMS\Category;
 use App\Models\Identitas;
 use App\Models\Kategori;
 use App\Models\Penduduk;
@@ -100,3 +101,15 @@ Breadcrumbs::for('penduduk.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push($penduduk);
 });
 
+Breadcrumbs::for('categories.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Kategori', route('categories.index'));
+});
+Breadcrumbs::for('categories.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('categories.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('categories.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Category::find($id)?->slug ?? '-';
+    $trail->parent('categories.index');
+    $trail->push($item);
+});

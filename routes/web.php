@@ -12,6 +12,7 @@ use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Web\PageController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +37,7 @@ Auth::routes([
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {
-    Route::get('/', [DasborController::class, 'index'])->name('dasbor');
+    Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
@@ -52,6 +53,11 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/edit/{id}', [GroupController::class, 'edit'])->name('groups.edit');
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show']);
+
+    });
+
+    Route::prefix('cms')->group(function(){
+        Route::resource('categories', App\Http\Controllers\CMS\CategoryController::class)->except(['show']);
 
     });
 
@@ -116,4 +122,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::middleware(['role:master-data-pengaturan'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
             Route::middleware(['role:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
+});
+
+Route::middleware(['website.enable'])->group(function(){
+    Route::get('/', [PageController::class, 'index']);
 });

@@ -4,7 +4,7 @@ namespace App\Models\CMS;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\OpenKabModel as Model;
 
 /**
  * App\Base\SluggableModel

@@ -2,7 +2,6 @@
 
 namespace App\Models\CMS;
 
-use Attribute;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -86,9 +85,9 @@ class Article extends SluggableModel
         return Carbon::parse($this->attributes['published_at'])->format(config('app.format.date'));
     }
 
-    public function getPublishedAtAttribute($value)
+    public function getLocalPublishedAtAttribute($value)
     {
-        return Carbon::parse($value)->format(config('app.format.date'));
+        return Carbon::parse($this->attributes['published_at'])->format(config('app.format.date'));
     }
 
     /**

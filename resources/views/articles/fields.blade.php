@@ -34,7 +34,7 @@
         <!-- Published At Field -->
         <div class="form-group ">
             {!! Form::label('published_at', 'Tanggal Terbit') !!}
-            {!! Form::text('published_at', null, ['class' => 'form-control datepicker','id'=>'published_at']) !!}
+            {!! Form::text('published_at', $article?->local_published_at , ['class' => 'form-control datepicker','id'=>'published_at']) !!}
         </div>
 
         <div>

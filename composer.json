@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
         "league/flysystem-ftp": "^3.10",
+        "proengsoft/laravel-jsvalidation": "^4.8",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-csp": "^2.8",
         "spatie/laravel-fractal": "^6.0",

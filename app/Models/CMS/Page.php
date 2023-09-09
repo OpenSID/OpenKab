@@ -40,12 +40,6 @@ class Page extends SluggableModel
         'state' => 'required|boolean',
     ];
 
-    public static array $errorMessages = [
-        'title' => [
-            'min' => 'Judul minimal :min karakter',
-            'max' => 'Judul minimal :max karakter',
-        ]
-    ];
 /**
      * @param $query
      *
@@ -66,7 +60,7 @@ class Page extends SluggableModel
 
     public function getLocalPublishedAtAttribute($value)
     {
-        return Carbon::parse($this->attributes['published_at'])->format(config('app.format.date'));
+        return isset($this->attributes['published_at']) ? Carbon::parse($this->attributes['published_at'])->format(config('app.format.date')) : null;
     }
 
     /**

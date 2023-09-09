@@ -42,3 +42,4 @@
 
 @include('partials.asset_datepicker')
 @include('partials.asset_tinymce')
+{!! JsValidator::formRequest('App\Http\Requests\CreatePageRequest') !!}

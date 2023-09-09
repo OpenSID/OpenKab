@@ -92,7 +92,7 @@
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[created_at]": [$('input[name=start]').data('daterangepicker').startDate.format('YYYY-MM-DD'), $('input[name=start]').data('daterangepicker').endDate.format('YYYY-MM-DD')],
+                        "filter[created_at]": [$('input[name=start]').data('daterangepicker').startDate.format('YYYY-MM-DD')+' 00:00:00', $('input[name=start]').data('daterangepicker').endDate.format('YYYY-MM-DD')+' 23:59:59'],
                         "filter[causer_id]": $('select[name=causer_id]').val(),
                         "filter[search]": row.search.value,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]

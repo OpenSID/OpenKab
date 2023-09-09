@@ -1,0 +1,20 @@
+<!-- {{ $fieldTitle }} Field -->
+<div class="form-group row">
+    <div class="col-3">
+        @if($config->options->localized)
+        @{!! Form::label('{{ $fieldName }}',
+        __('models/{{ $config->modelNames->camelPlural }}.fields.{{ $fieldName }}').':') !!}
+        @else
+        @{!! Form::label('{{ $fieldName }}', '{{ $fieldTitle }}:') !!}
+        @endif
+    </div>
+    <div class="col-9">
+        <div class="input-group">
+            <div class="custom-file">
+                @{!! Form::file('{{ $fieldName }}', ['class' => 'custom-file-input']) !!}
+                @{!! Form::label('{{ $fieldName }}', 'Choose file', ['class' => 'custom-file-label']) !!}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>

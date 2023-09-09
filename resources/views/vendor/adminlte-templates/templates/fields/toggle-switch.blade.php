@@ -1,5 +1,5 @@
 <!-- 'bootstrap / Toggle Switch {{ $fieldTitle }} Field' -->
-<div class="form-group">
+<div class="form-group row">
     <div class="custom-control custom-switch">
         @{!! Form::checkbox('{{ $fieldName }}', 1, null,  ['class' => 'custom-control-input']) !!}
 @if($config->options->localized)

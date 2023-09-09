@@ -1,6 +1,22 @@
 {
-  "_vendor-fe2d781a.js": {
-    "file": "assets/vendor-fe2d781a.js"
+  "_admin-lte-a527eeb6.js": {
+    "file": "assets/admin-lte-a527eeb6.js",
+    "imports": [
+      "_vendor-4b9e9759.js",
+      "_datatables-cc2f0143.js"
+    ]
+  },
+  "_datatables-cc2f0143.js": {
+    "file": "assets/datatables-cc2f0143.js",
+    "imports": [
+      "_vendor-4b9e9759.js"
+    ]
+  },
+  "_vendor-4b9e9759.js": {
+    "file": "assets/vendor-4b9e9759.js",
+    "imports": [
+      "_admin-lte-a527eeb6.js"
+    ]
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
     "file": "assets/fa-brands-400-003f1154.ttf",
@@ -35,16 +51,44 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/js/app.js": {
-    "file": "assets/app-ef0a1c89.js",
+    "file": "assets/app-e2bb287b.js",
     "imports": [
-      "_vendor-fe2d781a.js"
+      "_admin-lte-a527eeb6.js",
+      "_vendor-4b9e9759.js",
+      "_datatables-cc2f0143.js"
     ],
     "isEntry": true,
     "src": "resources/js/app.js"
+  },
+  "resources/js/tinymce.js": {
+    "file": "assets/tinymce-bf966b15.js",
+    "imports": [
+      "resources/sass/tinymce.scss"
+    ],
+    "isEntry": true,
+    "src": "resources/js/tinymce.js"
+  },
+  "resources/js/web.js": {
+    "file": "assets/web-a4f47d02.js",
+    "isEntry": true,
+    "src": "resources/js/web.js"
   },
   "resources/sass/app.scss": {
     "file": "assets/app-f3c2b198.css",
     "isEntry": true,
     "src": "resources/sass/app.scss"
+  },
+  "resources/sass/tinymce.scss": {
+    "css": [
+      "assets/tinymce-146839e8.css"
+    ],
+    "file": "assets/tinymce-3934328d.js",
+    "isEntry": true,
+    "src": "resources/sass/tinymce.scss"
+  },
+  "resources/sass/web.scss": {
+    "file": "assets/web-37ab1782.css",
+    "isEntry": true,
+    "src": "resources/sass/web.scss"
   }
 }

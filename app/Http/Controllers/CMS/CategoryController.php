@@ -28,7 +28,6 @@ class CategoryController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $categories = $this->categoryRepository->paginate(10);
 
             return $this->fractal($this->categoryRepository->listCategory(), new CategoryTransformer, 'categories')->respond();
         }

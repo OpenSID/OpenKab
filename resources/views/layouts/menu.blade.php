@@ -33,3 +33,10 @@
         <p>Pages</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('slides.index') }}" class="nav-link {{ Request::is('slides*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-home"></i>
+        <p>Slides</p>
+    </a>
+</li>

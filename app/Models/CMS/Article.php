@@ -44,12 +44,12 @@ class Article extends SluggableModel
         'state' => 'required|numeric|digits_between:0,1',
         'foto'  => 'nullable|image|max:1024|mimes:png,jpg'
     ];
-
+    // menyebabkan error ketika validasi js
     public static array $errorMessages = [
-        'title' => [
-            'min' => 'Judul minimal :min karakter',
-            'max' => 'Judul minimal :max karakter',
-        ]
+        // 'title' => [
+        //     'min' => 'Judul minimal :min karakter',
+        //     'max' => 'Judul minimal :max karakter',
+        // ]
     ];
 
     /**
@@ -87,7 +87,7 @@ class Article extends SluggableModel
 
     public function getLocalPublishedAtAttribute($value)
     {
-        return Carbon::parse($this->attributes['published_at'])->format(config('app.format.date'));
+        return isset($this->attributes['published_at']) ? Carbon::parse($this->attributes['published_at'])->format(config('app.format.date')) : null;
     }
 
     /**

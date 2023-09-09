@@ -59,6 +59,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::prefix('cms')->group(function(){
         Route::resource('categories', App\Http\Controllers\CMS\CategoryController::class)->except(['show']);
         Route::resource('articles', App\Http\Controllers\CMS\ArticleController::class)->except(['show']);
+        Route::resource('pages', App\Http\Controllers\CMS\PageController::class)->except(['show']);
+        Route::resource('slides', App\Http\Controllers\CMS\SlideController::class)->except(['show']);
     });
 
     Route::prefix('sesi')->group(function () {

@@ -8,10 +8,10 @@
     @@include('partials.breadcrumbs')
 
     <div class="container-fluid">
-        @include('flash::message')
 
         <div class="row">
             <div class="col-lg-12">
+                @@include('adminlte-templates::common.alerts')
                 <div class="card card-outline card-primary">
                     <div class="card-header">
                         <div class="row mb-2">
@@ -37,7 +37,7 @@
 @@endsection
 
 @@section('js')
-    <script nonce="{{ csp_nonce() }}">
+    <script nonce="{{ '{{ ' }} csp_nonce() }}">
 	document.addEventListener("DOMContentLoaded", function(event) {
                 let {{ $config->modelNames->dashedPlural }} = $('#{{ $config->modelNames->dashedPlural }}-table').DataTable({
                 processing: true,

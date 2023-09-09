@@ -117,3 +117,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::middleware(['role:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
         });
 });
+
+Route::resource('settings', App\Http\Controllers\SettingController::class);
+Route::resource('categories', App\Http\Controllers\CategoryController::class);
+Route::resource('articles', App\Http\Controllers\ArticleController::class);
+Route::resource('pages', App\Http\Controllers\PageController::class);

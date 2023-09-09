@@ -13,7 +13,7 @@ use {{ $config->namespaces->app }}\Http\Controllers\AppBaseController;
 use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
 use {{ config('laravel_generator.namespace.transformer')}}\{{ $config->modelNames->name }}Transformer;
 use Illuminate\Http\Request;
-use Flash;
+use Illuminate\Support\Facades\Session;
 
 class {{ $config->modelNames->name }}Controller extends AppBaseController
 {

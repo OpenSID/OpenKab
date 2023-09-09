@@ -1,5 +1,5 @@
 @if($config->options->localized)
-    Flash::success(__('messages.deleted', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')]));
+    Session::flash('success',__('messages.deleted', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')]));
 @else
-    Flash::success('{{ $config->modelNames->human }} deleted successfully.');
+    Session::flash('success','{{ $config->modelNames->human }} berhasil dihapus.');
 @endif

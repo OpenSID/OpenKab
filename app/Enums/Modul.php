@@ -153,7 +153,7 @@ final class Modul extends Enum
                 [
                     'icon' => 'fas fa-image',
                     'text' => 'Slider',
-                    'url' => 'cms/sliders',
+                    'url' => 'cms/slides',
                     'role' => 'website-slider',
                 ],
                 [

@@ -19,7 +19,7 @@ class SettingSeeder extends Seeder
             ['text' => 'Aktif', 'value' => 1],
         ];
         $website = Setting::where(['key' => 'website_enable'])->first();
-        if (! $website) {
+        if (!$website) {
             Setting::create([
                 'key' => 'website_enable',
                 'name' => 'Pengaturan aktivasi website',

@@ -4,6 +4,7 @@ use App\Models\Bantuan;
 use App\Models\Identitas;
 use App\Models\Kategori;
 use App\Models\Penduduk;
+use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -100,3 +101,12 @@ Breadcrumbs::for('penduduk.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push($penduduk);
 });
 
+Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Setting', route('settings.index'));
+});
+
+Breadcrumbs::for('settings.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Setting::find($id)?->name ?? '-';
+    $trail->parent('settings.index');
+    $trail->push($item);
+});

@@ -9,13 +9,14 @@ use App\Models\User;
 use App\Models\UserTeam;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
     use UploadedFile;
+
     /**
      * Display a listing of the resource.
      *
@@ -93,7 +94,7 @@ class UserController extends Controller
                 'active' => 1,
             ];
 
-            if($request->file('foto')){
+            if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $insertData['foto'] = $this->uploadFile($request, 'foto');
             }
@@ -184,20 +185,20 @@ class UserController extends Controller
                 'company' => $request->get('company'),
                 'phone' => $request->get('phone'),
             ];
-            if($request->file('foto')){
+            if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $updateData['foto'] = $this->uploadFile($request, 'foto');
             }
             $user->update($updateData);
 
             $routeCurrent = Route::currentRouteName();
-            if ( $routeCurrent == 'profile.update') {
+            if ($routeCurrent == 'profile.update') {
                 return redirect()->route('profile.edit', Auth::id())->with('success', 'Data profil berhasil diubah!');
             }
 
             // update user team
             $user_team = UserTeam::find($user->id);
-            if($user_team){
+            if ($user_team) {
                 setPermissionsTeamId($user_team->id_team);
                 $user->roles()->detach();
                 $user_team->id_team = $data['group'];
@@ -212,7 +213,6 @@ class UserController extends Controller
                     }
                 }
             }
-
 
             setPermissionsTeamId($request['group']);
             // assign role berdasarkan team

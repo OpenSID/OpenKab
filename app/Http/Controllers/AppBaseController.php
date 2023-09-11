@@ -6,6 +6,7 @@ use InfyOm\Generator\Utils\ResponseUtil;
 
 /**
  * @OA\Server(url="/api")
+ *
  * @OA\Info(
  *   title="InfyOm Laravel Generator APIs",
  *   version="1.0.0"
@@ -29,7 +30,7 @@ class AppBaseController extends Controller
     {
         return response()->json([
             'success' => true,
-            'message' => $message
+            'message' => $message,
         ], 200);
     }
 

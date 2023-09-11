@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Setting;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SettingSeeder extends Seeder
@@ -27,7 +26,19 @@ class SettingSeeder extends Seeder
                 'value' => 1,
                 'type' => 'dropdown',
                 'attribute' => $attribute,
-                'description' => 'Pengaturan apakah website aktif atau tidak'
+                'description' => 'Pengaturan apakah website aktif atau tidak',
+            ]);
+        }
+
+        $statistik = Setting::where(['key' => 'statistik_website'])->first();
+        if (! $statistik) {
+            Setting::create([
+                'key' => 'statistik_website',
+                'name' => 'Pengaturan halaman statistik di website',
+                'value' => 1,
+                'type' => 'dropdown',
+                'attribute' => $attribute,
+                'description' => 'Pengaturan apakah statistik ditampilkan di website atau tidak',
             ]);
         }
     }

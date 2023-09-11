@@ -18,16 +18,18 @@ class SettingTransformer extends TransformerAbstract
             'attribute' => $setting->attribute,
             'description' => $setting->description,
             'created_at' => $setting->created_at,
-            'updated_at' => $setting->updated_at
+            'updated_at' => $setting->updated_at,
         ];
     }
 
-    private function mapValue(Setting $setting) {
-        switch($setting->type){
+    private function mapValue(Setting $setting)
+    {
+        switch($setting->type) {
             case 'dropdown':
                 return collect($setting->attribute)->pluck('text', 'value')[$setting->value] ?? '-';
                 break;
         }
+
         return $setting->value;
     }
 }

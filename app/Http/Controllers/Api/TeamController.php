@@ -84,6 +84,7 @@ class TeamController extends Controller
             }
         }
         activity('data-log')->event('created')->withProperties($request)->log('Pengaturan Group');
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);
@@ -140,6 +141,7 @@ class TeamController extends Controller
             }
         }
         activity('data-log')->event('updated')->withProperties($request)->log('Pengaturan Group');
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);
@@ -170,6 +172,7 @@ class TeamController extends Controller
 
         Team::Where('id', $id)->delete();
         activity('data-log')->event('deleted')->withProperties($request)->log('Pengaturan Group');
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);

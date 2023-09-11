@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -77,7 +77,8 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    private function addLogQuery(){
+    private function addLogQuery()
+    {
         if (config('app.debug')) {
             DB::listen(function ($query) {
                 File::append(

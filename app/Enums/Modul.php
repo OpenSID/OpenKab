@@ -87,12 +87,6 @@ final class Modul extends Enum
                     'url' => 'master/kategori/0',
                     'role' => 'master-data-artikel',
                 ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Pengaturan Aplikasi',
-                    'url' => 'master/pengaturan',
-                    'role' => 'master-data-pengaturan',
-                ]
             ],
         ],
 
@@ -108,7 +102,7 @@ final class Modul extends Enum
                     'role' => 'organisasi-departemen',
                 ],
                 [
-                    'icon' => 'fa fa-sitemap',
+                    'icon' => 'fa fa-star',
                     'text' => 'Jabatan',
                     'url' => 'positions',
                     'role' => 'organisasi-position',

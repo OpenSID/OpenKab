@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -53,7 +54,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/edit/{id}', [GroupController::class, 'edit'])->name('groups.edit');
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show']);
-
+        Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create']);
     });
 
     Route::prefix('cms')->group(function(){
@@ -114,19 +115,23 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 
     // Master Data
     Route::middleware(['role:master-data'])->controller(AdminWebController::class)
-        ->prefix('master')
         ->group(function () {
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
-            Route::middleware(['role:master-data-artikel'])->get('/kategori/tambah/{parrent}', 'kategori_create')->name('master-data-artikel.kategori-create');
-            Route::middleware(['role:master-data-pengaturan'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
-            Route::middleware(['role:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            Route::prefix('master')->group(function () {
+                Route::middleware(['role:master-data-artikel'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
+                Route::middleware(['role:master-data-artikel'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
+                Route::middleware(['role:master-data-artikel'])->get('/kategori/tambah/{parrent}', 'kategori_create')->name('master-data-artikel.kategori-create');
+                Route::middleware(['role:master-data-pengaturan'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
+                Route::middleware(['role:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            });
         });
 });
 
-// Route::middleware(['website.enable'])->group(function(){
-//     Route::get('/', [PageController::class, 'index']);
-// });
 Route::get('/', function(){
+    $website = Setting::where(['key' => 'website_enable'])->first()?->value ?? 0;
+
+    if (! $website) {
+        return redirect('login');
+    }
+
     return '<h3>Halaman publik</h3><a href="/login">Login</a>';
 });

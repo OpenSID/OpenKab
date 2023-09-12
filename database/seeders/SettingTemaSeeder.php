@@ -17,7 +17,7 @@ class SettingTemaSeeder extends Seeder
     {
         $configId = Config::first()->id;
         $warnaTema = SettingAplikasi::where(['config_id' => $configId, 'key' => 'warna_tema'])->count();
-        if (!$warnaTema){
+        if (! $warnaTema) {
             SettingAplikasi::create([
                 'config_id' => $configId,
                 'judul' => 'Warna Tema',
@@ -27,11 +27,11 @@ class SettingTemaSeeder extends Seeder
                 'jenis' => 'color',
                 'option' => null,
                 'attribute' => null,
-                'kategori' => 'openkab'
+                'kategori' => 'openkab',
             ]);
         }
         $lockTheme = SettingAplikasi::where(['config_id' => $configId, 'key' => 'lock_theme'])->count();
-        if (! $lockTheme){
+        if (! $lockTheme) {
             SettingAplikasi::create([
                 'config_id' => $configId,
                 'judul' => 'Kunci Tema',
@@ -41,7 +41,7 @@ class SettingTemaSeeder extends Seeder
                 'jenis' => 'option',
                 'option' => '{"1":"Aktif","0":"Tidak Aktif"}',
                 'attribute' => null,
-                'kategori' => 'openkab'
+                'kategori' => 'openkab',
             ]);
         }
     }

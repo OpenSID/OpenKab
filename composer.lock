@@ -4,68 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "05f13ce1652d4102e10976023a6c9ae7",
+    "content-hash": "c4f6bada74a96e17b5b35fb33cfddd69",
     "packages": [
-        {
-            "name": "alexusmai/laravel-file-manager",
-            "version": "v3.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/alexusmai/laravel-file-manager.git",
-                "reference": "5f019adfe3d92ce5b2b49e50f99189d3917aad04"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/alexusmai/laravel-file-manager/zipball/5f019adfe3d92ce5b2b49e50f99189d3917aad04",
-                "reference": "5f019adfe3d92ce5b2b49e50f99189d3917aad04",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-zip": "*",
-                "intervention/image": "^2.7",
-                "intervention/imagecache": "^2.6",
-                "laravel/framework": "^9.0|^10.0",
-                "league/flysystem": "^3.0",
-                "php": "^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Alexusmai\\LaravelFileManager\\FileManagerServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Alexusmai\\LaravelFileManager\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Aleksandr Manekin",
-                    "email": "alexusmai@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "File manager for Laravel",
-            "homepage": "https://github.com/alexusami/laravel-file-manager",
-            "keywords": [
-                "file",
-                "laravel",
-                "manager"
-            ],
-            "support": {
-                "issues": "https://github.com/alexusmai/laravel-file-manager/issues",
-                "source": "https://github.com/alexusmai/laravel-file-manager/tree/v3.0.5"
-            },
-            "time": "2023-02-26T08:58:15+00:00"
-        },
         {
             "name": "almasaeed2010/adminlte",
             "version": "v3.2.0",
@@ -256,80 +196,6 @@
             "time": "2023-01-15T23:15:59+00:00"
         },
         {
-            "name": "cocur/slugify",
-            "version": "v4.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cocur/slugify.git",
-                "reference": "4c6ed14a087ca061b220ffda640c07644946e2a0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cocur/slugify/zipball/4c6ed14a087ca061b220ffda640c07644946e2a0",
-                "reference": "4c6ed14a087ca061b220ffda640c07644946e2a0",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": "^7.1 || ~8.0.0 || ~8.1.0 || ~8.2.0"
-            },
-            "conflict": {
-                "symfony/config": "<3.4 || >=4,<4.3",
-                "symfony/dependency-injection": "<3.4 || >=4,<4.3",
-                "symfony/http-kernel": "<3.4 || >=4,<4.3",
-                "twig/twig": "<2.12.1"
-            },
-            "require-dev": {
-                "laravel/framework": "^5.0|^6.0|^7.0|^8.0",
-                "latte/latte": "~2.2",
-                "league/container": "^2.2.0",
-                "mikey179/vfsstream": "~1.6.8",
-                "mockery/mockery": "^1.3",
-                "nette/di": "~2.4",
-                "pimple/pimple": "~1.1",
-                "plumphp/plum": "~0.1",
-                "symfony/config": "^3.4 || ^4.3 || ^5.0 || ^6.0",
-                "symfony/dependency-injection": "^3.4 || ^4.3 || ^5.0 || ^6.0",
-                "symfony/http-kernel": "^3.4 || ^4.3 || ^5.0 || ^6.0",
-                "symfony/phpunit-bridge": "^5.4 || ^6.0",
-                "twig/twig": "^2.12.1 || ~3.0",
-                "zendframework/zend-modulemanager": "~2.2",
-                "zendframework/zend-servicemanager": "~2.2",
-                "zendframework/zend-view": "~2.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Cocur\\Slugify\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Florian Eckerstorfer",
-                    "email": "florian@eckerstorfer.co",
-                    "homepage": "https://florian.ec"
-                },
-                {
-                    "name": "Ivo Bathke",
-                    "email": "ivo.bathke@gmail.com"
-                }
-            ],
-            "description": "Converts a string into a slug.",
-            "keywords": [
-                "slug",
-                "slugify"
-            ],
-            "support": {
-                "issues": "https://github.com/cocur/slugify/issues",
-                "source": "https://github.com/cocur/slugify/tree/v4.4.0"
-            },
-            "time": "2023-08-05T09:42:11+00:00"
-        },
-        {
             "name": "composer/class-map-generator",
             "version": "1.1.0",
             "source": {
@@ -472,79 +338,6 @@
                 }
             ],
             "time": "2022-11-17T09:50:14+00:00"
-        },
-        {
-            "name": "cviebrock/eloquent-sluggable",
-            "version": "9.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cviebrock/eloquent-sluggable.git",
-                "reference": "3100e37682491424dd13eaeb3ec33cbbad186992"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cviebrock/eloquent-sluggable/zipball/3100e37682491424dd13eaeb3ec33cbbad186992",
-                "reference": "3100e37682491424dd13eaeb3ec33cbbad186992",
-                "shasum": ""
-            },
-            "require": {
-                "cocur/slugify": "^4.0",
-                "illuminate/config": "^9.0",
-                "illuminate/database": "^9.0",
-                "illuminate/support": "^9.0",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "limedeck/phpunit-detailed-printer": "^6.0",
-                "mockery/mockery": "^1.4.2",
-                "orchestra/database": "^7.0",
-                "orchestra/testbench": "^7.0",
-                "phpunit/phpunit": "^9.4"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Cviebrock\\EloquentSluggable\\ServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Cviebrock\\EloquentSluggable\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Colin Viebrock",
-                    "email": "colin@viebrock.ca"
-                }
-            ],
-            "description": "Easy creation of slugs for your Eloquent models in Laravel",
-            "homepage": "https://github.com/cviebrock/eloquent-sluggable",
-            "keywords": [
-                "eloquent",
-                "eloquent-sluggable",
-                "laravel",
-                "lumen",
-                "slug",
-                "sluggable"
-            ],
-            "support": {
-                "issues": "https://github.com/cviebrock/eloquent-sluggable/issues",
-                "source": "https://github.com/cviebrock/eloquent-sluggable/tree/9.0.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/cviebrock",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-01-25T02:55:58+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -1664,73 +1457,6 @@
             "time": "2022-05-21T17:30:32+00:00"
         },
         {
-            "name": "intervention/imagecache",
-            "version": "2.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Intervention/imagecache.git",
-                "reference": "86136575a62d3634b51f196a998fce4a583b49bb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/imagecache/zipball/86136575a62d3634b51f196a998fce4a583b49bb",
-                "reference": "86136575a62d3634b51f196a998fce4a583b49bb",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/cache": "^5.5|~6|~7|~8|~9|~10",
-                "illuminate/filesystem": "^5.5|~6|~7|~8|~9|~10",
-                "intervention/image": "~2.2",
-                "nesbot/carbon": "^2.39",
-                "opis/closure": "^3.5",
-                "php": "~7.2|~8"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Intervention\\Image\\": "src/Intervention/Image"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Oliver Vogel",
-                    "email": "oliver@intervention.io",
-                    "homepage": "http://intervention.io/"
-                }
-            ],
-            "description": "Caching extension for the Intervention Image Class",
-            "homepage": "https://image.intervention.io",
-            "keywords": [
-                "cache",
-                "gd",
-                "image",
-                "imagick",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/Intervention/imagecache/issues",
-                "source": "https://github.com/Intervention/imagecache/tree/2.6.0"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/interventionio",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/Intervention",
-                    "type": "github"
-                }
-            ],
-            "time": "2023-02-25T19:40:47+00:00"
-        },
-        {
             "name": "jeroennoten/laravel-adminlte",
             "version": "v3.9.2",
             "source": {
@@ -2053,16 +1779,16 @@
         },
         {
             "name": "laravel/sanctum",
-            "version": "v3.3.0",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sanctum.git",
-                "reference": "95a0181900019e2d79acbd3e2ee7d57e3d0a086b"
+                "reference": "217e8a2bc5aa6a827ced97fcb76504029d3115d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sanctum/zipball/95a0181900019e2d79acbd3e2ee7d57e3d0a086b",
-                "reference": "95a0181900019e2d79acbd3e2ee7d57e3d0a086b",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/217e8a2bc5aa6a827ced97fcb76504029d3115d7",
+                "reference": "217e8a2bc5aa6a827ced97fcb76504029d3115d7",
                 "shasum": ""
             },
             "require": {
@@ -2115,7 +1841,7 @@
                 "issues": "https://github.com/laravel/sanctum/issues",
                 "source": "https://github.com/laravel/sanctum"
             },
-            "time": "2023-09-04T14:26:54+00:00"
+            "time": "2023-08-22T13:21:11+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -3403,71 +3129,6 @@
             "time": "2023-02-08T01:06:31+00:00"
         },
         {
-            "name": "opis/closure",
-            "version": "3.6.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/opis/closure.git",
-                "reference": "3d81e4309d2a927abbe66df935f4bb60082805ad"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/opis/closure/zipball/3d81e4309d2a927abbe66df935f4bb60082805ad",
-                "reference": "3d81e4309d2a927abbe66df935f4bb60082805ad",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.4 || ^7.0 || ^8.0"
-            },
-            "require-dev": {
-                "jeremeamia/superclosure": "^2.0",
-                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.6.x-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "functions.php"
-                ],
-                "psr-4": {
-                    "Opis\\Closure\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marius Sarca",
-                    "email": "marius.sarca@gmail.com"
-                },
-                {
-                    "name": "Sorin Sarca",
-                    "email": "sarca_sorin@hotmail.com"
-                }
-            ],
-            "description": "A library that can be used to serialize closures (anonymous functions) and arbitrary objects.",
-            "homepage": "https://opis.io/closure",
-            "keywords": [
-                "anonymous functions",
-                "closure",
-                "function",
-                "serializable",
-                "serialization",
-                "serialize"
-            ],
-            "support": {
-                "issues": "https://github.com/opis/closure/issues",
-                "source": "https://github.com/opis/closure/tree/3.6.3"
-            },
-            "time": "2022-01-27T09:35:39+00:00"
-        },
-        {
             "name": "phpoption/phpoption",
             "version": "1.9.1",
             "source": {
@@ -3541,91 +3202,6 @@
                 }
             ],
             "time": "2023-02-25T19:38:58+00:00"
-        },
-        {
-            "name": "proengsoft/laravel-jsvalidation",
-            "version": "v4.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/proengsoft/laravel-jsvalidation.git",
-                "reference": "6cd0780dbcdb7ae62e5a1d3bf0d633d7c752b178"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/proengsoft/laravel-jsvalidation/zipball/6cd0780dbcdb7ae62e5a1d3bf0d633d7c752b178",
-                "reference": "6cd0780dbcdb7ae62e5a1d3bf0d633d7c752b178",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/config": "^9.0|^10.0",
-                "illuminate/contracts": "^9.0|^10.0",
-                "illuminate/http": "^9.0|^10.0",
-                "illuminate/support": "^9.0|^10.0",
-                "illuminate/translation": "^9.0|^10.0",
-                "illuminate/validation": "^9.0|^10.0",
-                "illuminate/view": "^9.0|^10.0",
-                "php": "^8.0",
-                "symfony/http-foundation": "^6.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.0",
-                "orchestra/testbench": "^7.0|^8.0",
-                "phpunit/phpunit": "^9.5|^10.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Proengsoft\\JsValidation\\JsValidationServiceProvider"
-                    ],
-                    "aliases": {
-                        "JsValidator": "Proengsoft\\JsValidation\\Facades\\JsValidatorFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Proengsoft\\JsValidation\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Albert Moreno",
-                    "email": "albert@memorylimit.net",
-                    "homepage": "https://github.com/torrentalle"
-                },
-                {
-                    "name": "Kieran Brahney",
-                    "email": "kieran@supportpal.com",
-                    "homepage": "https://github.com/bytestream"
-                }
-            ],
-            "description": "Validate forms transparently with Javascript reusing your Laravel Validation Rules, Messages, and FormRequest",
-            "homepage": "https://github.com/proengsoft/laravel-jsvalidation",
-            "keywords": [
-                "form",
-                "javascript",
-                "jquery",
-                "laravel",
-                "proengsoft",
-                "validation",
-                "validator"
-            ],
-            "support": {
-                "issues": "https://github.com/proengsoft/laravel-jsvalidation/issues",
-                "source": "https://github.com/proengsoft/laravel-jsvalidation/tree/v4.8.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/bytestream",
-                    "type": "github"
-                }
-            ],
-            "time": "2023-02-18T14:35:33+00:00"
         },
         {
             "name": "psr/clock",
@@ -8242,16 +7818,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v1.13.0",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "a19bd99c91b158f33a4c5ffe9653d17a921424de"
+                "reference": "08bcf51e520a5e5aea458fc600ac4869f6934a66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/a19bd99c91b158f33a4c5ffe9653d17a921424de",
-                "reference": "a19bd99c91b158f33a4c5ffe9653d17a921424de",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/08bcf51e520a5e5aea458fc600ac4869f6934a66",
+                "reference": "08bcf51e520a5e5aea458fc600ac4869f6934a66",
                 "shasum": ""
             },
             "require": {
@@ -8304,20 +7880,20 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2023-09-05T15:45:33+00:00"
+            "time": "2023-08-30T07:53:32+00:00"
         },
         {
             "name": "laravel/sail",
-            "version": "v1.24.1",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "3a373bb2845623aed2017c672dc61c84ae974890"
+                "reference": "c8a621d7b69ab2e568d97a20f837ca733a224006"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/3a373bb2845623aed2017c672dc61c84ae974890",
-                "reference": "3a373bb2845623aed2017c672dc61c84ae974890",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/c8a621d7b69ab2e568d97a20f837ca733a224006",
+                "reference": "c8a621d7b69ab2e568d97a20f837ca733a224006",
                 "shasum": ""
             },
             "require": {
@@ -8369,7 +7945,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2023-09-01T14:05:17+00:00"
+            "time": "2023-08-27T14:26:11+00:00"
         },
         {
             "name": "maximebf/debugbar",

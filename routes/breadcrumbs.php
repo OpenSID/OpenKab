@@ -5,6 +5,7 @@ use App\Models\CMS\Category;
 use App\Models\Identitas;
 use App\Models\Kategori;
 use App\Models\Penduduk;
+use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -111,5 +112,15 @@ Breadcrumbs::for('categories.create', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('categories.edit', function (BreadcrumbTrail $trail, $id) {
     $item = Category::find($id)?->slug ?? '-';
     $trail->parent('categories.index');
+    $trail->push($item);
+});
+
+Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Setting', route('settings.index'));
+});
+
+Breadcrumbs::for('settings.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Setting::find($id)?->name ?? '-';
+    $trail->parent('settings.index');
     $trail->push($item);
 });

@@ -6,8 +6,8 @@ Di rilis v2309.0.1 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 2. [#272](https://github.com/OpenSID/OpenKab/issues/272) Menambahkan pengaturan tampilan statistik ke halaman public.
 3. [#284](https://github.com/OpenSID/OpenKab/issues/284) Penyesuaian urutan menu pada halaman admin.
 
-#### Perbaikan BUG
 
+#### Perbaikan BUG
+1. [#281](https://github.com/OpenSID/OpenKab/issues/281) Perbaikan bug ketika menambah group baru.
 
 #### Perubahan Teknis
-

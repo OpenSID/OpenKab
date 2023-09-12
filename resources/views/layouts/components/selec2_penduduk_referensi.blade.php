@@ -1,6 +1,8 @@
 @push('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         $('#status').select2({
+            theme: 'bootstrap4',
             ajax: {
                 url: `{{ url('api/v1/penduduk/referensi/status') }}`,
                 dataType: 'json',
@@ -30,6 +32,7 @@
         })
 
         $('#status-dasar').select2({
+            theme: 'bootstrap4',
             ajax: {
                 url: `{{ url('api/v1/penduduk/referensi/status-dasar') }}`,
                 dataType: 'json',
@@ -59,6 +62,7 @@
         })
 
         $('#sex').select2({
+            theme: 'bootstrap4',
             ajax: {
                 url: `{{ url('api/v1/penduduk/referensi/sex') }}`,
                 dataType: 'json',
@@ -86,5 +90,6 @@
                 }
             }
         })
+    })
     </script>
 @endpush

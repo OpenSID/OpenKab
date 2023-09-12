@@ -1,25 +1,28 @@
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/datepicker/bootstrap-datepicker.min.css') }}">
-@endpush
 
 @push('js')
-    <script src="{{ asset('assets/datepicker/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/datepicker/bootstrap-datepicker.id.min.js') }}"></script>
+    <script src="{{ asset('vendor/moment/moment.js') }}"></script>
+    <script src="{{ asset('vendor/moment/id.js') }}"></script>
 
-    <script>
-        $(document).ready(function(){
+    <script nonce="{{ csp_nonce() }}"  >
+        document.addEventListener("DOMContentLoaded", function(event) {
             //Fortmat Tanggal dan Jam
-            $('.datepicker').datepicker(
+            $('.datepicker').daterangepicker(
             {
-                weekStart : 1,
-                language:'id',
-                format: 'dd-mm-yyyy',
-                autoclose: true
+                autoApply: true,
+                format: "dd/mm/yyyy",
+                singleDatePicker: true,
+                locale: {
+                    firstDay: 1
+                }
             });
 
-            $('.input-daterange').datepicker({
-                language:'id',
-                format: 'dd-mm-yyyy',
+            $('.input-daterange').daterangepicker({
+                autoApply: true,
+                format: "dd/mm/yyyy",
+                singleDatePicker: false,
+                locale: {
+                    firstDay: 1
+                }
             });
         });
     </script>

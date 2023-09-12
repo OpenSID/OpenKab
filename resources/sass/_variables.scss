@@ -5,3 +5,10 @@ $body-bg: #f8fafc;
 $font-family-sans-serif: 'Nunito', sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
+
+@for $i from 1 through 100 {
+    @include _width-class($i);
+}
+@for $i from 1 through 10 {
+    @include _font-size-class($i * 10);
+}

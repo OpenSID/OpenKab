@@ -113,9 +113,10 @@ class KategoriController extends Controller
         $id = (int) $request->id;
         try {
             $kategori = Kategori::where('id', $id)->orWhere('parrent', $id)->get();
-            foreach($kategori as $k){
+            foreach ($kategori as $k) {
                 $k->delete();
             }
+
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);

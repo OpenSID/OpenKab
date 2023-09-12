@@ -36,7 +36,7 @@ class LogPenduduk extends Model
 
     public function scopeTidakMati($query)
     {
-        return $query->where('kode_peristiwa' , '!=', StatusDasarEnum::MATI);
+        return $query->where('kode_peristiwa', '!=', StatusDasarEnum::MATI);
     }
 
     public function scopePeristiwaSampai($query, $tanggal)
@@ -52,7 +52,7 @@ class LogPenduduk extends Model
         $subQuery = DB::raw(
             '(SELECT MAX(id) as id, id_pend from log_penduduk group by id_pend) as logMax'
         );
+
         return $query->join($subQuery, 'logMax.id', '=', 'log_penduduk.id');
     }
 }
-

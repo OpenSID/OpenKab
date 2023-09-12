@@ -102,7 +102,7 @@ final class Modul extends Enum
                     'role' => 'organisasi-departemen',
                 ],
                 [
-                    'icon' => 'fa fa-sitemap',
+                    'icon' => 'fa fa-star',
                     'text' => 'Jabatan',
                     'url' => 'positions',
                     'role' => 'organisasi-position',
@@ -114,7 +114,7 @@ final class Modul extends Enum
                     'role' => 'organisasi-employee',
                 ],
                 [
-                    'icon' => 'fa fa-chart',
+                    'icon' => 'fa fa-sitemap',
                     'text' => 'Struktur Bagan',
                     'url' => 'orgchart',
                     'role' => 'organisasi-chart',
@@ -195,9 +195,9 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'fas fa-gear',
-                    'text' => 'Pengaturan Aplikasi',
-                    'url' => 'master/pengaturan',
-                    'role' => 'pengaturan-aplikasi',
+                    'text' => 'Aplikasi',
+                    'url' => 'pengaturan/settings',
+                    'role' => 'pengaturan-settings',
                 ],
             ],
         ],

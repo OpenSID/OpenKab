@@ -8,8 +8,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\PositionRepository;
 use App\Http\Transformers\PositionTransformer;
 use Illuminate\Http\Request;
-use Flash;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Session;
 
 class PositionController extends AppBaseController
 {
@@ -27,7 +27,6 @@ class PositionController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()){
-            $positions = $this->positionRepository->paginate(10);
             return $this->fractal($this->positionRepository->listPosition(), new PositionTransformer, 'positions')->respond();
         }
 
@@ -52,7 +51,7 @@ class PositionController extends AppBaseController
 
         $position = $this->positionRepository->create($input);
 
-        Flash::success('Position saved successfully.');
+        Session::flash('success','Jabatan berhasil disimpan.');
 
         return redirect(route('positions.index'));
     }
@@ -65,7 +64,7 @@ class PositionController extends AppBaseController
         $position = $this->positionRepository->find($id);
 
         if (empty($position)) {
-            Flash::error('Position not found');
+            Session::flash('error','Jabatan tidak ditemukan');
 
             return redirect(route('positions.index'));
         }
@@ -81,7 +80,7 @@ class PositionController extends AppBaseController
         $position = $this->positionRepository->find($id);
 
         if (empty($position)) {
-            Flash::error('Position not found');
+            Session::flash('error','Jabatan tidak ditemukan');
 
             return redirect(route('positions.index'));
         }
@@ -97,14 +96,14 @@ class PositionController extends AppBaseController
         $position = $this->positionRepository->find($id);
 
         if (empty($position)) {
-            Flash::error('Position not found');
+            Session::flash('error','Jabatan tidak ditemukan');
 
             return redirect(route('positions.index'));
         }
 
         $position = $this->positionRepository->update($request->all(), $id);
 
-        Flash::success('Position updated successfully.');
+        Session::flash('success','Jabatan updated successfully.');
 
         return redirect(route('positions.index'));
     }
@@ -119,16 +118,16 @@ class PositionController extends AppBaseController
         $position = $this->positionRepository->find($id);
 
         if (empty($position)) {
-            Flash::error('Position not found');
+            Session::flash('error','Jabatan tidak ditemukan');
 
             return redirect(route('positions.index'));
         }
 
         $this->positionRepository->delete($id);
         if(request()->ajax()){
-            return $this->sendSuccess('Role deleted successfully.');
+            return $this->sendSuccess('Role berhasil dihapus.');
         }
-        Flash::success('Position deleted successfully.');
+        Session::flash('success','Jabatan berhasil dihapus.');
 
         return redirect(route('positions.index'));
     }

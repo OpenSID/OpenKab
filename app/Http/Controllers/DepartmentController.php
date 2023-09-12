@@ -8,8 +8,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\DepartmentRepository;
 use App\Http\Transformers\DepartmentTransformer;
 use Illuminate\Http\Request;
-use Flash;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Session;
 
 class DepartmentController extends AppBaseController
 {
@@ -27,7 +27,6 @@ class DepartmentController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()){
-            $departments = $this->departmentRepository->paginate(10);
             return $this->fractal($this->departmentRepository->listDepartment(), new DepartmentTransformer, 'departments')->respond();
         }
 
@@ -52,7 +51,7 @@ class DepartmentController extends AppBaseController
 
         $department = $this->departmentRepository->create($input);
 
-        Flash::success('Department saved successfully.');
+        Session::flash('success','Departemen berhasil disimpan.');
 
         return redirect(route('departments.index'));
     }
@@ -65,7 +64,7 @@ class DepartmentController extends AppBaseController
         $department = $this->departmentRepository->find($id);
 
         if (empty($department)) {
-            Flash::error('Department not found');
+            Session::flash('error','Departemen tidak ditemukan');
 
             return redirect(route('departments.index'));
         }
@@ -81,7 +80,7 @@ class DepartmentController extends AppBaseController
         $department = $this->departmentRepository->find($id);
 
         if (empty($department)) {
-            Flash::error('Department not found');
+            Session::flash('error','Departemen not found');
 
             return redirect(route('departments.index'));
         }
@@ -97,14 +96,14 @@ class DepartmentController extends AppBaseController
         $department = $this->departmentRepository->find($id);
 
         if (empty($department)) {
-            Flash::error('Department not found');
+            Session::flash('error','Departemen tidak ditemukan');
 
             return redirect(route('departments.index'));
         }
 
         $department = $this->departmentRepository->update($request->all(), $id);
 
-        Flash::success('Department updated successfully.');
+        Session::flash('success','Departemen berhasil diupdate.');
 
         return redirect(route('departments.index'));
     }
@@ -119,16 +118,16 @@ class DepartmentController extends AppBaseController
         $department = $this->departmentRepository->find($id);
 
         if (empty($department)) {
-            Flash::error('Department not found');
+            Session::flash('error','Departemen tidak ditemukan');
 
             return redirect(route('departments.index'));
         }
 
         $this->departmentRepository->delete($id);
         if(request()->ajax()){
-            return $this->sendSuccess('Role deleted successfully.');
+            return $this->sendSuccess('Departemen berhasil dihapus.');
         }
-        Flash::success('Department deleted successfully.');
+        Session::flash('success','Departemen berhasil dihapus.');
 
         return redirect(route('departments.index'));
     }

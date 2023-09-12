@@ -3,10 +3,10 @@
 @section('content')
     @include('partials.breadcrumbs')
     <div class="container-fluid">
-        @include('flash::message')
 
         <div class="row">
             <div class="col-lg-12">
+                @include('adminlte-templates::common.alerts')
                 <div class="card card-outline card-primary">
                     <div class="card-header">
                         <div class="row mb-2">
@@ -28,8 +28,8 @@
 @endsection
 
 @section('js')
-    <script>
-            $(function() {
+    <script nonce="{{ csp_nonce() }}">
+        document.addEventListener("DOMContentLoaded", function(event) {
                 let positions = $('#positions-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -64,23 +64,23 @@
                     },
                 ],
                 columns: [{
-                        data: null,
-                    },
-                                                                                 {
-                        data: "attributes.name",
-                        name: "name"
-                    },
-                                                            {
-                        data: "attributes.description",
-                        name: "description"
-                    },
-                                                            {
-                        data: "attributes.parent_id",
-                        name: "parent_id"
-                    },
-                                        {
-                        data: function(data) {
-                            return `
+                            data: null,
+                        },
+                        {
+                            data: "attributes.name",
+                            name: "name"
+                        },
+                        {
+                            data: "attributes.description",
+                            name: "description"
+                        },
+                        {
+                            data: "attributes.parent_id",
+                            name: "parent_id"
+                        },
+                        {
+                            data: function (data) {
+                                return `
                                     <a href="{{ route('positions.index') }}/${data.id}/edit">
                                         <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
                                             <i class="fas fa-edit"></i>
@@ -91,8 +91,8 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                     `;
+                            },
                         },
-                    },
                 ],
                 order: [
                     [0, 'asc']

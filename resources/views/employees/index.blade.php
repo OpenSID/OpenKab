@@ -3,10 +3,10 @@
 @section('content')
     @include('partials.breadcrumbs')
     <div class="container-fluid">
-        @include('flash::message')
 
         <div class="row">
             <div class="col-lg-12">
+                @include('adminlte-templates::common.alerts')
                 <div class="card card-outline card-primary">
                     <div class="card-header">
                         <div class="row mb-2">
@@ -28,8 +28,8 @@
 @endsection
 
 @section('js')
-    <script>
-            $(function() {
+    <script nonce="{{ csp_nonce() }}">
+        document.addEventListener("DOMContentLoaded", function(event) {
                 let employees = $('#employees-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -64,44 +64,44 @@
                     },
                 ],
                 columns: [{
-                        data: null,
-                    },
-                                                                                 {
-                        data: "attributes.name",
-                        name: "name"
-                    },
-                                                            {
-                        data: "attributes.identity_number",
-                        name: "identity_number"
-                    },
-                                                            {
-                        data: "attributes.email",
-                        name: "email"
-                    },
-                                                            {
-                        data: "attributes.description",
-                        name: "description"
-                    },
-                                                            {
-                        data: "attributes.phone",
-                        name: "phone"
-                    },
-                                                            {
-                        data: "attributes.foto",
-                        name: "foto"
-                    },
-                                                            {
-                        data: "attributes.position_id",
-                        name: "position_id"
-                    },
-                                                            {
-                        data: "attributes.department_id",
-                        name: "department_id"
-                    },
+                            data: null,
+                        },
+                        {
+                            data: "attributes.name",
+                            name: "name"
+                        },
+                        {
+                            data: "attributes.identity_number",
+                            name: "identity_number"
+                        },
+                        {
+                            data: "attributes.email",
+                            name: "email"
+                        },
+                        {
+                            data: "attributes.description",
+                            name: "description"
+                        },
+                        {
+                            data: "attributes.phone",
+                            name: "phone"
+                        },
+                        {
+                            data: "attributes.foto",
+                            name: "foto"
+                        },
+                        {
+                            data: "attributes.position_id",
+                            name: "position_id"
+                        },
+                        {
+                            data: "attributes.department_id",
+                            name: "department_id"
+                        },
 
-                                        {
-                        data: function(data) {
-                            return `
+                        {
+                            data: function (data) {
+                                return `
                                     <a href="{{ route('employees.index') }}/${data.id}/edit">
                                         <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
                                             <i class="fas fa-edit"></i>
@@ -112,8 +112,8 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                     `;
+                            },
                         },
-                    },
                 ],
                 order: [
                     [0, 'asc']

@@ -11,8 +11,9 @@ use App\Http\Repository\PositionRepository;
 use App\Http\Transformers\EmployeeTransformer;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
-use Flash;
+
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Session;
 
 class EmployeeController extends AppBaseController
 {
@@ -33,7 +34,6 @@ class EmployeeController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()){
-            $employees = $this->employeeRepository->paginate(10);
             return $this->fractal($this->employeeRepository->listEmployee(), new EmployeeTransformer, 'employees')->respond();
         }
 
@@ -60,7 +60,7 @@ class EmployeeController extends AppBaseController
         }
         $employee = $this->employeeRepository->create($input);
 
-        Flash::success('Employee saved successfully.');
+        Session::flash('success','Pegawai berhasil disimpan.');
 
         return redirect(route('employees.index'));
     }
@@ -73,7 +73,7 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Flash::error('Employee not found');
+            Session::flash('error', 'Pegawai tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
@@ -89,7 +89,7 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Flash::error('Employee not found');
+            Session::flash('error','Pegawai tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
@@ -105,7 +105,7 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Flash::error('Employee not found');
+            Session::flash('error','Pegawai tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
@@ -117,7 +117,7 @@ class EmployeeController extends AppBaseController
 
         $employee = $this->employeeRepository->update($input, $id);
 
-        Flash::success('Employee updated successfully.');
+        Session::flash('success','Pegawai berhasil diupdate.');
 
         return redirect(route('employees.index'));
     }
@@ -132,16 +132,16 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Flash::error('Employee not found');
+            Session::flash('error','Pegawai tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
 
         $this->employeeRepository->delete($id);
         if(request()->ajax()){
-            return $this->sendSuccess('Role deleted successfully.');
+            return $this->sendSuccess('Pegawai berhasil dihapus.');
         }
-        Flash::success('Employee deleted successfully.');
+        Session::flash('success','Pegawai berhasil dihapus.');
 
         return redirect(route('employees.index'));
     }

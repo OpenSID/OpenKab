@@ -2,9 +2,7 @@
 
 use App\Enums\Modul;
 use App\Models\Team;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {

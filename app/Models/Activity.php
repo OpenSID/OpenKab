@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\Models\Activity as ModelsActivity;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\Activitylog\Models\Activity as ModelsActivity;
 
 class Activity extends ModelsActivity
 {
     /**
      * Get the user associated with the Activity
-     * Illuminate\Database\Eloquent\Relations\HasOne
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Illuminate\Database\Eloquent\Relations\HasOne.
      */
     public function user(): HasOne
     {

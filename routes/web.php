@@ -14,6 +14,7 @@ use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,7 @@ Auth::routes([
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {
-    Route::get('/', [DasborController::class, 'index'])->name('dasbor');
+    Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
@@ -52,7 +53,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/edit/{id}', [GroupController::class, 'edit'])->name('groups.edit');
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show']);
-
+        Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create']);
     });
 
     Route::prefix('sesi')->group(function () {
@@ -123,3 +124,12 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 });
 
+Route::get('/', function(){
+    $website = Setting::where(['key' => 'website_enable'])->first()?->value ?? 0;
+
+    if (! $website) {
+        return redirect('login');
+    }
+
+    return '<h3>Halaman publik</h3><a href="/login">Login</a>';
+});

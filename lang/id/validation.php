@@ -176,7 +176,8 @@ return [
 
     'attributes' => [
         'title' => 'judul',
-        'content' => 'isi'
+        'content' => 'isi',
+        'name' => 'nama'
     ],
 
 ];

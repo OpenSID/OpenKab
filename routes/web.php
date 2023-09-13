@@ -12,6 +12,7 @@ use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Web\PageController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Models\Setting;
@@ -54,6 +55,11 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show']);
         Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create']);
+    });
+
+    Route::prefix('cms')->group(function(){
+        Route::resource('categories', App\Http\Controllers\CMS\CategoryController::class)->except(['show']);
+
     });
 
     Route::prefix('sesi')->group(function () {

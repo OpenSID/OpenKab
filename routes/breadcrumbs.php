@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Bantuan;
+use App\Models\CMS\Category;
 use App\Models\BaseModel;
 use App\Models\Department;
 use App\Models\Employee;
@@ -103,6 +104,19 @@ Breadcrumbs::for('penduduk.edit', function (BreadcrumbTrail $trail, $id) {
     $penduduk = Penduduk::find($id)?->nama ?? '-';
     $trail->parent('penduduk.index');
     $trail->push($penduduk);
+});
+
+Breadcrumbs::for('categories.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Kategori', route('categories.index'));
+});
+Breadcrumbs::for('categories.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('categories.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('categories.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Category::find($id)?->slug ?? '-';
+    $trail->parent('categories.index');
+    $trail->push($item);
 });
 
 Breadcrumbs::for('employees.index', function (BreadcrumbTrail $trail) {

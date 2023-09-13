@@ -1,45 +1,41 @@
-@@extends('layouts.index')
+@extends('layouts.index')
 
-@@section('content_header')
-    <h1>Data {{ $config->modelNames->name }}</h1>
-@@stop
+@section('content_header')
+    <h1>Data Kategori</h1>
+@stop
 
-@@section('content')
-    @@include('partials.breadcrumbs')
+@section('content')
+    @include('partials.breadcrumbs')
 
     <div class="container-fluid">
 
         <div class="row">
             <div class="col-lg-12">
-                @@include('adminlte-templates::common.alerts')
+                @include('adminlte-templates::common.alerts')
                 <div class="card card-outline card-primary">
                     <div class="card-header">
                         <div class="row mb-2">
                             <div class="col-sm-6">
                                 <a
-                           href="{{ '{{' }} route('{!! $config->prefixes->getRoutePrefixWith('.') !!}{!! $config->modelNames->camelPlural !!}.create') }} ">
-    @if($config->options->localized)
-                             @@lang('crud.add_new')
-    @else
-            <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
-    @endif
-                        </a>
+                           href="{{ route('categories.create') }} ">
+                <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
+                            </a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        {!! $table !!}
+                        @include('categories.table')
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@@endsection
+@endsection
 
-@@section('js')
-    <script nonce="{{ '{{ ' }} csp_nonce() }}">
+@section('js')
+    <script nonce="{{  csp_nonce() }}">
 	document.addEventListener("DOMContentLoaded", function(event) {
-                let {{ $config->modelNames->dashedPlural }} = $('#{{ $config->modelNames->dashedPlural }}-table').DataTable({
+                let categories = $('#categories-table').DataTable({
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -49,15 +45,14 @@
                     columns: [0]
                 },
                 ajax: {
-                    url: `{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}`,
+                    url: `{{ route('categories.index') }}`,
                     method: 'get',
                     data: function(row) {
                         return {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
-                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
-                                ?.name,
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name,
                         };
                     },
                     dataSrc: function(json) {
@@ -73,39 +68,43 @@
                     },
                 ],
                 columns: [{
-                        data: null,
-                    },
-                    @foreach ($config->fields as $field)
-                    @if ( $config->primaryName == $field->name ) @continue; @endif
-                    {
-                        data: "attributes.{{ $field->name }}",
-                        name: "{{ $field->name }}"
-                    },
-                    @endforeach
-                    {
-                        data: function(data) {
-                            return `
-                                    <a href="{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}/${data.id}/edit">
-                                        <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
+                            data: null,
+                        },
+                        {
+                            data: "attributes.name",
+                            name: "name"
+                        }, {
+                            data: "attributes.slug",
+                            name: "slug"
+                        },
+                        {
+                            data: "attributes.status",
+                            name: "status"
+                        },
+                        {
+                            data: function (data) {
+                                return `
+                                    <a href="{{ route('categories.index') }}/${data.id}/edit">
+                                        <button type="button" class="btn btn-warning btn-sm edit" name="Ubah">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </a>
 
-                                    <button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
+                                    <button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" name="Hapus">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                     `;
+                            },
                         },
-                    },
-                ],
-                order: [
-                    [0, 'asc']
-                ]
-            })
+                    ],
+                    order: [
+                        [0, 'asc']
+                    ]
+                })
 
-            {{ $config->modelNames->dashedPlural }}.on('draw.dt', function() {
-                var PageInfo = $('#{{ $config->modelNames->dashedPlural }}-table').DataTable().page.info();
-                {{ $config->modelNames->dashedPlural }}.column(0, {
+            categories.on('draw.dt', function() {
+                var PageInfo = $('#categories-table').DataTable().page.info();
+                categories.column(0, {
                     page: 'current'
                 }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1 + PageInfo.start;
@@ -116,7 +115,7 @@
                     var id = $(this).data('id')
                     var that = $(this);
                     Swal.fire({
-                        title: 'Hapus',
+                        name: 'Hapus',
                         text: "Apakah anda yakin menghapus data ini?",
                         icon: 'warning',
                         showCancelButton: true,
@@ -124,7 +123,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             Swal.fire({
-                                title: 'Menyimpan',
+                                name: 'Menyimpan',
                                 didOpen: () => {
                                     Swal.showLoading()
                                 },
@@ -135,7 +134,7 @@
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 dataType: "json",
-                                url: `{{ '{{ ' }}route('{{ $config->prefixes->getRoutePrefixWith('.') }}{{ $config->modelNames->camelPlural }}.index'){!! ' }}' !!}/${id}`,
+                                url: `{{ route('categories.index') }}/${id}`,
                                 data: {
                                     id: id
                                 },
@@ -171,4 +170,4 @@
             });
 
     </script>
-@@endsection
+@endsection

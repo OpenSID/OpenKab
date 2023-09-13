@@ -9,7 +9,9 @@
     ],
     "require": {
         "php": "^8.0.2",
+        "alexusmai/laravel-file-manager": "^3.0",
         "bensampo/laravel-enum": "^6.3",
+        "cviebrock/eloquent-sluggable": "~9.0",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
@@ -20,6 +22,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
         "league/flysystem-ftp": "^3.10",
+        "proengsoft/laravel-jsvalidation": "^4.8",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-csp": "^2.8",
         "spatie/laravel-fractal": "^6.0",

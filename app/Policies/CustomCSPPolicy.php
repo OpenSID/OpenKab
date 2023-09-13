@@ -4,9 +4,9 @@ namespace App\Policies;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Spatie\Csp\Policies\Basic;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Keyword;
+use Spatie\Csp\Policies\Basic;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomCSPPolicy extends Basic
@@ -40,13 +40,13 @@ class CustomCSPPolicy extends Basic
             Keyword::SELF,
             'data:',
             'https://fonts.bunny.net/',
-            'https://fonts.gstatic.com/'
+            'https://fonts.gstatic.com/',
         ])->addDirective(Directive::CONNECT, [
             config('app.serverPantau'),
         ]);
     }
 
-    public function shouldBeApplied(Request  $request, Response $response): bool
+    public function shouldBeApplied(Request $request, Response $response): bool
     {
         $currentRoute = Route::getCurrentRoute()->getName();
         if (in_array($currentRoute, $this->excludeRoute)) {

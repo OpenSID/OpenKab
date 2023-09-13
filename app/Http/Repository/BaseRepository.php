@@ -6,6 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection as SupportCollection;
 
 abstract class BaseRepository
 {
@@ -23,27 +24,27 @@ abstract class BaseRepository
     }
 
     /**
-     * Get searchable fields array
+     * Get searchable fields array.
      */
     abstract public function getFieldsSearchable(): array;
 
     /**
-     * Configure the Model
+     * Configure the Model.
      */
     abstract public function model(): string;
 
     /**
-     * Make Model instance
-     *
-     * @throws \Exception
+     * Make Model instance.
      *
      * @return Model
+     *
+     * @throws \Exception
      */
     public function makeModel()
     {
         $model = app($this->model());
 
-        if (!$model instanceof Model) {
+        if (! $model instanceof Model) {
             throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
         }
 
@@ -68,18 +69,18 @@ abstract class BaseRepository
         $query = $this->model->newQuery();
 
         if (count($search)) {
-            foreach($search as $key => $value) {
+            foreach ($search as $key => $value) {
                 if (in_array($key, $this->getFieldsSearchable())) {
                     $query->where($key, $value);
                 }
             }
         }
 
-        if (!is_null($skip)) {
+        if (! is_null($skip)) {
             $query->skip($skip);
         }
 
-        if (!is_null($limit)) {
+        if (! is_null($limit)) {
             $query->limit($limit);
         }
 
@@ -87,7 +88,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Retrieve all records with given filter criteria
+     * Retrieve all records with given filter criteria.
      */
     public function all(array $search = [], int $skip = null, int $limit = null, array $columns = ['*']): Collection
     {
@@ -97,7 +98,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Create model record
+     * Create model record.
      */
     public function create(array $input): Model
     {
@@ -109,7 +110,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Find model record for given id
+     * Find model record for given id.
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null
      */
@@ -121,7 +122,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Update model record for given id
+     * Update model record for given id.
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
@@ -139,9 +140,9 @@ abstract class BaseRepository
     }
 
     /**
-     * @throws \Exception
-     *
      * @return bool|mixed|null
+     *
+     * @throws \Exception
      */
     public function delete(int $id)
     {
@@ -151,4 +152,15 @@ abstract class BaseRepository
 
         return $model->delete();
     }
+
+      /**
+     * Retrieve all records with given filter criteria
+     */
+    public function pluck(array $columns = ['name', 'id'], array $search = [], int $skip = null, int $limit = null): SupportCollection
+    {
+        $query = $this->allQuery($search, $skip, $limit);
+
+        return $query->pluck($columns[0], $columns[1]);
+    }
+
 }

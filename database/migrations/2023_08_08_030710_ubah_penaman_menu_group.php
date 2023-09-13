@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up()
     {
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         update team set menu = REPLACE(menu,'"Group"','"Grup"')
 SQL;
         DB::statement($sql);
@@ -25,7 +25,7 @@ SQL;
      */
     public function down()
     {
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         update team set menu = REPLACE(menu,'"Grup"','"Group"')
 SQL;
         DB::statement($sql);

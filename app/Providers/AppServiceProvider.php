@@ -35,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
         // daftarkan manual karena gagal install infyomlabs/adminlte-templates terkendala depedency
         View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
         $this->addLogQuery();
+        // daftarkan manual karena gagal install infyomlabs/adminlte-templates terkendala depedency
+        View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
     }
 
     public function bootHttps()
@@ -77,7 +79,8 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    private function addLogQuery(){
+    private function addLogQuery()
+    {
         if (config('app.debug')) {
             DB::listen(function ($query) {
                 File::append(

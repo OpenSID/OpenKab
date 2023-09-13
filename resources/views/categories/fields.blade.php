@@ -9,7 +9,7 @@
 
 <!-- Status Field -->
 <div class="form-group row">
-    {!! Form::label('status', 'Status', ['class' => 'col-3']) !!}
+    {!! Form::label('status', 'Tampilkan', ['class' => 'col-3']) !!}
     <div class="col-9">
         <label class="form-check-inline">
             {!! Form::radio('status', 1, $category?->status == 1 ? 1 : null, ['class' => 'form-check-input']) !!} Ya

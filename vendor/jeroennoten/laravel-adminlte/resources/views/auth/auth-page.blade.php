@@ -41,7 +41,7 @@
                 @endif
 
                 {{-- Logo Label --}}
-                @yield('auth_logo_label')
+                {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
 
             </a>
         </div>

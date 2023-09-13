@@ -10,29 +10,6 @@
 
 @section('auth_header', __('adminlte::adminlte.password_reset_message'))
 
-@section('auth_logo_label')
-
-    <span x-data="identitas()" x-init="retrieveData()">
-        <b x-text="dataIdentitas.nama_aplikasi"></b>
-    </span>
-   <script>
-       function identitas() {
-           return {
-               id: 1,
-               edit: '',
-               dataIdentitas: {},
-               retrieveData() {
-                   fetch('{{ url('api/v1/identitas') }}')
-                       .then(res => res.json())
-                       .then(response => {
-                           this.dataIdentitas = response.data.attributes;
-                           this.id = response.data.id
-                       });
-               },
-           }
-       }
-   </script>
-@stop
 @section('auth_body')
 
     @if(session('status'))

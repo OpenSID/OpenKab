@@ -6,6 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection as SupportCollection;
 
 abstract class BaseRepository
 {
@@ -151,4 +152,15 @@ abstract class BaseRepository
 
         return $model->delete();
     }
+
+      /**
+     * Retrieve all records with given filter criteria
+     */
+    public function pluck(array $columns = ['name', 'id'], array $search = [], int $skip = null, int $limit = null): SupportCollection
+    {
+        $query = $this->allQuery($search, $skip, $limit);
+
+        return $query->pluck($columns[0], $columns[1]);
+    }
+
 }

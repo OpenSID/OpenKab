@@ -36,6 +36,11 @@ tr.shown td.details-control {
     transition: .5s;
 }
 
+.img-cover{
+    height: 100px;
+    object-fit: cover;
+}
+
 .w-40 {
     width: 40%!important;
 }

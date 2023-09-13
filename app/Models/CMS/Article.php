@@ -2,6 +2,7 @@
 
 namespace App\Models\CMS;
 
+use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,7 +23,8 @@ class Article extends SluggableModel
         'slug',
         'title',
         'thumbnail',
-        'content'
+        'content',
+        'state'
     ];
 
     protected $casts = [
@@ -37,10 +39,17 @@ class Article extends SluggableModel
         'category_id' => 'required',
         'published_at' => 'required',
         'slug' => 'string|max:255',
-        'title' => 'required|string|max:255',
+        'title' => 'required|string|max:200|min:5',
         'content' => 'required|string|max:65535',
         'state' => 'required|numeric|digits_between:0,1',
         'foto'  => 'nullable|image|max:1024|mimes:png,jpg'
+    ];
+    // menyebabkan error ketika validasi js
+    public static array $errorMessages = [
+        // 'title' => [
+        //     'min' => 'Judul minimal :min karakter',
+        //     'max' => 'Judul minimal :max karakter',
+        // ]
     ];
 
     /**
@@ -73,7 +82,12 @@ class Article extends SluggableModel
      */
     public function getLocalizedPublishedAtAttribute(): string
     {
-        return $this->published_at->formatLocalized('%l, %j %F %Y');
+        return Carbon::parse($this->attributes['published_at'])->format(config('app.format.date'));
+    }
+
+    public function getLocalPublishedAtAttribute($value)
+    {
+        return isset($this->attributes['published_at']) ? Carbon::parse($this->attributes['published_at'])->format(config('app.format.date')) : null;
     }
 
     /**
@@ -95,8 +109,8 @@ class Article extends SluggableModel
         return route('article', ['aSlug' => $this->slug]);
     }
 
-    public function getStateAttribute($value): string
+    public function getLabelStateAttribute(): string
     {
-        return self::STATE_STRING[$value] ?? '-';
+        return self::STATE_STRING[$this->state] ?? '-';
     }
 }

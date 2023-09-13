@@ -108,7 +108,7 @@ final class Modul extends Enum
                     'role' => 'organisasi-departemen',
                 ],
                 [
-                    'icon' => 'fa fa-sitemap',
+                    'icon' => 'fa fa-star',
                     'text' => 'Jabatan',
                     'url' => 'positions',
                     'role' => 'organisasi-position',

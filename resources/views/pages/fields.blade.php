@@ -26,11 +26,8 @@
 
         <!-- State Field -->
         <div class="form-group">
-            <div class="form-check">
-                {!! Form::hidden('state', 0, ['class' => 'form-check-input']) !!}
-                {!! Form::checkbox('state', '1', $page?->state ? $page?->state : null, ['class' => 'form-check-input']) !!}
-                {!! Form::label('state', 'Aktif', ['class' => 'form-check-label']) !!}
-            </div>
+            {!! Form::label('state', 'Status') !!}
+            {!! Form::select('state', $stateItem, null, ['class' => 'form-control select2', 'required']) !!}
         </div>
 
         <div>

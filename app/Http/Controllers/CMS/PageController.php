@@ -148,6 +148,8 @@ class PageController extends AppBaseController
 
     protected function getOptionItems($id = null)
     {
-        return [];
+        return [
+            'stateItem' => Page::STATE_STRING,
+        ];
     }
 }

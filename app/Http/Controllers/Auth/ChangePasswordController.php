@@ -24,14 +24,13 @@ class ChangePasswordController extends ResetPasswordController
     {
         return [
             'password_old' => ['required', new MatchOldPassword],
-            'password' => ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()->uncompromised()]
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()->uncompromised()],
         ];
     }
 
     /**
      * Reset the given user's password.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      */
     public function reset(Request $request)
@@ -47,22 +46,24 @@ class ChangePasswordController extends ResetPasswordController
 
         // return $this->sendResetResponse($request, 'password changed succesfull');
         Auth::logout();
+
         return redirect(route('login'))->with('success', 'Password berhasil diubah, silakan login kembali');
     }
 
-    public function resetByAdmin(ModelsUser  $user ,Request $request)
+    public function resetByAdmin(ModelsUser $user, Request $request)
     {
         $user->password = $user->email;
         $user->save();
 
-        return $this->sendResetResponse($request, 'password user reset succesfull with new password '. $password);
+        return $this->sendResetResponse($request, 'password user reset succesfull with new password '.$password);
     }
 
     /**
      * Reset the given user's password.
      *
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
-     * @param  string  $password
+     * @param \Illuminate\Contracts\Auth\CanResetPassword $user
+     * @param string                                      $password
+     *
      * @return void
      */
     protected function changePassword($user, $password)
@@ -70,5 +71,4 @@ class ChangePasswordController extends ResetPasswordController
         $user->password = $password;
         $user->save();
     }
-
 }

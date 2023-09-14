@@ -192,7 +192,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-
+        Spatie\Csp\CspServiceProvider::class,
         /*
          * Package Service Providers...
          */

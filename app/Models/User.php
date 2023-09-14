@@ -10,9 +10,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -107,21 +107,24 @@ class User extends Authenticatable
         return $this->team()->first()?->id;
     }
 
-    public function adminlte_profile_url(){
+    public function adminlte_profile_url()
+    {
         return route('profile.edit', $this->id);
     }
 
-    public function adminlte_desc(){
+    public function adminlte_desc()
+    {
         return $this->team()->first()->name;
     }
 
-    public function isSuperAdmin(){
+    public function isSuperAdmin()
+    {
         return $this->id == self::superAdmin();
     }
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('user-log');;
+        return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('user-log');
         // Chain fluent methods for configuration options
     }
 }

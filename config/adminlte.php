@@ -334,7 +334,7 @@ return [
         [
             'text' => 'Dasbor',
             'icon' => 'fas fa-home',
-            'url' => '/',
+            'url' => '/dasbor',
         ],
 
     ],

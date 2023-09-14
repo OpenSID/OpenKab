@@ -203,7 +203,6 @@ if (! function_exists('default_favicon')) {
                 $filePath = public_path('assets/img/opensid_logo.png');
                 Image::make($filePath)->resize(96, 96)->save($pathFavicon, '100', 'png');
             }
-
         }
     }
 }

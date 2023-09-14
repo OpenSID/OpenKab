@@ -5,7 +5,7 @@
                 <th>No</th>
                 <th>Nama</th>
                 <th>Slug</th>
-                <th>Status</th>
+                <th>Tampilkan</th>
                 <th>Aksi</th>
             </tr>
             </thead>

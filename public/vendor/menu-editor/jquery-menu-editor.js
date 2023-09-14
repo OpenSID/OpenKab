@@ -102,11 +102,12 @@ function MenuEditor(e, s) {
             t && delete i.children, $.extend(o, i);
             var r = $("<li>").addClass("list-group-item pr-0");
             r.data(o);
-            var a = $("<div>").css("overflow", "auto"),
+            var a = $("<div>").addClass('d-flex'),
                 c = $("<i>").addClass(s.icon),
-                d = $("<span>").addClass("txt").append(s.text).css("margin-right", "5px"),
+                d = $("<span>").addClass("mr-auto txt").append(s.text),
+                e = $("<span>").addClass("mr-2 href").text(s.href),
                 p = u();
-            a.append(c).append("&nbsp;").append(d).append(p), r.append(a), t && r.append(f(s.children, l + 1)), n.append(r)
+            a.append(c).append("&nbsp;").append(d).append(e).append(p), r.append(a), t && r.append(f(s.children, l + 1)), n.append(r)
         })), n
     }
 

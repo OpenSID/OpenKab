@@ -16,7 +16,7 @@
                     <div class="card-body">
                         {!! Form::open(['route' => 'menus.store', 'id' => 'frmEdit']) !!}
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-5">
                                 <div class="card card-default">
                                     <div class="card-header">Sumber Menu URL</div>
                                     <div class="card-body">
@@ -28,7 +28,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-8">
+                            <div class="col-7">
                                 <div class="card card-default">
                                     <div class="card-header">Struktur Menu</div>
                                     <div class="card-body">
@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        {!! Form::button('<i class="fas fa-times"></i> Batal', ['type' => 'reset', 'class' => 'btn btn-danger btn-sm'] )  !!}
+                                        {!! Form::button('<i class="fas fa-times"></i> Batal', ['type' => 'button', 'class' => 'btn btn-danger btn-sm reload'] )  !!}
                                         {!! Form::button('<i class="fas fa-save"></i> Simpan', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm'] )  !!}
                                     </div>
                                 </div>
@@ -77,9 +77,6 @@
                 editor.setForm($('#frmEdit'));
                 editor.setUpdateButton($('#btnUpdate'));
                 editor.setData(arrayjson);
-                // $('#btnReload').on('click', function () {
-                //     editor.setData(arrayjson);
-                // });
 
                 $('#btnOutput').on('click', function () {
                     var str = editor.getString();
@@ -94,6 +91,10 @@
                     editor.add();
                 });
 
+                $('#frmEdit').bind('reset', function(e){
+                    $('select[name=sourcelist]').hide()
+                    $('input[name=href]').show()
+                })
                 $('#frmEdit').submit(function(e){
                     var str = editor.getString();
 
@@ -103,6 +104,10 @@
                     }
                     $('#frmEdit').find('textarea[name=json_menu]').val(str)
                     return true;
+                })
+
+                $('button.reload').click(function(){
+                    window.location.reload()
                 })
     });
     </script>

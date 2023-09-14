@@ -6,6 +6,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\CMS\MenuRepository;
 use App\Http\Requests\UpdateMenuRequest;
 use App\Http\Transformers\MenuTransformer;
+use App\Models\CMS\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -24,7 +25,18 @@ class MenuController extends AppBaseController
      */
     public function index()
     {
-        return view('menus.index', ['menus' => $this->menuRepository->treeJson()]);
+        $sourceItem = [
+            'Halaman' => [
+                '?hal=about' => 'Tentang',
+                '?hal=profil' => 'Profile'
+            ],
+            'Kategori' => Category::all()->pluck('name', 'link')->toArray(),
+            'Modul' => [
+                '?module=org' => 'Bagan Organisasi',
+                '?module=statistik' => 'Statistik',
+            ]
+        ];
+        return view('menus.index', ['menus' => $this->menuRepository->treeJson(), 'sourceItem' => $sourceItem]);
     }
 
     /**

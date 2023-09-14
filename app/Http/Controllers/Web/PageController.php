@@ -15,11 +15,12 @@ class PageController extends Controller
      */
     public function getIndex()
     {
-        return view('app.articles', [
-            'title' => 'judul',
-            'description' => 'description',
-            'articles' => Article::published()->paginate(4)
-        ]);
+        return '<h3>Halaman publik</h3><a href="/login">Login</a>';
+        // return view('web.articles', [
+        //     'title' => 'judul',
+        //     'description' => 'description',
+        //     'articles' => Article::published()->paginate(4)
+        // ]);
     }
 
     /**
@@ -29,7 +30,7 @@ class PageController extends Controller
      */
     public function getCategory(Category $category)
     {
-        return view('app.articles', [
+        return view('web.articles', [
             'title' => $category->title,
             'description' => $category->description,
             'articles' => Article::where('category_id', $category->id)->paginate(4)
@@ -43,7 +44,7 @@ class PageController extends Controller
      */
     public function getPage(Page $page)
     {
-        return view('app.content', ['object' => $page]);
+        return view('web.content', ['object' => $page]);
     }
 
     /**
@@ -53,7 +54,7 @@ class PageController extends Controller
      */
     public function getArticle(Article $article)
     {
-        return view('app.content', ['object' => $article]);
+        return view('web.content', ['object' => $article]);
     }
 
     /**

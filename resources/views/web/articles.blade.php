@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@include('partials.websections', [
+@include('web.partials.sections', [
 'title' => getTitle($title),
 'description' => getDescription($description),
-'image' => getImage()
+'image' => ''// getImage()
 ])
 
 @section('content')
-    @include('partials.webhero')
+    @include('web.partials.hero')
     <section class="section">
         <div class="container">
-            @include('partials.webarticles')
+            @include('web.partials.articles')
         </div>
     </section>
 @endsection

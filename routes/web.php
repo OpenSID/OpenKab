@@ -134,7 +134,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 });
 
 Route::middleware(['website.enable'])->group(function(){
-    Route::get('a/{aSlug}', [PageController::class, 'getIndex'])->name('article');
+    Route::get('/', [PageController::class, 'getIndex'])->name('article');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');
     Route::get('c/{cSlug}', [PageController::class, 'getCategory'])->name('category');

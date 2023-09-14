@@ -133,7 +133,7 @@ class Bantuan extends BaseModel
     {
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
             $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
-            $tanggalPeristiwa = Carbon::parse(implode('-',$periode))->endOfMonth()->format('Y-m-d');
+            $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
             $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa)->tidakMati()->toBoundSql();
         }
 
@@ -148,7 +148,7 @@ class Bantuan extends BaseModel
             ->groupBy("{$this->table}.id", "{$this->table}.nama");
 
         if (isset($logPenduduk)) {
-            $statistik->join(DB::raw("($logPenduduk) as log"),'log.id_pend', '=', 'tweb_penduduk.id');
+            $statistik->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id');
         }
 
         return $statistik;

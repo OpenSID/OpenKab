@@ -7,6 +7,7 @@ use App\Http\Repository\CMS\CategoryRepository;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Transformers\CategoryTransformer;
+use App\Models\CMS\Article;
 use App\Models\CMS\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -38,7 +39,7 @@ class CategoryController extends AppBaseController
      */
     public function create()
     {
-        return view('categories.create', $this->getOptionItems())->with('category', new Category(['status' => 1]) );
+        return view('categories.create', $this->getOptionItems())->with('category', new Category(['status' => 1]));
     }
 
     /**
@@ -115,6 +116,16 @@ class CategoryController extends AppBaseController
     public function destroy($id)
     {
         $category = $this->categoryRepository->find($id);
+        $article = Article::whereCategoryId($id)->count();
+
+        if ($article) {
+            if (request()->ajax()) {
+                return $this->sendError('Masih ada artikel pada kategori tersebut', 201);
+            }
+            Session::flash('error', 'Masih ada artikel pada kategori tersebut');
+
+            return redirect(route('categories.index'));
+        }
 
         if (empty($category)) {
             Session::flash('error', 'Kategori tidak ditemukan');
@@ -123,8 +134,9 @@ class CategoryController extends AppBaseController
         }
 
         $this->categoryRepository->delete($id);
+
         if (request()->ajax()) {
-            return $this->sendSuccess('Role deleted successfully.');
+            return $this->sendSuccess('Kategori berhasil dihapus.');
         }
         Session::flash('success', 'Kategori berhasil dihapus.');
 

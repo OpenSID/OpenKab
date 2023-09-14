@@ -4,13 +4,13 @@
         <!-- Title Field -->
         <div class="form-group">
             {!! Form::label('title', 'Judul Artikel') !!}
-            {!! Form::text('title', null, ['class' => 'form-control', 'required', 'maxlength' => 255, 'maxlength' => 255]) !!}
+            {!! Form::text('title', null, ['class' => 'form-control', 'required', 'maxlength' => 255]) !!}
         </div>
 
         <!-- Content Field -->
         <div class="form-group col-sm-12 col-lg-12">
             {!! Form::label('content', 'Isi Artikel') !!}
-            {!! Form::textarea('content', null, ['class' => 'form-control editor', 'required', 'maxlength' => 65535, 'maxlength' => 65535]) !!}
+            {!! Form::textarea('content', null, ['class' => 'form-control editor', 'required', 'maxlength' => 65535]) !!}
         </div>
 
     </div>
@@ -34,7 +34,7 @@
         <!-- Published At Field -->
         <div class="form-group ">
             {!! Form::label('published_at', 'Tanggal Terbit') !!}
-            {!! Form::text('published_at', null, ['class' => 'form-control datepicker','id'=>'published_at']) !!}
+            {!! Form::text('published_at', $article?->local_published_at , ['class' => 'form-control datepicker','id'=>'published_at']) !!}
         </div>
 
         <div>
@@ -46,3 +46,4 @@
 
 @include('partials.asset_datepicker')
 @include('partials.asset_tinymce')
+{!! JsValidator::formRequest(App\Http\Requests\CreateArticleRequest::class) !!}

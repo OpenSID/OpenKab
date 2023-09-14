@@ -13,6 +13,7 @@ import 'daterangepicker/daterangepicker';
 import 'chart.js/dist/Chart.bundle.min';
 import 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min';
 import 'moment/min/moment.min';
+import './jsvalidation.min';
 
 window._ = _;
 window.$ = $;

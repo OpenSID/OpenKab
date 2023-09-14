@@ -10,6 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class BaseModel extends Model
 {
     use LogsActivity;
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
@@ -82,7 +83,7 @@ class BaseModel extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('data-log');;
+        return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('data-log');
         // Chain fluent methods for configuration options
     }
 }

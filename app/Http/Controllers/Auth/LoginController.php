@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 class LoginController extends Controller
 {
     protected $decayMinutes = 3;
+
     protected $maxAttempts = 5;
     /*
     |--------------------------------------------------------------------------
@@ -79,7 +80,6 @@ class LoginController extends Controller
     /**
      * Attempt to log the user into the application.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
     protected function attemptLogin(Request $request)
@@ -95,15 +95,17 @@ class LoginController extends Controller
                     ->mixedCase()
                     ->numbers()
                     ->symbols()
-                    ->uncompromised()
-                    ]
+                    ->uncompromised(),
+                ],
                 ]);
                 session(['weak_password' => false]);
             } catch (ValidationException  $th) {
                 session(['weak_password' => true]);
+
                 return redirect(route('password.change'))->with('success-login', 'Ganti password dengan yang lebih kuat');
             }
         }
+
         return $successLogin;
     }
 }

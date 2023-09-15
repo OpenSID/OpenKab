@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CatatanRilis extends Controller
 {
@@ -15,6 +16,6 @@ class CatatanRilis extends Controller
     public function __invoke(Request $request)
     {
         $file = file_get_contents(base_path('catatan_rilis.md'));
-        return \Str::markdown($file);
+        return str_replace('<a', '<a class="text-primary"',Str::markdown($file));
     }
 }

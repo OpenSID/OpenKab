@@ -60,6 +60,9 @@
                     html: data,
                     position: 'top',
                     confirmButtonText: 'Tutup',
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    focusConfirm: false,
                     customClass: {
                         htmlContainer: 'text-left'
                     }

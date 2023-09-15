@@ -45,6 +45,28 @@
                 $('a[href="#collapse-filter"]').trigger('click')
             }
         }
+
+        $('li#catatan-rilis').click(function(){
+            Swal.fire({
+                title: 'Menyimpan',
+                didOpen: () => {
+                    Swal.showLoading()
+                },
+            })
+            $.get('/catatan-rilis', {}, function (data) {
+                Swal.fire({
+                    title: 'Catatan Rilis',
+                    width: '90%',
+                    html: data,
+                    position: 'top',
+                    confirmButtonText: 'Tutup',
+                    customClass: {
+                        htmlContainer: 'text-left'
+                    }
+
+                })
+            })
+        })
     })
     </script>
 @endpush

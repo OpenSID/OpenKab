@@ -311,6 +311,13 @@ return [
             'type' => 'fullscreen-widget',
             'topnav_right' => false,
         ],
+        [
+            'icon' => 'fas fa-info-circle fa-lg nav-link',
+            'id'  => 'catatan-rilis',
+            'text' => '',
+            'url' => '#',
+            'topnav_right' => true,
+        ],
         // Kecamatan
         [
             'key' => 'kecamatan',

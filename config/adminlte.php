@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'OpenKAB',
+    'title' => 'OpenKab',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -31,7 +31,7 @@ return [
     */
 
     'use_ico_only' => false,
-    'use_full_favicon' => false,
+    'use_full_favicon' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return [
     'logo_img_class' => 'brand-image elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'OpenKAB',
+    'logo_img_alt' => 'OpenKab',
 
     /*
     |--------------------------------------------------------------------------
@@ -107,7 +107,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'img' => [
             'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
             'alt' => 'AdminLTE Preloader Image',
@@ -134,7 +134,7 @@ return [
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => true,
     'usermenu_desc' => true,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -253,7 +253,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => '/',
+    'dashboard_url' => '/dasbor',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => false,
@@ -273,9 +273,9 @@ return [
     |
     */
 
-    'enabled_laravel_mix' => false,
-    'laravel_mix_css_path' => 'css/app.css',
-    'laravel_mix_js_path' => 'js/app.js',
+    'enabled_laravel_mix' => true,
+    'laravel_mix_css_path' => 'app.css',
+    'laravel_mix_js_path' => 'app.js',
 
     /*
     |--------------------------------------------------------------------------
@@ -290,6 +290,13 @@ return [
     */
 
     'menu' => [
+        // navbar-user
+        // [
+        //     'type'         => 'navbar-user',
+        //     'text'         => 'Ganti Password',
+        //     'route'        => 'password.change',
+        //     'topnav_user'  => true
+        // ],
         //Topbar items:
         [
             'type' => 'darkmode-widget',
@@ -322,12 +329,12 @@ return [
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'cari',
         ],
         [
             'text' => 'Dasbor',
             'icon' => 'fas fa-home',
-            'url' => '/',
+            'url' => '/dasbor',
         ],
 
     ],
@@ -368,7 +375,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -388,7 +395,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -407,7 +414,7 @@ return [
                 ],
             ],
         ],
-        'chart' => [
+        'Chart' => [
             'active' => false,
             'files' => [
                 [
@@ -418,7 +425,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -443,7 +450,7 @@ return [
             ],
         ],
         'ICheck' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'css',
@@ -453,7 +460,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'css',
@@ -469,7 +476,7 @@ return [
         ],
 
         'moment js' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -480,7 +487,7 @@ return [
         ],
 
         'bootstrap-datepicker' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'css',
@@ -496,7 +503,7 @@ return [
         ],
 
         'Lodash' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -507,7 +514,7 @@ return [
         ],
 
         'Alpine' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -533,7 +540,7 @@ return [
         ],
 
         'Colorpicker' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',

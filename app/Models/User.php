@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -17,6 +20,7 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
     use HasRoles;
+    use LogsActivity;
 
     protected $guard = 'web';
 
@@ -65,9 +69,7 @@ class User extends Authenticatable
 
     public function adminlte_image()
     {
-        $email = md5($this->email);
-
-        return "https://www.gravatar.com/avatar/{$email}?s=32&d=https://www.gravatar.com/avatar/00000000000000000000000000000000?s=32";
+        return $this->foto ? Storage::url($this->foto) : asset('assets/img/avatar.png');
     }
 
     /**
@@ -102,6 +104,27 @@ class User extends Authenticatable
 
     public function getTeamId()
     {
-        return $this->team()->first()->id;
+        return $this->team()->first()?->id;
+    }
+
+    public function adminlte_profile_url()
+    {
+        return route('profile.edit', $this->id);
+    }
+
+    public function adminlte_desc()
+    {
+        return $this->team()->first()->name;
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->id == self::superAdmin();
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('user-log');
+        // Chain fluent methods for configuration options
     }
 }

@@ -9,6 +9,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row" id="tampilkan-bantuan">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -47,8 +48,8 @@
 @endsection
 
 @section('js')
-    <script>
-        $(function() {
+    <script nonce="{{ csp_nonce() }}"  >
+        document.addEventListener("DOMContentLoaded", function(event) {
             let nama_desa = `{{ session('desa.nama_desa') }}`;
 
             var bantuan = $('#bantuan').DataTable({

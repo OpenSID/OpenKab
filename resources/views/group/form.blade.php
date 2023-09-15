@@ -3,10 +3,11 @@
 @section('title', 'Tambah Bantuan')
 
 @section('content_header')
-    <h1>Managemen Group</h1>
+    <h1>Managemen Grup</h1>
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row" x-data="group()" x-init="retrieveData()">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -18,7 +19,7 @@
                     <div class="card-body">
                         <div class="col">
                             <div class="mb-4">
-                                <label for="sasaran">Nama Group </label>
+                                <label for="sasaran">Nama Grup </label>
                                 <input type="text" class="form-control" name="name" x-model="dataGroup.name">
                             </div>
                         </div>
@@ -65,6 +66,7 @@
                                                 <td><input type="checkbox" name="menu" x-model="submenu.selected" @input.debounce.100ms="selected_sub(value)"></td>
                                                 <td width=20></td>
                                                 <td x-text="(index+1)+ '.' + (index2+1)"  width=20 class="text-center"></td>
+<<<<<<< HEAD
                                                 <td x-text="submenu.text" class="ps-5" style="padding-left: 50px;"></td>
                                                 <td class="text-center">
                                                     <input class="form-check-input"  type="checkbox" :name="submenu.role + '-read'" x-model="submenu[submenu.role + '-read']">
@@ -78,6 +80,9 @@
                                                 <td class="text-center">
                                                     <input class="form-check-input"  type="checkbox" :name="submenu.role + '-delete'" x-model="submenu[submenu.role + '-delete']">
                                                 </td>
+=======
+                                                <td x-text="submenu.text" class="ps-5 pl-50"></td>
+>>>>>>> rilis-dev
                                             <tr>
                                         </template>
                                     </tbody>

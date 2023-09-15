@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -18,7 +19,7 @@
                     <!-- /.card-header -->
                     <div x-data="{
                         data: {},
-                    
+
                         async retrievePosts() {
                             const response = await (await fetch('{{ url('api/v1/bantuan-kabupaten') }}?filter[id]={{ $id }}')).json();
                             this.data = response.data[0].attributes
@@ -50,7 +51,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <div class="col">
                                 <div class="mb-4">
                                     <label for="ndesc">Keterangan<span class="text-danger">*</span></label>
@@ -77,7 +78,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-4">
@@ -98,7 +99,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -118,12 +119,13 @@
 @include('partials.asset_datepicker')
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();
                 formData = $('#bantuan-form').serialize();
                 var id = "{{ $id }}";
-                
+
                 Swal.fire({
                     title: 'Ubah',
                     text: "Apakah anda yakin mengubah data ini?",
@@ -175,5 +177,6 @@
                     }
                 })
             });
+    })
     </script>
 @endsection

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\GroupController;
@@ -8,10 +9,13 @@ use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
+use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Web\PageController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -33,20 +37,31 @@ Auth::routes([
 
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
-Route::middleware(['auth', 'teams_permission'])->group(function () {
-    Route::get('/', [DasborController::class, 'index'])->name('dasbor');
-
-    Route::middleware(['role:pengaturan-users','permission:pengaturan-users-read'])->get('users/list', [UserController::class, 'getUsers'])->name('users.list');
-    Route::middleware(['role:pengaturan-users','permission:pengaturan-users-edit'])->get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
+Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {
+    Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
+    Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
+    Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
+    Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
+    Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
+    Route::get('users/{user}', [UserController::class, 'profile'])->name('profile.edit');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('profile.update');
     Route::prefix('pengaturan')->group(function () {
-        Route::middleware(['role:pengaturan-users','permission:pengaturan-users-read'])->resource('users', UserController::class);
-        Route::middleware(['role:pengaturan-identitas', 'permission:pengaturan-identitas-read'])->resource('identitas', IdentitasController::class)->only(['index', 'edit']);
-        Route::middleware(['role:pengaturan-group', 'permission:pengaturan-group-read'])->prefix('groups')->group(function () {
-            Route::get('/', [GroupController::class, 'index']);
-            Route::middleware(['permission:pengaturan-group-write'])->get('/tambah', [GroupController::class, 'create']);
-            Route::middleware(['permission:pengaturan-group-edit'])->get('/edit/{id}', [GroupController::class, 'edit']);
+        Route::middleware(['role:pengaturan-users'])->resource('users', UserController::class);
+        Route::middleware(['role:pengaturan-identitas'])->resource('identitas', IdentitasController::class)->only(['index', 'edit']);
+        Route::middleware(['role:pengaturan-group'])->prefix('groups')->group(function () {
+            Route::get('/', [GroupController::class, 'index'])->name('groups.index');
+            Route::get('/tambah', [GroupController::class, 'create'])->name('groups.create');
+            Route::get('/edit/{id}', [GroupController::class, 'edit'])->name('groups.edit');
         });
+        Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show']);
+        Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create']);
+    });
 
+    Route::prefix('cms')->group(function(){
+        Route::resource('categories', App\Http\Controllers\CMS\CategoryController::class)->except(['show']);
+        Route::resource('articles', App\Http\Controllers\CMS\ArticleController::class)->except(['show']);
+        Route::resource('pages', App\Http\Controllers\CMS\PageController::class)->except(['show']);
+        Route::resource('slides', App\Http\Controllers\CMS\SlideController::class)->except(['show']);
     });
 
     Route::prefix('sesi')->group(function () {
@@ -70,7 +85,7 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
 
     // Penduduk
     Route::middleware(['role:penduduk', 'permission:penduduk-read'])->get('penduduk/cetak', [PendudukController::class, 'cetak']);
-    Route::middleware(['role:penduduk', 'permission:penduduk-edit'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah']);
+    Route::middleware(['role:penduduk', 'permission:penduduk-edit'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah'])->name('penduduk.edit');
     Route::middleware(['role:penduduk', 'permission:penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
     // Keluarga
@@ -84,9 +99,9 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
     Route::middleware(['role:bantuan', 'permission:bantuan-read'])->controller(BantuanController::class)
         ->prefix('bantuan')
         ->group(function () {
-            Route::get('/', 'index');
+            Route::get('/', 'index')->name('bantuan');
             Route::get('/cetak', 'cetak');
-            Route::get('/detail/{id}', 'show');
+            Route::get('/detail/{id}', 'show')->name('bantuan.detail');
         });
 
     // Statistik
@@ -101,13 +116,28 @@ Route::middleware(['auth', 'teams_permission'])->group(function () {
         });
 
     // Master Data
-    Route::middleware(['role:master-data', 'permission:master-data-read'])->controller(AdminWebController::class)
-        ->prefix('master')
+    Route::middleware(['role:master-data'])->controller(AdminWebController::class)
         ->group(function () {
-            Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/{parrent}', 'kategori_index');
-            Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit');
-            Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/tambah/{parrent}', 'kategori_create');
-            Route::middleware(['role:master-data-pengaturan', 'permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index');
-            Route::middleware(['role:master-data-bantuan', 'permission:master-data-artikel-read'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            Route::resource('departments', App\Http\Controllers\DepartmentController::class)->except(['show']);
+            Route::resource('positions', App\Http\Controllers\PositionController::class)->except(['show']);
+            Route::resource('employees', App\Http\Controllers\EmployeeController::class)->except(['show']);
+
+            Route::prefix('master')->group(function () {
+                Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
+                Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
+                Route::middleware(['role:master-data-artikel', 'permission:master-data-artikel-read'])->get('/kategori/tambah/{parrent}', 'kategori_create')->name('master-data-artikel.kategori-create');
+                Route::middleware(['role:master-data-pengaturan', 'permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
+                Route::middleware(['role:master-data-bantuan', 'permission:master-data-artikel-read'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            });
         });
+});
+
+Route::get('/', function(){
+    $website = Setting::where(['key' => 'website_enable'])->first()?->value ?? 0;
+
+    if (! $website) {
+        return redirect('login');
+    }
+
+    return '<h3>Halaman publik</h3><a href="/login">Login</a>';
 });

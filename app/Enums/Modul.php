@@ -92,34 +92,121 @@ final class Modul extends Enum
                     'text' => 'Pengaturan Aplikasi',
                     'url' => 'master/pengaturan',
                     'role' => 'master-data-pengaturan',
-                ],
+                ]
             ],
         ],
 
+        [
+            'text' => 'Organisasi',
+            'icon' => 'fa fa-tags',
+            'role' => 'organisasi',
+            'submenu' => [
+                [
+                    'icon' => 'fa fa-building',
+                    'text' => 'Departemen',
+                    'url' => 'departments',
+                    'role' => 'organisasi-departemen',
+                ],
+                [
+                    'icon' => 'fa fa-star',
+                    'text' => 'Jabatan',
+                    'url' => 'positions',
+                    'role' => 'organisasi-position',
+                ],
+                [
+                    'icon' => 'fa fa-users',
+                    'text' => 'Pejabat Daerah',
+                    'url' => 'employees',
+                    'role' => 'organisasi-employee',
+                ],
+                [
+                    'icon' => 'fa fa-sitemap',
+                    'text' => 'Struktur Bagan',
+                    'url' => 'orgchart',
+                    'role' => 'organisasi-chart',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Modul Web',
+            'icon' => 'fa fa-globe',
+            'role' => 'website',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-bars',
+                    'text' => 'Menu Website',
+                    'url' => 'cms/menus',
+                    'role' => 'website-menu',
+                ],
+                [
+                    'icon' => 'fas fa-file-text',
+                    'text' => 'Halaman',
+                    'url' => 'cms/pages',
+                    'role' => 'website-pages',
+                ],
+                [
+                    'icon' => 'fas fa-list',
+                    'text' => 'Artikel',
+                    'url' => 'cms/articles',
+                    'role' => 'website-article',
+                ],
+                [
+                    'icon' => 'fas fa-folder',
+                    'text' => 'Kategori Artikel',
+                    'url' => 'cms/categories',
+                    'role' => 'website-categories',
+                ],
+                [
+                    'icon' => 'fas fa-image',
+                    'text' => 'Slider',
+                    'url' => 'cms/slides',
+                    'role' => 'website-slider',
+                ],
+                [
+                    'icon' => 'fas fa-download',
+                    'text' => 'Download Area',
+                    'url' => 'cms/downloads',
+                    'role' => 'website-downloads',
+                ],
+            ],
+        ],
         [
             'text' => 'Pengaturan',
             'icon' => 'fa fa-cog',
             'role' => 'pengaturan',
             'submenu' => [
                 [
-                    'icon' => 'fas fa-angle-right',
+                    'icon' => 'fas fa-cogs',
                     'text' => 'Identitas',
                     'url' => 'pengaturan/identitas',
                     'role' => 'pengaturan-identitas',
                 ],
                 [
-                    'icon' => 'fas fa-angle-right',
+                    'icon' => 'fas fa-user',
                     'text' => 'Pengguna',
                     'url' => 'pengaturan/users',
                     'role' => 'pengaturan-users',
                 ],
                 [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Group',
+                    'icon' => 'fas fa-users',
+                    'text' => 'Grup',
                     'url' => 'pengaturan/groups',
                     'role' => 'pengaturan-group',
                 ],
+                [
+                    'icon' => 'fas fa-history',
+                    'text' => 'Riwayat Pengguna',
+                    'url' => 'pengaturan/activities',
+                    'role' => 'pengaturan-users',
+                ],
+                [
+                    'icon' => 'fas fa-gear',
+                    'text' => 'Aplikasi',
+                    'url' => 'pengaturan/settings',
+                    'role' => 'pengaturan-settings',
+                ],
             ],
         ],
+
     ];
 }

@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE','UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -192,7 +192,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-
+        Spatie\Csp\CspServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -225,4 +225,8 @@ return [
         'Image' => Intervention\Image\Facades\Image::class
     ])->toArray(),
 
+    'format' => [
+        'date' => env('FORMAT_DATE','d/m/Y'),
+        'date_js' => env('FORMAT_DATE_JS','DD/MM/YYYY')
+    ]
 ];

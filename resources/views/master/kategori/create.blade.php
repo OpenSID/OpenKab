@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row" x-data="kategori()" x-init="retriveData()">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -35,7 +36,7 @@
             </div>
         </div>
     </div>
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
         function kategori() {
             return {
                 dataKategori: {

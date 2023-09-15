@@ -46,7 +46,7 @@ class KategoriController extends Controller
                 'slug' => url_title($data['kategori']),
                 'urut' => 0,
             ];
-            Kategori::insert($insert);
+            Kategori::create($insert);
 
             return response()->json([
                 'success' => true,
@@ -87,7 +87,8 @@ class KategoriController extends Controller
         try {
             $data = $request->validated();
             $data['slug'] = url_title($data['kategori']);
-            Kategori::where('id', $id)->whereNull('config_id')->update($data);
+            $kategori = Kategori::find($id);
+            $kategori->update($data);
 
             return response()->json([
                 'success' => true,
@@ -111,7 +112,10 @@ class KategoriController extends Controller
     {
         $id = (int) $request->id;
         try {
-            Kategori::where('id', $id)->orWhere('parrent', $id)->delete();
+            $kategori = Kategori::where('id', $id)->orWhere('parrent', $id)->get();
+            foreach ($kategori as $k) {
+                $k->delete();
+            }
 
             return response()->json([
                 'success' => true,

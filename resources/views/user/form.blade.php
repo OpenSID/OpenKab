@@ -7,7 +7,7 @@
         @enderror
     </div>
 </div>
-
+@isset($groups)
 <div class="col">
     <div class="mb-4">
         <label for="username">Username<span class="text-danger">*</span></label>
@@ -31,6 +31,7 @@
         @enderror
     </div>
 </div>
+@endisset
 
 <div class="col">
     <div class="mb-4">

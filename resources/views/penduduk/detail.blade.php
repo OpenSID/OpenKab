@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -365,7 +366,7 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
         $.ajax({
                 url: `{{ url('api/v1/penduduk') }}?filter[id]={{ $penduduk->id }}`,
                 method: 'get',

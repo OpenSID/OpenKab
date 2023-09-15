@@ -9,6 +9,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
 
     <div class="row" x-data="identitas()" x-init="retrieveData()">
 
@@ -73,7 +74,7 @@
             </div>
         </div>
     </div>
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
         function identitas() {
             return {
                 id: 1,

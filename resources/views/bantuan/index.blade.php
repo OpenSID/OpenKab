@@ -9,6 +9,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -33,16 +34,16 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Sasaran</label>
-                                            <select class="select2 form-control-sm" id="sasaran" name="sasaran"
-                                                data-placeholder="Semua Sasaran" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="sasaran" name="sasaran"
+                                                data-placeholder="Semua Sasaran">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>
-                                            <select class="select2 form-control-sm" id="tahun" name="tahun"
-                                                data-placeholder="Semua Tahun" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="tahun" name="tahun"
+                                                data-placeholder="Semua Tahun">
                                             </select>
                                         </div>
                                     </div>
@@ -97,7 +98,8 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         var bantuan = $('#bantuan').DataTable({
             processing: true,
             serverSide: true,
@@ -193,6 +195,7 @@
         });
 
         $('#sasaran').select2({
+            theme: 'bootstrap4',
             minimumResultsForSearch: -1,
             ajax: {
                 url: '{{ url('api/v1/bantuan') }}/sasaran/',
@@ -212,6 +215,7 @@
 
         $('#tahun').select2({
             minimumResultsForSearch: -1,
+            theme: 'bootstrap4',
             ajax: {
                 url: '{{ url('api/v1/bantuan') }}/tahun/',
                 dataType: 'json',
@@ -255,5 +259,6 @@
             url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');
             window.open(url.href, '_blank');
         });
+    })
     </script>
 @endsection

@@ -1,7 +1,7 @@
 /node_modules
-/public/build
 /public/hot
 /public/storage
+/public/favicons
 /public/favicon.png
 /public/favicon.ico
 /storage/*.key
@@ -18,7 +18,5 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-composer.lock
 package-lock.json
-composer.lock
 .php-cs-fixer.cache

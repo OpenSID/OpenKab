@@ -137,6 +137,7 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
         ->prefix('identitas')->group(function () {
             Route::put('/perbarui/{id}', 'update');
             Route::post('/upload/{id}', 'upload');
+            Route::post('/uploadFavicon/{id}', 'uploadFavicon');
         });
 
     // Pengaturan Aplikasi

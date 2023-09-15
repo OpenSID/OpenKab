@@ -5,8 +5,11 @@ namespace App\Http\Repository;
 use App\Models\Bantuan;
 use App\Models\Kelompok;
 use App\Models\Keluarga;
+use App\Models\LogPenduduk;
 use App\Models\Penduduk;
 use App\Models\Rtm;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -106,18 +109,13 @@ class BantuanRepository
 
     private function countStatistikKategoriPenduduk(): object
     {
-        $penduduk = Penduduk::countStatistik()
-        ->whereHas('logPenduduk', function ($q) {
-            $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=', '2')->groupBy('log_penduduk.id');
-
-            if (isset(request('filter')['tahun'])) {
-                $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
-            }
-
-            if (isset(request('filter')['bulan'])) {
-                $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
-            }
-        });
+        $tanggalPeristiwa = null;
+        if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
+            $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
+            $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
+        }
+        $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa)->tidakMati()->toBoundSql();
+        $penduduk = Penduduk::countStatistik()->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id');
 
         if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
             $penduduk->status();

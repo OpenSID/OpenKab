@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce() }}"  >
     function group() {
         _.mixin({
             'mergeByKey': function(arr1, arr2, key) {
@@ -68,6 +68,14 @@
                     });
             },
             simpan() {
+                if (_.isEmpty(_.trim(this.dataGroup.name))) {
+                    Swal.fire(
+                            'Error!  ',
+                            'Nama grup harus diisi',
+                            'error'
+                        )
+                    return
+                }
                 let menu = _.chain(this.menu).map(function(menu) {
                     if (menu.submenu && menu.selected) {
                         let submenu = _.chain(menu.submenu).filter(function(_submenu) {

@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce() }}"  >
     function group() {
         return {
             dataGroup: {
@@ -18,7 +18,15 @@
                     });
             },
             simpan() {
-                let menu = _.chain(this.menu).filter(function(menu) {
+                if (_.isEmpty(_.trim(this.dataGroup.name))) {
+                    Swal.fire(
+                            'Error!  ',
+                            'Nama grup harus diisi',
+                            'error'
+                        )
+                    return
+                }
+                let menu = _.chain(this.menu).filter(function (menu) {
                     if (menu.submenu && menu.selected) {
                         let submenu = _.chain(menu.submenu).filter(function(_submenu) {
                             if (_submenu.selected) {
@@ -34,6 +42,7 @@
                     }
                 }).value()
                 this.dataGroup.menu = menu;
+
                 Swal.fire({
                     title: 'Menyimpan',
                     didOpen: () => {

@@ -17,6 +17,7 @@
 @section('auth_header', __('adminlte::adminlte.login_message'))
 
 @section('auth_body')
+    @include('partials.flash_message')
     <form action="{{ $login_url }}" method="post">
         @csrf
 
@@ -111,7 +112,8 @@
     <span x-data="identitas()" x-init="retrieveData()">
         <b x-text="dataIdentitas.nama_aplikasi"></b>
     </span>
-   <script>
+
+   <script nonce="{{ csp_nonce() }}"  >
        function identitas() {
            return {
                id: 1,

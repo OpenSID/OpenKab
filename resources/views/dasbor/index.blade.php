@@ -10,9 +10,10 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <x-adminlte-callout theme="warning">
         Selamat datang <b>{{ Auth::user()->username ?? '' }}</b> di Dasbor Utama
-        <b>{{ config('app.namaAplikasi') . ' ' . config('app.sebutanKab') . ' ' . config('app.namaKab') }}</b>.
+        <b>{{ ucwords(strtolower($data['nama_aplikasi']))  . ' ' . ucwords(strtolower($data['nama_kabupaten'])) }}</b>.
     </x-adminlte-callout>
 
     <div class="row">
@@ -21,12 +22,12 @@
                 icon-theme="blue" />
         </a>
 
-        <a href="{{ url('keluarga') }}" class="unlink  col-12 col-sm-6 col-md-3">
+        <a href="#" class="unlink  col-12 col-sm-6 col-md-3">
             <x-adminlte-info-box id="keluarga" title="Keluarga" text="2991" icon="fas fa-lg fa-users"
                 icon-theme="red" />
         </a>
 
-        <a href="{{ url('rtm') }}" class="unlink  col-12 col-sm-6 col-md-3">
+        <a href="#" class="unlink  col-12 col-sm-6 col-md-3">
             <x-adminlte-info-box id="rtm" title="RTM" text="221" icon="fas fa-lg fa-home" icon-theme="green" />
         </a>
 
@@ -45,7 +46,6 @@
                 <div class="card-body">
                     <div class="chart">
                         <canvas id="barChart"
-                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%; display: block; width: 379px;"
                             width="758" height="500" class="chartjs-render-monitor"></canvas>
                     </div>
                 </div>
@@ -77,8 +77,8 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Tahun</label>
-                                            <select class="select2 form-control-sm" id="tahun" name="tahun"
-                                                data-placeholder="Semua Tahun" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="tahun" name="tahun"
+                                                data-placeholder="Semua Tahun">
                                             </select>
                                         </div>
                                     </div>
@@ -140,8 +140,15 @@
 @endsection
 
 @push('js')
-    <script>
-        $(document).ready(function() {
+    <script nonce="{{ csp_nonce() }}"  >
+        document.addEventListener("DOMContentLoaded", function(event) {
+            $('#bulan').select2({
+                minimumResultsForSearch: -1,
+                theme: "bootstrap4",
+
+                placeholder: "Pilih Bulan",
+            });
+
             var url = new URL("{{ url('api/v1/dasbor') }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
             url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
@@ -162,7 +169,6 @@
                     grafik(dataGrafik);
                 }
             });
-        });
 
         function grafik(dataGrafik) {
             rgb_l = randColorRGB();
@@ -286,13 +292,6 @@
             });
         });
 
-        $('#bulan').select2({
-            minimumResultsForSearch: -1,
-            theme: "bootstrap",
-
-            placeholder: "Pilih Bulan",
-        });
-
         $('#filter').on('click', function(e) {
             berita.draw();
         });
@@ -304,5 +303,18 @@
 
             berita.ajax.reload();
         });
+    });
     </script>
+@endpush
+@push('css')
+    <style nonce="{{ csp_nonce() }}" >
+        #barChart {
+            min-height: 300px;
+            height: 300px;
+            max-height: 300px;
+            max-width: 100%;
+            display: block;
+            width: 379px;
+        }
+    </style>
 @endpush

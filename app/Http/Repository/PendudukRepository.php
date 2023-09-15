@@ -7,6 +7,7 @@ use App\Models\Ktp;
 use App\Models\LogPenduduk;
 use App\Models\Penduduk;
 use App\Models\Umur;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -226,7 +227,7 @@ class PendudukRepository
 
     private function caseRentangUmur(): array|object
     {
-        $umur = Umur::countStatistikUmur()->status()->orderBy('id')->get();
+        $umur = Umur::countStatistikUmur()->status(Umur::RENTANG)->get();
         $query = $this->countStatistikPendudukHidup();
 
         return [
@@ -237,7 +238,7 @@ class PendudukRepository
 
     private function caseKategoriUmur(): array|object
     {
-        $umur = Umur::countStatistikUmur()->status(0)->orderBy('id')->get();
+        $umur = (new Umur())->setKlasifikasi(Umur::KATEGORI)->countStatistikUmur()->status(Umur::KATEGORI)->get();
         $query = $this->countStatistikPendudukHidup();
 
         return [
@@ -248,7 +249,7 @@ class PendudukRepository
 
     private function caseAktaKelahiran(): array|object
     {
-        $umur = Umur::countStatistikAkta()->status()->orderBy('id')->get();
+        $umur = Umur::countStatistikAkta()->status(Umur::RENTANG)->get();
         $query = $this->countStatistikPendudukHidup();
 
         return [
@@ -271,17 +272,13 @@ class PendudukRepository
 
     private function countStatistikPendudukHidup(string $whereHeader = null): array|object
     {
-        $penduduk = Penduduk::countStatistik()->whereRaws($whereHeader)->whereHas('logPenduduk', function ($q) {
-            $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=', '2')->groupBy('log_penduduk.id');
-
-            if (isset(request('filter')['tahun'])) {
-                $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
-            }
-
-            if (isset(request('filter')['bulan'])) {
-                $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
-            }
-        });
+        $tanggalPeristiwa = null;
+        if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
+            $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
+            $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
+        }
+        $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa)->tidakMati()->toBoundSql();
+        $penduduk = Penduduk::countStatistik()->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id');
         if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
             $penduduk->status();
         }
@@ -303,29 +300,19 @@ class PendudukRepository
             $query->whereRaw($whereFooter);
         }
 
+        $tanggalPeristiwa = null;
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
-            $log_penduduk = LogPenduduk::select('log_penduduk.id')
-                ->selectRaw('Max(log_penduduk.id) as max')
-                ->where('kode_peristiwa', '!=', 2)
-                ->whereRaw('tweb_penduduk.id = log_penduduk.id_pend')
-                ->when(isset(request('filter')['tahun']), function ($q) {
-                    return $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
-                })
-                ->when(isset(request('filter')['bulan']), function ($q) {
-                    return $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
-                })
-            ->groupBy('log_penduduk.id')
-            ->toBoundSql();
+            $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
+            $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
         }
+        $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa)->tidakMati()->toBoundSql();
 
         $sql = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', "tweb_penduduk.{$idReferensi}", '=', "{$tabelReferensi}.id", 'left')
             ->where('tweb_penduduk.status_dasar', 1)
+            ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
             ->groupBy("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
-        if (isset($log_penduduk)) {
-            $sql->whereRaw("EXISTS($log_penduduk)");
-        }
 
         return $sql->get();
     }

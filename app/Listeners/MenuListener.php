@@ -75,7 +75,7 @@ class MenuListener
         // tambahkan menu dari group
         $user = auth()->user();
 
-        foreach ($user->team->first()->menu as $menu) {
+        foreach ($user->team->first()?->menu ?? [] as $menu) {
             $event->menu->add($menu);
         }
     }

@@ -3,6 +3,7 @@
 @section('title', 'Data Bantuan')
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div x-data="{
         data: {},
         async retrievePosts() {

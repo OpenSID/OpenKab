@@ -13,6 +13,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -38,16 +39,16 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Status Penduduk</label>
-                                            <select class="select2 form-control-sm" id="status" name="status"
-                                                data-placeholder="Semua Status" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="status" name="status"
+                                                data-placeholder="Semua Status">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Status Dasar</label>
-                                            <select class="select2 form-control-sm" id="status-dasar" name="status-dasar"
-                                                data-placeholder="Semua Status Dasar" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="status-dasar" name="status-dasar"
+                                                data-placeholder="Semua Status Dasar">
                                                 <option value="1" selected>Hidup</option>
                                             </select>
                                         </div>
@@ -55,8 +56,8 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Jenis Kelamin</label>
-                                            <select class="select2 form-control-sm" id="sex" name="sex"
-                                                data-placeholder="Semua Jenis Kelamin" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="sex" name="sex"
+                                                data-placeholder="Semua Jenis Kelamin">
                                             </select>
                                         </div>
                                     </div>
@@ -64,24 +65,24 @@
                                     {{-- <div class="col-sm">
                                         <div class="form-group">
                                             <label>Pilih Dusun</label>
-                                            <select class="select2 form-control-sm" id="dusun" name="dusun"
-                                                data-placeholder="Semua Dusun" style="width: 100%;">
+                                            <select class="select2 form-control-sm width-100" id="dusun" name="dusun"
+                                                data-placeholder="Semua Dusun">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Pilih RW</label>
-                                            <select class="select2 form-control-sm" id="rw" name="rw"
-                                                data-placeholder="Semua RW" style="width: 100%;" disabled>
+                                            <select class="select2 form-control-sm width-100" id="rw" name="rw"
+                                                data-placeholder="Semua RW" disabled>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Pilih RT</label>
-                                            <select class="select2 form-control-sm" id="rt" name="rt"
-                                                data-placeholder="Semua RT" style="width: 100%;" disabled>
+                                            <select class="select2 form-control-sm width-100" id="rt" name="rt"
+                                                data-placeholder="Semua RT" disabled>
                                             </select>
                                         </div>
                                     </div> --}}
@@ -148,11 +149,12 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
 @endpush
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         var penduduk = $('#penduduk').DataTable({
             processing: true,
             serverSide: true,
@@ -208,7 +210,7 @@
                         var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';
                         return `<div class="btn-group open">
                             <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
-                            <ul class="dropdown-menu" role="menu" style="">
+                            <ul class="dropdown-menu" role="menu">
                                 <li>
                                     <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
                                 </li>
@@ -340,5 +342,6 @@
         $('#cetak').on('click', function() {
             window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
         });
+    });
     </script>
 @endsection

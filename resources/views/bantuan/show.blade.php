@@ -9,6 +9,7 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     <div class="row" id="tampilkan-bantuan">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -48,7 +49,8 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
         $.ajax({
@@ -187,5 +189,6 @@
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
         });
+    })
     </script>
 @endsection

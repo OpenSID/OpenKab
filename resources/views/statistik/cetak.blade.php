@@ -3,6 +3,7 @@
 @section('title', 'Data Statistik')
 
 @section('content')
+    @include('partials.breadcrumbs')
     <table class="border thick" id="tabel-penduduk">
         <thead>
             <tr class="border thick">
@@ -18,8 +19,8 @@
 @stop
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
+    <script nonce="{{ csp_nonce() }}"  >
+        document.addEventListener("DOMContentLoaded", function(event) {
             var kategori = `{{ $kategori }}`;
             var id = `{{ $id }}`;
 

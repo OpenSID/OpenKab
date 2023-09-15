@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 
 class UserRequest extends FormRequest
 {
@@ -28,6 +29,16 @@ class UserRequest extends FormRequest
         } else {
             $id = '';
         }
+        $routeCurrent = Route::currentRouteName();
+        if ($routeCurrent == 'profile.update') {
+            return [
+                'name' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
+                'email' => 'required|email|unique:users,email'.$id,
+                'company' => 'nullable|string',
+                'phone' => 'nullable|numeric|digits_between:10,13',
+                'foto' => 'nullable|image|max:1024|mimes:png,jpg',
+            ];
+        }
 
         return [
             'name' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
@@ -37,6 +48,7 @@ class UserRequest extends FormRequest
             'company' => 'nullable|string',
             'phone' => 'nullable|numeric|digits_between:10,13',
             'group' => ' required|exists:App\Models\Team,id',
+            'foto' => 'image|max:1024|mimes:png,jpg',
         ];
     }
 }

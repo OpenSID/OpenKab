@@ -174,6 +174,10 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'title' => 'judul',
+        'content' => 'isi',
+        'name' => 'nama'
+    ],
 
 ];

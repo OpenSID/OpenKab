@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @push('css')
-    <style>
+    <style nonce="{{ csp_nonce() }}" >
         /* ubah semua ukuran text yang ada dalam card-body */
         .card-body {
             font-size: 14px;
@@ -29,7 +29,9 @@
 @stop
 
 @section('content')
+    @include('partials.breadcrumbs')
     @include('partials.flash_message')
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -82,7 +84,7 @@
         </div>
     </div>
 
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
         function warna() {
             return {
                 data: {},
@@ -127,7 +129,8 @@
 @include('partials.reset_form')
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         $(document).on('click', 'button#submit', function(e) {
             e.preventDefault();
             formData = $('#pengaturan-form').serialize();
@@ -183,5 +186,6 @@
                 }
             })
         });
+    })
     </script>
 @endsection

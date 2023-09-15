@@ -2,9 +2,7 @@
 
 use App\Enums\Modul;
 use App\Models\Team;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
@@ -30,20 +28,6 @@ return new class extends Migration
             return $menu;
         });
         $team->save();
-
-        // add role ke admin
-        $role = Role::firstOrCreate(
-            [
-                'name' => 'pengaturan-group',
-                'team_id' => $team->id,
-                'guard_name' => 'web',
-            ]
-        );
-        setPermissionsTeamId($team->id);
-
-        $user = User::where('username', 'admin')->first();
-        $user->guard_name = 'web';
-        $user->assignRole($role->id);
     }
 
     /**

@@ -16,7 +16,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
-use App\Models\Setting;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +62,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::prefix('cms')->group(function(){
         Route::resource('categories', App\Http\Controllers\CMS\CategoryController::class)->except(['show']);
         Route::resource('articles', App\Http\Controllers\CMS\ArticleController::class)->except(['show']);
+        Route::resource('menus', App\Http\Controllers\CMS\MenuController::class)->except(['show']);
         Route::resource('pages', App\Http\Controllers\CMS\PageController::class)->except(['show']);
         Route::resource('slides', App\Http\Controllers\CMS\SlideController::class)->except(['show']);
     });
@@ -134,12 +135,10 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 });
 
-Route::get('/', function(){
-    $website = Setting::where(['key' => 'website_enable'])->first()?->value ?? 0;
-
-    if (! $website) {
-        return redirect('login');
-    }
-
-    return '<h3>Halaman publik</h3><a href="/login">Login</a>';
+Route::middleware(['website.enable'])->group(function(){
+    Route::get('/', [PageController::class, 'getIndex'])->name('article');
+    Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
+    Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');
+    Route::get('c/{cSlug}', [PageController::class, 'getCategory'])->name('category');
+    Route::get('sitemap.xml', [PageController::class, 'getSitemap'])->name('sitemap');
 });

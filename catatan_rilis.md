@@ -10,6 +10,7 @@ Di rilis v2309.0.1 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 6. [#274](https://github.com/OpenSID/OpenKab/issues/274) Menambahkan modul artikel.
 7. [#275](https://github.com/OpenSID/OpenKab/issues/275) Menambahkan modul slider.
 8. [#285](https://github.com/OpenSID/OpenKab/issues/285) Menambahkan modul halaman.
+9. [#276](https://github.com/OpenSID/OpenKab/issues/276) Menambahkan modul managemen menu.
 
 #### Perbaikan BUG
 1. [#281](https://github.com/OpenSID/OpenKab/issues/281) Perbaikan bug ketika menambah group baru.

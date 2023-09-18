@@ -88,7 +88,7 @@
                             if(_.isEmpty(data.attributes.thumbnail)) {
                                 return '-';
                             }
-                            return `<img src="${data.attributes.thumbnail}" alt="Foto" class="img-thumbnail">`;
+                            return `<img src="${data.attributes.thumbnail}" alt="Foto" class="img-thumbnail img-cover">`;
 
                         }
                     },

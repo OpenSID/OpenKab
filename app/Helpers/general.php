@@ -217,3 +217,23 @@ if (! function_exists('date_from_format')) {
         return Carbon::createFromFormat($format ?? config('app.format.date'), $value);
     }
 }
+
+if (! function_exists('getTitle')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function getTitle()
+    {
+        return 'ini judul';
+    }
+}
+
+if (! function_exists('getDescription')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function getDescription()
+    {
+        return 'ini deskripsi';
+    }
+}

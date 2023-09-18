@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'teams_permission' => \App\Http\Middleware\TeamsPermission::class,
         'password.weak' => \App\Http\Middleware\WeakPassword::class,
+        'website.enable' => \App\Http\Middleware\WebsiteEnable::class,
     ];
 }

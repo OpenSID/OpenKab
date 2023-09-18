@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repository\PengaturanRepository;
 use App\Http\Repository\SettingRepository;
 use App\Http\Requests\CreateSettingRequest;
 use App\Http\Requests\UpdateSettingRequest;
@@ -25,12 +26,12 @@ class SettingController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $settings = $this->settingRepository->paginate(10);
-
             return $this->fractal($this->settingRepository->listSetting(), new SettingTransformer, 'settings')->respond();
         }
+        $pengaturanOpensid = new PengaturanRepository();
+        $listPengaturan = $pengaturanOpensid->listPengaturan();
 
-        return view('settings.index');
+        return view('settings.index', compact('listPengaturan'));
     }
 
     /**

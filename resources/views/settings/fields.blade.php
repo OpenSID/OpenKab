@@ -18,9 +18,7 @@
         @case('dropdown')
             {!! Form::select('value', collect($setting->attribute)->pluck('text', 'value'), $setting->value, ['class' => 'form-control', 'required']) !!}
             @break
-
         @default
-
     @endswitch
 </div>
 

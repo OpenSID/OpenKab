@@ -11,6 +11,9 @@
         <div class="row">
             <div class="col-lg-12">
                 @include('adminlte-templates::common.alerts')
+
+                @include('settings.opensid')
+
                 <div class="card card-outline card-primary">
                     <div class="card-body">
                         @include('settings.table')

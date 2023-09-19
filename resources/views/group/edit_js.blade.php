@@ -7,23 +7,23 @@
                 return _.map(arr1, function(item) {
                     criteria[key] = item[key];
                     let find = _.find(arr2, criteria)
-                    console.log(find)
+
                     if (find) {
                         item.selected = true;
                         _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
-                            if (find[find.role + '-' + value] == 'true') {
-                                item[item.role + '-' + value] = true;
+                            if (find[find.permission + '-' + value] == 'true') {
+                                item[item.permission + '-' + value] = true;
                             }
                         })
 
                         if (find.submenu != undefined) {
 
-                            var merged = _.merge(_.keyBy(item.submenu, 'role'), _.keyBy(find.submenu, 'role'));
+                            var merged = _.merge(_.keyBy(item.submenu, 'permission'), _.keyBy(find.submenu, 'permission'));
                             let submenu = _.values(merged);
                             let submenu_selected = _.map(submenu, function(value) {
-                                _.forEach(['read', 'write', 'edit', 'delete'], function(permision) {
-                                    if (value[value.role + '-' + permision] == 'true') {
-                                        value[value.role + '-' + permision] = true;
+                                _.forEach(['read', 'write', 'edit', 'delete'], function(permission) {
+                                    if (value[value.permission + '-' + permission] == 'true') {
+                                        value[value.permission + '-' + permission] = true;
                                     }
                                 })
                                 if (value.selected == 'true') {
@@ -64,7 +64,7 @@
                     .then(response => {
                         this.dataGroup.name = response.data.attributes.name;
                         this.dataGroup.id = response.data.id;
-                        this.menu = _.mergeByKey(menu, response.data.attributes.menu, 'role');
+                        this.menu = _.mergeByKey(menu, response.data.attributes.menu, 'permission');
                     });
             },
             simpan() {
@@ -147,12 +147,12 @@
             },
             selected(data) {
                 _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
-                    data[data.role + '-' + value] = data.selected;
+                    data[data.permission + '-' + value] = data.selected;
                 })
                 if (data.submenu) {
                     data.submenu = _.chain(data.submenu).map(function(submenu) {
                         _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
-                            submenu[submenu.role + '-' + value] = data.selected;
+                            submenu[submenu.permission + '-' + value] = data.selected;
                         })
                         submenu.selected = data.selected;
                         return submenu;
@@ -162,7 +162,7 @@
             selected_sub(data) {
                 let selected = _.chain(data.submenu).filter(function(menu) {
                     _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
-                        menu[menu.role + '-' + value] = menu.selected;
+                        menu[menu.permission + '-' + value] = menu.selected;
                     })
                     if (menu.selected) {
 
@@ -171,12 +171,12 @@
                 }).value();
                 if (selected.length == 0) {
                     _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
-                        data[data.role + '-' + value] = false;
+                        data[data.permission + '-' + value] = false;
                     })
                     data.selected = false;
                 } else {
                     _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
-                        data[data.role + '-' + value] = true;
+                        data[data.permission + '-' + value] = true;
                     })
 
                     data.selected = true;

@@ -48,16 +48,16 @@
                                             <td x-text="(index +1)" colspan="2" width=40 class="text-center"></td>
                                             <td x-text="value.text"></td>
                                             <td class="text-center">
-                                                <input class="form-check-input"  type="checkbox" :name="value.role + '-read'" x-model="value[value.role + '-read']">
+                                                <input class="form-check-input"  type="checkbox" :name="value.permission + '-read'" x-model="value[value.permission + '-read']">
                                             </td>
                                             <td class="text-center">
-                                                <input class="form-check-input"  type="checkbox" :name="value.role + '-write'" x-model="value[value.role + '-write']">
+                                                <input class="form-check-input"  type="checkbox" :name="value.permission + '-write'" x-model="value[value.permission + '-write']">
                                             </td>
                                             <td class="text-center">
-                                                <input class="form-check-input"  type="checkbox" :name="value.role + '-edit'" x-model="value[value.role + '-edit']">
+                                                <input class="form-check-input"  type="checkbox" :name="value.permission + '-edit'" x-model="value[value.permission + '-edit']">
                                             </td>
                                             <td class="text-center">
-                                                <input class="form-check-input"  type="checkbox" :name="value.role + '-delete'" x-model="value[value.role + '-delete']">
+                                                <input class="form-check-input"  type="checkbox" :name="value.permission + '-delete'" x-model="value[value.permission + '-delete']">
                                             </td>
                                         </tr>
 
@@ -66,23 +66,19 @@
                                                 <td><input type="checkbox" name="menu" x-model="submenu.selected" @input.debounce.100ms="selected_sub(value)"></td>
                                                 <td width=20></td>
                                                 <td x-text="(index+1)+ '.' + (index2+1)"  width=20 class="text-center"></td>
-<<<<<<< HEAD
-                                                <td x-text="submenu.text" class="ps-5" style="padding-left: 50px;"></td>
+                                                <td x-text="submenu.text" class="ps-5"></td></td>
                                                 <td class="text-center">
-                                                    <input class="form-check-input"  type="checkbox" :name="submenu.role + '-read'" x-model="submenu[submenu.role + '-read']">
+                                                    <input class="form-check-input"  type="checkbox" :name="submenu.permission + '-read'" x-model="submenu[submenu.permission + '-read']">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input class="form-check-input"  type="checkbox" :name="submenu.role + '-write'" x-model="submenu[submenu.role + '-write']">
+                                                    <input class="form-check-input"  type="checkbox" :name="submenu.permission + '-write'" x-model="submenu[submenu.permission + '-write']">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input class="form-check-input"  type="checkbox" :name="submenu.role + '-edit'" x-model="submenu[submenu.role + '-edit']">
+                                                    <input class="form-check-input"  type="checkbox" :name="submenu.permission + '-edit'" x-model="submenu[submenu.permission + '-edit']">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input class="form-check-input"  type="checkbox" :name="submenu.role + '-delete'" x-model="submenu[submenu.role + '-delete']">
+                                                    <input class="form-check-input"  type="checkbox" :name="submenu.permission + '-delete'" x-model="submenu[submenu.permission + '-delete']">
                                                 </td>
-=======
-                                                <td x-text="submenu.text" class="ps-5 pl-50"></td>
->>>>>>> rilis-dev
                                             <tr>
                                         </template>
                                     </tbody>

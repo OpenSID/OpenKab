@@ -88,12 +88,12 @@
             },
             selected(data) {
                 _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
-                    data[data.role + '-' + value] = data.selected;
+                    data[data.permission + '-' + value] = data.selected;
                 })
                 if (data.submenu) {
                     data.submenu = _.chain(data.submenu).map(function(submenu) {
                         _.forEach(['read', 'write', 'edit', 'delete'], function(value) {
-                            submenu[submenu.role + '-' + value] = data.selected;
+                            submenu[submenu.permission + '-' + value] = data.selected;
                         })
                         submenu.selected = data.selected;
                         return submenu;

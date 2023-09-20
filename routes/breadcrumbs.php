@@ -4,6 +4,7 @@ use App\Models\Bantuan;
 use App\Models\CMS\Article;
 use App\Models\CMS\Category;
 use App\Models\BaseModel;
+use App\Models\CMS\Download;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Identitas;
@@ -178,5 +179,18 @@ Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('settings.edit', function (BreadcrumbTrail $trail, $id) {
     $item = Setting::find($id)?->name ?? '-';
     $trail->parent('settings.index');
+    $trail->push($item);
+});
+
+Breadcrumbs::for('downloads.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Download', route('downloads.index'));
+});
+Breadcrumbs::for('downloads.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('downloads.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('downloads.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Download::find($id)?->title ?? '-';
+    $trail->parent('downloads.index');
     $trail->push($item);
 });

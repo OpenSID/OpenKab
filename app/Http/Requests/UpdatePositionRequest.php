@@ -25,7 +25,7 @@ class UpdatePositionRequest extends FormRequest
     public function rules()
     {
         $rules = Position::$rules;
-        
+
         return $rules;
     }
 }

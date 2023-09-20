@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'teams_permission' => \App\Http\Middleware\TeamsPermission::class,
         'password.weak' => \App\Http\Middleware\WeakPassword::class,
         'website.enable' => \App\Http\Middleware\WebsiteEnable::class,
+        'log.visitor' => \Shetabit\Visitor\Middlewares\LogVisits::class,
     ];
 }

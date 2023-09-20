@@ -65,6 +65,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         Route::resource('menus', App\Http\Controllers\CMS\MenuController::class)->except(['show']);
         Route::resource('pages', App\Http\Controllers\CMS\PageController::class)->except(['show']);
         Route::resource('slides', App\Http\Controllers\CMS\SlideController::class)->except(['show']);
+        Route::get('statistik', App\Http\Controllers\CMS\StatistikPengunjungController::class)->name('cms.statistic.summary');
     });
 
     Route::prefix('sesi')->group(function () {
@@ -135,7 +136,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 });
 
-Route::middleware(['website.enable'])->group(function(){
+Route::middleware(['website.enable', 'log.visitor'])->group(function(){
     Route::get('/', [PageController::class, 'getIndex'])->name('article');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');

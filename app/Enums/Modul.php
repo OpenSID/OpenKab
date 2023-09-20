@@ -168,6 +168,12 @@ final class Modul extends Enum
                     'url' => 'cms/downloads',
                     'role' => 'website-downloads',
                 ],
+                [
+                    'icon' => 'fas fa-chart-line',
+                    'text' => 'Statistik Pengunjung',
+                    'url' => 'cms/statistik',
+                    'role' => 'website-statistik',
+                ],
             ],
         ],
         [

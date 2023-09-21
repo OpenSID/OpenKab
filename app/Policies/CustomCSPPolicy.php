@@ -22,7 +22,7 @@ class CustomCSPPolicy extends Basic
             $this->addDirective(Directive::IMG, ['blob:'])
                 ->addDirective(Directive::STYLE, ['unsafe-inline']);
         }
-        $this->addDirective(Directive::IMG, ['data:'])
+        $this->addDirective(Directive::IMG, ['data:', 'https://dabeng.github.io/'])
         ->addDirective(Directive::STYLE, [
             // 'unsafe-inline',
             'https://fonts.googleapis.com/',

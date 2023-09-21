@@ -119,11 +119,12 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 
     // Master Data
-    Route::middleware(['role:master-data'])->controller(AdminWebController::class)
+    Route::middleware(['permission:master-data-read'])->controller(AdminWebController::class)
         ->group(function () {
             Route::resource('departments', App\Http\Controllers\DepartmentController::class)->except(['show']);
             Route::resource('positions', App\Http\Controllers\PositionController::class)->except(['show']);
             Route::resource('employees', App\Http\Controllers\EmployeeController::class)->except(['show']);
+            Route::get('orgchart', App\Http\Controllers\OrgChartController::class);
 
             Route::prefix('master')->group(function () {
                 Route::middleware(['role:master-data-artikel'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');

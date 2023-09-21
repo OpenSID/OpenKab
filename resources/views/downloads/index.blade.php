@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @section('content_header')
-    <h1>Data Download</h1>
+    <h1>Data Unduhan</h1>
 @stop
 
 @section('content')

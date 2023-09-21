@@ -4,9 +4,9 @@
             <tr>
                 <th>No</th>
                 <th>Judul</th>
-                <th>File</th>
+                <th>Berkas</th>
                 <th>Keterangan</th>
-                <th>Total Download</th>
+                <th>Total Unduhan</th>
                 <th>Status</th>
                 <th>Aksi</th>
             </tr>

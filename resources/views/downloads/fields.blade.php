@@ -9,16 +9,16 @@
 
 <!-- Url Field -->
 <div class="form-group row">
-    {!! Form::label('url', 'File', ['class' => 'col-3']) !!}
+    {!! Form::label('url', 'Berkas', ['class' => 'col-3']) !!}
     <div class="col-9">
         <div class="custom-file">
             <input type="file" name="download_file" class="custom-file-input" accept=".doc, .docx, .pdf, .zip, .xls, .xlsx" id="inputGroupFile01"
-              aria-describedby="inputGroupFileAddon01">
+              aria-describedby="inputGroupFileAddon01" lang="id">
             <label class="custom-file-label" for="inputGroupFile01">Pilih berkas</label>
         </div>
         @if (isset($download))
             @if ($download->url)
-                {{ link_to(Storage::url($download->url), 'file download', ['class' => 'text-primary', 'target' => '_blank']) }}
+                {{ link_to(Storage::url($download->url), 'berkas unduhan', ['class' => 'text-primary', 'target' => '_blank']) }}
             @endif
         @endif
     </div>

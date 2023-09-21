@@ -164,7 +164,7 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'fas fa-download',
-                    'text' => 'Download Area',
+                    'text' => 'Daftar Unduhan',
                     'url' => 'cms/downloads',
                     'role' => 'website-downloads',
                 ],

@@ -183,7 +183,7 @@ Breadcrumbs::for('settings.edit', function (BreadcrumbTrail $trail, $id) {
 });
 
 Breadcrumbs::for('downloads.index', function (BreadcrumbTrail $trail) {
-    $trail->push('Download', route('downloads.index'));
+    $trail->push('Unduhan', route('downloads.index'));
 });
 Breadcrumbs::for('downloads.create', function (BreadcrumbTrail $trail) {
     $trail->parent('downloads.index');

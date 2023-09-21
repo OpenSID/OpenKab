@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @section('content_header')
-    <h1>Tambah Download</h1>
+    <h1>Tambah Unduhan</h1>
 @stop
 
 @section('content')
@@ -12,7 +12,7 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                 <a href="{{ route('downloads.index') }}" class="btn btn-primary btn-sm"><i
-                        class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Download</a>
+                        class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Unduhan</a>
             </div>
             {!! Form::open(['route' => 'downloads.store', 'enctype' => 'multipart/form-data']) !!}
 

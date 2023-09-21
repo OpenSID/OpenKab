@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @section('content_header')
-    <h1>Edit Download</h1>
+    <h1>Edit Unduhan</h1>
 @stop
 
 @section('content')
@@ -13,7 +13,7 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                 <a href="{{ route('downloads.index') }}" class="btn btn-primary btn-sm"><i
-                        class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Download</a>
+                        class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Unduhan</a>
             </div>
             {!! Form::model($download, ['route' => ['downloads.update', $download->id, 'enctype' => 'multipart/form-data'], 'method' => 'patch']) !!}
 

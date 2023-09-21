@@ -49,6 +49,7 @@ class CustomCSPPolicy extends Basic
     public function shouldBeApplied(Request $request, Response $response): bool
     {
         $currentRoute = Route::getCurrentRoute()->getName();
+
         if (in_array($currentRoute, $this->excludeRoute)) {
             config(['csp.enabled' => false]);
         }

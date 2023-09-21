@@ -13,17 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('team', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 100);
-            $table->json('menu');
-            $table->timestamps();
-        });
 
-        Schema::create('user_team', function (Blueprint $table) {
-            $table->integer('id_user');
-            $table->integer('id_team');
-        });
+        if (!Schema::hasTable('team')) {
+            Schema::create('team', function (Blueprint $table) {
+                $table->id();
+                $table->string('name', 100);
+                $table->json('menu');
+                $table->timestamps();
+            });
+        }
+        if (!Schema::hasTable('user_team')) {
+            Schema::create('user_team', function (Blueprint $table) {
+                $table->integer('id_user');
+                $table->integer('id_team');
+            });
+        }
+
     }
 
     /**
@@ -35,5 +40,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('user_team');
         Schema::dropIfExists('team');
+        Schema::dropIfExists('user_team');
     }
 };

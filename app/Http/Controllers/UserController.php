@@ -108,13 +108,8 @@ class UserController extends Controller
 
             // assign role berdasarkan team
             setPermissionsTeamId($request['group']);
-            foreach ($user->team->first()->menu as $menu) {
-                $user->assignRole($menu['role']);
-                if (isset($menu['submenu'])) {
-                    foreach ($menu['submenu'] as $submenu) {
-                        $user->assignRole($submenu['role']);
-                    }
-                }
+            foreach (Team::find($data['group'])->role as $role) {
+                $user->assignRole($role);
             }
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
@@ -197,25 +192,23 @@ class UserController extends Controller
             }
 
             // update user team
+            $idGroup = $request->get('group');
             $user_team = UserTeam::find($user->id);
             if ($user_team) {
-                setPermissionsTeamId($user_team->id_team);
-                $user->roles()->detach();
-                $user_team->id_team = $data['group'];
+                $user_team->id_team = $idGroup;
                 $user_team->save();
-
-                foreach ($user->team->first()->menu as $menu) {
-                    $user->assignRole($menu['role']);
-                    if (isset($menu['submenu'])) {
-                        foreach ($menu['submenu'] as $submenu) {
-                            $user->assignRole($submenu['role']);
-                        }
-                    }
-                }
+            } else {
+                UserTeam::create([
+                    'id_user' => $user->id,
+                    'id_team' => $idGroup,
+                ]);
             }
 
-            setPermissionsTeamId($request['group']);
+            setPermissionsTeamId($idGroup);
             // assign role berdasarkan team
+            foreach (Team::find($idGroup)->role as $role) {
+                $user->syncRoles($role);
+            }
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {

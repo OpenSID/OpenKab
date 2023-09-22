@@ -83,7 +83,7 @@
                     _imageName.push(`
                         <div class="textlinebox border-bottom border-danger">
                             <img class="avatar" src="${_defaultPhoto}" />
-                            belum ada
+                            ${data.name}
                         </div>`)
                 }
                 return `

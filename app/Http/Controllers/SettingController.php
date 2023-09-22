@@ -14,6 +14,7 @@ class SettingController extends AppBaseController
 {
     /** @var SettingRepository */
     private $settingRepository;
+    protected $permission = 'pengaturan-settings';
 
     public function __construct(SettingRepository $settingRepo)
     {
@@ -30,8 +31,8 @@ class SettingController extends AppBaseController
         }
         $pengaturanOpensid = new PengaturanRepository();
         $listPengaturan = $pengaturanOpensid->listPengaturan();
-
-        return view('settings.index', compact('listPengaturan'));
+        $listPermission = $this->generateListPermission();
+        return view('settings.index', compact('listPengaturan'))->with($listPermission);
     }
 
     /**

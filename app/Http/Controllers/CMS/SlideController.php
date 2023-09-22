@@ -17,6 +17,7 @@ class SlideController extends AppBaseController
     use UploadedFile;
     /** @var SlideRepository */
     private $slideRepository;
+    protected $permission = 'website-slider';
 
     public function __construct(SlideRepository $slideRepo)
     {
@@ -32,8 +33,8 @@ class SlideController extends AppBaseController
         if ($request->ajax()) {
             return $this->fractal($this->slideRepository->listSlide(), new SlideTransformer, 'slides')->respond();
         }
-
-        return view('slides.index');
+        $listPermission = $this->generateListPermission();
+        return view('slides.index')->with($listPermission);
     }
 
     /**

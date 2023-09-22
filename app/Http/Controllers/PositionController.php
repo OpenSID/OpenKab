@@ -15,6 +15,7 @@ class PositionController extends AppBaseController
 {
     /** @var PositionRepository $positionRepository*/
     private $positionRepository;
+    protected $permission = 'organisasi-position';
 
     public function __construct(PositionRepository $positionRepo)
     {
@@ -29,8 +30,8 @@ class PositionController extends AppBaseController
         if ($request->ajax()){
             return $this->fractal($this->positionRepository->listPosition(), new PositionTransformer, 'positions')->respond();
         }
-
-        return view('positions.index');
+        $listPermission = $this->generateListPermission();
+        return view('positions.index')->with($listPermission);
     }
 
 

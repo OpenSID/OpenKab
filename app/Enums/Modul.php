@@ -86,12 +86,6 @@ final class Modul extends Enum
                     'text' => 'Kategori Artikel',
                     'url' => 'master/kategori/0',
                     'permission' => 'master-data-artikel',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Pengaturan Aplikasi',
-                    'url' => 'master/pengaturan',
-                    'permission' => 'master-data-pengaturan',
                 ]
             ],
         ],

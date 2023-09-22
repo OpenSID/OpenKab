@@ -17,6 +17,7 @@ class DownloadController extends AppBaseController
     use UploadedFile;
     /** @var DownloadRepository */
     private $downloadRepository;
+    protected $permission = 'website-downloads';
 
     public function __construct(DownloadRepository $downloadRepo)
     {
@@ -32,8 +33,8 @@ class DownloadController extends AppBaseController
         if ($request->ajax()) {
             return $this->fractal($this->downloadRepository->listDownload(), new DownloadTransformer, 'downloads')->respond();
         }
-
-        return view('downloads.index');
+        $listPermission = $this->generateListPermission();
+        return view('downloads.index')->with($listPermission);
     }
 
     /**

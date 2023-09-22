@@ -14,7 +14,7 @@ class DownloadTransformer extends TransformerAbstract
         return [
             'id' => $download->id,
             'title' => $download->title,
-            'url' => $download->url ? link_to(Storage::url($download->url), 'file', ['class' => 'text-primary'])->toHtml() : '',
+            'url' => $download->url ? link_to(Storage::url($download->url), 'berkas', ['class' => 'text-primary'])->toHtml() : '',
             'description' => $download->description,
             'state' => $download->state == StatusEnum::aktif ? 'Tampilkan' : 'Tidak',
             'created_at' => $download->created_at,

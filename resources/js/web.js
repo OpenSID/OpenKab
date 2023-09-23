@@ -1,7 +1,6 @@
-if (document.getElementById('toggle-menu')) {
-    document.getElementById('toggle-menu').onclick = function () {
-        document.getElementById('menu').style.display = document.getElementById('menu').style.display === 'block' ? 'none' : 'block';
-    };
-}
+import $ from 'jquery';
+import '../vendor/bootstrap-5.3.2/js/bootstrap.bundle.min';
 
-// Your application logic here
+
+window.$ = $;
+window.jQuery = $;

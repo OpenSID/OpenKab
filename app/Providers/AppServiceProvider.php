@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Transformers\IdentitasTransformer;
 use App\Models\Config;
+use App\Models\Identitas;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
@@ -35,8 +37,13 @@ class AppServiceProvider extends ServiceProvider
         // daftarkan manual karena gagal install infyomlabs/adminlte-templates terkendala depedency
         View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
         $this->addLogQuery();
-        // daftarkan manual karena gagal install infyomlabs/adminlte-templates terkendala depedency
-        View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
+        // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
+        View::share('identitasAplikasi', fractal(
+                Identitas::first(),
+                IdentitasTransformer::class,
+                \League\Fractal\Serializer\JsonApiSerializer::class
+            )->toArray()['data']['attributes']
+        );
     }
 
     public function bootHttps()

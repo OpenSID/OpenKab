@@ -4,6 +4,7 @@ namespace App\Http\Repository\CMS;
 
 use App\Http\Repository\BaseRepository;
 use App\Models\CMS\Menu;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class MenuRepository extends BaseRepository
@@ -28,16 +29,21 @@ class MenuRepository extends BaseRepository
 
     public function treeJson(): string
     {
-        $menus = $this->model->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon")
+        $menus = $this->tree()->toArray();
+
+        $this->removeEmptyChildren($menus);
+        return json_encode($menus);
+    }
+
+    public function tree(): Collection|null
+    {
+        return $this->model->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon")
             ->whereNull('parent_id')
             ->with(['children' => function($q) {
                 $q->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon");
             }])
             ->orderBy('sequence')
-            ->get()->toArray();
-
-        $this->removeEmptyChildren($menus);
-        return json_encode($menus);
+            ->get();
     }
 
     private function removeEmptyChildren(&$array)

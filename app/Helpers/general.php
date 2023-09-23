@@ -237,3 +237,32 @@ if (! function_exists('getDescription')) {
         return 'ini deskripsi';
     }
 }
+
+
+if (!function_exists('generateMenu')) {
+    function generateMenu($tree, $parentId = null)
+    {
+        $result = '';
+        foreach($tree as $item){
+            if($item->children->count()){
+                $result .= "
+                <div class='nav-item dropdown'>
+                    <a href='#' class='nav-link dropdown-toggle' data-bs-toggle='dropdown'>{$item->text}</a>
+                    <div class='dropdown-menu rounded-0 m-0'>";
+                $result .= generateMenu($item->children, $item->id);
+                $result .= "
+                    </div>
+                </div>";
+            }else {
+                if ($parentId){
+                    $result .= "<a href='{$item->href}' class='dropdown-item'>{$item->text}</a>";
+                }else {
+                    $result .= "<a href='{$item->href}' class='nav-item nav-link'>{$item->text}</a>";
+                }
+
+            }
+        }
+        return $result;
+    }
+}
+

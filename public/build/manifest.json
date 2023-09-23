@@ -68,11 +68,6 @@
     "isEntry": true,
     "src": "resources/js/tinymce.js"
   },
-  "resources/js/web.js": {
-    "file": "assets/web-a4f47d02.js",
-    "isEntry": true,
-    "src": "resources/js/web.js"
-  },
   "resources/sass/app.scss": {
     "file": "assets/app-f3c2b198.css",
     "isEntry": true,
@@ -85,10 +80,5 @@
     "file": "assets/tinymce-3934328d.js",
     "isEntry": true,
     "src": "resources/sass/tinymce.scss"
-  },
-  "resources/sass/web.scss": {
-    "file": "assets/web-37ab1782.css",
-    "isEntry": true,
-    "src": "resources/sass/web.scss"
   }
 }

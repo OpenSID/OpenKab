@@ -1,32 +1,16 @@
-<footer class="footer">
+<!-- Footer Start -->
+<div class="container-fluid bg-dark text-white-50 footer mt-5" >
     <div class="container">
-        <div class="content">
-            <div class="columns">
-                <div class="column is-3">
-                    <p class="title is-5">{{ __('app.footer.follow') }}</p>
-                        <p>
-                            <a href="https://www.facebook.com" rel="nofollow noopener" target="_blank">
-                                <span class="text">Facebook</span>
-                            </a>
-                        </p>
-                    <p>
-                        <a href="https://twitter.com" rel="nofollow noopener" target="_blank">
-                            <span class="text">Twitter</span>
-                        </a>
-                    </p>
+        <div class="copyright">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    &copy; <a class="border-bottom" href="#">OpenDesa</a>, Hak Cipta Dilindungi.
+
                 </div>
-                <div class="column is-3">
-                    <p class="title is-5">{{ __('app.footer.latest') }}</p>
-                    @foreach (getFooterArticles() as $article)
-                        <p><a href="{{ $article->link }}">{{ $article->title }}</a></p>
-                    @endforeach
-                </div>
-                <div class="column is-6">
-                    <p class="title is-5">{{ __('app.footer.about') }}</p>
-                    <p>{{ __('app.footer.text') }}</p>
-                    <a href="{{ __('app.footer.url') }}">{{ __('app.footer.url') }}</a>
-                </div>
+
             </div>
         </div>
     </div>
-</footer>
+</div>
+
+<!-- Footer End -->

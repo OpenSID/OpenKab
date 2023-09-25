@@ -16,6 +16,7 @@ Di rilis v2309.0.1 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 12. [#278](https://github.com/OpenSID/OpenKab/issues/278) Menambahkan modul download area.
 13. [#233](https://github.com/OpenSID/OpenKab/issues/233) Menyesuaikan identitas desa sesuai data provinsi & kabupaten kota melalui pantau. 
 14. [#255](https://github.com/OpenSID/OpenKab/issues/255) Menambahkan struktur  bagan pemerintah daerah.
+15. [#301](https://github.com/OpenSID/OpenKab/issues/301) Menyesuaikan tombol sesuai hak akses. 
 
 #### Perbaikan BUG
 1. [#281](https://github.com/OpenSID/OpenKab/issues/281) Perbaikan bug ketika menambah group baru.

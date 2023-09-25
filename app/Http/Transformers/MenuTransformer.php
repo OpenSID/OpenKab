@@ -17,7 +17,7 @@ class MenuTransformer extends TransformerAbstract
             'position' => $menu->position,
             'parent_id' => $menu->parent_id,
             'created_at' => $menu->created_at,
-            'updated_at' => $menu->updated_at
+            'updated_at' => $menu->updated_at,
         ];
     }
 }

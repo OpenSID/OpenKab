@@ -153,8 +153,8 @@ abstract class BaseRepository
         return $model->delete();
     }
 
-      /**
-     * Retrieve all records with given filter criteria
+    /**
+     * Retrieve all records with given filter criteria.
      */
     public function pluck(array $columns = ['name', 'id'], array $search = [], int $skip = null, int $limit = null): SupportCollection
     {
@@ -162,5 +162,4 @@ abstract class BaseRepository
 
         return $query->pluck($columns[0], $columns[1]);
     }
-
 }

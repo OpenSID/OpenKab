@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CustomCSPPolicy extends Basic
 {
     // exclude karena livewire tidak jalan ketika csp enable
-    private $excludeRoute = ['fm.tinymce5', 'fm.initialize', 'fm.content', 'fm.tree'];
+    private $excludeRoute = ['fm.tinymce5', 'fm.initialize', 'fm.content', 'fm.tree', 'cms.statistic.summary'];
     private $hasTinyMCE = ['articles.create', 'articles.edit'];
     public function configure()
     {

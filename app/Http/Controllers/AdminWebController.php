@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 class AdminWebController extends Controller
 {
+    protected $permission = 'master-data-artikel';
     public function kategori_index($parent)
     {
-        return view('master.kategori.index');
+        $listPermission = $this->generateListPermission();
+        return view('master.kategori.index')->with($listPermission);
     }
 
     public function kategori_aksi()

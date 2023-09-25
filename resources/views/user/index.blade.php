@@ -13,8 +13,10 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
+                    @if($canwrite)
                     <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm" judul="Tambah Data"><i
                             class="fa fa-plus"></i>&ensp;Tambah</a>
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

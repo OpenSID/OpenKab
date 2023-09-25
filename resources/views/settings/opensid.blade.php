@@ -33,9 +33,11 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
+                    @if($canedit)
                     <button type="button" id="reset" class="btn btn-danger btn-sm"><i class="fas fa-times"></i>&nbsp; Batal</button>
                     <button id="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i>&nbsp;
                         Simpan</button>
+                    @endif
                 </div>
             </form>
         </div>

@@ -128,7 +128,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 
     Route::prefix('master')
         ->group(function () {
-            Route::middleware(['easyauthorize:master-data-artikel'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            Route::middleware(['easyauthorize:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
             Route::controller(AdminWebController::class)->group(function () {
                 Route::middleware(['permission:master-data-artikel-read'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
                 Route::middleware(['permission:master-data-artikel-edit'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');

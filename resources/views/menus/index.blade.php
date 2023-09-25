@@ -22,10 +22,12 @@
                                     <div class="card-body">
                                         @include('menus.fields')
                                     </div>
+                                    @if ($canwrite)
                                     <div class="card-footer">
                                         {!! Form::button('<i class="fas fa-save"></i> Simpan', ['type' => 'button', 'class' => 'btn btn-primary btn-sm', 'id' => 'btnUpdate'] )  !!}
                                         {!! Form::button('<i class="fas fa-plus-square"></i> Tambah', ['type' => 'button', 'class' => 'btn btn-success btn-sm', 'id' => 'btnAdd'] )  !!}
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-7">
@@ -37,10 +39,12 @@
                                             {!! Form::textarea('json_menu', null, ['hidden', 'rows' => 1]) !!}
                                         </div>
                                     </div>
+                                    @if ($canwrite)
                                     <div class="card-footer">
                                         {!! Form::button('<i class="fas fa-times"></i> Batal', ['type' => 'button', 'class' => 'btn btn-danger btn-sm reload'] )  !!}
                                         {!! Form::button('<i class="fas fa-save"></i> Simpan', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm'] )  !!}
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

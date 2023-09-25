@@ -14,6 +14,7 @@ class DepartmentController extends AppBaseController
 {
     /** @var DepartmentRepository */
     private $departmentRepository;
+    protected $permission = 'organisasi-departemen';
 
     public function __construct(DepartmentRepository $departmentRepo)
     {
@@ -28,8 +29,8 @@ class DepartmentController extends AppBaseController
         if ($request->ajax()) {
             return $this->fractal($this->departmentRepository->listDepartment(), new DepartmentTransformer, 'departments')->respond();
         }
-
-        return view('departments.index');
+        $listPermission = $this->generateListPermission();
+        return view('departments.index')->with($listPermission);
     }
 
     /**

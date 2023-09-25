@@ -19,6 +19,7 @@ class PageController extends AppBaseController
 
     /** @var PageRepository */
     private $pageRepository;
+    protected $permission = 'website-pages';
 
     public function __construct(PageRepository $pageRepo)
     {
@@ -34,8 +35,8 @@ class PageController extends AppBaseController
         if ($request->ajax()) {
             return $this->fractal($this->pageRepository->listPage(), new PageTransformer, 'pages')->respond();
         }
-
-        return view('pages.index');
+        $listPermission = $this->generateListPermission();
+        return view('pages.index')->with($listPermission);
     }
 
     /**

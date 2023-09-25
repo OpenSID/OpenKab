@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateEmployeeRequest;
-use App\Http\Requests\UpdateEmployeeRequest;
-use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\DepartmentRepository;
 use App\Http\Repository\EmployeeRepository;
 use App\Http\Repository\PositionRepository;
+use App\Http\Requests\CreateEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Transformers\EmployeeTransformer;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 
@@ -19,7 +17,7 @@ class EmployeeController extends AppBaseController
 {
     use UploadedFile;
 
-    /** @var EmployeeRepository $employeeRepository*/
+    /** @var EmployeeRepository */
     private $employeeRepository;
 
     public function __construct(EmployeeRepository $employeeRepo)
@@ -33,13 +31,12 @@ class EmployeeController extends AppBaseController
      */
     public function index(Request $request)
     {
-        if ($request->ajax()){
+        if ($request->ajax()) {
             return $this->fractal($this->employeeRepository->listEmployee(), new EmployeeTransformer, 'employees')->respond();
         }
 
         return view('employees.index');
     }
-
 
     /**
      * Show the form for creating a new Employee.
@@ -55,12 +52,12 @@ class EmployeeController extends AppBaseController
     public function store(CreateEmployeeRequest $request)
     {
         $input = $request->all();
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['foto'] = $this->uploadFile($request, 'foto');
         }
         $employee = $this->employeeRepository->create($input);
 
-        Session::flash('success','Pegawai berhasil disimpan.');
+        Session::flash('success', 'Pegawai berhasil disimpan.');
 
         return redirect(route('employees.index'));
     }
@@ -89,7 +86,7 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Session::flash('error','Pegawai tidak ditemukan');
+            Session::flash('error', 'Pegawai tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
@@ -105,19 +102,19 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Session::flash('error','Pegawai tidak ditemukan');
+            Session::flash('error', 'Pegawai tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
 
         $input = $request->all();
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['foto'] = $this->uploadFile($request, 'foto');
         }
 
         $employee = $this->employeeRepository->update($input, $id);
 
-        Session::flash('success','Pegawai berhasil diupdate.');
+        Session::flash('success', 'Pegawai berhasil diupdate.');
 
         return redirect(route('employees.index'));
     }
@@ -132,23 +129,25 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Session::flash('error','Pegawai tidak ditemukan');
+            Session::flash('error', 'Pegawai tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
 
         $this->employeeRepository->delete($id);
-        if(request()->ajax()){
+        if (request()->ajax()) {
             return $this->sendSuccess('Pegawai berhasil dihapus.');
         }
-        Session::flash('success','Pegawai berhasil dihapus.');
+        Session::flash('success', 'Pegawai berhasil dihapus.');
 
         return redirect(route('employees.index'));
     }
 
-    protected function getOptionItems($id = null){
+    protected function getOptionItems($id = null)
+    {
         $departments = (new Collection(['' => 'Pilih departement']))->union((new DepartmentRepository)->pluck());
         $positions = (new Collection(['' => 'Pilih jabatan']))->union((new PositionRepository)->pluck());
+
         return compact('departments', 'positions');
     }
 }

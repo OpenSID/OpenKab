@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Listeners\FailedLoginListener;
 use App\Listeners\LoginListener;
 use App\Listeners\LogoutListener;
+use App\Observers\VisitorObserver;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
@@ -12,6 +13,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
+use Shetabit\Visitor\Models\Visit;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -45,6 +47,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Visit::observe(VisitorObserver::class);
     }
 
     /**

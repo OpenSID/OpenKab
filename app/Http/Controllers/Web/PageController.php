@@ -39,7 +39,7 @@ class PageController extends Controller
      */
     public function getPage(Page $page)
     {
-        return view('web.content', ['object' => $page]);
+        return view('web.page', ['object' => $page]);
     }
 
     /**
@@ -49,7 +49,7 @@ class PageController extends Controller
      */
     public function getArticle(Article $article)
     {
-        return view('web.content', ['object' => $article]);
+        return view('web.article', ['object' => $article]);
     }
 
     /**

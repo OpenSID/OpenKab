@@ -244,20 +244,23 @@ if (!function_exists('generateMenu')) {
     {
         $result = '';
         foreach($tree as $item){
-            if($item->children->count()){
+            if($item->children->count() > 0){
+                $classLink = empty($parentId) ? 'nav-link' : 'dropdown-item';
                 $result .= "
-                <div class='nav-item dropdown'>
-                    <a href='#' class='nav-link dropdown-toggle' data-bs-toggle='dropdown'>{$item->text}</a>
-                    <div class='dropdown-menu rounded-0 m-0'>";
+                <li class='nav-item dropdown'>
+                    <a class='{$classLink} dropdown-toggle' role='button' href='#' data-bs-toggle='dropdown'>
+                    {$item->text}
+                    </a>
+                    <ul class='dropdown-menu'>";
                 $result .= generateMenu($item->children, $item->id);
                 $result .= "
-                    </div>
-                </div>";
+                    </ul>
+                </li>";
             }else {
                 if ($parentId){
-                    $result .= "<a href='{$item->href}' class='dropdown-item'>{$item->text}</a>";
+                    $result .= "<li><a class='dropdown-item' href='{$item->href}'>{$item->text}</a></li>";
                 }else {
-                    $result .= "<a href='{$item->href}' class='nav-item nav-link'>{$item->text}</a>";
+                    $result .= "<li class='nav-item'><a href='{$item->href}' class='nav-link'>{$item->text}</a></li>";
                 }
 
             }

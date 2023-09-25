@@ -124,6 +124,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::middleware('easyauthorize:organisasi-departemen')->resource('departments', App\Http\Controllers\DepartmentController::class)->except(['show']);
     Route::middleware('easyauthorize:organisasi-position')->resource('positions', App\Http\Controllers\PositionController::class)->except(['show']);
     Route::middleware('easyauthorize:organisasi-employee')->resource('employees', App\Http\Controllers\EmployeeController::class)->except(['show']);
+    Route::middleware('permission:organisasi-chart-read')->get('orgchart', App\Http\Controllers\OrgChartController::class);
 
     Route::prefix('master')
         ->group(function () {

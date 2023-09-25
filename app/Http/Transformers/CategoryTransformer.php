@@ -17,8 +17,7 @@ class CategoryTransformer extends TransformerAbstract
             'status' => $category->status == StatusEnum::aktif ? 'Ya' : 'Tidak',
             'created_at' => $category->created_at,
             'updated_at' => $category->updated_at,
-            'deleted_at' => $category->deleted_at
+            'deleted_at' => $category->deleted_at,
         ];
     }
-
 }

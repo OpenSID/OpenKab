@@ -16,7 +16,7 @@ use Yajra\DataTables\DataTables;
 class UserController extends Controller
 {
     use UploadedFile;
-
+    protected $permission = 'pengaturan-users';
     /**
      * Display a listing of the resource.
      *
@@ -24,23 +24,32 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index');
+        $listPermission = $this->generateListPermission();
+        return view('user.index')->with($listPermission);
     }
 
     public function getUsers(Request $request)
     {
         if ($request->ajax()) {
+            $permission = $this->generateListPermission();
             return DataTables::of(User::with('team')->get())
                 ->addIndexColumn()
-                ->addColumn('aksi', function ($row) {
+                ->addColumn('aksi', function ($row) use($permission) {
+                    $data = [];
                     if (! auth()->guest()) {
-                        $data['edit'] = route('users.edit', $row->id);
+                        if ($permission['canedit']){
+                            $data['edit'] = route('users.edit', $row->id);
+                        }
                         if ($row->id !== User::superAdmin()) {
-                            $data['delete'] = route('users.destroy', $row->id);
-                            if ($row->active == StatusEnum::aktif) {
-                                $data['deactive'] = route('users.status', [$row->id, StatusEnum::tidakAktif]);
-                            } else {
-                                $data['active'] = route('users.status', [$row->id, StatusEnum::aktif]);
+                            if ($permission['candelete']){
+                                $data['delete'] = route('users.destroy', $row->id);
+                            }
+                            if ($permission['canedit']){
+                                if ($row->active == StatusEnum::aktif) {
+                                    $data['deactive'] = route('users.status', [$row->id, StatusEnum::tidakAktif]);
+                                } else {
+                                    $data['active'] = route('users.status', [$row->id, StatusEnum::aktif]);
+                                }
                             }
                         }
                     }

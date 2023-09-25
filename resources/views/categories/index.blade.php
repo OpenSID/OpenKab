@@ -14,14 +14,16 @@
                 @include('adminlte-templates::common.alerts')
                 <div class="card card-outline card-primary">
                     <div class="card-header">
+                        @if($canwrite)
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <a
-                           href="{{ route('categories.create') }} ">
-                <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
-                            </a>
+                                <a href="{{ route('categories.create') }} ">
+                                    <button type="button" class="btn btn-primary btn-sm"><i
+                                            class="far fa-plus-square"></i> Tambah</button>
+                                </a>
                             </div>
                         </div>
+                        @endif
                     </div>
                     <div class="card-body">
                         @include('categories.table')
@@ -83,17 +85,17 @@
                         },
                         {
                             data: function (data) {
-                                return `
-                                    <a href="{{ route('categories.index') }}/${data.id}/edit">
-                                        <button type="button" class="btn btn-warning btn-sm edit" name="Ubah">
+                                let canEdit = `{{ $canedit }}`
+                                let canDelete = `{{ $candelete }}`
+                                let buttonEdit = canEdit ? `<a href="{{ route('categories.index') }}/${data.id}/edit">
+                                        <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                    </a>
-
-                                    <button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" name="Hapus">
+                                    </a>` : ``;
+                                let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
                                         <i class="fas fa-trash"></i>
-                                    </button>
-                                    `;
+                                    </button>` : ``;
+                                return `${buttonEdit} ${buttonDelete}`;
                             },
                         },
                     ],

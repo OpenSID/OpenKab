@@ -7,7 +7,7 @@
                 <th>Nama</th>
                 <th>Deskripsi</th>
                 <th>Jabatan Atasan</th>
-                <th>Action</th>
+                <th>Aksi</th>
             </tr>
             </thead>
             <tbody>

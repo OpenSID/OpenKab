@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 /**
  * @OA\Server(url="/api")
+ *
  * @OA\Info(
  *   title="InfyOm Laravel Generator APIs",
  *   version="1.0.0"
@@ -17,7 +18,7 @@ class AppBaseController extends Controller
     {
         return response()->json([
             'success' => true,
-            'message' => $message
+            'message' => $message,
         ], $code);
     }
 
@@ -25,7 +26,7 @@ class AppBaseController extends Controller
     {
         return response()->json([
             'success' => false,
-            'message' => $error
+            'message' => $error,
         ], $code);
     }
 
@@ -33,7 +34,7 @@ class AppBaseController extends Controller
     {
         return response()->json([
             'success' => true,
-            'message' => $message
+            'message' => $message,
         ], 200);
     }
 

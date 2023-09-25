@@ -16,6 +16,11 @@ trait UploadedFile
     protected function uploadFile(Request $request, $name)
     {
         $file = $request->file($name);
+        $storagePathFolder = storage_path($this->basePath.$this->pathFolder);
+        if (! File::isDirectory($storagePathFolder)) {
+            \Log::error('buat folder dulu '. $storagePathFolder);
+            File::makeDirectory($storagePathFolder);
+        }
 
         if (empty($file)) {
             throw new RuntimeException('file '.$name.' is required');
@@ -27,7 +32,7 @@ trait UploadedFile
 
         $extensionPhoto = File::guessExtension(request()->file($name));
         $newName = $name.'_'.Uuid::uuid4()->toString(). '.' . $extensionPhoto;
-        if($file->move(storage_path($this->basePath.$this->pathFolder), $newName)){
+        if($file->move($storagePathFolder, $newName)){
             return $this->pathFolder.'/'.$newName;
         }
 

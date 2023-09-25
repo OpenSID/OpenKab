@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Session;
 class SlideController extends AppBaseController
 {
     use UploadedFile;
+
     /** @var SlideRepository */
     private $slideRepository;
+    protected $permission = 'website-slider';
 
     public function __construct(SlideRepository $slideRepo)
     {
@@ -32,8 +34,8 @@ class SlideController extends AppBaseController
         if ($request->ajax()) {
             return $this->fractal($this->slideRepository->listSlide(), new SlideTransformer, 'slides')->respond();
         }
-
-        return view('slides.index');
+        $listPermission = $this->generateListPermission();
+        return view('slides.index')->with($listPermission);
     }
 
     /**
@@ -50,7 +52,7 @@ class SlideController extends AppBaseController
     public function store(CreateSlideRequest $request)
     {
         $input = $request->all();
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
 
@@ -107,10 +109,10 @@ class SlideController extends AppBaseController
         }
         $input = $request->all();
         $removeThumbnail = $request->get('remove_thumbnail');
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         } else {
-            if ($removeThumbnail){
+            if ($removeThumbnail) {
                 $input['thumbnail'] = null;
             }
         }

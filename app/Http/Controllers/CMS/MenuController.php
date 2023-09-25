@@ -13,6 +13,7 @@ class MenuController extends AppBaseController
 {
     /** @var MenuRepository */
     private $menuRepository;
+    protected $permission = 'website-menu';
 
     public function __construct(MenuRepository $menuRepo)
     {
@@ -33,7 +34,8 @@ class MenuController extends AppBaseController
                 '?module=unduhan' => 'Daftar Unduhan',
             ]
         ];
-        return view('menus.index', ['menus' => $this->menuRepository->treeJson(), 'sourceItem' => $sourceItem]);
+        $listPermission = $this->generateListPermission();
+        return view('menus.index', ['menus' => $this->menuRepository->treeJson(), 'sourceItem' => $sourceItem])->with($listPermission);
     }
 
     /**

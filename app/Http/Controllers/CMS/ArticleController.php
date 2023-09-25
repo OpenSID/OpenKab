@@ -19,6 +19,7 @@ class ArticleController extends AppBaseController
 
     /** @var ArticleRepository */
     private $articleRepository;
+    protected $permission = 'website-article';
 
     public function __construct(ArticleRepository $articleRepo)
     {
@@ -34,8 +35,8 @@ class ArticleController extends AppBaseController
         if ($request->ajax()) {
             return $this->fractal($this->articleRepository->listArticle(), new ArticleTransformer, 'articles')->respond();
         }
-
-        return view('articles.index');
+        $listPermission = $this->generateListPermission();
+        return view('articles.index')->with($listPermission);
     }
 
     /**
@@ -52,7 +53,7 @@ class ArticleController extends AppBaseController
     public function store(CreateArticleRequest $request)
     {
         $input = $request->all();
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
         $this->articleRepository->create($input);
@@ -107,10 +108,10 @@ class ArticleController extends AppBaseController
         }
         $input = $request->all();
         $removeThumbnail = $request->get('remove_thumbnail');
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         } else {
-            if ($removeThumbnail){
+            if ($removeThumbnail) {
                 $input['thumbnail'] = null;
             }
         }

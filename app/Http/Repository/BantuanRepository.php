@@ -240,4 +240,9 @@ class BantuanRepository
                 'asaldana',
             ])->jsonPaginate();
     }
+
+    public function summary()
+    {
+        return QueryBuilder::for(Bantuan::class)->count();
+    }
 }

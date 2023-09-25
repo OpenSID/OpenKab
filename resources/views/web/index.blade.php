@@ -12,7 +12,10 @@
 
 <!-- Search Start -->
 <div class="container-fluid bg-primary mb-5 wow fadeIn p-3" data-wow-delay="0.1s">
-    @include('web.partials.search')
+    <div class="container">
+        @include('web.partials.summary')
+        @include('web.partials.search', ['listKecamatan' => $listKecamatan, 'listDesa' => $listDesa])
+    </div>
 </div>
 <!-- Search End -->
 

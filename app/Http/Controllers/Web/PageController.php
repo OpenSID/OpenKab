@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Services\SitemapService;
 use App\Http\Controllers\Controller;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Repository\ConfigRepository;
@@ -10,6 +9,7 @@ use App\Http\Repository\PendudukRepository;
 use App\Models\CMS\Article;
 use App\Models\CMS\Category;
 use App\Models\CMS\Page;
+use App\Services\SitemapService;
 
 class PageController extends Controller
 {
@@ -47,7 +47,7 @@ class PageController extends Controller
         return view('web.articles', [
             'title' => $category->title,
             'description' => $category->description,
-            'articles' => Article::where('category_id', $category->id)->paginate(4)
+            'articles' => Article::where('category_id', $category->id)->paginate(4),
         ]);
     }
 
@@ -75,6 +75,7 @@ class PageController extends Controller
      * @param \App\Base\Services\SitemapService $sitemapService
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function getSitemap(SitemapService $sitemapService)

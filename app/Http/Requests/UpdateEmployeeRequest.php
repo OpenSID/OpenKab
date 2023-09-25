@@ -25,7 +25,7 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules()
     {
         $rules = Employee::$rules;
-        
+
         return $rules;
     }
 }

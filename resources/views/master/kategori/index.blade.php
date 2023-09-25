@@ -20,11 +20,13 @@
                         @endif
                     </div>
                 </div>
+                @if($canwrite)
                 <div class="row">
                     <div class="col-md-3">
                         <a class="btn btn-primary btn-sm" href="{{ url('master/kategori/tambah/') . '/' . request()->route('parrent') }}"><i class="far fa-plus-square"></i> Tambah</a>
                     </div>
                 </div>
+                @endif
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-striped" id="kategori">
@@ -107,16 +109,18 @@
                         data: "attributes.id",
                         className: 'aksi',
                         render: function(data, type, row) {
+                            let canEdit = `{{ $canedit }}`
+                            let canDelete = `{{ $candelete }}`
                             var id = row.id;
                             var sub = (row.attributes.parrent == 0) ? `<a href="{{ url('master/kategori/') }}/${id}" class="btn btn-info btn-sm edit" data-id="${id}" title="Ubah"><i class="fas fa-bars"></i></a>` : '';
-                            var render = `
-                                    ${sub}
-                                    <a href="{{ url('master/kategori/edit') }}/${id}/{{ (int) request()->route('parrent') }}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
+                            let buttonEdit = canEdit ? `<a href="{{ url('master/kategori/edit') }}/${id}/{{ (int) request()->route('parrent') }}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
                                         <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Ubah">
+                                    </a>` : ``;
+                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Ubah">
                                         <i class="fas fa-trash"></i>
-                                    </button>
+                                    </button>` : ``;
+                            var render = `
+                                    ${sub} ${buttonEdit} ${buttonDelete}
                                 `;
 
                             return render;

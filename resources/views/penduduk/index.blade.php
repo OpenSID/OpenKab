@@ -149,7 +149,7 @@
 @endsection
 
 @push('js')
-    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+    <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
 @endpush
 
 @section('js')
@@ -208,19 +208,22 @@
                     orderable: false,
                     data: function(data) {
                         var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';
+                        let canEdit = `{{ $canedit }}`
+                        let pindahMenu = canEdit ? `<li>
+                                    <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
+                                </li>` : ``;
                         return `<div class="btn-group open">
                             <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
                             <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
-                                </li>
+                                ${pindahMenu}
                             </ul>
                         </div>`
                     }
                 },
                 {
                     data: function(data) {
-                        return `<a href="${data.attributes.urlFoto}" class="progressive replace kecil">
+                        let hrefTag = data.attributes.urlFoto ? 'href='+data.attributes.urlFoto : `href="{{ asset('assets/img/avatar.png') }}"`;
+                        return `<a ${hrefTag} class="progressive replace kecil">
                                     <img class="preview" loading="lazy" src="{{ asset('assets/img/img-loader.gif') }}" alt="Foto Penduduk"/>
                                 </a>`
                     }

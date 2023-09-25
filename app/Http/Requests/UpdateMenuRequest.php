@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\CMS\Menu;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateMenuRequest extends FormRequest
@@ -25,7 +24,7 @@ class UpdateMenuRequest extends FormRequest
     public function rules()
     {
         return [
-            'json_menu' => 'required|string'
+            'json_menu' => 'required|string',
         ];
     }
 }

@@ -1,40 +1,30 @@
-<nav class="navbar is-light">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="{{ route('root') }}">
-                <img src="{{ asset(config('settings.logo')) }}" alt="{{ config('settings.site_title') }}">
-            </a>
-            <div id="toggle-menu" class="navbar-burger burger">
-                <span></span>
-                <span></span>
-                <span></span>
+<!-- Navbar Start -->
+<div class="container-fluid nav-bar bg-transparent">
+    <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+        <a href="index.html" class="navbar-brand d-flex align-items-center text-center">
+            <div class="p-2 me-2">
+                <img class="img-fluid img-logo" src="{{ asset('web/img/logo.png') }}" alt="Icon">
             </div>
-        </div>
-        <div id="menu" class="navbar-menu">
-            <div class="navbar-start">
-                @foreach (getMenu() as $p)
-                    @if ($p->children->count() > 0)
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <div class="navbar-link">
-                                <a class="navbar-item {{ active($p) }}" href="{{ $p->link }}">
-                                    {{ $p->title }}
-                                </a>
-                            </div>
-                            <div class="navbar-dropdown">
-                                @foreach ($p->children as $child)
-                                    <a class="navbar-item {{ active($child) }}" href="{{ $child->link }}">
-                                        {{ $child->title }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    @else
-                        <a class="navbar-item" href="{{ $p->link }}">
-                            {{ $p->title }}
-                        </a>
-                    @endif
-                @endforeach
+            <h1 class="m-0 text-logo">{{ config('app.name')}}</h1>
+        </a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto">
+                <a href="index.html" class="nav-item nav-link active">Beranda</a>
+                <a href="tentangkami.html" class="nav-item nav-link">Tentang Kami</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Informasi</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                        <a href="informasi.html" class="dropdown-item">Event</a>
+                        <a href="informasi.html" class="dropdown-item">Kegiatan</a>
+                    </div>
+                </div>
+                <a href="unduhan.html" class="nav-item nav-link">Daftar Unduhan</a>
             </div>
+            <a href="#" class="btn btn-login px-3 d-none d-lg-flex">Login</a>
         </div>
-    </div>
-</nav>
+    </nav>
+</div>
+<!-- Navbar End -->

@@ -15,7 +15,7 @@ class PageController extends Controller
      */
     public function getIndex()
     {
-        return '<h3>Halaman publik</h3><a href="/login">Login</a>';
+        return view('web.index');
         // return view('web.articles', [
         //     'title' => 'judul',
         //     'description' => 'description',

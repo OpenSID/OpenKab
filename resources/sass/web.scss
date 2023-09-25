@@ -1,14 +1,7 @@
-@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
-@import "web/_variables";
-@import "web/_icons";
+@import "../vendor/bootstrap-5.3.2/css/bootstrap.min.css";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "../vendor/animate/animate.min.css";
+@import 'owl.carousel/dist/assets/owl.carousel.css';
 
-iframe {
-  border: 0;
-}
 
-.turbolinks-progress-bar {
-  height: 2px;
-  background: $primary;
-  background: -webkit-linear-gradient(to right, $primary, darken($primary, 5%));
-  background: linear-gradient(to right, $primary, darken($primary, 5%));
-}

@@ -13,10 +13,8 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/sass/app.scss',
-                'resources/sass/web.scss',
                 'resources/sass/tinymce.scss',
                 'resources/js/app.js',
-                'resources/js/web.js',
                 'resources/js/tinymce.js',
             ],
             refresh: true,

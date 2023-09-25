@@ -25,7 +25,7 @@ class UpdateDepartmentRequest extends FormRequest
     public function rules()
     {
         $rules = Department::$rules;
-        
+
         return $rules;
     }
 }

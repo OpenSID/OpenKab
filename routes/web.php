@@ -65,6 +65,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         Route::resource('menus', App\Http\Controllers\CMS\MenuController::class)->except(['show'])->middleware('easyauthorize:website-menu');
         Route::resource('pages', App\Http\Controllers\CMS\PageController::class)->except(['show'])->middleware('easyauthorize:website-pages');
         Route::resource('slides', App\Http\Controllers\CMS\SlideController::class)->except(['show'])->middleware('easyauthorize:website-slider');
+        Route::resource('downloads', App\Http\Controllers\CMS\DownloadController::class)->except(['show'])->middleware('easyauthorize:website-downloads');
         Route::get('statistik', App\Http\Controllers\CMS\StatistikPengunjungController::class)->name('cms.statistic.summary')->middleware('permission:website-statistik-read');
     });
 

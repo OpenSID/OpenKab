@@ -26,3 +26,10 @@
         <p>Employees</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('downloads.index') }}" class="nav-link {{ Request::is('downloads*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-home"></i>
+        <p>Downloads</p>
+    </a>
+</li>

@@ -30,28 +30,30 @@ class MenuRepository extends BaseRepository
     {
         $menus = $this->model->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon")
             ->whereNull('parent_id')
-            ->with(['children' => function($q) {
+            ->with(['children' => function ($q) {
                 $q->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon");
             }])
             ->orderBy('sequence')
             ->get()->toArray();
 
         $this->removeEmptyChildren($menus);
+
         return json_encode($menus);
     }
 
     private function removeEmptyChildren(&$array)
     {
-        foreach($array as &$item){
-            if(empty($item['children'])){
+        foreach ($array as &$item) {
+            if (empty($item['children'])) {
                 unset($item['children']);
             } else {
                 $this->removeEmptyChildren($item['children']);
             }
         }
     }
+
     /**
-     * Create model record
+     * Create model record.
      */
     public function create(array $input): Model
     {
@@ -59,20 +61,22 @@ class MenuRepository extends BaseRepository
         try {
             // hapus data lama lalu buat lagi
             $json = json_decode($input['json_menu'], 1);
+
             return $this->loopTree($json);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    private function loopTree(array $elements, $parentId = null) {
+    private function loopTree(array $elements, $parentId = null)
+    {
         $sequence = 1;
         foreach ($elements as $element) {
             $input = [
                 'name' => $element['text'],
                 'url' => $element['href'],
                 'sequence' => $sequence,
-                'parent_id' => $parentId
+                'parent_id' => $parentId,
             ];
             $model = parent::create($input);
             if (isset($element['children'])) {
@@ -80,6 +84,7 @@ class MenuRepository extends BaseRepository
             }
             $sequence++;
         }
+
         return $model;
     }
 }

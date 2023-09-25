@@ -53,7 +53,7 @@ class ArticleController extends AppBaseController
     public function store(CreateArticleRequest $request)
     {
         $input = $request->all();
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
         $this->articleRepository->create($input);
@@ -108,10 +108,10 @@ class ArticleController extends AppBaseController
         }
         $input = $request->all();
         $removeThumbnail = $request->get('remove_thumbnail');
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         } else {
-            if ($removeThumbnail){
+            if ($removeThumbnail) {
                 $input['thumbnail'] = null;
             }
         }

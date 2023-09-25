@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 class SlideController extends AppBaseController
 {
     use UploadedFile;
+
     /** @var SlideRepository */
     private $slideRepository;
     protected $permission = 'website-slider';
@@ -51,7 +52,7 @@ class SlideController extends AppBaseController
     public function store(CreateSlideRequest $request)
     {
         $input = $request->all();
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
 
@@ -108,10 +109,10 @@ class SlideController extends AppBaseController
         }
         $input = $request->all();
         $removeThumbnail = $request->get('remove_thumbnail');
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         } else {
-            if ($removeThumbnail){
+            if ($removeThumbnail) {
                 $input['thumbnail'] = null;
             }
         }

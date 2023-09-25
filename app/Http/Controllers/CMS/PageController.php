@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 class PageController extends AppBaseController
 {
     use UploadedFile;
+
     /** @var PageRepository */
     private $pageRepository;
     protected $permission = 'website-pages';
@@ -52,7 +53,7 @@ class PageController extends AppBaseController
     public function store(CreatePageRequest $request)
     {
         $input = $request->all();
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $this->pathFolder .= '/profile';
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
@@ -109,10 +110,10 @@ class PageController extends AppBaseController
         }
         $input = $request->all();
         $removeThumbnail = $request->get('remove_thumbnail');
-        if($request->file('foto')){
+        if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         } else {
-            if ($removeThumbnail){
+            if ($removeThumbnail) {
                 $input['thumbnail'] = null;
             }
         }

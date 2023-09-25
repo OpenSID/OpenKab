@@ -65,6 +65,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         Route::resource('menus', App\Http\Controllers\CMS\MenuController::class)->except(['show'])->middleware('easyauthorize:website-menu');
         Route::resource('pages', App\Http\Controllers\CMS\PageController::class)->except(['show'])->middleware('easyauthorize:website-pages');
         Route::resource('slides', App\Http\Controllers\CMS\SlideController::class)->except(['show'])->middleware('easyauthorize:website-slider');
+        Route::resource('downloads', App\Http\Controllers\CMS\DownloadController::class)->except(['show'])->middleware('easyauthorize:website-downloads');
+        Route::get('statistik', App\Http\Controllers\CMS\StatistikPengunjungController::class)->name('cms.statistic.summary')->middleware('permission:website-statistik-read');
     });
 
     Route::prefix('sesi')->group(function () {
@@ -122,6 +124,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::middleware('easyauthorize:organisasi-departemen')->resource('departments', App\Http\Controllers\DepartmentController::class)->except(['show']);
     Route::middleware('easyauthorize:organisasi-position')->resource('positions', App\Http\Controllers\PositionController::class)->except(['show']);
     Route::middleware('easyauthorize:organisasi-employee')->resource('employees', App\Http\Controllers\EmployeeController::class)->except(['show']);
+    Route::middleware('permission:organisasi-chart-read')->get('orgchart', App\Http\Controllers\OrgChartController::class);
 
     Route::prefix('master')
         ->group(function () {
@@ -135,7 +138,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 });
 
-Route::middleware(['website.enable'])->group(function(){
+Route::middleware(['website.enable', 'log.visitor'])->group(function(){
     Route::get('/', [PageController::class, 'getIndex'])->name('article');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');

@@ -158,9 +158,15 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'fas fa-download',
-                    'text' => 'Download Area',
+                    'text' => 'Daftar Unduhan',
                     'url' => 'cms/downloads',
                     'permission' => 'website-downloads',
+                ],
+                [
+                    'icon' => 'fas fa-chart-line',
+                    'text' => 'Statistik Pengunjung',
+                    'url' => 'cms/statistik',
+                    'role' => 'website-statistik',
                 ],
             ],
         ],

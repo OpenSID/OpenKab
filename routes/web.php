@@ -14,6 +14,7 @@ use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Web\PageController;
+use App\Http\Controllers\Web\SearchController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
 
@@ -141,4 +142,5 @@ Route::middleware(['website.enable'])->group(function(){
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');
     Route::get('c/{cSlug}', [PageController::class, 'getCategory'])->name('category');
     Route::get('sitemap.xml', [PageController::class, 'getSitemap'])->name('sitemap');
+    Route::get('search', SearchController::class)->name('web.search');
 });

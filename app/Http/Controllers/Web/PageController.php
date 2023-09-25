@@ -21,7 +21,7 @@ class PageController extends Controller
         $totalDesa = 0;
         $configSummary = (new ConfigRepository)->desa()->groupBy('nama_kecamatan')->map(function($item) use (&$totalDesa) {
             $totalDesa += $item->count();
-            return $item->pluck('nama_desa', 'kode_desa');
+            return $item->pluck('nama_desa', 'id');
         });
 
         $bantuanSummary = (new BantuanRepository)->summary();

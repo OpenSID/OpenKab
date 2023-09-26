@@ -350,4 +350,9 @@ class PendudukRepository
             'footer' => $this->listFooter($covid, $query),
         ];
     }
+
+    public function summary()
+    {
+        return QueryBuilder::for(Penduduk::class)->count();
+    }
 }

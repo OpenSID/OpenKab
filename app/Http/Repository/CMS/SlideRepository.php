@@ -42,4 +42,9 @@ class SlideRepository extends BaseRepository
             ])->allowedSorts($this->getFieldsSearchable())
             ->jsonPaginate();
     }
+
+    public function activeSlide($limit = 5)
+    {
+        return $this->all(['state' => 1], null, $limit);
+    }
 }

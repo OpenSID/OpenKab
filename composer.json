@@ -9,6 +9,7 @@
     ],
     "require": {
         "php": "^8.0.2",
+        "akaunting/laravel-apexcharts": "^3.0",
         "alexusmai/laravel-file-manager": "^3.0",
         "bensampo/laravel-enum": "^6.3",
         "cviebrock/eloquent-sluggable": "~9.0",
@@ -23,12 +24,14 @@
         "laravel/ui": "^4.2",
         "league/flysystem-ftp": "^3.10",
         "proengsoft/laravel-jsvalidation": "^4.8",
+        "shetabit/visitor": "^4.1",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-csp": "^2.8",
         "spatie/laravel-fractal": "^6.0",
         "spatie/laravel-json-api-paginate": "^1.13",
         "spatie/laravel-permission": "^5.10",
         "spatie/laravel-query-builder": "^5.2",
+        "stevebauman/location": "^7.0",
         "yajra/laravel-datatables": "9.0"
     },
     "require-dev": {

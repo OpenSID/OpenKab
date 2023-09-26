@@ -12,7 +12,7 @@
                 <th>Foto</th>
                 <th>Jabatan</th>
                 <th>Departemen</th>
-                <th colspan="2">Action</th>
+                <th>Aksi</th>
             </tr>
             </thead>
             <tbody>

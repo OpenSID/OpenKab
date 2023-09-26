@@ -273,14 +273,22 @@ class PendudukRepository
     private function countStatistikPendudukHidup(string $whereHeader = null): array|object
     {
         $tanggalPeristiwa = null;
+        $configDesa = null;
+        if(request('config_desa')){
+            $configDesa = request('config_desa');
+        }
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
             $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
             $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
         }
-        $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa)->tidakMati()->toBoundSql();
+        $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa, $configDesa)->tidakMati()->toBoundSql();
         $penduduk = Penduduk::countStatistik()->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id');
         if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
             $penduduk->status();
+        }
+
+        if ($configDesa) {
+            $penduduk->filterDesa();
         }
 
         return $penduduk->get();
@@ -294,6 +302,10 @@ class PendudukRepository
 
         if (session()->has('desa')) {
             $query->where('tweb_penduduk.config_id', session('desa.id'));
+        }
+
+        if (request('config_desa')) {
+            $query->where('tweb_penduduk.config_id', request('config_desa'));
         }
 
         if ($whereFooter) {

@@ -131,10 +131,15 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikPenduduk($query)
     {
+        $configDesa = null;
+        if(request('config_desa')){
+            $configDesa = request('config_desa');
+        }
+
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
             $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
             $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
-            $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa)->tidakMati()->toBoundSql();
+            $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa, $configDesa)->tidakMati()->toBoundSql();
         }
 
         $statistik = $this->scopeConfigId($query)
@@ -151,6 +156,12 @@ class Bantuan extends BaseModel
             $statistik->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id');
         }
 
+        if ($configDesa){
+            $statistik->where(function($q) use ($configDesa) {
+                return $q->where("{$this->table}.config_id", $configDesa)->orWhereNull("{$this->table}.config_id");
+            });
+        }
+
         return $statistik;
     }
 
@@ -159,7 +170,11 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikKeluarga($query)
     {
-        return $this->scopeConfigId($query)
+        $configDesa = null;
+        if(request('config_desa')){
+            $configDesa = request('config_desa');
+        }
+        $query = $this->scopeConfigId($query)
             ->select(["{$this->table}.id", "{$this->table}.nama"])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
@@ -169,6 +184,13 @@ class Bantuan extends BaseModel
             ->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_KELUARGA)
             ->groupBy("{$this->table}.id", "{$this->table}.nama");
+
+            if ($configDesa){
+                $query->where(function($q) use ($configDesa) {
+                    return $q->where("{$this->table}.config_id", $configDesa)->orWhereNull("{$this->table}.config_id");
+                });
+            }
+        return $query;
     }
 
     /**

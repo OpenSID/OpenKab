@@ -56,16 +56,22 @@ class Keluarga extends BaseModel
     /**
      * Scope untuk Statistik.
      */
-    public function scopeCountStatistik($query)
+    public function scopeCountStatistik($query, $configId = null)
     {
         $this->appends = [];
         $this->with = [];
 
-        return $this->scopeConfigId($query)
+        $query = $this->scopeConfigId($query)
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', "{$this->table}.nik_kepala", 'left')
             ->where('tweb_penduduk.status_dasar', 1);
+
+        if($configId) {
+            $query->where('tweb_keluarga.config_id', $configId);
+        }
+
+        return $query;
     }
 
     /**

@@ -57,24 +57,30 @@ class Umur extends BaseModel
     public function scopeCountStatistik($query, $type = '')
     {
         $defaultConfigId = 1;
+        $configDesa = NULL;
         if (session()->has('desa')) {
             // $where .= ' AND tweb_penduduk.config_id = '.session('desa.id');
             $query = $this->scopeConfigId($query);
-            $defaultConfigId = session('desa.id');
-        } else {
-            $query = $query->where('config_id', $defaultConfigId);
+            // $defaultConfigId = session('desa.id');
+            $configDesa = session('desa.id');
         }
+        if (request('config_desa')) {
+            // $defaultConfigId = request('config_desa');
+            $configDesa = request('config_desa');
+        }
+
+        $query = $query->where('config_id', $defaultConfigId);
 
         $tanggalPeristiwa = null;
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
             $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
             $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
         }
-        $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa)->tidakMati()->toBoundSql();
+        $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa, $configDesa)->tidakMati()->toBoundSql();
         $queryPenduduk = Penduduk::selectRaw("config_id, sex, (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(tanggallahir)),'%Y') + 0) as umur")
                 ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
-                ->when(session()->has('desa'), function ($q) {
-                    return $q->where(['config_id' => session('desa.id')]);
+                ->when($configDesa, function ($q) use ($configDesa) {
+                    return $q->where(['config_id' => $configDesa]);
                 })->when($type == 'akta', function ($q) {
                     return $q->whereNotNull('akta_lahir');
                 })->toBoundSql();

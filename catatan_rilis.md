@@ -21,6 +21,7 @@ Di rilis v2309.0.1 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 17. [#304](https://github.com/OpenSID/OpenKab/issues/304) Menyesuaikan modul navigasi pada halaman depan sesuai pengaturan pada halaman admin.
 18. [#305](https://github.com/OpenSID/OpenKab/issues/305) Menyesuaikan tampilan slider berdasarkan pengaturan pada halaman admin.
 19. [#308](https://github.com/OpenSID/OpenKab/issues/308) Menyesuaikan data pejabat pada halaman public berdasarkan halaman admin.
+20. [#309](https://github.com/OpenSID/OpenKab/issues/309) Menyesuaikan tampilan halaman jika ditampilkan pada halaman public.
 
 #### Perbaikan BUG
 1. [#281](https://github.com/OpenSID/OpenKab/issues/281) Perbaikan bug ketika menambah group baru.

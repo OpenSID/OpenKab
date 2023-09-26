@@ -1,6 +1,6 @@
 {
-  "_vendor-1ec7a266.js": {
-    "file": "assets/vendor-1ec7a266.js"
+  "_vendor-f758b850.js": {
+    "file": "assets/vendor-f758b850.js"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
     "file": "assets/fa-brands-400-003f1154.ttf",
@@ -47,15 +47,15 @@
     "src": "node_modules/owl.carousel/dist/assets/owl.video.play.png"
   },
   "resources/js/web.js": {
-    "file": "assets/web-b39d73f8.js",
+    "file": "assets/web-0fea6c47.js",
     "imports": [
-      "_vendor-1ec7a266.js"
+      "_vendor-f758b850.js"
     ],
     "isEntry": true,
     "src": "resources/js/web.js"
   },
   "resources/sass/web.scss": {
-    "file": "assets/web-a757550c.css",
+    "file": "assets/web-76c0c283.css",
     "isEntry": true,
     "src": "resources/sass/web.scss"
   }

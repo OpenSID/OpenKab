@@ -68,6 +68,6 @@ class Category extends SluggableModel
      */
     public function getLinkAttribute(): string
     {
-        return route('category', ['cSlug' => $this->slug]);
+        return \Str::replaceFirst(url('/'), '', route('category', ['cSlug' => $this->slug]));
     }
 }

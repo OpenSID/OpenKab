@@ -166,7 +166,7 @@ final class Modul extends Enum
                     'icon' => 'fas fa-chart-line',
                     'text' => 'Statistik Pengunjung',
                     'url' => 'cms/statistik',
-                    'role' => 'website-statistik',
+                    'permission' => 'website-statistik',
                 ],
             ],
         ],

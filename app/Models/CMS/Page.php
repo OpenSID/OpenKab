@@ -50,6 +50,11 @@ class Page extends SluggableModel
         return $query->where('published_at', '<=', now())->orderBy('published_at', 'desc');
     }
 
+    public function scopeActivePublished($query)
+    {
+        return $this->published()->whereState(StatusEnum::aktif);
+    }
+
     /**
      * @return string
      */
@@ -79,7 +84,7 @@ class Page extends SluggableModel
      */
     public function getLinkAttribute(): string
     {
-        return route('page', ['aSlug' => $this->slug]);
+        return  \Str::replaceFirst(url('/'), '', route('page', ['pSlug' => $this->slug]));
     }
 
     public function getLabelStateAttribute(): string

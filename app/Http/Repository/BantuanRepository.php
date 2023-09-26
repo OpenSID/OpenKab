@@ -3,6 +3,7 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
+use App\Models\BantuanPeserta;
 use App\Models\Kelompok;
 use App\Models\Keluarga;
 use App\Models\LogPenduduk;
@@ -109,19 +110,20 @@ class BantuanRepository
 
     private function countStatistikKategoriPenduduk(): object
     {
-        $tanggalPeristiwa = null;
-        if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
-            $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
-            $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
-        }
-        $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa)->tidakMati()->toBoundSql();
-        $penduduk = Penduduk::countStatistik()->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id');
+        $configDesa = request('config_desa') ?? null;
 
-        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
-            $penduduk->status();
+        $bantuan = new Bantuan();
+        // if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
+        //     $bantuan->status();
+        // }
+
+        if ($configDesa){
+            $bantuan->where(function($q) use ($configDesa) {
+                return $q->where("program.config_id", $configDesa)->orWhereNull("program.config_id");
+            });
         }
 
-        return $penduduk->get();
+        return $bantuan->get();
     }
 
     public function caseKategoriKeluarga(): array

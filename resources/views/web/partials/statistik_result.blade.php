@@ -15,8 +15,8 @@
             <div class="panel-group" role="tablist">
                 <div class="panel panel-default">
                   <div class="panel-heading" role="tab" id="collapseListGroupHeading1-{{$stat['text']}}">
-                      <a class="collapsed  d-flex justify-content-between" data-bs-toggle="collapse" href="#collapseListGroup1-{{$stat['text']}}" aria-expanded="false" aria-controls="collapseListGroup1">
-                        Statistik {{ $stat['text'] }}
+                        <a class="collapsed  d-flex justify-content-between fs-5" data-bs-toggle="collapse" href="#collapseListGroup1-{{$stat['text']}}" aria-expanded="false" aria-controls="collapseListGroup1">
+                            <span> <i class="fa {{ $stat['icon'] }}"></i> Statistik {{ $stat['text'] }} </span>
                         <i class="fa {{ !$index ? 'fa-angle-up' : 'fa-angle-down' }}"></i>
                       </a>
                   </div>
@@ -35,15 +35,15 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-2">
-                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
+                        <div class="col-2">
+                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-bs-toggle="collapse"
                                 href="#grafik-statistik" role="button" aria-expanded="false"
                                 aria-controls="grafik-statistik">
                                 <i class="fas fa-chart-bar"></i> Grafik
                             </button>
                         </div>
                         <div class="col-md-2">
-                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse"
+                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-bs-toggle="collapse"
                                 href="#pie-statistik" role="button" aria-expanded="false" aria-controls="pie-statistik">
                                 <i class="fas fa-chart-pie"></i> Chart
                             </button>
@@ -53,14 +53,14 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="grafik-statistik" class="collapse">
+                            <div id="grafik-statistik" class="collapse4">
                                 <div class="chart" id="grafik">
                                     <canvas id="barChart"></canvas>
                                 </div>
                                 <hr class="hr-chart">
                             </div>
 
-                            <div id="pie-statistik" class="collapse">
+                            <div id="pie-statistik" class="collapse4">
                                 <div class="chart" id="pie">
                                     <canvas id="donutChart"></canvas>
                                 </div>

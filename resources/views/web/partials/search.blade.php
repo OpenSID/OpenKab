@@ -19,15 +19,15 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function (event) {
             $('select[name=search_desa]').find('optgroup').hide()
-            $('select[name=search_kecamatan]').change(function(){
+            $('select[name=search_kecamatan]').change(function () {
                 let _val = $(this).val()
                 $('select[name=search_desa]').find('optgroup').hide()
-                $('select[name=search_desa]').find('optgroup[label="'+_val+'"]').show()
-                $('select[name=search_desa]').find('optgroup[label="'+_val+'"]').find('option:first').prop('selected', 1)
+                $('select[name=search_desa]').find('optgroup[label="' + _val + '"]').show()
+                $('select[name=search_desa]').find('optgroup[label="' + _val + '"]').find('option:first').prop('selected', 1)
                 $('select[name=search_desa]').trigger('change')
             })
 
-            $('select[name=search_desa]').change(function(){
+            $('select[name=search_desa]').change(function () {
                 let _val = $(this).val()
                 $('#search_button').prop('disabled', 1)
                 if (_val) {
@@ -35,124 +35,115 @@
                 }
             })
 
-            $('#search_button').click(function(){
+            $('#search_button').click(function () {
                 let configDesa = $('select[name=search_desa]').val()
                 $.ajax({
                     url: '{{ route('web.search') }}',
                     dataType: 'json',
-                    data: { config_desa:  configDesa},
-                    beforeSend: function(){
+                    data: {
+                        config_desa: configDesa
+                    },
+                    beforeSend: function () {
                         $('#statistik_result').html('Mohon ditunggu, sedang mengambil data dari server ......')
                     },
-                    success: function(data){
+                    success: function (data) {
                         $('#statistik_result').replaceWith(data.content)
-                        initializeDatatable()
+                        initializeDatatable($('#statistik_result li.list-group-item:first'))
                     },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
                         $('#statistik_result').html(XMLHttpRequest.responseJSON['message'])
                     }
                 })
             })
 
-            $('body').on('click', '#statistik_result .panel-heading', function(){
-                $(this).find('i').toggleClass('fa-angle-down fa-angle-up')
+            $('body').on('click', '#statistik_result .panel-heading', function () {
+                $(this).find('a > i').toggleClass('fa-angle-down fa-angle-up')
             })
 
-            function initializeDatatable(){
-                let kategori = $('#statistik_result li.list-group-item:first').data('kategori')
-                let default_id = $('#statistik_result li.list-group-item:first').data('id')
-                let config_desa = $('#statistik_result li.list-group-item:first').data('configdesa')
-                var statistik = $('#tabel-data').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    autoWidth: false,
-                    ordering: false,
-                    searching: false,
-                    paging: false,
-                    info: false,
-                    ajax: {
-                        url: `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${default_id}&filter[configdesa]=${config_desa}`,
-                        method: 'get',
-                        data: function(row) {
-                            return {
-                                "filter[bulan]": $("#bulan").val(),
-                                "filter[tahun]": $("#tahun").val(),
-                            };
-                        },
-                        dataSrc: function(json) {
-                            if (json.data.length > 0) {
-                                data_grafik = [];
-                                json.data.forEach(function(item, index) {
-                                    data_grafik.push(item.attributes)
-                                })
+            $('body').on('click', '#statistik_result .panel-collapse ul>li', function () {
+                initializeDatatable($(this))
+                $('#statistik_result .panel-collapse ul>li.active').removeClass('active')
+                $(this).addClass('active')
+            })
 
-                                grafikPie()
-
-                                return json.data;
-                            }
-
-                            return false;
-                        },
+            function initializeDatatable(elm) {
+                let kategori = $(elm).data('kategori')
+                let default_id = $(elm).data('id')
+                let config_desa = $(elm).data('configdesa')
+                let tahun = new Date().getFullYear()
+                let bulan = new Date().getMonth() + 1
+                let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
+                $.ajax({
+                    url: `{{ url('api/v1/statistik-web') }}/${kategori}?filter[id]=${default_id}&filter[tahun]=${tahun}&filter[bulan]=${bulan}&config_desa=${config_desa}`,
+                    type: 'get',
+                    dataType: 'json',
+                    data: {},
+                    beforeSend: function () {
+                        $('#tabel-data tbody').html('Mohon ditunggu, sedang mengambil data dari server ......')
                     },
-                    columnDefs: [{
-                            targets: '_all',
-                            className: 'text-nowrap',
-                        },
-                        {
-                            targets: [2, 3, 4, 5, 6, 7],
-                            className: 'dt-body-right',
-                        },
-                    ],
-                    columns: [{
-                        data: null,
-                    }, {
-                        data: function(data) {
-                            return data.attributes.nama;
-                        },
-                    }, {
-                        data: function(data) {
-                            return data.attributes.jumlah
-                        },
-                    }, {
-                        data: function(data) {
-                            return data.attributes.persentase_jumlah;
-                        },
-                    }, {
-                        data: function(data) {
-                            return data.attributes.laki_laki
-                        },
-                    }, {
-                        data: function(data) {
-                            return data.attributes.persentase_laki_laki;
-                        },
-                    }, {
-                        data: function(data) {
-                            return data.attributes.perempuan
-                        },
-                    }, {
-                        data: function(data) {
-                            return data.attributes.persentase_perempuan;
-                        },
-                    }]
-                });
+                    success: function (json) {
+                        if (json.data.length > 0) {
+                            data_grafik = [];
+                            generateIsiTable('#tabel-data', elm, json.data)
 
-                statistik.on('draw.dt', function() {
-                    var dataTable = $('#tabel-data').DataTable();
-                    var pageInfo = dataTable.page.info();
-                    var recordsTotal = dataTable.data().count();
+                            json.data.forEach(function (item, index) {
+                                if(! exclude_chart.includes(item.attributes.nama)) {
+                                    data_grafik.push(item.attributes)
+                                }
 
-                    statistik.column(0, {
-                        page: 'current'
-                    }).nodes().each(function(cell, i) {
-                        if ((recordsTotal - i) <= 3) {
-                            cell.innerHTML = '';
-                        } else {
-                            cell.innerHTML = i + 1 + pageInfo.start;
+                            })
+
+                            grafikPie()
+
+                            return json.data;
                         }
-                    });
-                });
 
+                        return false;
+                    },
+                })
             }
+
+            function generateIsiTable(tableSelector, elm, data){
+                let _table = $(tableSelector)
+                let _tbody = _table.find('tbody')
+                let _trs = []
+
+                _table.find('thead #judul_kolom_nama').text($(elm).text())
+                _tbody.empty()
+                data.forEach((item, index) => {
+                    _trs.push(`<tr>
+                            <td>${index + 1}</td>
+                            <td>${item.attributes.nama}</td>
+                            <td>${item.attributes.jumlah}</td>
+                            <td>${item.attributes.persentase_jumlah}</td>
+                            <td>${item.attributes.laki_laki}</td>
+                            <td>${item.attributes.persentase_laki_laki}</td>
+                            <td>${item.attributes.perempuan}</td>
+                            <td>${item.attributes.persentase_perempuan}</td>
+                        </tr>`)
+                })
+
+                _tbody.append(_trs.join(''))
+            }
+
+
         })
     </script>
+@endpush
+
+@push('styles')
+    <style nonce="{{ csp_nonce() }}" >
+        #barChart {
+            min-height: 250px;
+            height: 250px;
+            max-height: 250px;
+            max-width: 100%;
+        }
+        #donutChart {
+            min-height: 250px;
+            height: 250px;
+            max-height: 250px;
+            max-width: 100%;
+        }
+    </style>
 @endpush

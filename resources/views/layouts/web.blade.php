@@ -39,6 +39,7 @@
     <script defer src="{{ asset('web/lib/wow/wow.min.js') }}"></script>
     <script defer src="{{ asset('web/lib/owlcarousel/owl.carousel.min.js') }}"></script>
     <!-- Template Javascript -->
+    <script defer src="{{ asset('assets/costume/js/admin.js') }}"></script>
     <script defer src="{{ asset('web/js/main.js') }}"></script>
     @stack('scripts')
 </body>

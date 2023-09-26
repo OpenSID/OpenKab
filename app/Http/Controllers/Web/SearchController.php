@@ -28,10 +28,10 @@ class SearchController extends Controller
             ['text' => 'bantuan','value' => Bantuan::filterDesa()->count(), 'icon' => 'web/img/bantuan.jpg'],
         ];
         $groupStatistik = [
-            ['text' => 'Penduduk', 'key' => 'penduduk', 'items' => Penduduk::KATEGORI_STATISTIK],
-            ['text' => 'Keluarga', 'key' => 'keluarga', 'items' => Keluarga::KATEGORI_STATISTIK],
-            ['text' => 'Bantuan', 'key' => 'bantuan', 'items' => Bantuan::KATEGORI_STATISTIK],
-            ['text' => 'RTM', 'key' => 'rtm', 'items' => Rtm::KATEGORI_STATISTIK],
+            ['text' => 'Penduduk', 'key' => 'penduduk', 'items' => Penduduk::KATEGORI_STATISTIK, 'icon' => 'fa-pie-chart'],
+            ['text' => 'Keluarga', 'key' => 'keluarga', 'items' => Keluarga::KATEGORI_STATISTIK, 'icon' => 'fa-bar-chart'],
+            ['text' => 'Bantuan', 'key' => 'bantuan', 'items' => Bantuan::KATEGORI_STATISTIK, 'icon' => 'fa-line-chart'],
+            ['text' => 'RTM', 'key' => 'rtm', 'items' => Rtm::KATEGORI_STATISTIK, 'icon' => 'fa-area-chart'],
         ];
         $view = view('web.partials.statistik_result', compact('categoriesItems', 'desa', 'groupStatistik'))->render();
         return response()->json(['content' => $view]);

@@ -44,14 +44,25 @@ class LogPenduduk extends Model
         return $query->where('tgl_peristiwa', '<=', $tanggal);
     }
 
-    public function scopePeristiwaTerakhir($query, $tanggal = null)
+    public function scopePeristiwaTerakhir($query, $tanggal = null, $configId = null)
     {
         if (! empty($tanggal)) {
             $query->where('tgl_peristiwa', '<=', $tanggal);
         }
+
+        if (! empty($configId)) {
+            $query->where('config_id', $configId);
+        }
+
         $subQuery = DB::raw(
             '(SELECT MAX(id) as id, id_pend from log_penduduk group by id_pend) as logMax'
         );
+
+        if (! empty($configId)) {
+            $subQuery = DB::raw(
+                '(SELECT MAX(id) as id, id_pend from log_penduduk where config_id = '.$configId.' group by id_pend) as logMax'
+            );
+        }
 
         return $query->join($subQuery, 'logMax.id', '=', 'log_penduduk.id');
     }

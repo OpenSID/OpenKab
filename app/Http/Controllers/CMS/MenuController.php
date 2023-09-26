@@ -6,6 +6,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\CMS\MenuRepository;
 use App\Http\Requests\UpdateMenuRequest;
 use App\Models\CMS\Category;
+use App\Models\CMS\Page;
 use Illuminate\Support\Facades\Session;
 
 class MenuController extends AppBaseController
@@ -25,16 +26,13 @@ class MenuController extends AppBaseController
     public function index()
     {
         $sourceItem = [
-            'Halaman' => [
-                '?hal=about' => 'Tentang',
-                '?hal=profil' => 'Profile',
-            ],
+            'Halaman' => Page::activePublished()->get()->pluck('title', 'link')->toArray(),
             'Kategori' => Category::all()->pluck('name', 'link')->toArray(),
             'Modul' => [
                 '?module=org' => 'Bagan Organisasi',
                 '?module=statistik' => 'Statistik',
-                '?module=download' => 'Download Area',
-            ],
+                '?module=unduhan' => 'Daftar Unduhan',
+            ]
         ];
         $listPermission = $this->generateListPermission();
         return view('menus.index', ['menus' => $this->menuRepository->treeJson(), 'sourceItem' => $sourceItem])->with($listPermission);

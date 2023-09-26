@@ -4,3 +4,5 @@ import 'chart.js/dist/Chart.bundle.min';
 
 window.$ = $;
 window.jQuery = $;
+window.bootstrap = bootstrap;
+window.Bootnavbar = Bootnavbar;

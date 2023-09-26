@@ -44,5 +44,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         ]
     });
 
+    (new Bootnavbar).init({selector: "menu-navbar",});
 });
 

@@ -7,6 +7,7 @@ export default defineConfig({
         inject({   // => that should be first under plugins array
             $: 'jquery',
             jQuery: 'jquery',
+            bootstrap: 'bootstrap'
         }),
         splitVendorChunkPlugin(),
         laravel({

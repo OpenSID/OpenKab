@@ -135,6 +135,11 @@ a {
     transition: .5s;
 }
 
+.pejabat-item img{
+    width: 200px;
+    height: 200px;
+}
+
 .pejabat-item .btn {
     color: var(--primary);
     background: #FFFFFF;

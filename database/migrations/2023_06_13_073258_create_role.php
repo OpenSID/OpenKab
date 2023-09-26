@@ -30,7 +30,14 @@ return new class extends Migration
             'id_user' => $user->id,
             'id_team' => $team->id,
         ]);
-
+        $role = Role::create(
+            [
+                'name' => 'administrator',
+                'team_id' => $team->id,
+                'guard_name' => 'web',
+            ]
+        );
+        $user->assignRole($role);
         Artisan::call('admin:menu-update');
     }
 

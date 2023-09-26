@@ -3,6 +3,7 @@
 namespace App\Http\Repository;
 
 use App\Models\Employee;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -41,14 +42,17 @@ class EmployeeRepository extends BaseRepository
                         $q->orWhere('identity_number', 'LIKE', '%'.$value.'%');
                         $q->orWhere('email', 'LIKE', '%'.$value.'%');
                         $q->orWhere('description', 'LIKE', '%'.$value.'%');
-                        $q->orWhere('phone', 'LIKE', '%'.$value.'%');
-                        $q->orWhere('foto', 'LIKE', '%'.$value.'%');
-                        $q->orWhere('position_id', 'LIKE', '%'.$value.'%');
-                        $q->orWhere('department_id', 'LIKE', '%'.$value.'%');
-                        $q->orWhere('user_id', 'LIKE', '%'.$value.'%');
                     });
                 }),
             ])->allowedSorts($this->getFieldsSearchable())
             ->jsonPaginate();
     }
+
+    public function allQuery(array $search = [], int $skip = null, int $limit = null): Builder
+    {
+        $query = parent::allQuery($search, $skip, $limit)->with(['department', 'position']);
+
+        return $query;
+    }
+
 }

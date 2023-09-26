@@ -18,7 +18,7 @@ class KelasSosial extends BaseModel
     /**
      * Scope untuk Statistik.
      */
-    public function scopeCountStatistik($query)
+    public function scopeCountStatistik($query, $configId = null)
     {
         return $this->scopeFilters($query, request()->input('filter'), 'tgl_daftar')
             ->select(['tweb_keluarga_sejahtera.id', 'tweb_keluarga_sejahtera.nama'])
@@ -30,6 +30,8 @@ class KelasSosial extends BaseModel
             ->where('tweb_penduduk.status_dasar', 1)
             ->when(session()->has('desa'), function ($query) {
                 $query->where('tweb_penduduk.config_id', session('desa.id'));
+            })->when($configId, function ($query) use ($configId) {
+                $query->where('tweb_penduduk.config_id', $configId);
             })
             ->groupBy('tweb_keluarga_sejahtera.id', 'tweb_keluarga_sejahtera.nama');
     }

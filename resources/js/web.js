@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import '../vendor/bootstrap-5.3.2/js/bootstrap.bundle.min';
-import Bootnavbar from '../vendor/bootstrap-navbar-multi-level-dropdowns/js/bootnavbar';
+import 'chart.js/dist/Chart.bundle.min';
 
 window.$ = $;
 window.jQuery = $;

@@ -7,6 +7,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+    <base href="{{ route('web.index') }}" />
     <!-- Favicon -->
     <link href="{{ asset('web/img/logo.png') }}" rel="icon">
 

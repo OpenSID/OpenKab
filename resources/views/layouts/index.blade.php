@@ -9,7 +9,8 @@
 @endsection
 
 @push('js')
-    <script type="application/javascript">
+    <script nonce="{{ csp_nonce() }}" type="application/javascript">
+    document.addEventListener("DOMContentLoaded", function(event) {
         var base_url = '{{ url('/') }}';
         $.ajax({
         type: "get",
@@ -28,21 +29,47 @@
         $('#desa').children('a.active').text(nama_desa);
 
         $.extend($.fn.dataTable.defaults, {
-            language: {url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/id.json"}
+            language: {url: "{{ asset('vendor/datatable/id.json') }}"}
         });
 
-        $(document).ready(function() {
-            window.setTimeout(function() {
-                $("#notifikasi").fadeTo(500, 0).slideUp(500, function() {
-                    $(this).remove();
-                });
-            }, 5000);
-        });
+
+        window.setTimeout(function() {
+            $("#notifikasi").fadeTo(500, 0).slideUp(500, function() {
+                $(this).remove();
+            });
+        }, 5000);
+
 
         function filter_open () {
             if ($('a[href="#collapse-filter"]').attr('aria-expanded') == 'false') {
                 $('a[href="#collapse-filter"]').trigger('click')
             }
         }
+
+        $('li#catatan-rilis').click(function(){
+            Swal.fire({
+                title: 'Menyimpan',
+                didOpen: () => {
+                    Swal.showLoading()
+                },
+            })
+            $.get('/catatan-rilis', {}, function (data) {
+                Swal.fire({
+                    title: 'Catatan Rilis',
+                    width: '90%',
+                    html: data,
+                    position: 'top',
+                    confirmButtonText: 'Tutup',
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    focusConfirm: false,
+                    customClass: {
+                        htmlContainer: 'text-left'
+                    }
+
+                })
+            })
+        })
+    })
     </script>
 @endpush

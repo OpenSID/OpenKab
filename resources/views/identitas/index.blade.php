@@ -16,10 +16,12 @@
         <div class="col-sm-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
+                    @if($canedit)
                     <a x-bind:href="'{{ url('pengaturan/identitas') }}/' + id + '/edit'">
                         <button type="button" class="btn btn-primary btn-sm"><i class="far fa-edit"></i> Ubah
                             Identitas</button>
                     </a>
+                    @endif
                 </div>
 
                 <div class="card-body">
@@ -74,7 +76,7 @@
             </div>
         </div>
     </div>
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
         function identitas() {
             return {
                 id: 1,

@@ -1,9 +1,17 @@
 <?php
 
 use App\Models\Bantuan;
+use App\Models\CMS\Article;
+use App\Models\CMS\Category;
+use App\Models\BaseModel;
+use App\Models\CMS\Download;
+use App\Models\Department;
+use App\Models\Employee;
 use App\Models\Identitas;
 use App\Models\Kategori;
 use App\Models\Penduduk;
+use App\Models\Position;
+use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -100,3 +108,89 @@ Breadcrumbs::for('penduduk.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push($penduduk);
 });
 
+Breadcrumbs::for('categories.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Artikel', route('categories.index'));
+});
+Breadcrumbs::for('categories.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('categories.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('categories.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Category::find($id)?->slug ?? '-';
+    $trail->parent('categories.index');
+    $trail->push($item);
+});
+
+Breadcrumbs::for('articles.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Artikel', route('articles.index'));
+});
+Breadcrumbs::for('articles.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('articles.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('articles.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Article::find($id)?->slug ?? '-';
+    $trail->parent('articles.index');
+});
+Breadcrumbs::for('employees.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Pegawai', route('employees.index'));
+});
+Breadcrumbs::for('employees.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('employees.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('employees.edit', function (BreadcrumbTrail $trail, $id) {
+    $employee = Employee::find($id)?->name ?? '-';
+    $trail->parent('employees.index');
+    $trail->push($employee);
+});
+
+Breadcrumbs::for('departments.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Departemen', route('departments.index'));
+});
+Breadcrumbs::for('departments.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('departments.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('departments.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Department::find($id)?->name ?? '-';
+    $trail->parent('departments.index');
+    $trail->push($item);
+});
+
+Breadcrumbs::for('positions.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Jabatan', route('positions.index'));
+});
+Breadcrumbs::for('positions.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('positions.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('positions.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Position::find($id)?->name ?? '-';
+    $trail->parent('positions.index');
+    $trail->push($item);
+});
+
+
+Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Setting', route('settings.index'));
+});
+
+Breadcrumbs::for('settings.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Setting::find($id)?->name ?? '-';
+    $trail->parent('settings.index');
+    $trail->push($item);
+});
+
+Breadcrumbs::for('downloads.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Unduhan', route('downloads.index'));
+});
+Breadcrumbs::for('downloads.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('downloads.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('downloads.edit', function (BreadcrumbTrail $trail, $id) {
+    $item = Download::find($id)?->title ?? '-';
+    $trail->parent('downloads.index');
+    $trail->push($item);
+});

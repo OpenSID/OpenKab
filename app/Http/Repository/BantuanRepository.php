@@ -3,10 +3,14 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
+use App\Models\BantuanPeserta;
 use App\Models\Kelompok;
 use App\Models\Keluarga;
+use App\Models\LogPenduduk;
 use App\Models\Penduduk;
 use App\Models\Rtm;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -106,24 +110,20 @@ class BantuanRepository
 
     private function countStatistikKategoriPenduduk(): object
     {
-        $penduduk = Penduduk::countStatistik()
-        ->whereHas('logPenduduk', function ($q) {
-            $q->select('log_penduduk.id')->selectRaw('Max(log_penduduk.id) as max')->where('log_penduduk.kode_peristiwa', '!=', '2')->groupBy('log_penduduk.id');
+        $configDesa = request('config_desa') ?? null;
 
-            if (isset(request('filter')['tahun'])) {
-                $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
-            }
+        $bantuan = new Bantuan();
+        // if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
+        //     $bantuan->status();
+        // }
 
-            if (isset(request('filter')['bulan'])) {
-                $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
-            }
-        });
-
-        if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
-            $penduduk->status();
+        if ($configDesa){
+            $bantuan->where(function($q) use ($configDesa) {
+                return $q->where("program.config_id", $configDesa)->orWhereNull("program.config_id");
+            });
         }
 
-        return $penduduk->get();
+        return $bantuan->get();
     }
 
     public function caseKategoriKeluarga(): array
@@ -241,5 +241,10 @@ class BantuanRepository
                 'nama',
                 'asaldana',
             ])->jsonPaginate();
+    }
+
+    public function summary()
+    {
+        return QueryBuilder::for(Bantuan::class)->count();
     }
 }

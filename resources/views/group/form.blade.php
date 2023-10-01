@@ -28,9 +28,16 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <td width="30">#</td>
-                                        <td width="40" colspan="2">No</td>
-                                        <td>Nama Modul</td>
+                                        <td width="30" rowspan="2"</td>
+                                        <td width="40" colspan="2" rowspan="2" class="text-center">No</td>
+                                        <td rowspan="2" class="text-center">Nama Modul</td>
+                                        <td colspan="4" class="text-center">Hak Akses</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Baca</td>
+                                        <td class="text-center">Tulis</td>
+                                        <td class="text-center">Ubah</td>
+                                        <td class="text-center">Hapus</td>
                                     </tr>
                                 </thead>
 
@@ -40,6 +47,18 @@
                                             <td><input type="checkbox" name="menu" x-model="value.selected" @input.debounce.100ms="selected(value)"></td>
                                             <td x-text="(index +1)" colspan="2" width=40 class="text-center"></td>
                                             <td x-text="value.text"></td>
+                                            <td class="text-center">
+                                                <input class="form-check-input"  type="checkbox" :name="value.permission + '-read'" x-model="value[value.permission + '-read']">
+                                            </td>
+                                            <td class="text-center">
+                                                <input class="form-check-input"  type="checkbox" :name="value.permission + '-write'" x-model="value[value.permission + '-write']">
+                                            </td>
+                                            <td class="text-center">
+                                                <input class="form-check-input"  type="checkbox" :name="value.permission + '-edit'" x-model="value[value.permission + '-edit']">
+                                            </td>
+                                            <td class="text-center">
+                                                <input class="form-check-input"  type="checkbox" :name="value.permission + '-delete'" x-model="value[value.permission + '-delete']">
+                                            </td>
                                         </tr>
 
                                         <template x-for="(submenu, index2) in value.submenu">
@@ -47,7 +66,19 @@
                                                 <td><input type="checkbox" name="menu" x-model="submenu.selected" @input.debounce.100ms="selected_sub(value)"></td>
                                                 <td width=20></td>
                                                 <td x-text="(index+1)+ '.' + (index2+1)"  width=20 class="text-center"></td>
-                                                <td x-text="submenu.text" class="ps-5" style="padding-left: 50px;"></td>
+                                                <td x-text="submenu.text" class="ps-5"></td></td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input"  type="checkbox" :name="submenu.permission + '-read'" x-model="submenu[submenu.permission + '-read']">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input"  type="checkbox" :name="submenu.permission + '-write'" x-model="submenu[submenu.permission + '-write']">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input"  type="checkbox" :name="submenu.permission + '-edit'" x-model="submenu[submenu.permission + '-edit']">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input"  type="checkbox" :name="submenu.permission + '-delete'" x-model="submenu[submenu.permission + '-delete']">
+                                                </td>
                                             <tr>
                                         </template>
                                     </tbody>

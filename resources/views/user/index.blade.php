@@ -13,8 +13,10 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
+                    @if($canwrite)
                     <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm" judul="Tambah Data"><i
                             class="fa fa-plus"></i>&ensp;Tambah</a>
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -42,7 +44,8 @@
 @endsection
 
 @section('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
+    document.addEventListener("DOMContentLoaded", function(event) {
         var user = $('#user').DataTable({
             processing: true,
             serverSide: true,
@@ -104,6 +107,7 @@
                 [2, 'asc']
             ]
         })
+    })
     </script>
     @include('partials.delete_modal')
 @endsection

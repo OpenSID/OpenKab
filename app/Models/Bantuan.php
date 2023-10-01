@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Enums\SasaranEnum;
 use App\Models\Traits\FilterWilayahTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Bantuan extends BaseModel
 {
@@ -130,19 +131,15 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikPenduduk($query)
     {
+        $configDesa = null;
+        if(request('config_desa')){
+            $configDesa = request('config_desa');
+        }
+
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
-            $log_penduduk = LogPenduduk::select('log_penduduk.id')
-            ->selectRaw('Max(log_penduduk.id) as max')
-            ->where('kode_peristiwa', '!=', 2)
-            ->whereRaw('tweb_penduduk.id = log_penduduk.id_pend')
-            ->when(isset(request('filter')['tahun']), function ($q) {
-                return $q->whereYear('tgl_peristiwa', '<=', request('filter')['tahun']);
-            })
-            ->when(isset(request('filter')['bulan']), function ($q) {
-                return $q->whereMonth('tgl_peristiwa', '<=', request('filter')['bulan']);
-            })
-           ->groupBy('log_penduduk.id')
-           ->toBoundSql();
+            $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
+            $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
+            $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa, $configDesa)->tidakMati()->toBoundSql();
         }
 
         $statistik = $this->scopeConfigId($query)
@@ -155,8 +152,14 @@ class Bantuan extends BaseModel
             ->where('program.sasaran', self::SASARAN_PENDUDUK)
             ->groupBy("{$this->table}.id", "{$this->table}.nama");
 
-        if (isset($log_penduduk)) {
-            $statistik->whereRaw("EXISTS($log_penduduk)");
+        if (isset($logPenduduk)) {
+            $statistik->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id');
+        }
+
+        if ($configDesa){
+            $statistik->where(function($q) use ($configDesa) {
+                return $q->where("{$this->table}.config_id", $configDesa)->orWhereNull("{$this->table}.config_id");
+            });
         }
 
         return $statistik;
@@ -167,7 +170,11 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikKeluarga($query)
     {
-        return $this->scopeConfigId($query)
+        $configDesa = null;
+        if(request('config_desa')){
+            $configDesa = request('config_desa');
+        }
+        $query = $this->scopeConfigId($query)
             ->select(["{$this->table}.id", "{$this->table}.nama"])
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
@@ -177,6 +184,13 @@ class Bantuan extends BaseModel
             ->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_KELUARGA)
             ->groupBy("{$this->table}.id", "{$this->table}.nama");
+
+            if ($configDesa){
+                $query->where(function($q) use ($configDesa) {
+                    return $q->where("{$this->table}.config_id", $configDesa)->orWhereNull("{$this->table}.config_id");
+                });
+            }
+        return $query;
     }
 
     /**

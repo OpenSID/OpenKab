@@ -10,11 +10,13 @@ use App\Models\UserTeam;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
     use UploadedFile;
+    protected $permission = 'pengaturan-users';
     /**
      * Display a listing of the resource.
      *
@@ -22,23 +24,32 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index');
+        $listPermission = $this->generateListPermission();
+        return view('user.index')->with($listPermission);
     }
 
     public function getUsers(Request $request)
     {
         if ($request->ajax()) {
+            $permission = $this->generateListPermission();
             return DataTables::of(User::with('team')->get())
                 ->addIndexColumn()
-                ->addColumn('aksi', function ($row) {
+                ->addColumn('aksi', function ($row) use($permission) {
+                    $data = [];
                     if (! auth()->guest()) {
-                        $data['edit'] = route('users.edit', $row->id);
+                        if ($permission['canedit']){
+                            $data['edit'] = route('users.edit', $row->id);
+                        }
                         if ($row->id !== User::superAdmin()) {
-                            $data['delete'] = route('users.destroy', $row->id);
-                            if ($row->active == StatusEnum::aktif) {
-                                $data['deactive'] = route('users.status', [$row->id, StatusEnum::tidakAktif]);
-                            } else {
-                                $data['active'] = route('users.status', [$row->id, StatusEnum::aktif]);
+                            if ($permission['candelete']){
+                                $data['delete'] = route('users.destroy', $row->id);
+                            }
+                            if ($permission['canedit']){
+                                if ($row->active == StatusEnum::aktif) {
+                                    $data['deactive'] = route('users.status', [$row->id, StatusEnum::tidakAktif]);
+                                } else {
+                                    $data['active'] = route('users.status', [$row->id, StatusEnum::aktif]);
+                                }
                             }
                         }
                     }
@@ -92,7 +103,7 @@ class UserController extends Controller
                 'active' => 1,
             ];
 
-            if($request->file('foto')){
+            if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $insertData['foto'] = $this->uploadFile($request, 'foto');
             }
@@ -106,13 +117,8 @@ class UserController extends Controller
 
             // assign role berdasarkan team
             setPermissionsTeamId($request['group']);
-            foreach ($user->team->first()->menu as $menu) {
-                $user->assignRole($menu['role']);
-                if (isset($menu['submenu'])) {
-                    foreach ($menu['submenu'] as $submenu) {
-                        $user->assignRole($submenu['role']);
-                    }
-                }
+            foreach (Team::find($data['group'])->role as $role) {
+                $user->assignRole($role);
             }
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
@@ -152,6 +158,20 @@ class UserController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function profile($id)
+    {
+        $user = User::find($id);
+
+        return view('user.profile', compact('user'));
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -162,46 +182,42 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         try {
-            $data = $request->validated();
-
             $updateData = [
-                'name' => $data['name'],
-                'username' => $data['username'],
-                'email' => $data['email'],
-                'company' => $data['company'],
-                'phone' => $data['phone'],
+                'name' => $request->get('name'),
+                'username' => $request->get('username') ?? $user->username,
+                'email' => $request->get('email'),
+                'company' => $request->get('company'),
+                'phone' => $request->get('phone'),
             ];
-            if($request->file('foto')){
+            if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $updateData['foto'] = $this->uploadFile($request, 'foto');
             }
             $user->update($updateData);
 
-            if (! Auth::user()->isSuperAdmin()){
-                return redirect()->route('users.edit', Auth::id())->with('success', 'Data profil berhasil diubah!');
+            $routeCurrent = Route::currentRouteName();
+            if ($routeCurrent == 'profile.update') {
+                return redirect()->route('profile.edit', Auth::id())->with('success', 'Data profil berhasil diubah!');
             }
 
             // update user team
+            $idGroup = $request->get('group');
             $user_team = UserTeam::find($user->id);
-            if($user_team){
-                setPermissionsTeamId($user_team->id_team);
-                $user->roles()->detach();
-                $user_team->id_team = $data['group'];
+            if ($user_team) {
+                $user_team->id_team = $idGroup;
                 $user_team->save();
-
-                foreach ($user->team->first()->menu as $menu) {
-                    $user->assignRole($menu['role']);
-                    if (isset($menu['submenu'])) {
-                        foreach ($menu['submenu'] as $submenu) {
-                            $user->assignRole($submenu['role']);
-                        }
-                    }
-                }
+            } else {
+                UserTeam::create([
+                    'id_user' => $user->id,
+                    'id_team' => $idGroup,
+                ]);
             }
 
-
-            setPermissionsTeamId($request['group']);
+            setPermissionsTeamId($idGroup);
             // assign role berdasarkan team
+            foreach (Team::find($idGroup)->role as $role) {
+                $user->syncRoles($role);
+            }
 
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {

@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Http\Transformers\IdentitasTransformer;
 use App\Models\Config;
+use App\Models\Identitas;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +35,22 @@ class AppServiceProvider extends ServiceProvider
         $this->bootHttps();
         $this->bootConfigFTP();
         $this->addValidation();
+        // daftarkan manual karena gagal install infyomlabs/adminlte-templates terkendala depedency
+        View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
+        $this->addLogQuery();
+
+        if(App::runningInConsole()){
+            activity()->disableLogging();
+        } else {
+            // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
+            View::share('identitasAplikasi', fractal(
+                Identitas::first(),
+                IdentitasTransformer::class,
+                \League\Fractal\Serializer\JsonApiSerializer::class
+            )->toArray()['data']['attributes']
+        );
+        }
+
     }
 
     public function bootHttps()
@@ -70,5 +91,17 @@ class AppServiceProvider extends ServiceProvider
 
             return true;
         });
+    }
+
+    private function addLogQuery()
+    {
+        if (config('app.debug')) {
+            DB::listen(function ($query) {
+                File::append(
+                    storage_path('/logs/query.log'),
+                    $query->sql.' ['.implode(', ', $query->bindings).']'.PHP_EOL
+                );
+            });
+        }
     }
 }

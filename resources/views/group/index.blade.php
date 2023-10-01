@@ -14,9 +14,11 @@
         <div class="col-sm-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
+                    @if($canwrite)
                     <a href="{{ url('pengaturan/groups/tambah') }}">
                         <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
                     </a>
+                    @endif
                 </div>
 
                 <div class="card-body">
@@ -43,8 +45,8 @@
     </div>
 @endsection
 @section('js')
-    <script>
-        $(function() {
+    <script nonce="{{ csp_nonce() }}"  >
+        document.addEventListener("DOMContentLoaded", function(event) {
             var grup = $('#grup').DataTable({
             processing: true,
             serverSide: true,
@@ -76,17 +78,17 @@
                         if (data.attributes.name == 'administrator') {
                             return ``;
                         }
-                        return `
-                                <a href="{{ url('pengaturan/groups/edit/${data.id}') }}">
+                        let canEdit = `{{ $canedit }}`
+                        let canDelete = `{{ $candelete }}`
+                        let buttonEdit = canEdit ? `<a href="{{ url('pengaturan/groups/edit/${data.id}') }}">
                                     <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                </a>
-
-                                <button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
+                                </a>` : ``;
+                        let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
                                     <i class="fas fa-trash"></i>
-                                </button>
-                                `;
+                                </button>` : ``;
+                        return `${buttonEdit} ${buttonDelete}`;
                     },
                 },
                 {

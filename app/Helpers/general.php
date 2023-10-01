@@ -2,6 +2,7 @@
 
 use App\Models\Config;
 use App\Models\SettingAplikasi;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
@@ -11,7 +12,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2309.0.0';
+        return 'v2310.0.0';
     }
 }
 
@@ -202,7 +203,69 @@ if (! function_exists('default_favicon')) {
                 $filePath = public_path('assets/img/opensid_logo.png');
                 Image::make($filePath)->resize(96, 96)->save($pathFavicon, '100', 'png');
             }
-
         }
     }
 }
+
+if (! function_exists('date_from_format')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function date_from_format($value, $format = null)
+    {
+        \Log::error($value);
+        return Carbon::createFromFormat($format ?? config('app.format.date'), $value);
+    }
+}
+
+if (! function_exists('getTitle')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function getTitle()
+    {
+        return 'ini judul';
+    }
+}
+
+if (! function_exists('getDescription')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function getDescription()
+    {
+        return 'ini deskripsi';
+    }
+}
+
+
+if (!function_exists('generateMenu')) {
+    function generateMenu($tree, $parentId = null)
+    {
+        $result = '';
+        foreach($tree as $item){
+            if($item->children->count() > 0){
+                $classLink = empty($parentId) ? 'nav-link' : 'dropdown-item';
+                $result .= "
+                <li class='nav-item dropdown'>
+                    <a class='{$classLink} dropdown-toggle' role='button' href='#' data-bs-toggle='dropdown'>
+                    {$item->text}
+                    </a>
+                    <ul class='dropdown-menu'>";
+                $result .= generateMenu($item->children, $item->id);
+                $result .= "
+                    </ul>
+                </li>";
+            }else {
+                if ($parentId){
+                    $result .= "<li><a class='dropdown-item' href='{$item->href}'>{$item->text}</a></li>";
+                }else {
+                    $result .= "<li class='nav-item'><a href='{$item->href}' class='nav-link'>{$item->text}</a></li>";
+                }
+
+            }
+        }
+        return $result;
+    }
+}
+

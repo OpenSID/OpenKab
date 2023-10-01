@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\Modul;
 use App\Http\Repository\TeamRepository;
+use App\Http\Requests\TeamRequest;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +25,7 @@ class TeamController extends Controller
         }, 'team')->respond();
     }
 
-    public function create(Request $request)
+    public function create(TeamRequest $request)
     {
         $data = $request->all();
         // buat team
@@ -31,18 +33,15 @@ class TeamController extends Controller
             'name' => $data['nama'],
             'menu' => $data['menu'],
         ]);
+        Role::firstOrCreate(
+            [
+                'name' => $data['nama'],
+                'team_id' => $team->id,
+                'guard_name' => 'web',
+            ]
+        );
 
         setPermissionsTeamId($team->id);
-
-        foreach ($data['menu'] as $menu1) {
-            Role::create(
-                [
-                    'name' => $menu1['role'],
-                    'team_id' => $team->id,
-                    'guard_name' => 'web',
-                ]
-            );
-        }
 
         return response()->json([
             'success' => true,
@@ -59,31 +58,21 @@ class TeamController extends Controller
             'name' => $data['name'],
             'menu' => $menu,
         ]);
+
         setPermissionsTeamId($team->id);
+        // buat role
+        $role = Role::create(
+            [
+                'name' => $data['name'],
+                'team_id' => $team['id'],
+                'guard_name' => 'web',
+            ]
+        );
+        $permissions = $this->collectPermissions($data);
 
-        foreach ($menu as $main_menu) {
-            // buat role
-            Role::create(
-                [
-                    'name' => $main_menu['role'],
-                    'team_id' => $team['id'],
-                    'guard_name' => 'web',
-                ]
-            );
-
-            if (isset($main_menu['submenu'])) {
-                foreach ($main_menu['submenu'] as $sub_menu) {
-                    Role::create(
-                        [
-                            'name' => $sub_menu['role'],
-                            'team_id' => $team['id'],
-                            'guard_name' => 'web',
-                        ]
-                    );
-                }
-            }
-        }
+        $role->syncPermissions($permissions);
         activity('data-log')->event('created')->withProperties($request)->log('Pengaturan Group');
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);
@@ -92,54 +81,27 @@ class TeamController extends Controller
     public function update(Request $request, $id)
     {
         // ambil
-
-        $users = User::with('team')
-        ->whereHas('team', function ($q) use ($id) {
-            return $q->where('id', $id);
-        })->get();
-
         $data = $request->all();
         Team::where('id', $id)->update([
             'name' => $data['name'],
             'menu' => $data['menu'],
         ]);
 
-        // hapus role
-        Role::where('team_id', $id)->delete();
+        $role = Role::firstOrCreate(
+            [
+                'name' => $data['name'],
+                'team_id' => $id,
+                'guard_name' => 'web',
+            ]
+        );
 
         // set team
         setPermissionsTeamId($id);
+        $permissions = $this->collectPermissions($data);
 
-        foreach ($data['menu'] as $main_menu) {
-            // buat role
-            $role = Role::create(
-                [
-                    'name' => $main_menu['role'],
-                    'team_id' => $id,
-                    'guard_name' => 'web',
-                ]
-            );
-
-            foreach ($users as $user) {
-                $user->assignRole($role->id);
-            }
-
-            if (isset($main_menu['submenu'])) {
-                foreach ($main_menu['submenu'] as $sub_menu) {
-                    $role = Role::create(
-                        [
-                            'name' => $sub_menu['role'],
-                            'team_id' => $id,
-                            'guard_name' => 'web',
-                        ]
-                    );
-                    foreach ($users as $user) {
-                        $user->assignRole($role->id);
-                    }
-                }
-            }
-        }
+        $role->syncPermissions($permissions);
         activity('data-log')->event('updated')->withProperties($request)->log('Pengaturan Group');
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);
@@ -170,6 +132,7 @@ class TeamController extends Controller
 
         Team::Where('id', $id)->delete();
         activity('data-log')->event('deleted')->withProperties($request)->log('Pengaturan Group');
+
         return response()->json([
             'success' => true,
         ], Response::HTTP_OK);
@@ -181,5 +144,37 @@ class TeamController extends Controller
             'success' => true,
             'data' => Modul::Menu,
         ], Response::HTTP_OK);
+    }
+
+    private function collectPermissions($data){
+        $permissions = [];
+        foreach ($data['menu'] as $main_menu) {
+
+            foreach(Modul::permision as $permission){
+                $permissionName = $main_menu['permission'].'-'.$permission;
+                Permission::findOrCreate($permissionName, 'web');
+                if(isset($main_menu[$permissionName])){
+                    if($main_menu[$permissionName]  == 'true'){
+                        $permissions[] = $permissionName;
+                    }
+                }
+
+            }
+            if (isset($main_menu['submenu'])) {
+                foreach ($main_menu['submenu'] as $sub_menu) {
+                    foreach(Modul::permision as $permission){
+                        $permissionName = $sub_menu['permission'].'-'.$permission;
+                        Permission::findOrCreate($permissionName, 'web');
+                        if(isset($sub_menu[$permissionName])){
+                            if($sub_menu[$permissionName] == 'true'){
+                                $permissions[] = $permissionName;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $permissions;
     }
 }

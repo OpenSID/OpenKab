@@ -1,5 +1,5 @@
 @push('js')
-<script type="module">
+<script nonce="{{ csp_nonce() }}" type="module">
     $('#reset').click(function(){
         location.reload();
     });

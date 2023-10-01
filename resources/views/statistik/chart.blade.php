@@ -1,13 +1,13 @@
-<script>
+<script nonce="{{ csp_nonce() }}"  >
     function grafikPie() {
         data = [];
         $('#barChart').remove();
         $('#donutChart').remove();
         $('#grafik').append(
-            '<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>'
+            '<canvas id="barChart"></canvas>'
         );
         $('#pie').append(
-            '<canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>'
+            '<canvas id="donutChart"></canvas>'
         );
         var data = modifikasiData(data_grafik);
         tampilGrafik(data[0]);
@@ -89,3 +89,19 @@
         ]
     }
 </script>
+@push('css')
+    <style nonce="{{ csp_nonce() }}" >
+        #barChart {
+            min-height: 250px;
+            height: 250px;
+            max-height: 250px;
+            max-width: 100%;
+        }
+        #donutChart {
+            min-height: 250px;
+            height: 250px;
+            max-height: 250px;
+            max-width: 100%;
+        }
+    </style>
+@endpush

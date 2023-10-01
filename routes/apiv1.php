@@ -43,14 +43,14 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
     });
 
     // Wilayah
-    Route::prefix('wilayah')->middleware(['role:wilayah'])->group(function () {
+    Route::prefix('wilayah')->middleware(['can:wilayah-read'])->group(function () {
         Route::get('desa', [WilayahController::class, 'desa']);
         Route::get('dusun', [WilayahController::class, 'dusun']);
         Route::get('rw', [WilayahController::class, 'rw']);
         Route::get('rt', [WilayahController::class, 'rt']);
     });
 
-    Route::prefix('penduduk')->middleware(['role:penduduk'])->group(function () {
+    Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 
         // Referensi
@@ -66,7 +66,7 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
     });
 
     // Dokumen
-    Route::prefix('dokumen')->middleware(['role:penduduk'])->group(function () {
+    Route::prefix('dokumen')->middleware(['can:penduduk-read'])->group(function () {
         Route::get('/', DokumenController::class);
     });
 
@@ -157,3 +157,25 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
             });
         });
 });
+
+// Statistik
+Route::controller(StatistikController::class)
+    ->prefix('statistik-web')->group(function () {
+    Route::get('/kategori-statistik', 'kategoriStatistik');
+    Route::prefix('penduduk')->group(function () {
+        Route::get('/', 'penduduk');
+        Route::get('/tahun', 'refTahunPenduduk');
+    });
+    Route::prefix('keluarga')->group(function () {
+        Route::get('/', 'keluarga');
+        Route::get('/tahun', 'refTahunKeluarga');
+    });
+    Route::prefix('rtm')->group(function () {
+        Route::get('/', 'rtm');
+        Route::get('/tahun', 'refTahunRtm');
+    });
+    Route::get('/bantuan', 'bantuan');
+    Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
+});
+
+// Bantuan

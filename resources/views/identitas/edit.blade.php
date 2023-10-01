@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @push('css')
-    <style>
+    <style nonce="{{ csp_nonce() }}" >
         .select2-container .select2-selection--single {
             height: 34px;
         }
@@ -66,6 +66,12 @@
                 <div class="card-body">
                     <form class="form-horizontal">
                         <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Pilih Provinsi</label>
+                            <div class="col-sm-10">
+                                <select name="prov" class="form-control" x-ref="selectProv"></select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-2 col-form-label">Pilih Kab</label>
                             <div class="col-sm-10">
                                 <select name="kab" class="form-control" x-ref="select"></select>
@@ -93,7 +99,7 @@
             </div>
         </div>
     </div>
-    <script>
+    <script nonce="{{ csp_nonce() }}"  >
         function identitas() {
             return {
                 dataIdentitas: {},
@@ -107,8 +113,54 @@
                             this.dataIdentitas = response.data.attributes;
                             this.id = response.data.id;
                             this.$nextTick();
+                            this.selectProv();
                             this.selectKab();
                         });
+                },
+
+                selectProv() {
+                    this.select2Prov = $(this.$refs.selectProv).select2({
+                        ajax: {
+                            url: function() {
+                                return "{{ config('app.serverPantau') }}" +
+                                    'index.php/api/wilayah/list_wilayah?&token=' +
+                                    '{{ config('app.tokenPantau') }}';
+                            },
+                            dataType: 'json',
+                            data: function(params) {
+                                return {
+                                    cari: params.term || '',
+                                    page: params.page || 1,
+                                };
+                            },
+                            processResults: function(data) {
+                                let results = data.results;
+                                return {
+                                    results: results.map(value => {
+                                        return {
+                                            'id': value.kode_prov,
+                                            'text': value.nama_prov,
+                                            'kode_prov': value.kode_prov,
+                                            'nama_prov': value.nama_prov
+                                        }
+                                    }),
+                                    pagination: data.pagination,
+                                }
+                            },
+                            cache: true
+                        },
+                        placeholder: this.dataIdentitas.nama_provinsi ? this.dataIdentitas.nama_provinsi : '--  Cari Nama Provinsi --',
+                        minimumInputLength: 2,
+                        allowClear: true,
+                        escapeMarkup: function(markup) {
+                            return markup;
+                        },
+                    });
+
+                    this.select2Prov.on("select2:select", (event) => {
+                        this.dataIdentitas.kode_provinsi = event.params.data.kode_prov;
+                        this.dataIdentitas.nama_provinsi = event.params.data.nama_prov;
+                    });
                 },
 
                 selectKab() {
@@ -116,13 +168,14 @@
                         ajax: {
                             url: function() {
                                 return "{{ config('app.serverPantau') }}" +
-                                    'index.php/api/wilayah/carikabupaten?&token=' +
+                                    'index.php/api/wilayah/list_wilayah?&token=' +
                                     '{{ config('app.tokenPantau') }}';
                             },
                             dataType: 'json',
                             data: function(params) {
                                 return {
-                                    q: params.term || '',
+                                    cari: params.term || '',
+                                    kode: $('select[name=prov]').val(),
                                     page: params.page || 1,
                                 };
                             },
@@ -343,7 +396,4 @@
             }
         }
     </script>
-@endsection
-
-@section('js')
 @endsection

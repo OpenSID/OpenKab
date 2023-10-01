@@ -18,7 +18,7 @@ class PengaturanRepository
                     $query->whereIn('key', $value);
                 }),
             ])
-            ->orWhere('kategori', 'openkab')
+            ->where('kategori', 'openkab')
             ->get()
             ->unique('key');
     }

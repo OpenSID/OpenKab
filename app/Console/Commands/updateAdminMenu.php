@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Enums\Modul;
+use App\Models\Team;
+use Illuminate\Console\Command;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
+class updateAdminMenu extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'admin:menu-update';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Update default menu administrator';
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
+    {
+        $team = Team::whereName('administrator')->first();
+
+        if ($team) {
+            $team->menu = Modul::Menu;
+            $team->save();
+
+            $role = Role::firstOrCreate(
+                [
+                    'name' => 'administrator',
+                    'team_id' => $team->id,
+                    'guard_name' => 'web',
+                ]
+            );
+
+            $permissions = $this->collectPermissions();
+            $role->syncPermissions($permissions);
+        }
+
+
+        return Command::SUCCESS;
+    }
+
+    private function collectPermissions(){
+        $permissions = [];
+        foreach (Modul::Menu as $main_menu) {
+            foreach(Modul::permision as $permission){
+                $permissionName = $main_menu['permission'].'-'.$permission;
+                Permission::findOrCreate($permissionName, 'web');
+                $permissions[] = $permissionName;
+
+            }
+            if (isset($main_menu['submenu'])) {
+                foreach ($main_menu['submenu'] as $sub_menu) {
+                    foreach(Modul::permision as $permission){
+                        $permissionName = $sub_menu['permission'].'-'.$permission;
+                        Permission::findOrCreate($permissionName, 'web');
+                        $permissions[] = $permissionName;
+                    }
+                }
+            }
+        }
+
+        return $permissions;
+    }
+}

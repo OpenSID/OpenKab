@@ -8,4 +8,4 @@ Demo aplikasi OpenKab dapat dilihat di https://devopenkab.opendesa.id. Versi yan
 
 Modul administrasi OpenKab demo dapat diaskses pada [https://devopenkab.opendesa.id/index.php/login](https://devopenkab.opendesa.id/login). 
 - Username = admin@gmail.com
-- Password = password
+- Password = Admin100%

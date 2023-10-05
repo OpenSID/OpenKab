@@ -43,7 +43,5 @@ document.addEventListener("DOMContentLoaded", function (event) {
             '<i class="bi bi-chevron-right"></i>'
         ]
     });
-
-    (new Bootnavbar).init({selector: "menu-navbar",});
 });
 

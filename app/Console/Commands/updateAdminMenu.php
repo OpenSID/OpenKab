@@ -32,7 +32,7 @@ class updateAdminMenu extends Command
     public function handle()
     {
         $team = Team::whereName('administrator')->first();
-
+        setPermissionsTeamId($team->id);
         if ($team) {
             $team->menu = Modul::Menu;
             $team->save();

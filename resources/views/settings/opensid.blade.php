@@ -5,30 +5,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="col">
-                        @forelse ($listPengaturan as $item)
-                        <!-- Name Field -->
-                        <div class="form-group">
-                            {!! Form::label($item->key, $item->judul) !!}
-                            @switch($item->jenis)
-                                @case('option')
-                                    {!! Form::select($item->key, collect(json_decode($item->option)), $item->value, ['class' => 'form-control', 'required']) !!}
-                                    @break
-                                @case('color')
-                                    <div class="input-group">
-                                        {!! Form::text($item->key, $item->value, ['class' => 'form-control color', 'required']) !!}
-                                        <div class="input-group-append">
-                                            <div class="input-group-text bg-danger">
-                                                <i class="fas fa-lg fa-square"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @break
-                                @default
-                                    {!! Form::text($item->key, null, ['class' => 'form-control', 'required']) !!}
-                            @endswitch
-                        </div>
-                        @empty
-                        @endforelse
+
                     </div>
                 </div>
                 <!-- /.card-body -->
@@ -47,7 +24,56 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function (event) {
-            $('.color').colorpicker()
+            function buildInputForm(data) {
+                let form = [], _tmp, _item;
+                for(let i in data) {
+                    _item = data[i]
+                    _tmp = `<div class="form-group">
+                        <label for="${_item.attributes.key}">${_item.attributes.judul}</label>`
+                    switch(_item.attributes.jenis){
+                        case 'color':
+                        _tmp += `<div class="input-group">
+                            <input type="text" name="${_item.attributes.key}" class="form-control color" required value="${_item.attributes.value}" />
+                                        <div class="input-group-append">
+                                            <div class="input-group-text bg-danger">
+                                                <i class="fas fa-lg fa-square"></i>
+                                            </div>
+                                        </div>
+                                    </div>`
+                            break;
+                        case 'option':
+                            let _options = []
+                            let _optionObj = JSON.parse(_item.attributes.option)
+                            for(let i in _optionObj){
+                                _options.push(`<option value="${i}" ${i == _item.attributes.value ? 'selected' : ''} >${_optionObj[i]}</option>`)
+                            }
+
+                            _tmp += `<select name="${_item.attributes.key}" class="form-control">${_options.join('')}</select>`
+                            break;
+                        default:
+                            _tmp += `<input type="text" name="${_item.attributes.key}" class="form-control" required value="${_item.attributes.value}" />`
+                    }
+                    _tmp += `</div>`
+                    form.push(_tmp)
+                }
+
+                return form.join('');
+            }
+            fetch(`{{ route('api.pengaturan_aplikasi') }}`)
+                .then(res => res.json())
+                .then(response => {
+                    if (response.data.length != 0) {
+                        $('#pengaturan-form>.card-body>.col').html(buildInputForm(response.data))
+                    }
+                }).then(() => {
+                    $('.color').colorpicker()
+                }).catch(err => {
+                    Swal.fire(
+                        'Error!',
+                        err,
+                        'error'
+                    )
+                }); // Catch errors;
 
             $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();

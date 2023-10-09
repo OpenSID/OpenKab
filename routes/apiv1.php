@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\TeamController;
+use App\Http\Controllers\Api\WebsiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -179,3 +180,5 @@ Route::controller(StatistikController::class)
 });
 
 // Bantuan
+// Data utama website
+Route::get('data-website', WebsiteController::class);

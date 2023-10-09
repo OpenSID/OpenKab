@@ -3,14 +3,9 @@
 namespace App\Http\Repository;
 
 use App\Models\Bantuan;
-use App\Models\BantuanPeserta;
 use App\Models\Kelompok;
 use App\Models\Keluarga;
-use App\Models\LogPenduduk;
-use App\Models\Penduduk;
 use App\Models\Rtm;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -117,9 +112,9 @@ class BantuanRepository
         //     $bantuan->status();
         // }
 
-        if ($configDesa){
-            $bantuan->where(function($q) use ($configDesa) {
-                return $q->where("program.config_id", $configDesa)->orWhereNull("program.config_id");
+        if ($configDesa) {
+            $bantuan->where(function ($q) use ($configDesa) {
+                return $q->where('program.config_id', $configDesa)->orWhereNull('program.config_id');
             });
         }
 

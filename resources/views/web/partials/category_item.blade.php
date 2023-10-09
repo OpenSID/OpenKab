@@ -5,7 +5,7 @@
                 <img class="img-fluid icons" src="{{ asset($icon) }}" alt="Icon">
             </div>
             <h6>{{ $text }}</h6>
-            <span>{{ number_format($value, 0, ',', '.') }}</span>
+            <span class="jumlah-{{ $key }}-elm">{{ $value }}</span>
         </div>
     </a>
 </div>

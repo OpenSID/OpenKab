@@ -269,3 +269,14 @@ if (!function_exists('generateMenu')) {
     }
 }
 
+if (! function_exists('angka_lokal')) {
+    /**
+     * Menampilkan nilai persentase.
+     *
+     * return decimal
+     */
+    function angka_lokal($angka, $decimal = 0)
+    {
+        return number_format($angka, $decimal, ',', '.');
+    }
+}

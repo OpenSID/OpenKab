@@ -19,21 +19,23 @@ class PageController extends Controller
     public function getIndex()
     {
         $totalDesa = 0;
-        $configSummary = (new ConfigRepository)->desa()->groupBy('nama_kecamatan')->map(function($item) use (&$totalDesa) {
+        $configSummary = (new ConfigRepository)->desa()->groupBy('nama_kecamatan')->map(function ($item) use (&$totalDesa) {
             $totalDesa += $item->count();
+
             return $item->pluck('nama_desa', 'id');
         });
 
         $bantuanSummary = (new BantuanRepository)->summary();
         $pendudukSummary = (new PendudukRepository)->summary();
         $categoriesItems = [
-            ['text' => 'penduduk','value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
-            ['text' => 'kecamatan','value' => $configSummary->count() ?? 0, 'icon' => 'web/img/kecamatan.jpg'],
-            ['text' => 'desa/kelurahan','value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
-            ['text' => 'bantuan','value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
+            ['text' => 'penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['text' => 'kecamatan', 'value' => $configSummary->count() ?? 0, 'icon' => 'web/img/kecamatan.jpg'],
+            ['text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['text' => 'bantuan', 'value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
-        $listKecamatan = ['' => 'Pilih Kecamatan'] + array_combine($configSummary->keys()->toArray() , $configSummary->keys()->toArray());
+        $listKecamatan = ['' => 'Pilih Kecamatan'] + array_combine($configSummary->keys()->toArray(), $configSummary->keys()->toArray());
         $listDesa = ['' => 'Pilih Desa'] + $configSummary->toArray();
+
         return view('web.index', compact('categoriesItems', 'listKecamatan', 'listDesa'));
     }
 

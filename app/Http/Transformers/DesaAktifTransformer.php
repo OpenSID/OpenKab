@@ -20,9 +20,9 @@ class DesaAktifTransformer extends TransformerAbstract
             'nama_kecamatan' => $config->nama_kecamatan,
             'alamat' => $config->alamat_kantor,
             'website' => $config->website,
-            'penduduk' => $config->penduduk_count,
-            'keluarga' => $config->keluarga_count,
-            'rtm' => $config->rtm_count,
+            'penduduk' => angka_lokal($config->penduduk_count),
+            'keluarga' => angka_lokal($config->keluarga_count),
+            'rtm' => angka_lokal($config->rtm_count),
         ];
     }
 }

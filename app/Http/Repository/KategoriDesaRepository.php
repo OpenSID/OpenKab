@@ -13,7 +13,7 @@ class KategoriDesaRepository
                 ->whereHas('rtm')
                 ->withCount('penduduk')
                 ->withCount('rtm')
-                ->withCount('keluarga')                
+                ->withCount('keluarga')
                 ->orderByArtikel()
                 ->orderByTraffic()
         )

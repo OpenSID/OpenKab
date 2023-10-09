@@ -12,6 +12,7 @@ use App\Models\LogKeluarga;
 use App\Models\LogPenduduk;
 use App\Models\Penduduk;
 use App\Models\Rtm;
+use Database\Seeders\ArtikelDemoSeeder;
 use Database\Seeders\BantuanDemoSeeder;
 use Database\Seeders\ConfigDemoSeeder;
 use Database\Seeders\KategoriDemoSeeder;
@@ -30,7 +31,7 @@ class GenerateDataDemo extends Command
      *
      * @var string
      */
-    protected $signature = 'openkab:demo-data {--kodekabupaten=} {--minpenduduk=} {--maxpenduduk=}  {--reset}';
+    protected $signature = 'openkab:demo-data {--kodekabupaten=} {--minpenduduk=} {--maxpenduduk=}  {--reset} {--append}';
 
     /**
      * The console command description.
@@ -60,12 +61,25 @@ class GenerateDataDemo extends Command
     public function handle()
     {
         $minPenduduk = $this->option('minpenduduk') ?? 100;
-        $maxPenduduk = $this->option('minpenduduk') ?? $minPenduduk * 2;
+        $maxPenduduk = $this->option('maxpenduduk') ?? $minPenduduk * 2;
         $kodekabupaten = $this->option('kodekabupaten');
+        $reset = $this->option('reset') ?? true;
+        $append = $this->option('append') ?? false;
+
+        if ($append) {
+            $reset = false;
+        }
+
         config()->set('seeder.config.kode_kabupaten', $kodekabupaten);
         DB::connection('openkab')->statement('SET foreign_key_checks=0');
-        $this->reset();
-        $this->seedConfig();
+
+        if ($reset) {
+            $this->reset();
+            $this->seedConfig();
+            $this->seedKategoriBerita();
+            $this->seedArtikel();
+        }
+
         config()->set('seeder.keluarga.anggota_min', 2);
         config()->set('seeder.keluarga.anggota_max', 5);
         config()->set('seeder.bantuan.program_min', 1);
@@ -78,7 +92,7 @@ class GenerateDataDemo extends Command
             config()->set('seeder.wilayah.desa_nama_aktif', $item->nama_desa);
             $this->seedDataDesa();
         });
-        $this->seedKategoriBerita();
+
         DB::connection('openkab')->statement('SET foreign_key_checks=1');
 
     }
@@ -143,6 +157,14 @@ class GenerateDataDemo extends Command
     private function seedKategoriBerita()
     {
         $exitCode = Artisan::call('db:seed', ['--class' => KategoriDemoSeeder::class]);
+        $output = Artisan::output();
+        Log::info($output);
+        $this->info($output);
+    }
+
+    private function seedArtikel()
+    {
+        $exitCode = Artisan::call('db:seed', ['--class' => ArtikelDemoSeeder::class]);
         $output = Artisan::output();
         Log::info($output);
         $this->info($output);

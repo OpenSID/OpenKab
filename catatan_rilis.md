@@ -6,6 +6,7 @@ Di rilis v2310.0.1 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 2. [#310](https://github.com/OpenSID/OpenKab/issues/310) Menyesuaikan tampilan halaman permodul pada halaman public.
 3. [#268](https://github.com/OpenSID/OpenKab/issues/268) Menambahkan seeder untuk demo data OpenSID di OpenKab.
 4. [#323](https://github.com/OpenSID/OpenKab/issues/323) Menambahkan data desa/kelurahan sesuai parameter desa teraktif.
+5. [#328](https://github.com/OpenSID/OpenKab/issues/328) Menyesuaikan permisi folder agar bisa dibuat rekursif ketika upload gambar.
 
 #### Perbaikan BUG
 

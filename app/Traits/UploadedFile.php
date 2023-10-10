@@ -19,7 +19,7 @@ trait UploadedFile
         $storagePathFolder = storage_path($this->basePath.$this->pathFolder);
         if (! File::isDirectory($storagePathFolder)) {
             \Log::error('buat folder dulu '. $storagePathFolder);
-            File::makeDirectory($storagePathFolder);
+            File::makeDirectory($storagePathFolder, 0755, true, true);
         }
 
         if (empty($file)) {

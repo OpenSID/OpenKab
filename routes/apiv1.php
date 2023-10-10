@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
+use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\TeamController;
 
 /*
@@ -178,4 +179,5 @@ Route::controller(StatistikController::class)
     Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
 });
 
-// Bantuan
+// Desa teraktif
+Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);

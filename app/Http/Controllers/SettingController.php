@@ -29,10 +29,9 @@ class SettingController extends AppBaseController
         if ($request->ajax()) {
             return $this->fractal($this->settingRepository->listSetting(), new SettingTransformer, 'settings')->respond();
         }
-        $pengaturanOpensid = new PengaturanRepository();
-        $listPengaturan = $pengaturanOpensid->listPengaturan();
+
         $listPermission = $this->generateListPermission();
-        return view('settings.index', compact('listPengaturan'))->with($listPermission);
+        return view('settings.index')->with($listPermission);
     }
 
     /**

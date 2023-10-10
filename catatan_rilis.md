@@ -12,3 +12,5 @@ Di rilis v2310.0.1 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 
 
 #### Perubahan Teknis
+
+1. [#128](https://github.com/OpenSID/OpenKab/issues/128) Menyesuaikan API dari OpenKab sehingga API dapat jalan terpisah dari OpenKab & OpenSID database gabungan.

@@ -22,10 +22,10 @@ class SearchController extends Controller
     {
         $desa = Config::find($request->get('config_desa'));
         $categoriesItems = [
-            ['text' => 'penduduk','value' => Penduduk::filterDesa()->count(), 'icon' => 'web/img/penduduk.jpg'],
-            ['text' => 'keluarga','value' => Keluarga::filterDesa()->count(), 'icon' => 'web/img/keluarga.jpg'],
-            ['text' => 'RTM','value' => Rtm::filterDesa()->count(), 'icon' => 'web/img/kelurahan.jpg'],
-            ['text' => 'bantuan','value' => Bantuan::filterDesa()->count(), 'icon' => 'web/img/bantuan.jpg'],
+            ['text' => 'penduduk','key' => 'penduduk','value' => angka_lokal(Penduduk::filterDesa()->count()), 'icon' => 'web/img/penduduk.jpg'],
+            ['text' => 'keluarga','key' => 'keluarga','value' => angka_lokal(Keluarga::filterDesa()->count()), 'icon' => 'web/img/keluarga.jpg'],
+            ['text' => 'RTM','key' => 'rtm', 'value' => angka_lokal(Rtm::filterDesa()->count()), 'icon' => 'web/img/kelurahan.jpg'],
+            ['text' => 'bantuan','key' => 'bantuan','value' => angka_lokal(Bantuan::filterDesa()->count()), 'icon' => 'web/img/bantuan.jpg'],
         ];
         $groupStatistik = [
             ['text' => 'Penduduk', 'key' => 'penduduk', 'items' => Penduduk::KATEGORI_STATISTIK, 'icon' => 'fa-pie-chart'],

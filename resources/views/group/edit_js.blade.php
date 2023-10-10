@@ -68,7 +68,7 @@
                     });
             },
             simpan() {
-                if (_.isEmpty(_.trim(this.dataGroup.name))) {
+                if (isEmpty(_.trim(this.dataGroup.name))) {
                     Swal.fire(
                             'Error!  ',
                             'Nama grup harus diisi',

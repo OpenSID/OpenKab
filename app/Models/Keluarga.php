@@ -16,6 +16,8 @@ class Keluarga extends BaseModel
     /** {@inheritdoc} */
     protected $table = 'tweb_keluarga';
 
+    const CREATED_AT = NULL;
+
     /**
      * {@inheritDoc}
      */

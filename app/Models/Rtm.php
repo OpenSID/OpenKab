@@ -16,6 +16,7 @@ class Rtm extends BaseModel
     /** {@inheritdoc} */
     protected $table = 'tweb_rtm';
 
+    public $timestamps = false;
     /**
      * Define a one-to-one relationship.
      *

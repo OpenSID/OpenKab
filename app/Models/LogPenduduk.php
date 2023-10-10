@@ -29,6 +29,15 @@ class LogPenduduk extends Model
      */
     public $timestamps = false;
 
+    const BARU_LAHIR = 1;
+
+    const MATI              = 2;
+    const PINDAH_KELUAR     = 3;
+    const HILANG            = 4;
+    const BARU_PINDAH_MASUK = 5;
+    const TIDAK_TETAP_PERGI = 6;
+    const PERISTIWA         = [1, 2, 3, 4];
+
     public function scopeTahun($query)
     {
         return $query->selectRaw('YEAR(MIN(tgl_peristiwa)) AS tahun_awal, YEAR(MAX(tgl_peristiwa)) AS tahun_akhir');

@@ -1,21 +1,21 @@
 {
-  "_admin-lte-a527eeb6.js": {
-    "file": "assets/admin-lte-a527eeb6.js",
+  "_admin-lte-d25cdfab.js": {
+    "file": "assets/admin-lte-d25cdfab.js",
     "imports": [
-      "_vendor-4b9e9759.js",
-      "_datatables-cc2f0143.js"
+      "_vendor-175e65d1.js",
+      "_datatables-4731ffb6.js"
     ]
   },
-  "_datatables-cc2f0143.js": {
-    "file": "assets/datatables-cc2f0143.js",
+  "_datatables-4731ffb6.js": {
+    "file": "assets/datatables-4731ffb6.js",
     "imports": [
-      "_vendor-4b9e9759.js"
+      "_vendor-175e65d1.js"
     ]
   },
-  "_vendor-4b9e9759.js": {
-    "file": "assets/vendor-4b9e9759.js",
+  "_vendor-175e65d1.js": {
+    "file": "assets/vendor-175e65d1.js",
     "imports": [
-      "_admin-lte-a527eeb6.js"
+      "_admin-lte-d25cdfab.js"
     ]
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
@@ -51,11 +51,11 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/js/app.js": {
-    "file": "assets/app-e2bb287b.js",
+    "file": "assets/app-ef4394ff.js",
     "imports": [
-      "_admin-lte-a527eeb6.js",
-      "_vendor-4b9e9759.js",
-      "_datatables-cc2f0143.js"
+      "_admin-lte-d25cdfab.js",
+      "_vendor-175e65d1.js",
+      "_datatables-4731ffb6.js"
     ],
     "isEntry": true,
     "src": "resources/js/app.js"

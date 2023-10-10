@@ -39,4 +39,9 @@ class DownloadRepository extends BaseRepository
             ])->allowedSorts($this->getFieldsSearchable())
             ->jsonPaginate();
     }
+
+    public function publicDownload()
+    {
+        return QueryBuilder::for(Download::with(['counter']))->get();
+    }
 }

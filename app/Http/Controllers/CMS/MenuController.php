@@ -29,9 +29,9 @@ class MenuController extends AppBaseController
             'Halaman' => Page::activePublished()->get()->pluck('title', 'link')->toArray(),
             'Kategori' => Category::all()->pluck('name', 'link')->toArray(),
             'Modul' => [
-                '?module=org' => 'Bagan Organisasi',
-                '?module=statistik' => 'Statistik',
-                '?module=unduhan' => 'Daftar Unduhan',
+                '/module/org' => 'Bagan Organisasi',
+                '/module/statistik' => 'Statistik',
+                '/module/unduhan' => 'Daftar Unduhan',
             ]
         ];
         $listPermission = $this->generateListPermission();

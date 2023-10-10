@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminWebController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\CatatanRilis;
+use App\Http\Controllers\Web\DownloadCounterController;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IdentitasController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Middleware\KecamatanMiddleware;
@@ -140,10 +142,12 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 });
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function(){
-    Route::get('/', [PageController::class, 'getIndex'])->name('article');
+    Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');
     Route::get('c/{cSlug}', [PageController::class, 'getCategory'])->name('category');
     Route::get('sitemap.xml', [PageController::class, 'getSitemap'])->name('sitemap');
     Route::get('search', SearchController::class)->name('web.search');
+    Route::get('module/{moduleName}', ModuleController::class)->name('web.module');
+    Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });

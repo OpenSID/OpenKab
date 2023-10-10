@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Enums\Modul;
 use App\Models\Team;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -31,6 +32,7 @@ class updateAdminMenu extends Command
      */
     public function handle()
     {
+        Artisan::call('cache:clear');
         $team = Team::whereName('administrator')->first();
         setPermissionsTeamId($team->id);
         if ($team) {

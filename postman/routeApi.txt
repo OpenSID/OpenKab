@@ -1,0 +1,63 @@
+  GET|HEAD        api/user ............................................................. api.
+  GET|HEAD        api/v1/artikel ................................ Api\ArtikelController@index
+  GET|HEAD        api/v1/artikel/tahun .......................... Api\ArtikelController@tahun
+  GET|HEAD        api/v1/bantuan ................................ Api\BantuanController@index
+  GET|HEAD        api/v1/bantuan-kabupaten ............. Api\BantuanKabupatenController@index
+  POST            api/v1/bantuan-kabupaten/hapus ..... Api\BantuanKabupatenController@destroy
+  PUT             api/v1/bantuan-kabupaten/perbarui/{id} Api\BantuanKabupatenController@upda…
+  POST            api/v1/bantuan-kabupaten/tambah ...... Api\BantuanKabupatenController@store
+  GET|HEAD        api/v1/bantuan/cetak ................... Api\BantuanController@cetakBantuan
+  GET|HEAD        api/v1/bantuan/peserta ...................... Api\BantuanController@peserta
+  GET|HEAD        api/v1/bantuan/sasaran ...................... Api\BantuanController@sasaran
+  GET|HEAD        api/v1/bantuan/tahun .......................... Api\BantuanController@tahun
+  GET|HEAD        api/v1/dasbor ........................................ Api\DasborController
+  GET|HEAD        api/v1/data-website ................................. Api\WebsiteController
+  GET|HEAD        api/v1/dokumen ...................................... Api\DokumenController
+  GET|HEAD        api/v1/identitas ............................ Api\IdentitasController@index
+  PUT             api/v1/identitas/perbarui/{id} ............. Api\IdentitasController@update
+  POST            api/v1/identitas/upload/{id} ............... Api\IdentitasController@upload
+  POST            api/v1/identitas/uploadFavicon/{id} . Api\IdentitasController@uploadFavicon
+  GET|HEAD        api/v1/kategori .............................. Api\KategoriController@index
+  POST            api/v1/kategori/buat ......................... Api\KategoriController@store
+  POST            api/v1/kategori/hapus ...................... Api\KategoriController@destroy
+  PUT             api/v1/kategori/perbarui/{id} ............... Api\KategoriController@update
+  GET|HEAD        api/v1/kategori/tampil ........................ Api\KategoriController@show
+  GET|HEAD        api/v1/keluarga/show .... api.keluarga.detail › Api\KeluargaController@show
+  POST            api/v1/logout .............................. Api\Auth\AuthController@logOut
+  GET|HEAD        api/v1/penduduk .............................. Api\PendudukController@index
+  POST            api/v1/penduduk/aksi/pindah ................. Api\PendudukController@pindah
+  GET|HEAD        api/v1/penduduk/referensi/sex .......... Api\PendudukController@pendudukSex
+  GET|HEAD        api/v1/penduduk/referensi/status .... Api\PendudukController@pendudukStatus
+  GET|HEAD        api/v1/penduduk/referensi/status-dasar Api\PendudukController@pendudukStat…
+  GET|HEAD        api/v1/pengaturan api.pengaturan_aplikasi › Api\PengaturanController@index
+  GET|HEAD        api/v1/pengaturan/group .......................... Api\TeamController@index
+  POST            api/v1/pengaturan/group .......................... Api\TeamController@store
+  POST            api/v1/pengaturan/group/delete .................. Api\TeamController@delete
+  GET|HEAD        api/v1/pengaturan/group/menu ...................... Api\TeamController@menu
+  GET|HEAD        api/v1/pengaturan/group/show/{id} ................. Api\TeamController@show
+  PUT             api/v1/pengaturan/group/{id} .................... Api\TeamController@update
+  POST            api/v1/pengaturan/update .................. Api\PengaturanController@update
+  POST            api/v1/signin ............................... Api\Auth\AuthController@login
+  GET|HEAD        api/v1/statistik-web/bantuan .............. Api\StatistikController@bantuan
+  GET|HEAD        api/v1/statistik-web/bantuan/tahun ............ Api\BantuanController@tahun
+  GET|HEAD        api/v1/statistik-web/kategori-statistik Api\StatistikController@kategoriSt…
+  GET|HEAD        api/v1/statistik-web/keluarga ............ Api\StatistikController@keluarga
+  GET|HEAD        api/v1/statistik-web/keluarga/tahun Api\StatistikController@refTahunKeluar…
+  GET|HEAD        api/v1/statistik-web/penduduk ............ Api\StatistikController@penduduk
+  GET|HEAD        api/v1/statistik-web/penduduk/tahun Api\StatistikController@refTahunPendud…
+  GET|HEAD        api/v1/statistik-web/rtm ...................... Api\StatistikController@rtm
+  GET|HEAD        api/v1/statistik-web/rtm/tahun ........ Api\StatistikController@refTahunRtm
+  GET|HEAD        api/v1/statistik/bantuan .................. Api\StatistikController@bantuan
+  GET|HEAD        api/v1/statistik/bantuan/tahun ................ Api\BantuanController@tahun
+  GET|HEAD        api/v1/statistik/kategori-statistik Api\StatistikController@kategoriStatis…
+  GET|HEAD        api/v1/statistik/keluarga ................ Api\StatistikController@keluarga
+  GET|HEAD        api/v1/statistik/keluarga/tahun .. Api\StatistikController@refTahunKeluarga
+  GET|HEAD        api/v1/statistik/penduduk ................ Api\StatistikController@penduduk
+  GET|HEAD        api/v1/statistik/penduduk/tahun .. Api\StatistikController@refTahunPenduduk
+  GET|HEAD        api/v1/statistik/rtm .......................... Api\StatistikController@rtm
+  GET|HEAD        api/v1/statistik/rtm/tahun ............ Api\StatistikController@refTahunRtm
+  GET|HEAD        api/v1/user ............................................................... 
+  GET|HEAD        api/v1/wilayah/desa ............................ Api\WilayahController@desa
+  GET|HEAD        api/v1/wilayah/dusun .......................... Api\WilayahController@dusun
+  GET|HEAD        api/v1/wilayah/rt ................................ Api\WilayahController@rt
+  GET|HEAD        api/v1/wilayah/rw ................................ Api\WilayahController@rw

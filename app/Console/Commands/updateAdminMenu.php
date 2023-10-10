@@ -34,7 +34,7 @@ class updateAdminMenu extends Command
     {
         Artisan::call('cache:clear');
         $team = Team::whereName('administrator')->first();
-
+        setPermissionsTeamId($team->id);
         if ($team) {
             $team->menu = Modul::Menu;
             $team->save();

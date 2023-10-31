@@ -86,7 +86,7 @@ final class Modul extends Enum
                     'text' => 'Kategori Artikel',
                     'url' => 'master/kategori/0',
                     'permission' => 'master-data-artikel',
-                ]
+                ],
             ],
         ],
 

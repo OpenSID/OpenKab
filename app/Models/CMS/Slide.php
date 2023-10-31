@@ -32,6 +32,6 @@ class Slide extends Model
         'url' => 'nullable|url|max:255',
         'description' => 'nullable|string|max:65535',
         'state' => 'required|numeric|digits_between:0,1',
-        'foto'  => 'nullable|image|max:1024|mimes:png,jpg'
+        'foto' => 'nullable|image|max:1024|mimes:png,jpg',
     ];
 }

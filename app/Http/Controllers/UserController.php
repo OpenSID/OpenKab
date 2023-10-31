@@ -16,7 +16,9 @@ use Yajra\DataTables\DataTables;
 class UserController extends Controller
 {
     use UploadedFile;
+
     protected $permission = 'pengaturan-users';
+
     /**
      * Display a listing of the resource.
      *
@@ -25,6 +27,7 @@ class UserController extends Controller
     public function index()
     {
         $listPermission = $this->generateListPermission();
+
         return view('user.index')->with($listPermission);
     }
 
@@ -32,19 +35,20 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             $permission = $this->generateListPermission();
+
             return DataTables::of(User::with('team')->get())
                 ->addIndexColumn()
-                ->addColumn('aksi', function ($row) use($permission) {
+                ->addColumn('aksi', function ($row) use ($permission) {
                     $data = [];
                     if (! auth()->guest()) {
-                        if ($permission['canedit']){
+                        if ($permission['canedit']) {
                             $data['edit'] = route('users.edit', $row->id);
                         }
                         if ($row->id !== User::superAdmin()) {
-                            if ($permission['candelete']){
+                            if ($permission['candelete']) {
                                 $data['delete'] = route('users.destroy', $row->id);
                             }
-                            if ($permission['canedit']){
+                            if ($permission['canedit']) {
                                 if ($row->active == StatusEnum::aktif) {
                                     $data['deactive'] = route('users.status', [$row->id, StatusEnum::tidakAktif]);
                                 } else {

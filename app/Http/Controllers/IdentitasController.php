@@ -7,6 +7,7 @@ use App\Models\Identitas;
 class IdentitasController extends Controller
 {
     protected $permission = 'pengaturan-identitas';
+
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +16,7 @@ class IdentitasController extends Controller
     public function index()
     {
         $listPermission = $this->generateListPermission();
+
         return view('identitas.index')->with($listPermission);
     }
 

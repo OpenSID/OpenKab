@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('total')->default(0);
             $table->timestamps();
 
-            $table->unique(['model_type','model_id']);
+            $table->unique(['model_type', 'model_id']);
         });
     }
 

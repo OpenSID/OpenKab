@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Repository\PengaturanRepository;
 use App\Http\Repository\SettingRepository;
 use App\Http\Requests\CreateSettingRequest;
 use App\Http\Requests\UpdateSettingRequest;
@@ -14,6 +13,7 @@ class SettingController extends AppBaseController
 {
     /** @var SettingRepository */
     private $settingRepository;
+
     protected $permission = 'pengaturan-settings';
 
     public function __construct(SettingRepository $settingRepo)
@@ -31,6 +31,7 @@ class SettingController extends AppBaseController
         }
 
         $listPermission = $this->generateListPermission();
+
         return view('settings.index')->with($listPermission);
     }
 

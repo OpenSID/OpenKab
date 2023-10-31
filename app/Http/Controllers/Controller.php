@@ -11,12 +11,14 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     protected $permission;
 
-    protected function generateListPermission(){
+    protected function generateListPermission()
+    {
         $listPermission = [];
         if ($this->permission) {
-            foreach(Modul::permision as $item) {
+            foreach (Modul::permision as $item) {
                 $listPermission['can'.$item] = auth()->user()->can($this->permission.'-'.$item) ?? 0;
             }
         }

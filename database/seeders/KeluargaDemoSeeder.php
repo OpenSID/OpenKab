@@ -2,15 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Agama;
 use App\Models\Config;
 use App\Models\Enums\JenisKelaminEnum;
 use App\Models\Enums\SHDKEnum;
 use App\Models\GolonganDarah;
 use App\Models\KelasSosial;
 use App\Models\Keluarga;
-use App\Models\LogKeluarga;
-use App\Models\LogPenduduk;
 use App\Models\Pekerjaan;
 use App\Models\Pendidikan;
 use App\Models\PendidikanKK;
@@ -23,15 +20,25 @@ use Illuminate\Support\Facades\DB;
 class KeluargaDemoSeeder extends Seeder
 {
     private $totalStatusKawin;
+
     private $totalAgama;
+
     private $totalPendidikan;
+
     private $totalPendidikanKK;
+
     private $totalPekerjaan;
+
     private $totalGolonganDarah;
+
     private $dataWilayah;
+
     private $totalKeluargaSejahtera = 0;
+
     private $totalPenduduk = 0;
+
     private $kodeKecamatan;
+
     /**
      * Run the database seeds.
      *
@@ -49,7 +56,8 @@ class KeluargaDemoSeeder extends Seeder
         $this->command->info('Isi data keluarga untuk desa '.$name);
     }
 
-    private function init($configId){
+    private function init($configId)
+    {
         $this->dataWilayah = Wilayah::whereConfigId($configId)->pluck('id');
         $this->totalStatusKawin = StatusKawin::count();
         $this->totalPekerjaan = Pekerjaan::count();
@@ -72,7 +80,8 @@ class KeluargaDemoSeeder extends Seeder
         }
     }
 
-    private function buatSatuKeluargaLengkap($configId, $urut){
+    private function buatSatuKeluargaLengkap($configId, $urut)
+    {
         $idCluster = $this->dataWilayah->random(1)->first();
         // buat kepala keluarga
         $kepalaKeluarga = $this->buatIndividu($configId, SHDKEnum::KEPALA_KELUARGA, $idCluster);
@@ -102,16 +111,15 @@ class KeluargaDemoSeeder extends Seeder
         if ($minAnggotaKeluarga > 1) {
             $this->buatAnggotaKeluarga($configId, $kepalaKeluarga, $maxAnggotaKeluarga);
         }
-
     }
 
     private function buatAnggotaKeluarga($configId, $kepalaKeluarga, $jumlahAnggota = 0)
     {
         $adaPasangan = 0;
         $i = 0;
-        while($i < $jumlahAnggota){
+        while ($i < $jumlahAnggota) {
             // Apakah ada pasangan?
-            if ($kepalaKeluarga->status_kawin != 1 && fake()->boolean() && !$adaPasangan) {
+            if ($kepalaKeluarga->status_kawin != 1 && fake()->boolean() && ! $adaPasangan) {
                 $this->buatIndividu($configId, $kepalaKeluarga->sex == JenisKelaminEnum::laki_laki ? SHDKEnum::ISTRI : SHDKEnum::SUAMI, $kepalaKeluarga->id_cluster);
                 $adaPasangan = 1;
                 $i++;
@@ -199,12 +207,13 @@ class KeluargaDemoSeeder extends Seeder
         ];
         $penduduk = Penduduk::create($data);
         $this->totalPenduduk++;
+
         return $penduduk;
     }
 
     private function generateLogPenduduk($configId)
     {
-        $sql      = "insert into log_penduduk (config_id, id_pend, kode_peristiwa, tgl_lapor, updated_by)
+        $sql = "insert into log_penduduk (config_id, id_pend, kode_peristiwa, tgl_lapor, updated_by)
                 select {$configId} as config_id, id as id_pend, 5 as kode_peristiwa, DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 5 YEAR), INTERVAL FLOOR(RAND() * DATEDIFF(DATE_SUB(CURDATE(), INTERVAL 5 YEAR), CURDATE())) DAY) AS tgl_lapor, 1 as updated_by
                 from tweb_penduduk where config_id = '{$configId}'";
         DB::connection('openkab')->statement($sql);
@@ -212,7 +221,7 @@ class KeluargaDemoSeeder extends Seeder
 
     private function generateLogKeluarga($configId)
     {
-        $sql      = "insert into log_keluarga (config_id, id_kk, id_peristiwa, tgl_peristiwa, updated_by)
+        $sql = "insert into log_keluarga (config_id, id_kk, id_peristiwa, tgl_peristiwa, updated_by)
                 select {$configId} as config_id, id as id_kk, 1 as id_peristiwa, tgl_daftar as tgl_peristiwa, 1 as updated_by
                 from tweb_keluarga where config_id = '{$configId}'";
         DB::connection('openkab')->statement($sql);

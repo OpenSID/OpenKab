@@ -38,17 +38,17 @@ class TransformerGenerator extends BaseGenerator
     public function variables(): array
     {
         return [
-            'transforms'        => implode(','.infy_nl_tab(1, 2), $this->generateTransforms()),
+            'transforms' => implode(','.infy_nl_tab(1, 2), $this->generateTransforms()),
         ];
     }
 
     protected function generateTransforms(): array
     {
         $transforms = [];
-        if (isset($this->config->fields) && !empty($this->config->fields)) {
-            $modelName =  Str::lower($this->config->modelNames->name);
+        if (isset($this->config->fields) && ! empty($this->config->fields)) {
+            $modelName = Str::lower($this->config->modelNames->name);
             foreach ($this->config->fields as $field) {
-                $transforms[] = "'".$field->name."' => \$". $modelName."->".$field->name;
+                $transforms[] = "'".$field->name."' => \$".$modelName.'->'.$field->name;
             }
         }
 

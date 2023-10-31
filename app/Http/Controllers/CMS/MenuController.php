@@ -13,6 +13,7 @@ class MenuController extends AppBaseController
 {
     /** @var MenuRepository */
     private $menuRepository;
+
     protected $permission = 'website-menu';
 
     public function __construct(MenuRepository $menuRepo)
@@ -32,9 +33,10 @@ class MenuController extends AppBaseController
                 '/module/org' => 'Bagan Organisasi',
                 '/module/statistik' => 'Statistik',
                 '/module/unduhan' => 'Daftar Unduhan',
-            ]
+            ],
         ];
         $listPermission = $this->generateListPermission();
+
         return view('menus.index', ['menus' => $this->menuRepository->treeJson(), 'sourceItem' => $sourceItem])->with($listPermission);
     }
 

@@ -54,5 +54,4 @@ class EmployeeRepository extends BaseRepository
 
         return $query;
     }
-
 }

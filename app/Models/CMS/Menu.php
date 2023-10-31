@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Menu extends Model
 {
-
     public $table = 'menus';
 
     public $fillable = [
@@ -35,9 +34,7 @@ class Menu extends Model
     ];
 
     /**
-     * Get all of the children for the Menu
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the children for the Menu.
      */
     public function child(): HasMany
     {
@@ -46,7 +43,7 @@ class Menu extends Model
 
     public function children(): HasMany
     {
-        return $this->hasMany(Menu::class, 'parent_id', 'id')->with(['children' => function($q){
+        return $this->hasMany(Menu::class, 'parent_id', 'id')->with(['children' => function ($q) {
             return $q->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon");
         }]);
     }

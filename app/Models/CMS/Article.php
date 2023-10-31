@@ -11,10 +11,13 @@ class Article extends SluggableModel
 {
     use HasFactory;
     use SoftDeletes;
+
     public $table = 'articles';
 
     const DRAFT = 0;
+
     const PUBLISH = 1;
+
     const STATE_STRING = [self::DRAFT => 'Draft', self::PUBLISH => 'Terbitkan'];
 
     public $fillable = [
@@ -24,7 +27,7 @@ class Article extends SluggableModel
         'title',
         'thumbnail',
         'content',
-        'state'
+        'state',
     ];
 
     protected $casts = [
@@ -32,7 +35,7 @@ class Article extends SluggableModel
         'slug' => 'string',
         'title' => 'string',
         'thumbnail' => 'string',
-        'content' => 'string'
+        'content' => 'string',
     ];
 
     public static array $rules = [
@@ -42,8 +45,9 @@ class Article extends SluggableModel
         'title' => 'required|string|max:200|min:5',
         'content' => 'required|string|max:65535',
         'state' => 'required|numeric|digits_between:0,1',
-        'foto'  => 'nullable|image|max:1024|mimes:png,jpg'
+        'foto' => 'nullable|image|max:1024|mimes:png,jpg',
     ];
+
     // menyebabkan error ketika validasi js
     public static array $errorMessages = [
         // 'title' => [
@@ -53,23 +57,18 @@ class Article extends SluggableModel
     ];
 
     /**
-     * Carbon instance fields
+     * Carbon instance fields.
      *
      * @var array
      */
     protected $dates = ['published_at'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
     /**
-     * @param $query
-     *
      * @return mixed
      */
     public function scopePublished($query)
@@ -77,9 +76,6 @@ class Article extends SluggableModel
         return $query->where('published_at', '<=', now())->orderBy('published_at', 'desc');
     }
 
-    /**
-     * @return string
-     */
     public function getLocalizedPublishedAtAttribute(): string
     {
         return Carbon::parse($this->attributes['published_at'])->format(config('app.format.date'));
@@ -93,7 +89,6 @@ class Article extends SluggableModel
     /**
      * Prepare a date for array / JSON serialization.
      *
-     * @param  \DateTimeInterface  $date
      * @return string
      */
     protected function serializeDate(DateTimeInterface $date)
@@ -101,9 +96,6 @@ class Article extends SluggableModel
         return $date->format('Y-m-d H:i:s');
     }
 
-    /**
-     * @return string
-     */
     public function getLinkAttribute(): string
     {
         return route('article', ['aSlug' => $this->slug]);

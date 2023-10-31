@@ -26,6 +26,7 @@ class CreateDownloadRequest extends FormRequest
     {
         $rules = Download::$rules;
         $rules['download_file'] = 'required|'.$rules['download_file'];
+
         return $rules;
     }
 }

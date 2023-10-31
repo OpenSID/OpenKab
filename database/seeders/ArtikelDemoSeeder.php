@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 class ArtikelDemoSeeder extends Seeder
 {
     private $articles = [];
+
     /**
      * Run the database seeds.
      *
@@ -18,8 +19,8 @@ class ArtikelDemoSeeder extends Seeder
     {
         $randomConfig = Config::inRandomOrder()->limit(10)->get();
         if ($randomConfig) {
-            foreach($randomConfig as $config){
-                for($i = 0; $i < random_int(3, 10); $i++){
+            foreach ($randomConfig as $config) {
+                for ($i = 0; $i < random_int(3, 10); $i++) {
                     $this->articles[] = $this->generateArticle($config);
                 }
             }
@@ -27,7 +28,8 @@ class ArtikelDemoSeeder extends Seeder
         }
     }
 
-    private function generateArticle($config) {
+    private function generateArticle($config)
+    {
         return [
             'config_id' => $config->id,
             'isi' => fake()->paragraph(),
@@ -35,7 +37,7 @@ class ArtikelDemoSeeder extends Seeder
             'enabled' => 1,
             'headline' => 0,
             'id_kategori' => 1,
-            'id_user' => 1
+            'id_user' => 1,
         ];
     }
 }

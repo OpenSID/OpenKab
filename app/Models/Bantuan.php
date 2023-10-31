@@ -132,7 +132,7 @@ class Bantuan extends BaseModel
     public function scopeCountStatistikPenduduk($query)
     {
         $configDesa = null;
-        if(request('config_desa')){
+        if (request('config_desa')) {
             $configDesa = request('config_desa');
         }
 
@@ -156,8 +156,8 @@ class Bantuan extends BaseModel
             $statistik->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id');
         }
 
-        if ($configDesa){
-            $statistik->where(function($q) use ($configDesa) {
+        if ($configDesa) {
+            $statistik->where(function ($q) use ($configDesa) {
                 return $q->where("{$this->table}.config_id", $configDesa)->orWhereNull("{$this->table}.config_id");
             });
         }
@@ -171,7 +171,7 @@ class Bantuan extends BaseModel
     public function scopeCountStatistikKeluarga($query)
     {
         $configDesa = null;
-        if(request('config_desa')){
+        if (request('config_desa')) {
             $configDesa = request('config_desa');
         }
         $query = $this->scopeConfigId($query)
@@ -185,11 +185,12 @@ class Bantuan extends BaseModel
             ->where('program.sasaran', self::SASARAN_KELUARGA)
             ->groupBy("{$this->table}.id", "{$this->table}.nama");
 
-            if ($configDesa){
-                $query->where(function($q) use ($configDesa) {
-                    return $q->where("{$this->table}.config_id", $configDesa)->orWhereNull("{$this->table}.config_id");
-                });
-            }
+        if ($configDesa) {
+            $query->where(function ($q) use ($configDesa) {
+                return $q->where("{$this->table}.config_id", $configDesa)->orWhereNull("{$this->table}.config_id");
+            });
+        }
+
         return $query;
     }
 

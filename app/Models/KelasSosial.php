@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class KelasSosial extends BaseModel
 {
     /**

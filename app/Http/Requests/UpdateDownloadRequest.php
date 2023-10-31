@@ -26,6 +26,7 @@ class UpdateDownloadRequest extends FormRequest
     {
         $rules = Download::$rules;
         $rules['download_file'] = 'nullable|'.$rules['download_file'];
+
         return $rules;
     }
 }

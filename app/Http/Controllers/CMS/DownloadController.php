@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Session;
 class DownloadController extends AppBaseController
 {
     use UploadedFile;
+
     /** @var DownloadRepository */
     private $downloadRepository;
+
     protected $permission = 'website-downloads';
 
     public function __construct(DownloadRepository $downloadRepo)
@@ -34,6 +36,7 @@ class DownloadController extends AppBaseController
             return $this->fractal($this->downloadRepository->listDownload(), new DownloadTransformer, 'downloads')->respond();
         }
         $listPermission = $this->generateListPermission();
+
         return view('downloads.index')->with($listPermission);
     }
 
@@ -57,7 +60,7 @@ class DownloadController extends AppBaseController
 
         $this->downloadRepository->create($input);
 
-        Session::flash('success','File berhasil disimpan.');
+        Session::flash('success', 'File berhasil disimpan.');
 
         return redirect(route('downloads.index'));
     }
@@ -70,7 +73,7 @@ class DownloadController extends AppBaseController
         $download = $this->downloadRepository->find($id);
 
         if (empty($download)) {
-            Session::flash('error','File download tidak ditemukan');
+            Session::flash('error', 'File download tidak ditemukan');
 
             return redirect(route('downloads.index'));
         }
@@ -86,7 +89,7 @@ class DownloadController extends AppBaseController
         $download = $this->downloadRepository->find($id);
 
         if (empty($download)) {
-            Session::flash('error','File download tidak ditemukan');
+            Session::flash('error', 'File download tidak ditemukan');
 
             return redirect(route('downloads.index'));
         }
@@ -102,7 +105,7 @@ class DownloadController extends AppBaseController
         $download = $this->downloadRepository->find($id);
 
         if (empty($download)) {
-            Session::flash('error','File download tidak ditemukan');
+            Session::flash('error', 'File download tidak ditemukan');
 
             return redirect(route('downloads.index'));
         }
@@ -112,7 +115,7 @@ class DownloadController extends AppBaseController
         }
         $download = $this->downloadRepository->update($input, $id);
 
-        Session::flash('success','File berhasil diupdate.');
+        Session::flash('success', 'File berhasil diupdate.');
 
         return redirect(route('downloads.index'));
     }
@@ -127,7 +130,7 @@ class DownloadController extends AppBaseController
         $download = $this->downloadRepository->find($id);
 
         if (empty($download)) {
-            Session::flash('error','File download tidak ditemukan');
+            Session::flash('error', 'File download tidak ditemukan');
 
             return redirect(route('downloads.index'));
         }
@@ -136,7 +139,7 @@ class DownloadController extends AppBaseController
         if (request()->ajax()) {
             return $this->sendSuccess('Role deleted successfully.');
         }
-        Session::flash('success','File download berhasil dihapus.');
+        Session::flash('success', 'File download berhasil dihapus.');
 
         return redirect(route('downloads.index'));
     }

@@ -12,12 +12,13 @@ class DownloadCounterController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function __invoke(Download $download)
     {
-        if($download->url){
+        if ($download->url) {
             $download->counter?->increment('total');
 
             return Storage::disk('public')->download($download->url);

@@ -13,7 +13,9 @@ use Illuminate\Database\Seeder;
 class RTMDemoSeeder extends Seeder
 {
     private $kodeDesa;
+
     private $totalKeluargaSejahtera;
+
     /**
      * Run the database seeds.
      *
@@ -29,7 +31,8 @@ class RTMDemoSeeder extends Seeder
         $this->command->info('Isi data RTM untuk desa '.$name);
     }
 
-    private function init(){
+    private function init()
+    {
         $this->totalKeluargaSejahtera = KelasSosial::count();
     }
 

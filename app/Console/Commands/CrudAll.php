@@ -21,6 +21,7 @@ class CrudAll extends Command
      * @var string
      */
     protected $description = 'Generate scaffold infyom ';
+
     private $files;
 
     /**
@@ -44,10 +45,10 @@ class CrudAll extends Command
         $module = $this->option('module');
         $connection = $this->option('connection');
         $jsonData = [];
-        if (!empty($filepath)) {
+        if (! empty($filepath)) {
             $this->info($filepath);
             if (file_exists($filepath)) {
-                if (!is_readable($filepath)) {
+                if (! is_readable($filepath)) {
                     $this->error('File can\'t read');
 
                     return false;
@@ -63,26 +64,26 @@ class CrudAll extends Command
             }
         } else {
             $tmpJson = [];
-            if (!empty($table)) {
+            if (! empty($table)) {
                 $this->info('table ==>'.$table);
                 $tmpJson['tables'] = explode(',', $table);
                 $tmpJson['module'] = '';
             }
 
-            if (!empty($module)) {
+            if (! empty($module)) {
                 $this->info('module ==>'.$module);
                 $tmpJson['module'] = $module;
             }
 
-            if (!empty($connection)) {
+            if (! empty($connection)) {
                 $tmpJson['connection'] = $connection;
             }
-            if (!empty($tmpJson)) {
+            if (! empty($tmpJson)) {
                 array_push($jsonData, $tmpJson);
             }
         }
 
-        if (!empty($jsonData)) {
+        if (! empty($jsonData)) {
             $this->processJson($jsonData);
         }
 
@@ -121,7 +122,7 @@ class CrudAll extends Command
 
                 $this->call('crud-transformer', [
                     'model' => $model,
-                    '--table' => $t
+                    '--table' => $t,
                 ]);
 
                 // $this->generatePermission(Str::snake($t));

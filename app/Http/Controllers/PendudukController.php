@@ -12,6 +12,7 @@ class PendudukController extends Controller
     public function index()
     {
         $listPermission = $this->generateListPermission();
+
         return view('penduduk.index')->with($listPermission);
     }
 

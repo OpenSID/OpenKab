@@ -13,7 +13,9 @@ class CustomCSPPolicy extends Basic
 {
     // exclude karena livewire tidak jalan ketika csp enable
     private $excludeRoute = ['fm.tinymce5', 'fm.initialize', 'fm.content', 'fm.tree', 'cms.statistic.summary'];
+
     private $hasTinyMCE = ['articles.create', 'articles.edit'];
+
     public function configure()
     {
         parent::configure();
@@ -32,7 +34,7 @@ class CustomCSPPolicy extends Basic
             'sha256-z7zcnw/4WalZqx+PrNaRnoeLz/G9WXuFqV1WCJ129sg=',
             'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
             'sha256-hIQQk/yoM15mwdqWhaRQ/qiDh22AXD54o7w5fUsss+w=',
-            'sha256-wXDqcLlNCfwz7CniAXnDuBVLmG9xeJRAiHkMrCetfeQ='
+            'sha256-wXDqcLlNCfwz7CniAXnDuBVLmG9xeJRAiHkMrCetfeQ=',
         ])->addDirective(Directive::SCRIPT, [
             // karena banyak yang menggunakan alpine js
             'unsafe-eval',

@@ -62,7 +62,7 @@ class RouteServiceProvider extends ServiceProvider
 
     /**
      * Do not remove GENERATOR_PARAMETER_BINDER if you want to use CMS generator properly
-     * Check the file app/Console/Commands/Cms/Resource.php
+     * Check the file app/Console/Commands/Cms/Resource.php.
      *
      * @return void
      */
@@ -77,6 +77,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('pSlug', function ($slug) {
             return Page::where('slug', $slug)->firstOrFail();
         });
-        /** GENERATOR_PARAMETER_BINDER **/
+        /* GENERATOR_PARAMETER_BINDER **/
     }
 }

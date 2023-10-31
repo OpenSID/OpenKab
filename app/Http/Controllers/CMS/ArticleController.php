@@ -19,6 +19,7 @@ class ArticleController extends AppBaseController
 
     /** @var ArticleRepository */
     private $articleRepository;
+
     protected $permission = 'website-article';
 
     public function __construct(ArticleRepository $articleRepo)
@@ -36,6 +37,7 @@ class ArticleController extends AppBaseController
             return $this->fractal($this->articleRepository->listArticle(), new ArticleTransformer, 'articles')->respond();
         }
         $listPermission = $this->generateListPermission();
+
         return view('articles.index')->with($listPermission);
     }
 

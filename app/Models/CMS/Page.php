@@ -13,7 +13,8 @@ class Page extends SluggableModel
 
     public $table = 'pages';
 
-    const STATE_STRING = [ StatusEnum::aktif => 'Aktif', StatusEnum::tidakAktif => 'Tidak Aktif'];
+    const STATE_STRING = [StatusEnum::aktif => 'Aktif', StatusEnum::tidakAktif => 'Tidak Aktif'];
+
     public $fillable = [
         'published_at',
         'slug',
@@ -40,9 +41,7 @@ class Page extends SluggableModel
         'state' => 'required|boolean',
     ];
 
-/**
-     * @param $query
-     *
+    /**
      * @return mixed
      */
     public function scopePublished($query)
@@ -55,9 +54,6 @@ class Page extends SluggableModel
         return $this->published()->whereState(StatusEnum::aktif);
     }
 
-    /**
-     * @return string
-     */
     public function getLocalizedPublishedAtAttribute(): string
     {
         return Carbon::parse($this->attributes['published_at'])->format(config('app.format.date'));
@@ -71,7 +67,6 @@ class Page extends SluggableModel
     /**
      * Prepare a date for array / JSON serialization.
      *
-     * @param  \DateTimeInterface  $date
      * @return string
      */
     protected function serializeDate(DateTimeInterface $date)
@@ -79,9 +74,6 @@ class Page extends SluggableModel
         return $date->format('Y-m-d H:i:s');
     }
 
-    /**
-     * @return string
-     */
     public function getLinkAttribute(): string
     {
         return  \Str::replaceFirst(url('/'), '', route('page', ['pSlug' => $this->slug]));
@@ -92,4 +84,3 @@ class Page extends SluggableModel
         return self::STATE_STRING[$this->state] ?? '-';
     }
 }
-

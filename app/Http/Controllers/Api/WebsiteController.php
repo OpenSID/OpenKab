@@ -17,23 +17,26 @@ class WebsiteController extends Controller
         ], Response::HTTP_OK);
     }
 
-    private function data(){
+    private function data()
+    {
         $totalDesa = 0;
-        $configSummary = (new ConfigRepository)->desa()->groupBy('nama_kecamatan')->map(function($item) use (&$totalDesa) {
+        $configSummary = (new ConfigRepository)->desa()->groupBy('nama_kecamatan')->map(function ($item) use (&$totalDesa) {
             $totalDesa += $item->count();
+
             return $item->pluck('nama_desa', 'id');
         });
 
         $bantuanSummary = (new BantuanRepository)->summary();
         $pendudukSummary = (new PendudukRepository)->summary();
         $categoriesItems = [
-            'penduduk' => ['text' => 'penduduk','value' => angka_lokal($pendudukSummary), 'icon' => 'web/img/penduduk.jpg'],
-            'kecamatan' => ['text' => 'kecamatan','value' => angka_lokal($configSummary->count()) ?? 0, 'icon' => 'web/img/kecamatan.jpg'],
-            'desa' => ['text' => 'desa/kelurahan','value' => angka_lokal($totalDesa), 'icon' => 'web/img/kelurahan.jpg'],
-            'bantuan' => ['text' => 'bantuan','value' => angka_lokal($bantuanSummary), 'icon' => 'web/img/bantuan.jpg'],
+            'penduduk' => ['text' => 'penduduk', 'value' => angka_lokal($pendudukSummary), 'icon' => 'web/img/penduduk.jpg'],
+            'kecamatan' => ['text' => 'kecamatan', 'value' => angka_lokal($configSummary->count()) ?? 0, 'icon' => 'web/img/kecamatan.jpg'],
+            'desa' => ['text' => 'desa/kelurahan', 'value' => angka_lokal($totalDesa), 'icon' => 'web/img/kelurahan.jpg'],
+            'bantuan' => ['text' => 'bantuan', 'value' => angka_lokal($bantuanSummary), 'icon' => 'web/img/bantuan.jpg'],
         ];
-        $listKecamatan = array_combine($configSummary->keys()->toArray() , $configSummary->keys()->toArray());
+        $listKecamatan = array_combine($configSummary->keys()->toArray(), $configSummary->keys()->toArray());
         $listDesa = $configSummary->toArray();
+
         return compact('categoriesItems', 'listKecamatan', 'listDesa');
     }
 }

@@ -19,6 +19,7 @@ class EmployeeController extends AppBaseController
 
     /** @var EmployeeRepository */
     private $employeeRepository;
+
     protected $permission = 'organisasi-employee';
 
     public function __construct(EmployeeRepository $employeeRepo)
@@ -36,6 +37,7 @@ class EmployeeController extends AppBaseController
             return $this->fractal($this->employeeRepository->listEmployee(), new EmployeeTransformer, 'employees')->respond();
         }
         $listPermission = $this->generateListPermission();
+
         return view('employees.index')->with($listPermission);
     }
 

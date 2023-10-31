@@ -51,22 +51,21 @@ class updateAdminMenu extends Command
             $role->syncPermissions($permissions);
         }
 
-
         return Command::SUCCESS;
     }
 
-    private function collectPermissions(){
+    private function collectPermissions()
+    {
         $permissions = [];
         foreach (Modul::Menu as $main_menu) {
-            foreach(Modul::permision as $permission){
+            foreach (Modul::permision as $permission) {
                 $permissionName = $main_menu['permission'].'-'.$permission;
                 Permission::findOrCreate($permissionName, 'web');
                 $permissions[] = $permissionName;
-
             }
             if (isset($main_menu['submenu'])) {
                 foreach ($main_menu['submenu'] as $sub_menu) {
-                    foreach(Modul::permision as $permission){
+                    foreach (Modul::permision as $permission) {
                         $permissionName = $sub_menu['permission'].'-'.$permission;
                         Permission::findOrCreate($permissionName, 'web');
                         $permissions[] = $permissionName;

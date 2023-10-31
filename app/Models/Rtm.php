@@ -17,6 +17,7 @@ class Rtm extends BaseModel
     protected $table = 'tweb_rtm';
 
     public $timestamps = false;
+
     /**
      * Define a one-to-one relationship.
      *

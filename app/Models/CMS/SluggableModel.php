@@ -2,15 +2,16 @@
 
 namespace App\Models\CMS;
 
+use App\Models\OpenKabModel as Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-use App\Models\OpenKabModel as Model;
 
 /**
- * App\Base\SluggableModel
+ * App\Base\SluggableModel.
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Base\SluggableModel findSimilarSlugs($attribute, $config, $slug)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Base\SluggableModel whereSlug($slug)
+ *
  * @mixin \Eloquent
  */
 class SluggableModel extends Model
@@ -22,16 +23,13 @@ class SluggableModel extends Model
      */
     protected $guarded = ['created_at', 'id'];
 
-    /**
-     * @return array
-     */
     public function sluggable(): array
     {
         return [
             'slug' => [
-                'source'   => 'title',
-                'onUpdate' => true
-            ]
+                'source' => 'title',
+                'onUpdate' => true,
+            ],
         ];
     }
 }

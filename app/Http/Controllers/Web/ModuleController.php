@@ -12,34 +12,37 @@ class ModuleController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(String $moduleName)
+    public function __invoke(string $moduleName)
     {
-        $content = match($moduleName){
+        $content = match ($moduleName) {
             'unduhan' => $this->downloadModule(),
             'org' => $this->orgModule(),
             'statistik' => $this->statistikModule(),
-             default => ''
+            default => ''
         };
+
         return view('web.module', compact('content', 'moduleName'));
     }
 
-    private function downloadModule(){
+    private function downloadModule()
+    {
         return (new DownloadRepository)->publicDownload();
     }
 
-    private function orgModule(){
-
-        $tree = Department::with(['employees' => function($q){
+    private function orgModule()
+    {
+        $tree = Department::with(['employees' => function ($q) {
             return $q->select(['department_id', 'name', 'foto', 'position_id', 'identity_number'])->with(['position']);
-        }])->select(['id','name','parent_id','_lft', '_rgt'])->get()->toTree();
+        }])->select(['id', 'name', 'parent_id', '_lft', '_rgt'])->get()->toTree();
 
         return $tree;
     }
 
-    private function statistikModule(){
-
+    private function statistikModule()
+    {
     }
 }

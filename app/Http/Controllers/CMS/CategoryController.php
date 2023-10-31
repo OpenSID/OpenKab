@@ -16,6 +16,7 @@ class CategoryController extends AppBaseController
 {
     /** @var CategoryRepository */
     private $categoryRepository;
+
     protected $permission = 'website-categories';
 
     public function __construct(CategoryRepository $categoryRepo)
@@ -32,6 +33,7 @@ class CategoryController extends AppBaseController
             return $this->fractal($this->categoryRepository->listCategory(), new CategoryTransformer, 'categories')->respond();
         }
         $listPermission = $this->generateListPermission();
+
         return view('categories.index')->with($listPermission);
     }
 

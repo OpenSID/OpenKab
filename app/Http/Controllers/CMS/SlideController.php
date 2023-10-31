@@ -18,6 +18,7 @@ class SlideController extends AppBaseController
 
     /** @var SlideRepository */
     private $slideRepository;
+
     protected $permission = 'website-slider';
 
     public function __construct(SlideRepository $slideRepo)
@@ -35,6 +36,7 @@ class SlideController extends AppBaseController
             return $this->fractal($this->slideRepository->listSlide(), new SlideTransformer, 'slides')->respond();
         }
         $listPermission = $this->generateListPermission();
+
         return view('slides.index')->with($listPermission);
     }
 

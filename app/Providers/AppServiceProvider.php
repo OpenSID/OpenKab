@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
         View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
         $this->addLogQuery();
 
-        if(App::runningInConsole()){
+        if (App::runningInConsole()) {
             activity()->disableLogging();
         } else {
             // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
@@ -48,9 +48,8 @@ class AppServiceProvider extends ServiceProvider
                 IdentitasTransformer::class,
                 \League\Fractal\Serializer\JsonApiSerializer::class
             )->toArray()['data']['attributes']
-        );
+            );
         }
-
     }
 
     public function bootHttps()

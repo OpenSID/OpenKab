@@ -73,7 +73,7 @@ class GenerateDataDemo extends Command
         if ($append) {
             $reset = 0;
         }
-        $this->info('set nilai reset ' .$reset);
+        $this->info('set nilai reset '.$reset);
 
         config()->set('seeder.config.kode_kabupaten', $kodekabupaten);
         DB::connection('openkab')->statement('SET foreign_key_checks=0');
@@ -91,7 +91,7 @@ class GenerateDataDemo extends Command
         config()->set('seeder.bantuan.program_max', 3);
         config()->set('seeder.bantuan.peserta_min', 5);
         config()->set('seeder.bantuan.peserta_max', 20);
-        Config::select(['id', 'nama_desa'])->get()->each(function($item) use ($minPenduduk, $maxPenduduk, $reset) {
+        Config::select(['id', 'nama_desa'])->get()->each(function ($item) use ($minPenduduk, $maxPenduduk, $reset) {
             config()->set('seeder.penduduk.max', fake()->numberBetween($minPenduduk, $maxPenduduk));
             config()->set('seeder.wilayah.desa_aktif', $item->id);
             config()->set('seeder.wilayah.desa_nama_aktif', $item->nama_desa);
@@ -99,7 +99,6 @@ class GenerateDataDemo extends Command
         });
 
         DB::connection('openkab')->statement('SET foreign_key_checks=1');
-
     }
 
     private function reset()
@@ -121,7 +120,7 @@ class GenerateDataDemo extends Command
 
     private function seedDataDesa($reset)
     {
-        if ($reset){
+        if ($reset) {
             $this->seedWilayah();
         }
         $this->seedKeluarga();

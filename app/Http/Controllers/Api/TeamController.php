@@ -146,27 +146,26 @@ class TeamController extends Controller
         ], Response::HTTP_OK);
     }
 
-    private function collectPermissions($data){
+    private function collectPermissions($data)
+    {
         $permissions = [];
         foreach ($data['menu'] as $main_menu) {
-
-            foreach(Modul::permision as $permission){
+            foreach (Modul::permision as $permission) {
                 $permissionName = $main_menu['permission'].'-'.$permission;
                 Permission::findOrCreate($permissionName, 'web');
-                if(isset($main_menu[$permissionName])){
-                    if($main_menu[$permissionName]  == 'true'){
+                if (isset($main_menu[$permissionName])) {
+                    if ($main_menu[$permissionName] == 'true') {
                         $permissions[] = $permissionName;
                     }
                 }
-
             }
             if (isset($main_menu['submenu'])) {
                 foreach ($main_menu['submenu'] as $sub_menu) {
-                    foreach(Modul::permision as $permission){
+                    foreach (Modul::permision as $permission) {
                         $permissionName = $sub_menu['permission'].'-'.$permission;
                         Permission::findOrCreate($permissionName, 'web');
-                        if(isset($sub_menu[$permissionName])){
-                            if($sub_menu[$permissionName] == 'true'){
+                        if (isset($sub_menu[$permissionName])) {
+                            if ($sub_menu[$permissionName] == 'true') {
                                 $permissions[] = $permissionName;
                             }
                         }

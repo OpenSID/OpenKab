@@ -12,6 +12,7 @@ use Illuminate\Database\Seeder;
 class BantuanDemoSeeder extends Seeder
 {
     private $totalKelompok;
+
     private $sasaran = [
         // penduduk
         1 => [
@@ -129,6 +130,7 @@ class BantuanDemoSeeder extends Seeder
             'Bantuan Program Riset Pertanian',
         ],
     ];
+
     /**
      * Run the database seeds.
      *
@@ -170,10 +172,10 @@ class BantuanDemoSeeder extends Seeder
 
         $nama = fake()->randomElement($this->sasaran[$sasaran]);
         $asalDana = [
-            'Pusat'             => 'Pusat',
-            'Provinsi'          => 'Provinsi',
-            'Kab/Kota'          => 'Kab/Kota',
-            'Dana Desa'         => 'Dana Desa',
+            'Pusat' => 'Pusat',
+            'Provinsi' => 'Provinsi',
+            'Kab/Kota' => 'Kab/Kota',
+            'Dana Desa' => 'Dana Desa',
             'Lain-lain (Hibah)' => 'Lain-lain (Hibah)',
         ];
 
@@ -191,12 +193,12 @@ class BantuanDemoSeeder extends Seeder
         $bantuan = Bantuan::create($data);
 
         // Peserta
-        $minPeserta = config('seeder.bantuan.peserta_min', 5);;
-        $maxPeserta = config('seeder.bantuan.peserta_max', 50);;
+        $minPeserta = config('seeder.bantuan.peserta_min', 5);
+        $maxPeserta = config('seeder.bantuan.peserta_max', 50);
         $jumlahPeserta = fake()->numberBetween($minPeserta, $maxPeserta);
 
         $kecuali = [];
-        foreach($this->sasaran as $key => $val){
+        foreach ($this->sasaran as $key => $val) {
             $kecuali[$key] = [];
         }
 
@@ -226,7 +228,7 @@ class BantuanDemoSeeder extends Seeder
                 $penduduk = Penduduk::select('tweb_penduduk.id', 'tweb_penduduk.nik', 'tweb_penduduk.nama', 'tweb_penduduk.tempatlahir', 'tweb_penduduk.tanggallahir', 'tweb_penduduk.alamat_sekarang', 'tweb_keluarga.no_kk')
                     ->join('tweb_keluarga', 'tweb_penduduk.id_kk', '=', 'tweb_keluarga.id')
                     ->where('tweb_penduduk.config_id', $configId)
-                    ->whereIn('tweb_penduduk.kk_level', [SHDKEnum::KEPALA_KELUARGA,SHDKEnum::SUAMI,SHDKEnum::ISTRI,SHDKEnum::ANAK])
+                    ->whereIn('tweb_penduduk.kk_level', [SHDKEnum::KEPALA_KELUARGA, SHDKEnum::SUAMI, SHDKEnum::ISTRI, SHDKEnum::ANAK])
                     ->whereNotIn('tweb_keluarga.no_kk', $kecuali[$sasaran])
                     ->inRandomOrder()
                     ->first();

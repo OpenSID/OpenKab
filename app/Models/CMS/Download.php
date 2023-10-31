@@ -35,9 +35,7 @@ class Download extends Model
     ];
 
     /**
-     * Get the counter associated with the Download
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Get the counter associated with the Download.
      */
     public function counter(): HasOne
     {

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +14,7 @@ class KategoriDemoSeeder extends Seeder
      */
     public function run()
     {
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         INSERT INTO kategori (config_id,kategori,tipe,urut,enabled,parrent,slug) VALUES
             (NULL,'Berita Baru',1,0,1,0,'Berita-Baru'),
             (NULL,'Bene',1,0,1,0,'Bene'),

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Config extends Model
 {
     use HasFactory;
+
     /** {@inheritdoc} */
     protected $connection = 'openkab';
 
@@ -16,9 +17,7 @@ class Config extends Model
     protected $table = 'config';
 
     /**
-     * Get all of the artikel for the Config
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the artikel for the Config.
      */
     public function artikel(): HasMany
     {
@@ -26,9 +25,7 @@ class Config extends Model
     }
 
     /**
-     * Get all of the traffic for the Config
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the traffic for the Config.
      */
     public function traffic(): HasMany
     {
@@ -36,9 +33,7 @@ class Config extends Model
     }
 
     /**
-     * Get all of the penduduk for the Config
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the penduduk for the Config.
      */
     public function penduduk(): HasMany
     {
@@ -46,9 +41,7 @@ class Config extends Model
     }
 
     /**
-     * Get all of the rtm for the Config
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the rtm for the Config.
      */
     public function rtm(): HasMany
     {
@@ -56,9 +49,7 @@ class Config extends Model
     }
 
     /**
-     * Get all of the Keluarga for the Config
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the Keluarga for the Config.
      */
     public function Keluarga(): HasMany
     {

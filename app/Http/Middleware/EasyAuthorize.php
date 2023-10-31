@@ -18,7 +18,6 @@ class EasyAuthorize
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
      * @return void
      */
     public function __construct(Gate $gate)
@@ -29,10 +28,10 @@ class EasyAuthorize
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $ability
-     * @param  array|null  ...$models
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $ability
+     * @param array|null               ...$models
+     *
      * @return mixed
      *
      * @throws \Illuminate\Auth\AuthenticationException
@@ -53,7 +52,7 @@ class EasyAuthorize
         $tmp = explode('.', $route);
         $arrLength = count($tmp);
 
-        $ability = $permission.'-'.$mapPermission[$tmp[$arrLength-1]] ?? $tmp[$arrLength-1];
+        $ability = $permission.'-'.$mapPermission[$tmp[$arrLength - 1]] ?? $tmp[$arrLength - 1];
 //        dd(Auth::user()->can($ability));
         $this->gate->authorize($ability);
 

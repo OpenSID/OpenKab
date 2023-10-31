@@ -274,7 +274,7 @@ class PendudukRepository
     {
         $tanggalPeristiwa = null;
         $configDesa = null;
-        if(request('config_desa')){
+        if (request('config_desa')) {
             $configDesa = request('config_desa');
         }
         if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {

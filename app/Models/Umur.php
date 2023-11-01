@@ -57,7 +57,7 @@ class Umur extends BaseModel
     public function scopeCountStatistik($query, $type = '')
     {
         $defaultConfigId = 1;
-        $configDesa = NULL;
+        $configDesa = null;
         if (session()->has('desa')) {
             // $where .= ' AND tweb_penduduk.config_id = '.session('desa.id');
             $query = $this->scopeConfigId($query);

@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Http\Repository\BantuanRepository;
-use App\Http\Repository\ConfigRepository;
-use App\Http\Repository\PendudukRepository;
 use App\Models\CMS\Article;
 use App\Models\CMS\Category;
 use App\Models\CMS\Page;
@@ -19,21 +16,18 @@ class PageController extends Controller
     public function getIndex()
     {
         $totalDesa = 0;
-        $configSummary = (new ConfigRepository)->desa()->groupBy('nama_kecamatan')->map(function($item) use (&$totalDesa) {
-            $totalDesa += $item->count();
-            return $item->pluck('nama_desa', 'id');
-        });
-
-        $bantuanSummary = (new BantuanRepository)->summary();
-        $pendudukSummary = (new PendudukRepository)->summary();
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $bantuanSummary = 0;
         $categoriesItems = [
-            ['text' => 'penduduk','value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
-            ['text' => 'kecamatan','value' => $configSummary->count() ?? 0, 'icon' => 'web/img/kecamatan.jpg'],
-            ['text' => 'desa/kelurahan','value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
-            ['text' => 'bantuan','value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
+            ['key' => 'penduduk', 'text' => 'penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'bantuan', 'text' => 'bantuan', 'value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
-        $listKecamatan = ['' => 'Pilih Kecamatan'] + array_combine($configSummary->keys()->toArray() , $configSummary->keys()->toArray());
-        $listDesa = ['' => 'Pilih Desa'] + $configSummary->toArray();
+        $listKecamatan = ['' => 'Pilih Kecamatan'];
+        $listDesa = ['' => 'Pilih Desa'];
+
         return view('web.index', compact('categoriesItems', 'listKecamatan', 'listDesa'));
     }
 

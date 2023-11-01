@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Traits\ConfigIdTrait;
-
 class KelasSosial extends BaseModel
 {
-    use ConfigIdTrait;
-
     /**
      * The table associated with the model.
      *

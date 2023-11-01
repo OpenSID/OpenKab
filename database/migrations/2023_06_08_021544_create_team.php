@@ -13,8 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-
-        if (!Schema::hasTable('team')) {
+        if (! Schema::hasTable('team')) {
             Schema::create('team', function (Blueprint $table) {
                 $table->id();
                 $table->string('name', 100);
@@ -22,13 +21,12 @@ return new class extends Migration
                 $table->timestamps();
             });
         }
-        if (!Schema::hasTable('user_team')) {
+        if (! Schema::hasTable('user_team')) {
             Schema::create('user_team', function (Blueprint $table) {
                 $table->integer('id_user');
                 $table->integer('id_team');
             });
         }
-
     }
 
     /**

@@ -83,7 +83,7 @@
                         },
                         {
                             data: function(data) {
-                                if(_.isEmpty(data.attributes.thumbnail)) {
+                                if(isEmpty(data.attributes.thumbnail)) {
                                     return '-';
                                 }
                                 return `<img src="${data.attributes.thumbnail}" alt="Foto" class="img-thumbnail img-cover">`;

@@ -32,6 +32,7 @@ class MenuRepository extends BaseRepository
         $menus = $this->tree()->toArray();
 
         $this->removeEmptyChildren($menus);
+
         return json_encode($menus);
     }
 

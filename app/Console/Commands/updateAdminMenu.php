@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Enums\Modul;
 use App\Models\Team;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -31,8 +32,9 @@ class updateAdminMenu extends Command
      */
     public function handle()
     {
+        Artisan::call('cache:clear');
         $team = Team::whereName('administrator')->first();
-
+        setPermissionsTeamId($team->id);
         if ($team) {
             $team->menu = Modul::Menu;
             $team->save();
@@ -49,22 +51,21 @@ class updateAdminMenu extends Command
             $role->syncPermissions($permissions);
         }
 
-
         return Command::SUCCESS;
     }
 
-    private function collectPermissions(){
+    private function collectPermissions()
+    {
         $permissions = [];
         foreach (Modul::Menu as $main_menu) {
-            foreach(Modul::permision as $permission){
+            foreach (Modul::permision as $permission) {
                 $permissionName = $main_menu['permission'].'-'.$permission;
                 Permission::findOrCreate($permissionName, 'web');
                 $permissions[] = $permissionName;
-
             }
             if (isset($main_menu['submenu'])) {
                 foreach ($main_menu['submenu'] as $sub_menu) {
-                    foreach(Modul::permision as $permission){
+                    foreach (Modul::permision as $permission) {
                         $permissionName = $sub_menu['permission'].'-'.$permission;
                         Permission::findOrCreate($permissionName, 'web');
                         $permissions[] = $permissionName;

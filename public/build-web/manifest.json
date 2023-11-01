@@ -47,7 +47,7 @@
     "src": "node_modules/owl.carousel/dist/assets/owl.video.play.png"
   },
   "resources/js/web.js": {
-    "file": "assets/web-4cf77c07.js",
+    "file": "assets/web-e736f2a8.js",
     "imports": [
       "_vendor-29af0985.js"
     ],
@@ -55,7 +55,7 @@
     "src": "resources/js/web.js"
   },
   "resources/sass/web.scss": {
-    "file": "assets/web-bfde8d75.css",
+    "file": "assets/web-08ea1e1c.css",
     "isEntry": true,
     "src": "resources/sass/web.scss"
   }

@@ -12,7 +12,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2310.0.0';
+        return 'v2311.0.0';
     }
 }
 
@@ -214,6 +214,7 @@ if (! function_exists('date_from_format')) {
     function date_from_format($value, $format = null)
     {
         \Log::error($value);
+
         return Carbon::createFromFormat($format ?? config('app.format.date'), $value);
     }
 }
@@ -238,13 +239,12 @@ if (! function_exists('getDescription')) {
     }
 }
 
-
-if (!function_exists('generateMenu')) {
+if (! function_exists('generateMenu')) {
     function generateMenu($tree, $parentId = null)
     {
         $result = '';
-        foreach($tree as $item){
-            if($item->children->count() > 0){
+        foreach ($tree as $item) {
+            if ($item->children->count() > 0) {
                 $classLink = empty($parentId) ? 'nav-link' : 'dropdown-item';
                 $result .= "
                 <li class='nav-item dropdown'>
@@ -253,19 +253,30 @@ if (!function_exists('generateMenu')) {
                     </a>
                     <ul class='dropdown-menu'>";
                 $result .= generateMenu($item->children, $item->id);
-                $result .= "
+                $result .= '
                     </ul>
-                </li>";
-            }else {
-                if ($parentId){
+                </li>';
+            } else {
+                if ($parentId) {
                     $result .= "<li><a class='dropdown-item' href='{$item->href}'>{$item->text}</a></li>";
-                }else {
+                } else {
                     $result .= "<li class='nav-item'><a href='{$item->href}' class='nav-link'>{$item->text}</a></li>";
                 }
-
             }
         }
+
         return $result;
     }
 }
 
+if (! function_exists('angka_lokal')) {
+    /**
+     * Menampilkan nilai persentase.
+     *
+     * return decimal
+     */
+    function angka_lokal($angka, $decimal = 0)
+    {
+        return number_format($angka, $decimal, ',', '.');
+    }
+}

@@ -18,8 +18,8 @@ trait UploadedFile
         $file = $request->file($name);
         $storagePathFolder = storage_path($this->basePath.$this->pathFolder);
         if (! File::isDirectory($storagePathFolder)) {
-            \Log::error('buat folder dulu '. $storagePathFolder);
-            File::makeDirectory($storagePathFolder);
+            \Log::error('buat folder dulu '.$storagePathFolder);
+            File::makeDirectory($storagePathFolder, 0755, true, true);
         }
 
         if (empty($file)) {
@@ -31,8 +31,8 @@ trait UploadedFile
         }
 
         $extensionPhoto = File::guessExtension(request()->file($name));
-        $newName = $name.'_'.Uuid::uuid4()->toString(). '.' . $extensionPhoto;
-        if($file->move($storagePathFolder, $newName)){
+        $newName = $name.'_'.Uuid::uuid4()->toString().'.'.$extensionPhoto;
+        if ($file->move($storagePathFolder, $newName)) {
             return $this->pathFolder.'/'.$newName;
         }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 class BantuanKabupatenController extends Controller
 {
     protected $permission = 'master-data-bantuan';
+
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +16,7 @@ class BantuanKabupatenController extends Controller
     public function index()
     {
         $listPermission = $this->generateListPermission();
+
         return view('master.bantuan.index')->with($listPermission);
     }
 

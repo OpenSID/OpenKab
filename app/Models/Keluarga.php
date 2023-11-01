@@ -16,6 +16,8 @@ class Keluarga extends BaseModel
     /** {@inheritdoc} */
     protected $table = 'tweb_keluarga';
 
+    const CREATED_AT = null;
+
     /**
      * {@inheritDoc}
      */
@@ -67,7 +69,7 @@ class Keluarga extends BaseModel
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', "{$this->table}.nik_kepala", 'left')
             ->where('tweb_penduduk.status_dasar', 1);
 
-        if($configId) {
+        if ($configId) {
             $query->where('tweb_keluarga.config_id', $configId);
         }
 

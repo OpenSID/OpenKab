@@ -20,7 +20,7 @@ class DownloadTransformer extends TransformerAbstract
             'created_at' => $download->created_at,
             'updated_at' => $download->updated_at,
             'deleted_at' => $download->deleted_at,
-            'total_download' => $download->counter?->total ?? 0
+            'total_download' => $download->counter?->total ?? 0,
         ];
     }
 }

@@ -10,7 +10,8 @@ class VisitorObserver
     /**
      * Handle the ShetabitVisitorModelsVisit "created" event.
      *
-     * @param  Shetabit\Visitor\Models\Visit  $shetabitVisitorModelsVisit
+     * @param Shetabit\Visitor\Models\Visit $shetabitVisitorModelsVisit
+     *
      * @return void
      */
     public function created(Visit $shetabitVisitorModelsVisit)
@@ -26,6 +27,5 @@ class VisitorObserver
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }
-
     }
 }

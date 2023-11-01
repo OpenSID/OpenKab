@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //
+        /* untuk IdentitasSeeder dan CreateAdminUserSeeder sudah dipanggil dalam migration */
+        $this->call(SettingSeeder::class);
+        $this->call(SettingTemaSeeder::class);
     }
 }

@@ -19,6 +19,7 @@ class SitemapService
 
     /**
      * @return mixed
+     *
      * @throws \Exception
      */
     public function render()
@@ -35,19 +36,19 @@ class SitemapService
                     $this->addUrl($a->link, $a->updated_at);
                 });
             });
+
             return $this->end();
         });
     }
 
     /**
      * @param string $set
-     *
-     * @return string
      */
-    private function init($set = 'urlset') : string
+    private function init($set = 'urlset'): string
     {
         $this->xml = '<?xml version="1.0" encoding="UTF-8"?>';
-        $this->xml .= '<'. $set .' xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        $this->xml .= '<'.$set.' xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
         return $this->xml;
     }
 
@@ -58,24 +59,24 @@ class SitemapService
      */
     private function end($set = 'urlset')
     {
-        $this->xml .= '</'. $set . '>';
+        $this->xml .= '</'.$set.'>';
+
         return response($this->xml)->header('Content-Type', 'application/xml');
     }
 
     /**
      * @param string $loc
      * @param string $lastmod
-     *
-     * @return string
      */
     private function addUrl($loc, $lastmod = null): string
     {
         $this->xml .= '<url>';
-        $this->xml .= '<loc>' . $loc . '</loc>';
+        $this->xml .= '<loc>'.$loc.'</loc>';
         if ($lastmod !== null) {
-            $this->xml .= '<lastmod>' . $lastmod . '</lastmod>';
+            $this->xml .= '<lastmod>'.$lastmod.'</lastmod>';
         }
         $this->xml .= '</url>';
+
         return $this->xml;
     }
 }

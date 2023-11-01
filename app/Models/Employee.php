@@ -39,7 +39,7 @@ class Employee extends OpenKabModel
         'phone' => 'nullable|string|max:20',
         'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:1024|valid_file',
         'position_id' => 'nullable',
-        'department_id' => 'nullable'
+        'department_id' => 'nullable',
     ];
 
     public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo

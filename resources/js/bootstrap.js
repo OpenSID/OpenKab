@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import _ from 'lodash';
 import $ from 'jquery';
 import * as bootstrap from 'bootstrap';
 import 'admin-lte/dist/js/adminlte.min';
@@ -15,7 +15,8 @@ import 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min';
 import 'moment/min/moment.min';
 import './jsvalidation.min';
 
-window.isEmpty = isEmpty;
+window.isEmpty = _.isEmpty;
+window._ = _;
 window.$ = $;
 window.jQuery = $;
 window.bootstrap = bootstrap;

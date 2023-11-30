@@ -123,7 +123,8 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();
-                formData = $('#bantuan-form').serialize();
+                let dateParam = $.param({ sdate: $('input[name=sdate]').data('daterangepicker').startDate.format('YYYY-MM-DD'), edate: $('input[name=edate]').data('daterangepicker').startDate.format('YYYY-MM-DD')})
+                let formData = $('#bantuan-form  input,textarea,select').not('.datepicker').serialize()+'&'+dateParam
                 var id = "{{ $id }}";
 
                 Swal.fire({

@@ -14,7 +14,6 @@
                 <form id="destroy" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-danger btn-sm">&nbsp; Hapus</button>
                 </form>
             </div>

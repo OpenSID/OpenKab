@@ -101,6 +101,14 @@
                 }).value()
 
                 this.dataGroup.menu = menu;
+                if (isEmpty(this.dataGroup.menu)) {
+                    Swal.fire(
+                            'Error!  ',
+                            'Tidak ada menu yang dipilih',
+                            'error'
+                        )
+                    return
+                }
                 Swal.fire({
                     title: 'Menyimpan',
                     didOpen: () => {

@@ -11,7 +11,7 @@ class EasyAuthorize
     /**
      * The gate instance.
      *
-     * @var \Illuminate\Contracts\Auth\Access\Gate
+     * @var Gate
      */
     protected $gate;
 

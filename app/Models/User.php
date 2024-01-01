@@ -54,7 +54,7 @@ class User extends Authenticatable
     protected $casts = [
         'last_login' => 'datetime',
         'email_verified_at' => 'datetime',
-        'tempat_dilahirkan' => \App\Models\Enums\StatusEnum::class,
+        'tempat_dilahirkan' => Enums\StatusEnum::class,
     ];
 
     /**

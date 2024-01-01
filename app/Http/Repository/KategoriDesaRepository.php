@@ -10,7 +10,6 @@ class KategoriDesaRepository
     public function aktif()
     {
         return  QueryBuilder::for(Config::whereHas('penduduk')
-                ->whereHas('rtm')
                 ->withCount('penduduk')
                 ->withCount('rtm')
                 ->withCount('keluarga')

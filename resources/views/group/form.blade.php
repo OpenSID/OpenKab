@@ -1,6 +1,6 @@
 @extends('layouts.index')
 
-@section('title', 'Tambah Bantuan')
+@section('title', 'Tambah Grup')
 
 @section('content_header')
     <h1>Managemen Grup</h1>
@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <a href="{{ url('pengaturan/groups') }}" class="btn btn-primary btn-sm"><i class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Bantuan</a>
+                    <a href="{{ url('pengaturan/groups') }}" class="btn btn-primary btn-sm"><i class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Grup</a>
                 </div>
                 <form id="bantuan-form">
                     <!-- /.card-header -->

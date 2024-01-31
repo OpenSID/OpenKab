@@ -213,7 +213,7 @@ if (! function_exists('date_from_format')) {
      */
     function date_from_format($value, $format = null)
     {
-        \Log::error($value);
+        Log::error($value);
 
         return Carbon::createFromFormat($format ?? config('app.format.date'), $value);
     }

@@ -1,4 +1,4 @@
-<div class="row over-flow g-4">
+<div class="row">
     @foreach ($categoriesItems as $item)
         @include('presisi.partials.category_item', $item)
     @endforeach

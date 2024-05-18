@@ -1,0 +1,36 @@
+.sidebar-mini .main-sidebar .nav-link, .sidebar-mini-md .main-sidebar .nav-link, .sidebar-mini-xs .main-sidebar .nav-link {
+    background-color: #f0070b;
+    color: #fffffd;
+    font-weight: bold;
+    text-align: center;
+}
+
+.rounded-xl {
+    border-radius: 1rem !important;
+}
+
+.layout-fixed .main-sidebar {
+   height:  calc(100vh - 40px);
+   margin-left: 25px;
+}
+
+.content-wrapper {
+    background-color: #ffffff;
+}
+
+.content-wrapper>.content {
+    padding: 1rem;
+    background-color: #e9f3f4;
+}
+
+[class*=sidebar-dark] .brand-link {
+    border-bottom: none;
+}
+
+@media (min-width: 768px) {
+    body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper,body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer,body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
+        transition:margin-left .3s ease-in-out;
+        margin-left: 300px
+    }
+}
+

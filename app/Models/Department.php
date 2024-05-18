@@ -31,6 +31,6 @@ class Department extends OpenKabModel
 
     public function employees(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(\App\Models\Employee::class, 'department_id');
+        return $this->hasMany(Employee::class, 'department_id');
     }
 }

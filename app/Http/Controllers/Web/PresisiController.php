@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Config;
 
 class PresisiController extends Controller
 {
@@ -16,7 +15,7 @@ class PresisiController extends Controller
         $pendudukSummary = 0;
         $configSummary = 0;
         $keluargaSummary = 0;
-        $categoriesItems = [            
+        $categoriesItems = [
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
             ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\BantuanRepository;
 use App\Http\Repository\ConfigRepository;
+use App\Http\Repository\KeluargaRepository;
 use App\Http\Repository\PendudukRepository;
 use Illuminate\Http\Response;
 
@@ -28,7 +29,9 @@ class WebsiteController extends Controller
 
         $bantuanSummary = (new BantuanRepository)->summary();
         $pendudukSummary = (new PendudukRepository)->summary();
+        $keluargaSummary = (new KeluargaRepository)->summary();
         $categoriesItems = [
+            'keluarga' => ['text' => 'keluarga', 'value' => angka_lokal($keluargaSummary), 'icon' => 'web/img/penduduk.jpg'],
             'penduduk' => ['text' => 'penduduk', 'value' => angka_lokal($pendudukSummary), 'icon' => 'web/img/penduduk.jpg'],
             'kecamatan' => ['text' => 'kecamatan', 'value' => angka_lokal($configSummary->count()) ?? 0, 'icon' => 'web/img/kecamatan.jpg'],
             'desa' => ['text' => 'desa/kelurahan', 'value' => angka_lokal($totalDesa), 'icon' => 'web/img/kelurahan.jpg'],

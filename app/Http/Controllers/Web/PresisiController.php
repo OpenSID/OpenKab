@@ -15,12 +15,12 @@ class PresisiController extends Controller
         $totalDesa = 0;
         $pendudukSummary = 0;
         $configSummary = 0;
-        $bantuanSummary = 0;
-        $categoriesItems = [
-            ['key' => 'penduduk', 'text' => 'penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+        $keluargaSummary = 0;
+        $categoriesItems = [            
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
             ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
-            ['key' => 'bantuan', 'text' => 'bantuan', 'value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
         $listKecamatan = ['' => 'Pilih Kecamatan'];
         $listDesa = ['' => 'Pilih Desa'];

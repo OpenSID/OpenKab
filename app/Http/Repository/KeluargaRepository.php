@@ -86,4 +86,9 @@ class KeluargaRepository
             'footer' => $this->listFooter($kelas, $query),
         ];
     }
+
+    public function summary()
+    {
+        return QueryBuilder::for(Keluarga::class)->count();
+    }
 }

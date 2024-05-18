@@ -1,42 +1,44 @@
 @extends('layouts.presisi')
 
+@section('content_header')
+    <h1>Dashboard Data Presisi</h1>
+@stop
 @section('content')
-<div class="row">
-<div class="row">
-        <a href="{{ url('penduduk') }}" class="unlink  col-12 col-sm-6 col-md-3">
-            <x-adminlte-info-box id="penduduk" title="Penduduk" text="L : 2999 | P : 1999" icon="fas fa-lg fa-user"
-                icon-theme="blue" />
-        </a>
 
-        <a href="#" class="unlink  col-12 col-sm-6 col-md-3">
-            <x-adminlte-info-box id="keluarga" title="Keluarga" text="2991" icon="fas fa-lg fa-users"
-                icon-theme="red" />
-        </a>
+@include('presisi.summary')
 
-        <a href="#" class="unlink  col-12 col-sm-6 col-md-3">
-            <x-adminlte-info-box id="rtm" title="RTM" text="221" icon="fas fa-lg fa-home" icon-theme="green" />
-        </a>
-
-        <a href="{{ url('bantuan') }}" class="unlink  col-12 col-sm-6 col-md-3">
-            <x-adminlte-info-box id="bantuan" title="Bantuan" text="22" icon="fas fa-lg fa-handshake"
-                icon-theme="yellow" />
-        </a>
-        <div class="col-12">
-            <div class="card card-success">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-chart-pie mr-1"></i>
-                        Statistik Penduduk
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="chart">
-                        <canvas id="barChart"
-                            width="758" height="500" class="chartjs-render-monitor"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
+
+@push('scripts')
+<script nonce="{{ csp_nonce() }}" type="text/javascript">
+document.addEventListener("DOMContentLoaded", function (event) {
+    "use strict";
+    $.get('{{ url('index.php/api/v1/data-website') }}', {}, function(result){
+        let category = result.data.categoriesItems
+        let listDesa = result.data.listDesa
+        let listKecamatan = result.data.listKecamatan
+
+        for(let index  in category) {
+            $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value'])
+        };
+        let _optionKecamatan = []
+        let _optionDesa = []
+        for(let item in listKecamatan){
+            _optionKecamatan.push(`<option>${item}</option>`)
+        }
+
+        for(let item in listDesa){
+            _optionDesa.push(`<optgroup label='${item}'>`)
+            for(let desa in listDesa[item]){
+                _optionDesa.push(`<option value='${desa}'>${listDesa[item][desa]}</option>`)
+            }
+            _optionDesa.push(`</optgroup>`)
+            _optionKecamatan.push(`<option>${item}</option>`)
+        }
+
+        $('select[name=search_kecamatan]').append(_optionKecamatan.join(''))
+        $('select[name=search_desa]').append(_optionDesa.join(''))
+    }, 'json')
+});
+</script>
+@endpush

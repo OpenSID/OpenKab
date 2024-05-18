@@ -7,7 +7,7 @@
         <b>Versi</b> {{ openkab_versi() }}
     </div>
 @endsection
-@push('js')
+@stack('scripts')
     <script nonce="{{ csp_nonce() }}" type="application/javascript">
     document.addEventListener("DOMContentLoaded", function(event) {
         // remove menu, ganti dengan yang baru. Pakai cara ini dulu
@@ -49,6 +49,6 @@
                                             </li>`)                                            
     })
     </script>
-@endpush
+
 
 

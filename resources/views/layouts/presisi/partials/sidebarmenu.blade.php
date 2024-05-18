@@ -32,7 +32,7 @@
         </li>
 
         <li class="nav-item mt-2 mb-2">
-            <a class="nav-link  " href="kependudukan">
+            <a class="nav-link  " href="presisi/kependudukan">
                 <p>
                     Kependudukan
                 </p>

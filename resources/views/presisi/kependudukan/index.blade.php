@@ -286,7 +286,7 @@
                 var data = modifikasiData(data_grafik);
                 $('#grafik').append('<canvas id="barChart"></canvas>');
                 $('#pie').append('<canvas id="donutChart"></canvas>');
-
+                console.log(data)
                 tampilGrafik(data[0]);
                 tampilPie(data[1]);
             }
@@ -295,9 +295,10 @@
                 var barChartCanvas = $('#barChart').get(0).getContext('2d')
                 var barChartData = $.extend(true, {}, areaChartData)
                 var temp0 = areaChartData.datasets[0]
-                var temp1 = areaChartData.datasets[1]
+                var temp1 = areaChartData.datasets[1] ?? []
                 barChartData.datasets[0] = temp1
                 barChartData.datasets[1] = temp0
+                console.log(barChartData);
 
                 var barChartOptions = {
                     responsive: true,

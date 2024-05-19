@@ -14,29 +14,21 @@
                             <div class="card card-primary rounded-0 elevation-0 border">
                                 <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Penduduk</h3>
-                                     
+
                                 </div>
                                 <div class="card-body p-0 ">
                                     <ul class="nav nav-pills flex-column">
-                                        <li class="nav-item active">
-                                            <a href="#" class="nav-link">
-                                                <i class="fas fa-inbox"></i> Tabel
-                                                <span class="badge bg-primary float-right">12</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item active">
-                                            <a href="#" class="nav-link">
-                                                <i class="fas fa-inbox"></i> Tabel
-                                                <span class="badge bg-primary float-right">12</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item active">
-                                            <a href="#" class="nav-link">
-                                                <i class="fas fa-inbox"></i> Tabel
-                                                <span class="badge bg-primary float-right">12</span>
-                                            </a>
-                                        </li>
+                                        @foreach ($statistik as $key => $sub)
+                                            <li class="nav-item active">
+                                                <a class="nav-link" data-key="{{ $key }}">
+                                                    <i class="fas fa-inbox"></i> {{ $sub }}
+                                                    <span class="badge bg-primary float-right">12</span>
+                                                </a>
+                                            </li>
+                                        @endforeach
+
                                          
+
                                     </ul>
                                 </div>
 
@@ -46,14 +38,24 @@
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
                                 <div class="card-header">
                                     <h3 class="card-title">Tabel</h3>
-                                     
+
 
                                 </div>
 
                                 <div class="card-body p-0">
-                                  
+
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Penyandang Cacat	</th>
+                                                    <th>Jumlah</th>
+                                                    <th>Laki - laki</th>
+                                                    <th>Perempuan</th>
+                                                     
+                                                </tr>
+                                            </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>

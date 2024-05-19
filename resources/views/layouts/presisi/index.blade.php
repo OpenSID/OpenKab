@@ -68,7 +68,7 @@
     </div>
     <!-- ./wrapper -->
     @include('layouts.presisi.partials.javascript')
-
+    @stack('js')
 </body>
 
 </html>

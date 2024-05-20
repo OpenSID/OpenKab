@@ -8,6 +8,6 @@ Di rilis v2401.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 
 #### Perbaikan BUG
 
-1. [#336](https://github.com/OpenSID/OpenKab/issues/336) Perbaikan halaman depan yang tidak tampil datanya secara dinamis.
+1. [#342](https://github.com/OpenSID/OpenKab/issues/342) Perbaikan perbaiki duplikat pilih Kecamatan.
 
 #### Perubahan Teknis

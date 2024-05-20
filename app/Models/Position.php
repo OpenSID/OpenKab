@@ -31,6 +31,6 @@ class Position extends OpenKabModel
 
     public function employees(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(\App\Models\Employee::class, 'position_id');
+        return $this->hasMany(Employee::class, 'position_id');
     }
 }

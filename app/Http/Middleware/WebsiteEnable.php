@@ -11,7 +11,7 @@ class WebsiteEnable
     /**
      * Handle an incoming request.
      *
-     * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse) $next
+     * @param Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse) $next
      *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
@@ -23,7 +23,7 @@ class WebsiteEnable
             return redirect('login');
         }
         $homePage = Setting::where(['key' => 'home_page'])->first()?->value ?? 0;
-        if($homePage == 'presisi'){
+        if ($homePage == 'presisi') {
             return redirect('presisi');
         }
 

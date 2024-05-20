@@ -45,7 +45,7 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
     });
 
     // Wilayah
-    Route::prefix('wilayah')->middleware(['can:wilayah-read'])->group(function () {
+    Route::prefix('wilayah')->middleware(['can:penduduk-read'])->group(function () {
         Route::get('desa', [WilayahController::class, 'desa']);
         Route::get('dusun', [WilayahController::class, 'dusun']);
         Route::get('rw', [WilayahController::class, 'rw']);

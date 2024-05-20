@@ -13,7 +13,7 @@ class WeakPassword
     /**
      * Handle an incoming request.
      *
-     * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse) $next
+     * @param Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse) $next
      *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
@@ -21,7 +21,7 @@ class WeakPassword
     {
         $weakPassword = session('weak_password');
         if ($weakPassword && ! in_array(Route::currentRouteName(), $this->except)) {
-            return redirect(route('password.change'));
+            // return redirect(route('password.change'));
         }
 
         return $next($request);

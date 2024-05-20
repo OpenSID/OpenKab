@@ -44,11 +44,11 @@ class Employee extends OpenKabModel
 
     public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\Department::class, 'department_id');
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function position(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\Position::class, 'position_id');
+        return $this->belongsTo(Position::class, 'position_id');
     }
 }

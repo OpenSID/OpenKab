@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * @property \App\Models\Enums\TempatDilahirkanEnum  $tempat_dilahirkan
- * @property \App\Models\Enums\JenisKelahiranEnum    $jenis_kelahiran
- * @property \App\Models\Enums\PenolongKelahiranEnum $penolong_kelahiran
- * @property \Carbon\Carbon                          $tanggallahir
+ * @property Enums\TempatDilahirkanEnum  $tempat_dilahirkan
+ * @property Enums\JenisKelahiranEnum    $jenis_kelahiran
+ * @property Enums\PenolongKelahiranEnum $penolong_kelahiran
+ * @property \Carbon\Carbon              $tanggallahir
  */
 class Penduduk extends BaseModel
 {

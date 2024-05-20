@@ -16,6 +16,13 @@
             </a>
         </li>
         <li class="nav-item mt-2 mb-2">
+            <a class="nav-link  " href="{{ url('presisi/kependudukan') }}">
+                <p>
+                    Kependudukan
+                </p>
+            </a>
+        </li>
+        <li class="nav-item mt-2 mb-2">
             <a class="nav-link  " href="{{ url('presisi/ekonomi') }}">
                 <p>
                     Ekonomi
@@ -29,14 +36,6 @@
                     Kesehatan
                 </p>
             </a>
-        </li>
-
-        <li class="nav-item mt-2 mb-2">
-            <a class="nav-link  " href="{{ url('presisi/kependudukan') }}">
-                <p>
-                    Kependudukan
-                </p>
-            </a>
-        </li>
+        </li>        
     </ul>
 </nav>

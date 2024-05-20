@@ -1,28 +1,29 @@
 <?php
 
-use App\Http\Controllers\AdminWebController;
-use App\Http\Controllers\Auth\ChangePasswordController;
-use App\Http\Controllers\BantuanController;
-use App\Http\Controllers\CatatanRilis;
-use App\Http\Controllers\Web\DownloadCounterController;
-use App\Http\Controllers\DasborController;
-use App\Http\Controllers\GroupController;
-use App\Http\Controllers\IdentitasController;
-use App\Http\Controllers\KeluargaController;
-use App\Http\Controllers\Master\BantuanKabupatenController;
-use App\Http\Controllers\PendudukController;
-use App\Http\Controllers\RiwayatPenggunaController;
-use App\Http\Controllers\StatistikController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\Web\ModuleController;
-use App\Http\Controllers\Web\PageController;
-use App\Http\Controllers\Web\PresisiController;
-use App\Http\Controllers\Web\SearchController;
-use App\Http\Middleware\KecamatanMiddleware;
-use App\Http\Middleware\WilayahMiddleware;
-
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CatatanRilis;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\DasborController;
+use App\Http\Middleware\WilayahMiddleware;
+use App\Http\Controllers\BantuanController;
+use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\KeluargaController;
+use App\Http\Controllers\PendudukController;
+use App\Http\Controllers\Web\PageController;
+use App\Http\Middleware\KecamatanMiddleware;
+use App\Http\Controllers\IdentitasController;
+use App\Http\Controllers\StatistikController;
+use App\Http\Controllers\Web\ModuleController;
+use App\Http\Controllers\Web\SearchController;
+use App\Http\Controllers\Web\PresisiController;
+use App\Http\Controllers\RiwayatPenggunaController;
+
+use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\Web\DownloadCounterController;
+use App\Http\Controllers\Master\BantuanKabupatenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +64,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create'])->middleware('easyauthorize:pengaturan-settings');
     });
 
-    Route::prefix('cms')->group(function(){
+    Route::prefix('cms')->group(function () {
         Route::resource('categories', App\Http\Controllers\CMS\CategoryController::class)->except(['show'])->middleware('easyauthorize:website-categories');
         Route::resource('articles', App\Http\Controllers\CMS\ArticleController::class)->except(['show'])->middleware('easyauthorize:website-article');
         Route::resource('menus', App\Http\Controllers\CMS\MenuController::class)->except(['show'])->middleware('easyauthorize:website-menu');
@@ -142,7 +143,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 });
 
-Route::middleware(['website.enable', 'log.visitor'])->group(function(){
+Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');
@@ -153,6 +154,8 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function(){
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });
 
-Route::prefix('presisi')->group(function(){
+Route::prefix('presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
+    Route::view('/sosial',   'presisi.sosial.index');
+    Route::view('/kependudukan',   'presisi.kependudukan.index');
 });

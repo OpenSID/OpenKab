@@ -1,14 +1,14 @@
-@extends('layouts.presisi')
+@extends('layouts.presisi.index')
 
 @section('content_header')
-    <h1>Dashboard Data Presisi</h1>
+    <h2>Dashboard Data Presisi</h2>
 @stop
 @section('content')
 
 @include('presisi.summary')
 <div class="row">
     <div class="col-md-6">
-        <div class="card">
+        <div class="card rounded-0 elevation-0">
             <div class="card-header">Peta</div>
             <div class="card-body">
                 
@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card">
+        <div class="card rounded-0 elevation-0">
           <div class="card-header">Data Batas Wilayah</div>  
           <div class="card-body">
           <ul class="list-group">
@@ -43,6 +43,15 @@
                   <span >10</span>
               </li>
           </ul>
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card rounded-0 elevation-0">
+          <div class="card-header">Data Kelurahan /Desa</div>  
+          <div class="card-body">
+           
           </div>
         </div>
     </div>

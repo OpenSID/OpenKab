@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Penduduk;
 
 class PresisiController extends Controller
 {
@@ -25,5 +26,12 @@ class PresisiController extends Controller
         $listDesa = ['' => 'Pilih Desa'];
 
         return view('presisi.index', compact('categoriesItems', 'listKecamatan', 'listDesa'));
+    }
+
+    public function kependudukan()
+    {
+        $statistik = Penduduk::KATEGORI_STATISTIK;
+
+        return view('presisi.kependudukan.index', compact('statistik'));
     }
 }

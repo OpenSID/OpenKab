@@ -157,5 +157,5 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
 Route::prefix('presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
     Route::view('/sosial',   'presisi.sosial.index');
-    Route::view('/kependudukan',   'presisi.kependudukan.index');
+    Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
 });

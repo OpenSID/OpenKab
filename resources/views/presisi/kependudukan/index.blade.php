@@ -1,7 +1,7 @@
 @extends('layouts.presisi.index')
 
 @section('content_header')
-    <h2>Dashboard Data Presisi</h2>
+    <h2>Dashboard Kependudukan</h2>
 @stop
 
 @section('content')
@@ -14,29 +14,21 @@
                             <div class="card card-primary rounded-0 elevation-0 border">
                                 <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Penduduk</h3>
-                                     
+
                                 </div>
                                 <div class="card-body p-0 ">
-                                    <ul class="nav nav-pills flex-column">
-                                        <li class="nav-item active">
-                                            <a href="#" class="nav-link">
-                                                <i class="fas fa-inbox"></i> Tabel
-                                                <span class="badge bg-primary float-right">12</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item active">
-                                            <a href="#" class="nav-link">
-                                                <i class="fas fa-inbox"></i> Tabel
-                                                <span class="badge bg-primary float-right">12</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item active">
-                                            <a href="#" class="nav-link">
-                                                <i class="fas fa-inbox"></i> Tabel
-                                                <span class="badge bg-primary float-right">12</span>
-                                            </a>
-                                        </li>
-                                         
+                                    <ul class="nav nav-pills flex-column" id="nav-statistik">
+                                        @foreach ($statistik as $key => $sub)
+                                            <li class="nav-item active">
+                                                <a href="javascript:;" class="nav-link rounded-0"
+                                                    data-key="{{ $key }}" data-name="{{ $sub }}">
+                                                    <i class="fas fa-inbox"></i> {{ $sub }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+
+
+
                                     </ul>
                                 </div>
 
@@ -45,314 +37,99 @@
                         <div class="col-8">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
                                 <div class="card-header">
-                                    <h3 class="card-title">Tabel</h3>
-                                     
+                                    <div class="row">
+                                        <div class="col-1" style="display: none">
+                                            <a class="btn btn-sm btn-secondary" data-toggle="collapse"
+                                                href="#collapse-filter" role="button" aria-expanded="true"
+                                                aria-controls="collapse-filter">
+                                                <i class="fas fa-filter"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-2">
+                                            <button id="btn-tabel" class="btn btn-sm btn-info btn-block btn-sm "
+                                                data-bs-toggle="collapse" href="#Tabel" role="button"
+                                                aria-expanded="false" aria-controls="grafik-Tabel" disabled>
+                                                <i class="fas fa-chart-bar"></i> Tabel
+                                            </button>
+                                        </div>
+                                        <div class="col-2">
+                                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm"
+                                                data-bs-toggle="collapse" href="#grafik-statistik" role="button"
+                                                aria-expanded="false" aria-controls="grafik-statistik">
+                                                <i class="fas fa-chart-bar"></i> Grafik
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm"
+                                                data-bs-toggle="collapse" href="#pie-statistik" role="button"
+                                                aria-expanded="false" aria-controls="pie-statistik">
+                                                <i class="fas fa-chart-pie"></i> Chart
+                                            </button>
+                                        </div>
+                                    </div>
+
 
                                 </div>
 
                                 <div class="card-body p-0">
-                                  
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id="collapse-filter" class="collapse ">
+                                                <div class="row m-0">
+                                                    <div class=" col-6">
+                                                        <div class="form-group">
+                                                            <label>Kecamatan</label>
+                                                            <select class="form-control " name="search_kecamatan"> </select>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class=" col-6">
+                                                        <div class="form-group">
+                                                            <label>Desa</label>
+                                                            <select class="form-control " name="search_desa"> </select>
+                                                        </div>
+
+                                                    </div>
+
+
+
+                                                </div>
+
+                                                <hr class="mt-0">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="chart" id="grafik" style="height: 500px; display: none">
+
+                                    </div>
+
+                                    <div class="chart" id="pie" style="height: 500px; display: none">
+
+                                    </div>
+
                                     <div class="table-responsive mailbox-messages">
-                                        <table class="table table-hover table-striped">
-                                            <tbody>
+                                        <table class="table table-hover table-striped" id="statistik">
+                                            <thead>
                                                 <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check1">
-                                                            <label for="check1"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a
-                                                        solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"></td>
-                                                    <td class="mailbox-date">5 mins ago</td>
+                                                    <th>No</th>
+                                                    <th class="judul">Rentang Umur</th>
+                                                    <th class="text-center">Jumlah</th>
+                                                    <th class="text-center">Laki - laki</th>
+                                                    <th class="text-center">Perempuan</th>
+
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check2">
-                                                            <label for="check2"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star-o text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">28 mins ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check3">
-                                                            <label for="check3"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star-o text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">11 hours ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check4">
-                                                            <label for="check4"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"></td>
-                                                    <td class="mailbox-date">15 hours ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check5">
-                                                            <label for="check5"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">Yesterday</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check6">
-                                                            <label for="check6"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star-o text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">2 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check7">
-                                                            <label for="check7"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star-o text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">2 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check8">
-                                                            <label for="check8"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"></td>
-                                                    <td class="mailbox-date">2 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check9">
-                                                            <label for="check9"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"></td>
-                                                    <td class="mailbox-date">2 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check10">
-                                                            <label for="check10"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star-o text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"></td>
-                                                    <td class="mailbox-date">2 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check11">
-                                                            <label for="check11"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star-o text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">4 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check12">
-                                                            <label for="check12"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"></td>
-                                                    <td class="mailbox-date">12 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check13">
-                                                            <label for="check13"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star-o text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">12 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check14">
-                                                            <label for="check14"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">14 days ago</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check15">
-                                                            <label for="check15"></label>
-                                                        </div>
-                                                    </td>
-                                                    <td class="mailbox-star"><a href="#"><i
-                                                                class="fas fa-star text-warning"></i></a></td>
-                                                    <td class="mailbox-name"><a href="#">Alexander Pierce</a>
-                                                    </td>
-                                                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                        a solution to this problem...
-                                                    </td>
-                                                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                    <td class="mailbox-date">15 days ago</td>
-                                                </tr>
-                                            </tbody>
+                                            </thead>
+
                                         </table>
 
                                     </div>
 
                                 </div>
 
-                                <div class="card-footer p-0">
-                                    <div class="mailbox-controls">
 
-                                        <button type="button" class="btn btn-default btn-sm checkbox-toggle">
-                                            <i class="far fa-square"></i>
-                                        </button>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default btn-sm">
-                                                <i class="far fa-trash-alt"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-default btn-sm">
-                                                <i class="fas fa-reply"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-default btn-sm">
-                                                <i class="fas fa-share"></i>
-                                            </button>
-                                        </div>
-
-                                        <button type="button" class="btn btn-default btn-sm">
-                                            <i class="fas fa-sync-alt"></i>
-                                        </button>
-                                        <div class="float-right">
-                                            1-50/200
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-sm">
-                                                    <i class="fas fa-chevron-left"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-default btn-sm">
-                                                    <i class="fas fa-chevron-right"></i>
-                                                </button>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -363,7 +140,262 @@
         </div>
 
     </div>
-
-
-
 @endsection
+@push('js')
+    <script>
+        $(function() {
+            var statistik = [];
+            var data_grafik = [];
+            let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
+
+            $('#nav-statistik li a:first').addClass('active');
+            $('#nav-statistik li').click(function(e) {
+                e.preventDefault();
+                $('#nav-statistik').find('li a.active').removeClass('active');
+                $(this).find('a').addClass('active');
+
+                $('#statistik thead').find('.judul').html($(this).find('a').data('name'))
+                table.ajax.reload()
+            });
+
+            $('#btn-tabel').click(function() {
+                $(this).prop('disabled', true);
+                $('#btn-grafik').prop('disabled', false);
+                $('#btn-pie').prop('disabled', false);
+
+                $('#grafik').hide();
+                $('#pie').hide()
+                $('#statistik').show()
+            })
+
+            $('#btn-grafik').click(function() {
+                $(this).prop('disabled', true);
+                $('#btn-tabel').prop('disabled', false);
+                $('#btn-pie').prop('disabled', false);
+
+                $('#grafik').show();
+                $('#pie').hide()
+                $('#statistik').hide()
+            })
+
+            $('#btn-pie').click(function() {
+                $(this).prop('disabled', true);
+                $('#btn-tabel').prop('disabled', false);
+                $('#btn-grafik').prop('disabled', false);
+
+                $('#grafik').hide();
+                $('#pie').show()
+                $('#statistik').hide()
+            })
+
+
+            var table = $('#statistik').DataTable({
+                "processing": true,
+                "serverSide": true,
+                'pageLength': -1,
+                "ordering": false,
+                paging: false,
+                searching: false,
+                info: false,
+
+                'order': [
+                    [0, 'desc']
+                ],
+
+                "ajax": {
+                    "url": "{{ url('api/v1/statistik-web/penduduk') }}",
+                    "type": "get",
+                    "data": function(d) {
+                        var nav = $('#nav-statistik').find('li a.active')
+                        d['filter[id]'] = nav.data('key');
+                        // d.config_desa = $('#position').val();
+                    },
+                    dataSrc: function(json) {
+                        if (json.data.length > 0) {
+                            data_grafik = [];
+                            json.data.forEach(function(item, index) {
+                                if (!exclude_chart.includes(item.attributes.nama)) {
+                                    data_grafik.push(item.attributes)
+                                }
+
+                            });
+                            grafikPie();
+
+                        }
+                        return json.data
+                    },
+
+                    error: function(xhr, status, error) {
+                        // Handle the error callback here
+                        console.error(error);
+                    }
+                },
+                columns: [{
+                        data: null,
+                        sortable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'attributes.nama',
+                        sortable: false,
+                        searchable: false,
+
+                    },
+
+                    {
+                        data: null,
+                        sortable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+
+                            return `<td class="text-center"><span class="mr-4">${data.attributes.jumlah}  </span>  ${data.attributes
+                                .persentase_jumlah}</td>`;
+                        }
+                    },
+
+                    {
+                        data: null,
+                        sortable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return `<td class="text-center"><span class="mr-4">${data.attributes.laki_laki}  </span>  ${data.attributes
+                                .persentase_laki_laki}</td>`;
+                        }
+                    },
+
+                    {
+                        data: null,
+                        sortable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return `<td class="text-center"><span class="mr-4">${data.attributes?.perempuan}  </span>  ${data.attributes
+                                .persentase_perempuan}</td>`;
+                        }
+                    },
+
+
+                ],
+            });
+
+            function grafikPie() {
+                $('#barChart').remove();
+                $('#donutChart').remove();
+
+                var data = modifikasiData(data_grafik);
+                $('#grafik').append('<canvas id="barChart"></canvas>');
+                $('#pie').append('<canvas id="donutChart"></canvas>');
+                tampilGrafik(data[0]);
+                tampilPie(data[1]);
+            }
+
+            function tampilGrafik(areaChartData) {
+                var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                var barChartData = $.extend(true, {}, areaChartData)
+                var temp0 = areaChartData.datasets[0] ?? []
+                var temp1 = areaChartData.datasets[1] ?? []
+                barChartData.datasets[0] = temp1
+                barChartData.datasets[1] = temp0
+            
+                var barChartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    datasetFill: false
+                }
+
+                new Chart(barChartCanvas, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: barChartOptions
+                })
+            }
+
+            function tampilPie(donutData) {
+                var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+                new Chart(donutChartCanvas, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: donutOptions
+                })
+            }
+
+            function modifikasiData(data) {
+                var dataBaruGrafik = []
+                var labelsPie = [];
+                var dataPie = [];
+                var backgroundColorPie = [];
+
+                data.forEach(function(item, index) {
+                    let color = randColorRGB();
+                    let colorPoint = randColorHex();
+
+                    dataBaruGrafik.push({
+                        label: item.nama,
+                        backgroundColor: color,
+                        borderColor: color,
+                        pointRadius: false,
+                        pointColor: color,
+                        pointStrokeColor: colorPoint,
+                        pointHighlightFill: colorPoint,
+                        pointHighlightStroke: color,
+                        data: [item.jumlah, 1]
+                    })
+
+                    labelsPie.push(item.nama)
+                    dataPie.push(item.jumlah)
+                    backgroundColorPie.push(color)
+                })
+
+                return [{
+                        labels: ['Data'],
+                        datasets: dataBaruGrafik
+                    },
+                    {
+                        labels: labelsPie,
+                        datasets: [{
+                            data: dataPie,
+                            backgroundColor: backgroundColorPie,
+                        }]
+                    }
+                ]
+            }
+        });
+    </script>
+
+    <script nonce="{{ csp_nonce() }}" type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function(event) {
+            "use strict";
+            $.get('{{ url('index.php/api/v1/data-website') }}', {}, function(result) {
+                let category = result.data.categoriesItems
+                let listDesa = result.data.listDesa
+                let listKecamatan = result.data.listKecamatan
+
+                for (let index in category) {
+                    $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value'])
+                };
+                let _optionKecamatan = []
+                let _optionDesa = []
+                for (let item in listKecamatan) {
+                    _optionKecamatan.push(`<option>${item}</option>`)
+                }
+
+                for (let item in listDesa) {
+                    _optionDesa.push(`<optgroup label='${item}'>`)
+                    for (let desa in listDesa[item]) {
+                        _optionDesa.push(`<option value='${desa}'>${listDesa[item][desa]}</option>`)
+                    }
+                    _optionDesa.push(`</optgroup>`)
+                    _optionKecamatan.push(`<option>${item}</option>`)
+                }
+
+                $('select[name=search_kecamatan]').append(_optionKecamatan.join(''))
+                $('select[name=search_desa]').append(_optionDesa.join(''))
+            }, 'json')
+        });
+    </script>
+@endpush

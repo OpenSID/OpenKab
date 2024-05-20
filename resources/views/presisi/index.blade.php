@@ -58,11 +58,11 @@
 </div>
 @endsection
 
-@push('scripts')
+@push('js')
 <script nonce="{{ csp_nonce() }}" type="text/javascript">
 document.addEventListener("DOMContentLoaded", function (event) {
     "use strict";
-    $.get('{{ url('index.php/api/v1/data-website') }}', {}, function(result){
+    $.get('{{ url('api/v1/data-website') }}', {}, function(result){
         let category = result.data.categoriesItems
         let listDesa = result.data.listDesa
         let listKecamatan = result.data.listKecamatan

@@ -16,6 +16,7 @@ use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\PageController;
+use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
@@ -150,4 +151,8 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function(){
     Route::get('search', SearchController::class)->name('web.search');
     Route::get('module/{moduleName}', ModuleController::class)->name('web.module');
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
+});
+
+Route::prefix('presisi')->group(function(){
+    Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
 });

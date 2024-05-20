@@ -63,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 _optionDesa.push(`<option value='${desa}'>${listDesa[item][desa]}</option>`)
             }
             _optionDesa.push(`</optgroup>`)
-            _optionKecamatan.push(`<option>${item}</option>`)
         }
 
         $('select[name=search_kecamatan]').append(_optionKecamatan.join(''))

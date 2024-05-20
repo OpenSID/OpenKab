@@ -3,6 +3,7 @@ Di rilis v2312.0.1 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 #### Penambahan Fitur
 
 1. [#344](https://github.com/OpenSID/OpenKab/issues/344) Penambahan opsi dasbor pada pengaturan OpenKab.
+2. [#345](https://github.com/OpenSID/OpenKab/issues/345) Penambahan template dasbor baru pada OpenKab.
 
 #### Perbaikan BUG
 

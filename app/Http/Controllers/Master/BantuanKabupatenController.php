@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 class BantuanKabupatenController extends Controller
 {
@@ -25,7 +26,7 @@ class BantuanKabupatenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         return view('master.bantuan.create');
     }
@@ -37,7 +38,7 @@ class BantuanKabupatenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         return view('master.bantuan.edit', compact('id'));
     }

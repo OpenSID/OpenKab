@@ -60,7 +60,7 @@ class EmployeeController extends AppBaseController
         }
         $employee = $this->employeeRepository->create($input);
 
-        Session::flash('success', 'Pegawai berhasil disimpan.');
+        Session::flash('success', 'Pejabat Daerah berhasil disimpan.');
 
         return redirect(route('employees.index'));
     }
@@ -73,7 +73,7 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Session::flash('error', 'Pegawai tidak ditemukan');
+            Session::flash('error', 'Pejabat Daerah tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
@@ -89,7 +89,7 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Session::flash('error', 'Pegawai tidak ditemukan');
+            Session::flash('error', 'Pejabat Daerah tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
@@ -105,7 +105,7 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Session::flash('error', 'Pegawai tidak ditemukan');
+            Session::flash('error', 'Pejabat Daerah tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
@@ -117,7 +117,7 @@ class EmployeeController extends AppBaseController
 
         $employee = $this->employeeRepository->update($input, $id);
 
-        Session::flash('success', 'Pegawai berhasil diupdate.');
+        Session::flash('success', 'Pejabat Daerah berhasil diupdate.');
 
         return redirect(route('employees.index'));
     }
@@ -132,16 +132,16 @@ class EmployeeController extends AppBaseController
         $employee = $this->employeeRepository->find($id);
 
         if (empty($employee)) {
-            Session::flash('error', 'Pegawai tidak ditemukan');
+            Session::flash('error', 'Pejabat Daerah tidak ditemukan');
 
             return redirect(route('employees.index'));
         }
 
         $this->employeeRepository->delete($id);
         if (request()->ajax()) {
-            return $this->sendSuccess('Pegawai berhasil dihapus.');
+            return $this->sendSuccess('Pejabat Daerah berhasil dihapus.');
         }
-        Session::flash('success', 'Pegawai berhasil dihapus.');
+        Session::flash('success', 'Pejabat Daerah berhasil dihapus.');
 
         return redirect(route('employees.index'));
     }

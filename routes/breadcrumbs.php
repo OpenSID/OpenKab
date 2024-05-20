@@ -133,7 +133,7 @@ Breadcrumbs::for('articles.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->parent('articles.index');
 });
 Breadcrumbs::for('employees.index', function (BreadcrumbTrail $trail) {
-    $trail->push('Pegawai', route('employees.index'));
+    $trail->push('Pejabat Daerah', route('employees.index'));
 });
 Breadcrumbs::for('employees.create', function (BreadcrumbTrail $trail) {
     $trail->parent('employees.index');

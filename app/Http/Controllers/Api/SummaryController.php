@@ -70,7 +70,7 @@ class SummaryController extends Controller
             });
         }
 
-        return money($total, 'IDR', true)->formatSimple();
+        return angka_lokal($total);
     }
 
     private function getLuasPertanian($tahun)
@@ -86,7 +86,7 @@ class SummaryController extends Controller
         }
 
         $total = $this->luasHutan + $this->luasKebun + $this->luasTernak;
-        return money($total, 'IDR', true)->formatSimple();
+        return angka_lokal($total);
     }
 
     private function getLuasPerkebunan($tahun)
@@ -94,21 +94,18 @@ class SummaryController extends Controller
         $total = 0;
         if ($this->luasKebun) {
             $total = $this->luasKebun;
-            return money($total, 'IDR', true)->formatSimple();            
+            return angka_lokal($total);            
         }
-        $batasWilayah = Potensi::where('kategori', 'kepemilikan-lahan-kebun')->where('tahun', $tahun)->get();
+        $batasWilayah = Potensi::where('kategori', 'jenis-lahan')->where('tahun', $tahun)->get();
         if (! $batasWilayah->isEmpty()) {
             $batasWilayah->groupBy('config_id')->each(function ($item) use (&$total) {
-                $luas1 = $item->sortByDesc('bulan')->first()->data['memiliki_kurang_10_ha'];
-                $luas2 = $item->sortByDesc('bulan')->first()->data['memiliki_10_50_ha'];
-                $luas3 = $item->sortByDesc('bulan')->first()->data['memiliki_50_100_ha'];
-                $luas4 = $item->sortByDesc('bulan')->first()->data['memiliki_lebih_dari_100_ha'];
-                $total += money($luas1, 'IDR', true)->getValue() + money($luas2, 'IDR', true)->getValue() + money($luas3, 'IDR', true)->getValue() + money($luas4, 'IDR', true)->getValue();
+                $luas = $item->sortByDesc('bulan')->first()->data['luas_tanah_perkebunan'];                
+                $total += money($luas, 'IDR', true)->getValue();
             });
         }
         $this->luasKebun = $total;
 
-        return money($total, 'IDR', true)->formatSimple();
+        return angka_lokal($total);
     }
 
     private function getLuasHutan($tahun)
@@ -116,7 +113,7 @@ class SummaryController extends Controller
         $total = 0;
         if ($this->luasHutan) {
             $total = $this->luasHutan;
-            return money($total, 'IDR', true)->formatSimple();
+            return angka_lokal($total);
         }
         $batasWilayah = Potensi::where('kategori', 'kepemilikan-lahan-hutan')->where('tahun', $tahun)->get();
         if (! $batasWilayah->isEmpty()) {
@@ -127,7 +124,7 @@ class SummaryController extends Controller
         }
         $this->luasHutan = $total;
 
-        return money($total, 'IDR', true)->formatSimple();
+        return angka_lokal($total);
     }
 
     private function getLuasPeternakan($tahun)
@@ -135,7 +132,7 @@ class SummaryController extends Controller
         $total = 0;
         if ($this->luasTernak) {
             $total = $this->luasTernak;
-            return money($total, 'IDR', true)->formatSimple();
+            return angka_lokal($total);
         }
         $batasWilayah = Potensi::where('kategori', 'lahan-dan-pakan-ternak')->where('tahun', $tahun)->get();
         if (! $batasWilayah->isEmpty()) {
@@ -146,6 +143,6 @@ class SummaryController extends Controller
         }
         $this->luasTernak = $total;
 
-        return money($total, 'IDR', true)->formatSimple();
+        return angka_lokal($total);
     }
 }

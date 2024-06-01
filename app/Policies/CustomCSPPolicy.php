@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CustomCSPPolicy extends Basic
 {
     // exclude karena livewire tidak jalan ketika csp enable
-    private $excludeRoute = ['fm.tinymce5', 'fm.initialize', 'fm.content', 'fm.tree', 'cms.statistic.summary'];
+    private $excludeRoute = ['fm.tinymce5', 'fm.initialize', 'fm.content', 'fm.tree', 'cms.statistic.summary', 'presisi.index','presisi.kependudukan'];
 
     private $hasTinyMCE = ['articles.create', 'articles.edit'];
 
@@ -24,25 +24,31 @@ class CustomCSPPolicy extends Basic
             $this->addDirective(Directive::IMG, ['blob:'])
                 ->addDirective(Directive::STYLE, ['unsafe-inline']);
         }
-        $this->addDirective(Directive::IMG, ['data:'])
+        $this->addDirective(Directive::IMG, ['data:', 'https://tile.openstreetmap.org/'])
         ->addDirective(Directive::STYLE, [
             // 'unsafe-inline',
             'https://fonts.googleapis.com/',
             'https://fonts.bunny.net/',
             'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
             'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+            'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',
+            'https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css',
             'sha256-z7zcnw/4WalZqx+PrNaRnoeLz/G9WXuFqV1WCJ129sg=',
             'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
             'sha256-hIQQk/yoM15mwdqWhaRQ/qiDh22AXD54o7w5fUsss+w=',
-            'sha256-wXDqcLlNCfwz7CniAXnDuBVLmG9xeJRAiHkMrCetfeQ=',
+            'sha256-wXDqcLlNCfwz7CniAXnDuBVLmG9xeJRAiHkMrCetfeQ=',       
         ])->addDirective(Directive::SCRIPT, [
             // karena banyak yang menggunakan alpine js
             'unsafe-eval',
+            'https://cdn.datatables.net/2.0.7/js/dataTables.min.js',
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
         ])->addDirective(Directive::FONT, [
             Keyword::SELF,
             'data:',
             'https://fonts.bunny.net/',
             'https://fonts.gstatic.com/',
+            'https://code.ionicframework.com/ionicons/2.0.1/fonts/'
         ])->addDirective(Directive::CONNECT, [
             config('app.serverPantau'),
         ]);

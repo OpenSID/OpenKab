@@ -1,23 +1,24 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\BantuanController;
+use App\Http\Controllers\Api\BantuanKabupatenController;
+use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DokumenController;
-use App\Http\Controllers\Api\WilayahController;
+use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\KategoriController;
+use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\PendudukController;
-use App\Http\Controllers\Api\IdentitasController;
-use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\PengaturanController;
-use App\Http\Controllers\Api\BantuanKabupatenController;
-use App\Http\Controllers\Api\KategoriDesaController;
+use App\Http\Controllers\Api\StatistikController;
+use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
+use App\Http\Controllers\Api\WilayahController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,11 +31,11 @@ use App\Http\Controllers\Api\WebsiteController;
 |
 */
 
-Route::post('/signin', [AuthController::class,'login']);
-Route::get('/identitas', [IdentitasController::class,'index']);
+Route::post('/signin', [AuthController::class, 'login']);
+Route::get('/identitas', [IdentitasController::class, 'index']);
 
 Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
-    Route::post('/logout', [AuthController::class,'logOut']);
+    Route::post('/logout', [AuthController::class, 'logOut']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -50,6 +51,7 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
         Route::get('dusun', [WilayahController::class, 'dusun']);
         Route::get('rw', [WilayahController::class, 'rw']);
         Route::get('rt', [WilayahController::class, 'rt']);
+        Route::get('penduduk', [WilayahController::class, 'penduduk']);
     });
 
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
@@ -163,25 +165,26 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
 // Statistik
 Route::controller(StatistikController::class)
     ->prefix('statistik-web')->group(function () {
-    Route::get('/kategori-statistik', 'kategoriStatistik');
-    Route::prefix('penduduk')->group(function () {
-        Route::get('/', 'penduduk');
-        Route::get('/tahun', 'refTahunPenduduk');
+        Route::get('/kategori-statistik', 'kategoriStatistik');
+        Route::prefix('penduduk')->group(function () {
+            Route::get('/', 'penduduk');
+            Route::get('/tahun', 'refTahunPenduduk');
+        });
+        Route::prefix('keluarga')->group(function () {
+            Route::get('/', 'keluarga');
+            Route::get('/tahun', 'refTahunKeluarga');
+        });
+        Route::prefix('rtm')->group(function () {
+            Route::get('/', 'rtm');
+            Route::get('/tahun', 'refTahunRtm');
+        });
+        Route::get('/bantuan', 'bantuan');
+        Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
     });
-    Route::prefix('keluarga')->group(function () {
-        Route::get('/', 'keluarga');
-        Route::get('/tahun', 'refTahunKeluarga');
-    });
-    Route::prefix('rtm')->group(function () {
-        Route::get('/', 'rtm');
-        Route::get('/tahun', 'refTahunRtm');
-    });
-    Route::get('/bantuan', 'bantuan');
-    Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
-});
 
 // Bantuan
 // Data utama website
 Route::get('data-website', WebsiteController::class);
+Route::get('data-summary', SummaryController::class);
 // Desa teraktif
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);

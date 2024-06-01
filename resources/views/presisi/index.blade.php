@@ -23,23 +23,33 @@
           <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                   Total Luas Wilayah
-                  <span id="summary-luas_wilayah">0</span> Ha
+                  <span>
+                    <span id="summary-luas_wilayah">0</span> Ha
+                  </span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Total Lahan Pertanian
+                <span>
                   <span id="summary-luas_pertanian">0</span> Ha
+                </span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
               Total Lahan Perkebunan
+                <span>
                   <span id="summary-luas_perkebunan">0</span> Ha
+                </span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
               Total Lahan Kehutanan
+                <span>
                   <span id="summary-luas_hutan">0</span> Ha
+                </span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
               Total Lahan Peternakan
+                <span>
                   <span id="summary-luas_peternakan">0</span> Ha
+                </span>
               </li>
           </ul>
           </div>

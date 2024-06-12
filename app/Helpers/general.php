@@ -12,7 +12,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2401.0.0';
+        return 'v2406.0.0';
     }
 }
 
@@ -213,7 +213,7 @@ if (! function_exists('date_from_format')) {
      */
     function date_from_format($value, $format = null)
     {
-        \Log::error($value);
+        Log::error($value);
 
         return Carbon::createFromFormat($format ?? config('app.format.date'), $value);
     }

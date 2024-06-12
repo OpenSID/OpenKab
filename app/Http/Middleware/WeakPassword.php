@@ -21,7 +21,7 @@ class WeakPassword
     {
         $weakPassword = session('weak_password');
         if ($weakPassword && ! in_array(Route::currentRouteName(), $this->except)) {
-            return redirect(route('password.change'));
+            // return redirect(route('password.change'));
         }
 
         return $next($request);

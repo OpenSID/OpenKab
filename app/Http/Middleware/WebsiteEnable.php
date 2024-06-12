@@ -22,6 +22,10 @@ class WebsiteEnable
         if (! $website) {
             return redirect('login');
         }
+        $homePage = Setting::where(['key' => 'home_page'])->first()?->value ?? 0;
+        if ($homePage == 'presisi') {
+            return redirect('presisi');
+        }
 
         return $next($request);
     }

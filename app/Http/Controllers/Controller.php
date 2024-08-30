@@ -2,29 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use App\Enums\Modul;
 use App\Models\Bantuan;
 use App\Models\Config;
-use App\Models\Penduduk;
 use App\Models\Identitas;
 use App\Models\Keluarga;
+use App\Models\Penduduk;
 use App\Models\Rtm;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $identitas;
+
     protected $permission;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->identitas = Identitas::first();
         if ($this->identitas) {
             $this->kirimTrack();
@@ -72,12 +74,14 @@ class Controller extends BaseController
 
         try {
             $response = Http::withHeaders([
-                'token' => config('app.tokenPantau')
-            ])->post($host_pantau . '/index.php/api/track/openkab?token=' . config('app.tokenPantau'), $data);
+                'token' => config('app.tokenPantau'),
+            ])->post($host_pantau.'/index.php/api/track/openkab?token='.config('app.tokenPantau'), $data);
             cache()->put('track', date('Y m d'), 60 * 60 * 24);
+
             return;
         } catch (Exception $e) {
             Log::notice($e);
+
             return;
         }
     }

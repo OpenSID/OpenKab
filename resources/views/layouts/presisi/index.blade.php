@@ -7,7 +7,7 @@
     <title>{{ config('app.namaAplikasi') }}</title>
 
     @include('layouts.presisi.partials.stylesheet')
-
+    @stack('styles')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

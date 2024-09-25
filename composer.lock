@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d79d2d738d9d074272bd0b2f8c6a54a0",
+    "content-hash": "19fae4d4f3f9ad7d24a89f9fb63a25d9",
     "packages": [
         {
             "name": "akaunting/laravel-apexcharts",
@@ -74,6 +74,76 @@
                 "source": "https://github.com/akaunting/laravel-apexcharts/tree/3.1.0"
             },
             "time": "2024-04-01T22:38:56+00:00"
+        },
+        {
+            "name": "akaunting/money",
+            "version": "5.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akaunting/laravel-money.git",
+                "reference": "c6710ee50ad9a394e3f607a0ebbc64905c308e69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/akaunting/laravel-money/zipball/c6710ee50ad9a394e3f607a0ebbc64905c308e69",
+                "reference": "c6710ee50ad9a394e3f607a0ebbc64905c308e69",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^9.0|^10.0|^11.0",
+                "illuminate/support": "^9.0|^10.0|^11.0",
+                "illuminate/validation": "^9.0|^10.0|^11.0",
+                "illuminate/view": "^9.0|^10.0|^11.0",
+                "php": "^8.0",
+                "vlucas/phpdotenv": "^5.4.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.4|^8.0|^9.0",
+                "phpunit/phpunit": "^9.5|^10.0|^11.0",
+                "vimeo/psalm": "^4.23|^5.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Akaunting\\Money\\Provider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Akaunting\\Money\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Denis Duliçi",
+                    "email": "info@akaunting.com",
+                    "homepage": "https://akaunting.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Currency formatting and conversion package for Laravel",
+            "keywords": [
+                "convert",
+                "currency",
+                "format",
+                "laravel",
+                "money"
+            ],
+            "support": {
+                "issues": "https://github.com/akaunting/laravel-money/issues",
+                "source": "https://github.com/akaunting/laravel-money/tree/5.2.0"
+            },
+            "abandoned": "akaunting/laravel-money",
+            "time": "2024-03-19T21:43:10+00:00"
         },
         {
             "name": "alexusmai/laravel-file-manager",
@@ -12020,5 +12090,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.2.0"
 }

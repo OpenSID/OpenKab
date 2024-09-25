@@ -4,6 +4,7 @@ namespace App\Http\Repository;
 
 use App\Models\ClusterDesa;
 use App\Models\Config;
+use App\Models\Enums\StatusDasarEnum;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -96,6 +97,20 @@ class WilayahRepository
             ->allowedSorts(['id', 'rt'])
             ->RT()
             ->orderBy('urut')
+            ->jsonPaginate();
+    }
+
+    public function listTotalPenduduk()
+    {
+        return QueryBuilder::for(Config::withCount(['penduduk' => static fn($q) => $q->status()]))
+            ->allowedFilters([                
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama_desa', 'like', "%{$value}%");
+                    });
+                }),
+            ])
+            ->allowedSorts(['nama_desa'])                        
             ->jsonPaginate();
     }
 }

@@ -2,6 +2,8 @@ Di rilis v2409.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 
 #### Penambahan Fitur
 
+1. [#343](https://github.com/OpenSID/OpenKab/issues/343) Pengaturan nama aplikasi.
+
 #### Perbaikan BUG
 
 

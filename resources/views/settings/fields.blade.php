@@ -1,7 +1,7 @@
 <!-- Key Field -->
 <div class="form-group">
     {!! Form::label('key', 'Kode Kunci:') !!}
-    {!! Form::text('key', null, ['class' => 'form-control', 'required', 'maxlength' => 50, 'disabled' => 'disabled']) !!}
+    {!! Form::text('key', null, ['class' => 'form-control', 'required', 'maxlength' => 50, 'readonly' => 'readonly']) !!}
 </div>
 
 

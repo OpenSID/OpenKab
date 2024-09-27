@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Setting;
+use App\Rules\HaveProdeskelRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSettingRequest extends FormRequest
@@ -28,7 +29,7 @@ class UpdateSettingRequest extends FormRequest
         // $rules['key'] .= ','.$this->id;
         unset($rules['key']);
         unset($rules['value']);
-
+        $rules['key'] = [new HaveProdeskelRule()];
         return $rules;
     }
 }

@@ -3,8 +3,7 @@
 namespace App\Models;
 
 class Potensi extends BaseModel
-{    
-
+{
     /**
      * The table associated with the model.
      *

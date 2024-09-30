@@ -86,6 +86,7 @@ class SummaryController extends Controller
         }
 
         $total = $this->luasHutan + $this->luasKebun + $this->luasTernak;
+
         return angka_lokal($total);
     }
 
@@ -94,12 +95,13 @@ class SummaryController extends Controller
         $total = 0;
         if ($this->luasKebun) {
             $total = $this->luasKebun;
-            return angka_lokal($total);            
+
+            return angka_lokal($total);
         }
         $batasWilayah = Potensi::where('kategori', 'jenis-lahan')->where('tahun', $tahun)->get();
         if (! $batasWilayah->isEmpty()) {
             $batasWilayah->groupBy('config_id')->each(function ($item) use (&$total) {
-                $luas = $item->sortByDesc('bulan')->first()->data['luas_tanah_perkebunan'];                
+                $luas = $item->sortByDesc('bulan')->first()->data['luas_tanah_perkebunan'];
                 $total += money($luas, 'IDR', true)->getValue();
             });
         }
@@ -113,6 +115,7 @@ class SummaryController extends Controller
         $total = 0;
         if ($this->luasHutan) {
             $total = $this->luasHutan;
+
             return angka_lokal($total);
         }
         $batasWilayah = Potensi::where('kategori', 'kepemilikan-lahan-hutan')->where('tahun', $tahun)->get();
@@ -132,6 +135,7 @@ class SummaryController extends Controller
         $total = 0;
         if ($this->luasTernak) {
             $total = $this->luasTernak;
+
             return angka_lokal($total);
         }
         $batasWilayah = Potensi::where('kategori', 'lahan-dan-pakan-ternak')->where('tahun', $tahun)->get();

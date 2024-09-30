@@ -2,16 +2,16 @@
 
 namespace App\Providers;
 
+use App\Http\Transformers\IdentitasTransformer;
 use App\Models\Config;
 use App\Models\Identitas;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Transformers\IdentitasTransformer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,13 +42,12 @@ class AppServiceProvider extends ServiceProvider
         if (App::runningInConsole()) {
             activity()->disableLogging();
         } else {
-
             $identitasAplikasi = fractal(
                 Identitas::first(),
                 IdentitasTransformer::class,
                 \League\Fractal\Serializer\JsonApiSerializer::class
             )->toArray()['data']['attributes'];
-    
+
             // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
             View::share('identitasAplikasi', $identitasAplikasi);
             $this->bootConfigAdminLTE($identitasAplikasi);
@@ -109,8 +108,8 @@ class AppServiceProvider extends ServiceProvider
 
     protected function bootConfigAdminLTE($identitasAplikasi)
     {
-        $this->app->config['adminlte.title']         = $identitasAplikasi['nama_aplikasi'];
+        $this->app->config['adminlte.title'] = $identitasAplikasi['nama_aplikasi'];
         $this->app->config['adminlte.title_postfix'] = "| {$identitasAplikasi['sebutan_kab']}";
-        $this->app->config['adminlte.logo']          = $identitasAplikasi['nama_aplikasi'];
+        $this->app->config['adminlte.logo'] = $identitasAplikasi['nama_aplikasi'];
     }
 }

@@ -42,13 +42,15 @@ class AppServiceProvider extends ServiceProvider
         if (App::runningInConsole()) {
             activity()->disableLogging();
         } else {
-            // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
-            View::share('identitasAplikasi', fractal(
+            $identitasAplikasi = fractal(
                 Identitas::first(),
                 IdentitasTransformer::class,
                 \League\Fractal\Serializer\JsonApiSerializer::class
-            )->toArray()['data']['attributes']
-            );
+            )->toArray()['data']['attributes'];
+
+            // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
+            View::share('identitasAplikasi', $identitasAplikasi);
+            $this->bootConfigAdminLTE($identitasAplikasi);
         }
     }
 
@@ -102,5 +104,12 @@ class AppServiceProvider extends ServiceProvider
                 );
             });
         }
+    }
+
+    protected function bootConfigAdminLTE($identitasAplikasi)
+    {
+        $this->app->config['adminlte.title'] = $identitasAplikasi['nama_aplikasi'];
+        $this->app->config['adminlte.title_postfix'] = "| {$identitasAplikasi['sebutan_kab']}";
+        $this->app->config['adminlte.logo'] = $identitasAplikasi['nama_aplikasi'];
     }
 }

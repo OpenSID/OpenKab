@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.0.2",
         "akaunting/laravel-apexcharts": "^3.0",
+        "akaunting/money": "^5.2",
         "alexusmai/laravel-file-manager": "^3.0",
         "bensampo/laravel-enum": "^6.3",
         "cviebrock/eloquent-sluggable": "~9.0",

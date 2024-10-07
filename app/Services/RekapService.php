@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use App\Models\Anak;
 use App\Models\UserGrup;
 use Illuminate\Support\Facades\DB;
@@ -11,16 +12,16 @@ class RekapService
     {
         if ($kuartal == 1) {
             $batasBulanBawah = 1;
-            $batasBulanAtas  = 3;
+            $batasBulanAtas = 3;
         } elseif ($kuartal == 2) {
             $batasBulanBawah = 4;
-            $batasBulanAtas  = 6;
+            $batasBulanAtas = 6;
         } elseif ($kuartal == 3) {
             $batasBulanBawah = 7;
-            $batasBulanAtas  = 9;
+            $batasBulanAtas = 9;
         } elseif ($kuartal == 4) {
             $batasBulanBawah = 10;
-            $batasBulanAtas  = 12;
+            $batasBulanAtas = 12;
         } else {
             abort(404, 'Terjadi Kesalahan di kuartal!');
         }
@@ -53,8 +54,8 @@ class RekapService
         //     }
         // }
 
-        $ibuHamil  = $ibuHamil->get()->toArray();
-        
+        $ibuHamil = $ibuHamil->get()->toArray();
+
         $dataTahun = DB::connection('openkab')->table('ibu_hamil')
             ->selectRaw('YEAR(created_at) as tahun')
             ->where('config_id', ('id'))
@@ -63,7 +64,7 @@ class RekapService
 
         if ($ibuHamil) {
             foreach ($ibuHamil as $item) {
-                $item                        = (array) $item;
+                $item = (array) $item;
                 $dataGrup[$item['kia_id']][] = $item;
             }
 
@@ -71,19 +72,19 @@ class RekapService
                 $isSudahMelahirkan = false;
                 $dataUsiaKehamilan = -1;
 
-                $hitungPeriksaKehamilan  = 0;
-                $hitungPilFe             = 0;
-                $hitungPeriksaNifas      = 0;
-                $hitungKonseling         = 0;
-                $hitungKunjunganRumah    = 0;
-                $hitungAksesAirBersih    = 0;
+                $hitungPeriksaKehamilan = 0;
+                $hitungPilFe = 0;
+                $hitungPeriksaNifas = 0;
+                $hitungKonseling = 0;
+                $hitungKunjunganRumah = 0;
+                $hitungAksesAirBersih = 0;
                 $hitungKepemilikanJamban = 0;
-                $hitungJaminanKesehatan  = 0;
+                $hitungJaminanKesehatan = 0;
 
                 foreach ($value as $item) {
                     // FIND USIA KEHAMILAN : CARI YANG TERBESAR USIA KEHAMILANYA
                     if ($item['tanggal_melahirkan']) {
-                        $isSudahMelahirkan  = true;
+                        $isSudahMelahirkan = true;
                         $tanggal_melahirkan = $item['tanggal_melahirkan'];
                     }
 
@@ -141,24 +142,24 @@ class RekapService
                     }
 
                     // FIND STATUS KEHAMILAN : DATA TERAKHIR STATUS KEHAMILAN
-                    $status_kehamilan   = $item['status_kehamilan'];
-                    $usia_kehamilan     = $item['usia_kehamilan'];
+                    $status_kehamilan = $item['status_kehamilan'];
+                    $usia_kehamilan = $item['usia_kehamilan'];
                     $tanggal_melahirkan = $isSudahMelahirkan ? $tanggal_melahirkan : '-';
                 }
 
                 if ($isSudahMelahirkan) {
                     //Ibu Bersalin
                     $periksaKehamilan = 'TS';
-                    $pilFe            = 'TS';
-                    $periksaNifas     = $hitungPeriksaNifas >= 3 ? 'Y' : 'T';
-                    $konseling        = 'TS';
-                    $kunjunganRumah   = 'TS';
+                    $pilFe = 'TS';
+                    $periksaNifas = $hitungPeriksaNifas >= 3 ? 'Y' : 'T';
+                    $konseling = 'TS';
+                    $kunjunganRumah = 'TS';
                 } elseif ($dataUsiaKehamilan <= 3) {
                     // 0 - 3 Bulan (Trisemester 1)
                     $periksaKehamilan = $hitungPeriksaKehamilan >= 1 ? 'Y' : 'T';
-                    $pilFe            = $hitungPilFe >= 1 ? 'Y' : 'T';
-                    $periksaNifas     = 'TS';
-                    $konseling        = $hitungKonseling >= 1 ? 'Y' : 'T';
+                    $pilFe = $hitungPilFe >= 1 ? 'Y' : 'T';
+                    $periksaNifas = 'TS';
+                    $konseling = $hitungKonseling >= 1 ? 'Y' : 'T';
                     if ($status_kehamilan == 'KEK' || $status_kehamilan == 'RISTI') {
                         $kunjunganRumah = $hitungKunjunganRumah >= 1 ? 'Y' : 'T';
                     } else {
@@ -167,9 +168,9 @@ class RekapService
                 } elseif ($dataUsiaKehamilan <= 6) {
                     // 4 - 6 Bulan (Trisemester 2)
                     $periksaKehamilan = $hitungPeriksaKehamilan >= 1 ? 'Y' : 'T';
-                    $pilFe            = $hitungPilFe >= 1 ? 'Y' : 'T';
-                    $periksaNifas     = 'TS';
-                    $konseling        = $hitungKonseling >= 1 ? 'Y' : 'T';
+                    $pilFe = $hitungPilFe >= 1 ? 'Y' : 'T';
+                    $periksaNifas = 'TS';
+                    $konseling = $hitungKonseling >= 1 ? 'Y' : 'T';
                     if ($status_kehamilan == 'KEK' || $status_kehamilan == 'RISTI') {
                         $kunjunganRumah = $hitungKunjunganRumah >= 1 ? 'Y' : 'T';
                     } else {
@@ -178,9 +179,9 @@ class RekapService
                 } else {
                     // 7 - 9 Bulan (Trisemester 3) atau lebih
                     $periksaKehamilan = $hitungPeriksaKehamilan >= 2 ? 'Y' : 'T';
-                    $pilFe            = $hitungPilFe >= 1 ? 'Y' : 'T';
-                    $periksaNifas     = 'TS';
-                    $konseling        = $hitungKonseling >= 2 ? 'Y' : 'T';
+                    $pilFe = $hitungPilFe >= 1 ? 'Y' : 'T';
+                    $periksaNifas = 'TS';
+                    $konseling = $hitungKonseling >= 2 ? 'Y' : 'T';
                     if ($status_kehamilan == 'KEK' || $status_kehamilan == 'RISTI') {
                         $kunjunganRumah = $hitungKunjunganRumah >= 1 ? 'Y' : 'T';
                     } else {
@@ -188,34 +189,34 @@ class RekapService
                     }
                 }
 
-                $aksesAirBersih    = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
+                $aksesAirBersih = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
                 $kepemilikanJamban = $hitungKepemilikanJamban >= 1 ? 'Y' : 'T';
-                $jaminanKesehatan  = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
+                $jaminanKesehatan = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
 
                 $dataFilter[$key]['user'] = [
                     'ket_usia_kehamilan' => $isSudahMelahirkan ? 'Ibu Bersalin' : $dataUsiaKehamilan,
-                    'no_kia'             => $item['no_kia'],
-                    'nama_ibu'           => $item['nama'],
-                    'status_kehamilan'   => $status_kehamilan,
-                    'usia_kehamilan'     => $usia_kehamilan,
+                    'no_kia' => $item['no_kia'],
+                    'nama_ibu' => $item['nama'],
+                    'status_kehamilan' => $status_kehamilan,
+                    'usia_kehamilan' => $usia_kehamilan,
                     'tanggal_melahirkan' => $tanggal_melahirkan,
                 ];
 
                 $dataFilter[$key]['indikator'] = [
-                    'periksa_kehamilan'  => $periksaKehamilan,
-                    'pil_fe'             => $pilFe,
-                    'pemeriksaan_nifas'  => $periksaNifas,
-                    'konseling_gizi'     => $konseling,
-                    'kunjungan_rumah'    => $kunjunganRumah,
-                    'akses_air_bersih'   => $aksesAirBersih,
+                    'periksa_kehamilan' => $periksaKehamilan,
+                    'pil_fe' => $pilFe,
+                    'pemeriksaan_nifas' => $periksaNifas,
+                    'konseling_gizi' => $konseling,
+                    'kunjungan_rumah' => $kunjunganRumah,
+                    'akses_air_bersih' => $aksesAirBersih,
                     'kepemilikan_jamban' => $kepemilikanJamban,
-                    'jaminan_kesehatan'  => $jaminanKesehatan,
+                    'jaminan_kesehatan' => $jaminanKesehatan,
                 ];
 
                 foreach ($dataFilter as $key => $item) {
-                    $jumlahY       = 0;
-                    $jumlahT       = 0;
-                    $jumlahTS      = 0;
+                    $jumlahY = 0;
+                    $jumlahT = 0;
+                    $jumlahTS = 0;
                     $jumlahLayanan = count($item['indikator']);
 
                     foreach ($item['indikator'] as $indikator) {
@@ -232,24 +233,24 @@ class RekapService
                         }
                     }
 
-                    $jumlahSeharusnya                          = $jumlahLayanan - $jumlahTS;
+                    $jumlahSeharusnya = $jumlahLayanan - $jumlahTS;
                     $dataFilter[$key]['konvergensi_indikator'] = [
                         'jumlah_diterima_lengkap' => $jumlahY,
-                        'jumlah_seharusnya'       => $jumlahSeharusnya,
-                        'persen'                  => $jumlahSeharusnya == 0 ? '0.00' : number_format($jumlahY / $jumlahSeharusnya * 100, 2),
+                        'jumlah_seharusnya' => $jumlahSeharusnya,
+                        'persen' => $jumlahSeharusnya == 0 ? '0.00' : number_format($jumlahY / $jumlahSeharusnya * 100, 2),
                     ];
                 }
             }
 
             $capaianKonvergensi = [
-                'periksa_kehamilan'  => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'pil_fe'             => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'pemeriksaan_nifas'  => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'konseling_gizi'     => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'kunjungan_rumah'    => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'akses_air_bersih'   => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'periksa_kehamilan' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'pil_fe' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'pemeriksaan_nifas' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'konseling_gizi' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'kunjungan_rumah' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'akses_air_bersih' => ['Y' => 0, 'T' => 0, 'TS' => 0],
                 'kepemilikan_jamban' => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'jaminan_kesehatan'  => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'jaminan_kesehatan' => ['Y' => 0, 'T' => 0, 'TS' => 0],
             ];
 
             foreach ($dataFilter as $item) {
@@ -264,16 +265,16 @@ class RekapService
             }
 
             foreach ($capaianKonvergensi as $key => $item) {
-                $capaianKonvergensijumlahSeharusnya            = count($dataFilter) - $item['TS'];
+                $capaianKonvergensijumlahSeharusnya = count($dataFilter) - $item['TS'];
                 $capaianKonvergensi[$key]['jumlah_seharusnya'] = $capaianKonvergensijumlahSeharusnya;
-                $capaianKonvergensi[$key]['persen']            = $capaianKonvergensijumlahSeharusnya == 0 ? '0.00' : number_format($item['Y'] / $capaianKonvergensijumlahSeharusnya * 100, 2);
+                $capaianKonvergensi[$key]['persen'] = $capaianKonvergensijumlahSeharusnya == 0 ? '0.00' : number_format($item['Y'] / $capaianKonvergensijumlahSeharusnya * 100, 2);
             }
 
-            $totalIndikator         = count($capaianKonvergensi) * count($dataFilter);
+            $totalIndikator = count($capaianKonvergensi) * count($dataFilter);
             $tingkatKonvergensiDesa = [
-                'jumlah_diterima'   => 0,
+                'jumlah_diterima' => 0,
                 'jumlah_seharusnya' => 0,
-                'persen'            => 0,
+                'persen' => 0,
             ];
 
             $TotalTS = 0;
@@ -284,25 +285,25 @@ class RekapService
             }
 
             $tingkatKonvergensiDesa['jumlah_seharusnya'] = $totalIndikator - $TotalTS;
-            $tingkatKonvergensiDesa['persen']            = $tingkatKonvergensiDesa['jumlah_seharusnya'] == 0 ? '0.00' : number_format($tingkatKonvergensiDesa['jumlah_diterima'] / $tingkatKonvergensiDesa['jumlah_seharusnya'] * 100, 2);
+            $tingkatKonvergensiDesa['persen'] = $tingkatKonvergensiDesa['jumlah_seharusnya'] == 0 ? '0.00' : number_format($tingkatKonvergensiDesa['jumlah_diterima'] / $tingkatKonvergensiDesa['jumlah_seharusnya'] * 100, 2);
         } else {
-            $dataGrup               = null;
-            $dataFilter             = null;
-            $capaianKonvergensi     = null;
+            $dataGrup = null;
+            $dataFilter = null;
+            $capaianKonvergensi = null;
             $tingkatKonvergensiDesa = null;
         }
 
-        $data['dataFilter']             = $dataFilter;
-        $data['capaianKonvergensi']     = $capaianKonvergensi;
+        $data['dataFilter'] = $dataFilter;
+        $data['capaianKonvergensi'] = $capaianKonvergensi;
         $data['tingkatKonvergensiDesa'] = $tingkatKonvergensiDesa;
-        $data['dataGrup']               = $dataGrup;
+        $data['dataGrup'] = $dataGrup;
 
         $data['batasBulanBawah'] = $batasBulanBawah;
-        $data['batasBulanAtas']  = $batasBulanAtas;
-        $data['_tahun']          = $tahun;
-        $data['ibuHamil']        = $ibuHamil;
-        $data['dataTahun']       = $dataTahun;
-        $data['kuartal']         = $kuartal;
+        $data['batasBulanAtas'] = $batasBulanAtas;
+        $data['_tahun'] = $tahun;
+        $data['ibuHamil'] = $ibuHamil;
+        $data['dataTahun'] = $dataTahun;
+        $data['kuartal'] = $kuartal;
 
         return $data;
     }
@@ -311,16 +312,16 @@ class RekapService
     {
         if ($kuartal == 1) {
             $batasBulanBawah = 1;
-            $batasBulanAtas  = 3;
+            $batasBulanAtas = 3;
         } elseif ($kuartal == 2) {
             $batasBulanBawah = 4;
-            $batasBulanAtas  = 6;
+            $batasBulanAtas = 6;
         } elseif ($kuartal == 3) {
             $batasBulanBawah = 7;
-            $batasBulanAtas  = 9;
+            $batasBulanAtas = 9;
         } elseif ($kuartal == 4) {
             $batasBulanBawah = 10;
-            $batasBulanAtas  = 12;
+            $batasBulanAtas = 12;
         } else {
             abort(404, 'Terjadi Kesalahan di kuartal!');
         }
@@ -355,7 +356,7 @@ class RekapService
         // }
 
         $bulananAnak = $bulananAnak->get()->toArray();
-        $dataTahun   = DB::connection('openkab')->table('bulanan_anak')
+        $dataTahun = DB::connection('openkab')->table('bulanan_anak')
             ->selectRaw('YEAR(created_at) as tahun')
             ->distinct()
             ->get();
@@ -364,19 +365,19 @@ class RekapService
 
         if ($bulananAnak) {
             foreach ($bulananAnak as $item) {
-                $item                        = (array) $item;
+                $item = (array) $item;
                 $dataGrup[$item['kia_id']][] = $item;
             }
 
             // d($dataGrupLengkap);
             foreach ($dataGrup as $key => $value) {
-                $umurAnak               = 0;
-                $hitungImunisasi        = 0;
-                $hitungImunisasiCampak  = 0;
-                $hitungKunjunganRumah   = 0;
-                $hitungAksesAirBersih   = 0;
-                $hitungJambanSehat      = 0;
-                $hitungAktaLahir        = 0;
+                $umurAnak = 0;
+                $hitungImunisasi = 0;
+                $hitungImunisasiCampak = 0;
+                $hitungKunjunganRumah = 0;
+                $hitungAksesAirBersih = 0;
+                $hitungJambanSehat = 0;
+                $hitungAktaLahir = 0;
                 $hitungJaminanKesehatan = 0;
 
                 foreach ($value as $item) {
@@ -384,16 +385,16 @@ class RekapService
                         $umurAnak = (int) $item['umur_bulan'];
                         if ($umurAnak < 6) {
                             $kategoriUmur = 1;
-                            $usiaAnak     = '0 - < 6 Bulan';
+                            $usiaAnak = '0 - < 6 Bulan';
                         } elseif ($umurAnak <= 12) {
                             $kategoriUmur = 2;
-                            $usiaAnak     = '6 - 12 Bulan';
+                            $usiaAnak = '6 - 12 Bulan';
                         } elseif ($umurAnak > 12 && $umurAnak < 18) {
                             $kategoriUmur = 3;
-                            $usiaAnak     = '> 12 - < 18 Bulan';
+                            $usiaAnak = '> 12 - < 18 Bulan';
                         } else {
                             $kategoriUmur = 4;
-                            $usiaAnak     = '> 18 - 23 Bulan';
+                            $usiaAnak = '> 18 - 23 Bulan';
                         }
                     }
 
@@ -462,15 +463,15 @@ class RekapService
                     ->count();
 
                 if ($kategoriUmur == 1) {
-                    $imunisasi             = 'TS';
+                    $imunisasi = 'TS';
                     $penimbanganBeratBadan = 'TS';
-                    $konseling_gizi        = 'TS';
-                    $kunjungan_rumah       = $hitungKunjunganRumah >= 2 ? 'Y' : 'T';
-                    $air_bersih            = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
-                    $jamban_sehat          = $hitungJambanSehat >= 1 ? 'Y' : 'T';
-                    $jaminanKesehatan      = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
-                    $akta_lahir            = $hitungAktaLahir >= 1 ? 'Y' : 'T';
-                    $pengasuhan_paud       = 'TS';
+                    $konseling_gizi = 'TS';
+                    $kunjungan_rumah = $hitungKunjunganRumah >= 2 ? 'Y' : 'T';
+                    $air_bersih = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
+                    $jamban_sehat = $hitungJambanSehat >= 1 ? 'Y' : 'T';
+                    $jaminanKesehatan = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
+                    $akta_lahir = $hitungAktaLahir >= 1 ? 'Y' : 'T';
+                    $pengasuhan_paud = 'TS';
                 } elseif ($kategoriUmur == 2) {
                     if ($umurAnak <= 9) {
                         $imunisasi = $hitungImunisasi > 0 ? 'Y' : 'T';
@@ -478,33 +479,33 @@ class RekapService
                         $imunisasi = $hitungImunisasi > 0 && $hitungImunisasiCampak > 0 ? 'Y' : 'T';
                     }
                     $penimbanganBeratBadan = $hitungPenimbangan >= 5 ? 'Y' : 'T';
-                    $konseling_gizi        = $JUMLAH_KG >= 5 ? 'Y' : 'T';
-                    $kunjungan_rumah       = $hitungKunjunganRumah >= 2 ? 'Y' : 'T';
-                    $air_bersih            = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
-                    $jamban_sehat          = $hitungJambanSehat >= 1 ? 'Y' : 'T';
-                    $jaminanKesehatan      = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
-                    $akta_lahir            = $hitungAktaLahir >= 1 ? 'Y' : 'T';
-                    $pengasuhan_paud       = $hitungPengasuhan >= 5 ? 'Y' : 'T';
+                    $konseling_gizi = $JUMLAH_KG >= 5 ? 'Y' : 'T';
+                    $kunjungan_rumah = $hitungKunjunganRumah >= 2 ? 'Y' : 'T';
+                    $air_bersih = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
+                    $jamban_sehat = $hitungJambanSehat >= 1 ? 'Y' : 'T';
+                    $jaminanKesehatan = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
+                    $akta_lahir = $hitungAktaLahir >= 1 ? 'Y' : 'T';
+                    $pengasuhan_paud = $hitungPengasuhan >= 5 ? 'Y' : 'T';
                 } elseif ($kategoriUmur == 3) {
-                    $imunisasi             = $hitungImunisasi > 0 && $hitungImunisasiCampak > 0 ? 'Y' : 'T';
+                    $imunisasi = $hitungImunisasi > 0 && $hitungImunisasiCampak > 0 ? 'Y' : 'T';
                     $penimbanganBeratBadan = $hitungPenimbangan >= 8 ? 'Y' : 'T';
-                    $konseling_gizi        = $JUMLAH_KG >= 8 ? 'Y' : 'T';
-                    $kunjungan_rumah       = $hitungKunjunganRumah >= 2 ? 'Y' : 'T';
-                    $air_bersih            = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
-                    $jamban_sehat          = $hitungJambanSehat >= 1 ? 'Y' : 'T';
-                    $jaminanKesehatan      = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
-                    $akta_lahir            = $hitungAktaLahir >= 1 ? 'Y' : 'T';
-                    $pengasuhan_paud       = $hitungPengasuhan >= 5 ? 'Y' : 'T';
+                    $konseling_gizi = $JUMLAH_KG >= 8 ? 'Y' : 'T';
+                    $kunjungan_rumah = $hitungKunjunganRumah >= 2 ? 'Y' : 'T';
+                    $air_bersih = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
+                    $jamban_sehat = $hitungJambanSehat >= 1 ? 'Y' : 'T';
+                    $jaminanKesehatan = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
+                    $akta_lahir = $hitungAktaLahir >= 1 ? 'Y' : 'T';
+                    $pengasuhan_paud = $hitungPengasuhan >= 5 ? 'Y' : 'T';
                 } elseif ($kategoriUmur === 4) {
-                    $imunisasi             = $hitungImunisasi > 0 && $hitungImunisasiCampak > 0 ? 'Y' : 'T';
+                    $imunisasi = $hitungImunisasi > 0 && $hitungImunisasiCampak > 0 ? 'Y' : 'T';
                     $penimbanganBeratBadan = $hitungPenimbangan >= 15 ? 'Y' : 'T';
-                    $konseling_gizi        = $JUMLAH_KG >= 15 ? 'Y' : 'T';
-                    $kunjungan_rumah       = $hitungKunjunganRumah >= 2 ? 'Y' : 'T';
-                    $air_bersih            = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
-                    $jamban_sehat          = $hitungJambanSehat >= 1 ? 'Y' : 'T';
-                    $jaminanKesehatan      = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
-                    $akta_lahir            = $hitungAktaLahir >= 1 ? 'Y' : 'T';
-                    $pengasuhan_paud       = $hitungPengasuhan >= 5 ? 'Y' : 'T';
+                    $konseling_gizi = $JUMLAH_KG >= 15 ? 'Y' : 'T';
+                    $kunjungan_rumah = $hitungKunjunganRumah >= 2 ? 'Y' : 'T';
+                    $air_bersih = $hitungAksesAirBersih >= 1 ? 'Y' : 'T';
+                    $jamban_sehat = $hitungJambanSehat >= 1 ? 'Y' : 'T';
+                    $jaminanKesehatan = $hitungJaminanKesehatan >= 1 ? 'Y' : 'T';
+                    $akta_lahir = $hitungAktaLahir >= 1 ? 'Y' : 'T';
+                    $pengasuhan_paud = $hitungPengasuhan >= 5 ? 'Y' : 'T';
                 } else {
                     show_404('kesalahan di kategori umur!');
                 }
@@ -627,26 +628,26 @@ class RekapService
                 $tinggiBadan = $hitungTinggiBadan > 0 ? 'Y' : 'T';
                 // END ---------------------------------------------------------------------------------------------
 
-                $dataFilter[$key]['user']['no_kia']                       = $dataGrup[$key][0]['no_kia'];
-                $dataFilter[$key]['user']['nama']                         = $dataGrup[$key][0]['nama'];
-                $dataFilter[$key]['user']['jenis_kelamin']                = $dataGrup[$key][0]['sex'];
-                $dataFilter[$key]['umur_dan_gizi']['umur_bulan']          = $umurAnak;
-                $dataFilter[$key]['umur_dan_gizi']['status_gizi']         = $statusGizi;
-                $dataFilter[$key]['indikator']['imunisasi']               = $imunisasi;
-                $dataFilter[$key]['indikator']['pengukuran_berat_badan']  = $penimbanganBeratBadan;
+                $dataFilter[$key]['user']['no_kia'] = $dataGrup[$key][0]['no_kia'];
+                $dataFilter[$key]['user']['nama'] = $dataGrup[$key][0]['nama'];
+                $dataFilter[$key]['user']['jenis_kelamin'] = $dataGrup[$key][0]['sex'];
+                $dataFilter[$key]['umur_dan_gizi']['umur_bulan'] = $umurAnak;
+                $dataFilter[$key]['umur_dan_gizi']['status_gizi'] = $statusGizi;
+                $dataFilter[$key]['indikator']['imunisasi'] = $imunisasi;
+                $dataFilter[$key]['indikator']['pengukuran_berat_badan'] = $penimbanganBeratBadan;
                 $dataFilter[$key]['indikator']['pengukuran_tinggi_badan'] = $tinggiBadan;
-                $dataFilter[$key]['indikator']['konseling_gizi']          = $konseling_gizi;
-                $dataFilter[$key]['indikator']['kunjungan_rumah']         = $kunjungan_rumah;
-                $dataFilter[$key]['indikator']['air_bersih']              = $air_bersih;
-                $dataFilter[$key]['indikator']['jamban_sehat']            = $jamban_sehat;
-                $dataFilter[$key]['indikator']['akta_lahir']              = $akta_lahir;
-                $dataFilter[$key]['indikator']['jaminan_kesehatan']       = $jaminanKesehatan;
-                $dataFilter[$key]['indikator']['pengasuhan_paud']         = $pengasuhan_paud;
+                $dataFilter[$key]['indikator']['konseling_gizi'] = $konseling_gizi;
+                $dataFilter[$key]['indikator']['kunjungan_rumah'] = $kunjungan_rumah;
+                $dataFilter[$key]['indikator']['air_bersih'] = $air_bersih;
+                $dataFilter[$key]['indikator']['jamban_sehat'] = $jamban_sehat;
+                $dataFilter[$key]['indikator']['akta_lahir'] = $akta_lahir;
+                $dataFilter[$key]['indikator']['jaminan_kesehatan'] = $jaminanKesehatan;
+                $dataFilter[$key]['indikator']['pengasuhan_paud'] = $pengasuhan_paud;
 
                 $jumlahLayanan = count($dataFilter[$key]['indikator']);
-                $jumlahY       = 0;
-                $jumlahT       = 0;
-                $jumlahTS      = 0;
+                $jumlahY = 0;
+                $jumlahT = 0;
+                $jumlahTS = 0;
 
                 foreach ($dataFilter[$key]['indikator'] as $indikator) {
                     if ($indikator == 'Y') {
@@ -661,27 +662,27 @@ class RekapService
                         $jumlahTS++;
                     }
                 }
-                $jumlahSeharusnya            = $jumlahLayanan - $jumlahTS;
+                $jumlahSeharusnya = $jumlahLayanan - $jumlahTS;
                 $tingkatKonvergensiIndikator = [
                     'jumlah_diterima_lengkap' => $jumlahY,
-                    'jumlah_seharusnya'       => $jumlahSeharusnya,
-                    'persen'                  => $jumlahSeharusnya == 0 ? '0.00' : number_format($jumlahY / $jumlahSeharusnya * 100, 2),
+                    'jumlah_seharusnya' => $jumlahSeharusnya,
+                    'persen' => $jumlahSeharusnya == 0 ? '0.00' : number_format($jumlahY / $jumlahSeharusnya * 100, 2),
                 ];
                 $dataFilter[$key]['tingkat_konvergensi_indikator'] = $tingkatKonvergensiIndikator;
             }
 
             // KALKULASI TINGKATAN CAPAIAN KONVERGENSI
             $capaianKonvergensi = [
-                'imunisasi'               => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'pengukuran_berat_badan'  => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'imunisasi' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'pengukuran_berat_badan' => ['Y' => 0, 'T' => 0, 'TS' => 0],
                 'pengukuran_tinggi_badan' => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'konseling_gizi'          => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'kunjungan_rumah'         => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'air_bersih'              => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'jamban_sehat'            => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'akta_lahir'              => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'jaminan_kesehatan'       => ['Y' => 0, 'T' => 0, 'TS' => 0],
-                'pengasuhan_paud'         => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'konseling_gizi' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'kunjungan_rumah' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'air_bersih' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'jamban_sehat' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'akta_lahir' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'jaminan_kesehatan' => ['Y' => 0, 'T' => 0, 'TS' => 0],
+                'pengasuhan_paud' => ['Y' => 0, 'T' => 0, 'TS' => 0],
             ];
 
             foreach ($dataFilter as $item) {
@@ -698,17 +699,17 @@ class RekapService
             }
 
             foreach ($capaianKonvergensi as $key => $item) {
-                $capaianKonvergensijumlahSeharusnya            = count($dataFilter) - $item['TS'];
-                $capaianKonvergensi[$key]['jumlah_diterima']   = $item['Y'];
+                $capaianKonvergensijumlahSeharusnya = count($dataFilter) - $item['TS'];
+                $capaianKonvergensi[$key]['jumlah_diterima'] = $item['Y'];
                 $capaianKonvergensi[$key]['jumlah_seharusnya'] = $capaianKonvergensijumlahSeharusnya;
-                $capaianKonvergensi[$key]['persen']            = $capaianKonvergensijumlahSeharusnya == 0 ? '0.00' : number_format($item['Y'] / $capaianKonvergensijumlahSeharusnya * 100, 2);
+                $capaianKonvergensi[$key]['persen'] = $capaianKonvergensijumlahSeharusnya == 0 ? '0.00' : number_format($item['Y'] / $capaianKonvergensijumlahSeharusnya * 100, 2);
             }
 
-            $totalIndikator         = count($capaianKonvergensi) * count($dataFilter);
+            $totalIndikator = count($capaianKonvergensi) * count($dataFilter);
             $tingkatKonvergensiDesa = [
-                'jumlah_diterima'   => 0,
+                'jumlah_diterima' => 0,
                 'jumlah_seharusnya' => 0,
-                'persen'            => 0,
+                'persen' => 0,
             ];
 
             $TotalTS = 0;
@@ -719,26 +720,26 @@ class RekapService
             }
 
             $tingkatKonvergensiDesa['jumlah_seharusnya'] = $totalIndikator - $TotalTS;
-            $tingkatKonvergensiDesa['persen']            = $tingkatKonvergensiDesa['jumlah_seharusnya'] == 0 ? '0.00' : number_format($tingkatKonvergensiDesa['jumlah_diterima'] / $tingkatKonvergensiDesa['jumlah_seharusnya'] * 100, 2);
+            $tingkatKonvergensiDesa['persen'] = $tingkatKonvergensiDesa['jumlah_seharusnya'] == 0 ? '0.00' : number_format($tingkatKonvergensiDesa['jumlah_diterima'] / $tingkatKonvergensiDesa['jumlah_seharusnya'] * 100, 2);
         } else {
-            $dataGrup               = null;
-            $dataFilter             = null;
-            $capaianKonvergensi     = null;
+            $dataGrup = null;
+            $dataFilter = null;
+            $capaianKonvergensi = null;
             $tingkatKonvergensiDesa = null;
         }
 
-        $data['dataFilter']             = $dataFilter;
-        $data['capaianKonvergensi']     = $capaianKonvergensi;
+        $data['dataFilter'] = $dataFilter;
+        $data['capaianKonvergensi'] = $capaianKonvergensi;
         $data['tingkatKonvergensiDesa'] = $tingkatKonvergensiDesa;
-        $data['dataGrup']               = $dataGrup;
+        $data['dataGrup'] = $dataGrup;
 
         $data['batasBulanBawah'] = $batasBulanBawah;
-        $data['batasBulanAtas']  = $batasBulanAtas;
+        $data['batasBulanAtas'] = $batasBulanAtas;
 
         $data['bulananAnak'] = $bulananAnak;
-        $data['dataTahun']   = $dataTahun;
+        $data['dataTahun'] = $dataTahun;
 
-        $data['_tahun']  = $tahun;
+        $data['_tahun'] = $tahun;
         $data['kuartal'] = $kuartal;
 
         return $data;

@@ -281,17 +281,16 @@ if (! function_exists('angka_lokal')) {
     }
 }
 
-
 if (! function_exists('tgl_indo')) {
     function date_indo($tgl): string
     {
-        $ubah    = gmdate($tgl, time() + 60 * 60 * 8);
-        $pecah   = explode('-', $ubah);
+        $ubah = gmdate($tgl, time() + 60 * 60 * 8);
+        $pecah = explode('-', $ubah);
         $tanggal = $pecah[2];
-        $bulan   = bulan($pecah[1]);
-        $tahun   = $pecah[0];
+        $bulan = bulan($pecah[1]);
+        $tahun = $pecah[0];
 
-        return $tanggal . ' ' . $bulan . ' ' . $tahun;
+        return $tanggal.' '.$bulan.' '.$tahun;
     }
 }
 
@@ -385,13 +384,13 @@ if (! function_exists('bulan2')) {
 if (! function_exists('shortdate_indo')) {
     function shortdate_indo($tgl): string
     {
-        $ubah    = gmdate($tgl, time() + 60 * 60 * 8);
-        $pecah   = explode('-', $ubah);
+        $ubah = gmdate($tgl, time() + 60 * 60 * 8);
+        $pecah = explode('-', $ubah);
         $tanggal = $pecah[2];
-        $bulan   = short_bulan($pecah[1]);
-        $tahun   = $pecah[0];
+        $bulan = short_bulan($pecah[1]);
+        $tahun = $pecah[0];
 
-        return $tanggal . '/' . $bulan . '/' . $tahun;
+        return $tanggal.'/'.$bulan.'/'.$tahun;
     }
 }
 
@@ -442,13 +441,13 @@ if (! function_exists('short_bulan')) {
 if (! function_exists('mediumdate_indo')) {
     function mediumdate_indo($tgl): string
     {
-        $ubah    = gmdate($tgl, time() + 60 * 60 * 8);
-        $pecah   = explode('-', $ubah);
+        $ubah = gmdate($tgl, time() + 60 * 60 * 8);
+        $pecah = explode('-', $ubah);
         $tanggal = $pecah[2];
-        $bulan   = medium_bulan($pecah[1]);
-        $tahun   = $pecah[0];
+        $bulan = medium_bulan($pecah[1]);
+        $tahun = $pecah[0];
 
-        return $tanggal . '-' . $bulan . '-' . $tahun;
+        return $tanggal.'-'.$bulan.'-'.$tahun;
     }
 }
 
@@ -499,14 +498,14 @@ if (! function_exists('medium_bulan')) {
 if (! function_exists('longdate_indo')) {
     function longdate_indo($tanggal): string
     {
-        $ubah  = gmdate($tanggal, time() + 60 * 60 * 8);
+        $ubah = gmdate($tanggal, time() + 60 * 60 * 8);
         $pecah = explode('-', $ubah);
-        $tgl   = $pecah[2];
-        $bln   = $pecah[1];
-        $thn   = $pecah[0];
+        $tgl = $pecah[2];
+        $bln = $pecah[1];
+        $thn = $pecah[0];
         $bulan = bulan($pecah[1]);
 
-        $nama      = date('l', mktime(0, 0, 0, $bln, $tgl, $thn));
+        $nama = date('l', mktime(0, 0, 0, $bln, $tgl, $thn));
         $nama_hari = '';
         if ($nama == 'Sunday') {
             $nama_hari = 'Minggu';
@@ -524,7 +523,7 @@ if (! function_exists('longdate_indo')) {
             $nama_hari = 'Sabtu';
         }
 
-        return $nama_hari . ',' . $tgl . ' ' . $bulan . ' ' . $thn;
+        return $nama_hari.','.$tgl.' '.$bulan.' '.$thn;
     }
 }
 
@@ -533,63 +532,63 @@ if (! function_exists('bulan_array')) {
     {
         return [
             [
-                'urut'         => 1,
-                'nama_pendek'  => medium_bulan(1),
+                'urut' => 1,
+                'nama_pendek' => medium_bulan(1),
                 'nama_panjang' => bulan(1),
             ],
             [
-                'urut'         => 2,
-                'nama_pendek'  => medium_bulan(2),
+                'urut' => 2,
+                'nama_pendek' => medium_bulan(2),
                 'nama_panjang' => bulan(2),
             ],
             [
-                'urut'         => 3,
-                'nama_pendek'  => medium_bulan(3),
+                'urut' => 3,
+                'nama_pendek' => medium_bulan(3),
                 'nama_panjang' => bulan(3),
             ],
             [
-                'urut'         => 4,
-                'nama_pendek'  => medium_bulan(4),
+                'urut' => 4,
+                'nama_pendek' => medium_bulan(4),
                 'nama_panjang' => bulan(4),
             ],
             [
-                'urut'         => 5,
-                'nama_pendek'  => medium_bulan(5),
+                'urut' => 5,
+                'nama_pendek' => medium_bulan(5),
                 'nama_panjang' => bulan(5),
             ],
             [
-                'urut'         => 6,
-                'nama_pendek'  => medium_bulan(6),
+                'urut' => 6,
+                'nama_pendek' => medium_bulan(6),
                 'nama_panjang' => bulan(6),
             ],
             [
-                'urut'         => 7,
-                'nama_pendek'  => medium_bulan(7),
+                'urut' => 7,
+                'nama_pendek' => medium_bulan(7),
                 'nama_panjang' => bulan(7),
             ],
             [
-                'urut'         => 8,
-                'nama_pendek'  => medium_bulan(8),
+                'urut' => 8,
+                'nama_pendek' => medium_bulan(8),
                 'nama_panjang' => bulan(8),
             ],
             [
-                'urut'         => 9,
-                'nama_pendek'  => medium_bulan(9),
+                'urut' => 9,
+                'nama_pendek' => medium_bulan(9),
                 'nama_panjang' => bulan(9),
             ],
             [
-                'urut'         => 10,
-                'nama_pendek'  => medium_bulan(10),
+                'urut' => 10,
+                'nama_pendek' => medium_bulan(10),
                 'nama_panjang' => bulan(10),
             ],
             [
-                'urut'         => 11,
-                'nama_pendek'  => medium_bulan(11),
+                'urut' => 11,
+                'nama_pendek' => medium_bulan(11),
                 'nama_panjang' => bulan(11),
             ],
             [
-                'urut'         => 12,
-                'nama_pendek'  => medium_bulan(12),
+                'urut' => 12,
+                'nama_pendek' => medium_bulan(12),
                 'nama_panjang' => bulan(12),
             ],
         ];
@@ -601,51 +600,51 @@ if (! function_exists('bulan2_array')) {
     {
         return [
             [
-                'urut'         => 1,
+                'urut' => 1,
                 'nama_panjang' => 'Januari',
             ],
             [
-                'urut'         => 2,
+                'urut' => 2,
                 'nama_panjang' => 'Februari',
             ],
             [
-                'urut'         => 3,
+                'urut' => 3,
                 'nama_panjang' => 'Maret',
             ],
             [
-                'urut'         => 4,
+                'urut' => 4,
                 'nama_panjang' => 'April',
             ],
             [
-                'urut'         => 5,
+                'urut' => 5,
                 'nama_panjang' => 'Mei',
             ],
             [
-                'urut'         => 6,
+                'urut' => 6,
                 'nama_panjang' => 'Juni',
             ],
             [
-                'urut'         => 7,
+                'urut' => 7,
                 'nama_panjang' => 'Juli',
             ],
             [
-                'urut'         => 8,
+                'urut' => 8,
                 'nama_panjang' => 'Agustus',
             ],
             [
-                'urut'         => 9,
+                'urut' => 9,
                 'nama_panjang' => 'September',
             ],
             [
-                'urut'         => 10,
+                'urut' => 10,
                 'nama_panjang' => 'Oktober',
             ],
             [
-                'urut'         => 11,
+                'urut' => 11,
                 'nama_panjang' => 'November',
             ],
             [
-                'urut'         => 12,
+                'urut' => 12,
                 'nama_panjang' => 'Desember',
             ],
         ];
@@ -659,20 +658,20 @@ if (! function_exists('kuartal')) {
     {
         return [
             [
-                'ke'    => 1,
-                'bulan' => bulan_array()[0]['nama_panjang'] . ' - ' . bulan_array()[2]['nama_panjang'],
+                'ke' => 1,
+                'bulan' => bulan_array()[0]['nama_panjang'].' - '.bulan_array()[2]['nama_panjang'],
             ],
             [
-                'ke'    => 2,
-                'bulan' => bulan_array()[3]['nama_panjang'] . ' - ' . bulan_array()[5]['nama_panjang'],
+                'ke' => 2,
+                'bulan' => bulan_array()[3]['nama_panjang'].' - '.bulan_array()[5]['nama_panjang'],
             ],
             [
-                'ke'    => 3,
-                'bulan' => bulan_array()[6]['nama_panjang'] . ' - ' . bulan_array()[8]['nama_panjang'],
+                'ke' => 3,
+                'bulan' => bulan_array()[6]['nama_panjang'].' - '.bulan_array()[8]['nama_panjang'],
             ],
             [
-                'ke'    => 4,
-                'bulan' => bulan_array()[9]['nama_panjang'] . ' - ' . bulan_array()[11]['nama_panjang'],
+                'ke' => 4,
+                'bulan' => bulan_array()[9]['nama_panjang'].' - '.bulan_array()[11]['nama_panjang'],
             ],
         ];
     }
@@ -683,20 +682,20 @@ if (! function_exists('kuartal2')) {
     {
         return [
             [
-                'ke'    => 1,
-                'bulan' => bulan2_array()[0]['nama_panjang'] . ' - ' . bulan2_array()[2]['nama_panjang'],
+                'ke' => 1,
+                'bulan' => bulan2_array()[0]['nama_panjang'].' - '.bulan2_array()[2]['nama_panjang'],
             ],
             [
-                'ke'    => 2,
-                'bulan' => bulan2_array()[3]['nama_panjang'] . ' - ' . bulan2_array()[5]['nama_panjang'],
+                'ke' => 2,
+                'bulan' => bulan2_array()[3]['nama_panjang'].' - '.bulan2_array()[5]['nama_panjang'],
             ],
             [
-                'ke'    => 3,
-                'bulan' => bulan2_array()[6]['nama_panjang'] . ' - ' . bulan2_array()[8]['nama_panjang'],
+                'ke' => 3,
+                'bulan' => bulan2_array()[6]['nama_panjang'].' - '.bulan2_array()[8]['nama_panjang'],
             ],
             [
-                'ke'    => 4,
-                'bulan' => bulan2_array()[9]['nama_panjang'] . ' - ' . bulan2_array()[11]['nama_panjang'],
+                'ke' => 4,
+                'bulan' => bulan2_array()[9]['nama_panjang'].' - '.bulan2_array()[11]['nama_panjang'],
             ],
         ];
     }
@@ -707,7 +706,7 @@ if (! function_exists('get_kuartal')) {
     {
         if ($kuartal == null || $kuartal < 0 || $kuartal > 4) {
             return [
-                'ke'    => 'undefined',
+                'ke' => 'undefined',
                 'bulan' => 'undefined',
             ];
         }

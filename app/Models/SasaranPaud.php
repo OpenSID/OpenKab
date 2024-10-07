@@ -4,7 +4,6 @@ namespace App\Models;
 
 class SasaranPaud extends BaseModel
 {
-
     /**
      * The table associated with the model.
      *
@@ -26,7 +25,7 @@ class SasaranPaud extends BaseModel
      */
     protected $guarded = [];
 
-    /**
+    /*
      * The casts with the model.
      *
      * @var array
@@ -35,7 +34,7 @@ class SasaranPaud extends BaseModel
     //     'status' => 'boolean',
     // ];
 
-    /**
+    /*
      * Define a one-to-many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -45,7 +44,7 @@ class SasaranPaud extends BaseModel
     //     return $this->hasMany(BantuanPeserta::class, 'program_id');
     // }
 
-    /**
+    /*
      * Scope query untuk status bantuan
      *
      * @param Builder $query

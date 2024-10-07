@@ -5,25 +5,25 @@ namespace App\Models;
 class IbuHamil extends BaseModel
 {
     /**
-     * Static data status kehamilan ibu
+     * Static data status kehamilan ibu.
      *
      * @var array
      */
     public const STATUS_KEHAMILAN_IBU = [
         [
-            'id'     => 1,
+            'id' => 1,
             'simbol' => 'N',
-            'nama'   => 'Normal (N)',
+            'nama' => 'Normal (N)',
         ],
         [
-            'id'     => 2,
+            'id' => 2,
             'simbol' => 'Risti',
-            'nama'   => 'Risiko Tinggi (Risti)',
+            'nama' => 'Risiko Tinggi (Risti)',
         ],
         [
-            'id'     => 3,
+            'id' => 3,
             'simbol' => 'KEK',
-            'nama'   => 'Kekurangan Energi Kronis (KEK)',
+            'nama' => 'Kekurangan Energi Kronis (KEK)',
         ],
     ];
 

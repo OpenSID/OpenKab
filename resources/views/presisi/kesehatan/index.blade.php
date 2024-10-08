@@ -52,78 +52,44 @@
 @stop
 
 @section('content')
+    <div class="row"> 
+        <?php 
+            $listIcon = ['fa-female','fa-child', 'fa-female','fa-child','fa-child','fa-child','fa-child'];
+        ?>
+        <?php foreach($data['widgets'] as $index => $item): ?>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="small-box bordered <?= $item['bg-color'] == 'bg-gray' ? 'bg-danger' : $item['bg-color'] ?>"  style="border-radius:5px;padding:5px">
+                <div class="row" style="padding:5px">
+                    <div class="col-md-3 col-sm-4">
+                        <div class="icon">
+                            <i class="fa fa-4x <?= $listIcon[$index] ?? 'fa-female' ?>"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-9 col-sm-8">                    
+                        <p><?= $item['title'] ?></p>
+                        <p style="font-size:40px;margin-top:-20px "><?= $item['total'] ?></p>
+                    </div>
+                </div>                    
+
+            </div>
+        </div>
+        <?php endforeach ?>
+    </div>
     <div class="row">
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
-            <div class="row">
-                <div class="col-md-4 col-sm-6 col-12 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="info-box shadow-none rounded-0">
-
-                        <div class="info-box-content text-center kategori-item">
-                            <h4 class="text-strong">Ibu Hamil Periksa Bulan Ini</h4>
-                            <span class="jumlah-desa-elm">{{$data['bulanIniIbuHamil']}}</span>
-                        </div>
-
-                    </div>
-                
-                </div>
-                <div class="col-md-4 col-sm-6 col-12 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="info-box shadow-none rounded-0">
-
-                        <div class="info-box-content text-center kategori-item">
-                            <h4 class="text-strong">Anak Periksa Bulan Ini</h4>
-                            <span class="jumlah-penduduk-elm">{{$data['bulanIniAnak']}}</span>
-                        </div>
-
-                    </div>
-                
-                </div>
-                <div class="col-md-4 col-sm-6 col-12 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="info-box shadow-none rounded-0">
-
-                        <div class="info-box-content text-center kategori-item">
-                            <h4 class="text-strong">Ibu Hamil dan Anak 0-23 Bulan</h4>
-                            <span class="jumlah-keluarga-elm">{{$data['totalIbuHamil']+$data['totalAnak']}}</span>
-                        </div>
-
-                    </div>
-                
-                </div>
-                <div class="col-md-4 col-sm-6 col-12 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="info-box shadow-none rounded-0">
-
-                        <div class="info-box-content text-center kategori-item">
-                            <h4 class="text-strong">Anak Usia 0-23 Normal</h4>
-                            <span class="jumlah-desa-elm">{{$data['totalAnakNormal']}}</span>
-                        </div>
-
-                    </div>
-                
-                </div>
-                <div class="col-md-4 col-sm-6 col-12 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="info-box shadow-none rounded-0">
-
-                        <div class="info-box-content text-center kategori-item">
-                            <h4 class="text-strong">Anak Usia 0-23 Resiko Stunting</h4>
-                            <span class="jumlah-penduduk-elm">{{$data['totalAnakResiko']}}</span>
-                        </div>
-
-                    </div>
-                
-                </div>
-                <div class="col-md-4 col-sm-6 col-12 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="info-box shadow-none rounded-0">
-
-                        <div class="info-box-content text-center kategori-item">
-                            <h4 class="text-strong">Anak Usia 0-23 Stunting</h4>
-                            <span class="jumlah-keluarga-elm">{{$data['totalAnakStunting']}}</span>
-                        </div>
-
-                    </div>
-                
-                </div>
-            </div>
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
+                    <div class="row mt-4">     
+                        <div class="col-md-4 col-sm-12" id="chart_0_5"></div>
+                        <div class="col-md-4 col-sm-12" id="chart_6_11"></div>
+                        <div class="col-md-4 col-sm-12" id="chart_12_23"></div>
+                    </div>
+
+                    
+                    <div class="grid grid-cols-1 container px-3 lg:px-5">     
+                        <div id="chart_posyandu"></div>    
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                             <div class="box box-success">
@@ -543,5 +509,69 @@
             window.location.href = "{{ url('presisi/kesehatan/') }}/" + kuartal + "/" +
                 tahun + "/" + posyandu;
         });
+        
+        $(document).ready(function(){
+            <?php foreach($data['chartStuntingUmurData'] as $item): ?>
+                Highcharts.chart('<?= $item['id'] ?>', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: '<?= $item['title'] ?>'
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },    
+                plotOptions: {
+                    series: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        colors: ['blue', 'red'],
+                        showInLegend: true,                    
+                    },
+                    pie: {
+                        dataLabels: {
+                        enabled: true,
+                        distance: -50,
+                        format: '{point.y:,.1f} %'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        name: 'percentage',
+                        colorByPoint: true,
+                        data: <?= json_encode($item['data']) ?>
+                    }
+                ]
+                
+            })
+            
+            <?php endforeach; ?>
+        })
+        
+        $(document).ready(function(){        
+            const posy=    Highcharts.chart('chart_posyandu', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Grafik Kasus Stunting per-Posyandu'
+                },
+                xAxis: {
+                    categories: <?= json_encode($data['chartStuntingPosyanduData']['categories']) ?>
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Angka Kasus Stunting'
+                    }
+                },            
+                colors: ['#028EFA', '#5EE497', '#FDB13B'],
+                series: <?= json_encode($data['chartStuntingPosyanduData']['data']) ?>
+
+            })                
+        })
     </script>
 @endpush

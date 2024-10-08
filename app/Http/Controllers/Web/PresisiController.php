@@ -9,6 +9,7 @@ use App\Models\Penduduk;
 use App\Models\Posyandu;
 use App\Models\SasaranPaud;
 use App\Services\RekapService;
+use App\Services\StuntingService;
 
 class PresisiController extends Controller
 {
@@ -62,11 +63,10 @@ class PresisiController extends Controller
         if ($tahun == null) {
             $tahun = date('Y');
         }
-        $statistik = Penduduk::KATEGORI_STATISTIK;
 
         $data = $this->sumber_data($kuartal, $tahun, $id);
-
-        return view('presisi.kesehatan.index', compact('data', 'statistik'));
+        
+        return view('presisi.kesehatan.index', compact('data'));
     }
 
     private function sumber_data($kuartal = null, $tahun = null, $id = null)
@@ -309,6 +309,9 @@ class PresisiController extends Controller
         $data['kuartal'] = $kuartal;
         $data['_tahun'] = $tahun;
         $data['aktif'] = 'scorcard';
+        $stunting = new StuntingService(['idPosyandu' => $id, 'kuartal' => $kuartal, 'tahun' => $tahun]);
+        $data['chartStuntingUmurData'] = $stunting->chartStuntingUmurData();
+        $data['chartStuntingPosyanduData'] = $stunting->chartPosyanduData();
 
         return $data;
     }
@@ -323,6 +326,50 @@ class PresisiController extends Controller
             'totalAnakNormal' => Anak::where('status_gizi', 1)->count(),
             'totalAnakResiko' => Anak::whereIn('status_gizi', [2, 3])->count(),
             'totalAnakStunting' => Anak::where('status_gizi', 4)->count(),
+            'widgets' => [
+                [
+                    'title' => 'Ibu Hamil Periksa Bulan ini',
+                    'icon' => 'ion-woman',
+                    'bg-color' => 'bg-blue',
+                    'bg-icon'=> 'ion-stats-bars',
+                    'total' => IbuHamil::whereMonth('created_at', date('m'))->count(),
+                ],
+                [
+                    'title' => 'Anak Periksa Bulan ini',
+                    'icon' => 'ion-woman',
+                    'bg-color' => 'bg-gray',
+                    'bg-icon'=> 'ion-stats-bars',
+                    'total' => Anak::whereMonth('created_at', date('m'))->count(),
+                ],
+                [
+                    'title' => 'Ibu Hamil & Anak 0-23 Bulan',
+                    'icon' => 'ion-woman',
+                    'bg-color' => 'bg-green',
+                    'bg-icon'=> 'ion-stats-bars',
+                    'total' => IbuHamil::count() + Anak::count(),
+                ],
+                [
+                    'title' => 'Anak 0-23 Bulan Normal',
+                    'icon' => 'ion-woman',
+                    'bg-color' => 'bg-green',
+                    'bg-icon'=> 'ion-stats-bars',
+                    'total' => Anak::normal()->count(),
+                ],
+                [
+                    'title' => 'Anak 0-23 Bulan Resiko Stunting',
+                    'icon' => 'ion-woman',
+                    'bg-color' => 'bg-yellow',
+                    'bg-icon'=> 'ion-stats-bars',
+                    'total' => Anak::resikoStunting()->count(),
+                ],
+                [
+                    'title' => 'Anak 0-23 Bulan Stunting',
+                    'icon' => 'ion-woman',
+                    'bg-color' => 'bg-red',
+                    'bg-icon'=> 'ion-stats-bars',
+                    'total' => Anak::stunting()->count(),
+                ]     
+            ]
         ];
     }
 }

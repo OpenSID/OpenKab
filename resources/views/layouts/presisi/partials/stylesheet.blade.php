@@ -17,4 +17,6 @@
 <link rel="stylesheet" href="{{ asset('assets/plugins/chart.js/Chart.min.css') }}">
 
 <link href="{{ asset('web/css/presisi.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('assets/css/highcharts.css') }}">
+
 

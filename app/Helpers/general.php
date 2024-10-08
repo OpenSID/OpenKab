@@ -714,3 +714,13 @@ if (! function_exists('get_kuartal')) {
         return kuartal2()[$kuartal - 1];
     }
 }
+
+function persen3($number, $total, $precision = 2)
+{
+    // Can't divide by zero so let's catch that early.
+    if ($total == 0) {
+        return 0;
+    }
+
+    return round(($number / $total) * 100, $precision) . '%';
+}

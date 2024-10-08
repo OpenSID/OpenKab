@@ -60,7 +60,7 @@
 
                         <div class="info-box-content text-center kategori-item">
                             <h4 class="text-strong">Ibu Hamil Periksa Bulan Ini</h4>
-                            <span class="jumlah-desa-elm">0</span>
+                            <span class="jumlah-desa-elm">{{$data['bulanIniIbuHamil']}}</span>
                         </div>
 
                     </div>
@@ -71,7 +71,7 @@
 
                         <div class="info-box-content text-center kategori-item">
                             <h4 class="text-strong">Anak Periksa Bulan Ini</h4>
-                            <span class="jumlah-penduduk-elm">0</span>
+                            <span class="jumlah-penduduk-elm">{{$data['bulanIniAnak']}}</span>
                         </div>
 
                     </div>
@@ -82,7 +82,7 @@
 
                         <div class="info-box-content text-center kategori-item">
                             <h4 class="text-strong">Ibu Hamil dan Anak 0-23 Bulan</h4>
-                            <span class="jumlah-keluarga-elm">0</span>
+                            <span class="jumlah-keluarga-elm">{{$data['totalIbuHamil']+$data['totalAnak']}}</span>
                         </div>
 
                     </div>
@@ -93,7 +93,7 @@
 
                         <div class="info-box-content text-center kategori-item">
                             <h4 class="text-strong">Anak Usia 0-23 Normal</h4>
-                            <span class="jumlah-desa-elm">0</span>
+                            <span class="jumlah-desa-elm">{{$data['totalAnakNormal']}}</span>
                         </div>
 
                     </div>
@@ -104,7 +104,7 @@
 
                         <div class="info-box-content text-center kategori-item">
                             <h4 class="text-strong">Anak Usia 0-23 Resiko Stunting</h4>
-                            <span class="jumlah-penduduk-elm">0</span>
+                            <span class="jumlah-penduduk-elm">{{$data['totalAnakResiko']}}</span>
                         </div>
 
                     </div>
@@ -115,7 +115,7 @@
 
                         <div class="info-box-content text-center kategori-item">
                             <h4 class="text-strong">Anak Usia 0-23 Stunting</h4>
-                            <span class="jumlah-keluarga-elm">0</span>
+                            <span class="jumlah-keluarga-elm">{{$data['totalAnakStunting']}}</span>
                         </div>
 
                     </div>

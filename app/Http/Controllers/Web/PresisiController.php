@@ -119,6 +119,7 @@ class PresisiController extends Controller
             ->selectRaw('ibu_hamil.kia_id as kia_id')
             ->get();
 
+
         $JTRT_BulananAnak = Anak::query()
             ->distinct()
             ->join('kia', 'bulanan_anak.kia_id', '=', 'kia.id')
@@ -319,6 +320,9 @@ class PresisiController extends Controller
             'bulanIniAnak' => Anak::whereMonth('created_at', date('m'))->count(),
             'totalIbuHamil' => IbuHamil::count(),
             'totalAnak' => Anak::count(),
+            'totalAnakNormal' => Anak::where('status_gizi', 1)->count(),
+            'totalAnakResiko' => Anak::whereIn('status_gizi', [2, 3])->count(),
+            'totalAnakStunting' => Anak::where('status_gizi', 4)->count(),
         ];
     }
 }

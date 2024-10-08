@@ -722,5 +722,5 @@ function persen3($number, $total, $precision = 2)
         return 0;
     }
 
-    return round(($number / $total) * 100, $precision) . '%';
+    return round(($number / $total) * 100, $precision).'%';
 }

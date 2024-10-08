@@ -65,7 +65,7 @@ class PresisiController extends Controller
         }
 
         $data = $this->sumber_data($kuartal, $tahun, $id);
-        
+
         return view('presisi.kesehatan.index', compact('data'));
     }
 
@@ -330,45 +330,45 @@ class PresisiController extends Controller
                     'title' => 'Ibu Hamil Periksa Bulan ini',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-blue',
-                    'bg-icon'=> 'ion-stats-bars',
+                    'bg-icon' => 'ion-stats-bars',
                     'total' => IbuHamil::whereMonth('created_at', date('m'))->count(),
                 ],
                 [
                     'title' => 'Anak Periksa Bulan ini',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-gray',
-                    'bg-icon'=> 'ion-stats-bars',
+                    'bg-icon' => 'ion-stats-bars',
                     'total' => Anak::whereMonth('created_at', date('m'))->count(),
                 ],
                 [
                     'title' => 'Ibu Hamil & Anak 0-23 Bulan',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-green',
-                    'bg-icon'=> 'ion-stats-bars',
+                    'bg-icon' => 'ion-stats-bars',
                     'total' => IbuHamil::count() + Anak::count(),
                 ],
                 [
                     'title' => 'Anak 0-23 Bulan Normal',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-green',
-                    'bg-icon'=> 'ion-stats-bars',
+                    'bg-icon' => 'ion-stats-bars',
                     'total' => Anak::normal()->count(),
                 ],
                 [
                     'title' => 'Anak 0-23 Bulan Resiko Stunting',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-yellow',
-                    'bg-icon'=> 'ion-stats-bars',
+                    'bg-icon' => 'ion-stats-bars',
                     'total' => Anak::resikoStunting()->count(),
                 ],
                 [
                     'title' => 'Anak 0-23 Bulan Stunting',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-red',
-                    'bg-icon'=> 'ion-stats-bars',
+                    'bg-icon' => 'ion-stats-bars',
                     'total' => Anak::stunting()->count(),
-                ]     
-            ]
+                ],
+            ],
         ];
     }
 }

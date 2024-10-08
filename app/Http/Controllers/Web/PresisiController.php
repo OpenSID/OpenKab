@@ -119,7 +119,6 @@ class PresisiController extends Controller
             ->selectRaw('ibu_hamil.kia_id as kia_id')
             ->get();
 
-
         $JTRT_BulananAnak = Anak::query()
             ->distinct()
             ->join('kia', 'bulanan_anak.kia_id', '=', 'kia.id')

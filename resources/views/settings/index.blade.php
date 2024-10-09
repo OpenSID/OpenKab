@@ -82,16 +82,12 @@
                     {
                         data: function (data) {
                             let canEdit = `{{ $canedit }}`
-                            let canDelete = `{{ $candelete }}`
                             let buttonEdit = canEdit ? `<a href="{{ route('settings.index') }}/${data.id}/edit">
                                         <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </a>` : ``;
-                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>` : ``;
-                            return `${buttonEdit} ${buttonDelete}`;
+                            return `${buttonEdit}`;
                         },
                     },
                 ],

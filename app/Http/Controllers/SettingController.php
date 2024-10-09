@@ -7,6 +7,8 @@ use App\Http\Requests\CreateSettingRequest;
 use App\Http\Requests\UpdateSettingRequest;
 use App\Http\Transformers\SettingTransformer;
 use Illuminate\Http\Request;
+use App\Models\SettingModul;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Session;
 
 class SettingController extends AppBaseController
@@ -92,7 +94,19 @@ class SettingController extends AppBaseController
      * Update the specified Setting in storage.
      */
     public function update($id, UpdateSettingRequest $request)
-    {
+    {  
+        if (empty(SettingModul::where('url', 'like', '%prodeskel%')->first()) && $request->value == 'presisi' ) {
+            $setting = Setting::where('key', 'home_page')->where('value', 'presisi')->first();
+            
+            if($setting){
+                $setting->update(['value' => 'default']);
+            }
+
+            Session::flash('alert', 'Pengaturan halaman utama dasbor presisi tidak dapat diaktifkan, mohon pastikan prodeskel pada OpenSID harus terpasang.');
+            
+            return redirect(route('settings.index'));
+        }
+
         $setting = $this->settingRepository->find($id);
 
         if (empty($setting)) {

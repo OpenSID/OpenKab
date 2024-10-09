@@ -122,42 +122,6 @@
                                     Swal.showLoading()
                                 },
                             })
-                            $.ajax({
-                                type: 'DELETE',
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                dataType: "json",
-                                url: `{{ route('settings.index') }}/${id}`,
-                                data: {
-                                    id: id
-                                },
-                                success: function(response) {
-
-                                    if (response.success == true) {
-                                        Swal.fire(
-                                            'Hapus!',
-                                            'Data berhasil dihapus',
-                                            'success'
-                                        )
-                                        that.parent().parent().remove();
-                                    } else {
-                                        Swal.fire(
-                                            'Error!',
-                                            response.message,
-                                            'error'
-                                        )
-                                    }
-                                },
-                                error: function(xhr, ajaxOptions, thrownError) {
-                                    Swal.fire(
-                                        'Error!',
-                                        thrownError,
-                                        'error'
-                                    )
-
-                                }
-                            });
                         }
                     })
                 });

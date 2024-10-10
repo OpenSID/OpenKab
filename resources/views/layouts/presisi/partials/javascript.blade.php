@@ -17,3 +17,12 @@
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
 <script src="{{ asset('assets/plugins/chart.js/Chart.min.js') }}"></script>
 <script src="{{ asset('assets/costume/js/admin.js') }}"></script>
+
+<!-- Highcharts JS -->
+<script src="{{ asset('assets/js/highcharts/highcharts.js') }}"></script>
+<script src="{{ asset('assets/js/highcharts/highcharts-3d.js') }}"></script>
+<script src="{{ asset('assets/js/highcharts/exporting.js') }}"></script>
+<script src="{{ asset('assets/js/highcharts/highcharts-more.js') }}"></script>
+<script src="{{ asset('assets/js/highcharts/sankey.js') }}"></script>
+<script src="{{ asset('assets/js/highcharts/organization.js') }}"></script>
+<script src="{{ asset('assets/js/highcharts/accessibility.js') }}"></script>

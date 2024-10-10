@@ -2,12 +2,12 @@ Di rilis v2410.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 
 #### Penambahan Fitur
 
-1. [#343](https://github.com/OpenSID/OpenKab/issues/343) Pengaturan nama aplikasi.
-2. [#346](https://github.com/OpenSID/OpenKab/issues/346) Dasbor awal data presisi.
+1. [#362](https://github.com/OpenSID/OpenKab/issues/362) Penambahan halaman statistik untuk stunting pada halaman public.
 
 #### Perbaikan BUG
 
+1. [#369](https://github.com/OpenSID/OpenKab/issues/369) Perbaikan status pengaturan dasbor presisi tidak bisa diaktifkan jika tidak memenuhi standar.
 
 #### Perubahan Teknis
 
-1. [#358](https://github.com/OpenSID/OpenKab/issues/358) Kirim track openkab ke pantau.
+1. [#368](https://github.com/OpenSID/OpenKab/issues/368) Sesuaikan pengaturan tidak dapat dihapus.

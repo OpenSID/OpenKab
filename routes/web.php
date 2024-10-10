@@ -154,7 +154,7 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });
 
-Route::prefix('presisi')->group(function () {
+Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
     Route::view('/sosial',   'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');

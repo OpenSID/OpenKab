@@ -74,5 +74,6 @@ class Kernel extends HttpKernel
         'website.enable' => Middleware\WebsiteEnable::class,
         'log.visitor' => \Shetabit\Visitor\Middlewares\LogVisits::class,
         'easyauthorize' => Middleware\EasyAuthorize::class,
+        'check.presisi' => Middleware\CheckPresisiStatus::class,
     ];
 }

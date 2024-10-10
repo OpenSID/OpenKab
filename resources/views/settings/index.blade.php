@@ -82,16 +82,12 @@
                     {
                         data: function (data) {
                             let canEdit = `{{ $canedit }}`
-                            let canDelete = `{{ $candelete }}`
                             let buttonEdit = canEdit ? `<a href="{{ route('settings.index') }}/${data.id}/edit">
                                         <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </a>` : ``;
-                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>` : ``;
-                            return `${buttonEdit} ${buttonDelete}`;
+                            return `${buttonEdit}`;
                         },
                     },
                 ],
@@ -126,42 +122,6 @@
                                     Swal.showLoading()
                                 },
                             })
-                            $.ajax({
-                                type: 'DELETE',
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                dataType: "json",
-                                url: `{{ route('settings.index') }}/${id}`,
-                                data: {
-                                    id: id
-                                },
-                                success: function(response) {
-
-                                    if (response.success == true) {
-                                        Swal.fire(
-                                            'Hapus!',
-                                            'Data berhasil dihapus',
-                                            'success'
-                                        )
-                                        that.parent().parent().remove();
-                                    } else {
-                                        Swal.fire(
-                                            'Error!',
-                                            response.message,
-                                            'error'
-                                        )
-                                    }
-                                },
-                                error: function(xhr, ajaxOptions, thrownError) {
-                                    Swal.fire(
-                                        'Error!',
-                                        thrownError,
-                                        'error'
-                                    )
-
-                                }
-                            });
                         }
                     })
                 });

@@ -9,3 +9,4 @@ Di rilis v2410.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 
 #### Perubahan Teknis
 
+1. [#368](https://github.com/OpenSID/OpenKab/issues/368) Sesuaikan pengaturan tidak dapat dihapus.

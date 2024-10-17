@@ -83,3 +83,17 @@
 .bg-light-blue {
     background: #eaedf6!important;
 }
+.c-badge-small {
+    background: #b2debb;
+    padding: 0px 5px 3px 5px;
+}
+.bg-white.btn.active, .bg-white.btn:active, .bg-white.btn:not(:disabled):not(.disabled).active, .bg-white.btn:not(:disabled):not(.disabled):active {
+    background-color: white !important;
+    border-color: white!important;
+    color: #007BFF!important;
+}
+.bg-white.btn:hover{
+    background-color: white !important;
+    border-color: white!important;
+    color: #007BFF!important;
+}

@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav ms-auto">
             </ul>
-            <a href="/login" class="btn btn-login px-3 d-none d-lg-flex">Login</a>
+            <a href="/login" class="btn btn-outline-primary px-3 d-none d-lg-flex">Login</a>
         </div>
     </nav>
 <!-- Navbar End -->

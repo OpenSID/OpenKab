@@ -1,64 +1,76 @@
 @extends('layouts.presisi.index')
 
 @section('content_header')
-    <h2>Dashboard Data Presisi</h2>
 @stop
 @section('content')
 
-@include('presisi.summary')
-<div class="row">
-    <div class="col-md-6">
+
+    <!-- Header -->
+    <div class="card container bg-c2  border-0 shadow-none">
+        <div class="dashboard-header d-flex justify-content-between align-items-center mt-1">
+            <h2>{{ config('app.namaAplikasi') }}</h2>
+            <div>
+                <button class="btn rounded-0 shadow-sm text-muted"><i class="fas fa-calendar"></i> Hari Ini</button>
+            </div>
+        </div>
+        <div class="btn-group mt-2 mb-2">
+            <button type="button" class="btn bg-white p-2 mr-1 text-muted"><i class="fas fa-calendar"></i> Terkini</button>
+            <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-calendar"></i> Demografi</button>
+            <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-calendar"></i> Sosial</button>
+            <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-calendar"></i> Kependudukan</button>
+            <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-calendar"></i> Ekonomi</button>
+            <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-calendar"></i> E-Stunting</button>
+            <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-calendar"></i> Geo Spasial</button>
+        </div>
+    </div>
+
+<div class="row m-1">
+    <div class="col-md-12">
         
-        <div class="card rounded-0 elevation-0">
-            <div class="card-header">Peta</div>
+        <div class="card rounded-0 border-0 shadow-none">
+            @include('presisi.summary')
             <div class="card-body">
             <div id="map" style="height: 250px;"></div>
             </div>            
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card rounded-0 elevation-0">
-          <div class="card-header">Data Batas Wilayah</div>  
-          <div class="card-body">
-          <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                  Total Luas Wilayah
-                  <span>
-                    <span id="summary-luas_wilayah">0</span> Ha
-                  </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Total Lahan Pertanian
-                <span>
-                  <span id="summary-luas_pertanian">0</span> Ha
-                </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-              Total Lahan Perkebunan
-                <span>
-                  <span id="summary-luas_perkebunan">0</span> Ha
-                </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-              Total Lahan Kehutanan
-                <span>
-                  <span id="summary-luas_hutan">0</span> Ha
-                </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-              Total Lahan Peternakan
-                <span>
-                  <span id="summary-luas_peternakan">0</span> Ha
-                </span>
-              </li>
-          </ul>
-          </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card p-3">
+            <i class="fas fa-bullseye"></i>
+            <h5>
+                <span id="summary-luas_wilayah">0</span> Ha
+            </h5>
+            <p>Luas Wilayah</p>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card p-3">
+            <i class="fas fa-check-circle"></i>
+            <h5>
+            <span id="summary-luas_pertanian">0</span> Ha
+            </h5>
+            <p>Total Lahan Pertanian</p>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card p-3">
+            <i class="fas fa-clock"></i>
+            <h5><span id="summary-luas_perkebunan">0</span> Ha</h5>
+            <p>Total Lahan Perkebunan</p>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card p-3">
+            <i class="fas fa-dollar-sign"></i>
+            <h5><span id="summary-luas_hutan">0</span> Ha</h5>
+            <p>Total Lahan Kehutanan</p>
         </div>
     </div>
 
     <div class="col-md-12">
         <div class="card rounded-0 elevation-0">
-          <div class="card-header">Data Kelurahan /Desa</div>  
+          <div class="card-header bg-white">Data Kelurahan /Desa</div>  
           <div class="card-body">
               <div class="table-responsive">
                   <table class="table table-striped" id="summary-penduduk">

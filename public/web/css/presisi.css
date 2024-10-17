@@ -43,3 +43,43 @@
 .cbg-white.btn:hover {
     border-color: white;
 }
+.mr-40 {
+    margin-right: 40%;
+}
+.c-badge {
+    padding-top: 12px;
+    padding-bottom: 6px;
+    background: #eaf2ff;
+}
+.c-badge1 {
+    padding: 10px 6px;
+    background: #f8ecd7;
+    color: #ecbe36;
+}
+.c-badge2 {
+    padding: 10px 6px;
+    background: #d1e8e7;
+    color: #41ca76;
+}
+.c-badge3 {
+    padding: 10px 6px;
+    background: #e9def6;
+    color: #b26cf6;
+}
+.c-badge4 {
+    padding: 10px 6px;
+    background: #dce1eb;
+    color: #67778e;
+}
+.bg-light-oren {
+    background: #faf4ef!important;
+}
+.bg-light-green {
+    background: #e8f3f4!important;
+}
+.bg-light-purple {
+    background: #f0ecf6!important;
+}
+.bg-light-blue {
+    background: #eaedf6!important;
+}

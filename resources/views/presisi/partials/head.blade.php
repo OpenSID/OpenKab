@@ -1,9 +1,11 @@
-<div class="card container bg-c2 border-0 shadow-none">
-    <div class="dashboard-header d-flex justify-content-between align-items-center mt-1">
-        <h2>{{ config('app.namaAplikasi') }}</h2>
-        <div>
-        <input type="text" name="filtera" value="" class="form-control datepicker" id="filtera">
-            <button class="btn rounded-0 shadow-sm text-muted"><i class="fas fa-calendar"></i> Hari Ini</button>
+            <div class="card container bg-c2 border-0 shadow-none">
+                <div class="dashboard-header d-flex justify-content-between align-items-center mt-1">
+                    <h2>{{ config('app.namaAplikasi') }}</h2>
+                    <div>
+                    <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span> <i class="fa fa-caret-down"></i>
+            </div>
         </div>
     </div>
     <div class="btn-group mt-2 mb-2">
@@ -38,4 +40,3 @@
         <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-map"></i> Geo Spasial</button>
     </div>
 </div>
-@include('partials.asset_datepicker')

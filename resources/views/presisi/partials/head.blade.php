@@ -40,4 +40,3 @@
         <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-map"></i> Geo Spasial</button>
     </div>
 </div>
-@include('partials.asset_datepicker')

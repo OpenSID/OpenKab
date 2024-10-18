@@ -7,6 +7,8 @@
                 <span></span> <i class="fa fa-caret-down"></i>
             </div>
         </div>
+        <input type="text" name="filter" value="" class="form-control datepicker" id="filter">
+
     </div>
     <div class="btn-group mt-2 mb-2">
         <button type="button" class="btn bg-white p-2 mr-1 text-muted"><span class="c-badge-small rounded-circle"><i class="fas fa-circle text-success text-sm"></i></span> Terkini</button>

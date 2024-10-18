@@ -2,13 +2,12 @@
                 <div class="dashboard-header d-flex justify-content-between align-items-center mt-1">
                     <h2>{{ config('app.namaAplikasi') }}</h2>
                     <div>
-                    <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                <i class="fa fa-calendar"></i>&nbsp;
-                <span></span> <i class="fa fa-caret-down"></i>
-            </div>
+                    <div style="position: relative; width: 100%;">
+                    <i class="fa fa-calendar" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%);"></i>
+                    <input id="reportrange" type="text" style="padding-left: 30px; padding-right: 30px; width: 100%; border: 1px solid #ccc;"/>
+                    <i class="fa fa-caret-down" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);"></i>
+                </div>
         </div>
-        <input type="text" name="filter" value="" class="form-control datepicker" id="filter">
-
     </div>
     <div class="btn-group mt-2 mb-2">
         <button type="button" class="btn bg-white p-2 mr-1 text-muted"><span class="c-badge-small rounded-circle"><i class="fas fa-circle text-success text-sm"></i></span> Terkini</button>

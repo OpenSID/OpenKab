@@ -206,6 +206,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 },
             ],
         })
+
+        $('.datepicker').daterangepicker(
+            {
+                autoApply: true,
+                singleDatePicker: true,
+                locale: {                    
+                    firstDay: 1
+                }
+            });
 });
 </script>
 @endpush

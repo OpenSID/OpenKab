@@ -2,6 +2,7 @@
     <div class="dashboard-header d-flex justify-content-between align-items-center mt-1">
         <h2>{{ config('app.namaAplikasi') }}</h2>
         <div>
+        <input type="text" name="filtera" value="" class="form-control datepicker" id="filtera">
             <button class="btn rounded-0 shadow-sm text-muted"><i class="fas fa-calendar"></i> Hari Ini</button>
         </div>
         <input type="text" name="filter" value="" class="form-control datepicker" id="filter">
@@ -39,3 +40,4 @@
         <button type="button" class="btn bg-white p-2 text-muted"><i class="fas fa-map"></i> Geo Spasial</button>
     </div>
 </div>
+@include('partials.asset_datepicker')

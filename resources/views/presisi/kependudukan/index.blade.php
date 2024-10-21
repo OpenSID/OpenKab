@@ -11,7 +11,7 @@
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card card-primary rounded-0 elevation-0 border">
                                 <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Penduduk</h3>
@@ -35,7 +35,7 @@
 
                             </div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
                                 <div class="card-header">
                                     <div class="row">

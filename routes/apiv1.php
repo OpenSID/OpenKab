@@ -34,7 +34,29 @@ use Illuminate\Support\Facades\Route;
 Route::post('/signin', [AuthController::class, 'login']);
 Route::get('/identitas', [IdentitasController::class, 'index']);
 
-Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
+Route::middleware('auth:sanctum')->get('validate-token', function (Request $request) {
+    $user = $request->user();
+
+    // Check if the user has an authenticated token
+    if ($user && $user->currentAccessToken()) {
+        // Get the current access token
+        $token = $user->currentAccessToken();
+
+        // Fetch the abilities associated with the token
+        $abilities = $token->abilities;
+
+        return response()->json([
+            'user' => $user,
+            'abilities' => $abilities,
+        ]);
+    }
+
+    return response()->json([
+        'message' => 'No active token found.',
+    ], 401);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logOut']);
     Route::get('/user', function (Request $request) {
         return $request->user();

@@ -6,8 +6,8 @@
             </div>
             <h2 class="m-0 text-logo">{{ $identitasAplikasi['nama_aplikasi'] }}<br><p class="text-black h6">Dasbor Kabupaten</p></h2>
         </a>
-        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
+        <button type="button" class="m-only btn btn-outline-primary px-3" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <a href="/login" class="">Login</a>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav ms-auto">

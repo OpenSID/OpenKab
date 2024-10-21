@@ -97,3 +97,17 @@
     border-color: white!important;
     color: #007BFF!important;
 }
+.m-only{
+    display: none!important;
+}
+.d-only{
+    display: inline-flex!important;
+}
+@media (max-width: 767px){
+    .m-only{
+        display: block!important;
+    }
+    .d-only{
+        display: none!important;
+    }
+}

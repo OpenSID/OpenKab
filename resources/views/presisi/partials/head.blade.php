@@ -1,6 +1,6 @@
             <div class="card container bg-c2 border-0 shadow-none">
                 <div class="dashboard-header d-flex justify-content-between align-items-center mt-1">
-                    <h2>{{ config('app.namaAplikasi') }}</h2>
+                    <h2>{{ $identitasAplikasi['nama_aplikasi'] }}</h2>
                     <div>
                     <div style="position: relative; width: 100%;">
                     <i class="fa fa-calendar" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%);"></i>

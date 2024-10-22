@@ -376,6 +376,7 @@ class PresisiController extends Controller
     public function bantuan()
     {
         $statistik = Bantuan::get();
+        
         return view('presisi.bantuan.index', compact('statistik'));
     }
 }

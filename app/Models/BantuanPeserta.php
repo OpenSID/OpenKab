@@ -17,6 +17,7 @@ class BantuanPeserta extends BaseModel
         'no_kk',
         'jenis_kelamin',
         'keterangan',
+        'kartu_alamat',
     ];
 
     public function getNikAttribute()

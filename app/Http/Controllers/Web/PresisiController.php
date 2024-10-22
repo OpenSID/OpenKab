@@ -371,4 +371,11 @@ class PresisiController extends Controller
             ],
         ];
     }
+
+    public function bantuan()
+    {
+        $statistik = Penduduk::KATEGORI_STATISTIK;
+
+        return view('presisi.bantuan.index', compact('statistik'));
+    }
 }

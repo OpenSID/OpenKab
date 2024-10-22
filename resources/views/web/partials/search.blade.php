@@ -62,6 +62,8 @@
             })
 
             $('body').on('click', '#statistik_result .panel-collapse ul>li', function () {
+                window.history.pushState({}, document.title, window.location.pathname);
+
                 initializeDatatable($(this))
                 $('#statistik_result .panel-collapse ul>li.active').removeClass('active')
                 $(this).addClass('active')

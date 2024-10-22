@@ -19,12 +19,26 @@
                                 </div>
                                 <div class="card-body p-0 ">
                                     <ul class="nav nav-pills flex-column" id="nav-statistik">
-                                            <li class="nav-item active">
-                                                <a href="javascript:;" class="nav-link rounded-0"
-                                                    data-key="penduduk" data-name="Penerima Bantuan Penduduk">
-                                                    <i class="fas fa-inbox"></i> Penerima Bantuan Penduduk
-                                                </a>
-                                            </li>
+                                    <li class="nav-item active">
+                                        <a href="javascript:;" class="nav-link rounded-0"
+                                            data-key="penduduk" data-name="Penerima Bantuan Penduduk">
+                                            <i class="fas fa-inbox"></i> Penerima Bantuan Penduduk
+                                        </a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a href="javascript:;" class="nav-link rounded-0"
+                                            data-key="keluarga" data-name="Penerima Bantuan Keluarga">
+                                            <i class="fas fa-inbox"></i> Penerima Bantuan Keluarga
+                                        </a>
+                                    </li>
+                                    @foreach ($statistik as $key => $sub)
+                                        <li class="nav-item active">
+                                            <a href="javascript:;" class="nav-link rounded-0"
+                                                data-key="{{ $sub->slug }}" data-name="{{ $sub->nama }}">
+                                                <i class="fas fa-inbox"></i> {{ $sub->nama }}
+                                            </a>
+                                        </li>
+                                    @endforeach
 
 
 
@@ -114,7 +128,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th class="judul">Rentang Umur</th>
+                                                    <th class="judul">Kelompok</th>
                                                     <th class="text-center">Jumlah</th>
                                                     <th class="text-center">Laki - laki</th>
                                                     <th class="text-center">Perempuan</th>

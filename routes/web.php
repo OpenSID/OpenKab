@@ -20,6 +20,7 @@ use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
+use App\Http\Controllers\Web\PresisiStatistikBantuanController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\Web\DownloadCounterController;
@@ -160,4 +161,7 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
     Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/kesehatan/{kuartal}/{tahun}/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+    Route::get('/bantuan/{id?}', [PresisiStatistikBantuanController::class, 'index'])->name('presisi.bantuan');
+    Route::get('/bantuan/datatables', [PresisiStatistikBantuanController::class, 'datatables'])->name('presisi.bantuan.datatables');
+    Route::get('/bantuan/peserta_datatables', [PresisiStatistikBantuanController::class, 'datatables'])->name('presisi.bantuan.peserta_datatables');
 });

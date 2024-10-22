@@ -24,12 +24,12 @@
 
     <!-- Dropdown Sosial -->
     <div class="dropdown bg-white pl-3 pr-2">
-        <button class="btn bg-white p-2 dropdown-toggle text-muted rounded-0 {{ Route::getCurrentRoute()->getName() == 'presisi.sosial' ? 'active' : '' }}" type="button" id="sosialDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn bg-white p-2 dropdown-toggle text-muted rounded-0 {{ Route::getCurrentRoute()->getName() == 'presisi.sosial' ? 'active' : '' }} {{ Route::getCurrentRoute()->getName() == 'presisi.bantuan' ? 'active' : '' }}" type="button" id="sosialDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-table"></i> Sosial
         </button>
         <div class="dropdown-menu" aria-labelledby="sosialDropdown">
             <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.sosial' ? 'active' : '' }}" href="{{ url('presisi/sosial') }}">Data Kemiskinan</a>
-            <a class="dropdown-item" href="#">Program Bantuan</a>
+            <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.bantuan' ? 'active' : '' }}" href="{{ url('presisi/bantuan') }}" href="#">Program Bantuan</a>
         </div>
     </div>
 

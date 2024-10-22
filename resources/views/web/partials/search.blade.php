@@ -74,6 +74,25 @@
                 let tahun = new Date().getFullYear()
                 let bulan = new Date().getMonth() + 1
                 let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
+
+                let urlParams = new URLSearchParams(window.location.search);
+                let queryStatistik = urlParams.get('statistik');
+
+
+                if (urlParams.get('statistik') && urlParams.get('kategori')) {
+                    default_id = urlParams.get('kategori');
+                    kategori = urlParams.get('statistik');
+
+                    $('.panel-collapse').removeClass('show').addClass('collapse');
+
+                    // Open the panel for the matching item (add 'show' class)
+                    $(`.list-group-item[data-id="${default_id}"]`).closest('.panel-collapse').addClass('show');
+
+                    // Set active class for the matching item and toggle icons
+                    $('.list-group-item').removeClass('active').find('i.fa-angle-up').addClass('fa-angle-down').removeClass('fa-angle-up');
+                    $(`.list-group-item[data-id="${default_id}"]`).addClass('active').find('i.fa-angle-down').removeClass('fa-angle-down').addClass('fa-angle-up');
+                }
+
                 $.ajax({
                     url: `{{ url('api/v1/statistik-web') }}/${kategori}?filter[id]=${default_id}&filter[tahun]=${tahun}&filter[bulan]=${bulan}&config_desa=${config_desa}`,
                     type: 'get',

@@ -39,19 +39,19 @@ class MenuController extends AppBaseController
                 '/module/statistik' => 'Statistik',
                 // Statistik Penduduk
                 ...collect(Penduduk::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                    return ["/module/{$key}" => ucwords("Statistik Penduduk {$item}")];
+                    return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
                 })->toArray(),
                 // Statistik Keluarga
                 ...collect(Keluarga::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                    return ["/module/{$key}" => ucwords("Statistik Keluarga {$item}")];
+                    return ["/module/keluarga/{$key}" => ucwords("Statistik Keluarga {$item}")];
                 })->toArray(),
                 // Statistik Bantuan
                 ...collect(Bantuan::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                    return ["/module/{$key}" => ucwords("Statistik Bantuan {$item}")];
+                    return ["/module/bantuan/{$key}" => ucwords("Statistik Bantuan {$item}")];
                 })->toArray(),
                 // Statistik RTM
                 ...collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                    return ["/module/{$key}" => ucwords("Statistik Rtm {$item}")];
+                    return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
                 })->toArray(),
             ],
         ];

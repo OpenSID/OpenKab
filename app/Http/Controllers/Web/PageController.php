@@ -21,14 +21,16 @@ class PageController extends Controller
         $bantuanSummary = 0;
         $categoriesItems = [
             ['key' => 'penduduk', 'text' => 'penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'kabupaten', 'text' => 'kabupaten', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
             ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'bantuan', 'text' => 'bantuan', 'value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
+        $listKabupaten = ['' => 'Pilih Kabupaten'];
         $listKecamatan = ['' => 'Pilih Kecamatan'];
         $listDesa = ['' => 'Pilih Desa'];
 
-        return view('web.index', compact('categoriesItems', 'listKecamatan', 'listDesa'));
+        return view('web.index', compact('categoriesItems', 'listKecamatan', 'listDesa', 'listKabupaten'));
     }
 
     /**

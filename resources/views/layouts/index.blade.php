@@ -22,7 +22,6 @@
         }
     });
         // ganti text navbar kabupaten, kecamatan dan desa
-
         var nama_kabupaten = $('#kabupaten').children().find('a.active').data('kabupaten');
         $('#kabupaten').children('a.active').text(nama_kabupaten);
 

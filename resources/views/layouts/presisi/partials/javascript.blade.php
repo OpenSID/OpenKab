@@ -26,3 +26,6 @@
 <script src="{{ asset('assets/js/highcharts/sankey.js') }}"></script>
 <script src="{{ asset('assets/js/highcharts/organization.js') }}"></script>
 <script src="{{ asset('assets/js/highcharts/accessibility.js') }}"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>

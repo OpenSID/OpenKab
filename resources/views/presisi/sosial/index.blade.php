@@ -1,10 +1,11 @@
 @extends('layouts.presisi.index')
 
 @section('content_header')
-    <h2>Dashboard Data Presisi</h2>
 @stop
 
 @section('content')
+@include('presisi.partials.head')
+
     <div class="row">
         <div class="col-md-4 col-sm-6 col-12 wow fadeInUp" data-wow-delay="0.3s">
             <div class="info-box shadow-none rounded-0">

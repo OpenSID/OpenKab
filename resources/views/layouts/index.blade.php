@@ -70,6 +70,16 @@
                 })
             })
         })
+
+        $('.datepicker').daterangepicker(
+            {
+                autoApply: true,
+                singleDatePicker: true,
+                locale: {
+                    format: "DD/MM/YYYY",
+                    firstDay: 1
+                }
+            });
     })
     </script>
 @endpush

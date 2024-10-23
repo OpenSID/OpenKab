@@ -13,6 +13,7 @@ class ArtikelTransformer extends TransformerAbstract
             'id' => null,
             'nama_desa' => $config->nama_desa,
             'nama_kecamatan' => $config->nama_kecamatan,
+            'nama_kabupaten' => $config->nama_kabupaten,
             'jumlah_artikel' => $config->jumlah,
         ];
     }

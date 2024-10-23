@@ -45,8 +45,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     "use strict";
     $.get('{{ url('index.php/api/v1/data-website') }}', {}, function(result){
 
-        console.log(result)
-
         let category = result.data.categoriesItems
         let listDesa = result.data.listDesa
         let listKecamatan = result.data.listKecamatan

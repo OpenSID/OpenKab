@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +11,8 @@
     @stack('styles')
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed bg-light bg-c1">
+    
     <div class="wrapper">
 
         <!-- Preloader -->
@@ -18,10 +20,11 @@
     <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
   </div> --}}
 
+  @include('layouts.presisi.partials.header')
 
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary mt-4 rounded-xl">
+        {{-- <aside class="main-sidebar sidebar-dark-primary mt-4 rounded-xl">
             <!-- Brand Logo -->
             <div class="  text-center">
                 <a href="{{ url('presisi') }}" class="brand-link">
@@ -30,14 +33,13 @@
             </div>
             <!-- Sidebar -->
             <div class="sidebar">
-                @include('layouts.presisi.partials.sidebarmenu')
                 <!-- /.sidebar-menu -->
             </div>
             <!-- /.sidebar -->
-        </aside>
+        </aside> --}}
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="container">
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
@@ -56,7 +58,7 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer">
+        <footer class="main-footer ml-0">
             <strong>Hak cipta © <?= date('Y') ?> <a href="https://opendesa.id">OpenDesa</a>.</strong>
             Seluruh hak cipta dilindungi.
             <div class="float-right d-none d-sm-inline-block">

@@ -34,20 +34,8 @@
 <div class="form-group row">
     <div class="col-12">
         {!! Form::select('penduduk', $sourceItem['penduduk'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-12">
         {!! Form::select('keluarga', $sourceItem['keluarga'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-12">
         {!! Form::select('bantuan', $sourceItem['bantuan'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-12">
         {!! Form::select('rtm', $sourceItem['rtm'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
     </div>
 </div>
@@ -79,6 +67,7 @@
         $('select[name=sourcelist]').on('change', function() {
             let val = $(this).val();
             $('input[name=href]').val(val);
+            $('select[name=penduduk], select[name=keluarga], select[name=bantuan], select[name=rtm]').hide();
 
             switch ($(this).val()) {
                 case 'statistik-penduduk':

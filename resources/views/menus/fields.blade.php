@@ -27,8 +27,28 @@
 <!-- Url Field -->
 <div class="form-group row">
     <div class="col-12">
-    {!! Form::select('sourcelist', $sourceItem, null, ['class' => 'form-control']) !!}
-    {!! Form::text('href', null, ['class' => 'form-control item-menu', 'maxlength' => 255, 'placeholder' => 'http://contoh.com']) !!}
+        {!! Form::select('sourcelist', $sourceItem, null, ['class' => 'form-control']) !!}
+        {!! Form::text('href', null, ['class' => 'form-control item-menu', 'maxlength' => 255, 'placeholder' => 'http://contoh.com']) !!}
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-12">
+        {!! Form::select('penduduk', $sourceItem['penduduk'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-12">
+        {!! Form::select('keluarga', $sourceItem['keluarga'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-12">
+        {!! Form::select('bantuan', $sourceItem['bantuan'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-12">
+        {!! Form::select('rtm', $sourceItem['rtm'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
     </div>
 </div>
 
@@ -56,9 +76,40 @@
             }
         })
 
-        $('select[name=sourcelist]').on('change', function(){
-            $('input[name=href]').val($(this).val())
+        $('select[name=sourcelist]').on('change', function() {
+            let val = $(this).val();
+            $('input[name=href]').val(val);
+
+            switch ($(this).val()) {
+                case 'statistik-penduduk':
+                    val = $('select[name=penduduk]').val();
+                    $('select[name=penduduk]').show();
+                    break;
+                case 'statistik-keluarga':
+                    val = $('select[name=keluarga]').val();
+                    $('select[name=keluarga]').show();
+                    break;
+                case 'statistik-bantuan':
+                    val = $('select[name=bantuan]').val();
+                    $('select[name=bantuan]').show();
+                    break;
+                case 'statistik-rtm':
+                    val = $('select[name=rtm]').val();
+                    $('select[name=rtm]').show();
+                    break;
+                default:
+                    break;
+            }
         })
+
+        $('select[name=penduduk], select[name=keluarga], select[name=bantuan], select[name=rtm]').on('change', function() {
+            updateHref();
+        });
+
+        function updateHref() {
+            const visibleSelect = $('select[name=sourcelist]').val().replace('statistik-', '');
+            $('input[name=href]').val($('select[name=' + visibleSelect + ']').val());
+        }
     })
 </script>
 @endpush

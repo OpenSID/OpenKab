@@ -36,24 +36,23 @@ class MenuController extends AppBaseController
             'Modul' => [
                 '/module/org' => 'Bagan Organisasi',
                 '/module/unduhan' => 'Daftar Unduhan',
-                '/module/statistik' => 'Statistik',
-                // Statistik Penduduk
-                ...collect(Penduduk::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                    return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
-                })->toArray(),
-                // Statistik Keluarga
-                ...collect(Keluarga::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                    return ["/module/keluarga/{$key}" => ucwords("Statistik Keluarga {$item}")];
-                })->toArray(),
-                // Statistik Bantuan
-                ...collect(Bantuan::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                    return ["/module/bantuan/{$key}" => ucwords("Statistik Bantuan {$item}")];
-                })->toArray(),
-                // Statistik RTM
-                ...collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                    return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
-                })->toArray(),
+                'statistik-penduduk' => 'Statistik Penduduk',
+                'statistik-keluarga' => 'Statistik Keluarga',
+                'statistik-bantuan' => 'Statistik Bantuan',
+                'statistik-rtm' => 'Statistik RTM',
             ],
+            'penduduk' => collect(Penduduk::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
+            })->toArray(),
+            'keluarga' => collect(Keluarga::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                return ["/module/keluarga/{$key}" => ucwords("Statistik Keluarga {$item}")];
+            })->toArray(),
+            'bantuan' => collect(Bantuan::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                return ["/module/bantuan/{$key}" => ucwords("Statistik Bantuan {$item}")];
+            })->toArray(),
+            'rtm' => collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
+            })->toArray(),
         ];
 
         $listPermission = $this->generateListPermission();

@@ -16,7 +16,7 @@ class ModuleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(string $moduleName, string $moduleCategory = null)
+    public function __invoke(string $moduleName)
     {
         $content = match ($moduleName) {
             'unduhan' => $this->downloadModule(),
@@ -24,10 +24,6 @@ class ModuleController extends Controller
             'statistik' => $this->statistikModule(),
             default => ''
         };
-
-        if (empty($content)) {
-            return redirect()->route('web.index', ['statistik' => $moduleName, 'kategori' => $moduleCategory]);
-        }
 
         return view('web.module', compact('content', 'moduleName'));
     }

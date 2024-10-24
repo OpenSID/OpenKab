@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CatatanRilis;
 use App\Http\Controllers\UserController;
@@ -158,7 +157,7 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('c/{cSlug}', [PageController::class, 'getCategory'])->name('category');
     Route::get('sitemap.xml', [PageController::class, 'getSitemap'])->name('sitemap');
     Route::get('search', SearchController::class)->name('web.search');
-    Route::get('module/{moduleName}/{moduleCategori?}', ModuleController::class)->name('web.module');
+    Route::get('module/{moduleName}', ModuleController::class)->name('web.module');
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });
 

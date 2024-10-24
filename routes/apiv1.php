@@ -33,6 +33,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signin', [AuthController::class, 'login']);
 Route::get('/identitas', [IdentitasController::class, 'index']);
+// Wilayah
+Route::prefix('wilayah')->group(function () {
+    Route::get('desa', [WilayahController::class, 'desa']);
+    Route::get('dusun', [WilayahController::class, 'dusun']);
+    Route::get('rw', [WilayahController::class, 'rw']);
+    Route::get('rt', [WilayahController::class, 'rt']);
+    Route::get('penduduk', [WilayahController::class, 'penduduk']);
+});
 
 Route::middleware('auth:sanctum')->get('validate-token', function (Request $request) {
     $user = $request->user();
@@ -65,15 +73,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Dasbor
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
-    });
-
-    // Wilayah
-    Route::prefix('wilayah')->middleware(['can:penduduk-read'])->group(function () {
-        Route::get('desa', [WilayahController::class, 'desa']);
-        Route::get('dusun', [WilayahController::class, 'dusun']);
-        Route::get('rw', [WilayahController::class, 'rw']);
-        Route::get('rt', [WilayahController::class, 'rt']);
-        Route::get('penduduk', [WilayahController::class, 'penduduk']);
     });
 
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {

@@ -21,7 +21,10 @@
             $('.brand-link').children('span').text(data.nama_aplikasi);
         }
     });
-        // ganti text navbar kecamatan dan desa
+        // ganti text navbar kabupaten, kecamatan dan desa
+        var nama_kabupaten = $('#kabupaten').children().find('a.active').data('kabupaten');
+        $('#kabupaten').children('a.active').text(nama_kabupaten);
+
         var nama_kecamatan = $('#kecamatan').children().find('a.active').data('kecamatan');
         $('#kecamatan').children('a.active').text(nama_kecamatan);
 
@@ -70,6 +73,16 @@
                 })
             })
         })
+
+        $('.datepicker').daterangepicker(
+            {
+                autoApply: true,
+                singleDatePicker: true,
+                locale: {
+                    format: "DD/MM/YYYY",
+                    firstDay: 1
+                }
+            });
     })
     </script>
 @endpush

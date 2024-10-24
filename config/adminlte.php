@@ -318,6 +318,13 @@ return [
             'url' => '#',
             'topnav_right' => true,
         ],
+        // Kabupaten
+        [
+            'key' => 'kabupaten',
+            'text' => 'kabupaten',
+            'topnav_right' => true,
+            'id' => 'kabupaten'
+        ],
         // Kecamatan
         [
             'key' => 'kecamatan',

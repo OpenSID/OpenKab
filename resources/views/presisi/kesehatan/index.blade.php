@@ -1,6 +1,8 @@
 @extends('layouts.presisi.index')
 
 @section('content_header')
+@include('presisi.partials.head')
+
     <div class="box-header">
         <div class="row">
             <div class="col-md-4">

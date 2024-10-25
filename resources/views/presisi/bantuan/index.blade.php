@@ -11,7 +11,7 @@
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <div class="card card-primary rounded-0 elevation-0 border">
                                 <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Bantuan</h3>
@@ -46,10 +46,58 @@
                                 </div>
 
                             </div>
-                        </div>
-                        <div class="col-md-9">
+                        </div> --}}
+                        <div class="col-md-12">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
                                 <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <p> Pilih Tahun:</p>
+                                            </div>
+                                            <div class="row">
+                                                <select name="Filter Tahun" id="filter_tahun" required class="form-control" title="Pilih Tahun">
+                                                    <option value="">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <p> Pilih Kecamatan:</p>
+                                            </div>
+                                            <div class="row">
+                                                <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
+                                                    <option value="">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <p> Pilih Desa:</p>
+                                            </div>
+                                            <div class="row">
+                                                <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
+                                                    <option value="">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-end pt-1">
+                                        <div class="col-md-4 pull-right text-right">
+                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
+                                            <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <p> Pilih Program:</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="Filter Program" id="filter_program" required class="form-control" title="Pilih Program">
+                                                <option value="">All</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-1" style="display: none">
                                             <a class="btn btn-sm btn-secondary" data-toggle="collapse"
@@ -159,7 +207,25 @@
         $(function() {
             var statistik = [];
             var data_grafik = [];
-            let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
+            let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL'];
+
+            $('#filter_tahun').select2({
+                placeholder: "Pilih Tahun"
+            });
+            $('#filter_kecamatan').select2({
+                placeholder: "Pilih Kecamatan"
+            });
+            $('#filter_desa').select2({
+                placeholder: "Pilih Desa"
+            });
+            $('#filter_program').select2({
+                placeholder: "Pilih Program"
+            });
+
+            GetListTahun();
+            GetListKecamatan();
+            GetListDesa();
+            GetListProgram();
 
             $('#nav-statistik li a:first').addClass('active');
             $('#nav-statistik li').click(function(e) {
@@ -201,6 +267,28 @@
                 $('#statistik').hide()
             })
 
+            $('#filter_kecamatan').on("select2:select", function(e) {
+                GetListDesa(this.value);
+            });
+
+            $('#filter_program').on("select2:select", function(e) {
+                $('#statistik thead').find('.judul').html($("#filter_program").select2('data')[0].text);
+                table.ajax.reload();
+            });
+
+            $('#bt_clear_filter').click(function(){
+                $("#filter_tahun").val("").trigger("change");
+                $("#filter_kecamatan").val("").trigger("change");
+                $("#filter_desa").val("").trigger("change");
+                $('#filter_desa').empty().trigger("change");
+                $('#bt_clear_filter').hide();
+            });
+
+            $('#bt_filter').click(function(){
+                $('#bt_clear_filter').show();
+                table.ajax.reload();
+            });
+
 
             var table = $('#statistik').DataTable({
                 "processing": true,
@@ -219,8 +307,12 @@
                     "url": "{{ url('api/v1/statistik-web/bantuan') }}",
                     "type": "get",
                     "data": function(d) {
-                        var nav = $('#nav-statistik').find('li a.active')
-                        d['filter[id]'] = nav.data('key');
+                        // var nav = $('#nav-statistik').find('li a.active')
+                        // d['filter[id]'] = nav.data('key');
+                        d['filter[id]'] =  $("#filter_program").val();
+                        d['filter[tahun]'] = $("#filter_tahun").val();
+                        d['filter[kecamatan]'] = $("#filter_kecamatan").val();
+                        d['filter[desa]'] = $("#filter_desa").val();
                         // d.config_desa = $('#position').val();
                     },
                     dataSrc: function(json) {
@@ -310,7 +402,7 @@
                 var temp1 = areaChartData.datasets[1] ?? []
                 barChartData.datasets[0] = temp1
                 barChartData.datasets[1] = temp0
-            
+
                 var barChartOptions = {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -410,5 +502,90 @@
                 $('select[name=search_desa]').append(_optionDesa.join(''))
             }, 'json')
         });
+
+        function GetListTahun() {
+            $('#filter_tahun').empty().trigger("change");
+            var optionEmpty = new Option("", "");
+            $("#filter_tahun").append(optionEmpty);
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('api/v1/statistik-web/get-list-tahun') }}",
+                dataType: 'json',
+                success: function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = new Option(data[i].year, data[i].year, true, true);
+                        $("#filter_tahun").append(newOption);
+                    }
+                    $("#filter_tahun").val("");
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+        }
+        function GetListKecamatan() {
+            $('#filter_kecamatan').empty().trigger("change");
+            var optionEmpty = new Option("", "");
+            $("#filter_kecamatan").append(optionEmpty);
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}",
+                dataType: 'json',
+                success: function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = new Option(data[i].nama_kecamatan, data[i].kode_kecamatan, true, true);
+                        $("#filter_kecamatan").append(newOption);
+                    }
+                    $("#filter_kecamatan").val("").trigger("change");
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+        }
+        function GetListDesa($id) {
+            $('#filter_desa').empty().trigger("change");
+            if ($id != undefined && $id != null){
+                var optionEmpty = new Option("", "");
+                $("#filter_desa").append(optionEmpty);
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ url('api/v1/statistik-web/get-list-desa') }}" + "/" + $id,
+                    dataType: 'json',
+                    success: function(data) {
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = new Option(data[i].nama_desa, data[i].kode_desa, true, true);
+                            $("#filter_desa").append(newOption);
+                        }
+                        $("#filter_desa").val("");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            }
+        }
+        function GetListProgram() {
+            $('#filter_program').empty().trigger("change");
+            var optionPenduduk = new Option("Penerima Bantuan Penduduk", "penduduk");
+            $("#filter_program").append(optionPenduduk);
+            var optionKeluarga = new Option("Penerima Bantuan Keluarga", "keluarga");
+            $("#filter_program").append(optionKeluarga);
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('api/v1/statistik-web/get-list-program') }}",
+                dataType: 'json',
+                success: function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = new Option(data[i].nama, data[i].id, true, true);
+                        $("#filter_program").append(newOption);
+                    }
+                    $("#filter_program").val("penduduk");
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+        }
     </script>
 @endpush

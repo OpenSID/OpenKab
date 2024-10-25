@@ -60,7 +60,7 @@
                 ],
 
                 "ajax": {
-                    "url": "{{ url('api/v1/statistik-web/keluarga') }}",
+                    "url": "{{ url('api/v1/statistik-web/rtm') }}",
                     "type": "get",
                     "data": function(d) {
                         var nav = $('#nav-statistik').find('li a.active')

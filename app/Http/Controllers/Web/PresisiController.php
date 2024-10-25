@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Anak;
 use App\Models\IbuHamil;
 use App\Models\Penduduk;
+use App\Models\Keluarga;
 use App\Models\Posyandu;
 use App\Models\SasaranPaud;
 use App\Services\RekapService;
@@ -370,5 +371,13 @@ class PresisiController extends Controller
                 ],
             ],
         ];
+    }
+    
+
+    public function keluarga()
+    {
+        $statistik = Keluarga::KATEGORI_STATISTIK;
+
+        return view('presisi.keluarga.index', compact('statistik'));
     }
 }

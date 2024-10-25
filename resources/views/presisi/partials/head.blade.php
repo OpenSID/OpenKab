@@ -34,13 +34,13 @@
 
     <!-- Dropdown Kependudukan -->
     <div class="dropdown bg-white pl-3 pr-2">
-        <button class="btn bg-white p-2 dropdown-toggle text-muted rounded-0 {{ Route::getCurrentRoute()->getName() == 'presisi.kependudukan' ? 'active' : '' }}" type="button" id="kependudukanDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn bg-white p-2 dropdown-toggle text-muted rounded-0 {{ Route::getCurrentRoute()->getName() == 'presisi.rtm' ? 'active' : '' }} {{ Route::getCurrentRoute()->getName() == 'presisi.kependudukan' ? 'active' : '' }}" type="button" id="kependudukanDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-book"></i> Kependudukan
         </button>
         <div class="dropdown-menu" aria-labelledby="kependudukanDropdown">
             <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.kependudukan' ? 'active' : '' }}" href="{{ url('presisi/kependudukan') }}">Statistik Penduduk</a>
             <a class="dropdown-item" href="#">Statistik Keluarga</a>
-            <a class="dropdown-item" href="#">Statistik RTM</a>
+            <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.rtm' ? 'active' : '' }}" href="{{ url('presisi/rtm') }}">Statistik RTM</a>
         </div>
     </div>
 

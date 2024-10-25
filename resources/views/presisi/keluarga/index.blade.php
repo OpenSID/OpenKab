@@ -209,6 +209,7 @@
                     "data": function(d) {
                         var nav = $('#nav-statistik').find('li a.active')
                         d['filter[id]'] = nav.data('key');
+                        d['filter[tahun]'] = '';
                         // d.config_desa = $('#position').val();
                     },
                     dataSrc: function(json) {

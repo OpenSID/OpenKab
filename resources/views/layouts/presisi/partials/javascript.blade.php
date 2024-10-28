@@ -9,7 +9,7 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
- 
+
 <script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('assets/js/adminlte.js') }}"></script>
@@ -29,3 +29,20 @@
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
+<script>
+    var selectedMenuObj = null;
+
+    $('.item-menu').each(function(i, obj) {
+        if ($(obj).attr('href') ===window.location.pathname){
+            selectedMenuObj = obj;
+        }
+    });
+    $(selectedMenuObj).addClass("active");
+    if ($(selectedMenuObj).closest('.parent-dropdown-menu').length > 0){
+        if ($(selectedMenuObj).closest('.parent-dropdown-menu').find('.parent-menu').length > 0){
+            $(selectedMenuObj).closest('.parent-dropdown-menu').find('.parent-menu').addClass("active");
+        }
+    }
+
+    </script>

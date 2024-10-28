@@ -10,6 +10,7 @@ class Menu extends Model
     public $table = 'menus';
 
     public $fillable = [
+        'menu_type',
         'name',
         'url',
         'sequence',

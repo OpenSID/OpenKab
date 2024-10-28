@@ -12,12 +12,12 @@
     </div>
     <!-- Tombol untuk Desktop -->
 <div class="btn-group mt-2 mb-2 d-none d-md-flex flex-wrap">
-    <button type="button" class="btn bg-white p-2 mr-1 text-muted">
+    {{-- <button type="button" class="btn bg-white p-2 mr-1 text-muted">
         <span class="c-badge-small rounded-circle">
             <i class="fas fa-circle text-success text-sm"></i>
         </span> Terkini
     </button>
-    
+
     <a type="button" class="btn bg-white p-2 text-muted {{ Route::getCurrentRoute()->getName() == 'presisi.index' ? 'active' : '' }}" href="{{ url('presisi') }}">
         <i class="fa-solid fa-chart-column"></i> Demografi
     </a>
@@ -48,14 +48,16 @@
     <a type="button" class="btn bg-white p-2 text-muted {{ Route::getCurrentRoute()->getName() == 'presisi.ekonomi' ? 'active' : '' }}" href="{{ url('presisi/ekonomi') }}">
         <i class="fa fa-solid fa-briefcase"></i> Ekonomi
     </a>
-    
+
     <a type="button" class="btn bg-white p-2 text-muted {{ Route::getCurrentRoute()->getName() == 'presisi.kesehatan' ? 'active' : '' }}" href="{{ url('presisi/kesehatan') }}">
         <i class="fa fa-solid fa-camera-retro pl-1"></i> E-Stunting
     </a>
 
     <button type="button" class="btn bg-white p-2 text-muted">
         <i class="fas fa-map"></i> Geo Spasial
-    </button>
+    </button> --}}
+
+    {!! generateMenuPresisi((new \App\Http\Repository\CMS\MenuRepository)->tree(2)) !!}
 </div>
 
 <!-- Dropdown untuk Mobile -->

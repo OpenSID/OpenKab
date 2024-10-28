@@ -89,10 +89,18 @@
 
                 $("#btnUpdate").click(function () {
                     editor.update();
+                    const queryString = window.location.search;
+                    const urlParams = new URLSearchParams(queryString);
+                    const menutype = urlParams.get('type')
+                    $('select[name=menu_type]').val((menutype == null ? 1 : menutype));
                 });
 
                 $('#btnAdd').click(function () {
                     editor.add();
+                    const queryString = window.location.search;
+                    const urlParams = new URLSearchParams(queryString);
+                    const menutype = urlParams.get('type')
+                    $('select[name=menu_type]').val((menutype == null ? 1 : menutype));
                 });
 
                 $('#frmEdit').bind('reset', function(e){

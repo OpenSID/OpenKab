@@ -271,6 +271,35 @@ if (! function_exists('generateMenu')) {
     }
 }
 
+if (! function_exists('generateMenuPresisi')) {
+    function generateMenuPresisi($tree, $parentId = null)
+    {
+        $result = '';
+        foreach ($tree as $item) {
+            if ($item->children->count() > 0) {
+                $result .= "<div class='parent-dropdown-menu dropdown bg-white pl-3 pr-2'>
+                 <button class='parent-menu btn bg-white p-2 dropdown-toggle text-muted rounded-0' type='button'  id='{$item->id}Dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                     {$item->text}
+                 </button>
+                 <div class='dropdown-menu' aria-labelledby='{$item->id}Dropdown'>";
+                $result .= generateMenuPresisi($item->children, $item->id);
+                $result .= '
+                    </div>
+               </div>';
+            } else {
+                if ($parentId) {
+                    $result .= "<a class='item-menu dropdown-item' href='{$item->href}'>{$item->text}</a>";
+                } else {
+                    $result .= "<a type='button' class='item-menu btn bg-white p-2 text-muted' href='{$item->href}'>{$item->text}</a>";
+                }
+            }
+        }
+
+        return $result;
+    }
+}
+
+
 if (! function_exists('angka_lokal')) {
     /**
      * Menampilkan nilai persentase.

@@ -7,15 +7,84 @@
 
 <div class="row m-1">
     <div class="col-md-12">
-        
+
         <div class="card rounded-0 border-0 shadow-none">
             @include('presisi.summary')
             <div class="card-body">
-            <div id="map" style="height: 250px;"></div>
-            </div>            
+                <div class="row" >
+                    <div class="col-md-12" >
+                        <div class="card card-primary card-outline rounded-0 elevation-0 border">
+                            <div class="card-header" style=" background-color: lightblue!important;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <p><b> Pilih Kecamatan:</b></p>
+                                        </div>
+                                        <div class="row">
+                                            <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
+                                                <option value="">All</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <p><b> Pilih Desa:</b></p>
+                                        </div>
+                                        <div class="row">
+                                            <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
+                                                <option value="">All</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-end pt-1">
+                                    <div class="col-md-4 pull-right text-right">
+                                        <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
+                                        <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="card-body p-0">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="collapse-filter" class="collapse ">
+                                            <div class="row m-0">
+                                                <div class=" col-6">
+                                                    <div class="form-group">
+                                                        <label>Kecamatan</label>
+                                                        <select class="form-control " name="search_kecamatan"> </select>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class=" col-6">
+                                                    <div class="form-group">
+                                                        <label>Desa</label>
+                                                        <select class="form-control " name="search_desa"> </select>
+                                                    </div>
+
+                                                </div>
+
+
+
+                                            </div>
+
+                                            <hr class="mt-0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="map" style="height: 250px;"></div>
+            </div>
         </div>
     </div>
-    
+
     <div class="col-lg-3 col-md-6">
         <div class="card p-3 bg-light-oren">
             <table>
@@ -75,7 +144,7 @@
 
     <div class="col-md-12">
         <div class="card rounded-0 elevation-0">
-          <div class="card-header bg-white">Data Kelurahan /Desa</div>  
+          <div class="card-header bg-white">Data Kelurahan /Desa</div>
           <div class="card-body">
               <div class="table-responsive">
                   <table class="table table-striped" id="summary-penduduk">
@@ -89,7 +158,7 @@
                       </thead>
                       <tbody></tbody>
                   </table>
-              </div>          
+              </div>
           </div>
     </div>
 </div>
@@ -110,6 +179,133 @@ document.addEventListener("DOMContentLoaded", function (event) {
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
+
+    $('#filter_kecamatan').select2({
+                placeholder: "Pilih Kecamatan"
+    });
+    $('#filter_desa').select2({
+        placeholder: "Pilih Desa"
+    });
+    GetListKecamatan();
+    GetListDesa();
+    GetListCoordinates();
+
+    $('#bt_clear_filter').click(function(){
+        $("#filter_kecamatan").val("").trigger("change");
+        $("#filter_desa").val("").trigger("change");
+        $('#filter_desa').empty().trigger("change");
+        $('#bt_clear_filter').hide();
+        GetListCoordinates();
+        GetSummary();
+    });
+
+    $('#bt_filter').click(function(){
+        $('#bt_clear_filter').show();
+        GetListCoordinates( $("#filter_kecamatan").val(), $("#filter_desa").val());
+        GetSummary();
+    });
+
+    $('#filter_kecamatan').on("select2:select", function(e) {
+        GetListDesa(this.value);
+    });
+
+    var markerIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    function GetListCoordinates(kecamatan = null, desa= null) {
+        var coordUrl =  "{{ url('api/v1/statistik-web/get-list-coordinate') }}";
+        if (kecamatan != null || desa != null){
+            coordUrl =  coordUrl+= "?filter[kecamatan]=" + (kecamatan == null ? "" : kecamatan) + "&filter[desa]=" + (desa == null ? "" : desa);
+        }
+        $.ajax({
+            type: 'GET',
+            url: coordUrl,
+            dataType: 'json',
+            success: function(data) {
+                map.eachLayer((layer) => {
+                if (layer instanceof L.Marker) {
+                    layer.remove();
+                }
+                });
+                var isFirst = true;
+                for (var i=0; i < data.length; i++ ){
+                    if (data[i].lat !=null && data[i].lng != null){
+                        var marker = L.marker([parseFloat(data[i].lat), parseFloat(data[i].lng)], {icon: markerIcon}).bindPopup("<b style='font-size:12pt;'>Provinsi :" + data[i].nama_propinsi + "</b><br><b style='font-size:12pt;'>Kota :" + data[i].nama_kabupaten + "</b><br><b style='font-size:12pt;'>Kecamatan :" + data[i].nama_kecamatan + "</b><br><b style='font-size:12pt;'>Desa :" + data[i].nama_desa + "</b>")
+                        .addTo(map)
+                        marker.on('mouseover',function(ev) {
+                            ev.target.openPopup();
+                        });
+                        if (isFirst){
+                            isFirst = false;
+                            map.panTo(new L.LatLng(parseFloat(data[i].lat), parseFloat(data[i].lng)));
+                        }
+                    }
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+            }
+        });
+    }
+
+    function GetListKecamatan() {
+            $('#filter_kecamatan').empty().trigger("change");
+            var optionEmpty = new Option("", "");
+            $("#filter_kecamatan").append(optionEmpty);
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}",
+                dataType: 'json',
+                success: function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = new Option(data[i].nama_kecamatan, data[i].kode_kecamatan, true, true);
+                        $("#filter_kecamatan").append(newOption);
+                    }
+                    $("#filter_kecamatan").val("").trigger("change");
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+        }
+        function GetListDesa($id) {
+            $('#filter_desa').empty().trigger("change");
+            if ($id != undefined && $id != null){
+                var optionEmpty = new Option("", "");
+                $("#filter_desa").append(optionEmpty);
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ url('api/v1/statistik-web/get-list-desa') }}" + "/" + $id,
+                    dataType: 'json',
+                    success: function(data) {
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = new Option(data[i].nama_desa, data[i].kode_desa, true, true);
+                            $("#filter_desa").append(newOption);
+                        }
+                        $("#filter_desa").val("");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            }
+        }
+
+        function GetSummary(){
+            var searchParam = {'search' : {'luas_wilayah' : 1, 'luas_pertanian' : 1, 'luas_perkebunan' : 1, 'luas_hutan' : 1, 'luas_peternakan' : 1},'filter' : {'kecamatan' :  $("#filter_kecamatan").val(), 'desa' : $("#filter_desa").val()}}
+            $.get('{{ url('api/v1/data-summary') }}', searchParam, function(result){
+                for(let i in result.data){
+                    $(`#summary-${i}`).text(result.data[i])
+                }
+            }, 'json')
+        }
+
 
     $.get('{{ url('api/v1/data-website') }}', {}, function(result){
         let category = result.data.categoriesItems
@@ -140,8 +336,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const indexSearch = {'search' : {'luas_wilayah' : 1, 'luas_pertanian' : 1, 'luas_perkebunan' : 1, 'luas_hutan' : 1, 'luas_peternakan' : 1}}
     $.get('{{ url('api/v1/data-summary') }}', indexSearch, function(result){
         for(let i in result.data){
-            $(`#summary-${i}`).text(result.data[i])                        
-        }        
+            $(`#summary-${i}`).text(result.data[i])
+        }
     }, 'json')
 
 
@@ -161,7 +357,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[search]": row.search.value,                                            
+                        "filter[search]": row.search.value,
                     };
                 },
                 dataSrc: function(json) {
@@ -198,7 +394,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 {
                     data: "attributes.nama_kecamatan",
                     name: "nama_kecamatan"
-                },                
+                },
                 {
                     data: "attributes.penduduk_count",
                     name: "penduduk_count",
@@ -240,5 +436,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     cb(start, end);
 });
 });
+
+
 </script>
 @endpush

@@ -13,7 +13,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav ms-auto">
-                {!! generateMenu((new \App\Http\Repository\CMS\MenuRepository)->tree()) !!}
+                {!! generateMenu((new \App\Http\Repository\CMS\MenuRepository)->tree(1)) !!}
             </ul>
             <a href="/login" class="btn btn-login px-3 d-none d-lg-flex">Login</a>
         </div>

@@ -5,6 +5,7 @@ Di rilis v2410.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 1. [#362](https://github.com/OpenSID/OpenKab/issues/362) Penambahan halaman statistik untuk stunting pada halaman public.
 2. [#372](https://github.com/OpenSID/OpenKab/issues/372) Penyesuaian tampilan baru dasbor presisi.
 3. [#385](https://github.com/OpenSID/OpenKab/issues/385) Penambahan fungsi group kabupaten pada API dan tampilkan pada filter wilayah sehingga kabupaten yang ada dapat di pilih.
+4. [#380](https://github.com/OpenSID/OpenKab/issues/380) Tambahkan pengaturan menu statistik.
 
 #### Perbaikan BUG
 

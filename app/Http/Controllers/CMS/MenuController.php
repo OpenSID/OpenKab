@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\CMS;
 
+use App\Models\Rtm;
+use App\Models\Bantuan;
+use App\Models\CMS\Page;
+use App\Models\Keluarga;
+use App\Models\Penduduk;
+use App\Models\CMS\Category;
+use Illuminate\Support\Facades\Session;
+use App\Http\Requests\UpdateMenuRequest;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\CMS\MenuRepository;
-use App\Http\Requests\UpdateMenuRequest;
-use App\Models\CMS\Category;
-use App\Models\CMS\Page;
-use Illuminate\Support\Facades\Session;
 
 class MenuController extends AppBaseController
 {
@@ -35,10 +39,41 @@ class MenuController extends AppBaseController
             'Kategori' => Category::all()->pluck('name', 'link')->toArray(),
             'Modul' => [
                 '/module/org' => 'Bagan Organisasi',
-                '/module/statistik' => 'Statistik',
                 '/module/unduhan' => 'Daftar Unduhan',
+                'statistik-penduduk' => 'Statistik Penduduk',
+                'statistik-keluarga' => 'Statistik Keluarga',
+                'statistik-bantuan' => 'Statistik Bantuan',
+                'statistik-rtm' => 'Statistik RTM',
             ],
+            'penduduk' => collect(['/module/penduduk' => 'Semua Statistik Penduduk'])
+                ->merge(
+                    collect(Penduduk::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                        return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
+                    })
+                )->toArray(),
+            
+            'keluarga' => collect(['/module/keluarga' => 'Semua Statistik Keluarga'])
+                ->merge(
+                    collect(Keluarga::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                        return ["/module/keluarga/{$key}" => ucwords("Statistik Keluarga {$item}")];
+                    })
+                )->toArray(),
+            
+            'bantuan' => collect(['/module/bantuan' => 'Semua Statistik Bantuan'])
+                ->merge(
+                    collect(Bantuan::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                        return ["/module/bantuan/{$key}" => ucwords("Statistik Bantuan {$item}")];
+                    })
+                )->toArray(),
+            
+            'rtm' => collect(['/module/rtm' => 'Semua Statistik Rtm'])
+                ->merge(
+                    collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                        return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
+                    })
+                )->toArray(),
         ];
+
         $listPermission = $this->generateListPermission();
 
         return view('menus.index', ['menus' => $this->menuRepository->treeJson(), 'sourceItem' => $sourceItem])->with($listPermission);

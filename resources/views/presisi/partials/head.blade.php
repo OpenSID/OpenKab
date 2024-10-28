@@ -1,5 +1,5 @@
 
-     <div class="card container bg-c2 border-0 shadow-none">
+<div class="card container bg-c2 border-0 shadow-none">
             <div class="dashboard-header d-flex justify-content-between align-items-center mt-1">
                 <h2>{{ $identitasAplikasi['nama_aplikasi'] }}</h2>
             <div>

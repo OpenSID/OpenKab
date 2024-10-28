@@ -15,7 +15,6 @@ return new class extends Migration
     public function up()
     {
         DB::table("menus")->insert([
-            ["id" => "191", "menu_type" => "2", "name" => "<span class='c-badge-small rounded-circle'><i class='fas fa-circle text-success text-sm'></i></span> Terkini", "url" => "#", "sequence" => "1", "position" => "top", "parent_id" => NULL, "created_at" => "2023-09-27 17:39:33"],
             ["id" => "192","menu_type" => "2", "name" => "<i class='fa-solid fa-chart-column'></i> Demografi", "url" => "/presisi", "sequence" => "2", "position" => "top", "parent_id" => NULL, "created_at" => "2023-09-27 17:39:33"],
             ["id" => "193","menu_type" => "2", "name" => "<i class='fas fa-table'></i> Sosial", "url" => "/presisi/bantuan", "sequence" => "3", "position" => "top", "parent_id" => NULL, "created_at" => "2023-09-27 17:39:33"],
             ["id" => "194","menu_type" => "2", "name" => "Data Kemiskinan", "url" => "/presisi/sosial", "sequence" => "1", "position" => "top", "parent_id" => "193", "created_at" => "2023-09-27 17:39:33"],

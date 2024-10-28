@@ -125,6 +125,7 @@
                             <thead>
                                 <tr>
                                     <th class="padat">No</th>
+                                    <th>Kabupaten</th>
                                     <th>Kecamatan</th>
                                     <th>Kelurahan</th>
                                     <th class="padat">Jumlah Artikel Perkelurahan</th>
@@ -266,6 +267,10 @@
             ],
             columns: [{
                     data: null,
+                },
+                {
+                    data: "attributes.nama_kabupaten",
+                    name: "nama_kabupaten"
                 },
                 {
                     data: "attributes.nama_kecamatan",

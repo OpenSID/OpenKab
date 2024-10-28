@@ -16,31 +16,63 @@ class MenuListener
      */
     public function handle(BuildingMenu $event)
     {
-        $event->menu->addIn('kecamatan', [
+        $event->menu->addIn('kabupaten', [
             'text' => 'Semua',
             'url' => 'sesi/hapus',
-            'active' => ! session()->has('kecamatan'),
+            'active' => ! session()->has('kabupaten'),
             'data' => [
-                'kecamatan' => 'Kecamatan',
+                'kabupaten' => 'Kabupaten',
             ],
         ]);
 
-        // list menu daftar kecamatan
+        // list menu daftar kabupaten
         Config::query()
-            ->selectRaw('max(nama_kecamatan) as nama_kecamatan, max(kode_kecamatan) as kode_kecamatan')
-            ->groupBy('kode_kecamatan')
+            ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
+            ->groupBy('kode_kabupaten')
             ->get()
             ->each(function ($item) use ($event) {
-                $event->menu->addIn('kecamatan', [
+                $event->menu->addIn('kabupaten', [
                     'classes' => '<style>height: 400px; overflow-y: scroll</style>',
-                    'text' => $item->nama_kecamatan,
-                    'url' => "sesi/kecamatan/{$item->kode_kecamatan}",
-                    'active' => session()->has('kecamatan') ? session('kecamatan.kode_kecamatan') === $item->kode_kecamatan : false,
+                    'text' => $item->nama_kabupaten,
+                    'url' => "sesi/kabupaten/{$item->kode_kabupaten}",
+                    'active' => session()->has('kabupaten') ? session('kabupaten.kode_kabupaten') === $item->kode_kabupaten : false,
                     'data' => [
-                        'kecamatan' => $item->nama_kecamatan,
+                        'kabupaten' => $item->nama_kabupaten,
                     ],
                 ]);
             });
+
+        // tampilkan jika kabupaten sudah terpilih
+        if (session()->has('kabupaten')) {
+            $event->menu->addIn('kecamatan', [
+                'text' => 'Semua',
+                'url' => 'sesi/hapus',
+                'active' => ! session()->has('kecamatan'),
+                'data' => [
+                    'kecamatan' => 'Kecamatan',
+                ],
+            ]);
+
+            // list menu daftar kecamatan
+            Config::query()
+                ->when(session()->has('kabupaten'), function ($query) {
+                    $query->where('kode_kabupaten', session('kabupaten.kode_kabupaten'));
+                })
+                ->selectRaw('max(nama_kecamatan) as nama_kecamatan, max(kode_kecamatan) as kode_kecamatan')
+                ->groupBy('kode_kecamatan')
+                ->get()
+                ->each(function ($item) use ($event) {
+                    $event->menu->addIn('kecamatan', [
+                        'classes' => '<style>height: 400px; overflow-y: scroll</style>',
+                        'text' => $item->nama_kecamatan,
+                        'url' => "sesi/kecamatan/{$item->kode_kecamatan}",
+                        'active' => session()->has('kecamatan') ? session('kecamatan.kode_kecamatan') === $item->kode_kecamatan : false,
+                        'data' => [
+                            'kecamatan' => $item->nama_kecamatan,
+                        ],
+                    ]);
+                });
+        }
 
         // tampilkan jika kecamatan sudah terpilih
         if (session()->has('kecamatan')) {

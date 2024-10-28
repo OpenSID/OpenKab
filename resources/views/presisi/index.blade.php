@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     @include('layouts.presisi.peta.index')
     @include('layouts.presisi.peta.style')
-    @include('layouts.presisi.partials.wilayah.data')
+    @include('layouts.presisi.wilayah.data')
 
 
     $.get('{{ url('api/v1/data-website') }}', {}, function(result){

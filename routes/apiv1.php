@@ -201,6 +201,7 @@ Route::controller(StatistikController::class)
         });
         Route::get('/bantuan', 'bantuan');
         Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
+        Route::get('/get-list-coordinate', 'getListCoordinate');
     });
 
 // Bantuan

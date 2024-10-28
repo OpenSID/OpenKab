@@ -8,6 +8,7 @@ use App\Http\Repository\PendudukRepository;
 use App\Http\Repository\RtmRepository;
 use App\Http\Repository\StatistikRepository;
 use App\Http\Transformers\StatistikTransformer;
+use App\Models\Config;
 use Illuminate\Http\Response;
 
 class StatistikController extends Controller
@@ -15,11 +16,15 @@ class StatistikController extends Controller
     protected $statistik;
 
     protected $kategori;
+    protected $kecamatan;
+    protected $desa;
 
     public function __construct(StatistikRepository $statistik)
     {
         $this->statistik = $statistik;
         $this->kategori = request()->input('filter')['id'] ?? null;
+        $this->kecamatan = request()->input('filter')['kecamatan'] ?? null;
+        $this->desa = request()->input('filter')['desa'] ?? null;
     }
 
     public function kategoriStatistik()
@@ -109,4 +114,17 @@ class StatistikController extends Controller
             'message' => 'Kategori tidak ditemukan',
         ], Response::HTTP_NOT_FOUND);
     }
+
+    public function getListCoordinate(){
+        $coordinate = Config::selectRaw('config.kode_propinsi, config.nama_propinsi, config.kode_kabupaten, config.nama_kabupaten,config.kode_kecamatan, config.nama_kecamatan,config.kode_desa, config.nama_desa, config.lat, config.lng, config.kode_pos');
+        if(!empty($this->kecamatan)){
+            $coordinate = $coordinate->where('config.kode_kecamatan','=',$this->kecamatan);
+        }
+        if(!empty($this->desa)){
+            $coordinate = $coordinate->where('config.kode_desa','=',$this->desa);
+        }
+
+        $coordinate = $coordinate->distinct()->orderBy('config.nama_desa', 'ASC')->get();
+        return $coordinate->toJson();
+}
 }

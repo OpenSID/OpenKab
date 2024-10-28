@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminWebController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\Web\PageController;
+use App\Http\Middleware\KabupatenMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\StatistikController;
@@ -75,6 +76,12 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     });
 
     Route::prefix('sesi')->group(function () {
+
+        // Kabupaten
+        Route::middleware(KabupatenMiddleware::class)->get('kabupaten/{kodeKabupaten}', function () {
+            return redirect()->back();
+        });
+
         // Kecamatan
         Route::middleware(KecamatanMiddleware::class)->get('kecamatan/{kodeKecamatan}', function () {
             return redirect()->back();
@@ -86,6 +93,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 
         Route::get('hapus', function () {
+            session()->remove('kabupaten');
             session()->remove('kecamatan');
             session()->remove('desa');
 

@@ -15,3 +15,4 @@ Di rilis v2410.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 
 1. [#368](https://github.com/OpenSID/OpenKab/issues/368) Sesuaikan pengaturan tidak dapat dihapus.
 2. [#394](https://github.com/OpenSID/OpenKab/issues/394) Sesuaikan auth gateway OpenKab.
+3. [#376](https://github.com/OpenSID/OpenKab/issues/376) Sesuaikan pengaturan API pada OpenKab.

@@ -21,7 +21,7 @@
             'fas fa-comments' => 'Comments',
             'fas fa-file-alt' => 'File Alt',
             'fas fa-fingerprint' => 'Fingerprint',
-        ], 'fas fa-list', ['class' => 'form-control item-menu']) !!}
+        ], '', ['class' => 'form-control item-menu']) !!}
     </div>
 </div>
 

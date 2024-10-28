@@ -9,6 +9,7 @@ use App\Http\Repository\RtmRepository;
 use App\Http\Repository\StatistikRepository;
 use App\Http\Transformers\StatistikTransformer;
 use App\Models\Bantuan;
+use App\Models\BantuanPeserta;
 use App\Models\Config;
 use Illuminate\Http\Response;
 
@@ -138,5 +139,40 @@ class StatistikController extends Controller
             return $tahun->toJson();
         }
         return null;
+    }
+    public function getListPenerimaBantuan(){
+        if ($this->kategori) {
+                $data = BantuanPeserta::join('program', 'program.id', '=', "program_peserta.program_id", 'left')
+               ->join('config', 'config.id', '=', "program_peserta.config_id", 'left')
+               ->join('tweb_penduduk', 'tweb_penduduk.id', '=', "program_peserta.kartu_id_pend", 'left');
+            if ($this->kategori == "penduduk"){
+                $data = $data->where('program.sasaran','=',1);
+            }
+            else if ($this->kategori == "keluarga"){
+                $data = $data->where('program.sasaran','=',2);
+            }
+            else{
+                $data = $data->where('program.id','=',$this->kategori);
+            }
+
+            if (!empty($this->tahun)){
+                $data = $data->whereRaw("YEAR(program.sdate) = " . $this->tahun);
+            }
+
+            if (!empty($this->kecamatan)){
+                $data = $data-->where('config.kode_kecamatan','=',$this->kecamatan);
+            }
+
+            if (!empty($this->desa)){
+                $data = $data->where('config.kode_desa','=',$this->desa);
+            }
+            $data = $data->selectRaw('program.nama as nama_program, program_peserta.kartu_nama as nama_penerima, program_peserta.kartu_alamat as alamat_penerima')->get();
+            return $data->toJson();
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Kategori tidak ditemukan',
+        ], Response::HTTP_NOT_FOUND);
     }
 }

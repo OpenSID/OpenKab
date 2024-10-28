@@ -106,7 +106,7 @@
                                                 <i class="fas fa-filter"></i>
                                             </a>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div style="display:none;" class="col-md-2">
                                             <button id="btn-tabel" class="btn btn-sm btn-info btn-block btn-sm "
                                                 data-bs-toggle="collapse" href="#Tabel" role="button"
                                                 aria-expanded="false" aria-controls="grafik-Tabel" disabled>
@@ -116,7 +116,7 @@
                                         <div class="col-md-2">
                                             <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm"
                                                 data-bs-toggle="collapse" href="#grafik-statistik" role="button"
-                                                aria-expanded="false" aria-controls="grafik-statistik">
+                                                aria-expanded="false" aria-controls="grafik-statistik" disabled>
                                                 <i class="fas fa-chart-bar"></i> Grafik
                                             </button>
                                         </div>
@@ -163,14 +163,15 @@
                                     </div>
 
 
-                                    <div class="chart" id="grafik" style="height: 500px; display: none">
+                                    <div class="chart" id="grafik" style="height: 500px;">
 
                                     </div>
 
                                     <div class="chart" id="pie" style="height: 500px; display: none">
 
                                     </div>
-
+                                    <br/>
+                                    <h5> Tabel Penerima Bantuan Penduduk</h5>
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="statistik">
                                             <thead>
@@ -181,6 +182,21 @@
                                                     <th class="text-center">Laki - laki</th>
                                                     <th class="text-center">Perempuan</th>
 
+                                                </tr>
+                                            </thead>
+
+                                        </table>
+
+                                    </div>
+                                    <br/>
+                                    <h5> Daftar Penerima Bantuan Penduduk</h5>
+                                    <div class="table-responsive mailbox-messages">
+                                        <table class="table table-hover table-striped" id="daftar_penerima">
+                                            <thead>
+                                                <tr>
+                                                    <th>Program</th>
+                                                    <th>Nama Peserta</th>
+                                                    <th>Alamat</th>
                                                 </tr>
                                             </thead>
 
@@ -227,6 +243,7 @@
             GetListDesa();
             GetListProgram();
 
+
             $('#nav-statistik li a:first').addClass('active');
             $('#nav-statistik li').click(function(e) {
                 e.preventDefault();
@@ -234,7 +251,8 @@
                 $(this).find('a').addClass('active');
 
                 $('#statistik thead').find('.judul').html($(this).find('a').data('name'))
-                table.ajax.reload()
+                table.ajax.reload();
+                table_penerima.ajax.reload();
             });
 
             $('#btn-tabel').click(function() {
@@ -249,22 +267,22 @@
 
             $('#btn-grafik').click(function() {
                 $(this).prop('disabled', true);
-                $('#btn-tabel').prop('disabled', false);
+                //$('#btn-tabel').prop('disabled', false);
                 $('#btn-pie').prop('disabled', false);
 
                 $('#grafik').show();
                 $('#pie').hide()
-                $('#statistik').hide()
+                //$('#statistik').hide()
             })
 
             $('#btn-pie').click(function() {
                 $(this).prop('disabled', true);
-                $('#btn-tabel').prop('disabled', false);
+                //$('#btn-tabel').prop('disabled', false);
                 $('#btn-grafik').prop('disabled', false);
 
                 $('#grafik').hide();
                 $('#pie').show()
-                $('#statistik').hide()
+               // $('#statistik').hide()
             })
 
             $('#filter_kecamatan').on("select2:select", function(e) {
@@ -274,6 +292,7 @@
             $('#filter_program').on("select2:select", function(e) {
                 $('#statistik thead').find('.judul').html($("#filter_program").select2('data')[0].text);
                 table.ajax.reload();
+                table_penerima.ajax.reload();
             });
 
             $('#bt_clear_filter').click(function(){
@@ -282,11 +301,14 @@
                 $("#filter_desa").val("").trigger("change");
                 $('#filter_desa').empty().trigger("change");
                 $('#bt_clear_filter').hide();
+                table.ajax.reload();
+                table_penerima.ajax.reload();
             });
 
             $('#bt_filter').click(function(){
                 $('#bt_clear_filter').show();
                 table.ajax.reload();
+                table_penerima.ajax.reload();
             });
 
 
@@ -383,6 +405,59 @@
 
                 ],
             });
+
+            var table_penerima = $('#daftar_penerima').DataTable({
+                "processing": true,
+                "serverSide": false,
+                'pageLength': 10,
+                "ordering": true,
+                paging: true,
+                searching: true,
+                info: false,
+
+                'order': [
+                    [0, 'asc']
+                ],
+
+                "ajax": {
+                    "url": "{{ url('api/v1/statistik-web/get-list-penerima') }}",
+                    "type": "get",
+                    "data": function(d) {
+                        d['filter[id]'] =  $("#filter_program").val();
+                        d['filter[tahun]'] = $("#filter_tahun").val();
+                        d['filter[kecamatan]'] = $("#filter_kecamatan").val();
+                        d['filter[desa]'] = $("#filter_desa").val();
+                    },
+                    "dataSrc": function (d) {
+                        return d
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle the error callback here
+                        console.error(error);
+                    }
+                },
+                columns: [
+                    {
+                        data: 'nama_program',
+                        sortable: true,
+                        searchable: true,
+
+                    },
+                    {
+                    data: 'nama_penerima',
+                        sortable: true,
+                        searchable: true,
+
+                    },
+                    {
+                    data: 'alamat_penerima',
+                        sortable: true,
+                        searchable: true,
+
+                    },
+                ],
+            });
+
 
             function grafikPie() {
                 $('#barChart').remove();
@@ -587,5 +662,6 @@
                 }
             });
         }
+
     </script>
 @endpush

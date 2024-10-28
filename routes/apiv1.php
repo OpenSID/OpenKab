@@ -183,6 +183,7 @@ Route::controller(StatistikController::class)
         Route::get('/get-list-tahun', 'getListTahun');
         Route::get('/get-list-kecamatan', 'getListKecamatan');
         Route::get('/get-list-desa/{id}', 'getListDesa');
+        Route::get('/get-list-penerima', 'getListPenerimaBantuan');
     });
 
 // Bantuan

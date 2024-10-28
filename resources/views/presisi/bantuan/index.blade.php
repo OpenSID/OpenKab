@@ -171,7 +171,7 @@
 
                                     </div>
                                     <br/>
-                                    <h2>Tabel Penerima Bantuan Penduduk</h2>
+                                    <h5> Tabel Penerima Bantuan Penduduk</h5>
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="statistik">
                                             <thead>
@@ -189,7 +189,7 @@
 
                                     </div>
                                     <br/>
-                                    <h2>Daftar Penerima Bantuan Penduduk</h2>
+                                    <h5> Daftar Penerima Bantuan Penduduk</h5>
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="daftar_penerima">
                                             <thead>

@@ -1,6 +1,7 @@
 <!-- Name Field -->
 <div class="form-group row">
     <div class="col-12">
+    {!! Form::select('menu_type', array('1' => 'Default', '2' => 'Presisi'), '1',['class' => 'form-control']) !!}<br>
     {!! Form::text('text', null, ['class' => 'form-control item-menu', 'maxlength' => 255, 'placeholder' => 'Nama Menu']) !!}
     {!! Form::hidden('icon', 'fas fa-list', ['class' => 'item-menu']) !!}
     </div>
@@ -59,6 +60,15 @@
         $('select[name=sourcelist]').on('change', function(){
             $('input[name=href]').val($(this).val())
         })
+
+        $('select[name=menu_type]').on('change', function(){
+            window.location.href = "{{ url('cms/menus') }}?type=" + this.value;
+        })
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const menutype = urlParams.get('type')
+        $('select[name=menu_type]').val((menutype == null ? 1 : menutype));
     })
 </script>
 @endpush

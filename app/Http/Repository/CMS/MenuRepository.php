@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class MenuRepository extends BaseRepository
 {
     protected $fieldSearchable = [
+        'icon',
         'menu_type',
         'name',
         'url',
@@ -46,7 +47,7 @@ class MenuRepository extends BaseRepository
         if($menu_type == null){
             $menu_type = request('type');
         }
-        $menus =  $this->model->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon");
+        $menus =  $this->model->selectRaw("id, parent_id , name as text, url as href, icon");
         if($menu_type != null){
             $menus = $menus->where('menu_type',  $menu_type);
         }
@@ -55,7 +56,7 @@ class MenuRepository extends BaseRepository
         }
         $menus = $menus->whereNull('parent_id')
             ->with(['children' => function ($q) {
-                $q->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon");
+                $q->selectRaw("id, parent_id , name as text, url as href, icon");
             }])
             ->orderBy('sequence');
         return  $menus->get();
@@ -98,6 +99,7 @@ class MenuRepository extends BaseRepository
                 'menu_type' => $menu_type,
                 'name' => $element['text'],
                 'url' => $element['href'],
+                'icon' => $element['icon'],
                 'sequence' => $sequence,
                 'parent_id' => $parentId,
             ];

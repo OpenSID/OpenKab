@@ -276,10 +276,13 @@ if (! function_exists('generateMenuPresisi')) {
     {
         $result = '';
         foreach ($tree as $item) {
+            // Mengambil ikon jika ada, dan membuat tag HTML ikon
+            $icon = isset($item->icon) ? "<i class='{$item->icon}'></i> " : '';
+
             if ($item->children->count() > 0) {
                 $result .= "<div class='parent-dropdown-menu dropdown bg-white pl-3 pr-2'>
                  <button class='parent-menu btn bg-white p-2 dropdown-toggle text-muted rounded-0' type='button'  id='{$item->id}Dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                     {$item->text}
+                     {$icon}{$item->text}
                  </button>
                  <div class='dropdown-menu' aria-labelledby='{$item->id}Dropdown'>";
                 $result .= generateMenuPresisi($item->children, $item->id);
@@ -288,9 +291,9 @@ if (! function_exists('generateMenuPresisi')) {
                </div>';
             } else {
                 if ($parentId) {
-                    $result .= "<a class='item-menu dropdown-item' href='{$item->href}'>{$item->text}</a>";
+                    $result .= "<a class='item-menu dropdown-item' href='{$item->href}'>{$icon}{$item->text}</a>";
                 } else {
-                    $result .= "<a type='button' class='item-menu btn bg-white p-2 text-muted' href='{$item->href}'>{$item->text}</a>";
+                    $result .= "<a type='button' class='item-menu btn bg-white p-2 text-muted' href='{$item->href}'>{$icon}{$item->text}</a>";
                 }
             }
         }
@@ -298,6 +301,7 @@ if (! function_exists('generateMenuPresisi')) {
         return $result;
     }
 }
+
 
 
 if (! function_exists('angka_lokal')) {

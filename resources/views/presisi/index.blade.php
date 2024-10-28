@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     GetListKecamatan();
     GetListDesa();
-    GetListCoordinates();
+    
 
     $('#bt_clear_filter').click(function(){
         $("#filter_kecamatan").val("").trigger("change");
@@ -209,50 +209,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         GetListDesa(this.value);
     });
 
-    var markerIcon = new L.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-
-    function GetListCoordinates(kecamatan = null, desa= null) {
-        var coordUrl =  "{{ url('api/v1/statistik-web/get-list-coordinate') }}";
-        if (kecamatan != null || desa != null){
-            coordUrl =  coordUrl+= "?filter[kecamatan]=" + (kecamatan == null ? "" : kecamatan) + "&filter[desa]=" + (desa == null ? "" : desa);
-        }
-        $.ajax({
-            type: 'GET',
-            url: coordUrl,
-            dataType: 'json',
-            success: function(data) {
-                map.eachLayer((layer) => {
-                if (layer instanceof L.Marker) {
-                    layer.remove();
-                }
-                });
-                var isFirst = true;
-                for (var i=0; i < data.length; i++ ){
-                    if (data[i].lat !=null && data[i].lng != null){
-                        var marker = L.marker([parseFloat(data[i].lat), parseFloat(data[i].lng)], {icon: markerIcon}).bindPopup("<b style='font-size:12pt;'>Provinsi :" + data[i].nama_propinsi + "</b><br><b style='font-size:12pt;'>Kota :" + data[i].nama_kabupaten + "</b><br><b style='font-size:12pt;'>Kecamatan :" + data[i].nama_kecamatan + "</b><br><b style='font-size:12pt;'>Desa :" + data[i].nama_desa + "</b>")
-                        .addTo(map)
-                        marker.on('mouseover',function(ev) {
-                            ev.target.openPopup();
-                        });
-                        if (isFirst){
-                            isFirst = false;
-                            map.panTo(new L.LatLng(parseFloat(data[i].lat), parseFloat(data[i].lng)));
-                        }
-                    }
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-
-            }
-        });
-    }
+    @include('layouts.presisi.peta.index')
+    @include('layouts.presisi.peta.style')
 
     function GetListKecamatan() {
             $('#filter_kecamatan').empty().trigger("change");

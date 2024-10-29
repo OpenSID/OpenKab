@@ -1,13 +1,29 @@
 
      <div class="card container bg-c2 border-0 shadow-none">
             <div class="dashboard-header d-flex justify-content-between align-items-center mt-1">
-                <h2>{{ $identitasAplikasi['nama_aplikasi'] }}</h2>
+                <h2>
+                    @php
+                    $currentPath = '/' . Request::path();
+
+                    if (Illuminate\Support\Str::contains($currentPath, '/module/')) {
+                        $pathParts = explode('/', $currentPath);
+
+                        // Buat ulang URL hanya dengan bagian kedua dan ketiga, misal: /presisi/keluarga
+                        $newUrl = '/presisi/' . ($pathParts[2] ?? ''); 
+                        if($menu = App\Models\CMS\Menu::where('url', $newUrl)->where('menu_type', 2)->first()) {
+                            echo $menu->name.' - ';
+                        }
+                    }
+                    @endphp
+
+                    {{App\Models\CMS\Menu::where('url', '/'.Request::path())->where('menu_type', 2)->orderBy('id', 'desc')->first()->name.'' ?? ''}}
+                </h2>
             <div>
-            <div style="position: relative;" class="ml-3">
+            <!-- <div style="position: relative;" class="ml-3">
                 <i class="fa fa-calendar" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%);"></i>
                 <input id="reportrange" type="text" style="padding-left: 30px; padding-right: 30px; width: 100%; border: 1px solid #ccc;"/>
                 <i class="fa fa-caret-down" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);"></i>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- Tombol untuk Desktop -->

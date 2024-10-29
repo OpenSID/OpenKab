@@ -175,4 +175,17 @@ class StatistikController extends Controller
             'message' => 'Kategori tidak ditemukan',
         ], Response::HTTP_NOT_FOUND);
     }
+
+    public function getListCoordinate(){
+        $coordinate = Config::selectRaw('config.kode_propinsi, config.nama_propinsi, config.kode_kabupaten, config.nama_kabupaten,config.kode_kecamatan, config.nama_kecamatan,config.kode_desa, config.nama_desa, config.lat, config.lng, config.kode_pos');
+        if(!empty($this->kecamatan)){
+            $coordinate = $coordinate->where('config.kode_kecamatan','=',$this->kecamatan);
+        }
+        if(!empty($this->desa)){
+            $coordinate = $coordinate->where('config.kode_desa','=',$this->desa);
+        }
+
+        $coordinate = $coordinate->distinct()->orderBy('config.nama_desa', 'ASC')->get();
+        return $coordinate->toJson();
+}
 }

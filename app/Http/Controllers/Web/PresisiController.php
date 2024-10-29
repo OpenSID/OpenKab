@@ -7,6 +7,7 @@ use App\Models\Anak;
 use App\Models\IbuHamil;
 use App\Models\Penduduk;
 use App\Models\Rtm;
+use App\Models\Bantuan;
 use App\Models\Posyandu;
 use App\Models\SasaranPaud;
 use App\Services\RekapService;
@@ -378,5 +379,13 @@ class PresisiController extends Controller
         $statistik = Rtm::KATEGORI_STATISTIK;
 
         return view('presisi.rtm.index', compact('statistik'));
+    }
+    
+    public function bantuan()
+    {
+        // $statistik = Bantuan::get();
+
+        // return view('presisi.bantuan.index', compact('statistik'));
+        return view('presisi.bantuan.index');
     }
 }

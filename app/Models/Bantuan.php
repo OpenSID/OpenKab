@@ -131,24 +131,35 @@ class Bantuan extends BaseModel
      */
     public function scopeCountStatistikPenduduk($query)
     {
+
         $configDesa = null;
         if (request('config_desa')) {
             $configDesa = request('config_desa');
         }
 
-        if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
-            $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
-            $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
-            $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa, $configDesa)->tidakMati()->toBoundSql();
-        }
+        // if (isset(request('filter')['tahun']) || isset(request('filter')['bulan'])) {
+        //     $periode = [request('filter')['tahun'] ?? date('Y'), request('filter')['bulan'] ?? '12', '01'];
+        //     $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
+        //     $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa, $configDesa)->tidakMati()->toBoundSql();
+        // }
 
         $statistik = $this->scopeConfigId($query)
-            ->select(["{$this->table}.id", "{$this->table}.nama"])
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->select(["{$this->table}.id", "{$this->table}.nama"]);
+            if(isset(request('filter')['tahun'])){
+                $statistik->whereRaw("YEAR(program.sdate) = " . request('filter')['tahun']);
+            }
+            $statistik->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('program_peserta', 'program_peserta.program_id', '=', "{$this->table}.id", 'left')
             ->join('tweb_penduduk', 'program_peserta.peserta', '=', 'tweb_penduduk.nik', 'left')
-            ->where('tweb_penduduk.status_dasar', 1)
+            ->join('config', 'config.id', '=', "{$this->table}.config_id", 'left');
+            if(isset(request('filter')['kecamatan'])){
+                $statistik->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+            }
+            if(isset(request('filter')['desa'])){
+                $statistik->whereRaw("config.kode_desa = " . request('filter')['desa']);
+            }
+            $statistik->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_PENDUDUK)
             ->groupBy("{$this->table}.id", "{$this->table}.nama");
 
@@ -175,13 +186,23 @@ class Bantuan extends BaseModel
             $configDesa = request('config_desa');
         }
         $query = $this->scopeConfigId($query)
-            ->select(["{$this->table}.id", "{$this->table}.nama"])
-            ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
+            ->select(["{$this->table}.id", "{$this->table}.nama"]);
+            if(isset(request('filter')['tahun'])){
+                $query->whereRaw("YEAR(program.sdate) = " . request('filter')['tahun']);
+            }
+            $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('program_peserta', 'program_peserta.program_id', '=', "{$this->table}.id", 'left')
             ->join('tweb_keluarga', 'program_peserta.peserta', '=', 'tweb_keluarga.no_kk', 'left')
             ->join('tweb_penduduk', 'tweb_keluarga.nik_kepala', '=', 'tweb_penduduk.id', 'left')
-            ->where('tweb_penduduk.status_dasar', 1)
+            ->join('config', 'config.id', '=', "{$this->table}.config_id", 'left');
+            if(isset(request('filter')['kecamatan'])){
+                $query->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+            }
+            if(isset(request('filter')['desa'])){
+                $query->whereRaw("config.kode_desa = " . request('filter')['desa']);
+            }
+            $query->where('tweb_penduduk.status_dasar', 1)
             ->where('program.sasaran', self::SASARAN_KELUARGA)
             ->groupBy("{$this->table}.id", "{$this->table}.nama");
 

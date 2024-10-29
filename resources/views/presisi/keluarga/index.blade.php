@@ -20,10 +20,10 @@
                     <div class="row">
                         <div class="col-md-3 @if($id) d-none @endif" >
                             <div class="card card-primary rounded-0 elevation-0 border">
-                                <div class="card-header rounded-0">
+                                <!-- <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Keluarga</h3>
 
-                                </div>
+                                </div> -->
                                 @include('presisi.keluarga.kategori')
 
 

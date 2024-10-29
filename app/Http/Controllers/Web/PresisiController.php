@@ -374,11 +374,11 @@ class PresisiController extends Controller
         ];
     }
 
-    public function keluarga()
+    public function keluarga($id = "")
     {
         $statistik = Keluarga::KATEGORI_STATISTIK;
 
-        return view('presisi.keluarga.index', compact('statistik'));
+        return view('presisi.keluarga.index', compact('statistik', 'id'));
     }
   
     public function bantuan()

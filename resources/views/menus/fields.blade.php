@@ -1,8 +1,27 @@
 <!-- Name Field -->
 <div class="form-group row">
     <div class="col-12">
-    {!! Form::text('text', null, ['class' => 'form-control item-menu', 'maxlength' => 255, 'placeholder' => 'Nama Menu']) !!}
-    {!! Form::hidden('icon', 'fas fa-list', ['class' => 'item-menu']) !!}
+        {!! Form::select('menu_type', array('1' => 'Default', '2' => 'Presisi'), '1',['class' => 'form-control']) !!}<br>
+        {!! Form::text('text', null, ['class' => 'form-control item-menu', 'maxlength' => 255, 'placeholder' => 'Nama Menu']) !!}<br>
+        
+        <!-- Icon Field as Dropdown -->
+        {!! Form::select('icon', [
+            '' => 'Select Icon',  // Pilihan kosong di awal
+            'fas fa-list' => 'List',
+            'fas fa-home' => 'Home',
+            'fas fa-user' => 'User',
+            'fas fa-cog' => 'Settings',
+            'fas fa-envelope' => 'Mail',
+            // Tambahkan ikon lain sesuai kebutuhan
+            'fas fa-car' => 'Car',
+            'fas fa-tree' => 'Tree',
+            'fas fa-star' => 'Star',
+            'fas fa-bell' => 'Bell',
+            'fas fa-chart-line' => 'Chart Line',
+            'fas fa-comments' => 'Comments',
+            'fas fa-file-alt' => 'File Alt',
+            'fas fa-fingerprint' => 'Fingerprint',
+        ], '', ['class' => 'form-control item-menu']) !!}
     </div>
 </div>
 
@@ -31,6 +50,7 @@
         {!! Form::text('href', null, ['class' => 'form-control item-menu', 'maxlength' => 255, 'placeholder' => 'http://contoh.com']) !!}
     </div>
 </div>
+
 <div class="form-group row">
     <div class="col-12">
         {!! Form::select('penduduk', $sourceItem['penduduk'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
@@ -42,7 +62,7 @@
 
 @push('js')
 <script nonce="{{  csp_nonce() }}">
-	document.addEventListener("DOMContentLoaded", function(event) {
+    document.addEventListener("DOMContentLoaded", function(event) {
         $('select[name=sourcelist]').hide()
         $(':radio[name=source]').change(function(){
             let _val = $(this).val()
@@ -91,6 +111,14 @@
             }
         })
 
+        $('select[name=menu_type]').on('change', function(){
+            window.location.href = "{{ url('cms/menus') }}?type=" + this.value;
+        })
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const menutype = urlParams.get('type')
+        $('select[name=menu_type]').val((menutype == null ? 1 : menutype));
         $('select[name=penduduk], select[name=keluarga], select[name=bantuan], select[name=rtm]').on('change', function() {
             updateHref();
         });

@@ -30,6 +30,10 @@ class MenuController extends AppBaseController
      */
     public function index()
     {
+        $type = 1;
+        if (request('type') != null){
+            $type = request('type');
+        }
         $sourceItem = [
             'Halaman' => Page::activePublished()->get()->pluck('title', 'link')->toArray(),
             'Kategori' => Category::all()->pluck('name', 'link')->toArray(),
@@ -82,11 +86,20 @@ class MenuController extends AppBaseController
     {
         $input = $request->all();
 
+        $menu_type = $input["menu_type"] == null ? 1 : $input["menu_type"];
+
         $menu = $this->menuRepository->create($input);
 
         Session::flash('success', 'Menu berhasil disimpan.');
-
-        return redirect(route('menus.index'));
+        if ($menu_type == 1){
+            return redirect(route('menus.index'));
+        }
+        else if ($menu_type == 2){
+            return redirect(route('menus.index') . "?type=" .$menu_type);
+        }
+        else{
+            return redirect(route('menus.index'));
+        }
     }
 
     protected function getOptionItems($id = null)

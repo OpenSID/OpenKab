@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CatatanRilis;
 use App\Http\Controllers\UserController;
@@ -168,4 +167,5 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
     Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/kesehatan/{kuartal}/{tahun}/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+    Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
 });

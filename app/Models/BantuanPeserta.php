@@ -21,22 +21,22 @@ class BantuanPeserta extends BaseModel
 
     public function getNikAttribute()
     {
-        return $this->penduduk->nik;
+        return $this->penduduk ? $this->penduduk->nik : null;
     }
 
     public function getNoKKAttribute()
     {
-        return $this->penduduk->keluarga->no_kk;
+        return $this->penduduk ? $this->penduduk->no_kk : null;
     }
 
     public function getJenisKelaminAttribute()
     {
-        return $this->penduduk->jenisKelamin;
+        return $this->penduduk ? $this->penduduk->jenisKelamin : null;
     }
 
     public function getKeteranganAttribute()
     {
-        return $this->penduduk->pendudukStatusDasar;
+        return $this->penduduk ? $this->penduduk->pendudukStatusDasar : null;
     }
 
     /**

@@ -61,7 +61,7 @@
                                     @if(!$id)
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="chart" id="pie" style="height: 500px;"></div>
+                                            <div class="chart" id="pie" style="height: 500px;"></div><br><br>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="chart" id="grafik" style="height: 500px;"></div>

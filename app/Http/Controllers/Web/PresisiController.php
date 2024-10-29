@@ -374,13 +374,13 @@ class PresisiController extends Controller
         ];
     }
 
-    public function rtm()
+    public function rtm($id = '')
     {
         $statistik = Rtm::KATEGORI_STATISTIK;
 
-        return view('presisi.rtm.index', compact('statistik'));
+        return view('presisi.rtm.index', compact('statistik', 'id'));
     }
-    
+
     public function bantuan()
     {
         // $statistik = Bantuan::get();

@@ -1,4 +1,4 @@
-<div class="card-body p-0 ">
+<div class="card-body p-0">
     <ul class="nav nav-pills flex-column" id="nav-statistik">
         @foreach ($statistik as $key => $sub)
             <li class="nav-item active">
@@ -8,8 +8,5 @@
                 </a>
             </li>
         @endforeach
-
-
-
     </ul>
 </div>

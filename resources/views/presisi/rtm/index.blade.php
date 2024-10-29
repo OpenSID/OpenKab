@@ -11,7 +11,7 @@
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-3 @if($id) d-none @endif">
                             <div class="card card-primary rounded-0 elevation-0 border">
                                 <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik RTM</h3>
@@ -22,11 +22,9 @@
 
                             </div>
                         </div>
-                        <div class="col-md-9">
+                        <div class="@if($id) col-md-12 @else col-md-9 @endif">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
-                            @include('presisi.rtm.head')
-                                
-
+                            
                                 <div class="card-body p-0">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -56,15 +54,27 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-                                    <div class="chart" id="grafik" style="height: 500px; display: none">
-
+                                    @if(!$id)
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="chart" id="pie" style="height: 500px;"></div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="chart" id="grafik" style="height: 500px;"></div>
+                                        </div>
                                     </div>
-
-                                    <div class="chart" id="pie" style="height: 500px; display: none">
-
+                                    @else
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <div class="chart" id="grafik" style="height: 500px;"></div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="chart" id="pie" style="height: 500px;"></div>
+                                        </div>
                                     </div>
+                                    @endif
+
+                                    
 
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="statistik">

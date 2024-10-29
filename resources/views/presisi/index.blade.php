@@ -50,7 +50,7 @@
         <div class="card p-3 bg-light-purple">
             <table>
                 <tr>
-                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge3 mr-2 text-center"><i class="fas fa-clock"></i></h4></td>
+                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge3 mr-2 text-center"><i class="fa-solid fa-tree"></i></h4></td>
                     <td><h5><span id="summary-luas_perkebunan">0</span> Ha</h5></td>
                 </tr>
                 <tr>
@@ -63,7 +63,7 @@
         <div class="card p-3 bg-light-blue">
             <table>
                 <tr>
-                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge4 mr-2 text-center"><i class="fas fa-dollar-sign"></i></h4></td>
+                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge4 mr-2 text-center"><i class="fa-solid fa-location-dot"></i></h4></td>
                     <td><h5><span id="summary-luas_hutan">0</span> Ha</h5></td>
                 </tr>
                 <tr>

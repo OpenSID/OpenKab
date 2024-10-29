@@ -13,8 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IdentitasController extends Controller
 {
-    public function __construct(protected IdentitasRepository $identitas)
+    protected $identitas;
+
+    public function __construct(IdentitasRepository $identitas)
     {
+        $this->identitas = $identitas;
     }
 
     /**

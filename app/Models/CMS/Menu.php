@@ -10,6 +10,8 @@ class Menu extends Model
     public $table = 'menus';
 
     public $fillable = [
+        'icon',
+        'menu_type',
         'name',
         'url',
         'sequence',
@@ -26,6 +28,7 @@ class Menu extends Model
     public static array $rules = [
         'name' => 'required|string|max:255',
         'url' => 'nullable|url|max:255',
+        'icon' => 'nullable|url|max:255',
         'text' => 'nullable|string|max:255',
         'href' => 'nullable|url|max:255',
         'sequence' => 'nullable',

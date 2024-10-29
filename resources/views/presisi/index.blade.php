@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map)
 
+    @include('layouts.presisi.peta.filter')
     @include('layouts.presisi.peta.index')
     @include('layouts.presisi.peta.style')
     @include('layouts.presisi.wilayah.data')

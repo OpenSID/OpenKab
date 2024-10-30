@@ -162,6 +162,7 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
 });
 
 Route::get('/module/rtm/{id}', [PresisiController::class, 'rtm'])->name('presisi.rtm');
+Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

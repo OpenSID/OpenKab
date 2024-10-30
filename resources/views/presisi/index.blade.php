@@ -50,6 +50,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
     @include('layouts.presisi.wilayah.data')
 
 
+    @include('layouts.presisi.peta.index')
+    @include('layouts.presisi.peta.style')
+    
+
     $.get('{{ url('api/v1/data-website') }}', {}, function(result){
         let category = result.data.categoriesItems
         let listDesa = result.data.listDesa

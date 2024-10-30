@@ -40,10 +40,10 @@ class MenuController extends AppBaseController
             'Modul' => [
                 '/module/org' => 'Bagan Organisasi',
                 '/module/unduhan' => 'Daftar Unduhan',
-                'statistik-penduduk' => 'Statistik Penduduk',
-                'statistik-keluarga' => 'Statistik Keluarga',
-                'statistik-bantuan' => 'Statistik Bantuan',
-                'statistik-rtm' => 'Statistik RTM',
+                '/statistik-penduduk' => 'Statistik Penduduk',
+                '/statistik-keluarga' => 'Statistik Keluarga',
+                '/statistik-bantuan' => 'Statistik Bantuan',
+                '/statistik-rtm' => 'Statistik RTM',
             ],
             'penduduk' => collect(['/module/penduduk' => 'Semua Statistik Penduduk'])
                 ->merge(

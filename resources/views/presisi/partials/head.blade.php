@@ -16,7 +16,7 @@
                     }
                     @endphp
 
-                    {{App\Models\CMS\Menu::where('url', '/'.Request::path())->where('menu_type', 2)->orderBy('id', 'desc')->first()->name.'' ?? ''}}
+                    {{App\Models\CMS\Menu::where('url', '/'.Request::path())->where('menu_type', 2)->orderBy('id', 'desc')->first()->name ?? ''}}
                 </h2>
             <div>
             <!-- <div style="position: relative;" class="ml-3">

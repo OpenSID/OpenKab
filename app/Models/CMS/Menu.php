@@ -15,12 +15,14 @@ class Menu extends Model
         'sequence',
         'position',
         'parent_id',
+        'is_show',
     ];
 
     protected $casts = [
         'name' => 'string',
         'url' => 'string',
         'position' => 'string',
+        'is_show' => 'boolean',
     ];
 
     public static array $rules = [
@@ -44,7 +46,7 @@ class Menu extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Menu::class, 'parent_id', 'id')->with(['children' => function ($q) {
-            return $q->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon");
+            return $q->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon");
         }]);
     }
 }

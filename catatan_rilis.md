@@ -9,6 +9,7 @@ Di rilis v2410.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 5. [#398](https://github.com/OpenSID/OpenKab/issues/398) Penambahan pengaturan menu presisi.
 6. [#373](https://github.com/OpenSID/OpenKab/issues/373) Penambahan statistik bantuan.
 7. [#399](https://github.com/OpenSID/OpenKab/issues/399) Penambahan api dan peta.
+8. [#387](https://github.com/OpenSID/OpenKab/issues/387) Penambahan statistik keluarga presisi.
 
 #### Perbaikan BUG
 

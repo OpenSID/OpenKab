@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Anak;
 use App\Models\IbuHamil;
 use App\Models\Penduduk;
+use App\Models\Keluarga;
 use App\Models\Bantuan;
 use App\Models\Posyandu;
 use App\Models\SasaranPaud;
@@ -373,6 +374,23 @@ class PresisiController extends Controller
         ];
     }
 
+    public function keluarga($id = "")
+    {
+        $statistik = Keluarga::KATEGORI_STATISTIK;
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $keluargaSummary = 0;
+        $categoriesItems = [
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
+
+        return view('presisi.keluarga.index', compact('statistik', 'id', 'categoriesItems'));
+    }
+  
     public function bantuan()
     {
         // $statistik = Bantuan::get();

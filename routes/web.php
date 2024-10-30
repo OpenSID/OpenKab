@@ -150,7 +150,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 });
 
-Route::middleware(['website.enable', 'log.visitor'])->group(function () {
+Route::middleware([])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');
@@ -161,11 +161,12 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });
 
-Route::prefix('presisi')->middleware('check.presisi')->group(function () {
+Route::prefix('presisi')->middleware([])->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
     Route::view('/sosial',   'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
     Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/kesehatan/{kuartal}/{tahun}/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+    Route::get('statistik/{statistik}/{kategori?}', [PresisiController::class, 'statistik'])->name('presisi.statistik');
 });

@@ -125,6 +125,7 @@
 
         function updateHref() {
             const visibleSelect = $('select[name=sourcelist]').val().replace('statistik-', '');
+            console.log(visibleSelect);
             $('input[name=href]').val($('select[name=' + visibleSelect + ']').val());
         }
     })

@@ -45,31 +45,31 @@ class MenuController extends AppBaseController
                 'statistik-bantuan' => 'Statistik Bantuan',
                 'statistik-rtm' => 'Statistik RTM',
             ],
-            'penduduk' => collect(['/module/penduduk' => 'Semua Statistik Penduduk'])
+            'penduduk' => collect(['/presisi/statistik/penduduk/semua' => 'Semua Statistik Penduduk'])
                 ->merge(
                     collect(Penduduk::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                        return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
+                        return ["/presisi/statistik/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
                     })
                 )->toArray(),
             
-            'keluarga' => collect(['/module/keluarga' => 'Semua Statistik Keluarga'])
+            'keluarga' => collect(['/presisi/statistik/keluarga/semua' => 'Semua Statistik Keluarga'])
                 ->merge(
                     collect(Keluarga::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                        return ["/module/keluarga/{$key}" => ucwords("Statistik Keluarga {$item}")];
+                        return ["/presisi/statistik/keluarga/{$key}" => ucwords("Statistik Keluarga {$item}")];
                     })
                 )->toArray(),
             
-            'bantuan' => collect(['/module/bantuan' => 'Semua Statistik Bantuan'])
+            'bantuan' => collect(['/presisi/statistik/bantuan/semua' => 'Semua Statistik Bantuan'])
                 ->merge(
                     collect(Bantuan::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                        return ["/module/bantuan/{$key}" => ucwords("Statistik Bantuan {$item}")];
+                        return ["/presisi/statistik/bantuan/{$key}" => ucwords("Statistik Bantuan {$item}")];
                     })
                 )->toArray(),
             
-            'rtm' => collect(['/module/rtm' => 'Semua Statistik Rtm'])
+            'rtm' => collect(['/presisi/statistik/rtm/semua' => 'Semua Statistik Rtm'])
                 ->merge(
                     collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
-                        return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
+                        return ["/presisi/statistik/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
                     })
                 )->toArray(),
         ];

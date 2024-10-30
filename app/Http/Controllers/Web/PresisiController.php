@@ -380,4 +380,24 @@ class PresisiController extends Controller
         // return view('presisi.bantuan.index', compact('statistik'));
         return view('presisi.bantuan.index');
     }
+
+    public function statistik(string $statistik, string $katergori = null)
+    {
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $bantuanSummary = 0;
+        $categoriesItems = [
+            ['key' => 'penduduk', 'text' => 'penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'kabupaten', 'text' => 'kabupaten', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'bantuan', 'text' => 'bantuan', 'value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
+        $listKabupaten = ['' => 'Pilih Kabupaten'];
+        $listKecamatan = ['' => 'Pilih Kecamatan'];
+        $listDesa = ['' => 'Pilih Desa'];
+
+        return view('presisi.statistik.index', compact('categoriesItems', 'listKecamatan', 'listDesa', 'listKabupaten'));
+    }
 }

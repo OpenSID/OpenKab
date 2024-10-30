@@ -1,35 +1,28 @@
 <div class="row" >
     <div class="col-md-12" >
-        <div class="card card-primary card-outline rounded-0 elevation-0 border">
-            <div class="card-header" style=" background-color: lightblue!important;">
+        <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
+            <div class="card-header bg-primary rounded-0">
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <p><b> Pilih Kecamatan:</b></p>
-                        </div>
-                        <div class="row">
-                            <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
-                                <option value="">All</option>
-                            </select>
-                        </div>
+                    <div class="col-md-5">
+                        <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
+                            <option value="">All</option>
+                        </select>
                     </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <p><b> Pilih Desa:</b></p>
-                        </div>
-                        <div class="row">
-                            <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
-                                <option value="">All</option>
-                            </select>
-                        </div>
+                    <div class="col-md-5 p-0">
+                        <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">Tampilkan</button>
                     </div>
                 </div>
-                <div class="row justify-content-end pt-1">
+                <!-- <div class="row justify-content-end pt-1">
                     <div class="col-md-4 pull-right text-right">
                         <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
                         <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
                     </div>
-                </div>
+                </div> -->
 
             </div>
 

@@ -96,7 +96,14 @@ class StatistikController extends Controller
 
     public function rtm(RtmRepository $rtm)
     {
-        return $this->fractal($this->statistik->getStatistik($rtm->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-rtm')->respond();
+        if ($this->kategori) {
+            return $this->fractal($this->statistik->getStatistik($rtm->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-rtm')->respond();
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Kategori tidak ditemukan',
+        ], Response::HTTP_NOT_FOUND);
     }
 
     public function refTahunRtm(RtmRepository $rtm)

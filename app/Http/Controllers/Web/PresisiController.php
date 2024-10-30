@@ -373,11 +373,11 @@ class PresisiController extends Controller
         ];
     }
 
-    public function bantuan()
+    public function bantuan($id = "")
     {
         // $statistik = Bantuan::get();
 
         // return view('presisi.bantuan.index', compact('statistik'));
-        return view('presisi.bantuan.index');
+        return view('presisi.bantuan.index', compact('id'));
     }
 }

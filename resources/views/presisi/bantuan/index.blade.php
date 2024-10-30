@@ -88,7 +88,7 @@
                                             <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row @if($id) d-none @endif">
                                         <div class="col-md-2">
                                             <p> Pilih Program:</p>
                                         </div>
@@ -171,7 +171,7 @@
 
                                     </div>
                                     <br/>
-                                    <h5 class="pl-2"> Tabel Penerima Bantuan Penduduk</h5>
+                                    <h5 class="pl-2"> Tabel Penerima Bantuan</h5>
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="statistik">
                                             <thead>
@@ -189,7 +189,7 @@
 
                                     </div>
                                     <br/>
-                                    <h5 class="pl-2"> Daftar Penerima Bantuan Penduduk</h5>
+                                    <h5 class="pl-2"> Daftar Penerima Bantuan</h5>
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="daftar_penerima">
                                             <thead>
@@ -642,25 +642,51 @@
         }
         function GetListProgram() {
             $('#filter_program').empty().trigger("change");
-            var optionPenduduk = new Option("Penerima Bantuan Penduduk", "penduduk");
-            $("#filter_program").append(optionPenduduk);
-            var optionKeluarga = new Option("Penerima Bantuan Keluarga", "keluarga");
-            $("#filter_program").append(optionKeluarga);
-            $.ajax({
-                type: 'GET',
-                url: "{{ url('api/v1/statistik-web/get-list-program') }}",
-                dataType: 'json',
-                success: function(data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var newOption = new Option(data[i].nama, data[i].id, true, true);
-                        $("#filter_program").append(newOption);
-                    }
-                    $("#filter_program").val("penduduk");
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
+            @if($id) 
+                @if($id == 'penduduk')
+                    var optionPenduduk = new Option("Penerima Bantuan Penduduk", "penduduk");
+                    $("#filter_program").append(optionPenduduk);
+                @elseif($id == 'keluarga')
+                    var optionKeluarga = new Option("Penerima Bantuan Keluarga", "keluarga");
+                    $("#filter_program").append(optionKeluarga);
+                @else
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{ url('api/v1/statistik-web/get-list-program') }}",
+                        dataType: 'json',
+                        success: function(data) {
+                            for (var i = 0; i < data.length; i++) {
+                                var newOption = new Option(data[i].nama, data[i].id, true, true);
+                                $("#filter_program").append(newOption);
+                            }
+                            $("#filter_program").val("penduduk");
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
 
-                }
-            });
+                        }
+                    });
+                @endif
+            @else
+                var optionPenduduk = new Option("Penerima Bantuan Penduduk", "penduduk");
+                $("#filter_program").append(optionPenduduk);
+                var optionKeluarga = new Option("Penerima Bantuan Keluarga", "keluarga");
+                $("#filter_program").append(optionKeluarga);
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ url('api/v1/statistik-web/get-list-program') }}",
+                    dataType: 'json',
+                    success: function(data) {
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = new Option(data[i].nama, data[i].id, true, true);
+                            $("#filter_program").append(newOption);
+                        }
+                        $("#filter_program").val("penduduk");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            @endif
         }
 
     </script>

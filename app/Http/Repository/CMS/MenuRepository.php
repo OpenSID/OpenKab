@@ -15,6 +15,7 @@ class MenuRepository extends BaseRepository
         'sequence',
         'position',
         'parent_id',
+        'is_show',
     ];
 
     public function getFieldsSearchable(): array
@@ -38,10 +39,10 @@ class MenuRepository extends BaseRepository
 
     public function tree(): Collection|null
     {
-        return $this->model->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon")
+        return $this->model->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon")
             ->whereNull('parent_id')
             ->with(['children' => function ($q) {
-                $q->selectRaw("id, parent_id , name as text, url as href, 'fas fa-list' as icon");
+                $q->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon");
             }])
             ->orderBy('sequence')
             ->get();
@@ -83,6 +84,7 @@ class MenuRepository extends BaseRepository
                 'url' => $element['href'],
                 'sequence' => $sequence,
                 'parent_id' => $parentId,
+                'is_show' => $element['is_show'],
             ];
             $model = parent::create($input);
             if (isset($element['children'])) {

@@ -4,6 +4,7 @@
     <h1>Data Menu</h1>
 @stop
 
+
 @section('content')
     @include('partials.breadcrumbs')
 
@@ -97,6 +98,7 @@
 
                 $('#frmEdit').bind('reset', function(e){
                     $('select[name=sourcelist]').hide()
+                    $('select[name=sourcelistmodul]').hide()
                     $('input[name=href]').show()
                 })
                 $('#frmEdit').submit(function(e){

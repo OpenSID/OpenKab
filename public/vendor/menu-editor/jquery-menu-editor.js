@@ -3,7 +3,11 @@ function MenuEditor(e, s) {
         l = {
             labelEdit: '<i class="fas fa-edit clickable"></i>',
             labelRemove: '<i class="fas fa-trash-alt clickable"></i>',
+            labelLock: '<i class="fas fa-lock clickable"></i>',
+            labelUnlock: '<i class="fas fa-unlock clickable"></i>',
             textConfirmDelete: "Item ini akan dihapus, apakah anda yakin ?",
+            textConfirmShow: "Item ini akan aktifkan, apakah anda yakin ?",
+            textConfirmUnshow: "Item ini akan non-aktifkan, apakah anda yakin ?",
             iconPicker: {
                 cols: 4,
                 rows: 4,
@@ -57,34 +61,81 @@ function MenuEditor(e, s) {
         return $("<a>").addClass(e.classCss).addClass("clickable").attr("href", "#").html(e.text)
     }
 
-    function u() {
+    function u(event) {
+
         var e = $("<div>").addClass("btn-group float-right"),
-            s = p({
-                classCss: "btn btn-primary btn-sm btnEdit",
-                text: l.labelEdit
-            }),
-            t = p({
-                classCss: "btn btn-danger btn-sm btnRemove",
-                text: l.labelRemove
-            }),
-            n = p({
-                classCss: "btn btn-secondary btn-sm btnUp btnMove",
-                text: '<i class="fas fa-angle-up clickable"></i>'
+        s = p({
+            classCss: "btn btn-primary btn-sm btnEdit",
+            text: l.labelEdit
+        }),
+        t = p({
+            classCss: "btn btn-danger btn-sm btnRemove",
+            text: l.labelRemove
+        }),
+        isShow;
+
+        if (event.is_show) {
+            isShow = p({
+                classCss: "btn btn-warning btn-sm btnShow",
+                text: l.labelUnlock
+            });
+        } 
+        
+        if(!event.is_show) {
+            isShow = p({
+                classCss: "btn btn-dark btn-sm btnUnshow",
+                text: l.labelLock
+            });
+        }
+
+        var n = p({
+                classCss: "btn btn-default btn-sm btnUp btnMove",
+                text: '<i class="fa fa-angle-up clickable"></i>'
             }),
             o = p({
-                classCss: "btn btn-secondary btn-sm btnDown btnMove",
-                text: '<i class="fas fa-angle-down clickable"></i>'
+                classCss: "btn btn-default btn-sm btnDown btnMove",
+                text: '<i class="fa fa-angle-down clickable"></i>'
             }),
             i = p({
-                classCss: "btn btn-secondary btn-sm btnOut btnMove",
-                text: '<i class="fas fa-level-down-alt clickable"></i>'
+                classCss: "btn btn-default btn-sm btnOut btnMove",
+                text: '<i class="fa fa-level-down clickable"></i>'
             }),
             r = p({
-                classCss: "btn btn-secondary btn-sm btnIn btnMove",
-                text: '<i class="fas fa-level-up-alt clickable"></i>'
+                classCss: "btn btn-default btn-sm btnIn btnMove",
+                text: '<i class="fa fa-level-up clickable"></i>'
             });
-        return e.append(n).append(o).append(r).append(i).append(s).append(t), e
+
+        return e.append(n).append(o).append(r).append(i).append(s).append(isShow).append(t), e;
     }
+
+    // function u() {
+    //     var e = $("<div>").addClass("btn-group float-right"),
+    //         s = p({
+    //             classCss: "btn btn-primary btn-sm btnEdit",
+    //             text: l.labelEdit
+    //         }),
+    //         t = p({
+    //             classCss: "btn btn-danger btn-sm btnRemove",
+    //             text: l.labelRemove
+    //         }),
+    //         n = p({
+    //             classCss: "btn btn-secondary btn-sm btnUp btnMove",
+    //             text: '<i class="fas fa-angle-up clickable"></i>'
+    //         }),
+    //         o = p({
+    //             classCss: "btn btn-secondary btn-sm btnDown btnMove",
+    //             text: '<i class="fas fa-angle-down clickable"></i>'
+    //         }),
+    //         i = p({
+    //             classCss: "btn btn-secondary btn-sm btnOut btnMove",
+    //             text: '<i class="fas fa-level-down-alt clickable"></i>'
+    //         }),
+    //         r = p({
+    //             classCss: "btn btn-secondary btn-sm btnIn btnMove",
+    //             text: '<i class="fas fa-level-up-alt clickable"></i>'
+    //         });
+    //     return e.append(n).append(o).append(r).append(i).append(s).append(t), e
+    // }
 
     function f(e, s) {
         var l = void 0 === s ? 0 : s,
@@ -106,7 +157,7 @@ function MenuEditor(e, s) {
                 c = $("<i>").addClass(s.icon),
                 d = $("<span>").addClass("mr-auto txt").append(s.text),
                 e = $("<span>").addClass("mr-2 href").text(s.href),
-                p = u();
+                p = u(s);
             a.append(c).append("&nbsp;").append(d).append(e).append(p), r.append(a), t && r.append(f(s.children, l + 1)), n.append(r)
         })), n
     }
@@ -143,6 +194,30 @@ function MenuEditor(e, s) {
                 })), i.find(".item-menu").first().focus(), s.hasOwnProperty("icon") ? c.iconpicker("setIcon", s.icon) : c.iconpicker("setIcon", "empty");
                 r.removeAttr("disabled")
             }(n = $(this).closest("li"))
+    })),t.on("click", ".btnShow", (function (s) {
+        s.preventDefault();
+        if (confirm(l.textConfirmShow)) {
+            var n = $(this).closest("li");
+            var data = n.data();  
+            if (data.is_show) {
+                data.is_show = false;
+                n.data('is_show', false);
+
+                $(this).removeClass("btn btn-warning btn-sm btnShow").addClass("btn btn-dark btn-sm btnUnshow").html(l.labelLock).attr("title", "Menu tidak aktif");
+            }
+        }
+    })), t.on("click", ".btnUnshow", (function (s) {
+        s.preventDefault();
+        if (confirm(l.textConfirmShow)) {
+            var n = $(this).closest("li");
+            var data = n.data();  
+            if (data.is_show === false) {
+                data.is_show = true;
+                n.data('is_show', true);
+
+                $(this).removeClass("btn btn-danger btn-sm btnUnshow").addClass("btn btn-warning btn-sm btnShow").html(l.labelUnlock).attr("title", "Menu aktif");
+            }
+        }
     })), t.on("click", ".btnUp", (function (e) {
         e.preventDefault();
         var s = $(this).closest("li");

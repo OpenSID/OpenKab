@@ -26,7 +26,7 @@ if (! function_exists('persen')) {
     {
         $hasil = ($penyebut == 0) ? 0 : $pembilang / $penyebut * 100;
 
-        return number_format($hasil, $desimal, $pemisah).'%';
+        return number_format($hasil, $desimal, $pemisah) . '%';
     }
 }
 
@@ -119,12 +119,12 @@ if (! function_exists('url_title')) {
             '&.+?;' => '',
             '[^\w\d _-]' => '',
             '\s+' => $separator,
-            '('.$q_separator.')+' => $separator,
+            '(' . $q_separator . ')+' => $separator,
         ];
 
         $str = strip_tags($str);
         foreach ($trans as $key => $val) {
-            $str = preg_replace('#'.$key.'#i', $val, $str);
+            $str = preg_replace('#' . $key . '#i', $val, $str);
         }
 
         if ($lowercase === true) {
@@ -176,11 +176,11 @@ function ambilBerkas($pathBerkas, $tampil = true)
         }
 
         // Generate the server headers
-        header('Content-Type: '.$mime);
-        header('Content-Disposition: inline; filename="'.Str::random(10).'"');
+        header('Content-Type: ' . $mime);
+        header('Content-Disposition: inline; filename="' . Str::random(10) . '"');
         header('Expires: 0');
         header('Content-Transfer-Encoding: binary');
-        header('Content-Length: '.filesize($pathBerkas));
+        header('Content-Length: ' . filesize($pathBerkas));
         header('Cache-Control: private, no-transform, no-store, must-revalidate');
 
         return readfile($pathBerkas);
@@ -198,7 +198,7 @@ if (! function_exists('default_favicon')) {
         $path = public_path('favicons');
         if (! file_exists($path)) {
             mkdir($path, 0755, true);
-            $pathFavicon = public_path('favicons/'.$favicon);
+            $pathFavicon = public_path('favicons/' . $favicon);
             if (! file_exists($pathFavicon)) {
                 $filePath = public_path('assets/img/opensid_logo.png');
                 Image::make($filePath)->resize(96, 96)->save($pathFavicon, '100', 'png');
@@ -243,12 +243,12 @@ if (! function_exists('generateMenu')) {
     function generateMenu($tree, $parentId = null)
     {
         $result = '';
-        foreach ($tree as $item) {
+        foreach ($tree->where('is_show', 1) as $item) {
             if ($item->children->count() > 0) {
                 $classLink = empty($parentId) ? 'nav-link' : 'dropdown-item';
                 $result .= "
                 <li class='nav-item dropdown'>
-                    <a class='{$classLink} dropdown-toggle' role='button' href='#' data-bs-toggle='dropdown'>
+                    <a class='{$classLink} dropdown-toggle' style='font-size:12px;' role='button' href='#' data-bs-toggle='dropdown'>
                     {$item->text}
                     </a>
                     <ul class='dropdown-menu'>";
@@ -258,9 +258,9 @@ if (! function_exists('generateMenu')) {
                 </li>';
             } else {
                 if ($parentId) {
-                    $result .= "<li><a class='dropdown-item' href='{$item->href}'>{$item->text}</a></li>";
+                    $result .= "<li><a class='dropdown-item' style='font-size:12px;' href='{$item->href}'>{$item->text}</a></li>";
                 } else {
-                    $result .= "<li class='nav-item'><a href='{$item->href}' class='nav-link'>{$item->text}</a></li>";
+                    $result .= "<li class='nav-item'><a href='{$item->href}' style='font-size:12px;' class='nav-link'>{$item->text}</a></li>";
                 }
             }
         }
@@ -290,7 +290,7 @@ if (! function_exists('tgl_indo')) {
         $bulan = bulan($pecah[1]);
         $tahun = $pecah[0];
 
-        return $tanggal.' '.$bulan.' '.$tahun;
+        return $tanggal . ' ' . $bulan . ' ' . $tahun;
     }
 }
 
@@ -390,7 +390,7 @@ if (! function_exists('shortdate_indo')) {
         $bulan = short_bulan($pecah[1]);
         $tahun = $pecah[0];
 
-        return $tanggal.'/'.$bulan.'/'.$tahun;
+        return $tanggal . '/' . $bulan . '/' . $tahun;
     }
 }
 
@@ -447,7 +447,7 @@ if (! function_exists('mediumdate_indo')) {
         $bulan = medium_bulan($pecah[1]);
         $tahun = $pecah[0];
 
-        return $tanggal.'-'.$bulan.'-'.$tahun;
+        return $tanggal . '-' . $bulan . '-' . $tahun;
     }
 }
 
@@ -523,7 +523,7 @@ if (! function_exists('longdate_indo')) {
             $nama_hari = 'Sabtu';
         }
 
-        return $nama_hari.','.$tgl.' '.$bulan.' '.$thn;
+        return $nama_hari . ',' . $tgl . ' ' . $bulan . ' ' . $thn;
     }
 }
 
@@ -659,19 +659,19 @@ if (! function_exists('kuartal')) {
         return [
             [
                 'ke' => 1,
-                'bulan' => bulan_array()[0]['nama_panjang'].' - '.bulan_array()[2]['nama_panjang'],
+                'bulan' => bulan_array()[0]['nama_panjang'] . ' - ' . bulan_array()[2]['nama_panjang'],
             ],
             [
                 'ke' => 2,
-                'bulan' => bulan_array()[3]['nama_panjang'].' - '.bulan_array()[5]['nama_panjang'],
+                'bulan' => bulan_array()[3]['nama_panjang'] . ' - ' . bulan_array()[5]['nama_panjang'],
             ],
             [
                 'ke' => 3,
-                'bulan' => bulan_array()[6]['nama_panjang'].' - '.bulan_array()[8]['nama_panjang'],
+                'bulan' => bulan_array()[6]['nama_panjang'] . ' - ' . bulan_array()[8]['nama_panjang'],
             ],
             [
                 'ke' => 4,
-                'bulan' => bulan_array()[9]['nama_panjang'].' - '.bulan_array()[11]['nama_panjang'],
+                'bulan' => bulan_array()[9]['nama_panjang'] . ' - ' . bulan_array()[11]['nama_panjang'],
             ],
         ];
     }
@@ -683,19 +683,19 @@ if (! function_exists('kuartal2')) {
         return [
             [
                 'ke' => 1,
-                'bulan' => bulan2_array()[0]['nama_panjang'].' - '.bulan2_array()[2]['nama_panjang'],
+                'bulan' => bulan2_array()[0]['nama_panjang'] . ' - ' . bulan2_array()[2]['nama_panjang'],
             ],
             [
                 'ke' => 2,
-                'bulan' => bulan2_array()[3]['nama_panjang'].' - '.bulan2_array()[5]['nama_panjang'],
+                'bulan' => bulan2_array()[3]['nama_panjang'] . ' - ' . bulan2_array()[5]['nama_panjang'],
             ],
             [
                 'ke' => 3,
-                'bulan' => bulan2_array()[6]['nama_panjang'].' - '.bulan2_array()[8]['nama_panjang'],
+                'bulan' => bulan2_array()[6]['nama_panjang'] . ' - ' . bulan2_array()[8]['nama_panjang'],
             ],
             [
                 'ke' => 4,
-                'bulan' => bulan2_array()[9]['nama_panjang'].' - '.bulan2_array()[11]['nama_panjang'],
+                'bulan' => bulan2_array()[9]['nama_panjang'] . ' - ' . bulan2_array()[11]['nama_panjang'],
             ],
         ];
     }
@@ -722,5 +722,5 @@ function persen3($number, $total, $precision = 2)
         return 0;
     }
 
-    return round(($number / $total) * 100, $precision).'%';
+    return round(($number / $total) * 100, $precision) . '%';
 }

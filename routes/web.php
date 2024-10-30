@@ -161,10 +161,14 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });
 
+Route::get('/module/penduduk/{id}', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
+Route::get('/statistik-penduduk', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
+
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
     Route::view('/sosial',   'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
+    Route::get('/statistik-penduduk', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
     Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/kesehatan/{kuartal}/{tahun}/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');

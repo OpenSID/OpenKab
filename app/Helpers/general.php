@@ -293,7 +293,10 @@ if (! function_exists('generateMenuPresisi')) {
                 if ($parentId) {
                     $result .= "<a class='item-menu dropdown-item' href='{$item->href}'>{$icon}{$item->text}</a>";
                 } else {
-                    $href = str_contains($item->href, 'module') ? $item->href : '/'.$item->href;
+                    $href = $item->href;
+                    if($href != '/presisi'){
+                        $href = str_contains($item->href, 'module') ? $item->href : '/'.$item->href;
+                    }
                     $result .= "<a type='button' class='item-menu btn bg-white p-2 text-muted' href='{$href}'>{$icon}{$item->text}</a>";
 
                 }

@@ -376,9 +376,18 @@ class PresisiController extends Controller
 
     public function rtm($id = '')
     {
-        $statistik = Rtm::KATEGORI_STATISTIK;
+        $statistik = Rtm::KATEGORI_STATISTIK;$totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $keluargaSummary = 0;
+        $categoriesItems = [
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
 
-        return view('presisi.rtm.index', compact('statistik', 'id'));
+        return view('presisi.rtm.index', compact('statistik', 'id', 'categoriesItems'));
     }
 
     public function bantuan()

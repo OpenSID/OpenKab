@@ -7,6 +7,12 @@
 @include('presisi.partials.head')
 
     <div class="row">
+    <div class="col-md-12">
+            
+            <div class="card rounded-0 border-0 shadow-none">
+                @include('presisi.summary')
+            </div>
+        </div>
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">

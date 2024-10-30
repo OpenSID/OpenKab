@@ -3,7 +3,7 @@
         $(function() {
             var statistik = [];
             var data_grafik = [];
-            let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
+            let exclude_chart = []
 
             $('#nav-statistik li a:first').addClass('active');
             $('#nav-statistik li').click(function(e) {

@@ -111,6 +111,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
 
+    @include('layouts.presisi.peta.index')
+    @include('layouts.presisi.peta.style')
+    
+
     $.get('{{ url('api/v1/data-website') }}', {}, function(result){
         let category = result.data.categoriesItems
         let listDesa = result.data.listDesa

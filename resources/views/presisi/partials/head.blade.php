@@ -13,6 +13,8 @@
                         if($menu = App\Models\CMS\Menu::where('url', $newUrl)->where('menu_type', 2)->first()) {
                             echo $menu->name.' - ';
                         }
+                    }else{
+                        echo App\Models\CMS\Menu::where('url', str_replace('statistik-', '/presisi/', Request::path()))->where('menu_type', 2)->orderBy('id', 'desc')->first()->name ?? '';
                     }
                     @endphp
 

@@ -18,8 +18,8 @@ class ArtikelRepository
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where('nama_desa', 'LIKE', '%' . $value . '%')
-                        ->orWhere('tgl_upload', 'LIKE', '%' . $value . '%');
+                    $query->where('nama_desa', 'LIKE', '%'.$value.'%')
+                        ->orWhere('tgl_upload', 'LIKE', '%'.$value.'%');
                 }),
                 AllowedFilter::callback('tahun', function ($query, $value) {
                     $query->whereYear('tgl_upload', '<=', $value)

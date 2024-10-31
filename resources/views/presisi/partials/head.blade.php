@@ -10,7 +10,7 @@
 
                         // Buat ulang URL hanya dengan bagian kedua dan ketiga, misal: /presisi/keluarga
                         $newUrl = '/presisi/' . ($pathParts[2] ?? ''); 
-                        if($menu = App\Models\CMS\Menu::where('url', $newUrl)->where('menu_type', 2)->first()) {
+                        if($menu = App\Models\CMS\Menu::where('url', $newUrl)->where('menu_type', 2)->orderBy('id', 'desc')->first()) {
                             echo $menu->name.' - ';
                         }
                     }else{

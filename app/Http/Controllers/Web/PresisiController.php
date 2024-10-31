@@ -390,12 +390,21 @@ class PresisiController extends Controller
 
         return view('presisi.keluarga.index', compact('statistik', 'id', 'categoriesItems'));
     }
-  
-    public function bantuan()
+      
+    public function bantuan($id = "")
     {
-        // $statistik = Bantuan::get();
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $keluargaSummary = 0;
+        $categoriesItems = [
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
+        $statistik = Bantuan::get();
 
-        // return view('presisi.bantuan.index', compact('statistik'));
-        return view('presisi.bantuan.index');
+        return view('presisi.bantuan.index', compact('id', 'categoriesItems', 'statistik'));
     }
 }

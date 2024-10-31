@@ -61,12 +61,12 @@ class BantuanRepository
             ])->get();
     }
 
-    public function listStatistik($kategori, $tahun, $kecamatan, $desa): array
+    public function listStatistik($kategori, $tahun, $kabupaten, $kecamatan, $desa): array
     {
         return collect(match ($kategori) {
-            'penduduk' => $this->caseKategoriPenduduk($tahun, $kecamatan, $desa),
-            'keluarga' => $this->caseKategoriKeluarga($tahun, $kecamatan, $desa),
-            default => $this->caseNonKategori($kategori, $tahun, $kecamatan, $desa),
+            'penduduk' => $this->caseKategoriPenduduk($tahun, $kabupaten, $kecamatan, $desa),
+            'keluarga' => $this->caseKategoriKeluarga($tahun, $kabupaten, $kecamatan, $desa),
+            default => $this->caseNonKategori($kategori, $tahun, $kabupaten, $kecamatan, $desa),
         })->toArray();
     }
 
@@ -77,8 +77,11 @@ class BantuanRepository
         if(isset(request('filter')['tahun'])){
             $bantuan = $bantuan->whereRaw("YEAR(program.sdate) = " . request('filter')['tahun']);
         }
-        if (isset(request('filter')['kecamatan']) ||isset(request('filter')['desa'])){
+        if (isset(request('filter')['kabupaten']) ||isset(request('filter')['kecamatan']) ||isset(request('filter')['desa'])){
             $bantuan = $bantuan->join('config', 'config.id', '=', "{$this->table}.config_id", 'left');
+            if(isset(request('filter')['kabupaten'])){
+                $bantuan = $bantuan->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+            }
             if(isset(request('filter')['kecamatan'])){
                 $bantuan = $bantuan->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
             }
@@ -113,7 +116,7 @@ class BantuanRepository
         ];
     }
 
-    public function caseKategoriPenduduk($tahun, $kecamatan, $desa): array
+    public function caseKategoriPenduduk($tahun, $kabupaten, $kecamatan, $desa): array
     {
         $header = Bantuan::countStatistikPenduduk()->get();
         $footer = $this->countStatistikKategoriPenduduk();
@@ -135,8 +138,11 @@ class BantuanRepository
         if(isset(request('filter')['tahun'])){
             $bantuan = $bantuan->whereRaw("YEAR(program.sdate) = " . request('filter')['tahun']);
         }
-        if (isset(request('filter')['kecamatan']) || isset(request('filter')['kecamatan'])){
+        if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['kecamatan'])){
             $bantuan = $bantuan->join('config', 'config.id', '=', "program.config_id", 'left');
+            if(isset(request('filter')['kabupaten'])){
+                $bantuan = $bantuan->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+            }
             if(isset(request('filter')['kecamatan'])){
                 $bantuan = $bantuan->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
             }

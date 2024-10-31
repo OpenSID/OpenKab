@@ -81,6 +81,9 @@ class Keluarga extends BaseModel
                 $query->whereRaw("YEAR(program.sdate) = " . request('filter')['tahun']);
             }
             $query->where('tweb_penduduk.status_dasar', 1);
+            if(isset(request('filter')['kabupaten'])){
+                $query->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+            }
             if(isset(request('filter')['kecamatan'])){
                 $query->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
             }

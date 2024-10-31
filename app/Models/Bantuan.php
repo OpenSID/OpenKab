@@ -153,6 +153,9 @@ class Bantuan extends BaseModel
             ->join('program_peserta', 'program_peserta.program_id', '=', "{$this->table}.id", 'left')
             ->join('tweb_penduduk', 'program_peserta.peserta', '=', 'tweb_penduduk.nik', 'left')
             ->join('config', 'config.id', '=', "{$this->table}.config_id", 'left');
+            if(isset(request('filter')['kabupaten'])){
+                $statistik->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+            }
             if(isset(request('filter')['kecamatan'])){
                 $statistik->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
             }
@@ -196,6 +199,9 @@ class Bantuan extends BaseModel
             ->join('tweb_keluarga', 'program_peserta.peserta', '=', 'tweb_keluarga.no_kk', 'left')
             ->join('tweb_penduduk', 'tweb_keluarga.nik_kepala', '=', 'tweb_penduduk.id', 'left')
             ->join('config', 'config.id', '=', "{$this->table}.config_id", 'left');
+            if(isset(request('filter')['kabupaten'])){
+                $query->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+            }
             if(isset(request('filter')['kecamatan'])){
                 $query->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
             }

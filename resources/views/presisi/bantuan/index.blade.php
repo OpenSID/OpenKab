@@ -17,7 +17,7 @@
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        <div class="col-md-3 @if($id) d-none @endif" >
+                    {{-- <div class="col-md-3 @if($id) d-none @endif" >
                             <div class="card card-primary rounded-0 elevation-0 border">
                                 <!-- <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Bantuan</h3>
@@ -52,8 +52,8 @@
                                 </div>
 
                             </div>
-                        </div>
-                        <div class="@if($id) col-md-12 @else col-md-9 @endif">
+                        </div> --}}
+                        <div class="col-md-12">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
                                 <div class="card-header bg-primary rounded-0">
                                     <div class="row">
@@ -87,8 +87,16 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="row">
-                                                <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
-                                                <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
+                                                        </td>
+                                                        <td>
+                                                            <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -98,8 +106,8 @@
                                             <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
                                         </div>
                                     </div> -->
-                                    <hr class="d-none">
-                                    <div class="row @if($id) d-none @endif d-none">
+                                    <hr class="@if($id) d-none @endif">
+                                    <div class="row @if($id) d-none @endif">
                                         <div class="col-md-2">
                                             <p> Pilih Program:</p>
                                         </div>
@@ -113,7 +121,26 @@
 
 
                                 </div>
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm"
+                                                data-bs-toggle="collapse" href="#grafik-statistik" role="button"
+                                                aria-expanded="false" aria-controls="grafik-statistik" disabled>
+                                                <i class="fas fa-chart-bar"></i> Grafik
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm"
+                                                data-bs-toggle="collapse" href="#pie-statistik" role="button"
+                                                aria-expanded="false" aria-controls="pie-statistik">
+                                                <i class="fas fa-chart-pie"></i> Chart
+                                            </button>
+                                        </div>
+                                    </div>
 
+
+                                </div>
                                 <div class="card-body p-0">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -152,25 +179,14 @@
                                     </div>
 
 
-                                    @if(!$id)
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="chart" id="pie" style="height: 500px;"></div><br><br>
+                                            <div class="chart" id="pie" style="height: 500px;display:none"></div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="chart" id="grafik" style="height: 500px;"></div>
                                         </div>
                                     </div>
-                                    @else
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <div class="chart" id="grafik" style="height: 500px;"></div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="chart" id="pie" style="height: 500px;"></div>
-                                        </div>
-                                    </div>
-                                    @endif
                                     <br/>
                                     <h5 class="pl-2"> Tabel Penerima Bantuan</h5>
                                     <div class="table-responsive mailbox-messages">
@@ -259,36 +275,6 @@
                 table.ajax.reload();
                 table_penerima.ajax.reload();
             });
-
-            $('#btn-tabel').click(function() {
-                $(this).prop('disabled', true);
-                $('#btn-grafik').prop('disabled', false);
-                $('#btn-pie').prop('disabled', false);
-
-                $('#grafik').hide();
-                $('#pie').hide()
-                $('#statistik').show()
-            })
-
-            $('#btn-grafik').click(function() {
-                $(this).prop('disabled', true);
-                //$('#btn-tabel').prop('disabled', false);
-                $('#btn-pie').prop('disabled', false);
-
-                $('#grafik').show();
-                $('#pie').hide()
-                //$('#statistik').hide()
-            })
-
-            $('#btn-pie').click(function() {
-                $(this).prop('disabled', true);
-                //$('#btn-tabel').prop('disabled', false);
-                $('#btn-grafik').prop('disabled', false);
-
-                $('#grafik').hide();
-                $('#pie').show()
-               // $('#statistik').hide()
-            })
 
             $('#filter_kabupaten').on("select2:select", function(e) {
                 GetListKecamatan(this.value);
@@ -601,6 +587,36 @@
                 $('select[name=search_desa]').append(_optionDesa.join(''))
             }, 'json')
         });
+
+            // $('#btn-tabel').click(function() {
+            //     $(this).prop('disabled', true);
+            //     $('#btn-grafik').prop('disabled', false);
+            //     $('#btn-pie').prop('disabled', false);
+
+            //     $('#grafik').hide();
+            //     $('#pie').hide()
+            //     $('#statistik').show()
+            // })
+
+            $('#btn-grafik').click(function() {
+                $(this).prop('disabled', true);
+                // $('#btn-tabel').prop('disabled', false);
+                $('#btn-pie').prop('disabled', false);
+
+                $('#grafik').show();
+                $('#pie').hide()
+                // $('#statistik').hide()
+            })
+
+            $('#btn-pie').click(function() {
+                $(this).prop('disabled', true);
+                // $('#btn-tabel').prop('disabled', false);
+                $('#btn-grafik').prop('disabled', false);
+
+                $('#grafik').hide();
+                $('#pie').show()
+                // $('#statistik').hide()
+            })
 
         function GetListTahun() {
             $('#filter_tahun').empty().trigger("change");

@@ -71,7 +71,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="row">
                                                 <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
                                                     <option value="">All</option>
@@ -85,12 +85,12 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="row">
                                                 <table>
                                                     <tr>
                                                         <td>
-                                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
+                                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right wh-full" style="display:none;">HAPUS FILTER</button>
                                                         </td>
                                                         <td>
                                                             <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>

@@ -1,4 +1,4 @@
-@extends('layouts.web')
+@extends('layouts.statistik')
 
 @section('content')
     @includeWhen($moduleName == 'org' , 'web.partials.org', ['tree' => $content])

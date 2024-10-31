@@ -88,7 +88,7 @@
                     </div>
                 `;
             };
-            var datasource = {!! $tree[0] !!}
+            var datasource = {!! $tree[0] ?? 'null' !!};
 
             $('#chart-container').orgchart({
                 'exportButton': false,

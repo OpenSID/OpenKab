@@ -48,51 +48,55 @@
                             </div>
                         </div> --}}
                         <div class="col-md-12">
-                            <div class="card card-primary card-outline rounded-0 elevation-0 border">
-                                <div class="card-header">
+                            <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
+                                <div class="card-header bg-primary rounded-0">
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="row">
-                                                <p> Pilih Tahun:</p>
-                                            </div>
+                                        <div class="col-md-2">
                                             <div class="row">
                                                 <select name="Filter Tahun" id="filter_tahun" required class="form-control" title="Pilih Tahun">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="row">
-                                                <p> Pilih Kecamatan:</p>
+                                                <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control" title="Pilih Kabupaten">
+                                                    <option value="">All</option>
+                                                </select>
                                             </div>
+                                        </div>
+                                        <div class="col-md-3">
                                             <div class="row">
                                                 <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="row">
-                                                <p> Pilih Desa:</p>
-                                            </div>
+                                        <div class="col-md-3">
                                             <div class="row">
                                                 <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-1">
+                                            <div class="row">
+                                                <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="row justify-content-end pt-1">
+                                    <!-- <div class="row justify-content-end pt-1">
                                         <div class="col-md-4 pull-right text-right">
                                             <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
                                             <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
                                         </div>
-                                    </div>
+                                    </div> -->
+                                    <hr>
                                     <div class="row @if($id) d-none @endif">
                                         <div class="col-md-2">
                                             <p> Pilih Program:</p>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <select name="Filter Program" id="filter_program" required class="form-control" title="Pilih Program">
                                                 <option value="">All</option>
                                             </select>
@@ -108,7 +112,14 @@
                                         <div class="col-md-12">
                                             <div id="collapse-filter" class="collapse ">
                                                 <div class="row m-0">
-                                                    <div class=" col-6">
+                                                    <div class=" col-4">
+                                                        <div class="form-group">
+                                                            <label>Kabupaten</label>
+                                                            <select class="form-control " name="search_kabupaten"> </select>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class=" col-4">
                                                         <div class="form-group">
                                                             <label>Kecamatan</label>
                                                             <select class="form-control " name="search_kecamatan"> </select>
@@ -116,7 +127,7 @@
 
                                                     </div>
 
-                                                    <div class=" col-6">
+                                                    <div class=" col-4">
                                                         <div class="form-group">
                                                             <label>Desa</label>
                                                             <select class="form-control " name="search_desa"> </select>
@@ -211,6 +222,9 @@
             $('#filter_tahun').select2({
                 placeholder: "Pilih Tahun"
             });
+            $('#filter_kabupaten').select2({
+                placeholder: "Pilih Kabupaten"
+            });
             $('#filter_kecamatan').select2({
                 placeholder: "Pilih Kecamatan"
             });
@@ -222,6 +236,7 @@
             });
 
             GetListTahun();
+            GetListKabupaten();
             GetListKecamatan();
             GetListDesa();
             GetListProgram();
@@ -268,6 +283,10 @@
                // $('#statistik').hide()
             })
 
+            $('#filter_kabupaten').on("select2:select", function(e) {
+                GetListKecamatan(this.value);
+            });
+
             $('#filter_kecamatan').on("select2:select", function(e) {
                 GetListDesa(this.value);
             });
@@ -280,6 +299,7 @@
 
             $('#bt_clear_filter').click(function(){
                 $("#filter_tahun").val("").trigger("change");
+                $("#filter_kabupaten").val("").trigger("change");
                 $("#filter_kecamatan").val("").trigger("change");
                 $("#filter_desa").val("").trigger("change");
                 $('#filter_desa').empty().trigger("change");
@@ -316,6 +336,7 @@
                         // d['filter[id]'] = nav.data('key');
                         d['filter[id]'] =  $("#filter_program").val();
                         d['filter[tahun]'] = $("#filter_tahun").val();
+                        d['filter[kabupaten]'] = $("#filter_kabupaten").val();
                         d['filter[kecamatan]'] = $("#filter_kecamatan").val();
                         d['filter[desa]'] = $("#filter_desa").val();
                         // d.config_desa = $('#position').val();
@@ -408,6 +429,7 @@
                     "data": function(d) {
                         d['filter[id]'] =  $("#filter_program").val();
                         d['filter[tahun]'] = $("#filter_tahun").val();
+                        d['filter[kabupaten]'] = $("#filter_kabupaten").val();
                         d['filter[kecamatan]'] = $("#filter_kecamatan").val();
                         d['filter[desa]'] = $("#filter_desa").val();
                     },
@@ -537,14 +559,25 @@
                 let category = result.data.categoriesItems
                 let listDesa = result.data.listDesa
                 let listKecamatan = result.data.listKecamatan
+                let listKabupaten = result.data.listKabupaten
 
                 for (let index in category) {
                     $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value'])
                 };
+                let _optionKabupaten = []
                 let _optionKecamatan = []
                 let _optionDesa = []
+                for (let item in listKabupaten) {
+                    _optionKabupaten.push(`<option>${item}</option>`)
+                }
+
                 for (let item in listKecamatan) {
-                    _optionKecamatan.push(`<option>${item}</option>`)
+                    _optionKecamatan.push(`<optgroup label='${item}'>`)
+                    for (let kecamatan in listKecamatan[item]) {
+                        _optionKecamatan.push(`<option value='${kecamatan}'>${listKecamatan[item][kecamatan]}</option>`)
+                    }
+                    _optionKecamatan.push(`</optgroup>`)
+                    _optionKabupaten.push(`<option>${item}</option>`)
                 }
 
                 for (let item in listDesa) {
@@ -556,6 +589,7 @@
                     _optionKecamatan.push(`<option>${item}</option>`)
                 }
 
+                $('select[name=search_kabupaten]').append(_optionKabupaten.join(''))
                 $('select[name=search_kecamatan]').append(_optionKecamatan.join(''))
                 $('select[name=search_desa]').append(_optionDesa.join(''))
             }, 'json')
@@ -581,25 +615,47 @@
                 }
             });
         }
-        function GetListKecamatan() {
-            $('#filter_kecamatan').empty().trigger("change");
+        function GetListKabupaten() {
+            $('#filter_kabupaten').empty().trigger("change");
             var optionEmpty = new Option("", "");
-            $("#filter_kecamatan").append(optionEmpty);
+            $("#filter_kabupaten").append(optionEmpty);
             $.ajax({
                 type: 'GET',
-                url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}",
+                url: "{{ url('api/v1/statistik-web/get-list-kabupaten') }}",
                 dataType: 'json',
                 success: function(data) {
                     for (var i = 0; i < data.length; i++) {
-                        var newOption = new Option(data[i].nama_kecamatan, data[i].kode_kecamatan, true, true);
-                        $("#filter_kecamatan").append(newOption);
+                        var newOption = new Option(data[i].nama_kabupaten, data[i].kode_kabupaten, true, true);
+                        $("#filter_kabupaten").append(newOption);
                     }
-                    $("#filter_kecamatan").val("").trigger("change");
+                    $("#filter_kabupaten").val("").trigger("change");
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
 
                 }
             });
+        }
+        function GetListKecamatan($id) {
+            $('#filter_kecamatan').empty().trigger("change");
+            if ($id != undefined && $id != null){
+                var optionEmpty = new Option("", "");
+                $("#filter_kecamatan").append(optionEmpty);
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}" + "/" + $id,
+                    dataType: 'json',
+                    success: function(data) {
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = new Option(data[i].nama_kecamatan, data[i].kode_kecamatan, true, true);
+                            $("#filter_kecamatan").append(newOption);
+                        }
+                        $("#filter_kecamatan").val("");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            }
         }
         function GetListDesa($id) {
             $('#filter_desa').empty().trigger("change");

@@ -19,6 +19,7 @@ class StatistikController extends Controller
 
     protected $kategori;
     protected $tahun;
+    protected $kabupaten;
     protected $kecamatan;
     protected $desa;
 
@@ -28,6 +29,7 @@ class StatistikController extends Controller
         $this->kategori = request()->input('filter')['id'] ?? null;
         $this->tahun = request()->input('filter')['tahun'] ?? null;
         $this->kecamatan = request()->input('filter')['kecamatan'] ?? null;
+        $this->kabupaten = request()->input('filter')['kabupaten'] ?? null;
         $this->desa = request()->input('filter')['desa'] ?? null;
     }
 
@@ -110,7 +112,7 @@ class StatistikController extends Controller
     public function bantuan(BantuanRepository $bantuan)
     {
         if ($this->kategori) {
-            return $this->fractal($this->statistik->getStatistik($bantuan->listStatistik($this->kategori, $this->tahun, $this->kecamatan, $this->desa)), new StatistikTransformer(), 'statistik-bantuan')->respond();
+            return $this->fractal($this->statistik->getStatistik($bantuan->listStatistik($this->kategori, $this->tahun, $this->kabupaten, $this->kecamatan, $this->desa)), new StatistikTransformer(), 'statistik-bantuan')->respond();
         }
 
         return response()->json([
@@ -126,9 +128,21 @@ class StatistikController extends Controller
         $tahun = Bantuan::selectRaw('YEAR(sdate) as year')->whereNotNull('slug')->distinct()->orderBy('year', 'ASC')->get();
         return $tahun->toJson();
     }
-    public function getListKecamatan(){
-        $tahun = Config::selectRaw('config.kode_kecamatan, config.nama_kecamatan')
+    public function getListKabupaten(){
+        $tahun = Config::selectRaw('config.kode_kabupaten, config.nama_kabupaten')
+                ->distinct()->orderBy('config.nama_kabupaten', 'ASC')->get();
+        return $tahun->toJson();
+    }
+    public function getListKecamatan($id = ''){
+        if($id){
+            $tahun = Config::selectRaw('config.kode_kecamatan, config.nama_kecamatan')
+                ->where('config.kode_kabupaten', '=', $id)
                 ->distinct()->orderBy('config.nama_kecamatan', 'ASC')->get();
+        }else{
+            $tahun = Config::selectRaw('config.kode_kecamatan, config.nama_kecamatan')
+                ->distinct()->orderBy('config.nama_kecamatan', 'ASC')->get();
+        }
+        
         return $tahun->toJson();
     }
     public function getListDesa($id){
@@ -157,6 +171,10 @@ class StatistikController extends Controller
 
             if (!empty($this->tahun)){
                 $data = $data->whereRaw("YEAR(program.sdate) = " . $this->tahun);
+            }
+
+            if (!empty($this->kabupaten)){
+                $data = $data->where('config.kode_kabupaten','=',$this->kecamatan);
             }
 
             if (!empty($this->kecamatan)){

@@ -403,6 +403,8 @@ class PresisiController extends Controller
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
-        return view('presisi.bantuan.index', compact('id', 'categoriesItems'));
+        $statistik = Bantuan::get();
+
+        return view('presisi.bantuan.index', compact('id', 'categoriesItems', 'statistik'));
     }
 }

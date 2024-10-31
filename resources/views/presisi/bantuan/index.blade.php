@@ -17,12 +17,12 @@
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        {{-- <div class="col-md-3">
+                        <div class="col-md-3 @if($id) d-none @endif" >
                             <div class="card card-primary rounded-0 elevation-0 border">
-                                <div class="card-header rounded-0">
+                                <!-- <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Bantuan</h3>
 
-                                </div>
+                                </div> -->
                                 <div class="card-body p-0 ">
                                     <ul class="nav nav-pills flex-column" id="nav-statistik">
                                     <li class="nav-item active">
@@ -52,14 +52,14 @@
                                 </div>
 
                             </div>
-                        </div> --}}
-                        <div class="col-md-12">
+                        </div>
+                        <div class="@if($id) col-md-12 @else col-md-9 @endif">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
                                 <div class="card-header bg-primary rounded-0">
                                     <div class="row">
                                         <div class="col-md-2">
                                             <div class="row">
-                                                <select name="Filter Tahun" id="filter_tahun" required class="form-control" title="Pilih Tahun">
+                                                <select name="Filter Tahun" id="filter_tahun" required class="form-control" title="Tahun">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
@@ -78,15 +78,16 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="row">
                                                 <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <div class="row">
+                                                <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
                                                 <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
                                             </div>
                                         </div>
@@ -97,7 +98,7 @@
                                             <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
                                         </div>
                                     </div> -->
-                                    <hr>
+                                    <!-- <hr>
                                     <div class="row @if($id) d-none @endif">
                                         <div class="col-md-2">
                                             <p> Pilih Program:</p>
@@ -107,7 +108,7 @@
                                                 <option value="">All</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     
 
 
@@ -226,7 +227,7 @@
             let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL'];
 
             $('#filter_tahun').select2({
-                placeholder: "Pilih Tahun"
+                placeholder: "Tahun"
             });
             $('#filter_kabupaten').select2({
                 placeholder: "Pilih Kabupaten"

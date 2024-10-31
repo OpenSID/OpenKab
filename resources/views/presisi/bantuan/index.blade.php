@@ -7,6 +7,12 @@
 @include('presisi.partials.head')
 
     <div class="row">
+        <div class="col-md-12">
+            
+            <div class="card rounded-0 border-0 shadow-none">
+                @include('presisi.summary')       
+            </div>
+        </div>
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
@@ -682,7 +688,68 @@
 
         @include('presisi.bantuan.list_program')
 
-        
+
+        var summaryPenduduk = $('#summary-penduduk').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: false,
+            searchPanes: {
+                viewTotal: false,
+                columns: [0]
+            },
+            ajax: {
+                url: `{{ url('api/v1/wilayah/penduduk') }}`,
+                method: 'get',
+                data: function(row) {
+                    return {
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[search]": row.search.value,                                            
+                    };
+                },
+                dataSrc: function(json) {
+                    json.recordsTotal = json.meta.pagination.total
+                    json.recordsFiltered = json.meta.pagination.total
+
+                    return json.data
+                },
+            },
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: 0,
+                    render: function(data, type, row, meta) {
+                        var PageInfo = $('#summary-penduduk').DataTable().page.info();
+                        return PageInfo.start + meta.row + 1;
+                    }
+                },
+                {
+                    targets: [0, 1, 2, 3],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
+            columns: [{
+                    data: null,
+                },
+                {
+                    data: "attributes.nama_desa",
+                    name: "nama_desa"
+                },
+                {
+                    data: "attributes.nama_kecamatan",
+                    name: "nama_kecamatan"
+                },                
+                {
+                    data: "attributes.penduduk_count",
+                    name: "penduduk_count",
+                    className: 'text-center'
+                },
+            ],
+        })
 
     </script>
 @endpush

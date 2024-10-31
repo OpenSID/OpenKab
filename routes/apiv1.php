@@ -42,6 +42,24 @@ Route::prefix('wilayah')->group(function () {
     Route::get('penduduk', [WilayahController::class, 'penduduk']);
 });
 
+Route::controller(StatistikController::class)
+    ->prefix('web/statistik')->group(function () {
+        Route::prefix('penduduk')->group(function () {
+            Route::get('/', 'penduduk');
+            Route::get('/tahun', 'refTahunPenduduk');
+        });
+        Route::prefix('keluarga')->group(function () {
+            Route::get('/', 'keluarga');
+            Route::get('/tahun', 'refTahunKeluarga');
+        });
+        Route::prefix('rtm')->group(function () {
+            Route::get('/', 'rtm');
+            Route::get('/tahun', 'refTahunRtm');
+        });
+        Route::get('/bantuan', 'bantuan');
+        Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
+    });
+
 Route::middleware('auth:sanctum')->get('validate-token', function (Request $request) {
     $user = $request->user();
 
@@ -172,14 +190,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/update', 'update');
 
             Route::controller(TeamController::class)
-            ->prefix('group')->group(function () {
-                Route::get('/', 'index');
-                Route::get('/show/{id}', 'show');
-                Route::post('/delete', 'delete');
-                Route::post('/', 'store');
-                Route::put('/{id}', 'update');
-                Route::get('/menu', 'menu');
-            });
+                ->prefix('group')->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/show/{id}', 'show');
+                    Route::post('/delete', 'delete');
+                    Route::post('/', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::get('/menu', 'menu');
+                });
         });
 });
 

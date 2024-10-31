@@ -158,7 +158,21 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('c/{cSlug}', [PageController::class, 'getCategory'])->name('category');
     Route::get('sitemap.xml', [PageController::class, 'getSitemap'])->name('sitemap');
     Route::get('search', SearchController::class)->name('web.search');
-    Route::get('module/{moduleName}', ModuleController::class)->name('web.module');
+    Route::get('module/{any?}', ModuleController::class)
+        ->where('any', '.*')
+        ->name('web.module');
+
+
+    // Route::controller(ModuleController::class)
+    //     ->prefix('module/statistik')
+    //     ->group(function () {
+    //         Route::get('/penduduk/{default_kategori}', 'penduduk');
+    //         Route::get('/keluarga', 'keluarga');
+    //         Route::get('/rtm', 'rtm');
+    //         Route::get('/bantuan', 'bantuan');
+    //         Route::get('/cetak/{kategori}/{id}', 'cetak');
+    //     });
+
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });
 

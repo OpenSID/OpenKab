@@ -1,4 +1,4 @@
-Di rilis v2410.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pelayanan ke pelanggan.
+Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pelayanan ke pelanggan.
 
 #### Penambahan Fitur
 

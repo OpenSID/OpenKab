@@ -98,8 +98,8 @@
                                             <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
                                         </div>
                                     </div> -->
-                                    <!-- <hr>
-                                    <div class="row @if($id) d-none @endif">
+                                    <hr class="d-none">
+                                    <div class="row @if($id) d-none @endif d-none">
                                         <div class="col-md-2">
                                             <p> Pilih Program:</p>
                                         </div>
@@ -108,7 +108,7 @@
                                                 <option value="">All</option>
                                             </select>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     
 
 

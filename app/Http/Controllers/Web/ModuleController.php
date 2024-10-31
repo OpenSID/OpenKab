@@ -18,12 +18,19 @@ class ModuleController extends Controller
      */
     public function __invoke(string $moduleName)
     {
-        $content = match ($moduleName) {
+
+        $segments = explode('/', $moduleName);
+
+        $firstSegment = $segments[0] ?? null;
+
+        $content = match ($firstSegment) {
             'unduhan' => $this->downloadModule(),
             'org' => $this->orgModule(),
-            'statistik' => $this->statistikModule(),
-            default => ''
+            'statistik' => $this->statistikModule($moduleName),
+            default => 'Module not found'
         };
+
+        $moduleName = $firstSegment;
 
         return view('web.module', compact('content', 'moduleName'));
     }
@@ -42,7 +49,12 @@ class ModuleController extends Controller
         return $tree;
     }
 
-    private function statistikModule()
+    private function statistikModule(string $moduleName)
     {
+        $segments = explode('/', $moduleName);
+
+        if (count($segments) == 3) {
+            return $segments;
+        }
     }
 }

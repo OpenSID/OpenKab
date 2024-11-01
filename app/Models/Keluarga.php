@@ -9,6 +9,14 @@ class Keluarga extends BaseModel
 {
     use FilterWilayahTrait;
 
+    public const SASARAN_PENDUDUK = 1;
+
+    public const SASARAN_KELUARGA = 2;
+
+    public const SASARAN_RUMAH_TANGGA = 3;
+
+    public const SASARAN_KELOMPOK = 4;
+
     public const KATEGORI_STATISTIK = [
         'kelas-sosial' => 'Kelas Sosial',
     ];
@@ -67,12 +75,26 @@ class Keluarga extends BaseModel
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', "{$this->table}.nik_kepala", 'left')
-            ->where('tweb_penduduk.status_dasar', 1);
+            ->join('config', 'config.id', '=', "{$this->table}.config_id", 'left')
+            ->join('program', 'program.config_id', '=', "config.id", 'left');
+            if(isset(request('filter')['tahun'])){
+                $query->whereRaw("YEAR(program.sdate) = " . request('filter')['tahun']);
+            }
+            $query->where('tweb_penduduk.status_dasar', 1);
+            if(isset(request('filter')['kabupaten'])){
+                $query->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+            }
+            if(isset(request('filter')['kecamatan'])){
+                $query->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+            }
+            if(isset(request('filter')['desa'])){
+                $query->whereRaw("config.kode_desa = " . request('filter')['desa']);
+            }
+            $query->whereRaw("program.sasaran = " . self::SASARAN_KELUARGA);
 
         if ($configId) {
             $query->where('tweb_keluarga.config_id', $configId);
         }
-
         return $query;
     }
 

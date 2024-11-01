@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Anak;
-use App\Models\IbuHamil;
-use App\Models\Penduduk;
-use App\Models\Keluarga;
 use App\Models\Bantuan;
+use App\Models\IbuHamil;
+use App\Models\Keluarga;
+use App\Models\Penduduk;
 use App\Models\Posyandu;
 use App\Models\SasaranPaud;
 use App\Services\RekapService;
@@ -374,7 +374,7 @@ class PresisiController extends Controller
         ];
     }
 
-    public function keluarga($id = "")
+    public function keluarga($id = '')
     {
         $statistik = Keluarga::KATEGORI_STATISTIK;
         $totalDesa = 0;
@@ -390,8 +390,8 @@ class PresisiController extends Controller
 
         return view('presisi.keluarga.index', compact('statistik', 'id', 'categoriesItems'));
     }
-      
-    public function bantuan($id = "")
+
+    public function bantuan($id = '')
     {
         $totalDesa = 0;
         $pendudukSummary = 0;

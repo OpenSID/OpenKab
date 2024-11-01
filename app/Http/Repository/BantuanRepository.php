@@ -74,22 +74,22 @@ class BantuanRepository
     {
         $bantuan = Bantuan::whereId($id)->first();
 
-        if(isset(request('filter')['tahun'])){
-            $bantuan = $bantuan->whereRaw("YEAR(program.sdate) = " . request('filter')['tahun']);
+        if (isset(request('filter')['tahun'])) {
+            $bantuan = $bantuan->whereRaw('YEAR(program.sdate) = '.request('filter')['tahun']);
         }
-        if (isset(request('filter')['kabupaten']) ||isset(request('filter')['kecamatan']) ||isset(request('filter')['desa'])){
+        if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['desa'])) {
             $bantuan = $bantuan->join('config', 'config.id', '=', "{$this->table}.config_id", 'left');
-            if(isset(request('filter')['kabupaten'])){
-                $bantuan = $bantuan->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+            if (isset(request('filter')['kabupaten'])) {
+                $bantuan = $bantuan->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
             }
-            if(isset(request('filter')['kecamatan'])){
-                $bantuan = $bantuan->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+            if (isset(request('filter')['kecamatan'])) {
+                $bantuan = $bantuan->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
             }
-            if(isset(request('filter')['desa'])){
-                $bantuan = $bantuan->whereRaw("config.kode_desa = " . request('filter')['desa']);
+            if (isset(request('filter')['desa'])) {
+                $bantuan = $bantuan->whereRaw('config.kode_desa = '.request('filter')['desa']);
             }
-
         }
+
         return [
             [
                 'nama' => 'PESERTA',
@@ -135,28 +135,28 @@ class BantuanRepository
         // if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
         //     $bantuan->status();
         // }
-        if(isset(request('filter')['tahun'])){
-            $bantuan = $bantuan->whereRaw("YEAR(program.sdate) = " . request('filter')['tahun']);
+        if (isset(request('filter')['tahun'])) {
+            $bantuan = $bantuan->whereRaw('YEAR(program.sdate) = '.request('filter')['tahun']);
         }
-        if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['kecamatan'])){
-            $bantuan = $bantuan->join('config', 'config.id', '=', "program.config_id", 'left');
-            if(isset(request('filter')['kabupaten'])){
-                $bantuan = $bantuan->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+        if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['kecamatan'])) {
+            $bantuan = $bantuan->join('config', 'config.id', '=', 'program.config_id', 'left');
+            if (isset(request('filter')['kabupaten'])) {
+                $bantuan = $bantuan->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
             }
-            if(isset(request('filter')['kecamatan'])){
-                $bantuan = $bantuan->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+            if (isset(request('filter')['kecamatan'])) {
+                $bantuan = $bantuan->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
             }
-            if(isset(request('filter')['desa'])){
-                $bantuan = $bantuan->whereRaw("config.kode_desa = " . request('filter')['desa']);
+            if (isset(request('filter')['desa'])) {
+                $bantuan = $bantuan->whereRaw('config.kode_desa = '.request('filter')['desa']);
             }
         }
         if ($configDesa) {
-
             $bantuan->where(function ($q) use ($configDesa) {
                 return $q->where('program.config_id', $configDesa)->orWhereNull('program.config_id');
             });
         }
         $bantuan = $bantuan->where('program.sasaran', self::SASARAN_PENDUDUK);
+
         return $bantuan->get();
     }
 

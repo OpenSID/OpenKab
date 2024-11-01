@@ -4,127 +4,149 @@ namespace App\Models\Enums;
 
 use BenSampo\Enum\Enum;
 
-
 class StatistikPendudukEnum extends Enum
 {
     public const RENTANG_UMUR = [
-        'key'   => 13,
-        'slug'  => 'rentang-umur',
+        'key' => 13,
+        'slug' => 'rentang-umur',
         'label' => 'Rentang Umur',
     ];
+
     public const KATEGORI_UMUR = [
-        'key'   => 15,
-        'slug'  => 'kategori-umur',
+        'key' => 15,
+        'slug' => 'kategori-umur',
         'label' => 'Kategori Umur',
     ];
+
     public const PENDIDIKAN_KK = [
-        'key'   => 0,
-        'slug'  => 'pendidikan-dalam-kk',
+        'key' => 0,
+        'slug' => 'pendidikan-dalam-kk',
         'label' => 'Pendidikan Dalam KK',
     ];
+
     public const PENDIDIKAN_SEDANG = [
-        'key'   => 14,
-        'slug'  => 'pendidikan-sedang-ditempuh',
+        'key' => 14,
+        'slug' => 'pendidikan-sedang-ditempuh',
         'label' => 'Pendidikan Sedang Ditempuh',
     ];
+
     public const PEKERJAAN = [
-        'key'   => 1,
-        'slug'  => 'pekerjaan',
+        'key' => 1,
+        'slug' => 'pekerjaan',
         'label' => 'Pekerjaan',
     ];
+
     public const STATUS_PERKAWINAN = [
-        'key'   => 2,
-        'slug'  => 'status-perkawinan',
+        'key' => 2,
+        'slug' => 'status-perkawinan',
         'label' => 'Status Perkawinan',
     ];
+
     public const AGAMA = [
-        'key'   => 3,
-        'slug'  => 'agama',
+        'key' => 3,
+        'slug' => 'agama',
         'label' => 'Agama',
     ];
+
     public const JENIS_KELAMIN = [
-        'key'   => 4,
-        'slug'  => 'jenis-kelamin',
+        'key' => 4,
+        'slug' => 'jenis-kelamin',
         'label' => 'Jenis Kelamin',
     ];
+
     public const HUBUNGAN_KK = [
-        'key'   => 'hubungan_kk',
-        'slug'  => 'hubungan-dalam-kk',
+        'key' => 'hubungan_kk',
+        'slug' => 'hubungan-dalam-kk',
         'label' => 'Hubungan Dalam KK',
     ];
+
     public const WARGA_NEGARA = [
-        'key'   => 5,
-        'slug'  => 'warga-negara',
+        'key' => 5,
+        'slug' => 'warga-negara',
         'label' => 'Warga Negara',
     ];
+
     public const STATUS_PENDUDUK = [
-        'key'   => 6,
-        'slug'  => 'status-penduduk',
+        'key' => 6,
+        'slug' => 'status-penduduk',
         'label' => 'Status Penduduk',
     ];
+
     public const GOLONGAN_DARAH = [
-        'key'   => 7,
-        'slug'  => 'golongan-darah',
+        'key' => 7,
+        'slug' => 'golongan-darah',
         'label' => 'Golongan Darah',
     ];
+
     public const PENYANDANG_CACAT = [
-        'key'   => 9,
-        'slug'  => 'penyandang-cacat',
+        'key' => 9,
+        'slug' => 'penyandang-cacat',
         'label' => 'Penyandang Cacat',
     ];
+
     public const PENYAKIT_MENAHUN = [
-        'key'   => 10,
-        'slug'  => 'penyakit-menahun',
+        'key' => 10,
+        'slug' => 'penyakit-menahun',
         'label' => 'Penyakit Menahun',
     ];
+
     public const AKSEPTOR_KB = [
-        'key'   => 16,
-        'slug'  => 'akseptor-kb',
+        'key' => 16,
+        'slug' => 'akseptor-kb',
         'label' => 'Akseptor KB',
     ];
+
     public const AKTA_KELAHIRAN = [
-        'key'   => 17,
-        'slug'  => 'akta-kelahiran',
+        'key' => 17,
+        'slug' => 'akta-kelahiran',
         'label' => 'Akta Kelahiran',
     ];
+
     public const KEPEMILIKAN_KTP = [
-        'key'   => 18,
-        'slug'  => 'kepemilikan-ktp',
+        'key' => 18,
+        'slug' => 'kepemilikan-ktp',
         'label' => 'Kepemilikan KTP',
     ];
+
     public const ASURANSI_KESEHATAN = [
-        'key'   => 19,
-        'slug'  => 'asuransi-kesehatan',
+        'key' => 19,
+        'slug' => 'asuransi-kesehatan',
         'label' => 'Asuransi Kesehatan',
     ];
+
     public const STATUS_COVID = [
-        'key'   => 'covid',
-        'slug'  => 'status-covid',
+        'key' => 'covid',
+        'slug' => 'status-covid',
         'label' => 'Status Covid',
     ];
+
     public const SUKU_ETNIS = [
-        'key'   => 'suku',
-        'slug'  => 'suku-etnis',
+        'key' => 'suku',
+        'slug' => 'suku-etnis',
         'label' => 'Suku / Etnis',
     ];
+
     public const BPJS_KETENAGAKERJAAN = [
-        'key'   => 'bpjs-tenagakerja',
-        'slug'  => 'bpjs-ketenagakerjaan',
+        'key' => 'bpjs-tenagakerja',
+        'slug' => 'bpjs-ketenagakerjaan',
         'label' => 'BPJS Ketenagakerjaan',
     ];
+
     public const STATUS_KEHAMILAN = [
-        'key'   => 'hamil',
-        'slug'  => 'status-kehamilan',
+        'key' => 'hamil',
+        'slug' => 'status-kehamilan',
         'label' => 'Status Kehamilan',
     ];
+
     public const KEPEMILIKAN_KIA = [
-        'key'   => 'kia',
-        'slug'  => 'kepemilikan-kia',
+        'key' => 'kia',
+        'slug' => 'kepemilikan-kia',
         'label' => 'Kepemilikan KIA',
     ];
+
     public const KEPEMILIKAN_AKTA_KEMATIAN = [
-        'key'   => 'akta-kematian',
-        'slug'  => 'kepemilikan-akta-kematian',
+        'key' => 'akta-kematian',
+        'slug' => 'kepemilikan-akta-kematian',
         'label' => 'Kepemilikan Akta Kematian',
     ];
 
@@ -156,7 +178,7 @@ class StatistikPendudukEnum extends Enum
     ];
 
     /**
-     * Override method all()
+     * Override method all().
      */
     public static function all(): array
     {
@@ -164,7 +186,7 @@ class StatistikPendudukEnum extends Enum
     }
 
     /**
-     * Get all key label
+     * Get all key label.
      */
     public static function allKeyLabel(): array
     {
@@ -172,7 +194,7 @@ class StatistikPendudukEnum extends Enum
     }
 
     /**
-     * Get slug from key
+     * Get slug from key.
      */
     public static function slugFromKey(mixed $key): ?string
     {
@@ -182,7 +204,7 @@ class StatistikPendudukEnum extends Enum
     }
 
     /**
-     * Get key form slug
+     * Get key form slug.
      */
     public static function keyFromSlug(mixed $slug): ?string
     {

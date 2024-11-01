@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Config;
-use App\Models\SettingAplikasi;
 use App\Models\Bantuan;
+use App\Models\Config;
 use App\Models\Enums\SasaranEnum;
+use App\Models\SettingAplikasi;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -294,11 +294,10 @@ if (! function_exists('generateMenuPresisi')) {
                     $result .= "<a class='item-menu dropdown-item' href='{$item->href}'>{$icon}{$item->text}</a>";
                 } else {
                     $href = $item->href;
-                    if($href != '/presisi'){
+                    if ($href != '/presisi') {
                         $href = str_contains($item->href, 'module') ? $item->href : '/'.$item->href;
                     }
                     $result .= "<a type='button' class='item-menu btn bg-white p-2 text-muted' href='{$href}'>{$icon}{$item->text}</a>";
-
                 }
             }
         }
@@ -306,8 +305,6 @@ if (! function_exists('generateMenuPresisi')) {
         return $result;
     }
 }
-
-
 
 if (! function_exists('angka_lokal')) {
     /**
@@ -777,67 +774,67 @@ if (! function_exists('getStatistikLabel')) {
      */
     function getStatistikLabel($lap, $stat, $namaDesa)
     {
-        $akhiran  = ' di ' . ucwords(setting('sebutan_desa') . ' ' . $namaDesa) . ', ' . date('Y');
+        $akhiran = ' di '.ucwords(setting('sebutan_desa').' '.$namaDesa).', '.date('Y');
         $kategori = 'Penduduk';
-        $label    = 'Jumlah dan Persentase Penduduk Berdasarkan ' . $stat . $akhiran;
+        $label = 'Jumlah dan Persentase Penduduk Berdasarkan '.$stat.$akhiran;
 
         if ((int) $lap > 50) {
             // Untuk program bantuan, $lap berbentuk '50<program_id>'
-            $program_id               = substr($lap, 2);
-            $program                  = Bantuan::select(['nama', 'sasaran'])->find($program_id)->toArray();
+            $program_id = substr($lap, 2);
+            $program = Bantuan::select(['nama', 'sasaran'])->find($program_id)->toArray();
             $program['judul_sasaran'] = SasaranEnum::valueOf($program['sasaran']);
-            $kategori                 = 'Bantuan';
-            $label                    = 'Jumlah dan Persentase Peserta ' . $program['nama'] . $akhiran;
+            $kategori = 'Bantuan';
+            $label = 'Jumlah dan Persentase Peserta '.$program['nama'].$akhiran;
         } elseif ((int) $lap > 20 || $lap === 'kelas_sosial') {
             $kategori = 'Keluarga';
-            $label    = 'Jumlah dan Persentase Keluarga Berdasarkan ' . $stat . $akhiran;
+            $label = 'Jumlah dan Persentase Keluarga Berdasarkan '.$stat.$akhiran;
         } else {
             switch ($lap) {
                 case 'bantuan_keluarga':
                     $kategori = 'Bantuan';
-                    $label    = 'Jumlah dan Persentase ' . $stat . $akhiran;
+                    $label = 'Jumlah dan Persentase '.$stat.$akhiran;
                     break;
 
                 case 'bdt':
                     $kategori = 'RTM';
-                    $label    = 'Jumlah dan Persentase Rumah Tangga Berdasarkan ' . $stat . $akhiran;
+                    $label = 'Jumlah dan Persentase Rumah Tangga Berdasarkan '.$stat.$akhiran;
                     break;
 
                 case '1':
-                    $label = 'Jumlah dan Persentase Penduduk Berdasarkan Aktivitas atau Jenis Pekerjaannya ' . $akhiran;
+                    $label = 'Jumlah dan Persentase Penduduk Berdasarkan Aktivitas atau Jenis Pekerjaannya '.$akhiran;
                     break;
 
                 case '0':
                 case '14':
-                    $label = 'Jumlah dan Persentase Penduduk Berdasarkan ' . $stat . ' yang Dicatat dalam Kartu Keluarga ' . $akhiran;
+                    $label = 'Jumlah dan Persentase Penduduk Berdasarkan '.$stat.' yang Dicatat dalam Kartu Keluarga '.$akhiran;
                     break;
 
                 case '13':
                 case '15':
-                    $label = 'Jumlah dan Persentase Penduduk Menurut Kelompok ' . $stat . $akhiran;
+                    $label = 'Jumlah dan Persentase Penduduk Menurut Kelompok '.$stat.$akhiran;
                     break;
 
                 case '16':
-                    $label = 'Jumlah dan Persentase Penduduk Menurut Penggunaan Alat Keluarga Berencana dan Jenis Kelamin ' . $akhiran;
+                    $label = 'Jumlah dan Persentase Penduduk Menurut Penggunaan Alat Keluarga Berencana dan Jenis Kelamin '.$akhiran;
                     break;
 
                 case '13':
-                    $label = 'Jumlah Keluarga dan Penduduk Berdasarkan Wilayah RT ' . $akhiran;
+                    $label = 'Jumlah Keluarga dan Penduduk Berdasarkan Wilayah RT '.$akhiran;
                     break;
 
                 case '4':
-                    $label = 'Jumlah Penduduk yang Memiliki Hak Suara ' . $stat . $akhiran;
+                    $label = 'Jumlah Penduduk yang Memiliki Hak Suara '.$stat.$akhiran;
                     break;
 
                 case 'hamil':
-                    $label = 'Jumlah dan Persentase Penduduk Perempuan Berdasarkan ' . $stat . $akhiran;
+                    $label = 'Jumlah dan Persentase Penduduk Perempuan Berdasarkan '.$stat.$akhiran;
                     break;
             }
         }
 
         return [
             'kategori' => $kategori,
-            'label'    => $label,
+            'label' => $label,
         ];
     }
 }

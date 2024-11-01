@@ -74,4 +74,29 @@ class Wilayah extends BaseModel
     {
         return $this->hasOne(Penduduk::class, 'id', 'id_kepala')->select('nik', 'nama', 'id');
     }
+
+    public function isDusun(): bool
+    {
+        return $this->attributes['rt'] == '0' && $this->attributes['rw'] == '0';
+    }
+
+    public function isRw(): bool
+    {
+        return $this->attributes['rt'] == '0' && $this->attributes['rw'] !== '0';
+    }
+
+    public function isRt(): bool
+    {
+        return $this->attributes['rt'] !== '0';
+    }
+
+    public function bukanRT(): bool
+    {
+        return $this->attributes['rt'] == '0';
+    }
+
+    public static function treeAccess()
+    {
+        return self::select(['id', 'dusun', 'rt', 'rw'])->get()->groupBy('dusun')->map(static fn ($item) => $item->filter(static fn ($q): bool => $q->rw !== '0')->groupBy('rw')->map(static fn ($item) => $item->filter(static fn ($q): bool => ! $q->isDusun() && ! $q->bukanRT())));
+    }
 }

@@ -1,10 +1,13 @@
 <div class="row g-2">
     <div class="col-md-10">
         <div class="row g-2">
-            <div class="col-md-6">
+            <div class="col-md-4">
+                {!! Form::select('search_kabupaten', $listKabupaten, null, ['class' => 'form-select border-0 py-3']) !!}
+            </div>
+            <div class="col-md-4">
                 {!! Form::select('search_kecamatan', $listKecamatan, null, ['class' => 'form-select border-0 py-3']) !!}
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 {!! Form::select('search_desa', $listDesa, null, ['class' => 'form-select border-0 py-3']) !!}
             </div>
         </div>
@@ -19,6 +22,16 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function (event) {
             $('select[name=search_desa]').find('optgroup').hide()
+            $('select[name=search_kecamatan]').find('optgroup').hide()
+
+            $('select[name=search_kabupaten]').change(function () {
+                let _val = $(this).val()
+                $('select[name=search_kecamatan]').find('optgroup').hide()
+                $('select[name=search_kecamatan]').find('optgroup[label="' + _val + '"]').show()
+                $('select[name=search_kecamatan]').find('optgroup[label="' + _val + '"]').find('option:first').prop('selected', 1)
+                $('select[name=search_kecamatan]').trigger('change')
+            })
+
             $('select[name=search_kecamatan]').change(function () {
                 let _val = $(this).val()
                 $('select[name=search_desa]').find('optgroup').hide()

@@ -1,64 +1,81 @@
 @extends('layouts.presisi.index')
 
 @section('content_header')
-    <h2>Dashboard Data Presisi</h2>
 @stop
 @section('content')
+    @include('presisi.partials.head')
 
-@include('presisi.summary')
-<div class="row">
-    <div class="col-md-6">
+<div class="row m-1">
+    <div class="col-md-12">
         
-        <div class="card rounded-0 elevation-0">
-            <div class="card-header">Peta</div>
+        <div class="card rounded-0 border-0 shadow-none">
+            @include('presisi.summary')
             <div class="card-body">
             <div id="map" style="height: 250px;"></div>
             </div>            
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card rounded-0 elevation-0">
-          <div class="card-header">Data Batas Wilayah</div>  
-          <div class="card-body">
-          <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                  Total Luas Wilayah
-                  <span>
-                    <span id="summary-luas_wilayah">0</span> Ha
-                  </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Total Lahan Pertanian
-                <span>
-                  <span id="summary-luas_pertanian">0</span> Ha
-                </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-              Total Lahan Perkebunan
-                <span>
-                  <span id="summary-luas_perkebunan">0</span> Ha
-                </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-              Total Lahan Kehutanan
-                <span>
-                  <span id="summary-luas_hutan">0</span> Ha
-                </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-              Total Lahan Peternakan
-                <span>
-                  <span id="summary-luas_peternakan">0</span> Ha
-                </span>
-              </li>
-          </ul>
-          </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card p-3 bg-light-oren">
+            <table>
+                <tr>
+                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge1 mr-2 text-center"><i class="fas fa-bullseye"></i></h4></td>
+                    <td>
+                    <h5>
+                        <span id="summary-luas_wilayah">0</span> Ha
+                    </h5>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p class="text-sm text-muted">Luas Wilayah</p></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card p-3 bg-light-green">
+            <table>
+                <tr>
+                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge2 mr-2 text-center"><i class="fas fa-check-circle"></i></h4></td>
+                    <td><h5><span id="summary-luas_pertanian">0</span> Ha</h5></td>
+                </tr>
+                <tr>
+                    <td><p class="text-sm text-muted">Total Lahan Pertanian</p></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card p-3 bg-light-purple">
+            <table>
+                <tr>
+                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge3 mr-2 text-center"><i class="fa-solid fa-tree"></i></h4></td>
+                    <td><h5><span id="summary-luas_perkebunan">0</span> Ha</h5></td>
+                </tr>
+                <tr>
+                    <td><p class="text-sm text-muted">Total Lahan Perkebunan</p></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card p-3 bg-light-blue">
+            <table>
+                <tr>
+                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge4 mr-2 text-center"><i class="fa-solid fa-location-dot"></i></h4></td>
+                    <td><h5><span id="summary-luas_hutan">0</span> Ha</h5></td>
+                </tr>
+                <tr>
+                    <td><p class="text-sm text-muted">Total Lahan Kehutanan</p></td>
+                </tr>
+            </table>
         </div>
     </div>
 
     <div class="col-md-12">
         <div class="card rounded-0 elevation-0">
-          <div class="card-header">Data Kelurahan /Desa</div>  
+          <div class="card-header bg-white">Data Kelurahan /Desa</div>  
           <div class="card-body">
               <div class="table-responsive">
                   <table class="table table-striped" id="summary-penduduk">
@@ -93,6 +110,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
+
+    @include('layouts.presisi.peta.index')
+    @include('layouts.presisi.peta.style')
+    
 
     $.get('{{ url('api/v1/data-website') }}', {}, function(result){
         let category = result.data.categoriesItems
@@ -189,6 +210,39 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 },
             ],
         })
+
+        $(function() {
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+            'Hari Ini': [moment(), moment()],
+            'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+            '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+            'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+            'Bulan Lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        locale: {
+            format: 'D MMMM, YYYY',
+            applyLabel: 'Terapkan',
+            cancelLabel: 'Batal',
+            customRangeLabel: 'Rentang Kustom',
+            daysOfWeek: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+            monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+            firstDay: 1
+        }
+    }, cb);
+
+    cb(start, end);
+});
 });
 </script>
 @endpush

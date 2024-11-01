@@ -1,16 +1,17 @@
 @extends('layouts.presisi.index')
 
 @section('content_header')
-    <h2>Dashboard Kependudukan</h2>
 @stop
 
 @section('content')
+@include('presisi.partials.head')
+
     <div class="row">
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-md-3">
                             <div class="card card-primary rounded-0 elevation-0 border">
                                 <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Penduduk</h3>
@@ -34,7 +35,7 @@
 
                             </div>
                         </div>
-                        <div class="col-8">
+                        <div class="col-md-9">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
                                 <div class="card-header">
                                     <div class="row">
@@ -45,14 +46,14 @@
                                                 <i class="fas fa-filter"></i>
                                             </a>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-md-2">
                                             <button id="btn-tabel" class="btn btn-sm btn-info btn-block btn-sm "
                                                 data-bs-toggle="collapse" href="#Tabel" role="button"
                                                 aria-expanded="false" aria-controls="grafik-Tabel" disabled>
                                                 <i class="fas fa-chart-bar"></i> Tabel
                                             </button>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-md-2">
                                             <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm"
                                                 data-bs-toggle="collapse" href="#grafik-statistik" role="button"
                                                 aria-expanded="false" aria-controls="grafik-statistik">

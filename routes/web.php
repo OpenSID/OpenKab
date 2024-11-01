@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CatatanRilis;
 use App\Http\Controllers\UserController;
@@ -13,6 +12,7 @@ use App\Http\Controllers\AdminWebController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\Web\PageController;
+use App\Http\Middleware\KabupatenMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\StatistikController;
@@ -61,7 +61,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::middleware('can:pengaturan-group-edit')->get('/edit/{id}', [GroupController::class, 'edit'])->name('groups.edit');
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show'])->middleware('easyauthorize:pengaturan-activities');
-        Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create'])->middleware('easyauthorize:pengaturan-settings');
+        Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create', 'delete'])->middleware('easyauthorize:pengaturan-settings');
     });
 
     Route::prefix('cms')->group(function () {
@@ -75,6 +75,12 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     });
 
     Route::prefix('sesi')->group(function () {
+
+        // Kabupaten
+        Route::middleware(KabupatenMiddleware::class)->get('kabupaten/{kodeKabupaten}', function () {
+            return redirect()->back();
+        });
+
         // Kecamatan
         Route::middleware(KecamatanMiddleware::class)->get('kecamatan/{kodeKecamatan}', function () {
             return redirect()->back();
@@ -86,6 +92,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 
         Route::get('hapus', function () {
+            session()->remove('kabupaten');
             session()->remove('kecamatan');
             session()->remove('desa');
 
@@ -154,8 +161,19 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });
 
-Route::prefix('presisi')->group(function () {
+Route::get('/module/bantuan/{id}', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+
+Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
     Route::view('/sosial',   'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
+    Route::get('/keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+    Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+    Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+    Route::get('/kesehatan/{kuartal}/{tahun}/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+    Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+    Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
 });

@@ -33,8 +33,38 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signin', [AuthController::class, 'login']);
 Route::get('/identitas', [IdentitasController::class, 'index']);
+// Wilayah
+Route::prefix('wilayah')->group(function () {
+    Route::get('desa', [WilayahController::class, 'desa']);
+    Route::get('dusun', [WilayahController::class, 'dusun']);
+    Route::get('rw', [WilayahController::class, 'rw']);
+    Route::get('rt', [WilayahController::class, 'rt']);
+    Route::get('penduduk', [WilayahController::class, 'penduduk']);
+});
 
-Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
+Route::middleware('auth:sanctum')->get('validate-token', function (Request $request) {
+    $user = $request->user();
+
+    // Check if the user has an authenticated token
+    if ($user && $user->currentAccessToken()) {
+        // Get the current access token
+        $token = $user->currentAccessToken();
+
+        // Fetch the abilities associated with the token
+        $abilities = $token->abilities;
+
+        return response()->json([
+            'user' => $user,
+            'abilities' => $abilities,
+        ]);
+    }
+
+    return response()->json([
+        'message' => 'No active token found.',
+    ], 401);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logOut']);
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -43,15 +73,6 @@ Route::middleware(['auth:sanctum', 'teams_permission'])->group(function () {
     // Dasbor
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
-    });
-
-    // Wilayah
-    Route::prefix('wilayah')->middleware(['can:penduduk-read'])->group(function () {
-        Route::get('desa', [WilayahController::class, 'desa']);
-        Route::get('dusun', [WilayahController::class, 'dusun']);
-        Route::get('rw', [WilayahController::class, 'rw']);
-        Route::get('rt', [WilayahController::class, 'rt']);
-        Route::get('penduduk', [WilayahController::class, 'penduduk']);
     });
 
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
@@ -180,6 +201,13 @@ Route::controller(StatistikController::class)
         });
         Route::get('/bantuan', 'bantuan');
         Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
+        Route::get('/get-list-coordinate', 'getListCoordinate');
+        Route::get('/get-list-program', 'getListProgram');
+        Route::get('/get-list-tahun', 'getListTahun');
+        Route::get('/get-list-kabupaten', 'getListKabupaten');
+        Route::get('/get-list-kecamatan/{id}', 'getListKecamatan');
+        Route::get('/get-list-desa/{id}', 'getListDesa');
+        Route::get('/get-list-penerima', 'getListPenerimaBantuan');
     });
 
 // Bantuan

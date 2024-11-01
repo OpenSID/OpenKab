@@ -17,4 +17,17 @@
 <link rel="stylesheet" href="{{ asset('assets/plugins/chart.js/Chart.min.css') }}">
 
 <link href="{{ asset('web/css/presisi.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('assets/css/highcharts.css') }}">
+<style>
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        padding-left: 0;
+        height: auto;
+        margin-top: -9px!important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 31px;
+        right: 11px!important;
+    }
+</style>
+
 

@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Bantuan;
 use App\Models\Config;
+use App\Models\Enums\SasaranEnum;
 use App\Models\SettingAplikasi;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -12,7 +14,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2410.0.0';
+        return 'v2411.0.0';
     }
 }
 
@@ -261,6 +263,41 @@ if (! function_exists('generateMenu')) {
                     $result .= "<li><a class='dropdown-item' style='font-size:12px;' href='{$item->href}'>{$item->text}</a></li>";
                 } else {
                     $result .= "<li class='nav-item'><a href='{$item->href}' style='font-size:12px;' class='nav-link'>{$item->text}</a></li>";
+                }
+            }
+        }
+
+        return $result;
+    }
+}
+
+if (! function_exists('generateMenuPresisi')) {
+    function generateMenuPresisi($tree, $parentId = null)
+    {
+        $result = '';
+        foreach ($tree as $item) {
+            // Mengambil ikon jika ada, dan membuat tag HTML ikon
+            $icon = isset($item->icon) ? "<i class='{$item->icon}'></i> " : '';
+
+            if ($item->children->count() > 0) {
+                $result .= "<div class='parent-dropdown-menu dropdown bg-white pl-3 pr-2'>
+                 <button class='parent-menu btn bg-white p-2 dropdown-toggle text-muted rounded-0' type='button'  id='{$item->id}Dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                     {$icon}{$item->text}
+                 </button>
+                 <div class='dropdown-menu' aria-labelledby='{$item->id}Dropdown'>";
+                $result .= generateMenuPresisi($item->children, $item->id);
+                $result .= '
+                    </div>
+               </div>';
+            } else {
+                if ($parentId) {
+                    $result .= "<a class='item-menu dropdown-item' href='{$item->href}'>{$icon}{$item->text}</a>";
+                } else {
+                    $href = $item->href;
+                    if ($href != '/presisi') {
+                        $href = str_contains($item->href, 'module') ? $item->href : '/'.$item->href;
+                    }
+                    $result .= "<a type='button' class='item-menu btn bg-white p-2 text-muted' href='{$href}'>{$icon}{$item->text}</a>";
                 }
             }
         }
@@ -723,4 +760,81 @@ function persen3($number, $total, $precision = 2)
     }
 
     return round(($number / $total) * 100, $precision) . '%';
+}
+
+if (! function_exists('getStatistikLabel')) {
+    /**
+     * Mendapatkan label statistik berdasarkan kode laporan.
+     *
+     * @param mixed $lap
+     * @param mixed $stat
+     * @param mixed $namaDesa
+     *
+     * @return array
+     */
+    function getStatistikLabel($lap, $stat, $namaDesa)
+    {
+        $akhiran = ' di '.ucwords(setting('sebutan_desa').' '.$namaDesa).', '.date('Y');
+        $kategori = 'Penduduk';
+        $label = 'Jumlah dan Persentase Penduduk Berdasarkan '.$stat.$akhiran;
+
+        if ((int) $lap > 50) {
+            // Untuk program bantuan, $lap berbentuk '50<program_id>'
+            $program_id = substr($lap, 2);
+            $program = Bantuan::select(['nama', 'sasaran'])->find($program_id)->toArray();
+            $program['judul_sasaran'] = SasaranEnum::valueOf($program['sasaran']);
+            $kategori = 'Bantuan';
+            $label = 'Jumlah dan Persentase Peserta '.$program['nama'].$akhiran;
+        } elseif ((int) $lap > 20 || $lap === 'kelas_sosial') {
+            $kategori = 'Keluarga';
+            $label = 'Jumlah dan Persentase Keluarga Berdasarkan '.$stat.$akhiran;
+        } else {
+            switch ($lap) {
+                case 'bantuan_keluarga':
+                    $kategori = 'Bantuan';
+                    $label = 'Jumlah dan Persentase '.$stat.$akhiran;
+                    break;
+
+                case 'bdt':
+                    $kategori = 'RTM';
+                    $label = 'Jumlah dan Persentase Rumah Tangga Berdasarkan '.$stat.$akhiran;
+                    break;
+
+                case '1':
+                    $label = 'Jumlah dan Persentase Penduduk Berdasarkan Aktivitas atau Jenis Pekerjaannya '.$akhiran;
+                    break;
+
+                case '0':
+                case '14':
+                    $label = 'Jumlah dan Persentase Penduduk Berdasarkan '.$stat.' yang Dicatat dalam Kartu Keluarga '.$akhiran;
+                    break;
+
+                case '13':
+                case '15':
+                    $label = 'Jumlah dan Persentase Penduduk Menurut Kelompok '.$stat.$akhiran;
+                    break;
+
+                case '16':
+                    $label = 'Jumlah dan Persentase Penduduk Menurut Penggunaan Alat Keluarga Berencana dan Jenis Kelamin '.$akhiran;
+                    break;
+
+                case '13':
+                    $label = 'Jumlah Keluarga dan Penduduk Berdasarkan Wilayah RT '.$akhiran;
+                    break;
+
+                case '4':
+                    $label = 'Jumlah Penduduk yang Memiliki Hak Suara '.$stat.$akhiran;
+                    break;
+
+                case 'hamil':
+                    $label = 'Jumlah dan Persentase Penduduk Perempuan Berdasarkan '.$stat.$akhiran;
+                    break;
+            }
+        }
+
+        return [
+            'kategori' => $kategori,
+            'label' => $label,
+        ];
+    }
 }

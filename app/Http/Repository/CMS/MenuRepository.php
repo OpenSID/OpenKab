@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 class MenuRepository extends BaseRepository
 {
     protected $fieldSearchable = [
+        'icon',
+        'menu_type',
         'name',
         'url',
         'sequence',
@@ -30,22 +32,27 @@ class MenuRepository extends BaseRepository
 
     public function treeJson(): string
     {
-        $menus = $this->tree()->toArray();
+        $type = 1;
+        if (request('type') != null) {
+            $type = request('type');
+        }
+        $menus = $this->tree($type)->toArray();
 
         $this->removeEmptyChildren($menus);
 
         return json_encode($menus);
     }
 
-    public function tree(): Collection|null
+    public function tree($menu_type): Collection|null
     {
         return $this->model->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon")
             ->whereNull('parent_id')
             ->with(['children' => function ($q) {
                 $q->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon");
             }])
-            ->orderBy('sequence')
-            ->get();
+            ->orderBy('sequence');
+
+        return  $menus->get();
     }
 
     private function removeEmptyChildren(&$array)
@@ -64,31 +71,36 @@ class MenuRepository extends BaseRepository
      */
     public function create(array $input): Model
     {
-        $this->model->whereNotNull('id')->delete();
+        $menu_type = $input['menu_type'] != null ? $input['menu_type'] : 1;
+
+        $this->model->where('menu_type', $menu_type)->whereNotNull('id')->delete();
+
         try {
             // hapus data lama lalu buat lagi
             $json = json_decode($input['json_menu'], 1);
 
-            return $this->loopTree($json);
+            return $this->loopTree($json, $menu_type);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    private function loopTree(array $elements, $parentId = null)
+    private function loopTree(array $elements, $menu_type, $parentId = null)
     {
         $sequence = 1;
         foreach ($elements as $element) {
             $input = [
+                'menu_type' => $menu_type,
                 'name' => $element['text'],
                 'url' => $element['href'],
+                'icon' => $element['icon'],
                 'sequence' => $sequence,
                 'parent_id' => $parentId,
                 'is_show' => $element['is_show'],
             ];
             $model = parent::create($input);
             if (isset($element['children'])) {
-                $this->loopTree($element['children'], $model->id);
+                $this->loopTree($element['children'], $menu_type, $model->id);
             }
             $sequence++;
         }

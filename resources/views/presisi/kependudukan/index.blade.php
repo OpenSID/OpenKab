@@ -14,6 +14,44 @@
             </div>
         </div>
 
+        <div class="col-md-12">
+            <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
+                <div class="card-header bg-primary rounded-0">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control" title="Pilih Kabupaten">
+                                <option value="">All</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
+                                <option value="">All</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
+                                <option value="">All</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right wh-full" style="display:none;">HAPUS FILTER</button>
+                                        </td>
+                                        <td>
+                                            <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
@@ -31,8 +69,33 @@
                         </div>
                         <div class="@if($id) col-md-12 @else col-md-9 @endif">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
-                            
-                                
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-1" style="display: none">
+                                            <a class="btn btn-sm btn-secondary" data-toggle="collapse"
+                                                href="#collapse-filter" role="button" aria-expanded="true"
+                                                aria-controls="collapse-filter">
+                                                <i class="fas fa-filter"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm"
+                                                data-bs-toggle="collapse" href="#grafik-statistik" role="button"
+                                                aria-expanded="false" aria-controls="grafik-statistik" disabled>
+                                                <i class="fas fa-chart-bar"></i> Grafik
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm"
+                                                data-bs-toggle="collapse" href="#pie-statistik" role="button"
+                                                aria-expanded="false" aria-controls="pie-statistik">
+                                                <i class="fas fa-chart-pie"></i> Chart
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
 
                                 <div class="card-body p-0">
                                     <div class="row">
@@ -65,32 +128,20 @@
                                     </div>
 
 
-                                    @if(!$id)
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="chart" id="pie" style="height: 500px;"></div><br><br>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="chart" id="grafik" style="height: 500px;"></div>
-                                        </div>
+                                    <div class="chart" id="grafik" style="height: 100%; min-height:500px">
+
                                     </div>
-                                    @else
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <div class="chart" id="grafik" style="height: 500px;"></div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="chart" id="pie" style="height: 500px;"></div>
-                                        </div>
+
+                                    <div class="chart" id="pie" style="height: 100%;  min-height:500px; display: none">
+
                                     </div>
-                                    @endif
 
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="statistik">
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th class="judul">Kelompok</th>
+                                                    <th class="judul">Rentang Umur</th>
                                                     <th class="text-center">Jumlah</th>
                                                     <th class="text-center">Laki - laki</th>
                                                     <th class="text-center">Perempuan</th>

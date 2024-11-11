@@ -59,16 +59,16 @@ class PendudukRepository
             ->jsonPaginate();
     }
 
-    public function listStatistik($kategori): array|object
+    public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         return collect(match ($kategori) {
-            'rentang-umur' => $this->caseRentangUmur(),
-            'kategori-umur' => $this->caseKategoriUmur(),
-            'akta-kelahiran' => $this->caseAktaKelahiran(),
-            'status-covid' => $this->caseStatusCovid(),
-            'suku' => $this->caseSuku(),
-            'ktp' => $this->caseKtp(),
-            default => $this->caseWithReferensi($kategori),
+            'rentang-umur' => $this->caseRentangUmur($kabupaten, $kecamatan, $desa),
+            'kategori-umur' => $this->caseKategoriUmur($kabupaten, $kecamatan, $desa),
+            'akta-kelahiran' => $this->caseAktaKelahiran($kabupaten, $kecamatan, $desa),
+            'status-covid' => $this->caseStatusCovid($kabupaten, $kecamatan, $desa),
+            'suku' => $this->caseSuku($kabupaten, $kecamatan, $desa),
+            'ktp' => $this->caseKtp($kabupaten, $kecamatan, $desa),
+            default => $this->caseWithReferensi($kategori, $kabupaten, $kecamatan, $desa),
         })->toArray();
     }
 
@@ -225,7 +225,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseRentangUmur(): array|object
+    private function caseRentangUmur($kabupaten, $kecamatan, $desa): array|object
     {
         $umur = Umur::countStatistikUmur()->status(Umur::RENTANG)->get();
         $query = $this->countStatistikPendudukHidup();
@@ -236,7 +236,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseKategoriUmur(): array|object
+    private function caseKategoriUmur($kabupaten, $kecamatan, $desa): array|object
     {
         $umur = (new Umur())->setKlasifikasi(Umur::KATEGORI)->countStatistikUmur()->status(Umur::KATEGORI)->get();
         $query = $this->countStatistikPendudukHidup();
@@ -247,7 +247,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseAktaKelahiran(): array|object
+    private function caseAktaKelahiran($kabupaten, $kecamatan, $desa): array|object
     {
         $umur = Umur::countStatistikAkta()->status(Umur::RENTANG)->get();
         $query = $this->countStatistikPendudukHidup();
@@ -258,7 +258,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseWithReferensi(string $kategori): array|object
+    private function caseWithReferensi(string $kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         $referensi = $this->tabelReferensi($kategori);
         $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['whereHeader']);
@@ -329,7 +329,7 @@ class PendudukRepository
         return $sql->get();
     }
 
-    private function caseSuku(): array|object
+    private function caseSuku($kabupaten, $kecamatan, $desa): array|object
     {
         $umur = Penduduk::CountStatistikSuku()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -340,7 +340,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseKtp()
+    private function caseKtp($kabupaten, $kecamatan, $desa)
     {
         $whereFooter = "((DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(tweb_penduduk.tanggallahir)), '%Y')+0)>=17 OR (tweb_penduduk.status_kawin IS NOT NULL AND tweb_penduduk.status_kawin <> 1))";
         $umur = Ktp::countStatistik()->orderBy('id')->get();
@@ -352,7 +352,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseStatusCovid(): array|object
+    private function caseStatusCovid($kabupaten, $kecamatan, $desa): array|object
     {
         $covid = Covid::countStatistik()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();

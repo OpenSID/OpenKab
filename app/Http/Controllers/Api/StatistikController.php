@@ -55,7 +55,7 @@ class StatistikController extends Controller
     public function penduduk(PendudukRepository $penduduk)
     {
         if ($this->kategori) {
-            return $this->fractal($this->statistik->getStatistik($penduduk->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-penduduk')->respond();
+            return $this->fractal($this->statistik->getStatistik($penduduk->listStatistik($this->kategori, $this->kabupaten, $this->kecamatan, $this->desa)), new StatistikTransformer(), 'statistik-penduduk')->respond();
         }
 
         return response()->json([

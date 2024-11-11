@@ -1,7 +1,7 @@
-function GetListCoordinates(kecamatan = null, desa= null) {
+function GetListCoordinates(kabupaten = null, kecamatan = null, desa= null) {
     var coordUrl =  "{{ url('api/v1/statistik-web/get-list-coordinate') }}";
     if (kecamatan != null || desa != null){
-        coordUrl =  coordUrl+= "?filter[kecamatan]=" + (kecamatan == null ? "" : kecamatan) + "&filter[desa]=" + (desa == null ? "" : desa);
+        coordUrl =  coordUrl+= "?filter[kabupaten]=" + (kabupaten == null ? "" : kabupaten) + "&filter[kecamatan]=" + (kecamatan == null ? "" : kecamatan) + "&filter[desa]=" + (desa == null ? "" : desa);
     }
     $.ajax({
         type: 'GET',

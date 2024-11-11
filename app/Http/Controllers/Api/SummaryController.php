@@ -22,11 +22,13 @@ class SummaryController extends Controller
 
     private $luasTernak;
 
+    protected $kabupaten;
     protected $kecamatan;
     protected $desa;
 
     public function __construct()
     {
+        $this->kabupaten = request()->input('filter')['kabupaten'] ?? null;
         $this->kecamatan = request()->input('filter')['kecamatan'] ?? null;
         $this->desa = request()->input('filter')['desa'] ?? null;
     }
@@ -72,6 +74,9 @@ class SummaryController extends Controller
     {
         $total = 0;
         $batasWilayah = Potensi::join('config', 'config.id', '=', "prodeskel_potensi.config_id", 'left');
+        if(isset(request('filter')['kabupaten'])){
+            $batasWilayah = $batasWilayah->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+        }
         if(isset(request('filter')['kecamatan'])){
             $batasWilayah = $batasWilayah->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
         }
@@ -115,6 +120,9 @@ class SummaryController extends Controller
             return angka_lokal($total);
         }
         $batasWilayah = Potensi::join('config', 'config.id', '=', "prodeskel_potensi.config_id", 'left');
+        if(isset(request('filter')['kabupaten'])){
+            $batasWilayah = $batasWilayah->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+        }
         if(isset(request('filter')['kecamatan'])){
             $batasWilayah = $batasWilayah->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
         }
@@ -142,6 +150,9 @@ class SummaryController extends Controller
             return angka_lokal($total);
         }
         $batasWilayah = Potensi::join('config', 'config.id', '=', "prodeskel_potensi.config_id", 'left');
+        if(isset(request('filter')['kabupaten'])){
+            $batasWilayah = $batasWilayah->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+        }
         if(isset(request('filter')['kecamatan'])){
             $batasWilayah = $batasWilayah->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
         }
@@ -171,6 +182,9 @@ class SummaryController extends Controller
         $batasWilayah = Potensi::join('config', 'config.id', '=', "prodeskel_potensi.config_id", 'left');
         if(isset(request('filter')['kecamatan'])){
             $batasWilayah = $batasWilayah->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+        }
+        if(isset(request('filter')['kabupaten'])){
+            $batasWilayah = $batasWilayah->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
         }
         if(isset(request('filter')['desa'])){
             $batasWilayah = $batasWilayah->whereRaw("config.kode_desa = " . request('filter')['desa']);

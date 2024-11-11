@@ -83,7 +83,7 @@ class StatistikController extends Controller
     public function keluarga(KeluargaRepository $keluarga)
     {
         if ($this->kategori) {
-            return $this->fractal($this->statistik->getStatistik($keluarga->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-keluarga')->respond();
+            return $this->fractal($this->statistik->getStatistik($keluarga->listStatistik($this->kategori, $this->kabupaten, $this->kecamatan, $this->desa)), new StatistikTransformer(), 'statistik-keluarga')->respond();
         }
 
         return response()->json([

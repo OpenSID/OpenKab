@@ -376,7 +376,7 @@ class PresisiController extends Controller
 
     public function keluarga($id = '')
     {
-        if($id = 'keluarga'){
+        if($id != 'kelas-sosial'){
             $id = '';
         }
         $statistik = Keluarga::KATEGORI_STATISTIK;

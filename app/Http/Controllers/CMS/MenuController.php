@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\CMS;
 
-use App\Models\Rtm;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Repository\CMS\MenuRepository;
+use App\Http\Requests\UpdateMenuRequest;
 use App\Models\Bantuan;
+use App\Models\CMS\Category;
 use App\Models\CMS\Page;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
-use App\Models\CMS\Category;
+use App\Models\Rtm;
 use Illuminate\Support\Facades\Session;
-use App\Http\Requests\UpdateMenuRequest;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Repository\CMS\MenuRepository;
 
 class MenuController extends AppBaseController
 {
@@ -31,7 +31,7 @@ class MenuController extends AppBaseController
     public function index()
     {
         $type = 1;
-        if (request('type') != null){
+        if (request('type') != null) {
             $type = request('type');
         }
         $sourceItem = [
@@ -51,21 +51,21 @@ class MenuController extends AppBaseController
                         return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
                     })
                 )->toArray(),
-            
+
             'keluarga' => collect(['/module/keluarga' => 'Semua Statistik Keluarga'])
                 ->merge(
                     collect(Keluarga::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/keluarga/{$key}" => ucwords("Statistik Keluarga {$item}")];
                     })
                 )->toArray(),
-            
+
             'bantuan' => collect(['/module/bantuan' => 'Semua Statistik Bantuan'])
                 ->merge(
                     collect(Bantuan::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/bantuan/{$key}" => ucwords("Statistik Bantuan {$item}")];
                     })
                 )->toArray(),
-            
+
             'rtm' => collect(['/module/rtm' => 'Semua Statistik Rtm'])
                 ->merge(
                     collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
@@ -86,18 +86,16 @@ class MenuController extends AppBaseController
     {
         $input = $request->all();
 
-        $menu_type = $input["menu_type"] == null ? 1 : $input["menu_type"];
+        $menu_type = $input['menu_type'] == null ? 1 : $input['menu_type'];
 
         $menu = $this->menuRepository->create($input);
 
         Session::flash('success', 'Menu berhasil disimpan.');
-        if ($menu_type == 1){
+        if ($menu_type == 1) {
             return redirect(route('menus.index'));
-        }
-        else if ($menu_type == 2){
-            return redirect(route('menus.index') . "?type=" .$menu_type);
-        }
-        else{
+        } elseif ($menu_type == 2) {
+            return redirect(route('menus.index').'?type='.$menu_type);
+        } else {
             return redirect(route('menus.index'));
         }
     }

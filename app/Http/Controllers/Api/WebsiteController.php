@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Repository\BantuanRepository;
+use App\Http\Repository\ConfigRepository;
+use App\Http\Repository\KeluargaRepository;
+use App\Http\Repository\PendudukRepository;
 use App\Models\Config;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use App\Http\Repository\ConfigRepository;
-use App\Http\Repository\BantuanRepository;
-use App\Http\Repository\KeluargaRepository;
-use App\Http\Repository\PendudukRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class WebsiteController extends Controller
@@ -30,7 +30,6 @@ class WebsiteController extends Controller
             ->pluck('nama_kecamatan', 'id');
     }
 
-
     private function data()
     {
         $totalDesa = 0;
@@ -42,7 +41,7 @@ class WebsiteController extends Controller
 
         $configSummaryKecamatan = (new ConfigRepository)->kabupaten()->mapWithKeys(function ($item) {
             return [
-                $item->nama_kabupaten => $this->getKecamatan($item->kode_kabupaten)
+                $item->nama_kabupaten => $this->getKecamatan($item->kode_kabupaten),
             ];
         });
 

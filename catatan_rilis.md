@@ -1,4 +1,4 @@
-Di rilis v2410.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pelayanan ke pelanggan.
+Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pelayanan ke pelanggan.
 
 #### Penambahan Fitur
 
@@ -9,11 +9,13 @@ Di rilis v2410.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 5. [#398](https://github.com/OpenSID/OpenKab/issues/398) Penambahan pengaturan menu presisi.
 6. [#373](https://github.com/OpenSID/OpenKab/issues/373) Penambahan statistik bantuan.
 7. [#399](https://github.com/OpenSID/OpenKab/issues/399) Penambahan api dan peta.
+8. [#387](https://github.com/OpenSID/OpenKab/issues/387) Penambahan statistik keluarga presisi.
+9. [#383](https://github.com/OpenSID/OpenKab/issues/383) Penambahan statistik bantuan berdasarkan pengaturan menu.
 
 #### Perbaikan BUG
 
 1. [#369](https://github.com/OpenSID/OpenKab/issues/369) Perbaikan status pengaturan dasbor presisi tidak bisa diaktifkan jika tidak memenuhi standar.
-2. [#397](https://github.com/OpenSID/OpenKab/issues/397) perbaiki error pada pengaturan aplikasi.
+2. [#397](https://github.com/OpenSID/OpenKab/issues/397) Perbaikan error pada pengaturan aplikasi.
 
 #### Perubahan Teknis
 

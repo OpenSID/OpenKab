@@ -5,37 +5,10 @@
             var data_grafik = [];
             let exclude_chart = []
 
-            $('#filter_kabupaten').select2({
-                placeholder: "Pilih Kabupaten"
-            });
-            $('#filter_kecamatan').select2({
-                placeholder: "Pilih Kecamatan"
-            });
-            $('#filter_desa').select2({
-                placeholder: "Pilih Desa"
-            });
-            GetListKabupaten();
-            GetListKecamatan();
-            GetListDesa();
-            $('#filter_kabupaten').on("select2:select", function(e) {
-                GetListKecamatan(this.value);
-            });
-            $('#filter_kecamatan').on("select2:select", function(e) {
-                GetListDesa(this.value);
-            });
-            $('#bt_clear_filter').click(function(){
-                
-                $("#filter_kabupaten").val("").trigger("change");
-                $("#filter_kecamatan").val("").trigger("change");
-                $("#filter_desa").val("").trigger("change");
-                $('#filter_desa').empty().trigger("change");
-                $('#bt_clear_filter').hide();
-                table.ajax.reload();
-            });
-            $('#bt_filter').click(function(){
-                $('#bt_clear_filter').show();
-                table.ajax.reload();
-            });
+            @include('presisi.rtm.filter-wilayah.kabupaten')
+            @include('presisi.rtm.filter-wilayah.kecamatan')
+            @include('presisi.rtm.filter-wilayah.button')
+            @include('presisi.rtm.filter-wilayah.button')
 
             $('#nav-statistik li a:first').addClass('active');
             $('#nav-statistik li').click(function(e) {
@@ -172,67 +145,9 @@
                 ],
             });
 
-            function GetListKabupaten() {
-            $('#filter_kabupaten').empty().trigger("change");
-            var optionEmpty = new Option("", "");
-            $("#filter_kabupaten").append(optionEmpty);
-            $.ajax({
-                type: 'GET',
-                url: "{{ url('api/v1/statistik-web/get-list-kabupaten') }}",
-                dataType: 'json',
-                success: function(data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var newOption = new Option(data[i].nama_kabupaten, data[i].kode_kabupaten, true, true);
-                        $("#filter_kabupaten").append(newOption);
-                    }
-                    $("#filter_kabupaten").val("").trigger("change");
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                }
-            });
-        }
-        function GetListKecamatan($id) {
-            $('#filter_kecamatan').empty().trigger("change");
-            if ($id != undefined && $id != null){
-                var optionEmpty = new Option("", "");
-                $("#filter_kecamatan").append(optionEmpty);
-                $.ajax({
-                    type: 'GET',
-                    url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}" + "/" + $id,
-                    dataType: 'json',
-                    success: function(data) {
-                        for (var i = 0; i < data.length; i++) {
-                            var newOption = new Option(data[i].nama_kecamatan, data[i].kode_kecamatan, true, true);
-                            $("#filter_kecamatan").append(newOption);
-                        }
-                        $("#filter_kecamatan").val("");
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                    }
-                });
-            }
-        }
-        function GetListDesa($id) {
-            $('#filter_desa').empty().trigger("change");
-            if ($id != undefined && $id != null){
-                var optionEmpty = new Option("", "");
-                $("#filter_desa").append(optionEmpty);
-                $.ajax({
-                    type: 'GET',
-                    url: "{{ url('api/v1/statistik-web/get-list-desa') }}" + "/" + $id,
-                    dataType: 'json',
-                    success: function(data) {
-                        for (var i = 0; i < data.length; i++) {
-                            var newOption = new Option(data[i].nama_desa, data[i].kode_desa, true, true);
-                            $("#filter_desa").append(newOption);
-                        }
-                        $("#filter_desa").val("");
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                    }
-                });
-            }
-        }
+            
+        
+        
 
             function grafikPie() {
                 $('#barChart').remove();

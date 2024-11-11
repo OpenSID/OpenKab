@@ -103,11 +103,11 @@
                                     </div>
 
 
-                                    <div class="chart" id="grafik" style="height: 500px; display: none">
+                                    <div class="chart" id="grafik" style="height:100%; min-height: 500px; display: none">
 
                                     </div>
 
-                                    <div class="chart" id="pie" style="height: 500px; display: none">
+                                    <div class="chart" id="pie" style="height:100%; min-height: 500px; display: none">
 
                                     </div>
 

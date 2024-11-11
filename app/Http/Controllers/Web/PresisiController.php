@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Anak;
-use App\Models\IbuHamil;
-use App\Models\Penduduk;
-use App\Models\Keluarga;
 use App\Models\Bantuan;
+use App\Models\IbuHamil;
+use App\Models\Keluarga;
+use App\Models\Penduduk;
 use App\Models\Posyandu;
 use App\Models\SasaranPaud;
 use App\Services\RekapService;
@@ -374,7 +374,7 @@ class PresisiController extends Controller
         ];
     }
 
-    public function keluarga($id = "")
+    public function keluarga($id = '')
     {
         if($id = 'keluarga'){
             $id = '';
@@ -393,12 +393,21 @@ class PresisiController extends Controller
 
         return view('presisi.keluarga.index', compact('statistik', 'id', 'categoriesItems'));
     }
-  
-    public function bantuan()
-    {
-        // $statistik = Bantuan::get();
 
-        // return view('presisi.bantuan.index', compact('statistik'));
-        return view('presisi.bantuan.index');
+    public function bantuan($id = '')
+    {
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $keluargaSummary = 0;
+        $categoriesItems = [
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
+        $statistik = Bantuan::get();
+
+        return view('presisi.bantuan.index', compact('id', 'categoriesItems', 'statistik'));
     }
 }

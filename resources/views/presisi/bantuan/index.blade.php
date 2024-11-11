@@ -7,16 +7,22 @@
 @include('presisi.partials.head')
 
     <div class="row">
+        <div class="col-md-12">
+            
+            <div class="card rounded-0 border-0 shadow-none">
+                @include('presisi.summary')       
+            </div>
+        </div>
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        {{-- <div class="col-md-3">
+                    {{-- <div class="col-md-3 @if($id) d-none @endif" >
                             <div class="card card-primary rounded-0 elevation-0 border">
-                                <div class="card-header rounded-0">
+                                <!-- <div class="card-header rounded-0">
                                     <h3 class="card-title">Statistik Bantuan</h3>
 
-                                </div>
+                                </div> -->
                                 <div class="card-body p-0 ">
                                     <ul class="nav nav-pills flex-column" id="nav-statistik">
                                     <li class="nav-item active">
@@ -48,71 +54,75 @@
                             </div>
                         </div> --}}
                         <div class="col-md-12">
-                            <div class="card card-primary card-outline rounded-0 elevation-0 border">
-                                <div class="card-header">
+                            <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
+                                <div class="card-header bg-primary rounded-0">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                             <div class="row">
-                                                <p> Pilih Tahun:</p>
-                                            </div>
-                                            <div class="row">
-                                                <select name="Filter Tahun" id="filter_tahun" required class="form-control" title="Pilih Tahun">
+                                                <select name="Filter Tahun" id="filter_tahun" required class="form-control" title="Tahun">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="row">
-                                                <p> Pilih Kecamatan:</p>
+                                                <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control" title="Pilih Kabupaten">
+                                                    <option value="">All</option>
+                                                </select>
                                             </div>
+                                        </div>
+                                        <div class="col-md-2">
                                             <div class="row">
                                                 <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="row">
-                                                <p> Pilih Desa:</p>
-                                            </div>
+                                        <div class="col-md-2">
                                             <div class="row">
                                                 <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right wh-full" style="display:none;">HAPUS FILTER</button>
+                                                        </td>
+                                                        <td>
+                                                            <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="row justify-content-end pt-1">
+                                    <!-- <div class="row justify-content-end pt-1">
                                         <div class="col-md-4 pull-right text-right">
                                             <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right" style="display:none;">HAPUS FILTER</button>
                                             <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
                                         </div>
-                                    </div>
-                                    <div class="row">
+                                    </div> -->
+                                    <hr class="@if($id) d-none @endif">
+                                    <div class="row @if($id) d-none @endif">
                                         <div class="col-md-2">
                                             <p> Pilih Program:</p>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <select name="Filter Program" id="filter_program" required class="form-control" title="Pilih Program">
                                                 <option value="">All</option>
                                             </select>
                                         </div>
                                     </div>
+                                    
+
+
+                                </div>
+                                <div class="card-header">
                                     <div class="row">
-                                        <div class="col-1" style="display: none">
-                                            <a class="btn btn-sm btn-secondary" data-toggle="collapse"
-                                                href="#collapse-filter" role="button" aria-expanded="true"
-                                                aria-controls="collapse-filter">
-                                                <i class="fas fa-filter"></i>
-                                            </a>
-                                        </div>
-                                        <div style="display:none;" class="col-md-2">
-                                            <button id="btn-tabel" class="btn btn-sm btn-info btn-block btn-sm "
-                                                data-bs-toggle="collapse" href="#Tabel" role="button"
-                                                aria-expanded="false" aria-controls="grafik-Tabel" disabled>
-                                                <i class="fas fa-chart-bar"></i> Tabel
-                                            </button>
-                                        </div>
                                         <div class="col-md-2">
                                             <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm"
                                                 data-bs-toggle="collapse" href="#grafik-statistik" role="button"
@@ -131,13 +141,19 @@
 
 
                                 </div>
-
                                 <div class="card-body p-0">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div id="collapse-filter" class="collapse ">
                                                 <div class="row m-0">
-                                                    <div class=" col-6">
+                                                    <div class=" col-4">
+                                                        <div class="form-group">
+                                                            <label>Kabupaten</label>
+                                                            <select class="form-control " name="search_kabupaten"> </select>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class=" col-4">
                                                         <div class="form-group">
                                                             <label>Kecamatan</label>
                                                             <select class="form-control " name="search_kecamatan"> </select>
@@ -145,7 +161,7 @@
 
                                                     </div>
 
-                                                    <div class=" col-6">
+                                                    <div class=" col-4">
                                                         <div class="form-group">
                                                             <label>Desa</label>
                                                             <select class="form-control " name="search_desa"> </select>
@@ -163,15 +179,16 @@
                                     </div>
 
 
-                                    <div class="chart" id="grafik" style="height: 500px;">
-
-                                    </div>
-
-                                    <div class="chart" id="pie" style="height: 500px; display: none">
-
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="chart" id="pie" style="height: 500px;display:none"></div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="chart" id="grafik" style="height: 500px;"></div>
+                                        </div>
                                     </div>
                                     <br/>
-                                    <h5 class="pl-2"> Tabel Penerima Bantuan Penduduk</h5>
+                                    <h5 class="pl-2"> Tabel Penerima Bantuan</h5>
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="statistik">
                                             <thead>
@@ -189,7 +206,7 @@
 
                                     </div>
                                     <br/>
-                                    <h5 class="pl-2"> Daftar Penerima Bantuan Penduduk</h5>
+                                    <h5 class="pl-2"> Daftar Penerima Bantuan</h5>
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="daftar_penerima">
                                             <thead>
@@ -226,7 +243,10 @@
             let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL'];
 
             $('#filter_tahun').select2({
-                placeholder: "Pilih Tahun"
+                placeholder: "Tahun"
+            });
+            $('#filter_kabupaten').select2({
+                placeholder: "Pilih Kabupaten"
             });
             $('#filter_kecamatan').select2({
                 placeholder: "Pilih Kecamatan"
@@ -239,6 +259,7 @@
             });
 
             GetListTahun();
+            GetListKabupaten();
             GetListKecamatan();
             GetListDesa();
             GetListProgram();
@@ -255,35 +276,9 @@
                 table_penerima.ajax.reload();
             });
 
-            $('#btn-tabel').click(function() {
-                $(this).prop('disabled', true);
-                $('#btn-grafik').prop('disabled', false);
-                $('#btn-pie').prop('disabled', false);
-
-                $('#grafik').hide();
-                $('#pie').hide()
-                $('#statistik').show()
-            })
-
-            $('#btn-grafik').click(function() {
-                $(this).prop('disabled', true);
-                //$('#btn-tabel').prop('disabled', false);
-                $('#btn-pie').prop('disabled', false);
-
-                $('#grafik').show();
-                $('#pie').hide()
-                //$('#statistik').hide()
-            })
-
-            $('#btn-pie').click(function() {
-                $(this).prop('disabled', true);
-                //$('#btn-tabel').prop('disabled', false);
-                $('#btn-grafik').prop('disabled', false);
-
-                $('#grafik').hide();
-                $('#pie').show()
-               // $('#statistik').hide()
-            })
+            $('#filter_kabupaten').on("select2:select", function(e) {
+                GetListKecamatan(this.value);
+            });
 
             $('#filter_kecamatan').on("select2:select", function(e) {
                 GetListDesa(this.value);
@@ -297,6 +292,7 @@
 
             $('#bt_clear_filter').click(function(){
                 $("#filter_tahun").val("").trigger("change");
+                $("#filter_kabupaten").val("").trigger("change");
                 $("#filter_kecamatan").val("").trigger("change");
                 $("#filter_desa").val("").trigger("change");
                 $('#filter_desa').empty().trigger("change");
@@ -333,6 +329,7 @@
                         // d['filter[id]'] = nav.data('key');
                         d['filter[id]'] =  $("#filter_program").val();
                         d['filter[tahun]'] = $("#filter_tahun").val();
+                        d['filter[kabupaten]'] = $("#filter_kabupaten").val();
                         d['filter[kecamatan]'] = $("#filter_kecamatan").val();
                         d['filter[desa]'] = $("#filter_desa").val();
                         // d.config_desa = $('#position').val();
@@ -425,6 +422,7 @@
                     "data": function(d) {
                         d['filter[id]'] =  $("#filter_program").val();
                         d['filter[tahun]'] = $("#filter_tahun").val();
+                        d['filter[kabupaten]'] = $("#filter_kabupaten").val();
                         d['filter[kecamatan]'] = $("#filter_kecamatan").val();
                         d['filter[desa]'] = $("#filter_desa").val();
                     },
@@ -554,14 +552,25 @@
                 let category = result.data.categoriesItems
                 let listDesa = result.data.listDesa
                 let listKecamatan = result.data.listKecamatan
+                let listKabupaten = result.data.listKabupaten
 
                 for (let index in category) {
                     $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value'])
                 };
+                let _optionKabupaten = []
                 let _optionKecamatan = []
                 let _optionDesa = []
+                for (let item in listKabupaten) {
+                    _optionKabupaten.push(`<option>${item}</option>`)
+                }
+
                 for (let item in listKecamatan) {
-                    _optionKecamatan.push(`<option>${item}</option>`)
+                    _optionKecamatan.push(`<optgroup label='${item}'>`)
+                    for (let kecamatan in listKecamatan[item]) {
+                        _optionKecamatan.push(`<option value='${kecamatan}'>${listKecamatan[item][kecamatan]}</option>`)
+                    }
+                    _optionKecamatan.push(`</optgroup>`)
+                    _optionKabupaten.push(`<option>${item}</option>`)
                 }
 
                 for (let item in listDesa) {
@@ -573,10 +582,41 @@
                     _optionKecamatan.push(`<option>${item}</option>`)
                 }
 
+                $('select[name=search_kabupaten]').append(_optionKabupaten.join(''))
                 $('select[name=search_kecamatan]').append(_optionKecamatan.join(''))
                 $('select[name=search_desa]').append(_optionDesa.join(''))
             }, 'json')
         });
+
+            // $('#btn-tabel').click(function() {
+            //     $(this).prop('disabled', true);
+            //     $('#btn-grafik').prop('disabled', false);
+            //     $('#btn-pie').prop('disabled', false);
+
+            //     $('#grafik').hide();
+            //     $('#pie').hide()
+            //     $('#statistik').show()
+            // })
+
+            $('#btn-grafik').click(function() {
+                $(this).prop('disabled', true);
+                // $('#btn-tabel').prop('disabled', false);
+                $('#btn-pie').prop('disabled', false);
+
+                $('#grafik').show();
+                $('#pie').hide()
+                // $('#statistik').hide()
+            })
+
+            $('#btn-pie').click(function() {
+                $(this).prop('disabled', true);
+                // $('#btn-tabel').prop('disabled', false);
+                $('#btn-grafik').prop('disabled', false);
+
+                $('#grafik').hide();
+                $('#pie').show()
+                // $('#statistik').hide()
+            })
 
         function GetListTahun() {
             $('#filter_tahun').empty().trigger("change");
@@ -598,25 +638,47 @@
                 }
             });
         }
-        function GetListKecamatan() {
-            $('#filter_kecamatan').empty().trigger("change");
+        function GetListKabupaten() {
+            $('#filter_kabupaten').empty().trigger("change");
             var optionEmpty = new Option("", "");
-            $("#filter_kecamatan").append(optionEmpty);
+            $("#filter_kabupaten").append(optionEmpty);
             $.ajax({
                 type: 'GET',
-                url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}",
+                url: "{{ url('api/v1/statistik-web/get-list-kabupaten') }}",
                 dataType: 'json',
                 success: function(data) {
                     for (var i = 0; i < data.length; i++) {
-                        var newOption = new Option(data[i].nama_kecamatan, data[i].kode_kecamatan, true, true);
-                        $("#filter_kecamatan").append(newOption);
+                        var newOption = new Option(data[i].nama_kabupaten, data[i].kode_kabupaten, true, true);
+                        $("#filter_kabupaten").append(newOption);
                     }
-                    $("#filter_kecamatan").val("").trigger("change");
+                    $("#filter_kabupaten").val("").trigger("change");
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
 
                 }
             });
+        }
+        function GetListKecamatan($id) {
+            $('#filter_kecamatan').empty().trigger("change");
+            if ($id != undefined && $id != null){
+                var optionEmpty = new Option("", "");
+                $("#filter_kecamatan").append(optionEmpty);
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}" + "/" + $id,
+                    dataType: 'json',
+                    success: function(data) {
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = new Option(data[i].nama_kecamatan, data[i].kode_kecamatan, true, true);
+                            $("#filter_kecamatan").append(newOption);
+                        }
+                        $("#filter_kecamatan").val("");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            }
         }
         function GetListDesa($id) {
             $('#filter_desa').empty().trigger("change");
@@ -640,28 +702,71 @@
                 });
             }
         }
-        function GetListProgram() {
-            $('#filter_program').empty().trigger("change");
-            var optionPenduduk = new Option("Penerima Bantuan Penduduk", "penduduk");
-            $("#filter_program").append(optionPenduduk);
-            var optionKeluarga = new Option("Penerima Bantuan Keluarga", "keluarga");
-            $("#filter_program").append(optionKeluarga);
-            $.ajax({
-                type: 'GET',
-                url: "{{ url('api/v1/statistik-web/get-list-program') }}",
-                dataType: 'json',
-                success: function(data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var newOption = new Option(data[i].nama, data[i].id, true, true);
-                        $("#filter_program").append(newOption);
-                    }
-                    $("#filter_program").val("penduduk");
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
 
-                }
-            });
-        }
+        @include('presisi.bantuan.list_program')
+
+
+        var summaryPenduduk = $('#summary-penduduk').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: false,
+            searchPanes: {
+                viewTotal: false,
+                columns: [0]
+            },
+            ajax: {
+                url: `{{ url('api/v1/wilayah/penduduk') }}`,
+                method: 'get',
+                data: function(row) {
+                    return {
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[search]": row.search.value,                                            
+                    };
+                },
+                dataSrc: function(json) {
+                    json.recordsTotal = json.meta.pagination.total
+                    json.recordsFiltered = json.meta.pagination.total
+
+                    return json.data
+                },
+            },
+            columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: 0,
+                    render: function(data, type, row, meta) {
+                        var PageInfo = $('#summary-penduduk').DataTable().page.info();
+                        return PageInfo.start + meta.row + 1;
+                    }
+                },
+                {
+                    targets: [0, 1, 2, 3],
+                    orderable: false,
+                    searchable: false,
+                },
+            ],
+            columns: [{
+                    data: null,
+                },
+                {
+                    data: "attributes.nama_desa",
+                    name: "nama_desa"
+                },
+                {
+                    data: "attributes.nama_kecamatan",
+                    name: "nama_kecamatan"
+                },                
+                {
+                    data: "attributes.penduduk_count",
+                    name: "penduduk_count",
+                    className: 'text-center'
+                },
+            ],
+        })
 
     </script>
 @endpush

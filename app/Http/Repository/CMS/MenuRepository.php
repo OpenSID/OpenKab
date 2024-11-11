@@ -32,7 +32,7 @@ class MenuRepository extends BaseRepository
     public function treeJson(): string
     {
         $type = 1;
-        if (request('type') != null){
+        if (request('type') != null) {
             $type = request('type');
         }
         $menus = $this->tree($type)->toArray();
@@ -44,21 +44,21 @@ class MenuRepository extends BaseRepository
 
     public function tree($menu_type): Collection|null
     {
-        if($menu_type == null){
+        if ($menu_type == null) {
             $menu_type = request('type');
         }
-        $menus =  $this->model->selectRaw("id, parent_id , name as text, url as href, icon");
-        if($menu_type != null){
-            $menus = $menus->where('menu_type',  $menu_type);
-        }
-        else{
+        $menus = $this->model->selectRaw('id, parent_id , name as text, url as href, icon');
+        if ($menu_type != null) {
+            $menus = $menus->where('menu_type', $menu_type);
+        } else {
             $menus = $menus->where('menu_type', 1);
         }
         $menus = $menus->whereNull('parent_id')
             ->with(['children' => function ($q) {
-                $q->selectRaw("id, parent_id , name as text, url as href, icon");
+                $q->selectRaw('id, parent_id , name as text, url as href, icon');
             }])
             ->orderBy('sequence');
+
         return  $menus->get();
     }
 
@@ -85,6 +85,7 @@ class MenuRepository extends BaseRepository
         try {
             // hapus data lama lalu buat lagi
             $json = json_decode($input['json_menu'], 1);
+
             return $this->loopTree($json, $menu_type);
         } catch (\Throwable $th) {
             throw $th;

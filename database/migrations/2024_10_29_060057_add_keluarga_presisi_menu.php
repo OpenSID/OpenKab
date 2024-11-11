@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
@@ -15,7 +13,7 @@ return new class extends Migration
     public function up()
     {
         // Insert data baru tanpa tag <i> di kolom name
-        DB::table("menus")->where('name', 'Statistik Keluarga')->update(["url" => "/presisi/keluarga"]);
+        DB::table('menus')->where('name', 'Statistik Keluarga')->update(['url' => '/presisi/keluarga']);
     }
 
     /**

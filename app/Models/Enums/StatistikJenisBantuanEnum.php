@@ -7,13 +7,14 @@ use BenSampo\Enum\Enum;
 class StatistikJenisBantuanEnum extends Enum
 {
     public const PENDUDUK = [
-        'key'   => 'bantuan_penduduk',
-        'slug'  => 'bantuan-penduduk',
+        'key' => 'bantuan_penduduk',
+        'slug' => 'bantuan-penduduk',
         'label' => 'Bantuan Penduduk',
     ];
+
     public const KELUARGA = [
-        'key'   => 'bantuan_keluarga',
-        'slug'  => 'bantuan-keluarga',
+        'key' => 'bantuan_keluarga',
+        'slug' => 'bantuan-keluarga',
         'label' => 'Bantuan Keluarga',
     ];
 
@@ -23,7 +24,7 @@ class StatistikJenisBantuanEnum extends Enum
     ];
 
     /**
-     * Override method all()
+     * Override method all().
      */
     public static function all(): array
     {
@@ -31,7 +32,7 @@ class StatistikJenisBantuanEnum extends Enum
     }
 
     /**
-     * Get slug from key
+     * Get slug from key.
      */
     public static function slugFromKey(mixed $key): ?string
     {
@@ -41,7 +42,7 @@ class StatistikJenisBantuanEnum extends Enum
     }
 
     /**
-     * Get all key label
+     * Get all key label.
      */
     public static function allKeyLabel(): array
     {
@@ -49,7 +50,7 @@ class StatistikJenisBantuanEnum extends Enum
     }
 
     /**
-     * Get key form slug
+     * Get key form slug.
      */
     public static function keyFromSlug(mixed $slug): ?string
     {

@@ -326,15 +326,7 @@ class PendudukRepository
             ->where('tweb_penduduk.status_dasar', 1)
             ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
             ->groupBy("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
-            if (isset(request('filter')['kabupaten'])) {
-                $sql->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
-            }
-            if (isset(request('filter')['kecamatan'])) {
-                $sql->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
-            }
-            if (isset(request('filter')['desa'])) {
-                $sql->whereRaw('config.kode_desa = '.request('filter')['desa']);
-            }
+           
         return $sql->get();
     }
 

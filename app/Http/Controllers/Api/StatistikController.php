@@ -103,7 +103,7 @@ class StatistikController extends Controller
     public function rtm(RtmRepository $rtm)
     {
         if ($this->kategori) {
-            return $this->fractal($this->statistik->getStatistik($rtm->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-rtm')->respond();
+            return $this->fractal($this->statistik->getStatistik($rtm->listStatistik($this->kategori, $this->kabupaten, $this->kecamatan, $this->desa)), new StatistikTransformer(), 'statistik-rtm')->respond();
         }
 
         return response()->json([

@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Models\Enums;
+
 use BenSampo\Enum\Enum;
 
 class StatistikRtmEnum extends Enum
 {
     public const BDT = [
-        'key'   => 'bdt',
-        'slug'  => 'bdt',
+        'key' => 'bdt',
+        'slug' => 'bdt',
         'label' => 'BDT',
     ];
 
@@ -16,7 +17,7 @@ class StatistikRtmEnum extends Enum
     ];
 
     /**
-     * Override method all()
+     * Override method all().
      */
     public static function all(): array
     {
@@ -24,7 +25,7 @@ class StatistikRtmEnum extends Enum
     }
 
     /**
-     * Get slug from key
+     * Get slug from key.
      */
     public static function slugFromKey(mixed $key): ?string
     {
@@ -34,7 +35,7 @@ class StatistikRtmEnum extends Enum
     }
 
     /**
-     * Get all key label
+     * Get all key label.
      */
     public static function allKeyLabel(): array
     {
@@ -42,7 +43,7 @@ class StatistikRtmEnum extends Enum
     }
 
     /**
-     * Get key form slug
+     * Get key form slug.
      */
     public static function keyFromSlug(mixed $slug): ?string
     {

@@ -4,28 +4,31 @@ namespace App\Services;
 
 use App\Enums\JenisKelaminEnum;
 use App\Enums\PendidikanSedangEnum;
-use App\Models\Enums\StatistikJenisBantuanEnum;
-use App\Models\Enums\StatistikPendudukEnum;
-use App\Models\Enums\StatistikKeluargaEnum; 
-use App\Models\Enums\StatistikRtmEnum;
 use App\Models\Bantuan;
+use App\Models\Enums\StatistikJenisBantuanEnum;
+use App\Models\Enums\StatistikKeluargaEnum;
+use App\Models\Enums\StatistikPendudukEnum;
+use App\Models\Enums\StatistikRtmEnum;
 use Illuminate\Support\Facades\DB;
 
 class LaporanPenduduk
 {
     private $lap;
+
     private $tahun;
+
     private $filter;
+
     private $paramCetak;
 
     public function listData($lap = 0, $filter = [], $paramCetak = [])
     {
-        $this->lap        = $lap;
-        $this->filter     = $filter;
+        $this->lap = $lap;
+        $this->filter = $filter;
         $this->paramCetak = $paramCetak;
 
         $judul_jumlah = 'JUMLAH';
-        $judul_belum  = 'BELUM MENGISI';
+        $judul_belum = 'BELUM MENGISI';
 
         $data = $this->select_per_kategori();
 
@@ -43,22 +46,22 @@ class LaporanPenduduk
         $this->hitung_persentase($data, $semua);
 
         if ($lap == '14') {
-            $val              = collect($data);
+            $val = collect($data);
             $pendidikanSedang = collect(PendidikanSedangEnum::all());
 
             $data = $pendidikanSedang->map(static function ($item, $key) use ($val) {
                 $valItem = $val->where('id', $key)->first() ?? ['jumlah' => '0', 'laki' => '0', 'perempuan' => '0', 'persen' => '0%', 'persen1' => '0%', 'persen2' => '0%'];
 
                 return [
-                    'id'        => (string) $key,
-                    'nama'      => $item,
-                    'jumlah'    => $valItem['jumlah'],
-                    'laki'      => $valItem['laki'],
+                    'id' => (string) $key,
+                    'nama' => $item,
+                    'jumlah' => $valItem['jumlah'],
+                    'laki' => $valItem['laki'],
                     'perempuan' => $valItem['perempuan'],
-                    'no'        => $key,
-                    'persen'    => $valItem['persen'],
-                    'persen1'   => $valItem['persen1'],
-                    'persen2'   => $valItem['persen2'],
+                    'no' => $key,
+                    'persen' => $valItem['persen'],
+                    'persen1' => $valItem['persen1'],
+                    'persen2' => $valItem['persen2'],
                 ];
             })
                 ->merge($val->slice(-3))
@@ -97,7 +100,7 @@ class LaporanPenduduk
 
         // Hitung semua presentase
         for ($i = 0; $i < $counter; $i++) {
-            $data[$i]['persen']  = persen2($data[$i]['jumlah'], $semua['jumlah']);
+            $data[$i]['persen'] = persen2($data[$i]['jumlah'], $semua['jumlah']);
             $data[$i]['persen1'] = persen2($data[$i]['laki'], $semua['jumlah']);
             $data[$i]['persen2'] = persen2($data[$i]['perempuan'], $semua['jumlah']);
         }
@@ -109,12 +112,12 @@ class LaporanPenduduk
     {
         // Isi Total
         return [
-            'no'        => '',
-            'id'        => JUMLAH,
-            'nama'      => $nama,
-            'jumlah'    => $total['jumlah'],
+            'no' => '',
+            'id' => JUMLAH,
+            'nama' => $nama,
+            'jumlah' => $total['jumlah'],
             'perempuan' => $total['perempuan'],
-            'laki'      => $total['laki'],
+            'laki' => $total['laki'],
         ];
     }
 
@@ -122,12 +125,12 @@ class LaporanPenduduk
     {
         // Isi data jml belum mengisi
         $baris_belum = [
-            'no'        => '',
-            'id'        => BELUM_MENGISI,
-            'nama'      => $nama,
-            'jumlah'    => $semua['jumlah'] - $total['jumlah'],
+            'no' => '',
+            'id' => BELUM_MENGISI,
+            'nama' => $nama,
+            'jumlah' => $semua['jumlah'] - $total['jumlah'],
             'perempuan' => $semua['perempuan'] - $total['perempuan'],
-            'laki'      => $semua['laki'] - $total['laki'],
+            'laki' => $semua['laki'] - $total['laki'],
         ];
         if (isset($total['jumlah_nonaktif'])) {
             $baris_belum['jumlah'] += $total['jumlah_nonaktif'];
@@ -140,7 +143,7 @@ class LaporanPenduduk
 
     protected function get_data_jml()
     {
-        $lap          = $this->lap;
+        $lap = $this->lap;
         $status_dasar = '1';
 
         //Siapkan data baris rekaps
@@ -160,7 +163,7 @@ class LaporanPenduduk
                 $semua = $query->where('b.status_kawin', '!=', 1);
             } elseif ($lap == 'akta-kematian') {
                 $status_dasar = '2';
-                $semua        = $this->data_jml_semua_penduduk($status_dasar);
+                $semua = $this->data_jml_semua_penduduk($status_dasar);
             } else {
                 $semua = $query;
             }
@@ -174,8 +177,8 @@ class LaporanPenduduk
     protected function data_jml_semua_keluarga()
     {
         $dusun = $this->filter['dusun'];
-        $rw    = $this->filter['rw'];
-        $rt    = $this->filter['rt'];
+        $rw = $this->filter['rw'];
+        $rt = $this->filter['rt'];
 
         return DB::table('keluarga_aktif as k')
             ->selectRaw('COUNT(k.id) as jumlah')
@@ -201,8 +204,8 @@ class LaporanPenduduk
     protected function data_jml_semua_rtm()
     {
         $dusun = $this->filter['dusun'];
-        $rw    = $this->filter['rw'];
-        $rt    = $this->filter['rt'];
+        $rw = $this->filter['rw'];
+        $rt = $this->filter['rt'];
 
         return DB::table('tweb_rtm as r')
             ->selectRaw('COUNT(r.id) as jumlah')
@@ -230,10 +233,10 @@ class LaporanPenduduk
     {
         $semua = (array) $semua;
         // Hitung persentase
-        $semua['no']      = '';
-        $semua['id']      = TOTAL;
-        $semua['nama']    = 'TOTAL';
-        $semua['persen']  = persen2(($semua['laki'] + $semua['perempuan']), $semua['jumlah']);
+        $semua['no'] = '';
+        $semua['id'] = TOTAL;
+        $semua['nama'] = 'TOTAL';
+        $semua['persen'] = persen2(($semua['laki'] + $semua['perempuan']), $semua['jumlah']);
         $semua['persen1'] = persen2($semua['laki'], $semua['jumlah']);
         $semua['persen2'] = persen2($semua['perempuan'], $semua['jumlah']);
 
@@ -243,7 +246,7 @@ class LaporanPenduduk
     protected function data_jml_semua_penduduk($status_dasar = '1')
     {
         $idCluster = $this->filter['idCluster'];
-        $query     = DB::table('tweb_penduduk as b')
+        $query = DB::table('tweb_penduduk as b')
             ->selectRaw('COUNT(b.id) as jumlah')
             ->selectRaw('COUNT(CASE WHEN b.sex = 1 THEN b.id END) as laki')
             ->selectRaw('COUNT(CASE WHEN b.sex = 2 THEN b.id END) as perempuan')
@@ -258,10 +261,10 @@ class LaporanPenduduk
 
     protected function hitung_total(&$data)
     {
-        $total['no']        = '';
-        $total['id']        = TOTAL;
-        $total['jumlah']    = 0;
-        $total['laki']      = 0;
+        $total['no'] = '';
+        $total['id'] = TOTAL;
+        $total['jumlah'] = 0;
+        $total['laki'] = 0;
         $total['perempuan'] = 0;
 
         $data = collect($data)->map(static function ($item) use (&$total) {
@@ -304,13 +307,13 @@ class LaporanPenduduk
 
     private function select_jml(string $where, string $status_dasar = '1')
     {
-        $str_jml_penduduk  = $this->str_jml_penduduk($where, '', $status_dasar);
-        $str_jml_laki      = $this->str_jml_penduduk($where, '1', $status_dasar);
+        $str_jml_penduduk = $this->str_jml_penduduk($where, '', $status_dasar);
+        $str_jml_laki = $this->str_jml_penduduk($where, '1', $status_dasar);
         $str_jml_perempuan = $this->str_jml_penduduk($where, '2', $status_dasar);
 
         return [
-            'str_jml_penduduk'  => $str_jml_penduduk,
-            'str_jml_laki'      => $str_jml_laki,
+            'str_jml_penduduk' => $str_jml_penduduk,
+            'str_jml_laki' => $str_jml_laki,
             'str_jml_perempuan' => $str_jml_perempuan,
         ];
     }
@@ -346,24 +349,23 @@ class LaporanPenduduk
 
         // Bagian Penduduk
         $statistik_penduduk = [
-            '0'           => ['id_referensi' => 'pendidikan_kk_id', 'tabel_referensi' => 'tweb_penduduk_pendidikan_kk'],
-            '1'           => ['id_referensi' => 'pekerjaan_id', 'tabel_referensi' => 'tweb_penduduk_pekerjaan'],
-            '2'           => ['id_referensi' => 'status_kawin', 'tabel_referensi' => 'tweb_penduduk_kawin'],
-            '3'           => ['id_referensi' => 'agama_id', 'tabel_referensi' => 'tweb_penduduk_agama'],
-            '4'           => ['id_referensi' => 'sex', 'tabel_referensi' => 'tweb_penduduk_sex'],
+            '0' => ['id_referensi' => 'pendidikan_kk_id', 'tabel_referensi' => 'tweb_penduduk_pendidikan_kk'],
+            '1' => ['id_referensi' => 'pekerjaan_id', 'tabel_referensi' => 'tweb_penduduk_pekerjaan'],
+            '2' => ['id_referensi' => 'status_kawin', 'tabel_referensi' => 'tweb_penduduk_kawin'],
+            '3' => ['id_referensi' => 'agama_id', 'tabel_referensi' => 'tweb_penduduk_agama'],
+            '4' => ['id_referensi' => 'sex', 'tabel_referensi' => 'tweb_penduduk_sex'],
             'hubungan_kk' => ['id_referensi' => 'kk_level', 'tabel_referensi' => 'tweb_penduduk_hubungan'],
-            '5'           => ['id_referensi' => 'warganegara_id', 'tabel_referensi' => 'tweb_penduduk_warganegara'],
-            '6'           => ['id_referensi' => 'status', 'tabel_referensi' => 'tweb_penduduk_status'],
-            '7'           => ['id_referensi' => 'golongan_darah_id', 'tabel_referensi' => 'tweb_golongan_darah'],
-            '9'           => ['id_referensi' => 'cacat_id', 'tabel_referensi' => 'tweb_cacat'],
-            '10'          => ['id_referensi' => 'sakit_menahun_id', 'tabel_referensi' => 'tweb_sakit_menahun'],
+            '5' => ['id_referensi' => 'warganegara_id', 'tabel_referensi' => 'tweb_penduduk_warganegara'],
+            '6' => ['id_referensi' => 'status', 'tabel_referensi' => 'tweb_penduduk_status'],
+            '7' => ['id_referensi' => 'golongan_darah_id', 'tabel_referensi' => 'tweb_golongan_darah'],
+            '9' => ['id_referensi' => 'cacat_id', 'tabel_referensi' => 'tweb_cacat'],
+            '10' => ['id_referensi' => 'sakit_menahun_id', 'tabel_referensi' => 'tweb_sakit_menahun'],
             // '14'          => ['id_referensi' => 'pendidikan_sedang_id', 'tabel_referensi' => 'tweb_penduduk_pendidikan'],
             '16' => ['id_referensi' => 'cara_kb_id', 'tabel_referensi' => 'tweb_cara_kb'],
             '19' => ['id_referensi' => 'id_asuransi', 'tabel_referensi' => 'tweb_penduduk_asuransi'],
         ];
 
         switch ("{$lap}") {
-
             case 'hamil':
                 // Kehamilan
                 $data = $this->select_jml_penduduk_per_kategori('hamil', 'ref_penduduk_hamil');
@@ -374,13 +376,13 @@ class LaporanPenduduk
             case '13':
                 // Umur rentang
                 $where = "(DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=u.dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= u.sampai";
-                $jml   = $this->select_jml($where);
+                $jml = $this->select_jml($where);
 
                 return DB::table('tweb_penduduk_umur as u')
                     ->select('u.*')
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_penduduk'] . ') as jumlah'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_laki'] . ') as laki'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_perempuan'] . ') as perempuan'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_penduduk'].') as jumlah'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_laki'].') as laki'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_perempuan'].') as perempuan'))
                     ->where('u.status', '1')
                     // kondisi param datatable
                     ->when($this->paramCetak, static function ($query, $param) {
@@ -407,14 +409,14 @@ class LaporanPenduduk
             case 'akta-kematian':
                 // Akta Kematian
                 $where = "(DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=u.dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= u.sampai AND l.akta_mati IS NOT NULL ";
-                $jml   = $this->select_jml($where, '2');
+                $jml = $this->select_jml($where, '2');
 
                 return DB::table('tweb_penduduk_umur as u')
                     ->select('u.*')
                     ->selectRaw("CONCAT('UMUR ', u.dari, ' S/D ', u.sampai, ' TAHUN') as nama")
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_penduduk'] . ') as jumlah'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_laki'] . ') as laki'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_perempuan'] . ') as perempuan'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_penduduk'].') as jumlah'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_laki'].') as laki'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_perempuan'].') as perempuan'))
                     ->where('u.status', '1')
                 // kondisi param datatable
                     ->when($this->paramCetak, static function ($query, $param) {
@@ -459,7 +461,7 @@ class LaporanPenduduk
                     (SELECT COUNT(kartu_nik) FROM program_peserta WHERE program_id = u.id AND config_id = u.config_id) AS jumlah,
                     (SELECT COUNT(k.kartu_nik) FROM program_peserta k INNER JOIN tweb_penduduk p ON k.kartu_nik=p.nik WHERE program_id = u.id AND p.sex = 1 AND config_id = u.config_id) AS laki,
                     (SELECT COUNT(k.kartu_nik) FROM program_peserta k INNER JOIN tweb_penduduk p ON k.kartu_nik=p.nik WHERE program_id = u.id AND p.sex = 2 AND config_id = u.config_id) AS perempuan
-                    FROM program u WHERE (u.config_id = ' . identitas('id') . ' OR u.config_id IS NULL)';
+                    FROM program u WHERE (u.config_id = '.identitas('id').' OR u.config_id IS NULL)';
                 break;
 
                 // PENDUDUK
@@ -483,13 +485,13 @@ class LaporanPenduduk
             case 'kia':
                 // Kepemilikan kia
                 $where = "((DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(tanggallahir)), '%Y')+0)<=17) AND u.status_rekam = status_rekam AND b.ktp_el = '3'";
-                $jml   = $this->select_jml($where);
+                $jml = $this->select_jml($where);
 
                 return DB::table('tweb_status_ktp as u')
                     ->select('u.*')
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_penduduk'] . ') as jumlah'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_laki'] . ') as laki'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_perempuan'] . ') as perempuan'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_penduduk'].') as jumlah'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_laki'].') as laki'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_perempuan'].') as perempuan'))
                     ->get();
                 break;
 
@@ -549,15 +551,15 @@ class LaporanPenduduk
             case '15':
                 // Umur kategori
                 $where = "(DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=u.dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= u.sampai";
-                $jml   = $this->select_jml($where);
+                $jml = $this->select_jml($where);
 
                 return DB::table('tweb_penduduk_umur as u')
                     ->select('u.*')
                     // ->selectRaw("CONCAT(u.nama, (', u.dari, ' - ', u.sampai, ')') as nama")
                     ->selectRaw("CONCAT(u.nama, ' (', u.dari, ' - ', u.sampai, ')') as nama")
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_penduduk'] . ') as jumlah'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_laki'] . ') as laki'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_perempuan'] . ') as perempuan'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_penduduk'].') as jumlah'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_laki'].') as laki'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_perempuan'].') as perempuan'))
                     ->where('u.status', '0')
                     // kondisi param datatable
                     ->when($this->paramCetak, static function ($query, $param) {
@@ -570,14 +572,14 @@ class LaporanPenduduk
             case '17':
                 // Akta kelahiran
                 $where = "(DATE_FORMAT(FROM_DAYS(TO_DAYS( NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0)>=u.dari AND (DATE_FORMAT(FROM_DAYS( TO_DAYS(NOW()) - TO_DAYS(tanggallahir)) , '%Y')+0) <= u.sampai AND akta_lahir <> '' ";
-                $jml   = $this->select_jml($where);
+                $jml = $this->select_jml($where);
 
                 return DB::table('tweb_penduduk_umur as u')
                     ->select('u.*')
                     ->selectRaw("CONCAT('UMUR ', u.dari, ' S/D ', u.sampai, ' TAHUN') as nama")
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_penduduk'] . ') as jumlah'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_laki'] . ') as laki'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_perempuan'] . ') as perempuan'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_penduduk'].') as jumlah'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_laki'].') as laki'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_perempuan'].') as perempuan'))
                     ->where('u.status', '1')
                 // kondisi param datatable
                     ->when($this->paramCetak, static function ($query, $param) {
@@ -595,9 +597,9 @@ class LaporanPenduduk
 
                 return DB::table('tweb_status_ktp as u')
                     ->select('u.*')
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_penduduk'] . ') as jumlah'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_laki'] . ') as laki'))
-                    ->selectRaw(DB::raw('(' . $jml['str_jml_perempuan'] . ') as perempuan'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_penduduk'].') as jumlah'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_laki'].') as laki'))
+                    ->selectRaw(DB::raw('('.$jml['str_jml_perempuan'].') as perempuan'))
                 // kondisi param datatable
                     ->when($this->paramCetak, static function ($query, $param) {
                         $query->take($param['length'])->skip($param['start']);
@@ -615,9 +617,9 @@ class LaporanPenduduk
     public static function menuLabel()
     {
         return [
-            'Penduduk'        => ['data' => StatistikPendudukEnum::allKeyLabel(), 'kategori' => 'penduduk'],
-            'Keluarga'        => ['data' => StatistikKeluargaEnum::allKeyLabel(), 'kategori' => 'keluarga'],
-            'RTM'             => ['data' => StatistikRtmEnum::allKeyLabel(), 'kategori' => 'penduduk'],
+            'Penduduk' => ['data' => StatistikPendudukEnum::allKeyLabel(), 'kategori' => 'penduduk'],
+            'Keluarga' => ['data' => StatistikKeluargaEnum::allKeyLabel(), 'kategori' => 'keluarga'],
+            'RTM' => ['data' => StatistikRtmEnum::allKeyLabel(), 'kategori' => 'penduduk'],
             'Program Bantuan' => ['data' => StatistikJenisBantuanEnum::allKeyLabel() + Bantuan::pluck('nama', 'id')->toArray(), 'kategori' => 'bantuan'],
         ];
     }

@@ -201,9 +201,11 @@ Route::controller(StatistikController::class)
         });
         Route::get('/bantuan', 'bantuan');
         Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
+        Route::get('/get-list-coordinate', 'getListCoordinate');
         Route::get('/get-list-program', 'getListProgram');
         Route::get('/get-list-tahun', 'getListTahun');
-        Route::get('/get-list-kecamatan', 'getListKecamatan');
+        Route::get('/get-list-kabupaten', 'getListKabupaten');
+        Route::get('/get-list-kecamatan/{id}', 'getListKecamatan');
         Route::get('/get-list-desa/{id}', 'getListDesa');
         Route::get('/get-list-penerima', 'getListPenerimaBantuan');
     });

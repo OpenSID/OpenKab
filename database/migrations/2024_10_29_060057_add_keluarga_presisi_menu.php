@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -12,9 +12,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('menus', function ($table) {
-            $table->string('icon')->nullable()->after('name');
-        });
+        // Insert data baru tanpa tag <i> di kolom name
+        DB::table('menus')->where('name', 'Statistik Keluarga')->update(['url' => '/presisi/keluarga']);
     }
 
     /**
@@ -24,8 +23,5 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('menus', function ($table) {
-            $table->dropColumn('icon');
-        });
     }
 };

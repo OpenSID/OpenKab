@@ -163,14 +163,23 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
 
 Route::get('/module/rtm/{id}', [PresisiController::class, 'rtm'])->name('presisi.rtm');
 Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
+Route::get('/module/bantuan/{id}', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
     Route::view('/sosial',   'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
+
     Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
     Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
+    Route::get('/keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+    Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+
     Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/kesehatan/{kuartal}/{tahun}/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+    Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
 });

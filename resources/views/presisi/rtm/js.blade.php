@@ -7,7 +7,7 @@
 
             @include('presisi.rtm.filter-wilayah.kabupaten')
             @include('presisi.rtm.filter-wilayah.kecamatan')
-            @include('presisi.rtm.filter-wilayah.button')
+            @include('presisi.rtm.filter-wilayah.desa')
             @include('presisi.rtm.filter-wilayah.button')
 
             $('#nav-statistik li a:first').addClass('active');

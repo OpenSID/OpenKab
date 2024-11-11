@@ -77,13 +77,38 @@ class Umur extends BaseModel
             $tanggalPeristiwa = Carbon::parse(implode('-', $periode))->endOfMonth()->format('Y-m-d');
         }
         $logPenduduk = LogPenduduk::select(['log_penduduk.id_pend'])->peristiwaTerakhir($tanggalPeristiwa, $configDesa)->tidakMati()->toBoundSql();
-        $queryPenduduk = Penduduk::selectRaw("config_id, sex, (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(tanggallahir)),'%Y') + 0) as umur")
-                ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
-                ->when($configDesa, function ($q) use ($configDesa) {
-                    return $q->where(['config_id' => $configDesa]);
-                })->when($type == 'akta', function ($q) {
-                    return $q->whereNotNull('akta_lahir');
-                })->toBoundSql();
+        // $queryPenduduk = Penduduk::selectRaw("config_id, sex, (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(tanggallahir)),'%Y') + 0) as umur")
+        //         ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
+        //         ->when($configDesa, function ($q) use ($configDesa) {
+        //             return $q->where(['config_id' => $configDesa]);
+        //         })->when($type == 'akta', function ($q) {
+        //             return $q->whereNotNull('akta_lahir');
+        //         })->toBoundSql();
+        $queryPenduduk = Penduduk::selectRaw("
+        config_id, 
+        sex, 
+        (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(tanggallahir)), '%Y') + 0) as umur
+        ")
+        ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
+        ->join('config', 'config.id', '=', 'tweb_penduduk.config_id', 'left') // Menambahkan join ke tabel config
+        ->when($configDesa, function ($q) use ($configDesa) {
+            return $q->where(['config_id' => $configDesa]);
+        })
+        ->when($type == 'akta', function ($q) {
+            return $q->whereNotNull('akta_lahir');
+        })
+        // Menambahkan filter berdasarkan kabupaten, kecamatan, dan desa
+        ->when(isset(request('filter')['kabupaten']), function ($q) {
+            return $q->whereRaw('config.kode_kabupaten = ' . request('filter')['kabupaten']);
+        })
+        ->when(isset(request('filter')['kecamatan']), function ($q) {
+            return $q->whereRaw('config.kode_kecamatan = ' . request('filter')['kecamatan']);
+        })
+        ->when(isset(request('filter')['desa']), function ($q) {
+            return $q->whereRaw('config.kode_desa = ' . request('filter')['desa']);
+        })
+        ->toBoundSql();
+
         $subQuery = "select  tpu.id, count(tp.umur) as total, sex  from ($queryPenduduk) as tp
             join tweb_penduduk_umur tpu on tpu.config_id = $defaultConfigId and (tp.umur BETWEEN tpu.dari and tpu.sampai) and tpu.status = ".$this->getKlasifikasi().'
             group by tpu.id, tp.sex';

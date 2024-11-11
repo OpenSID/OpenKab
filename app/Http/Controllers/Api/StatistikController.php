@@ -177,6 +177,10 @@ class StatistikController extends Controller
   
     public function getListCoordinate(){
             $coordinate = Config::selectRaw('config.kode_propinsi, config.nama_propinsi, config.kode_kabupaten, config.nama_kabupaten,config.kode_kecamatan, config.nama_kecamatan,config.kode_desa, config.nama_desa, config.lat, config.lng, config.kode_pos');
+            
+            if (!empty($this->kabupaten)){
+                $coordinate = $coordinate->where('config.kode_kabupaten','=',$this->kabupaten);
+            }
             if(!empty($this->kecamatan)){
                 $coordinate = $coordinate->where('config.kode_kecamatan','=',$this->kecamatan);
             }

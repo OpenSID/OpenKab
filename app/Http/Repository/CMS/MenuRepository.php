@@ -43,17 +43,17 @@ class MenuRepository extends BaseRepository
         return json_encode($menus);
     }
 
-    public function tree($menu_type): Collection|null
+    public function tree(): ?Collection
     {
         return $this->model->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon")
             ->whereNull('parent_id')
             ->with(['children' => function ($q) {
                 $q->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon");
             }])
-            ->orderBy('sequence');
-
-        return  $menus->get();
+            ->orderBy('sequence')
+            ->get() ?? collect();
     }
+
 
     private function removeEmptyChildren(&$array)
     {

@@ -23,7 +23,7 @@
                         <table>
                             <tr>
                                 <td>
-                                    <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right wh-full" style="display:none;">HAPUS FILTER</button>
+                                    <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right wh-full" @if(Route::currentRouteName() == 'presisi.kesehatan') style="display:none;" @endif>HAPUS FILTER</button>
                                 </td>
                                 <td>
                                     <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>

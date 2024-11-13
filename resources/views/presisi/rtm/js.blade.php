@@ -20,34 +20,34 @@
                 table.ajax.reload()
             });
 
-            $('#btn-tabel').click(function() {
-                $(this).prop('disabled', true);
-                $('#btn-grafik').prop('disabled', false);
-                $('#btn-pie').prop('disabled', false);
+            // $('#btn-tabel').click(function() {
+            //     $(this).prop('disabled', true);
+            //     $('#btn-grafik').prop('disabled', false);
+            //     $('#btn-pie').prop('disabled', false);
 
-                $('#grafik').hide();
-                $('#pie').hide()
-                $('#statistik').show()
-            })
+            //     $('#grafik').hide();
+            //     $('#pie').hide()
+            //     $('#statistik').show()
+            // })
 
             $('#btn-grafik').click(function() {
                 $(this).prop('disabled', true);
-                $('#btn-tabel').prop('disabled', false);
+                // $('#btn-tabel').prop('disabled', false);
                 $('#btn-pie').prop('disabled', false);
 
                 $('#grafik').show();
                 $('#pie').hide()
-                $('#statistik').hide()
+                // $('#statistik').hide()
             })
 
             $('#btn-pie').click(function() {
                 $(this).prop('disabled', true);
-                $('#btn-tabel').prop('disabled', false);
+                // $('#btn-tabel').prop('disabled', false);
                 $('#btn-grafik').prop('disabled', false);
 
                 $('#grafik').hide();
                 $('#pie').show()
-                $('#statistik').hide()
+                // $('#statistik').hide()
             })
 
 

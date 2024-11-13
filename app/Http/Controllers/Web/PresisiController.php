@@ -43,8 +43,27 @@ class PresisiController extends Controller
         return view('presisi.kependudukan.index', compact('statistik'));
     }
 
-    public function kesehatan($kuartal = null, $tahun = null, $id = null)
+    public function kesehatan()
     {
+        $kuartal = request('kuartal') ?? null;
+        $tahun = request('tahun') ?? null;
+        $posyandu = request('posyandu') ?? null;
+        $kabupaten = request('kabupaten') ?? null;
+        $kecamatan = request('kecamatan') ?? null;
+        $desa = request('desa') ?? null;
+        $id = request('id') ?? null;
+// dd($kuartal, $tahun, $id, $kabupaten, $kecamatan, $desa);
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $keluargaSummary = 0;
+        $categoriesItems = [
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
+
         if ($kuartal < 1 || $kuartal > 4) {
             $kuartal = null;
         }
@@ -66,12 +85,12 @@ class PresisiController extends Controller
             $tahun = date('Y');
         }
 
-        $data = $this->sumber_data($kuartal, $tahun, $id);
+        $data = $this->sumber_data($kuartal, $tahun, $id, $kabupaten, $kecamatan, $desa);
 
-        return view('presisi.kesehatan.index', compact('data'));
+        return view('presisi.kesehatan.index', compact('data', 'categoriesItems', 'kuartal', 'tahun', 'id', 'kabupaten', 'kecamatan', 'desa'));
     }
 
-    private function sumber_data($kuartal = null, $tahun = null, $id = null)
+    private function sumber_data($kuartal = null, $tahun = null, $id = null, $kabupaten = null, $kecamatan = null, $desa = null)
     {
         $rekap = new RekapService();
 
@@ -140,8 +159,8 @@ class PresisiController extends Controller
             }
         }
 
-        $ibu_hamil = $rekap->get_data_ibu_hamil($kuartal, $tahun, $id);
-        $bulanan_anak = $rekap->get_data_bulanan_anak($kuartal, $tahun, $id);
+        $ibu_hamil = $rekap->get_data_ibu_hamil($kuartal, $tahun, $id, $kabupaten, $kecamatan, $desa);
+        $bulanan_anak = $rekap->get_data_bulanan_anak($kuartal, $tahun, $id, $kabupaten, $kecamatan, $desa);
 
         //HITUNG KEK ATAU RISTI
         $jumlahKekRisti = 0;
@@ -310,7 +329,7 @@ class PresisiController extends Controller
         $data['kuartal'] = $kuartal;
         $data['_tahun'] = $tahun;
         $data['aktif'] = 'scorcard';
-        $stunting = new StuntingService(['idPosyandu' => $id, 'kuartal' => $kuartal, 'tahun' => $tahun]);
+        $stunting = new StuntingService(['idPosyandu' => $id, 'kuartal' => $kuartal, 'tahun' => $tahun, 'kabupaten' => $kabupaten, 'kecamatan' => $kecamatan, 'desa' => $desa]);
         $data['chartStuntingUmurData'] = $stunting->chartStuntingUmurData();
         $data['chartStuntingPosyanduData'] = $stunting->chartPosyanduData();
 

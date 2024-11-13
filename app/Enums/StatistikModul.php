@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Models\Anak;
 use App\Models\Bantuan;
+use App\Models\IbuHamil;
 use App\Models\Keluarga;
 use BenSampo\Enum\Enum;
 use App\Models\Penduduk;
@@ -35,5 +37,12 @@ final class StatistikModul extends Enum
     public static function getBantuan(): array
     {
         return Bantuan::KATEGORI_STATISTIK;
+    }
+
+    public static function getKesehatan(): array
+    {
+        return [
+            'kesehatan' => 'E-Stunting',
+        ];
     }
 }

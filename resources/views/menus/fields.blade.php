@@ -49,6 +49,11 @@
         <select name="sourcelistmodul" id="sourcelistmodul" class="form-control">
             <option value="">Pilih URL</option>
             <option value="/module/org" data-nama="Bagan Organisasi">Bagan Organisasi</option>
+            <optgroup label="Statistik Kesehatan">
+                @foreach (\App\Enums\StatistikModul::getKesehatan() as $key => $value)
+                <option value="/presisi/kesehatan" data-nama="{{ $value }}">{{ $value }}</option>
+                @endforeach
+            </optgroup>
             <optgroup label="Statistik Penduduk">
                 @foreach (\App\Enums\StatistikModul::getPenduduk() as $key => $value)
                 <option value="/module/statistik/penduduk/{{ $key }}" data-nama="{{ $value }}">{{ $value }}</option>

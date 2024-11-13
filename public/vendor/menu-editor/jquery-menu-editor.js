@@ -266,7 +266,7 @@ function MenuEditor(e, s) {
             e[$(this).attr("name")] = $(this).val()
         }));
 
-        var s = u(),
+        var s = u(e),
             l = $("<span>").addClass("mr-auto txt").text(e.text),
             m = $("<span>").addClass("mr-2 href").text(e.href),
             n = $("<i>").addClass("pt-1").addClass(e.icon),

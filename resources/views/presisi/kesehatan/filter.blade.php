@@ -3,7 +3,7 @@
         <select name="kuartal" id="kuartal" required class="form-control input-sm" title="Pilih salah satu">
             <option value="null">Kuartal</option>    
             @foreach (kuartal2() as $item)
-                <option value="{{ $item['ke'] }}" {{ $item['ke'] == $data['kuartal'] ? 'selected' : '' }}>Kuartal ke {{ $item['ke'] }}
+                <option value="{{ $item['ke'] }}" {{ $item['ke'] == $kuartalget ? 'selected' : '' }}>Kuartal ke {{ $item['ke'] }}
                     ({{ $item['bulan'] }})
                 </option>
             @endforeach

@@ -88,6 +88,7 @@ class StuntingService
             ->selectRaw('sum(case when umur_bulan between 6 and 11 then 1 else 0 end) as range_2')
             ->selectRaw('sum(case when umur_bulan between 12 and 23 then 1 else 0 end) as range_3')
             ->stuntingPendek()
+            ->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
             // ->whereMonth('created_at', '>=',$this->batasBulanBawah)
             // ->whereMonth('created_at', '<=',$this->batasBulanAtas)
             // ->whereYear('created_at', $this->tahun)
@@ -95,6 +96,19 @@ class StuntingService
 
         if ($this->idPosyandu) {
             $stuntingObj->where('posyandu_id', $this->idPosyandu);
+        }
+
+        // Filter wilayah berdasarkan kabupaten, kecamatan, desa
+        if ($this->kabupaten != 'null' AND $this->kabupaten != null) {
+            $stuntingObj->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
+        }
+
+        if ($this->kecamatan != 'null' AND $this->kecamatan != null) {
+            $stuntingObj->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
+        }
+
+        if ($this->desa != 'null' AND $this->desa != null) {
+            $stuntingObj->whereRaw('config.kode_desa = ' . $this->desa);
         }
         $stunting = $stuntingObj->get();
 
@@ -127,7 +141,19 @@ class StuntingService
 
     public function chartPosyanduData()
     {
-        $giziAnakObj = Anak::selectRaw('status_gizi, posyandu_id, count(*) as total');
+        $giziAnakObj = Anak::selectRaw('status_gizi, posyandu_id, count(*) as total')
+                        ->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left');
+        if ($this->kabupaten != 'null' AND $this->kabupaten != null) {
+            $giziAnakObj->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
+        }
+
+        if ($this->kecamatan != 'null' AND $this->kecamatan != null) {
+            $giziAnakObj->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
+        }
+
+        if ($this->desa != 'null' AND $this->desa != null) {
+            $giziAnakObj->whereRaw('config.kode_desa = ' . $this->desa);
+        }
         if ($this->tahunawal == null) {
             $giziAnakObj->whereMonth('created_at', '>=', $this->batasBulanBawah)
             ->whereMonth('created_at', '<=', $this->batasBulanAtas)

@@ -58,7 +58,54 @@ class PendudukRepository
             ])
             ->jsonPaginate();
     }
+    public function listPendudukKesehatan()
+    {
+        return QueryBuilder::for(Penduduk::select([
+            'id',
+            'nik',
+            'nama',
+            'golongan_darah_id', 
+            'cacat_id', 
+            'sakit_menahun_id', 
+            'cara_kb_id', 
+            'hamil', 
+            'id_asuransi',
+            'no_asuransi'
+        ]))  
+        ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
+        ->allowedFilters([  // Tentukan filter yang diizinkan
+            AllowedFilter::exact('id'),
+            AllowedFilter::exact('sex'),
+            AllowedFilter::exact('status'),
+            AllowedFilter::exact('status_dasar'),
+            AllowedFilter::exact('keluarga.no_kk'),
+            AllowedFilter::exact('clusterDesa.dusun'),
+            AllowedFilter::exact('clusterDesa.rw'),
+            AllowedFilter::exact('clusterDesa.rt'),
+            AllowedFilter::callback('search', function ($query, $value) {
+                $query->where(function ($query) use ($value) {
+                    $query->where('nama', 'like', "%{$value}%")
+                        ->orWhere('nik', 'like', "%{$value}%")
+                        ->orWhere('tag_id_card', 'like', "%{$value}%");
+                });
+            }),
+        ])
+        ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
+            'nik',
+            'nama',
+            'umur',
+            'created_at',
+        ])
+        ->jsonPaginate();  // Melakukan pagination dan mengembalikan data dalam format JSON
 
+        // Opsional: jika ingin menambahkan `getSpecificAppends()` ke data, bisa dilakukan setelah query selesai
+        // $data->each(function ($item) {
+        //     $item->getSpecificAppends(); // Mengatur append yang diinginkan
+        // });
+
+        // return response()->json(['data' => $data]);
+    }
+    
     public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         return collect(match ($kategori) {

@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
 use App\Http\Controllers\Api\WilayahController;
-use App\Http\Controllers\Api\KesehatanController;
+use App\Http\Controllers\Api\DataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -212,10 +212,17 @@ Route::controller(StatistikController::class)
         Route::get('/get-list-penerima', 'getListPenerimaBantuan');
     });
 
-// Bantuan
+// Data
+Route::controller(DataController::class)
+->prefix('data')->group(function () {
+    Route::get('/kategori-statistik', 'kategoriStatistik');
+    Route::get('/kesehatan', 'kesehatan');
+    Route::get('/jaminan-kesehatan', 'jaminan_kesehatan');
+});
+
 // Data utama website
 Route::get('data-website', WebsiteController::class);
 Route::get('data-summary', SummaryController::class);
-Route::get('data-kesehatan', KesehatanController::class);
+
 // Desa teraktif
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);

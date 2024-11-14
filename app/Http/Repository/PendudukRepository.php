@@ -96,14 +96,36 @@ class PendudukRepository
             'umur',
             'created_at',
         ])
-        ->jsonPaginate();  // Melakukan pagination dan mengembalikan data dalam format JSON
+        ->jsonPaginate();  
+    }
 
-        // Opsional: jika ingin menambahkan `getSpecificAppends()` ke data, bisa dilakukan setelah query selesai
-        // $data->each(function ($item) {
-        //     $item->getSpecificAppends(); // Mengatur append yang diinginkan
-        // });
-
-        // return response()->json(['data' => $data]);
+    
+    public function listPendudukJaminanKesehatan()
+    {
+        return QueryBuilder::for(Penduduk::withRef()->filterWilayah()->select([
+            'id',
+            'nik',
+            'nama',
+            'id_asuransi',
+            'no_asuransi',
+            'bpjs_ketenagakerjaan', 
+            'cacat_id', 
+        ]))
+        ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
+        ->allowedFilters([  // Tentukan filter yang diizinkan
+            AllowedFilter::exact('id'),
+            AllowedFilter::callback('search', function ($query, $value) {
+                $query->where(function ($query) use ($value) {
+                    $query->where('nama', 'like', "%{$value}%")
+                        ->orWhere('nik', 'like', "%{$value}%");
+                });
+            }),
+        ])
+        ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
+            'nik',
+            'nama',
+        ])
+        ->jsonPaginate();  
     }
     
     public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object

@@ -83,7 +83,7 @@ class StatistikController extends Controller
     public function keluarga(KeluargaRepository $keluarga)
     {
         if ($this->kategori) {
-            return $this->fractal($this->statistik->getStatistik($keluarga->listStatistik($this->kategori)), new StatistikTransformer(), 'statistik-keluarga')->respond();
+            return $this->fractal($this->statistik->getStatistik($keluarga->listStatistik($this->kategori, $this->kabupaten, $this->kecamatan, $this->desa)), new StatistikTransformer(), 'statistik-keluarga')->respond();
         }
 
         return response()->json([
@@ -122,6 +122,7 @@ class StatistikController extends Controller
 
     public function bantuan(BantuanRepository $bantuan)
     {
+        set_time_limit(0);
         if ($this->kategori) {
             return $this->fractal($this->statistik->getStatistik($bantuan->listStatistik($this->kategori, $this->tahun, $this->kabupaten, $this->kecamatan, $this->desa)), new StatistikTransformer(), 'statistik-bantuan')->respond();
         }
@@ -180,6 +181,23 @@ class StatistikController extends Controller
 
         return null;
     }
+  
+    public function getListCoordinate(){
+            $coordinate = Config::selectRaw('config.kode_propinsi, config.nama_propinsi, config.kode_kabupaten, config.nama_kabupaten,config.kode_kecamatan, config.nama_kecamatan,config.kode_desa, config.nama_desa, config.lat, config.lng, config.kode_pos');
+            
+            if (!empty($this->kabupaten)){
+                $coordinate = $coordinate->where('config.kode_kabupaten','=',$this->kabupaten);
+            }
+            if(!empty($this->kecamatan)){
+                $coordinate = $coordinate->where('config.kode_kecamatan','=',$this->kecamatan);
+            }
+            if(!empty($this->desa)){
+                $coordinate = $coordinate->where('config.kode_desa','=',$this->desa);
+            }
+
+            $coordinate = $coordinate->distinct()->orderBy('config.nama_desa', 'ASC')->get();
+            return $coordinate->toJson();
+    }
 
     public function getListPenerimaBantuan()
     {
@@ -219,20 +237,5 @@ class StatistikController extends Controller
             'success' => false,
             'message' => 'Kategori tidak ditemukan',
         ], Response::HTTP_NOT_FOUND);
-    }
-
-    public function getListCoordinate()
-    {
-        $coordinate = Config::selectRaw('config.kode_propinsi, config.nama_propinsi, config.kode_kabupaten, config.nama_kabupaten,config.kode_kecamatan, config.nama_kecamatan,config.kode_desa, config.nama_desa, config.lat, config.lng, config.kode_pos');
-        if (! empty($this->kecamatan)) {
-            $coordinate = $coordinate->where('config.kode_kecamatan', '=', $this->kecamatan);
-        }
-        if (! empty($this->desa)) {
-            $coordinate = $coordinate->where('config.kode_desa', '=', $this->desa);
-        }
-
-        $coordinate = $coordinate->distinct()->orderBy('config.nama_desa', 'ASC')->get();
-
-        return $coordinate->toJson();
     }
 }

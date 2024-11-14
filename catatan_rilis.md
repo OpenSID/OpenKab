@@ -12,6 +12,7 @@ Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 8. [#387](https://github.com/OpenSID/OpenKab/issues/387) Penambahan statistik keluarga presisi.
 9. [#383](https://github.com/OpenSID/OpenKab/issues/383) Penambahan statistik bantuan berdasarkan pengaturan menu.
 10. [#382](https://github.com/OpenSID/OpenKab/issues/382) Penambahan statistik rtm dasbor presisi.
+11. [#400](https://github.com/OpenSID/OpenKab/issues/400) Penambahan filter peta, data wilayah.
 
 #### Perbaikan BUG
 

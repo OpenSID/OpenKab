@@ -215,7 +215,6 @@ Route::controller(StatistikController::class)
 // Data
 Route::controller(DataController::class)
 ->prefix('data')->group(function () {
-    Route::get('/kategori-statistik', 'kategoriStatistik');
     Route::get('/kesehatan', 'kesehatan');
     Route::get('/jaminan-kesehatan', 'jaminan_kesehatan');
 });

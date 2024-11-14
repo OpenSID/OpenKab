@@ -198,9 +198,4 @@ class PendudukController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-    public function kesehatan()
-    {
-        return $this->fractal($this->penduduk->listPendudukKesehatan(), new PendudukTransformer, 'penduduk')->respond();
-    }
 }

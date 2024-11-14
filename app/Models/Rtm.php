@@ -44,12 +44,24 @@ class Rtm extends BaseModel
 
     public function scopeCountStatistik($query)
     {
-        return $this->scopeConfigId($query)
+        $query = $this->scopeConfigId($query)
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala')
-            ->where('tweb_penduduk.status_dasar', 1)
-            ->groupBy('tweb_rtm.id');
+            ->join('config', 'config.id', '=', "tweb_penduduk.config_id", 'left')
+            ->where('tweb_penduduk.status_dasar', 1);
+        if (isset(request('filter')['kabupaten'])) {
+            $query->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
+        }
+        if (isset(request('filter')['kecamatan'])) {
+            $query->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
+        }
+        if (isset(request('filter')['desa'])) {
+            $query->whereRaw('config.kode_desa = '.request('filter')['desa']);
+        }
+        $query->groupBy('tweb_rtm.id');
+
+        return $query;
     }
 
     /**

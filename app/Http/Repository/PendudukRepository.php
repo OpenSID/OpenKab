@@ -71,7 +71,7 @@ class PendudukRepository
             'hamil', 
             'id_asuransi',
             'no_asuransi'
-        ]))  
+        ]))
         ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
         ->allowedFilters([  // Tentukan filter yang diizinkan
             AllowedFilter::exact('id'),

@@ -96,7 +96,7 @@ class MenuRepository extends BaseRepository
                 'icon' => $element['icon'],
                 'sequence' => $sequence,
                 'parent_id' => $parentId,
-                'is_show' => $element['is_show'],
+                'is_show' => isset($element['is_show']) ? $element['is_show'] : true,
             ];
             $model = parent::create($input);
             if (isset($element['children'])) {

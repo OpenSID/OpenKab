@@ -8,41 +8,42 @@
 
     <div class="row">
         <div class="col-md-12">
-            
             <div class="card rounded-0 border-0 shadow-none">
                 @include('presisi.summary')
             </div>
         </div>
-        @include('presisi.keluarga.filter-wilayah.view')
         
+        @include('presisi.rtm.filter-wilayah.view')
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        <div class="col-md-3 @if($id) d-none @endif" >
+                        <div class="col-md-3 @if($id) d-none @endif">
                             <div class="card card-primary rounded-0 elevation-0 border">
-                                <!-- <div class="card-header rounded-0">
-                                    <h3 class="card-title">Statistik Keluarga</h3>
+                                <div class="card-header rounded-0">
+                                    <h3 class="card-title">Statistik RTM</h3>
 
-                                </div> -->
-                                @include('presisi.keluarga.kategori')
+                                </div>
+                                @include('presisi.rtm.kategori')
 
 
                             </div>
                         </div>
                         <div class="@if($id) col-md-12 @else col-md-9 @endif">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
-                                @include('presisi.keluarga.tab')
+                            @include('presisi.rtm.tab')
 
                                 <div class="card-body p-0">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="chart" id="pie" style="height: 500px; display:none"></div><br><br>
-                                        </div>
-                                        <div class="col-md-12">
                                             <div class="chart" id="grafik" style="height: 500px;"></div>
                                         </div>
+                                        <div class="col-md-12">
+                                            <div class="chart" id="pie" style="height: 500px; display:none"></div>
+                                        </div>
                                     </div>
+
+                                    
 
                                     <div class="table-responsive mailbox-messages">
                                         <table class="table table-hover table-striped" id="statistik">
@@ -75,4 +76,4 @@
 
     </div>
 @endsection
-@include('presisi.keluarga.js')
+@include('presisi.rtm.js')

@@ -7,91 +7,24 @@
 
 <div class="row m-1">
     <div class="col-md-12">
-        
+
         <div class="card rounded-0 border-0 shadow-none">
             @include('presisi.summary')
             <div class="card-body">
-            <div id="map" style="height: 250px;"></div>
-            </div>            
-        </div>
-    </div>
-    
-    <div class="col-lg-3 col-md-6">
-        <div class="card p-3 bg-light-oren">
-            <table>
-                <tr>
-                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge1 mr-2 text-center"><i class="fas fa-bullseye"></i></h4></td>
-                    <td>
-                    <h5>
-                        <span id="summary-luas_wilayah">0</span> Ha
-                    </h5>
-                    </td>
-                </tr>
-                <tr>
-                    <td><p class="text-sm text-muted">Luas Wilayah</p></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="card p-3 bg-light-green">
-            <table>
-                <tr>
-                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge2 mr-2 text-center"><i class="fas fa-check-circle"></i></h4></td>
-                    <td><h5><span id="summary-luas_pertanian">0</span> Ha</h5></td>
-                </tr>
-                <tr>
-                    <td><p class="text-sm text-muted">Total Lahan Pertanian</p></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="card p-3 bg-light-purple">
-            <table>
-                <tr>
-                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge3 mr-2 text-center"><i class="fa-solid fa-tree"></i></h4></td>
-                    <td><h5><span id="summary-luas_perkebunan">0</span> Ha</h5></td>
-                </tr>
-                <tr>
-                    <td><p class="text-sm text-muted">Total Lahan Perkebunan</p></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="card p-3 bg-light-blue">
-            <table>
-                <tr>
-                    <td rowspan="2" width="24%"><h4 class="rounded-circle c-badge4 mr-2 text-center"><i class="fa-solid fa-location-dot"></i></h4></td>
-                    <td><h5><span id="summary-luas_hutan">0</span> Ha</h5></td>
-                </tr>
-                <tr>
-                    <td><p class="text-sm text-muted">Total Lahan Kehutanan</p></td>
-                </tr>
-            </table>
+                @include('presisi.wilayah.filter')
+                
+                @include('presisi.wilayah.peta')
+                
+            </div>
         </div>
     </div>
 
-    <div class="col-md-12">
-        <div class="card rounded-0 elevation-0">
-          <div class="card-header bg-white">Data Kelurahan /Desa</div>  
-          <div class="card-body">
-              <div class="table-responsive">
-                  <table class="table table-striped" id="summary-penduduk">
-                      <thead>
-                          <tr>
-                              <th class="padat">No</th>
-                              <th>Desa</th>
-                              <th>Kecamatan</th>
-                              <th class="padat">Jumlah Penduduk</th>
-                          </tr>
-                      </thead>
-                      <tbody></tbody>
-                  </table>
-              </div>          
-          </div>
-    </div>
+    @include('presisi.wilayah.data-wilayah')
+
+    @include('presisi.wilayah.data-desa')
+    
+
+    
 </div>
 
 @endsection
@@ -109,7 +42,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
+	}).addTo(map)
+
+    @include('layouts.presisi.peta.filter')
+    @include('layouts.presisi.peta.index')
+    @include('layouts.presisi.peta.style')
+    @include('layouts.presisi.wilayah.data')
+
 
     @include('layouts.presisi.peta.index')
     @include('layouts.presisi.peta.style')
@@ -144,8 +83,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const indexSearch = {'search' : {'luas_wilayah' : 1, 'luas_pertanian' : 1, 'luas_perkebunan' : 1, 'luas_hutan' : 1, 'luas_peternakan' : 1}}
     $.get('{{ url('api/v1/data-summary') }}', indexSearch, function(result){
         for(let i in result.data){
-            $(`#summary-${i}`).text(result.data[i])                        
-        }        
+            $(`#summary-${i}`).text(result.data[i])
+        }
     }, 'json')
 
 
@@ -165,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     return {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
-                        "filter[search]": row.search.value,                                            
+                        "filter[search]": row.search.value,
                     };
                 },
                 dataSrc: function(json) {
@@ -202,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 {
                     data: "attributes.nama_kecamatan",
                     name: "nama_kecamatan"
-                },                
+                },
                 {
                     data: "attributes.penduduk_count",
                     name: "penduduk_count",
@@ -244,5 +183,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     cb(start, end);
 });
 });
+
+
 </script>
 @endpush

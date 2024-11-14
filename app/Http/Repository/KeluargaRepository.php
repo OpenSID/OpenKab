@@ -33,10 +33,10 @@ class KeluargaRepository
         return Keluarga::where('no_kk', $no_kk)->get();
     }
 
-    public function listStatistik($kategori): array|object
+    public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         return collect(match ($kategori) {
-            'kelas-sosial' => $this->caseKelasSosial(),
+            'kelas-sosial' => $this->caseKelasSosial($kabupaten, $kecamatan, $desa),
             default => []
         })->toArray();
     }
@@ -75,11 +75,11 @@ class KeluargaRepository
         ];
     }
 
-    private function caseKelasSosial(): array|object
+    private function caseKelasSosial($kabupaten, $kecamatan, $desa): array|object
     {
         $configId = request('config_desa');
-        $kelas = KelasSosial::countStatistik($configId)->get();
-        $query = Keluarga::configId()->filters(request()->input('filter'), 'tgl_daftar')->countStatistik($configId)->get();
+        $kelas = KelasSosial::countStatistik($configId, $kabupaten, $kecamatan, $desa)->get();
+        $query = Keluarga::configId()->filters(request()->input('filter'), 'tgl_daftar')->countStatistik($configId, $kabupaten, $kecamatan, $desa)->get();
 
         return [
             'header' => $kelas,

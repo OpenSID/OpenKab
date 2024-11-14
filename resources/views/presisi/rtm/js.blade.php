@@ -3,12 +3,12 @@
         $(function() {
             var statistik = [];
             var data_grafik = [];
-            let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
-            
-            @include('presisi.keluarga.filter-wilayah.kabupaten')
-            @include('presisi.keluarga.filter-wilayah.kecamatan')
-            @include('presisi.keluarga.filter-wilayah.desa')
-            @include('presisi.keluarga.filter-wilayah.button')
+            let exclude_chart = []
+
+            @include('presisi.rtm.filter-wilayah.kabupaten')
+            @include('presisi.rtm.filter-wilayah.kecamatan')
+            @include('presisi.rtm.filter-wilayah.desa')
+            @include('presisi.rtm.filter-wilayah.button')
 
             $('#nav-statistik li a:first').addClass('active');
             $('#nav-statistik li').click(function(e) {
@@ -65,7 +65,7 @@
                 ],
 
                 "ajax": {
-                    "url": "{{ url('api/v1/statistik-web/keluarga') }}",
+                    "url": "{{ url('api/v1/statistik-web/rtm') }}",
                     "type": "get",
                     "data": function(d) {
                         var nav = $('#nav-statistik').find('li a.active')
@@ -144,6 +144,10 @@
 
                 ],
             });
+
+            
+        
+        
 
             function grafikPie() {
                 $('#barChart').remove();

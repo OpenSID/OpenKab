@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Anak;
-use App\Models\Bantuan;
 use App\Models\IbuHamil;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
+use App\Models\Rtm;
+use App\Models\Bantuan;
 use App\Models\Posyandu;
 use App\Models\SasaranPaud;
 use App\Services\RekapService;
@@ -384,8 +385,28 @@ class PresisiController extends Controller
         ];
     }
 
+    public function rtm($id = '')
+    {
+        $statistik = Rtm::KATEGORI_STATISTIK;
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $keluargaSummary = 0;
+        $categoriesItems = [
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
+
+        return view('presisi.rtm.index', compact('statistik', 'id', 'categoriesItems'));
+    }
+  
     public function keluarga($id = '')
     {
+        if($id != 'kelas-sosial'){
+            $id = '';
+        }
         $statistik = Keluarga::KATEGORI_STATISTIK;
         $totalDesa = 0;
         $pendudukSummary = 0;

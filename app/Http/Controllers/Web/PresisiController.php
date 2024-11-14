@@ -37,11 +37,21 @@ class PresisiController extends Controller
         return view('presisi.index', compact('categoriesItems', 'listKecamatan', 'listDesa'));
     }
 
-    public function kependudukan()
+    public function kependudukan($id = "")
     {
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $keluargaSummary = 0;
+        $categoriesItems = [
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
         $statistik = Penduduk::KATEGORI_STATISTIK;
 
-        return view('presisi.kependudukan.index', compact('statistik'));
+        return view('presisi.kependudukan.index', compact('statistik', 'id', 'categoriesItems'));
     }
 
     public function kesehatan($kuartal = null, $tahun = null, $id = null)

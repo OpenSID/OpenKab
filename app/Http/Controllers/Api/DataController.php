@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\PendudukRepository;
-use App\Http\Transformers\PendudukTransformer;
 use App\Http\Transformers\DtksTransformer;
+use App\Http\Transformers\KesehatanTransformer;
 
 class DataController extends Controller
 {
@@ -16,11 +16,11 @@ class DataController extends Controller
 
     public function kesehatan()
     {
-        return $this->fractal($this->penduduk->listPendudukKesehatan(), new PendudukTransformer, 'kesehatan')->respond();
+        return $this->fractal($this->penduduk->listPendudukKesehatan(), new KesehatanTransformer, 'kesehatan')->respond();
     }
 
-    public function jaminan_kesehatan()
+    public function jaminan_sosial()
     {
-        return $this->fractal($this->penduduk->listPendudukJaminanKesehatan(), new DtksTransformer, 'jaminan-kesehatan')->respond();
+        return $this->fractal($this->penduduk->listPendudukJaminanSosial(), new DtksTransformer, 'jaminan-sosial')->respond();
     }
 }

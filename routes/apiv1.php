@@ -214,10 +214,10 @@ Route::controller(StatistikController::class)
 
 // Data
 Route::controller(DataController::class)
-->prefix('data')->group(function () {
-    Route::get('/kesehatan', 'kesehatan');
-    Route::get('/jaminan-kesehatan', 'jaminan_kesehatan');
-});
+    ->prefix('data')->group(function () {
+        Route::get('/kesehatan', 'kesehatan');
+        Route::get('/jaminan-sosial', 'jaminan_sosial');
+    });
 
 // Data utama website
 Route::get('data-website', WebsiteController::class);

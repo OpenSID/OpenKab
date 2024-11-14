@@ -43,15 +43,35 @@ class MenuRepository extends BaseRepository
         return json_encode($menus);
     }
 
-    public function tree(): ?Collection
+    // public function tree(): ?Collection
+    // {
+    //     return $this->model->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon")
+    //         ->whereNull('parent_id')
+    //         ->with(['children' => function ($q) {
+    //             $q->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon");
+    //         }])
+    //         ->orderBy('sequence')
+    //         ->get() ?? collect();
+    // }
+
+    public function tree($menu_type): Collection
     {
-        return $this->model->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon")
-            ->whereNull('parent_id')
+        if ($menu_type == null) {
+            $menu_type = request('type');
+        }
+        $menus = $this->model->selectRaw('id, parent_id , name as text, url as href, is_show ,icon');
+        if ($menu_type != null) {
+            $menus = $menus->where('menu_type', $menu_type);
+        } else {
+            $menus = $menus->where('menu_type', 1);
+        }
+        $menus = $menus->whereNull('parent_id')
             ->with(['children' => function ($q) {
-                $q->selectRaw("id, parent_id , name as text, url as href, is_show,'fas fa-list' as icon");
+                $q->selectRaw('id, parent_id , name as text, url as href, is_show,icon');
             }])
-            ->orderBy('sequence')
-            ->get() ?? collect();
+            ->orderBy('sequence');
+
+        return  $menus->get() ?? collect();
     }
 
 

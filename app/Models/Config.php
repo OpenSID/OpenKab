@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Config extends Model
 {
@@ -54,6 +55,14 @@ class Config extends Model
     public function Keluarga(): HasMany
     {
         return $this->hasMany(Keluarga::class, 'config_id', 'id');
+    }
+
+    /**
+     * Get all of the Keluarga for the Config.
+     */
+    public function hoKeluarga(): HasOne
+    {
+        return $this->hasOne(Keluarga::class, 'config_id', 'id');
     }
 
     public function scopeOrderByArtikel($query)

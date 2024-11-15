@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DokumenController;
+use App\Http\Controllers\Api\DTKSController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KategoriDesaController;
@@ -181,6 +182,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::get('/menu', 'menu');
             });
         });
+
+    // Satu Data
+    Route::prefix('satu-data')->group(function () {
+        Route::get('dtks', DTKSController::class);
+    });
 });
 
 // Statistik

@@ -261,6 +261,16 @@ class Penduduk extends BaseModel
      *
      * @return BelongsTo
      */
+    public function wilayah()
+    {
+        return $this->belongsTo(Wilayah::class, 'id_cluster');
+    }
+
+    /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
     public function clusterDesa()
     {
         return $this->belongsTo(ClusterDesa::class, 'id_cluster')->withDefault();

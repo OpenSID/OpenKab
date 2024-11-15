@@ -16,9 +16,6 @@ class DDKTransformer extends TransformerAbstract
         return [
             'id' => $keluarga->id,
             'kepemilikan_lahan' => collect(DDKPilihanCheckboxEnum::KEPEMILIKAN_LAHAN)
-                ->filter(function ($item, $key) use ($keluarga) {
-                    return array_key_exists($key, $keluarga?->prodeskelDDK?->detail?->where('kode_field', DDKEnum::KODE_KEPEMILIKAN_LAHAN)?->first()?->value ?? []);
-                })
                 ->map(function ($item, $key) use ($keluarga) {
                     return [
                         'kk'          => $keluarga->no_kk,

@@ -76,6 +76,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', DasborController::class);
     });
 
+    Route::get('/pendidikan', PendidikanController::class);
+
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 
@@ -217,6 +219,5 @@ Route::controller(StatistikController::class)
 Route::get('data-website', WebsiteController::class);
 Route::get('data-summary', SummaryController::class);
 
-Route::get('/pendidikan', PendidikanController::class);
 // Desa teraktif
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);

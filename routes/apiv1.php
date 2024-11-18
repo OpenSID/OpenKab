@@ -217,6 +217,7 @@ Route::controller(DataController::class)
     ->prefix('data')->group(function () {
         Route::get('/kesehatan', 'kesehatan');
         Route::get('/jaminan-sosial', 'jaminan_sosial');
+        Route::get('/penduduk-prodeskel', 'penduduk_prodeskel');
     });
 
 // Data utama website

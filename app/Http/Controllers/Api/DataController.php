@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Repository\PendudukRepository;
 use App\Http\Transformers\DtksTransformer;
 use App\Http\Transformers\KesehatanTransformer;
+use App\Http\Transformers\PendudukProdeskelTransformer;
 
 class DataController extends Controller
 {
@@ -22,5 +23,10 @@ class DataController extends Controller
     public function jaminan_sosial()
     {
         return $this->fractal($this->penduduk->listPendudukJaminanSosial(), new DtksTransformer, 'jaminan-sosial')->respond();
+    }
+
+    public function penduduk_prodeskel()
+    {
+        return $this->fractal($this->penduduk->listPendudukProdeskel(), new PendudukProdeskelTransformer, 'penduduk-prodeskel')->respond();
     }
 }

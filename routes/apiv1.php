@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
+use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\StatistikController;
@@ -78,6 +79,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
 
+    Route::get('/pendidikan', PendidikanController::class);
 
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
         Route::get('/', [PendudukController::class, 'index']);

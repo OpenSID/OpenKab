@@ -199,11 +199,17 @@ class Penduduk extends BaseModel
         return $this->hasOne(KaderPemberdayaanMasyarakat::class, 'penduduk_id');
     }
 
+    public function dtks_anggota()
+    {
+        return $this->hasOne(DtksAnggota::class, 'id_penduduk', 'id');
+    }
+
     /**
      * Define an inverse one-to-one or many relationship.
      *
      * @return BelongsTo
      */
+    
     public function statusKawin()
     {
         return $this->belongsTo(StatusKawin::class, 'status_kawin')->withDefault();

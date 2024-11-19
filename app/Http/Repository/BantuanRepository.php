@@ -138,7 +138,7 @@ class BantuanRepository
         if (isset(request('filter')['tahun'])) {
             $bantuan = $bantuan->whereRaw('YEAR(program.sdate) = '.request('filter')['tahun']);
         }
-        if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['kecamatan'])) {
+        if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['desa'])) {
             $bantuan = $bantuan->join('config', 'config.id', '=', 'program.config_id', 'left');
             if (isset(request('filter')['kabupaten'])) {
                 $bantuan = $bantuan->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);

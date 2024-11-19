@@ -423,7 +423,7 @@ class PendudukRepository
             ->where('tweb_penduduk.status_dasar', 1)
             ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
             ->groupBy("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
-           
+
         return $sql->get();
     }
 
@@ -464,5 +464,79 @@ class PendudukRepository
     public function summary()
     {
         return QueryBuilder::for(Penduduk::class)->count();
+    }
+
+    public function listPendudukPendidikan()
+    {
+        return QueryBuilder::for(Penduduk::class)
+            // ->select([
+            //     'p.id',
+            //     'p.nik',
+            //     'p.pendidikan_kk_id',
+            //     'p.pendidikan_sedang_id',
+            //     'da.kd_partisipasi_sekolah',
+            //     'da.kd_pendidikan_tertinggi',
+            //     'da.kd_kelas_tertinggi',
+            //     'da.kd_ijazah_tertinggi',
+            // ])
+            // ->from('tweb_penduduk as p')
+            // ->leftJoin('config as c', 'p.config_id', '=', 'c.id')
+            // ->leftJoin('dtks as d', 'd.config_id', '=', 'c.id')
+            // ->leftJoin('dtks_anggota as da', 'da.id_dtks', '=', 'd.id')
+            ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
+            ->allowedFilters([  // Tentukan filter yang diizinkan
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sex'),
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('status_dasar'),
+                AllowedFilter::exact('keluarga.no_kk'),
+                AllowedFilter::exact('clusterDesa.dusun'),
+                AllowedFilter::exact('clusterDesa.rw'),
+                AllowedFilter::exact('clusterDesa.rt'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('p.nama', 'like', "%{$value}%")
+                            ->orWhere('p.nik', 'like', "%{$value}%")
+                            ->orWhere('p.tag_id_card', 'like', "%{$value}%");
+                    });
+                }),
+            ])
+            ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
+                'p.nik',
+                'p.nama',
+                'p.umur',
+                'p.created_at',
+            ])
+            ->jsonPaginate();  // Melakukan pagination dan mengembalikan data dalam 
+    }
+    
+    public function listPendudukKetenagakerjaan()
+    {
+        return QueryBuilder::for(Penduduk::class)
+            ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
+            ->allowedFilters([  // Tentukan filter yang diizinkan
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sex'),
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('status_dasar'),
+                AllowedFilter::exact('keluarga.no_kk'),
+                AllowedFilter::exact('clusterDesa.dusun'),
+                AllowedFilter::exact('clusterDesa.rw'),
+                AllowedFilter::exact('clusterDesa.rt'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama', 'like', "%{$value}%")
+                            ->orWhere('nik', 'like', "%{$value}%")
+                            ->orWhere('tag_id_card', 'like', "%{$value}%");
+                    });
+                }),
+            ])
+            ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
+                'nik',
+                'nama',
+                'umur',
+                'created_at',
+            ])
+            ->jsonPaginate();
     }
 }

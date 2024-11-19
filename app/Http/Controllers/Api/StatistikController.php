@@ -218,7 +218,7 @@ class StatistikController extends Controller
             }
 
             if (! empty($this->kabupaten)) {
-                $data = $data->where('config.kode_kabupaten', '=', $this->kecamatan);
+                $data = $data->where('config.kode_kabupaten', '=', $this->kabupaten);
             }
 
             if (! empty($this->kecamatan)) {

@@ -223,10 +223,24 @@ class Penduduk extends BaseModel
     }
 
     /**
+     * Get the phone associated with the config.
+     */
+    public function kaderPemberdayaanMasyarakat()
+    {
+        return $this->hasOne(KaderPemberdayaanMasyarakat::class, 'penduduk_id');
+    }
+
+    public function dtks_anggota()
+    {
+        return $this->hasOne(DtksAnggota::class, 'id_penduduk', 'id');
+    }
+
+    /**
      * Define an inverse one-to-one or many relationship.
      *
      * @return BelongsTo
      */
+    
     public function statusKawin()
     {
         return $this->belongsTo(StatusKawin::class, 'status_kawin')->withDefault();
@@ -409,8 +423,8 @@ class Penduduk extends BaseModel
             ? $this->statusKawin->nama
             : (
                 empty($this->akta_perkawinan)
-                    ? 'KAWIN BELUM TERCATAT'
-                    : 'KAWIN TERCATAT'
+                ? 'KAWIN BELUM TERCATAT'
+                : 'KAWIN TERCATAT'
             );
     }
 

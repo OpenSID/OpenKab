@@ -6,10 +6,10 @@ use App\Models\Rtm;
 
 class RtmRepository
 {
-    public function listStatistik($kategori): array|object
+    public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         return collect(match ($kategori) {
-            'bdt' => $this->caseBdt(),
+            'bdt' => $this->caseBdt($kabupaten, $kecamatan, $desa),
             default => []
         })->toArray();
     }
@@ -48,7 +48,7 @@ class RtmRepository
         ];
     }
 
-    private function caseBdt(): array|object
+    private function caseBdt($kabupaten, $kecamatan, $desa): array|object
     {
         $bdt = Rtm::CountStatistik()->filters(request()->input('filter'), 'tgl_daftar');
         $queryFooter = $bdt->get();

@@ -4,11 +4,11 @@
             var statistik = [];
             var data_grafik = [];
             let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
-            
-            @include('presisi.keluarga.filter-wilayah.kabupaten')
-            @include('presisi.keluarga.filter-wilayah.kecamatan')
-            @include('presisi.keluarga.filter-wilayah.desa')
-            @include('presisi.keluarga.filter-wilayah.button')
+
+            @include('presisi.kependudukan.filter-wilayah.kabupaten')
+            @include('presisi.kependudukan.filter-wilayah.kecamatan')
+            @include('presisi.kependudukan.filter-wilayah.desa')
+            @include('presisi.kependudukan.filter-wilayah.button')
 
             $('#nav-statistik li a:first').addClass('active');
             $('#nav-statistik li').click(function(e) {
@@ -36,8 +36,8 @@
                 $('#btn-pie').prop('disabled', false);
 
                 $('#grafik').show();
-                $('#pie').hide()
-                // $('#statistik').hide()
+                $('#pie').hide();
+                // $('#statistik').hide();
             })
 
             $('#btn-pie').click(function() {
@@ -65,7 +65,7 @@
                 ],
 
                 "ajax": {
-                    "url": "{{ url('api/v1/statistik-web/keluarga') }}",
+                    "url": "{{ url('api/v1/statistik-web/penduduk') }}",
                     "type": "get",
                     "data": function(d) {
                         var nav = $('#nav-statistik').find('li a.active')
@@ -145,6 +145,8 @@
                 ],
             });
 
+            
+        
             function grafikPie() {
                 $('#barChart').remove();
                 $('#donutChart').remove();
@@ -233,35 +235,6 @@
         });
     </script>
 
-    <script nonce="{{ csp_nonce() }}" type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function(event) {
-            "use strict";
-            $.get('{{ url('index.php/api/v1/data-website') }}', {}, function(result) {
-                let category = result.data.categoriesItems
-                let listDesa = result.data.listDesa
-                let listKecamatan = result.data.listKecamatan
-
-                for (let index in category) {
-                    $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value'])
-                };
-                let _optionKecamatan = []
-                let _optionDesa = []
-                for (let item in listKecamatan) {
-                    _optionKecamatan.push(`<option>${item}</option>`)
-                }
-
-                for (let item in listDesa) {
-                    _optionDesa.push(`<optgroup label='${item}'>`)
-                    for (let desa in listDesa[item]) {
-                        _optionDesa.push(`<option value='${desa}'>${listDesa[item][desa]}</option>`)
-                    }
-                    _optionDesa.push(`</optgroup>`)
-                    _optionKecamatan.push(`<option>${item}</option>`)
-                }
-
-                $('select[name=search_kecamatan]').append(_optionKecamatan.join(''))
-                $('select[name=search_desa]').append(_optionDesa.join(''))
-            }, 'json')
-        });
-    </script>
+    @include('presisi.kependudukan.summary')
+    
 @endpush

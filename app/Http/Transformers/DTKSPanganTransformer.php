@@ -2,13 +2,13 @@
 
 namespace App\Http\Transformers;
 
-use App\Models\DTKS;
+use App\Models\Dtks;
 use App\Enums\Dtks\Regsosek2022kEnum;
 use League\Fractal\TransformerAbstract;
 
 class DTKSPanganTransformer extends TransformerAbstract
 {
-    public function transform(DTKS $dtks)
+    public function transform(Dtks $dtks)
     {
         $pilihanBagian3 = Regsosek2022kEnum::pilihanBagian3();
 

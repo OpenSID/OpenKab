@@ -7,7 +7,7 @@
         <div class="small-box bordered <?= $item['bg-color'] == 'bg-gray' ? 'bg-danger' : $item['bg-color'] ?>"  style="border-radius:5px;padding:5px">
             <div class="row" style="padding:5px">
                 <div class="col-md-3 col-sm-4">
-                    <div class="icon">
+                    <div class="icon icon-custom">
                         <i class="fa fa-4x <?= $listIcon[$index] ?? 'fa-female' ?>"></i>
                     </div>
                 </div>

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class RekapService
 {
-    public function get_data_ibu_hamil($kuartal = null, $tahun = null, $id = null)
+    public function get_data_ibu_hamil($kuartal = null, $tahun = null, $id = null, $kabupaten = null, $kecamatan = null, $desa = null)
     {
         if ($kuartal == 1) {
             $batasBulanBawah = 1;
@@ -29,6 +29,7 @@ class RekapService
         $ibuHamil = DB::connection('openkab')->table('ibu_hamil')
             ->join('kia', 'ibu_hamil.kia_id', '=', 'kia.id')
             ->join('tweb_penduduk', 'kia.ibu_id', '=', 'tweb_penduduk.id')
+            ->join('config', 'config.id', '=', "tweb_penduduk.config_id", 'left')
             ->where('status_kehamilan', '!=', null)
             ->whereMonth('ibu_hamil.created_at', '>=', $batasBulanBawah)
             ->whereMonth('ibu_hamil.created_at', '<=', $batasBulanAtas)
@@ -41,6 +42,16 @@ class RekapService
                 'kia.anak_id',
                 'tweb_penduduk.nama',
             ]);
+
+        if ($kabupaten) {
+            $ibuHamil->whereRaw('config.kode_kabupaten = '.$kabupaten);
+        }
+        if ($kecamatan) {
+            $ibuHamil->whereRaw('config.kode_kecamatan = '.$kecamatan);
+        }
+        if ($desa) {
+            $ibuHamil->whereRaw('config.kode_desa = '.$desa);
+        }
 
         if ($id) {
             $ibuHamil = $ibuHamil->where('posyandu_id', $id);
@@ -308,7 +319,7 @@ class RekapService
         return $data;
     }
 
-    public function get_data_bulanan_anak($kuartal = null, $tahun = null, $id = null)
+    public function get_data_bulanan_anak($kuartal = null, $tahun = null, $id = null, $kabupaten = null, $kecamatan = null, $desa = null)
     {
         if ($kuartal == 1) {
             $batasBulanBawah = 1;
@@ -329,6 +340,7 @@ class RekapService
         $bulananAnak = DB::connection('openkab')->table('bulanan_anak')
             ->join('kia', 'bulanan_anak.kia_id', '=', 'kia.id')
             ->join('tweb_penduduk', 'kia.anak_id', '=', 'tweb_penduduk.id')
+            ->join('config', 'config.id', '=', "tweb_penduduk.config_id", 'left')
             ->where('bulanan_anak.config_id', ('id'))
             ->whereMonth('bulanan_anak.created_at', '>=', $batasBulanBawah)
             ->whereMonth('bulanan_anak.created_at', '<=', $batasBulanAtas)
@@ -342,6 +354,16 @@ class RekapService
                 'tweb_penduduk.nama',
                 'tweb_penduduk.sex',
             ]);
+        
+        if ($kabupaten) {
+            $bulananAnak->whereRaw('config.kode_kabupaten = '.$kabupaten);
+        }
+        if ($kecamatan) {
+            $bulananAnak->whereRaw('config.kode_kecamatan = '.$kecamatan);
+        }
+        if ($desa) {
+            $bulananAnak->whereRaw('config.kode_desa = '.$desa);
+        }
 
         if ($id) {
             $bulananAnak = $bulananAnak->where('posyandu_id', $id);

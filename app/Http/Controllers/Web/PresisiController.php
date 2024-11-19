@@ -54,8 +54,26 @@ class PresisiController extends Controller
         return view('presisi.kependudukan.index', compact('statistik', 'id', 'categoriesItems'));
     }
 
-    public function kesehatan($kuartal = null, $tahun = null, $id = null)
+    public function kesehatan($kuartal = null, $tahun = null, $id = null, $kabupaten = null, $kecamatan = null, $desa = null)
     {
+        // Cek apakah semua parameter null
+        if (($kuartal == 'null') && ($tahun == 'null') && ($id == 'null') && ($kabupaten == 'null') && ($kecamatan == 'null') && ($desa == 'null')) {
+            // Redirect ke link tertentu jika semua parameter null
+            return redirect()->route('presisi.kesehatan'); // Ganti dengan nama route yang sesuai
+        }
+
+        $kuartalget = $kuartal;
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $keluargaSummary = 0;
+        $categoriesItems = [
+            ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
+        ];
+
         if ($kuartal < 1 || $kuartal > 4) {
             $kuartal = null;
         }
@@ -77,12 +95,12 @@ class PresisiController extends Controller
             $tahun = date('Y');
         }
 
-        $data = $this->sumber_data($kuartal, $tahun, $id);
+        $data = $this->sumber_data($kuartal, $tahun, $id, $kabupaten, $kecamatan, $desa);
 
-        return view('presisi.kesehatan.index', compact('data'));
+        return view('presisi.kesehatan.index', compact('data', 'categoriesItems', 'kuartalget', 'tahun', 'id', 'kabupaten', 'kecamatan', 'desa'));
     }
 
-    private function sumber_data($kuartal = null, $tahun = null, $id = null)
+    private function sumber_data($kuartal = null, $tahun = null, $id = null, $kabupaten = null, $kecamatan = null, $desa = null)
     {
         $rekap = new RekapService();
 
@@ -151,8 +169,8 @@ class PresisiController extends Controller
             }
         }
 
-        $ibu_hamil = $rekap->get_data_ibu_hamil($kuartal, $tahun, $id);
-        $bulanan_anak = $rekap->get_data_bulanan_anak($kuartal, $tahun, $id);
+        $ibu_hamil = $rekap->get_data_ibu_hamil($kuartal, $tahun, $id, $kabupaten, $kecamatan, $desa);
+        $bulanan_anak = $rekap->get_data_bulanan_anak($kuartal, $tahun, $id, $kabupaten, $kecamatan, $desa);
 
         //HITUNG KEK ATAU RISTI
         $jumlahKekRisti = 0;
@@ -306,7 +324,7 @@ class PresisiController extends Controller
 
         //END ANAK PAUD------------------------------------------------------------
 
-        $data = $this->widget();
+        $data = $this->widget($kuartal, $tahun, $id, $kabupaten, $kecamatan, $desa);
         $data['navigasi'] = 'scorcard-konvergensi';
         $data['dataAnak0sd2Tahun'] = $dataAnak0sd2Tahun;
         $data['id'] = $id;
@@ -321,15 +339,77 @@ class PresisiController extends Controller
         $data['kuartal'] = $kuartal;
         $data['_tahun'] = $tahun;
         $data['aktif'] = 'scorcard';
-        $stunting = new StuntingService(['idPosyandu' => $id, 'kuartal' => $kuartal, 'tahun' => $tahun]);
+        $stunting = new StuntingService(['idPosyandu' => $id, 'kuartal' => $kuartal, 'tahun' => $tahun, 'kabupaten' => $kabupaten, 'kecamatan' => $kecamatan, 'desa' => $desa]);
         $data['chartStuntingUmurData'] = $stunting->chartStuntingUmurData();
         $data['chartStuntingPosyanduData'] = $stunting->chartPosyanduData();
 
         return $data;
     }
 
-    private function widget(): array
+    private function widget($kuartal = null, $tahun = null, $id = null, $kabupaten = null, $kecamatan = null, $desa = null): array
     {
+    $anaknormal = Anak::normal();
+    $anakresiko = Anak::normal();
+    $anakperiksa = Anak::normal();
+    $anakstunting = Anak::normal();
+    $ibuhamil = new IbuHamil();
+    $hamilperiksa = new IbuHamil();
+
+    // Filter berdasarkan kabupaten jika ada
+    if ($kabupaten != 'null' AND $kabupaten != null) {
+        $anakresiko->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
+                   ->where('config.kode_kabupaten', $kabupaten);
+        $anakstunting->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
+                   ->where('config.kode_kabupaten', $kabupaten);
+        
+        $anakperiksa->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
+                   ->where('config.kode_kabupaten', $kabupaten);
+                   
+        $anaknormal->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
+        ->where('config.kode_kabupaten', $kabupaten);
+
+        $ibuhamil->join('config', 'config.id', '=', 'ibu_hamil.config_id', 'left')
+                   ->where('config.kode_kabupaten', $kabupaten);
+        $hamilperiksa->join('config', 'config.id', '=', 'ibu_hamil.config_id', 'left')
+                   ->where('config.kode_kabupaten', $kabupaten);
+    }
+
+    // Filter berdasarkan kecamatan jika ada
+    if ($kecamatan != 'null' AND $kecamatan != null) {
+        $anakperiksa->where('config.kode_kecamatan', $kecamatan);
+        $anakresiko->where('config.kode_kecamatan', $kecamatan);
+        $anakstunting->where('config.kode_kecamatan', $kecamatan);
+        $anaknormal->where('config.kode_kecamatan', $kecamatan);
+        $ibuhamil->where('config.kode_kecamatan', $kecamatan);
+        $hamilperiksa->where('config.kode_kecamatan', $kecamatan);
+    }
+
+    // Filter berdasarkan desa jika ada
+    if ($desa != 'null' AND $desa != null) {
+        $anakperiksa->where('config.kode_desa', $desa);
+        $anakresiko->where('config.kode_desa', $desa);
+        $anakstunting->where('config.kode_desa', $desa);
+        $anaknormal->where('config.kode_desa', $desa);
+        $ibuhamil->where('config.kode_desa', $desa);
+        $hamilperiksa->where('config.kode_desa', $desa);
+    }
+
+    if ($id != 'null' AND $id != null) {
+        $anakperiksa->where('posyandu_id', $id);
+        $anakresiko->where('posyandu_id', $id);
+        $anakstunting->where('posyandu_id', $id);
+        $anaknormal->where('posyandu_id', $id);
+        $ibuhamil->where('posyandu_id', $id);
+        $hamilperiksa->where('posyandu_id', $id);
+    }
+    // Hitung jumlah anak normal dengan filter yang diterapkan
+    $anakperiksa = $anakperiksa->whereMonth('bulanan_anak.created_at', date('m'))->count();
+    $anakresiko = $anakresiko->resikoStunting()->count();
+    $anakstunting = $anakstunting->stunting()->count();
+    $anaknormal = $anaknormal->count();
+    $hamilperiksa = $hamilperiksa->whereMonth('created_at', date('m'))->count();
+    $ibuhamil = $ibuhamil->count();
+
         return [
             'bulanIniIbuHamil' => IbuHamil::whereMonth('created_at', date('m'))->count(),
             'bulanIniAnak' => Anak::whereMonth('created_at', date('m'))->count(),
@@ -344,42 +424,42 @@ class PresisiController extends Controller
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-blue',
                     'bg-icon' => 'ion-stats-bars',
-                    'total' => IbuHamil::whereMonth('created_at', date('m'))->count(),
+                    'total' => $hamilperiksa,
                 ],
                 [
                     'title' => 'Anak Periksa Bulan ini',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-gray',
                     'bg-icon' => 'ion-stats-bars',
-                    'total' => Anak::whereMonth('created_at', date('m'))->count(),
+                    'total' => $anakperiksa,
                 ],
                 [
                     'title' => 'Ibu Hamil & Anak 0-23 Bulan',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-green',
                     'bg-icon' => 'ion-stats-bars',
-                    'total' => IbuHamil::count() + Anak::count(),
+                    'total' => $ibuhamil + $anaknormal,
                 ],
                 [
                     'title' => 'Anak 0-23 Bulan Normal',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-green',
                     'bg-icon' => 'ion-stats-bars',
-                    'total' => Anak::normal()->count(),
+                    'total' => $anaknormal,
                 ],
                 [
                     'title' => 'Anak 0-23 Bulan Resiko Stunting',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-yellow',
                     'bg-icon' => 'ion-stats-bars',
-                    'total' => Anak::resikoStunting()->count(),
+                    'total' => $anakresiko,
                 ],
                 [
                     'title' => 'Anak 0-23 Bulan Stunting',
                     'icon' => 'ion-woman',
                     'bg-color' => 'bg-red',
                     'bg-icon' => 'ion-stats-bars',
-                    'total' => Anak::stunting()->count(),
+                    'total' => $anakstunting,
                 ],
             ],
         ];

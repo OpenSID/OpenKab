@@ -14,6 +14,7 @@ Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 10. [#382](https://github.com/OpenSID/OpenKab/issues/382) Penambahan statistik rtm dasbor presisi.
 11. [#400](https://github.com/OpenSID/OpenKab/issues/400) Penambahan filter peta, data wilayah.
 12. [#381](https://github.com/OpenSID/OpenKab/issues/381) Penambahan statistik penduduk berdasarkan pengaturan menu.
+13. [#411](https://github.com/OpenSID/OpenKab/issues/411) Penambahan filter wilayah pada estunting.
 
 #### Perbaikan BUG
 

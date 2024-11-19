@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DasborController;
+use App\Http\Controllers\Api\DDKController;
 use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\KategoriController;
@@ -196,6 +197,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::get('/menu', 'menu');
                 });
         });
+
+    // Prodeskel
+    Route::prefix('prodeskel')->group(function () {
+        Route::prefix('ddk')->group(function () {
+            Route::get('pangan', [DDKController::class, 'pangan']);
+        });
+    });
 });
 
 // Statistik

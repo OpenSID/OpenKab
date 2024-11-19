@@ -21,11 +21,20 @@ class StuntingService
 
     private $batasBulanBawah;
 
+    private $kabupaten;
+    
+    private $kecamatan;
+    
+    private $desa;
+
     public function __construct(?array $default)
     {
         $this->kuartal = $default['kuartal'] ?? null;
         $this->tahun = $default['tahun'] ?? null;
         $this->idPosyandu = $default['idPosyandu'] ?? null;
+        $this->kabupaten = $default['kabupaten'] ?? null;
+        $this->kecamatan = $default['kecamatan'] ?? null;
+        $this->desa = $default['desa'] ?? null;
 
         if ($this->kuartal < 1 || $this->kuartal > 4) {
             $this->kuartal = null;
@@ -79,6 +88,7 @@ class StuntingService
             ->selectRaw('sum(case when umur_bulan between 6 and 11 then 1 else 0 end) as range_2')
             ->selectRaw('sum(case when umur_bulan between 12 and 23 then 1 else 0 end) as range_3')
             ->stuntingPendek()
+            ->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
             // ->whereMonth('created_at', '>=',$this->batasBulanBawah)
             // ->whereMonth('created_at', '<=',$this->batasBulanAtas)
             // ->whereYear('created_at', $this->tahun)
@@ -86,6 +96,19 @@ class StuntingService
 
         if ($this->idPosyandu) {
             $stuntingObj->where('posyandu_id', $this->idPosyandu);
+        }
+
+        // Filter wilayah berdasarkan kabupaten, kecamatan, desa
+        if ($this->kabupaten != 'null' AND $this->kabupaten != null) {
+            $stuntingObj->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
+        }
+
+        if ($this->kecamatan != 'null' AND $this->kecamatan != null) {
+            $stuntingObj->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
+        }
+
+        if ($this->desa != 'null' AND $this->desa != null) {
+            $stuntingObj->whereRaw('config.kode_desa = ' . $this->desa);
         }
         $stunting = $stuntingObj->get();
 
@@ -118,7 +141,19 @@ class StuntingService
 
     public function chartPosyanduData()
     {
-        $giziAnakObj = Anak::selectRaw('status_gizi, posyandu_id, count(*) as total');
+        $giziAnakObj = Anak::selectRaw('status_gizi, posyandu_id, count(*) as total')
+                        ->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left');
+        if ($this->kabupaten != 'null' AND $this->kabupaten != null) {
+            $giziAnakObj->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
+        }
+
+        if ($this->kecamatan != 'null' AND $this->kecamatan != null) {
+            $giziAnakObj->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
+        }
+
+        if ($this->desa != 'null' AND $this->desa != null) {
+            $giziAnakObj->whereRaw('config.kode_desa = ' . $this->desa);
+        }
         if ($this->tahunawal == null) {
             $giziAnakObj->whereMonth('created_at', '>=', $this->batasBulanBawah)
             ->whereMonth('created_at', '<=', $this->batasBulanAtas)
@@ -174,20 +209,37 @@ class StuntingService
         $JTRT_IbuHamil = IbuHamil::query()
             ->distinct()
             ->join('kia', 'ibu_hamil.kia_id', '=', 'kia.id')
+            ->join('config', 'config.id', '=', "ibu_hamil.config_id", 'left')
             ->whereMonth('ibu_hamil.created_at', '>=', $this->batasBulanBawah)
             ->whereMonth('ibu_hamil.created_at', '<=', $this->batasBulanAtas)
             ->whereYear('ibu_hamil.created_at', $this->tahun)
-            ->selectRaw('ibu_hamil.kia_id as kia_id')
-            ->get();
-
+            ->selectRaw('ibu_hamil.kia_id as kia_id');
+        
         $JTRT_BulananAnak = Anak::query()
             ->distinct()
             ->join('kia', 'bulanan_anak.kia_id', '=', 'kia.id')
+            ->join('config', 'config.id', '=', "bulanan_anak.config_id", 'left')
             ->whereMonth('bulanan_anak.created_at', '>=', $this->batasBulanBawah)
             ->whereMonth('bulanan_anak.created_at', '<=', $this->batasBulanAtas)
             ->whereYear('bulanan_anak.created_at', $this->tahun)
-            ->selectRaw('bulanan_anak.kia_id as kia_id')
-            ->get();
+            ->selectRaw('bulanan_anak.kia_id as kia_id');
+        
+            if ($this->kabupaten) {
+                $JTRT_IbuHamil->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
+                $JTRT_BulananAnak->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
+            }
+            if ($this->kecamatan) {
+                $JTRT_IbuHamil->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
+                $JTRT_BulananAnak->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
+            }
+            if ($this->desa) {
+                $JTRT_IbuHamil->whereRaw('config.kode_desa = ' . $this->desa);
+                $JTRT_BulananAnak->whereRaw('config.kode_desa = ' . $this->desa);
+            }
+            
+            $JTRT_IbuHamil = $JTRT_IbuHamil->get();
+            $JTRT_BulananAnak = $JTRT_BulananAnak->get();
+
 
         foreach ($JTRT_IbuHamil as $item_ibuHamil) {
             $dataNoKia[] = $item_ibuHamil;
@@ -199,8 +251,8 @@ class StuntingService
             }
         }
 
-        $ibu_hamil = $rekap->get_data_ibu_hamil($this->kuartal, $this->tahun, $this->idPosyandu);
-        $bulanan_anak = $rekap->get_data_bulanan_anak($this->kuartal, $this->tahun, $this->idPosyandu);
+        $ibu_hamil = $rekap->get_data_ibu_hamil($this->kuartal, $this->tahun, $this->idPosyandu, $this->kabupaten, $this->kecamatan, $this->desa);
+        $bulanan_anak = $rekap->get_data_bulanan_anak($this->kuartal, $this->tahun, $this->idPosyandu, $this->kabupaten, $this->kecamatan, $this->desa);
 
         //HITUNG KEK ATAU RISTI
         $jumlahKekRisti = 0;

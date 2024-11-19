@@ -59,6 +59,11 @@ button.btn-dark {
     margin-top: -11px;
 }
 
+.icon-custom {
+    background: transparent!important;
+    border: none!important;
+}
+
 .owl-stage-outer {
     max-height: 704px;
 }

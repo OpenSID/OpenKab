@@ -87,6 +87,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     ->prefix('data')->group(function () {
         Route::get('/kategori-statistik', 'kategoriStatistik');
         Route::get('/kesehatan', 'kesehatan');
+        Route::get('/jaminan-sosial', 'jaminan_sosial');
     });
 
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
@@ -224,6 +225,7 @@ Route::controller(StatistikController::class)
         Route::get('/get-list-coordinate', 'getListCoordinate');
         Route::get('/get-list-penerima', 'getListPenerimaBantuan');
     });
+
 
 
 // Data utama website

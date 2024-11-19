@@ -91,10 +91,8 @@ class Penduduk extends BaseModel
         return $this;
     }
 
-    // Contoh fungsi untuk mendapatkan 'namaTempatDilahirkan' dan 'umur' saja
     public function getSpecificAppends()
     {
-        // Hanya mengambil namaTempatDilahirkan dan umur
         return $this->setSpecificAppends([
             'namaGolonganDarah',
             'namaCacat',
@@ -534,6 +532,11 @@ class Penduduk extends BaseModel
         return $this->hasOne(Kia::class, 'anak_id');  // Asumsi anak_id ada di Kia
     }
 
+    public function dtksAnggota()
+    {
+        return $this->hasOne(DtksAnggota::class, 'id_penduduk');  // Asumsi anak_id ada di Kia
+    }
+
     /**
      * Scope query untuk status penduduk.
      *
@@ -619,6 +622,7 @@ class Penduduk extends BaseModel
             'clusterDesa',
             'logPenduduk',
             'logPerubahanPenduduk',
+            'dtksAnggota'
         ]);
     }
 }

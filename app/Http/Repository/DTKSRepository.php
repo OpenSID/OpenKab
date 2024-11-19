@@ -2,7 +2,7 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Dtks;
+use App\Models\DTKS;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -10,7 +10,7 @@ class DTKSRepository
 {
     public function index()
     {
-        return QueryBuilder::for(Dtks::class)
+        return QueryBuilder::for(DTKS::class)
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('rtm.kepalaKeluarga.nik'),

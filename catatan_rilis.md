@@ -18,6 +18,7 @@ Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 14. [#415](https://github.com/OpenSID/OpenKab/issues/415) Penambahan API kebutuhan data presisi terkait Pendidikan.
 15. [#417](https://github.com/OpenSID/OpenKab/issues/417) Penambahan API kebutuhan data presisi terkait ketenagakerjaan.
 16. [#414](https://github.com/OpenSID/OpenKab/issues/414) Penambahan API kebutuhan data presisi terkait kesehatan.
+17. [#416](https://github.com/OpenSID/OpenKab/issues/416) Penambahan API jaminan sosial 
 
 #### Perbaikan BUG
 

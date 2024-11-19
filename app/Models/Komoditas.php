@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Komoditas extends BaseModel
 {
@@ -21,6 +22,14 @@ class Komoditas extends BaseModel
     protected $casts = [
         'data' => 'array',
     ];
+
+    /**
+     * Get the phone associated with the config.
+     */
+    public function config(): BelongsTo
+    {
+        return $this->belongsTo(Config::class, 'config_id');
+    }
 
     protected function scopeAlatProduksiIkanLaut(Builder $query)
     {

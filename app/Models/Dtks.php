@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\Dtks\DtksEnum;
 
-class DTKS extends BaseModel
+class Dtks extends BaseModel
 {
     /**
      * The table associated with the model.

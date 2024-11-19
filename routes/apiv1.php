@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
 use App\Http\Controllers\Api\WilayahController;
+use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -77,9 +78,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', DasborController::class);
     });
 
+    // API Data Presisi
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
 
     Route::get('/pendidikan', PendidikanController::class);
+
+    Route::controller(DataController::class)
+    ->prefix('data')->group(function () {
+        Route::get('/kategori-statistik', 'kategoriStatistik');
+        Route::get('/kesehatan', 'kesehatan');
+    });
 
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
@@ -217,7 +225,7 @@ Route::controller(StatistikController::class)
         Route::get('/get-list-penerima', 'getListPenerimaBantuan');
     });
 
-// Bantuan
+
 // Data utama website
 Route::get('data-website', WebsiteController::class);
 Route::get('data-summary', SummaryController::class);

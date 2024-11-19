@@ -24,6 +24,7 @@ class KIA extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'id',
         'no_kia',
         'ibu_id',
         'anak_id',
@@ -58,5 +59,10 @@ class KIA extends BaseModel
     public function bulananAnak()
     {
         return $this->hasOne(Anak::class, 'kia_id');
+    }
+
+    public function penduduk()
+    {
+        return $this->belongsTo(Penduduk::class, 'id');  // Asumsi anak_id di Kia mengarah ke Penduduk
     }
 }

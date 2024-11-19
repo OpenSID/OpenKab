@@ -56,6 +56,23 @@ class Config extends Model
         return $this->hasMany(Keluarga::class, 'config_id', 'id');
     }
 
+    /**
+     * Get all of the pendidikan for the Config.
+     */
+    public function pendidikans()
+    {
+        return $this->hasMany(Pendidikan::class, 'config_id', 'id');
+    }
+
+    /**
+     * Get all of the dtks for the Config.
+     */
+    public function dtkses()
+    {
+        return $this->hasMany(DTKS::class, 'config_id', 'id');
+    }
+
+
     public function scopeOrderByArtikel($query)
     {
         return $query->orderByRaw('(SELECT COUNT(*) FROM artikel WHERE config_id = config.id) DESC');

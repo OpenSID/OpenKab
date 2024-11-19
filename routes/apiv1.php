@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
 use App\Http\Controllers\Api\WilayahController;
+use App\Http\Controllers\Api\KetenagakerjaanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +76,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
     });
+
+    Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
 
     Route::get('/pendidikan', PendidikanController::class);
 

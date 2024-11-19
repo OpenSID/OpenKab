@@ -194,6 +194,11 @@ class Penduduk extends BaseModel
     /**
      * Get the phone associated with the config.
      */
+    public function kaderPemberdayaanMasyarakat()
+    {
+        return $this->hasOne(KaderPemberdayaanMasyarakat::class, 'penduduk_id');
+    }
+
     public function dtks_anggota()
     {
         return $this->hasOne(DtksAnggota::class, 'id_penduduk', 'id');
@@ -204,6 +209,7 @@ class Penduduk extends BaseModel
      *
      * @return BelongsTo
      */
+    
     public function statusKawin()
     {
         return $this->belongsTo(StatusKawin::class, 'status_kawin')->withDefault();

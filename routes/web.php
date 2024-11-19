@@ -180,7 +180,7 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 
     Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
-    Route::get('/kesehatan/{kuartal}/{tahun}/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+    Route::get('/kesehatan/{kuartal}/{tahun}/{id}/{kabupaten?}/{kecamatan?}/{desa?}', [PresisiController::class, 'kesehatan']);
     Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
     Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
 });

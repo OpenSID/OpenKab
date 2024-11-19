@@ -1,0 +1,38 @@
+<div class="col-md-12">
+    <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
+        <div class="card-header bg-primary rounded-0">
+            <div class="row">
+                @include('presisi.kesehatan.filter')
+                <div class="col-md-3 mb-1">
+                    <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control" title="Pilih Kabupaten">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <div class="row">
+                        <table>
+                            <tr>
+                                <td>
+                                    <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right wh-full" @if(Route::currentRouteName() == 'presisi.kesehatan') style="display:none;" @endif>HAPUS FILTER</button>
+                                </td>
+                                <td>
+                                    <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

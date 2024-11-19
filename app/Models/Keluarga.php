@@ -64,6 +64,16 @@ class Keluarga extends BaseModel
     }
 
     /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
+    public function ProdeskelDDK()
+    {
+        return $this->hasOne(ProdeskelDDK::class, 'keluarga_id');
+    }
+
+    /**
      * Scope untuk Statistik.
      */
     public function scopeCountStatistik($query, $configId = null)
@@ -78,19 +88,19 @@ class Keluarga extends BaseModel
             ->join('config', 'config.id', '=', "{$this->table}.config_id", 'left')
             ->join('program', 'program.config_id', '=', 'config.id', 'left');
         if (isset(request('filter')['tahun'])) {
-            $query->whereRaw('YEAR(program.sdate) = '.request('filter')['tahun']);
+            $query->whereRaw('YEAR(program.sdate) = ' . request('filter')['tahun']);
         }
         $query->where('tweb_penduduk.status_dasar', 1);
         if (isset(request('filter')['kabupaten'])) {
-            $query->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
+            $query->whereRaw('config.kode_kabupaten = ' . request('filter')['kabupaten']);
         }
         if (isset(request('filter')['kecamatan'])) {
-            $query->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
+            $query->whereRaw('config.kode_kecamatan = ' . request('filter')['kecamatan']);
         }
         if (isset(request('filter')['desa'])) {
-            $query->whereRaw('config.kode_desa = '.request('filter')['desa']);
+            $query->whereRaw('config.kode_desa = ' . request('filter')['desa']);
         }
-        $query->whereRaw('program.sasaran = '.self::SASARAN_KELUARGA);
+        $query->whereRaw('program.sasaran = ' . self::SASARAN_KELUARGA);
 
         if ($configId) {
             $query->where('tweb_keluarga.config_id', $configId);

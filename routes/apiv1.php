@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
+use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\StatistikController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
 use App\Http\Controllers\Api\WilayahController;
 use App\Http\Controllers\Api\DataController;
+use App\Http\Controllers\Api\KetenagakerjaanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +77,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
     });
+
+    Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
+
+    Route::get('/pendidikan', PendidikanController::class);
 
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
@@ -173,14 +179,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/update', 'update');
 
             Route::controller(TeamController::class)
-            ->prefix('group')->group(function () {
-                Route::get('/', 'index');
-                Route::get('/show/{id}', 'show');
-                Route::post('/delete', 'delete');
-                Route::post('/', 'store');
-                Route::put('/{id}', 'update');
-                Route::get('/menu', 'menu');
-            });
+                ->prefix('group')->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/show/{id}', 'show');
+                    Route::post('/delete', 'delete');
+                    Route::post('/', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::get('/menu', 'menu');
+                });
         });
 });
 
@@ -221,5 +227,6 @@ Route::controller(DataController::class)
 // Data utama website
 Route::get('data-website', WebsiteController::class);
 Route::get('data-summary', SummaryController::class);
+
 // Desa teraktif
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);

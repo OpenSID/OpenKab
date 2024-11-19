@@ -6,7 +6,7 @@ use App\Enums\Dtks\Regsosek2022kEnum;
 use App\Models\Dtks;
 use League\Fractal\TransformerAbstract;
 
-class DTKSTransformer extends TransformerAbstract
+class DTKSPanganTransformer extends TransformerAbstract
 {
     public function transform(Dtks $dtks)
     {

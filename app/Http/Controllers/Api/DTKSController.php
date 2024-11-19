@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\DTKSRepository;
-use App\Http\Transformers\DTKSTransformer;
+use App\Http\Transformers\DTKSPanganTransformer;
 
 class DTKSController extends Controller
 {
@@ -13,6 +13,6 @@ class DTKSController extends Controller
 
     public function __invoke()
     {
-        return $this->fractal($this->dtks->index(), new DTKSTransformer, 'dtks')->respond();
+        return $this->fractal($this->dtks->index(), new DTKSPanganTransformer, 'dtks')->respond();
     }
 }

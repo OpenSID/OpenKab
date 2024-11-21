@@ -138,7 +138,6 @@ class PendudukRepository
                 'suku',
                 'config_id', // Pastikan config_id termasuk dalam query
             ]))
-            ->where('config_id', 1) // Sesuaikan nilai ini jika dinamis
             ->allowedFields([
                 'id', 'nik', 'nama', 'agama_id', 'suku', 'prodeskelLembagaAdat.id', 'prodeskelLembagaAdat.kategori', 'prodeskelLembagaAdat.data'
             ])

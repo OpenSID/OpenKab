@@ -20,6 +20,7 @@ Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 16. [#414](https://github.com/OpenSID/OpenKab/issues/414) Penambahan API kebutuhan data presisi terkait kesehatan.
 17. [#416](https://github.com/OpenSID/OpenKab/issues/416) Penambahan API jaminan sosial.
 18. [#412](https://github.com/OpenSID/OpenKab/issues/412) Penambahan API data pangan.
+19. [#419](https://github.com/OpenSID/OpenKab/issues/419) Penambahan API kebutuhan data presisi terkait pariwisata.
 
 #### Perbaikan BUG
 

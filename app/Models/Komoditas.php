@@ -5,19 +5,13 @@ namespace App\Models;
 use App\Models\BaseModel;
 use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Komoditas extends BaseModel
 {
     use FilterWilayahTrait;
 
     public $table = 'prodeskel_komoditas';
-
-    /**
-     * The guarded with the model.
-     *
-     * @var array
-     */
-    protected $guarded = ['id'];
 
     /**
      * The casts with the model.
@@ -27,6 +21,14 @@ class Komoditas extends BaseModel
     protected $casts = [
         'data' => 'json',
     ];
+
+    /**
+     * Get the phone associated with the config.
+     */
+    public function config(): BelongsTo
+    {
+        return $this->belongsTo(Config::class, 'config_id');
+    }
 
     protected function scopeAlatProduksiIkanLaut(Builder $query)
     {
@@ -91,7 +93,6 @@ class Komoditas extends BaseModel
     protected function scopeKondisiHutan(Builder $query)
     {
         return $query->where('kategori', 'kondisi-hutan');
-
     }
 
     protected function scopeHasilHutan(Builder $query)

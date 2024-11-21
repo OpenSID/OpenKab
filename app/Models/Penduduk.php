@@ -64,6 +64,11 @@ class Penduduk extends BaseModel
         'umur',
         'tanggalLahirId',
         'urlFoto',
+        'namaGolonganDarah',
+        'namaCacat',
+        'namaSakitMenahun',
+        'namaKb',
+        'namaStuntingStatus',
     ];
 
     /** {@inheritdoc} */
@@ -72,6 +77,32 @@ class Penduduk extends BaseModel
         'tanggal_peristiwa' => 'datetime:d-m-Y',
         'created_at' => 'datetime:d-m-Y',
     ];
+
+    /**
+     * Set dynamic appends to return specific attributes.
+     *
+     * @param array $attributes
+     * @return $this
+     */
+    public function setSpecificAppends(array $attributes)
+    {
+        // Mengatur atribut append dinamis
+        $this->appends = $attributes;
+        return $this;
+    }
+
+    public function getSpecificAppends()
+    {
+        return $this->setSpecificAppends([
+            'namaGolonganDarah',
+            'namaCacat',
+            'namaSakitMenahun',
+            'namaKb',
+            'statusHamil',
+            'namaAsuransi',
+            'namaStuntingStatus'
+        ]);
+    }
 
     /**
      * Define an inverse one-to-one or many relationship.
@@ -192,10 +223,24 @@ class Penduduk extends BaseModel
     }
 
     /**
+     * Get the phone associated with the config.
+     */
+    public function kaderPemberdayaanMasyarakat()
+    {
+        return $this->hasOne(KaderPemberdayaanMasyarakat::class, 'penduduk_id');
+    }
+
+    public function dtks_anggota()
+    {
+        return $this->hasOne(DtksAnggota::class, 'id_penduduk', 'id');
+    }
+
+    /**
      * Define an inverse one-to-one or many relationship.
      *
      * @return BelongsTo
      */
+    
     public function statusKawin()
     {
         return $this->belongsTo(StatusKawin::class, 'status_kawin')->withDefault();
@@ -261,6 +306,16 @@ class Penduduk extends BaseModel
      *
      * @return BelongsTo
      */
+    public function wilayah()
+    {
+        return $this->belongsTo(Wilayah::class, 'id_cluster');
+    }
+
+    /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
     public function clusterDesa()
     {
         return $this->belongsTo(ClusterDesa::class, 'id_cluster')->withDefault();
@@ -284,6 +339,16 @@ class Penduduk extends BaseModel
     public function dokumenHidup()
     {
         return $this->hasMany(DokumenHidup::class, 'id_pend');
+    }
+
+    /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
+    public function asuransi()
+    {
+        return $this->belongsTo(Asuransi::class, 'id_asuransi')->withDefault();
     }
 
     /**
@@ -368,8 +433,8 @@ class Penduduk extends BaseModel
             ? $this->statusKawin->nama
             : (
                 empty($this->akta_perkawinan)
-                    ? 'KAWIN BELUM TERCATAT'
-                    : 'KAWIN TERCATAT'
+                ? 'KAWIN BELUM TERCATAT'
+                : 'KAWIN TERCATAT'
             );
     }
 
@@ -390,11 +455,13 @@ class Penduduk extends BaseModel
      */
     public function getNamaAsuransiAttribute()
     {
-        return ! empty($this->id_asuransi) && $this->id_asuransi != 1
-            ? (($this->id_asuransi == 99)
-                ? "Nama/No Asuransi : {$this->no_asuransi}"
-                : "No Asuransi : {$this->no_asuransi}")
-            : '';
+        return $this->asuransi->nama ?? 'TIDAK TAHU';
+
+        // return ! empty($this->id_asuransi) && $this->id_asuransi != 1
+        //     ? (($this->id_asuransi == 99)
+        //         ? "Nama/No Asuransi : {$this->no_asuransi}"
+        //         : "No Asuransi : {$this->no_asuransi}")
+        //     : '';
     }
 
     /**
@@ -432,6 +499,52 @@ class Penduduk extends BaseModel
         }
 
         return Storage::disk("ftp_{$this->config_id}")?->url("desa/upload/user_pict/{$this->foto}");
+    }
+
+    public function getNamaGolonganDarahAttribute()
+    {
+        return $this->golonganDarah->nama ?? 'TIDAK TAHU';
+    }
+
+    public function getNamaCacatAttribute()
+    {
+        return $this->cacat->nama ?? 'TIDAK TAHU';
+    }
+
+    public function getNamaSakitMenahunAttribute()
+    {
+        return $this->sakitMenahun->nama ?? 'TIDAK TAHU';
+    }
+
+    public function getNamaKbAttribute()
+    {
+        return $this->kb->nama ?? 'TIDAK TAHU';
+    }
+
+    public function getNamaStuntingStatusAttribute()
+    {
+        if ($this->kia) {
+            $anak = Anak::where('kia_id', $this->kia->id)->first() ?? null;
+            if($anak){
+                $statusGizi = collect(Anak::STATUS_GIZI_ANAK)->firstWhere('id', $anak->status_gizi);
+
+                // Jika ditemukan, kembalikan nama, jika tidak ada kembalikan string default
+                return $statusGizi ? $statusGizi['nama'] : 'TIDAK TAHU';
+            }
+        }
+
+        // Jika tidak ada data KIA terkait, kembalikan nilai default
+        return 'TIDAK TAHU';
+    }
+
+    public function kia()
+    {
+        return $this->hasOne(Kia::class, 'anak_id');  // Asumsi anak_id ada di Kia
+    }
+
+    public function dtksAnggota()
+    {
+        return $this->hasOne(DtksAnggota::class, 'id_penduduk');  // Asumsi anak_id ada di Kia
     }
 
     /**
@@ -498,6 +611,7 @@ class Penduduk extends BaseModel
         return $query->with([
             'jenisKelamin',
             'agama',
+            'asuransi',
             'bahasa',
             'config',
             'pendidikan',
@@ -518,6 +632,7 @@ class Penduduk extends BaseModel
             'clusterDesa',
             'logPenduduk',
             'logPerubahanPenduduk',
+            'dtksAnggota'
         ]);
     }
 }

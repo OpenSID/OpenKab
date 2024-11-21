@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Config extends Model
 {
@@ -63,6 +64,29 @@ class Config extends Model
     {
         return $this->hasMany(Komoditas::class, 'config_id', 'id');
     }
+
+    public function hoKeluarga(): HasOne
+    {
+        return $this->hasOne(Keluarga::class, 'config_id', 'id');
+    }
+
+     /** Get all of the pendidikan for the Config.
+     */
+
+    public function pendidikans()
+    {
+        return $this->hasMany(Pendidikan::class, 'config_id', 'id');
+    }
+
+    /**
+     * Get all of the dtks for the Config.
+     */
+    
+    public function dtkses()
+    {
+        return $this->hasMany(DTKS::class, 'config_id', 'id');
+    }
+
 
     public function scopeOrderByArtikel($query)
     {

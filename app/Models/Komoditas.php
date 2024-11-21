@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\BaseModel;
+use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Komoditas extends BaseModel
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'prodeskel_komoditas';
+    use FilterWilayahTrait;
+
+    public $table = 'prodeskel_komoditas';
 
     /**
      * The casts with the model.
@@ -20,7 +19,7 @@ class Komoditas extends BaseModel
      * @var array
      */
     protected $casts = [
-        'data' => 'array',
+        'data' => 'json',
     ];
 
     /**

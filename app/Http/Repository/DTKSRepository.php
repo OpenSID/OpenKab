@@ -10,7 +10,7 @@ class DTKSRepository
 {
     public function index()
     {
-        return QueryBuilder::for(Dtks::class)
+        return QueryBuilder::for(DTKS::class)
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('rtm.kepalaKeluarga.nik'),

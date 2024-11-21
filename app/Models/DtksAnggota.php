@@ -42,7 +42,7 @@ class DtksAnggota extends BaseModel
      */
     public function dtks()
     {
-        return $this->belongsTo(Dtks::class, 'id_dtks', 'id')->withoutGlobalScope(\App\Scopes\ConfigIdScope::class);
+        return $this->belongsTo(DTKS::class, 'id_dtks', 'id')->withoutGlobalScope(\App\Scopes\ConfigIdScope::class);
     }
 
     public function penduduk()

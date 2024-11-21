@@ -36,6 +36,6 @@ class DtksLampiran extends BaseModel
 
     public function dtks()
     {
-        return $this->belongsToMany(Dtks::class, 'dtks_ref_lampiran', 'id_lampiran', 'id_dtks')->withoutGlobalScope(\App\Scopes\ConfigIdScope::class);
+        return $this->belongsToMany(DTKS::class, 'dtks_ref_lampiran', 'id_lampiran', 'id_dtks')->withoutGlobalScope(\App\Scopes\ConfigIdScope::class);
     }
 }

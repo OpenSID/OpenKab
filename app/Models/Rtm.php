@@ -29,6 +29,16 @@ class Rtm extends BaseModel
     }
 
     /**
+     * Define a one-to-many relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function anggota()
+    {
+        return $this->hasMany(Penduduk::class, 'id_rtm', 'no_kk')->status();
+    }
+
+    /**
      * Scope query untuk bdt.
      *
      * @return Builder

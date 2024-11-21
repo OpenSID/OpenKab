@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
+use App\Http\Controllers\Api\PariwisataController;
 use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\PengaturanController;
@@ -78,6 +79,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
     });
+
+    Route::get('/pariwisata', PariwisataController::class);
 
     // API Data Presisi
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);

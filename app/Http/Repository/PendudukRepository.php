@@ -58,19 +58,20 @@ class PendudukRepository
             ])
             ->jsonPaginate();
     }
+
     public function listPendudukKesehatan()
     {
         return QueryBuilder::for(Penduduk::select([
             'id',
             'nik',
             'nama',
-            'golongan_darah_id', 
-            'cacat_id', 
-            'sakit_menahun_id', 
-            'cara_kb_id', 
-            'hamil', 
+            'golongan_darah_id',
+            'cacat_id',
+            'sakit_menahun_id',
+            'cara_kb_id',
+            'hamil',
             'id_asuransi',
-            'no_asuransi'
+            'no_asuransi',
         ]))
         ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
         ->allowedFilters([  // Tentukan filter yang diizinkan
@@ -96,10 +97,9 @@ class PendudukRepository
             'umur',
             'created_at',
         ])
-        ->jsonPaginate();  
+        ->jsonPaginate();
     }
 
-    
     public function listPendudukJaminanSosial()
     {
         return QueryBuilder::for(Penduduk::withRef()->filterWilayah()->select([
@@ -108,8 +108,8 @@ class PendudukRepository
             'nama',
             'id_asuransi',
             'no_asuransi',
-            'bpjs_ketenagakerjaan', 
-            'cacat_id', 
+            'bpjs_ketenagakerjaan',
+            'cacat_id',
         ]))
         ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
         ->allowedFilters([  // Tentukan filter yang diizinkan
@@ -125,9 +125,9 @@ class PendudukRepository
             'nik',
             'nama',
         ])
-        ->jsonPaginate();  
+        ->jsonPaginate();
     }
-    
+
     public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         return collect(match ($kategori) {
@@ -391,7 +391,7 @@ class PendudukRepository
         $sql = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', "tweb_penduduk.{$idReferensi}", '=', "{$tabelReferensi}.id", 'left')
-            ->join('config', 'config.id', '=', "tweb_penduduk.config_id", 'left')
+            ->join('config', 'config.id', '=', 'tweb_penduduk.config_id', 'left')
             ->where('tweb_penduduk.status_dasar', 1)
             ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
             ->groupBy("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
@@ -479,9 +479,9 @@ class PendudukRepository
                 'p.umur',
                 'p.created_at',
             ])
-            ->jsonPaginate();  // Melakukan pagination dan mengembalikan data dalam 
+            ->jsonPaginate();  // Melakukan pagination dan mengembalikan data dalam
     }
-    
+
     public function listPendudukKetenagakerjaan()
     {
         return QueryBuilder::for(Penduduk::class)

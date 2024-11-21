@@ -23,7 +23,7 @@ class DtksAnggota extends BaseModel
     protected $guarded = [];
 
     protected $casts = [
-        'tgl_lahir'  => 'date:Y-m-d',
+        'tgl_lahir' => 'date:Y-m-d',
         'created_at' => 'date:Y-m-d H:i:s',
         'updated_at' => 'date:Y-m-d H:i:s',
     ];

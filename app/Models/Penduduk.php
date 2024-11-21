@@ -81,13 +81,13 @@ class Penduduk extends BaseModel
     /**
      * Set dynamic appends to return specific attributes.
      *
-     * @param array $attributes
      * @return $this
      */
     public function setSpecificAppends(array $attributes)
     {
         // Mengatur atribut append dinamis
         $this->appends = $attributes;
+
         return $this;
     }
 
@@ -100,7 +100,7 @@ class Penduduk extends BaseModel
             'namaKb',
             'statusHamil',
             'namaAsuransi',
-            'namaStuntingStatus'
+            'namaStuntingStatus',
         ]);
     }
 
@@ -240,7 +240,6 @@ class Penduduk extends BaseModel
      *
      * @return BelongsTo
      */
-    
     public function statusKawin()
     {
         return $this->belongsTo(StatusKawin::class, 'status_kawin')->withDefault();
@@ -525,7 +524,7 @@ class Penduduk extends BaseModel
     {
         if ($this->kia) {
             $anak = Anak::where('kia_id', $this->kia->id)->first() ?? null;
-            if($anak){
+            if ($anak) {
                 $statusGizi = collect(Anak::STATUS_GIZI_ANAK)->firstWhere('id', $anak->status_gizi);
 
                 // Jika ditemukan, kembalikan nama, jika tidak ada kembalikan string default
@@ -632,7 +631,7 @@ class Penduduk extends BaseModel
             'clusterDesa',
             'logPenduduk',
             'logPerubahanPenduduk',
-            'dtksAnggota'
+            'dtksAnggota',
         ]);
     }
 }

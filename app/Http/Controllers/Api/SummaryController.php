@@ -23,7 +23,9 @@ class SummaryController extends Controller
     private $luasTernak;
 
     protected $kabupaten;
+
     protected $kecamatan;
+
     protected $desa;
 
     public function __construct()
@@ -73,15 +75,15 @@ class SummaryController extends Controller
     private function getLuasWilayah($tahun)
     {
         $total = 0;
-        $batasWilayah = Potensi::join('config', 'config.id', '=', "prodeskel_potensi.config_id", 'left');
-        if(isset(request('filter')['kabupaten'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+        $batasWilayah = Potensi::join('config', 'config.id', '=', 'prodeskel_potensi.config_id', 'left');
+        if (isset(request('filter')['kabupaten'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
         }
-        if(isset(request('filter')['kecamatan'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+        if (isset(request('filter')['kecamatan'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
         }
-        if(isset(request('filter')['desa'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_desa = " . request('filter')['desa']);
+        if (isset(request('filter')['desa'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_desa = '.request('filter')['desa']);
         }
         $batasWilayah = $batasWilayah->where('kategori', 'batas-wilayah')->where('tahun', $tahun)->get();
         if (! $batasWilayah->isEmpty()) {
@@ -119,15 +121,15 @@ class SummaryController extends Controller
 
             return angka_lokal($total);
         }
-        $batasWilayah = Potensi::join('config', 'config.id', '=', "prodeskel_potensi.config_id", 'left');
-        if(isset(request('filter')['kabupaten'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+        $batasWilayah = Potensi::join('config', 'config.id', '=', 'prodeskel_potensi.config_id', 'left');
+        if (isset(request('filter')['kabupaten'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
         }
-        if(isset(request('filter')['kecamatan'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+        if (isset(request('filter')['kecamatan'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
         }
-        if(isset(request('filter')['desa'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_desa = " . request('filter')['desa']);
+        if (isset(request('filter')['desa'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_desa = '.request('filter')['desa']);
         }
         $batasWilayah = $batasWilayah->where('kategori', 'jenis-lahan')->where('tahun', $tahun)->get();
         if (! $batasWilayah->isEmpty()) {
@@ -149,15 +151,15 @@ class SummaryController extends Controller
 
             return angka_lokal($total);
         }
-        $batasWilayah = Potensi::join('config', 'config.id', '=', "prodeskel_potensi.config_id", 'left');
-        if(isset(request('filter')['kabupaten'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+        $batasWilayah = Potensi::join('config', 'config.id', '=', 'prodeskel_potensi.config_id', 'left');
+        if (isset(request('filter')['kabupaten'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
         }
-        if(isset(request('filter')['kecamatan'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+        if (isset(request('filter')['kecamatan'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
         }
-        if(isset(request('filter')['desa'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_desa = " . request('filter')['desa']);
+        if (isset(request('filter')['desa'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_desa = '.request('filter')['desa']);
         }
         $batasWilayah = $batasWilayah->where('kategori', 'kepemilikan-lahan-hutan')->where('tahun', $tahun)->get();
         if (! $batasWilayah->isEmpty()) {
@@ -179,15 +181,15 @@ class SummaryController extends Controller
 
             return angka_lokal($total);
         }
-        $batasWilayah = Potensi::join('config', 'config.id', '=', "prodeskel_potensi.config_id", 'left');
-        if(isset(request('filter')['kecamatan'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_kecamatan = " . request('filter')['kecamatan']);
+        $batasWilayah = Potensi::join('config', 'config.id', '=', 'prodeskel_potensi.config_id', 'left');
+        if (isset(request('filter')['kecamatan'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
         }
-        if(isset(request('filter')['kabupaten'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_kabupaten = " . request('filter')['kabupaten']);
+        if (isset(request('filter')['kabupaten'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
         }
-        if(isset(request('filter')['desa'])){
-            $batasWilayah = $batasWilayah->whereRaw("config.kode_desa = " . request('filter')['desa']);
+        if (isset(request('filter')['desa'])) {
+            $batasWilayah = $batasWilayah->whereRaw('config.kode_desa = '.request('filter')['desa']);
         }
         $batasWilayah = $batasWilayah->where('kategori', 'lahan-dan-pakan-ternak')->where('tahun', $tahun)->get();
         if (! $batasWilayah->isEmpty()) {

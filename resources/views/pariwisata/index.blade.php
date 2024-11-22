@@ -1,0 +1,291 @@
+@extends('layouts.index')
+
+@include('components.progressive-image')
+
+@section('title', 'Data Bantuan')
+
+@section('content_header')
+    <h1>Potensi Wisata & Sumber Daya</h1>
+@stop
+
+@section('content')
+    @include('partials.breadcrumbs')
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">Statistik Jumlah Penginapan</div>
+                <div class="card-body">
+                    <div>
+                        <div class="chart" id="grafik">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                        <hr class="hr-chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">Statistik Tingkat Pemanfaatan</div>
+                <div class="card-body">
+                    <div>
+                        <div class="chart" id="pie">
+                            <canvas id="donutChart"></canvas>
+                        </div>
+                        <hr class="hr-chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <div class="float-left">Data Potensi Wita dan Sumber Daya</div>
+                    <div class="float-right">
+                        <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button" aria-expanded="true" aria-controls="collapse-filter">
+                            <i class="fas fa-filter"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="collapse-filter" class="collapse">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Sasaran</label>
+                                            <select class="select2 form-control-sm width-100" id="sasaran" name="sasaran"
+                                                data-placeholder="Semua Sasaran">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Tahun</label>
+                                            <select class="select2 form-control-sm width-100" id="tahun" name="tahun"
+                                                data-placeholder="Semua Tahun">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="bantuan">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Jenis Hiburan</th>
+                                    <th>Jumlah Penginapan</th>
+                                    <th>Lokasi/Tempat/Area Wisata</th>
+                                    <th>Keberadaan</th>
+                                    <th>Luas (Ha)</th>
+                                    <th>Tingkat Pemanfaatan</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('js')
+    @include('pariwisata.chart')
+    <script nonce="{{ csp_nonce() }}"  >
+        let data_grafik = [];
+    document.addEventListener("DOMContentLoaded", function(event) {
+        var bantuan = $('#bantuan').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: true,
+            searchPanes: {
+                viewTotal: false,
+                columns: [0]
+            },
+            ajax: {
+                url: `{{ url('api/v1/pariwisata') }}`,
+                method: 'get',
+                data: function(row) {
+                    return {
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name,
+                        "filter[kode_desa]": $("#kode_desa").val(),
+                    };
+                },
+                dataSrc: function(json) {
+                    
+                    if (json.data.length > 0) {
+
+                        json.recordsTotal = json.meta.pagination.total
+                        json.recordsFiltered = json.meta.pagination.total
+
+                        data_grafik = [];
+                        json.data.forEach(function(item, index) {
+                            data_grafik.push(item.attributes)
+                        })
+
+                        grafikPie()
+
+                        return json.data;
+                    }
+
+                    return false;
+
+                },
+            },
+            columnDefs: [{
+                        targets: '_all',
+                        className: 'text-nowrap',
+                    },
+                ],
+            columns: [{
+                    data: null,
+                },
+                {
+                    data: "attributes.jenis_hiburan",
+                    name: "jenis_hiburan",
+                    orderable: false
+                },
+                {
+                    data: "attributes.jumlah_penginapan",
+                    name: "jumlah_penginapan",
+                    orderable: false
+                },
+                {
+                    data: "attributes.lokasi_tempat_area_wisata",
+                    name: "lokasi_tempat_area_wisata",
+                    className: 'text-center',
+                    orderable: false
+                },
+                {
+                    data: "attributes.keberadaan",
+                    name: "keberadaan",
+                    orderable: false
+                },
+                {
+                    data: "attributes.luas",
+                    name: "luas",
+                    orderable: false
+                },
+                {
+                    data: "attributes.tingkat_pemanfaatan",
+                    name: "tingkat_pemanfaatan",
+                    orderable: false
+                },
+            ],
+            order: [
+                [0, 'asc']
+            ]
+        })
+
+        bantuan.on('draw.dt', function() {
+            var PageInfo = $('#bantuan').DataTable().page.info();
+            bantuan.column(0, {
+                page: 'current'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
+        });
+
+        $('#sasaran').select2({
+            theme: 'bootstrap4',
+            minimumResultsForSearch: -1,
+            ajax: {
+                url: '{{ url('api/v1/bantuan') }}/sasaran/',
+                dataType: 'json',
+                processResults: function(response) {
+                    return {
+                        results: response.data.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.nama
+                            }
+                        })
+                    };
+                }
+            },
+        });
+
+        $('#tahun').select2({
+            minimumResultsForSearch: -1,
+            theme: 'bootstrap4',
+            ajax: {
+                url: '{{ url('api/v1/bantuan') }}/tahun/',
+                dataType: 'json',
+                processResults: function(data) {
+                    if (data.data.tahun_awal == null) {
+                        return null
+                    };
+                    const element = new Array();
+
+                    for (let index = data.data.tahun_awal; index <= data.data.tahun_akhir; index++) {
+                        element.push({
+                            id: index,
+                            text: index
+                        });
+                    }
+
+                    return {
+                        results: element
+                    };
+                }
+            },
+        });
+
+
+        $('#filter').on('click', function(e) {
+            bantuan.draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#sasaran').val('').change();
+            $('#tahun').val('').change();
+
+            bantuan.ajax.reload();
+        });
+
+        $('#cetak').on('click', function() {
+            let url = new URL("{{ url('bantuan/cetak') }}");
+            url.searchParams.append("sasaran", $("#sasaran").val() ?? '');
+            url.searchParams.append("tahun", $("#tahun").val() ?? '');
+            url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');
+            window.open(url.href, '_blank');
+        });
+    })
+    </script>
+@endsection

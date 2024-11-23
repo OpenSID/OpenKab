@@ -23,6 +23,7 @@ class PariwisataTransformer extends TransformerAbstract
 
         return [
             'id' => $komoditas->id,
+            'nama_desa' => $komoditas->config?->nama_desa,
             'kode_desa' => $komoditas->config?->kode_desa,
             'jenis_hiburan' => $jenis_hiburan ? SaranaWisataEnum::fromValue((int)$data['sarana_wisata'])->description : 'TIDAK TAHU',
             'jumlah_penginapan' => $data['jumlah'] ?? 'TIDAK TAHU',

@@ -43,65 +43,14 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="float-left">Data Potensi Wita dan Sumber Daya</div>
-                    <div class="float-right">
-                        <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button" aria-expanded="true" aria-controls="collapse-filter">
-                            <i class="fas fa-filter"></i>
-                        </a>
-                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div id="collapse-filter" class="collapse">
-                                <div class="row">
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Sasaran</label>
-                                            <select class="select2 form-control-sm width-100" id="sasaran" name="sasaran"
-                                                data-placeholder="Semua Sasaran">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Tahun</label>
-                                            <select class="select2 form-control-sm width-100" id="tahun" name="tahun"
-                                                data-placeholder="Semua Tahun">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="reset" class="btn btn-secondary"><span
-                                                            class="fas fa-ban"></span></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="filter" class="btn btn-primary"><span
-                                                            class="fas fa-search"></span></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="mt-0">
-                            </div>
-                        </div>
-                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped" id="bantuan">
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Desa</th>
                                     <th>Jenis Hiburan</th>
                                     <th>Jumlah Penginapan</th>
                                     <th>Lokasi/Tempat/Area Wisata</th>
@@ -174,6 +123,11 @@
                 ],
             columns: [{
                     data: null,
+                },
+                {
+                    data: "attributes.nama_desa",
+                    name: "desa",
+                    orderable: false
                 },
                 {
                     data: "attributes.jenis_hiburan",

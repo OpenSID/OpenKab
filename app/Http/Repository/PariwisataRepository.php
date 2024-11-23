@@ -21,11 +21,13 @@ class PariwisataRepository
                     $query->where(function ($query) use ($value) {
                         $query->where('pk.kategori', 'like', "%{$value}%")
                             ->orWhere('pk.komoditas', 'like', "%{$value}%")
-                            ->orWhere('c.kode_desa', 'like', "%{$value}%");
+                            ->orWhere('c.kode_desa', 'like', "%{$value}%")
+                            ->orWhere('c.nama_desa', 'like', "%{$value}%");
                     });
                 }),
             ])
             ->allowedSorts([
+                'c.nama_desa',
                 'c.kode_desa',
                 'pk.komoditas',
                 'pk.created_at',

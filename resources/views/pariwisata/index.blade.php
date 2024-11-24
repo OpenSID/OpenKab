@@ -5,7 +5,7 @@
 @section('title', 'Data Bantuan')
 
 @section('content_header')
-    <h1>Potensi Wisata & Sumber Daya</h1>
+    <h1>{{ $title }}</h1>
 @stop
 
 @section('content')
@@ -42,11 +42,11 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <div class="float-left">Data Potensi Wita dan Sumber Daya</div>
+                    <div class="float-left">{{ $title }}</div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="bantuan">
+                        <table class="table table-striped" id="pariwisata">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -72,8 +72,15 @@
     @include('pariwisata.chart')
     <script nonce="{{ csp_nonce() }}"  >
         let data_grafik = [];
+
+        
     document.addEventListener("DOMContentLoaded", function(event) {
-        var bantuan = $('#bantuan').DataTable({
+
+        var url = new URL("{{ url('api/v1/pariwisata') }}");
+        url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+        url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
+
+        var pariwisata = $('#pariwisata').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -83,7 +90,7 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/pariwisata') }}`,
+                url: url.href,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -166,80 +173,16 @@
             ]
         })
 
-        bantuan.on('draw.dt', function() {
-            var PageInfo = $('#bantuan').DataTable().page.info();
-            bantuan.column(0, {
+        pariwisata.on('draw.dt', function() {
+            var PageInfo = $('#pariwisata').DataTable().page.info();
+            pariwisata.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
         });
 
-        $('#sasaran').select2({
-            theme: 'bootstrap4',
-            minimumResultsForSearch: -1,
-            ajax: {
-                url: '{{ url('api/v1/bantuan') }}/sasaran/',
-                dataType: 'json',
-                processResults: function(response) {
-                    return {
-                        results: response.data.map(function(item) {
-                            return {
-                                id: item.id,
-                                text: item.nama
-                            }
-                        })
-                    };
-                }
-            },
-        });
-
-        $('#tahun').select2({
-            minimumResultsForSearch: -1,
-            theme: 'bootstrap4',
-            ajax: {
-                url: '{{ url('api/v1/bantuan') }}/tahun/',
-                dataType: 'json',
-                processResults: function(data) {
-                    if (data.data.tahun_awal == null) {
-                        return null
-                    };
-                    const element = new Array();
-
-                    for (let index = data.data.tahun_awal; index <= data.data.tahun_akhir; index++) {
-                        element.push({
-                            id: index,
-                            text: index
-                        });
-                    }
-
-                    return {
-                        results: element
-                    };
-                }
-            },
-        });
-
-
-        $('#filter').on('click', function(e) {
-            bantuan.draw();
-        });
-
-        $(document).on('click', '#reset', function(e) {
-            e.preventDefault();
-            $('#sasaran').val('').change();
-            $('#tahun').val('').change();
-
-            bantuan.ajax.reload();
-        });
-
-        $('#cetak').on('click', function() {
-            let url = new URL("{{ url('bantuan/cetak') }}");
-            url.searchParams.append("sasaran", $("#sasaran").val() ?? '');
-            url.searchParams.append("tahun", $("#tahun").val() ?? '');
-            url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');
-            window.open(url.href, '_blank');
-        });
+        
     })
     </script>
 @endsection

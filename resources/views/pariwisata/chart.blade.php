@@ -10,10 +10,10 @@
             '<canvas id="donutChart"></canvas>'
         );
         var grafik = modifikasiDataGrafik(data_grafik);
-        var pie = modifikasiDataPie(data_grafik);
+        var pie = modifikasiDataPie(data_grafik, 'tingkat_pemanfaatan');
 
         tampilGrafik(grafik[0]);
-        tampilPie(pie[1]);
+        tampilPie(pie);
     }
 
     function tampilGrafik(areaChartData) {
@@ -93,48 +93,42 @@
         ]
     }
 
-    function modifikasiDataPie(data) {
-        var dataBaruGrafik = []
-        var labelsPie = [];
-        var dataPie = [];
-        var backgroundColorPie = [];
+    function modifikasiDataPie(data, key) {
+        var labelCounts = {}; // Objek untuk menghitung jumlah label unik
+        var labels = [];
+        var counts = [];
+        var backgroundColors = [];
 
-        data.forEach(function(item, index) {
-            let color = randColorRGB();
-            let colorPoint = randColorHex();
-
-            let jumlah = typeof item.luas == 'string' ? item.luas : 0
-
-            dataBaruGrafik.push({
-                label: item.tingkat_pemanfaatan,
-                backgroundColor: color,
-                borderColor: color,
-                pointRadius: false,
-                pointColor: color,
-                pointStrokeColor: colorPoint,
-                pointHighlightFill: colorPoint,
-                pointHighlightStroke: color,
-                data: [jumlah, 1]
-            })
-
-            labelsPie.push(item.tingkat_pemanfaatan)
-            dataPie.push(jumlah)
-            backgroundColorPie.push(color)
-        })
-
-        return [{
-                labels: ['Data'],
-                datasets: dataBaruGrafik
-            },
-            {
-                labels: labelsPie,
-                datasets: [{
-                    data: dataPie,
-                    backgroundColor: backgroundColorPie,
-                }]
+        // Hitung jumlah label unik berdasarkan kunci yang diberikan
+        data.forEach(function (item) {
+            var value = item[key]; // Ambil nilai berdasarkan kunci
+            if (!labelCounts[value]) {
+                labelCounts[value] = 0;
             }
-        ]
+            labelCounts[value]++;
+        });
+
+        // Buat data untuk chart
+        Object.keys(labelCounts).forEach(function (label) {
+            let color = randColorRGB();
+            labels.push(label); // Tambahkan label
+            counts.push(labelCounts[label]); // Tambahkan jumlah
+            backgroundColors.push(color); // Tambahkan warna
+        });
+
+        // Struktur data chart
+        return {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Jumlah',
+                    data: counts,
+                    backgroundColor: backgroundColors,
+                },
+            ],
+        };
     }
+
 </script>
 @push('css')
     <style nonce="{{ csp_nonce() }}" >

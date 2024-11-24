@@ -10,7 +10,7 @@ class PariwisataRepository
 {
     public function listPariwisataKomoditas()
     {
-        return QueryBuilder::for(Komoditas::class)
+        return QueryBuilder::for(Komoditas::filterWilayah())
             ->from('prodeskel_komoditas as pk')
             ->whereIn('kategori', ['sarana-wisata', 'potensi-wisata'])
             ->leftJoin('config as c', 'c.id', 'pk.config_id')

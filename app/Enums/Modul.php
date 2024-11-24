@@ -69,6 +69,12 @@ final class Modul extends Enum
             'url' => 'bantuan',
             'permission' => 'bantuan',
         ],
+        [
+            'text' => 'Data Suplemen',
+            'icon' => 'fa fa-users',
+            'url' => 'suplemen',
+            'permission' => 'suplemen',
+        ],
 
         [
             'text' => 'Master Data',

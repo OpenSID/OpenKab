@@ -32,6 +32,19 @@ final class Modul extends Enum
             ],
         ],
         [
+            'text' => 'Data Pokok',
+            'icon' => 'fas fa-chart-pie',
+            'permission' => 'datapokok',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pendidikan',
+                    'url' => 'data-pokok/pendidikan',
+                    'permission' => 'datapokok-pendidikan',
+                ],
+            ],
+        ],
+        [
             'text' => 'Statistik',
             'icon' => 'fas fa-chart-pie',
             'permission' => 'statistik',

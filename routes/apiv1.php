@@ -26,6 +26,9 @@ use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
+use App\Http\Controllers\Api\DTKSController;
+use App\Http\Controllers\Api\PariwisataController;
+use App\Http\Controllers\Api\KelembagaanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -210,6 +213,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
         Route::prefix('potensi')->group(function () {
             Route::get('prasarana-sarana', [PrasaranaSaranaController::class, 'prasaranaSarana']);
+            Route::get('kelembagaan', [KelembagaanController::class, 'kelembagaan']);
         });
     });
 
@@ -247,7 +251,13 @@ Route::controller(StatistikController::class)
         Route::get('/get-list-penerima', 'getListPenerimaBantuan');
     });
 
-
+// Data
+Route::controller(DataController::class)
+    ->prefix('data')->group(function () {
+        Route::get('/kesehatan', 'kesehatan');
+        Route::get('/jaminan-sosial', 'jaminanSosial');
+        Route::get('/penduduk-potensi-kelembagaan', 'pendudukPotensiKelembagaan');
+    });
 
 // Data utama website
 Route::get('data-website', WebsiteController::class);

@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Penduduk;
 use App\Models\Traits\FilterWilayahTrait;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProdeskelDDKBahanGalianAnggota extends BaseModel
 {
@@ -27,7 +26,8 @@ class ProdeskelDDKBahanGalianAnggota extends BaseModel
     protected $guarded = [];
 
     protected $touches = ['ddk'];
-    protected $casts   = [
+
+    protected $casts = [
         'created_at' => 'date:Y-m-d H:i:s',
         'updated_at' => 'date:Y-m-d H:i:s',
     ];

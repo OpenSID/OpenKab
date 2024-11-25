@@ -99,13 +99,13 @@ class Umur extends BaseModel
         })
         // Menambahkan filter berdasarkan kabupaten, kecamatan, dan desa
         ->when(isset(request('filter')['kabupaten']), function ($q) {
-            return $q->whereRaw('config.kode_kabupaten = ' . request('filter')['kabupaten']);
+            return $q->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
         })
         ->when(isset(request('filter')['kecamatan']), function ($q) {
-            return $q->whereRaw('config.kode_kecamatan = ' . request('filter')['kecamatan']);
+            return $q->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
         })
         ->when(isset(request('filter')['desa']), function ($q) {
-            return $q->whereRaw('config.kode_desa = ' . request('filter')['desa']);
+            return $q->whereRaw('config.kode_desa = '.request('filter')['desa']);
         })
         ->toBoundSql();
 

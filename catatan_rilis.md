@@ -23,6 +23,7 @@ Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 19. [#419](https://github.com/OpenSID/OpenKab/issues/419) Penambahan API kebutuhan data presisi terkait pariwisata.
 20. [#413](https://github.com/OpenSID/OpenKab/issues/413) Penambahan API untuk papan.
 21. [#420](https://github.com/OpenSID/OpenKab/issues/420) Penambahan API kebutuhan data presisi terkait infrastruktur.
+22. [#418](https://github.com/OpenSID/OpenKab/issues/418) Penambahan Api presisi prodeskel.
 
 #### Perbaikan BUG
 
@@ -34,3 +35,4 @@ Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 1. [#368](https://github.com/OpenSID/OpenKab/issues/368) Sesuaikan pengaturan tidak dapat dihapus.
 2. [#394](https://github.com/OpenSID/OpenKab/issues/394) Sesuaikan auth gateway OpenKab.
 3. [#376](https://github.com/OpenSID/OpenKab/issues/376) Sesuaikan pengaturan API pada OpenKab.
+4. [#451](https://github.com/OpenSID/OpenKab/issues/451) Tambahkan target branch bug-fix untuk phpcsfixer.

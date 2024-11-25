@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Anak;
+use App\Models\Bantuan;
 use App\Models\IbuHamil;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
-use App\Models\Rtm;
-use App\Models\Bantuan;
 use App\Models\Posyandu;
+use App\Models\Rtm;
 use App\Models\SasaranPaud;
 use App\Services\RekapService;
 use App\Services\StuntingService;
@@ -37,7 +37,7 @@ class PresisiController extends Controller
         return view('presisi.index', compact('categoriesItems', 'listKecamatan', 'listDesa'));
     }
 
-    public function kependudukan($id = "")
+    public function kependudukan($id = '')
     {
         $totalDesa = 0;
         $pendudukSummary = 0;
@@ -348,67 +348,67 @@ class PresisiController extends Controller
 
     private function widget($kuartal = null, $tahun = null, $id = null, $kabupaten = null, $kecamatan = null, $desa = null): array
     {
-    $anaknormal = Anak::normal();
-    $anakresiko = Anak::normal();
-    $anakperiksa = Anak::normal();
-    $anakstunting = Anak::normal();
-    $ibuhamil = new IbuHamil();
-    $hamilperiksa = new IbuHamil();
+        $anaknormal = Anak::normal();
+        $anakresiko = Anak::normal();
+        $anakperiksa = Anak::normal();
+        $anakstunting = Anak::normal();
+        $ibuhamil = new IbuHamil();
+        $hamilperiksa = new IbuHamil();
 
-    // Filter berdasarkan kabupaten jika ada
-    if ($kabupaten != 'null' AND $kabupaten != null) {
-        $anakresiko->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
-                   ->where('config.kode_kabupaten', $kabupaten);
-        $anakstunting->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
-                   ->where('config.kode_kabupaten', $kabupaten);
-        
-        $anakperiksa->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
-                   ->where('config.kode_kabupaten', $kabupaten);
-                   
-        $anaknormal->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
-        ->where('config.kode_kabupaten', $kabupaten);
+        // Filter berdasarkan kabupaten jika ada
+        if ($kabupaten != 'null' and $kabupaten != null) {
+            $anakresiko->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
+                       ->where('config.kode_kabupaten', $kabupaten);
+            $anakstunting->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
+                       ->where('config.kode_kabupaten', $kabupaten);
 
-        $ibuhamil->join('config', 'config.id', '=', 'ibu_hamil.config_id', 'left')
-                   ->where('config.kode_kabupaten', $kabupaten);
-        $hamilperiksa->join('config', 'config.id', '=', 'ibu_hamil.config_id', 'left')
-                   ->where('config.kode_kabupaten', $kabupaten);
-    }
+            $anakperiksa->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
+                       ->where('config.kode_kabupaten', $kabupaten);
 
-    // Filter berdasarkan kecamatan jika ada
-    if ($kecamatan != 'null' AND $kecamatan != null) {
-        $anakperiksa->where('config.kode_kecamatan', $kecamatan);
-        $anakresiko->where('config.kode_kecamatan', $kecamatan);
-        $anakstunting->where('config.kode_kecamatan', $kecamatan);
-        $anaknormal->where('config.kode_kecamatan', $kecamatan);
-        $ibuhamil->where('config.kode_kecamatan', $kecamatan);
-        $hamilperiksa->where('config.kode_kecamatan', $kecamatan);
-    }
+            $anaknormal->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
+            ->where('config.kode_kabupaten', $kabupaten);
 
-    // Filter berdasarkan desa jika ada
-    if ($desa != 'null' AND $desa != null) {
-        $anakperiksa->where('config.kode_desa', $desa);
-        $anakresiko->where('config.kode_desa', $desa);
-        $anakstunting->where('config.kode_desa', $desa);
-        $anaknormal->where('config.kode_desa', $desa);
-        $ibuhamil->where('config.kode_desa', $desa);
-        $hamilperiksa->where('config.kode_desa', $desa);
-    }
+            $ibuhamil->join('config', 'config.id', '=', 'ibu_hamil.config_id', 'left')
+                       ->where('config.kode_kabupaten', $kabupaten);
+            $hamilperiksa->join('config', 'config.id', '=', 'ibu_hamil.config_id', 'left')
+                       ->where('config.kode_kabupaten', $kabupaten);
+        }
 
-    if ($id != 'null' AND $id != null) {
-        $anakperiksa->where('posyandu_id', $id);
-        $anakresiko->where('posyandu_id', $id);
-        $anakstunting->where('posyandu_id', $id);
-        $anaknormal->where('posyandu_id', $id);
-        $ibuhamil->where('posyandu_id', $id);
-        $hamilperiksa->where('posyandu_id', $id);
-    }
-    // Hitung jumlah anak normal dengan filter yang diterapkan
-    $anakperiksa = $anakperiksa->whereMonth('bulanan_anak.created_at', date('m'))->count();
-    $anakresiko = $anakresiko->resikoStunting()->count();
-    $anakstunting = $anakstunting->stunting()->count();
-    $anaknormal = $anaknormal->count();
-    $hamilperiksa = $hamilperiksa->whereMonth('created_at', date('m'))->count();
-    $ibuhamil = $ibuhamil->count();
+        // Filter berdasarkan kecamatan jika ada
+        if ($kecamatan != 'null' and $kecamatan != null) {
+            $anakperiksa->where('config.kode_kecamatan', $kecamatan);
+            $anakresiko->where('config.kode_kecamatan', $kecamatan);
+            $anakstunting->where('config.kode_kecamatan', $kecamatan);
+            $anaknormal->where('config.kode_kecamatan', $kecamatan);
+            $ibuhamil->where('config.kode_kecamatan', $kecamatan);
+            $hamilperiksa->where('config.kode_kecamatan', $kecamatan);
+        }
+
+        // Filter berdasarkan desa jika ada
+        if ($desa != 'null' and $desa != null) {
+            $anakperiksa->where('config.kode_desa', $desa);
+            $anakresiko->where('config.kode_desa', $desa);
+            $anakstunting->where('config.kode_desa', $desa);
+            $anaknormal->where('config.kode_desa', $desa);
+            $ibuhamil->where('config.kode_desa', $desa);
+            $hamilperiksa->where('config.kode_desa', $desa);
+        }
+
+        if ($id != 'null' and $id != null) {
+            $anakperiksa->where('posyandu_id', $id);
+            $anakresiko->where('posyandu_id', $id);
+            $anakstunting->where('posyandu_id', $id);
+            $anaknormal->where('posyandu_id', $id);
+            $ibuhamil->where('posyandu_id', $id);
+            $hamilperiksa->where('posyandu_id', $id);
+        }
+        // Hitung jumlah anak normal dengan filter yang diterapkan
+        $anakperiksa = $anakperiksa->whereMonth('bulanan_anak.created_at', date('m'))->count();
+        $anakresiko = $anakresiko->resikoStunting()->count();
+        $anakstunting = $anakstunting->stunting()->count();
+        $anaknormal = $anaknormal->count();
+        $hamilperiksa = $hamilperiksa->whereMonth('created_at', date('m'))->count();
+        $ibuhamil = $ibuhamil->count();
 
         return [
             'bulanIniIbuHamil' => IbuHamil::whereMonth('created_at', date('m'))->count(),
@@ -481,10 +481,10 @@ class PresisiController extends Controller
 
         return view('presisi.rtm.index', compact('statistik', 'id', 'categoriesItems'));
     }
-  
+
     public function keluarga($id = '')
     {
-        if($id != 'kelas-sosial'){
+        if ($id != 'kelas-sosial') {
             $id = '';
         }
         $statistik = Keluarga::KATEGORI_STATISTIK;

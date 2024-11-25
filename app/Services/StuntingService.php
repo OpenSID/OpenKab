@@ -22,9 +22,9 @@ class StuntingService
     private $batasBulanBawah;
 
     private $kabupaten;
-    
+
     private $kecamatan;
-    
+
     private $desa;
 
     public function __construct(?array $default)
@@ -99,16 +99,16 @@ class StuntingService
         }
 
         // Filter wilayah berdasarkan kabupaten, kecamatan, desa
-        if ($this->kabupaten != 'null' AND $this->kabupaten != null) {
-            $stuntingObj->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
+        if ($this->kabupaten != 'null' and $this->kabupaten != null) {
+            $stuntingObj->whereRaw('config.kode_kabupaten = '.$this->kabupaten);
         }
 
-        if ($this->kecamatan != 'null' AND $this->kecamatan != null) {
-            $stuntingObj->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
+        if ($this->kecamatan != 'null' and $this->kecamatan != null) {
+            $stuntingObj->whereRaw('config.kode_kecamatan = '.$this->kecamatan);
         }
 
-        if ($this->desa != 'null' AND $this->desa != null) {
-            $stuntingObj->whereRaw('config.kode_desa = ' . $this->desa);
+        if ($this->desa != 'null' and $this->desa != null) {
+            $stuntingObj->whereRaw('config.kode_desa = '.$this->desa);
         }
         $stunting = $stuntingObj->get();
 
@@ -143,16 +143,16 @@ class StuntingService
     {
         $giziAnakObj = Anak::selectRaw('status_gizi, posyandu_id, count(*) as total')
                         ->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left');
-        if ($this->kabupaten != 'null' AND $this->kabupaten != null) {
-            $giziAnakObj->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
+        if ($this->kabupaten != 'null' and $this->kabupaten != null) {
+            $giziAnakObj->whereRaw('config.kode_kabupaten = '.$this->kabupaten);
         }
 
-        if ($this->kecamatan != 'null' AND $this->kecamatan != null) {
-            $giziAnakObj->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
+        if ($this->kecamatan != 'null' and $this->kecamatan != null) {
+            $giziAnakObj->whereRaw('config.kode_kecamatan = '.$this->kecamatan);
         }
 
-        if ($this->desa != 'null' AND $this->desa != null) {
-            $giziAnakObj->whereRaw('config.kode_desa = ' . $this->desa);
+        if ($this->desa != 'null' and $this->desa != null) {
+            $giziAnakObj->whereRaw('config.kode_desa = '.$this->desa);
         }
         if ($this->tahunawal == null) {
             $giziAnakObj->whereMonth('created_at', '>=', $this->batasBulanBawah)
@@ -209,37 +209,36 @@ class StuntingService
         $JTRT_IbuHamil = IbuHamil::query()
             ->distinct()
             ->join('kia', 'ibu_hamil.kia_id', '=', 'kia.id')
-            ->join('config', 'config.id', '=', "ibu_hamil.config_id", 'left')
+            ->join('config', 'config.id', '=', 'ibu_hamil.config_id', 'left')
             ->whereMonth('ibu_hamil.created_at', '>=', $this->batasBulanBawah)
             ->whereMonth('ibu_hamil.created_at', '<=', $this->batasBulanAtas)
             ->whereYear('ibu_hamil.created_at', $this->tahun)
             ->selectRaw('ibu_hamil.kia_id as kia_id');
-        
+
         $JTRT_BulananAnak = Anak::query()
             ->distinct()
             ->join('kia', 'bulanan_anak.kia_id', '=', 'kia.id')
-            ->join('config', 'config.id', '=', "bulanan_anak.config_id", 'left')
+            ->join('config', 'config.id', '=', 'bulanan_anak.config_id', 'left')
             ->whereMonth('bulanan_anak.created_at', '>=', $this->batasBulanBawah)
             ->whereMonth('bulanan_anak.created_at', '<=', $this->batasBulanAtas)
             ->whereYear('bulanan_anak.created_at', $this->tahun)
             ->selectRaw('bulanan_anak.kia_id as kia_id');
-        
-            if ($this->kabupaten) {
-                $JTRT_IbuHamil->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
-                $JTRT_BulananAnak->whereRaw('config.kode_kabupaten = ' . $this->kabupaten);
-            }
-            if ($this->kecamatan) {
-                $JTRT_IbuHamil->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
-                $JTRT_BulananAnak->whereRaw('config.kode_kecamatan = ' . $this->kecamatan);
-            }
-            if ($this->desa) {
-                $JTRT_IbuHamil->whereRaw('config.kode_desa = ' . $this->desa);
-                $JTRT_BulananAnak->whereRaw('config.kode_desa = ' . $this->desa);
-            }
-            
-            $JTRT_IbuHamil = $JTRT_IbuHamil->get();
-            $JTRT_BulananAnak = $JTRT_BulananAnak->get();
 
+        if ($this->kabupaten) {
+            $JTRT_IbuHamil->whereRaw('config.kode_kabupaten = '.$this->kabupaten);
+            $JTRT_BulananAnak->whereRaw('config.kode_kabupaten = '.$this->kabupaten);
+        }
+        if ($this->kecamatan) {
+            $JTRT_IbuHamil->whereRaw('config.kode_kecamatan = '.$this->kecamatan);
+            $JTRT_BulananAnak->whereRaw('config.kode_kecamatan = '.$this->kecamatan);
+        }
+        if ($this->desa) {
+            $JTRT_IbuHamil->whereRaw('config.kode_desa = '.$this->desa);
+            $JTRT_BulananAnak->whereRaw('config.kode_desa = '.$this->desa);
+        }
+
+        $JTRT_IbuHamil = $JTRT_IbuHamil->get();
+        $JTRT_BulananAnak = $JTRT_BulananAnak->get();
 
         foreach ($JTRT_IbuHamil as $item_ibuHamil) {
             $dataNoKia[] = $item_ibuHamil;

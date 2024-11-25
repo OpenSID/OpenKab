@@ -9,7 +9,8 @@ class PariwisataController extends Controller
 {
     public function __construct(
         protected PariwisataRepository $pariwisata
-    ) {}
+    ) {
+    }
 
     public function __invoke()
     {

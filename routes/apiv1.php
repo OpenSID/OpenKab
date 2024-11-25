@@ -3,8 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DDKController;
-use App\Http\Controllers\Api\DataController;
+use App\Http\Controllers\Api\DTKSController;
+use App\Http\Controllers\Api\PariwisataController;
 use App\Http\Controllers\Api\TeamController;
+use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\BantuanController;

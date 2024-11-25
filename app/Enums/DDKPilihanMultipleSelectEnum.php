@@ -14,16 +14,17 @@ class DDKPilihanMultipleSelectEnum
         7 => 'Prasarana transportasi',
         8 => 'Sumber air panas',
     ];
+
     public const LEMBAGA_PENDIDIKAN_YANG_DIMILIKI_KELUARGA_KOMUNITAS = [
-        1  => 'TK/Preschool/Play Group',
-        2  => 'SD/Sederajat',
-        3  => 'SMP/Sederajat',
-        4  => 'SMA/Sederajat',
-        5  => 'Perguruan Tinggi',
-        6  => 'Pondok Pesantren',
-        7  => "Taman Pendidikan Alqur'an",
-        8  => 'Rhaudatul Athfal (Tk)',
-        9  => 'Madrasah Ibtidaiyah',
+        1 => 'TK/Preschool/Play Group',
+        2 => 'SD/Sederajat',
+        3 => 'SMP/Sederajat',
+        4 => 'SMA/Sederajat',
+        5 => 'Perguruan Tinggi',
+        6 => 'Pondok Pesantren',
+        7 => "Taman Pendidikan Alqur'an",
+        8 => 'Rhaudatul Athfal (Tk)',
+        9 => 'Madrasah Ibtidaiyah',
         10 => 'Madrasah Tsanawiyah',
         11 => 'Madrasah Aliyah',
         12 => 'Sekolah Tinggi Agama Islam',
@@ -48,6 +49,7 @@ class DDKPilihanMultipleSelectEnum
         31 => 'Kursus Satpam',
         32 => 'Kursus Bela Diri',
     ];
+
     public const ASET_SARANA_TRANSPORTASI_UMUM = [
         1 => 'Memiliki ojek motor/sepeda motor/bentor',
         2 => 'Memiliki becak',
@@ -58,19 +60,21 @@ class DDKPilihanMultipleSelectEnum
         7 => 'Memiliki sepeda dayung',
         8 => 'Memiliki bajaj/kancil',
     ];
+
     public const ASET_SARANA_PRODUKSI = [
-        1  => 'Memiliki penggilingan padi',
-        2  => 'Memiliki traktor',
-        3  => 'Memiliki pabrik pengolahan hasil pertanian',
-        4  => 'Memiliki kapal penangkap ikan',
-        5  => 'Memiliki alat pengolahan hasil perikanan',
-        6  => 'Memiliki alat pengolahan hasil peternakan',
-        7  => 'Memiliki alat pengolahan hasil perkebunan',
-        8  => 'Memiliki alat pengolahan hasil hutan',
-        9  => 'Memiliki alat produksi dan pengolah hasil pertambangan',
+        1 => 'Memiliki penggilingan padi',
+        2 => 'Memiliki traktor',
+        3 => 'Memiliki pabrik pengolahan hasil pertanian',
+        4 => 'Memiliki kapal penangkap ikan',
+        5 => 'Memiliki alat pengolahan hasil perikanan',
+        6 => 'Memiliki alat pengolahan hasil peternakan',
+        7 => 'Memiliki alat pengolahan hasil perkebunan',
+        8 => 'Memiliki alat pengolahan hasil hutan',
+        9 => 'Memiliki alat produksi dan pengolah hasil pertambangan',
         10 => 'Memiliki alat produksi dan pengolah hasil Industri kerajinan keluarga skala kecil dan menengah',
         11 => 'Memiliki alat produksi dan pengolahan hasil industri bahan bakar dan gas skala rumah tangga',
     ];
+
     public const ASET_PERUMAHAN_DINDING = [
         1 => 'Tembok',
         2 => 'Kayu',
@@ -79,12 +83,14 @@ class DDKPilihanMultipleSelectEnum
         5 => 'Pelepah kelapa/lontar/gebang',
         6 => 'Dedaunan',
     ];
+
     public const ASET_PERUMAHAN_LANTAI = [
         1 => 'Keramik',
         2 => 'Semen',
         3 => 'Kayu',
         4 => 'Tanah',
     ];
+
     public const ASET_PERUMAHAN_ATAP = [
         1 => 'Genteng',
         2 => 'Seng',
@@ -95,16 +101,17 @@ class DDKPilihanMultipleSelectEnum
         7 => 'Daun lontar/gebang/enau',
         8 => 'Daun ilalang',
     ];
+
     public const ASET_LAINNYA = [
-        1  => 'Memiliki TV dan elektronik sejenis lainnya',
-        2  => 'Memiliki sepeda motor pribadi',
-        3  => 'Memiliki mobil pribadi dan sejenisnya',
-        4  => 'Memiliki perahu bermotor',
-        5  => 'Memiliki kapal barang',
-        6  => 'Memiliki kapal penumpang',
-        7  => 'Memiliki kapal pesiar',
-        8  => 'Memiliki/menyewa helikopter pribadi',
-        9  => 'Memiliki/menyewa pesawat terbang pribadi',
+        1 => 'Memiliki TV dan elektronik sejenis lainnya',
+        2 => 'Memiliki sepeda motor pribadi',
+        3 => 'Memiliki mobil pribadi dan sejenisnya',
+        4 => 'Memiliki perahu bermotor',
+        5 => 'Memiliki kapal barang',
+        6 => 'Memiliki kapal penumpang',
+        7 => 'Memiliki kapal pesiar',
+        8 => 'Memiliki/menyewa helikopter pribadi',
+        9 => 'Memiliki/menyewa pesawat terbang pribadi',
         10 => 'Memiliki ternak besar',
         11 => 'Memiliki ternak kecil',
         12 => 'Memiliki hiasan emas/berlian',
@@ -132,21 +139,23 @@ class DDKPilihanMultipleSelectEnum
         34 => 'Memiliki parabola',
         35 => 'Berlangganan koran/majalah',
     ];
+
     public const KUALITAS_IBU_HAMIL = [
-        1  => 'Ibu hamil periksa di Posyandu',
-        2  => 'Ibu hamil periksa di Puskesmas',
-        3  => 'Ibu hamil periksa di Rumah Sakit',
-        4  => 'Ibu hamil periksa di Dokter Praktek',
-        5  => 'Ibu hamil periksa di Bidan Praktek',
-        6  => 'Ibu hamil periksa di Dukun Terlatih',
-        7  => 'Ibu hamil tidak periksa kesehatan',
-        8  => 'Ibu hamil yang meninggal',
-        9  => 'Ibu hamil melahirkan',
+        1 => 'Ibu hamil periksa di Posyandu',
+        2 => 'Ibu hamil periksa di Puskesmas',
+        3 => 'Ibu hamil periksa di Rumah Sakit',
+        4 => 'Ibu hamil periksa di Dokter Praktek',
+        5 => 'Ibu hamil periksa di Bidan Praktek',
+        6 => 'Ibu hamil periksa di Dukun Terlatih',
+        7 => 'Ibu hamil tidak periksa kesehatan',
+        8 => 'Ibu hamil yang meninggal',
+        9 => 'Ibu hamil melahirkan',
         10 => 'Ibu nifas sakit',
         11 => 'Kematian ibu nifas',
         12 => 'Ibu nifas sehat',
         13 => 'Kematian ibu saat melahirkan',
     ];
+
     public const KUALITAS_BAYI = [
         1 => 'Keguguran kandungan',
         2 => 'Bayi lahir hidup normal',
@@ -156,6 +165,7 @@ class DDKPilihanMultipleSelectEnum
         6 => 'Bayi lahir berat lebih dari 4 kg',
         7 => 'Bayi 0-5 tahun hidup yang menderita kelainan organ tubuh, fisik dan mental',
     ];
+
     public const KUALITAS_TEMPAT_PERSALINAN = [
         1 => 'Tempat persalinan Rumah Sakit Umum',
         2 => 'Tempat persalinan Rumah Bersalin',
@@ -167,78 +177,90 @@ class DDKPilihanMultipleSelectEnum
         8 => 'Rumah dukun',
         9 => 'Rumah sendiri',
     ];
+
     public const CAKUPAN_IMUNISASI = [
-        1  => 'DPT-1',
-        2  => 'BCG',
-        3  => 'Polio -1',
-        4  => 'DPT-2',
-        5  => 'Polio-2',
-        6  => 'Polio-3',
-        7  => 'DPT-3',
-        8  => 'Campak',
-        9  => 'Cacar',
+        1 => 'DPT-1',
+        2 => 'BCG',
+        3 => 'Polio -1',
+        4 => 'DPT-2',
+        5 => 'Polio-2',
+        6 => 'Polio-3',
+        7 => 'DPT-3',
+        8 => 'Campak',
+        9 => 'Cacar',
         10 => 'Sudah Semua',
     ];
+
     public const PENDERITA_SAKIT_DAN_KELAINAN = [
-        1  => 'Muntaber',
-        2  => 'Demam Berdarah',
-        3  => 'Kolera',
-        4  => 'Polio',
-        5  => 'Cikungunya',
-        6  => 'Flu Burung',
-        7  => 'Busung Lapar',
-        8  => 'Kelaparan',
-        9  => 'Kulit Bersisik',
+        1 => 'Muntaber',
+        2 => 'Demam Berdarah',
+        3 => 'Kolera',
+        4 => 'Polio',
+        5 => 'Cikungunya',
+        6 => 'Flu Burung',
+        7 => 'Busung Lapar',
+        8 => 'Kelaparan',
+        9 => 'Kulit Bersisik',
         10 => 'Kelainan fisik',
         11 => 'Kelainan mental',
     ];
+
     public const JENIS_PENYAKIT_ANGGOTA_KELUARGA = [
-        1  => 'Jantung',
-        2  => 'Lever',
-        3  => 'Paru-paru',
-        4  => 'Kanker',
-        5  => 'Stroke',
-        6  => 'Diabetes Melitus',
-        7  => 'Ginjal',
-        8  => 'Malaria',
-        9  => 'Lepra/Kusta',
+        1 => 'Jantung',
+        2 => 'Lever',
+        3 => 'Paru-paru',
+        4 => 'Kanker',
+        5 => 'Stroke',
+        6 => 'Diabetes Melitus',
+        7 => 'Ginjal',
+        8 => 'Malaria',
+        9 => 'Lepra/Kusta',
         10 => 'HIV/AIDS',
         11 => 'Gila/stress',
         12 => 'TBC',
         13 => 'Asma',
     ];
+
     public const KERUKUNAN = [
         1 => 'Korban luka dalam keluarga akibat konflik Sara',
         2 => 'Korban meninggal dalam keluarga akibat konflik Sara',
         3 => 'Janda/duda dalam keluarga akibat konflik Sara',
         4 => 'Anak yatim/piatu dalam keluarga akibat konflik Sara',
     ];
+
     public const PERKELAHIAN = [
         1 => 'Korban jiwa akibat perkelahian dalam keluarga',
         2 => 'Korban luka parah akibat perkelahian dalam keluarga',
     ];
+
     public const PENCURIAN = [
         1 => 'Korban pencurian, perampokan dalam keluarga',
     ];
+
     public const PENJARAHAN = [
         1 => 'Korban penjarahan yang pelakunya anggota keluarga',
         2 => 'Korban penjarahan yang pelakunya bukan anggota keluarga',
     ];
+
     public const PERJUDIAN = [
         1 => 'Anggota keluarga yang memiliki kebiasaan berjudi',
     ];
+
     public const PEMAKAIAN_MIRAS_DAN_NARKOBA = [
         1 => 'Anggota keluarga mengkonsumsi Miras yang dilarang',
         2 => 'Anggota keluarga yang mengkonsumsi Narkoba',
     ];
+
     public const PEMBUNUHAN = [
         1 => 'Korban pembunuhan dalam keluarga yang pelakunya anggota keluarga',
         2 => 'Korban pembunuhan dalam keluarga yang pelakunya bukan anggota keluarga',
     ];
+
     public const PENCULIKAN = [
         1 => 'Korban penculikan yang pelakunya anggota keluarga',
         2 => 'Korban penculikan yang pelakunya bukan anggota keluarga',
     ];
+
     public const KEJAHATAN_SEKSUAL = [
         1 => 'Korban perkosaan/pelecehan seksual yang pelakunya anggota keluarga',
         2 => 'Korban perkosaan/pelecehan seksual yang pelakunya bukan anggota keluarga',
@@ -246,29 +268,31 @@ class DDKPilihanMultipleSelectEnum
         4 => 'Korban kehamilan yang tidak dinikahi pelakunya',
         5 => 'Korban kehamilan yang tidak/belum disahkan secara hukum agama dan hukum negara',
     ];
+
     public const KEKERASAN_DALAM_KELUARGA_ATAU_RUMAH_TANGGA = [
-        1  => 'Adanya pertengkaran dalam keluarga antara anak dan orang tua',
-        2  => 'Adanya pertengkaran dalam keluarga antara anak dan anak',
-        3  => 'Adanya pertengkaran dalam keluarga antara ayah dan ibu/orang tua',
-        4  => 'Adanya pertengkaran dalam keluarga antara anak dan pembantu',
-        5  => 'Adanya pertengkaran dalam keluarga antara anak dan anggota keluarga lain',
-        6  => 'Adanya pemukulan/tindakan fisik antara anak dengan orang tua',
-        7  => 'Adanya pemukulan/tindakan fisik antara orang tua dengan anak',
-        8  => 'Adanya pemukulan/tindakan fisik antara anak dengan anggota keluarga lain',
-        9  => 'Adanya pemukulan/tindakan fisik antara orang tua dengan orang tua',
+        1 => 'Adanya pertengkaran dalam keluarga antara anak dan orang tua',
+        2 => 'Adanya pertengkaran dalam keluarga antara anak dan anak',
+        3 => 'Adanya pertengkaran dalam keluarga antara ayah dan ibu/orang tua',
+        4 => 'Adanya pertengkaran dalam keluarga antara anak dan pembantu',
+        5 => 'Adanya pertengkaran dalam keluarga antara anak dan anggota keluarga lain',
+        6 => 'Adanya pemukulan/tindakan fisik antara anak dengan orang tua',
+        7 => 'Adanya pemukulan/tindakan fisik antara orang tua dengan anak',
+        8 => 'Adanya pemukulan/tindakan fisik antara anak dengan anggota keluarga lain',
+        9 => 'Adanya pemukulan/tindakan fisik antara orang tua dengan orang tua',
         10 => 'Adanya pemukulan/tindakan fisik antara anak dengan pembantu',
         11 => 'Adanya pemukulan/tindakan fisik antara orang tua dengan pembantu',
     ];
+
     public const MASALAH_KESEJAHTERAAN_KELUARGA = [
-        1  => 'Ada anggota keluarga yang mengemis',
-        2  => 'Ada anggota keluarga yang bermalam/tidur di jalanan/emperan toko/ kolong jembatan',
-        3  => 'Ada anggota keluarga yang termasuk manusia lanjut usia (di atas 60 thn)',
-        4  => 'Ada anak anggota keluarga yang mengemis',
-        5  => 'Ada anak dan anggota keluarga yang menjadi pengamen',
-        6  => 'Ada anggota keluarga yang gila/stres',
-        7  => 'Ada anggota keluarga yang cacat fisik',
-        8  => 'Ada anggota keluarga yang cacat mental',
-        9  => 'Ada anggota keluarga yang kelainan kulit',
+        1 => 'Ada anggota keluarga yang mengemis',
+        2 => 'Ada anggota keluarga yang bermalam/tidur di jalanan/emperan toko/ kolong jembatan',
+        3 => 'Ada anggota keluarga yang termasuk manusia lanjut usia (di atas 60 thn)',
+        4 => 'Ada anak anggota keluarga yang mengemis',
+        5 => 'Ada anak dan anggota keluarga yang menjadi pengamen',
+        6 => 'Ada anggota keluarga yang gila/stres',
+        7 => 'Ada anggota keluarga yang cacat fisik',
+        8 => 'Ada anggota keluarga yang cacat mental',
+        9 => 'Ada anggota keluarga yang kelainan kulit',
         10 => 'Ada anggota keluarga yang menjadi pengamen',
         11 => 'Anggota keluarga yatim/piatu',
         12 => 'Keluarga janda',
@@ -305,6 +329,7 @@ class DDKPilihanMultipleSelectEnum
         6 => 'Vasektomi',
         7 => 'Tubektomi',
     ];
+
     public const CACAT_FISIK = [
         1 => 'Tuna rungu',
         2 => 'Tuna wicara',
@@ -312,11 +337,13 @@ class DDKPilihanMultipleSelectEnum
         4 => 'Lumpuh',
         5 => 'Sumbing',
     ];
+
     public const CACAT_MENTAL = [
         1 => 'Idiot',
         2 => 'Gila',
         3 => 'Stress',
     ];
+
     public const KEDUDUKAN_ANGGOTA_SEBAGAI_WAJIB_PAJAK_DAN_RETRIBUSI = [
         1 => 'Wajib Pajak Bumi dan Bangunan',
         2 => 'Wajib Pajak Penghasilan Perorangan',
@@ -327,16 +354,17 @@ class DDKPilihanMultipleSelectEnum
         7 => 'Wajib iuran',
         8 => 'Wajib pungutan',
     ];
+
     public const LEMBAGA_KEMASYARAKATAN_YANG_DIIKUTI_ANGGOTA = [
-        1  => 'Pengurus RT',
-        2  => 'Anggota Pengurus RT',
-        3  => 'Pengurus RW',
-        4  => 'Anggota Pengurus RW',
-        5  => 'Pengurus LKMD/K/LPM',
-        6  => 'Anggota LKMD/K/LPM',
-        7  => 'Pengurus PKK',
-        8  => 'Anggota PKK',
-        9  => 'Pengurus Lembaga Adat',
+        1 => 'Pengurus RT',
+        2 => 'Anggota Pengurus RT',
+        3 => 'Pengurus RW',
+        4 => 'Anggota Pengurus RW',
+        5 => 'Pengurus LKMD/K/LPM',
+        6 => 'Anggota LKMD/K/LPM',
+        7 => 'Pengurus PKK',
+        8 => 'Anggota PKK',
+        9 => 'Pengurus Lembaga Adat',
         10 => 'Pengurus Karang Taruna',
         11 => 'Anggota Karang Taruna',
         12 => 'Pengurus Hansip/Linmas',
@@ -377,16 +405,17 @@ class DDKPilihanMultipleSelectEnum
         47 => 'Pengurus Posko Penanggulangan Bencana',
         48 => 'Anggota Tim Penanggulangan Bencana',
     ];
+
     public const LEMBAGA_EKONOMI_YANG_DIIKUTI_ANGGOTA = [
-        1  => 'Koperasi',
-        2  => 'Unit Usaha Simpan Pinjam',
-        3  => 'Industri Kerajinan Tangan',
-        4  => 'Industri Pakaian',
-        5  => 'Industri Usaha Makanan',
-        6  => 'Industri Alat Rumah Tangga',
-        7  => 'Industri Usaha Bahan Bangunan',
-        8  => 'Industri Alat Pertanian',
-        9  => 'Restoran',
+        1 => 'Koperasi',
+        2 => 'Unit Usaha Simpan Pinjam',
+        3 => 'Industri Kerajinan Tangan',
+        4 => 'Industri Pakaian',
+        5 => 'Industri Usaha Makanan',
+        6 => 'Industri Alat Rumah Tangga',
+        7 => 'Industri Usaha Bahan Bangunan',
+        8 => 'Industri Alat Pertanian',
+        9 => 'Restoran',
         10 => 'Toko/ Swalayan',
         11 => 'Warung Kelontongan/Kios',
         12 => 'Angkutan Darat',
@@ -456,43 +485,43 @@ class DDKPilihanMultipleSelectEnum
     ];
 
     /**
-     * prodeskel_ddk_detail ~ select multiple
+     * prodeskel_ddk_detail ~ select multiple.
      */
     final public static function semuaMultipleSelect(): array
     {
         return [
             DDKEnum::KODE_PEMANFAATAN_DANAU_SUNGAI_WADUK_SITU_MATA_AIR_OLEH_KELUARGA => self::PEMANFAATAN_DANAU_SUNGAI_WADUK_SITU_MATA_AIR_OLEH_KELUARGA,
-            DDKEnum::KODE_LEMBAGA_PENDIDIKAN_YANG_DIMILIKI_KELUARGA_KOMUNITAS        => self::LEMBAGA_PENDIDIKAN_YANG_DIMILIKI_KELUARGA_KOMUNITAS,
-            DDKEnum::KODE_ASET_SARANA_TRANSPORTASI_UMUM                              => self::ASET_SARANA_TRANSPORTASI_UMUM,
-            DDKEnum::KODE_ASET_SARANA_PRODUKSI                                       => self::ASET_SARANA_PRODUKSI,
-            DDKEnum::KODE_ASET_PERUMAHAN_LANTAI                                      => self::ASET_PERUMAHAN_LANTAI,
-            DDKEnum::KODE_ASET_PERUMAHAN_DINDING                                     => self::ASET_PERUMAHAN_DINDING,
-            DDKEnum::KODE_ASET_PERUMAHAN_ATAP                                        => self::ASET_PERUMAHAN_ATAP,
-            DDKEnum::KODE_ASET_LAINNYA                                               => self::ASET_LAINNYA,
-            DDKEnum::KODE_KUALITAS_IBU_HAMIL                                         => self::KUALITAS_IBU_HAMIL,
-            DDKEnum::KODE_KUALITAS_BAYI                                              => self::KUALITAS_BAYI,
-            DDKEnum::KODE_KUALITAS_TEMPAT_PERSALINAN                                 => self::KUALITAS_TEMPAT_PERSALINAN,
-            DDKEnum::KODE_CAKUPAN_IMUNISASI                                          => self::CAKUPAN_IMUNISASI,
-            DDKEnum::KODE_PENDERITA_SAKIT_DAN_KELAINAN                               => self::PENDERITA_SAKIT_DAN_KELAINAN,
-            DDKEnum::KODE_JENIS_PENYAKIT_ANGGOTA_KELUARGA                            => self::JENIS_PENYAKIT_ANGGOTA_KELUARGA,
-            DDKEnum::KODE_KERUKUNAN                                                  => self::KERUKUNAN,
-            DDKEnum::KODE_PERKELAHIAN                                                => self::PERKELAHIAN,
-            DDKEnum::KODE_PENCURIAN                                                  => self::PENCURIAN,
-            DDKEnum::KODE_PENJARAHAN                                                 => self::PENJARAHAN,
-            DDKEnum::KODE_PERJUDIAN                                                  => self::PERJUDIAN,
-            DDKEnum::KODE_PEMAKAIAN_MIRAS_DAN_NARKOBA                                => self::PEMAKAIAN_MIRAS_DAN_NARKOBA,
-            DDKEnum::KODE_PEMBUNUHAN                                                 => self::PEMBUNUHAN,
-            DDKEnum::KODE_PENCULIKAN                                                 => self::PENCULIKAN,
-            DDKEnum::KODE_KEJAHATAN_SEKSUAL                                          => self::KEJAHATAN_SEKSUAL,
-            DDKEnum::KODE_KEKERASAN_DALAM_KELUARGA_ATAU_RUMAH_TANGGA                 => self::KEKERASAN_DALAM_KELUARGA_ATAU_RUMAH_TANGGA,
-            DDKEnum::KODE_MASALAH_KESEJAHTERAAN_KELUARGA                             => self::MASALAH_KESEJAHTERAAN_KELUARGA,
+            DDKEnum::KODE_LEMBAGA_PENDIDIKAN_YANG_DIMILIKI_KELUARGA_KOMUNITAS => self::LEMBAGA_PENDIDIKAN_YANG_DIMILIKI_KELUARGA_KOMUNITAS,
+            DDKEnum::KODE_ASET_SARANA_TRANSPORTASI_UMUM => self::ASET_SARANA_TRANSPORTASI_UMUM,
+            DDKEnum::KODE_ASET_SARANA_PRODUKSI => self::ASET_SARANA_PRODUKSI,
+            DDKEnum::KODE_ASET_PERUMAHAN_LANTAI => self::ASET_PERUMAHAN_LANTAI,
+            DDKEnum::KODE_ASET_PERUMAHAN_DINDING => self::ASET_PERUMAHAN_DINDING,
+            DDKEnum::KODE_ASET_PERUMAHAN_ATAP => self::ASET_PERUMAHAN_ATAP,
+            DDKEnum::KODE_ASET_LAINNYA => self::ASET_LAINNYA,
+            DDKEnum::KODE_KUALITAS_IBU_HAMIL => self::KUALITAS_IBU_HAMIL,
+            DDKEnum::KODE_KUALITAS_BAYI => self::KUALITAS_BAYI,
+            DDKEnum::KODE_KUALITAS_TEMPAT_PERSALINAN => self::KUALITAS_TEMPAT_PERSALINAN,
+            DDKEnum::KODE_CAKUPAN_IMUNISASI => self::CAKUPAN_IMUNISASI,
+            DDKEnum::KODE_PENDERITA_SAKIT_DAN_KELAINAN => self::PENDERITA_SAKIT_DAN_KELAINAN,
+            DDKEnum::KODE_JENIS_PENYAKIT_ANGGOTA_KELUARGA => self::JENIS_PENYAKIT_ANGGOTA_KELUARGA,
+            DDKEnum::KODE_KERUKUNAN => self::KERUKUNAN,
+            DDKEnum::KODE_PERKELAHIAN => self::PERKELAHIAN,
+            DDKEnum::KODE_PENCURIAN => self::PENCURIAN,
+            DDKEnum::KODE_PENJARAHAN => self::PENJARAHAN,
+            DDKEnum::KODE_PERJUDIAN => self::PERJUDIAN,
+            DDKEnum::KODE_PEMAKAIAN_MIRAS_DAN_NARKOBA => self::PEMAKAIAN_MIRAS_DAN_NARKOBA,
+            DDKEnum::KODE_PEMBUNUHAN => self::PEMBUNUHAN,
+            DDKEnum::KODE_PENCULIKAN => self::PENCULIKAN,
+            DDKEnum::KODE_KEJAHATAN_SEKSUAL => self::KEJAHATAN_SEKSUAL,
+            DDKEnum::KODE_KEKERASAN_DALAM_KELUARGA_ATAU_RUMAH_TANGGA => self::KEKERASAN_DALAM_KELUARGA_ATAU_RUMAH_TANGGA,
+            DDKEnum::KODE_MASALAH_KESEJAHTERAAN_KELUARGA => self::MASALAH_KESEJAHTERAAN_KELUARGA,
             //  ANGGOTA
-            DDKEnum::KODE_AKSEPTOR_KB                                         => self::AKSEPTOR_KB,
-            DDKEnum::KODE_CACAT_FISIK                                         => self::CACAT_FISIK,
-            DDKEnum::KODE_CACAT_MENTAL                                        => self::CACAT_MENTAL,
+            DDKEnum::KODE_AKSEPTOR_KB => self::AKSEPTOR_KB,
+            DDKEnum::KODE_CACAT_FISIK => self::CACAT_FISIK,
+            DDKEnum::KODE_CACAT_MENTAL => self::CACAT_MENTAL,
             DDKEnum::KODE_KEDUDUKAN_ANGGOTA_SEBAGAI_WAJIB_PAJAK_DAN_RETRIBUSI => self::KEDUDUKAN_ANGGOTA_SEBAGAI_WAJIB_PAJAK_DAN_RETRIBUSI,
-            DDKEnum::KODE_LEMBAGA_KEMASYARAKATAN_YANG_DIIKUTI_ANGGOTA         => self::LEMBAGA_KEMASYARAKATAN_YANG_DIIKUTI_ANGGOTA,
-            DDKEnum::KODE_LEMBAGA_EKONOMI_YANG_DIMILIKI_ANGGOTA               => self::LEMBAGA_EKONOMI_YANG_DIIKUTI_ANGGOTA,
+            DDKEnum::KODE_LEMBAGA_KEMASYARAKATAN_YANG_DIIKUTI_ANGGOTA => self::LEMBAGA_KEMASYARAKATAN_YANG_DIIKUTI_ANGGOTA,
+            DDKEnum::KODE_LEMBAGA_EKONOMI_YANG_DIMILIKI_ANGGOTA => self::LEMBAGA_EKONOMI_YANG_DIIKUTI_ANGGOTA,
         ];
     }
 

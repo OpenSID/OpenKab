@@ -4,46 +4,53 @@ namespace App\Enums;
 
 class DDKPilihanProduksiTahunIniEnum
 {
-    public const TANAMAN_PANGAN          = 'Tanaman Pangan';
-    public const BUAH_BUAHAN             = 'Buah-Buahan';
-    public const TANAMAN_OBAT            = 'Tanaman Obat';
-    public const TANAMAN_PERKEBUNAN      = 'Tanaman Perkebunan';
-    public const HASIL_HUTAN             = 'Hasil Hutan';
+    public const TANAMAN_PANGAN = 'Tanaman Pangan';
+
+    public const BUAH_BUAHAN = 'Buah-Buahan';
+
+    public const TANAMAN_OBAT = 'Tanaman Obat';
+
+    public const TANAMAN_PERKEBUNAN = 'Tanaman Perkebunan';
+
+    public const HASIL_HUTAN = 'Hasil Hutan';
+
     public const PENGOLAHAN_HASIL_TERNAK = 'Pengolahan Hasil Ternak';
-    public const PERIKANAN               = 'Perikanan';
-    public const PENGATURAN              = [
+
+    public const PERIKANAN = 'Perikanan';
+
+    public const PENGATURAN = [
         self::TANAMAN_PANGAN => [
             'jumlah_pohon' => false,
-            'luas_panen'   => true,
+            'luas_panen' => true,
         ],
         self::BUAH_BUAHAN => [
             'jumlah_pohon' => true,
-            'luas_panen'   => true,
+            'luas_panen' => true,
         ],
         self::TANAMAN_OBAT => [
             'jumlah_pohon' => false,
-            'luas_panen'   => true,
+            'luas_panen' => true,
         ],
         self::TANAMAN_PERKEBUNAN => [
             'jumlah_pohon' => true,
-            'luas_panen'   => true,
+            'luas_panen' => true,
         ],
         self::HASIL_HUTAN => [
             'jumlah_pohon' => false,
-            'luas_panen'   => false,
+            'luas_panen' => false,
         ],
         self::PENGOLAHAN_HASIL_TERNAK => [
             'jumlah_pohon' => false,
-            'luas_panen'   => false,
+            'luas_panen' => false,
         ],
         self::PERIKANAN => [
             'jumlah_pohon' => false,
-            'luas_panen'   => false,
+            'luas_panen' => false,
         ],
     ];
 
     /**
-     * [kategori => ['komoditas' => string, 'satuan' => string] ]
+     * [kategori => ['komoditas' => string, 'satuan' => string] ].
      */
     public const DATA = [
         self::TANAMAN_PANGAN => [
@@ -241,20 +248,20 @@ class DDKPilihanProduksiTahunIniEnum
     ];
 
     /**
-     * prodeskel_ddk_produksi ~ [kategori_komoditas => ['kode' => prefix_komoditas + kode, 'komoditas' => string, 'satuan' => string] ]
+     * prodeskel_ddk_produksi ~ [kategori_komoditas => ['kode' => prefix_komoditas + kode, 'komoditas' => string, 'satuan' => string] ].
      *
      * @param mixed|null $data
      */
     final public static function dataWithKode($data = null): array
     {
         $data = $data == null ? self::DATA : $data;
-        $tmp  = [];
+        $tmp = [];
 
         foreach ($data as $key_kategori => $komoditas) {
-            $kode_komoditas     = 1;
+            $kode_komoditas = 1;
             $tmp[$key_kategori] = array_map(static function ($item) use ($key_kategori, &$kode_komoditas): array {
                 return array_merge($item, [
-                    'kode' => array_search($key_kategori, DDKEnum::KODE_KATEGORI_PRODUKSI_TAHUN_INI) . '_' . $kode_komoditas++,
+                    'kode' => array_search($key_kategori, DDKEnum::KODE_KATEGORI_PRODUKSI_TAHUN_INI).'_'.$kode_komoditas++,
                 ]);
             }, $komoditas);
         }

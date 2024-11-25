@@ -5,18 +5,18 @@ namespace App\Enums;
 class DDKPilihanBahanGalianAnggotaEnum
 {
     /**
-     * prodeskel_ddk_bahan_galian
+     * prodeskel_ddk_bahan_galian.
      */
     public const DATA = [
-        1  => 'Batu kali',
-        2  => 'Batu kapur',
-        3  => 'Pasir',
-        4  => 'Emas',
-        5  => 'Kuningan',
-        6  => 'Aluminium',
-        7  => 'Perunggu',
-        8  => 'Belerang',
-        9  => 'Batu marmer',
+        1 => 'Batu kali',
+        2 => 'Batu kapur',
+        3 => 'Pasir',
+        4 => 'Emas',
+        5 => 'Kuningan',
+        6 => 'Aluminium',
+        7 => 'Perunggu',
+        8 => 'Belerang',
+        9 => 'Batu marmer',
         10 => 'Batu cadas',
         11 => 'Batu apung',
         12 => 'Pasir kwarsa',

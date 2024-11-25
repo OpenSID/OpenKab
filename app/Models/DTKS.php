@@ -30,11 +30,11 @@ class DTKS extends BaseModel
     ];
 
     protected $casts = [
-        'created_at'          => 'date:Y-m-d H:i:s',
-        'updated_at'          => 'date:Y-m-d H:i:s',
-        'tanggal_pencacahan'  => 'date:Y-m-d',
+        'created_at' => 'date:Y-m-d H:i:s',
+        'updated_at' => 'date:Y-m-d H:i:s',
+        'tanggal_pencacahan' => 'date:Y-m-d',
         'tanggal_pemeriksaan' => 'date:Y-m-d',
-        'tanggal_pendataan'   => 'date:Y-m-d',
+        'tanggal_pendataan' => 'date:Y-m-d',
     ];
 
     public function config()

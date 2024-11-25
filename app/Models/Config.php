@@ -70,9 +70,8 @@ class Config extends Model
         return $this->hasOne(Keluarga::class, 'config_id', 'id');
     }
 
-     /** Get all of the pendidikan for the Config.
+    /** Get all of the pendidikan for the Config.
      */
-
     public function pendidikans()
     {
         return $this->hasMany(Pendidikan::class, 'config_id', 'id');
@@ -81,12 +80,10 @@ class Config extends Model
     /**
      * Get all of the dtks for the Config.
      */
-    
     public function dtkses()
     {
         return $this->hasMany(DTKS::class, 'config_id', 'id');
     }
-
 
     public function scopeOrderByArtikel($query)
     {

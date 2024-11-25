@@ -131,15 +131,15 @@ class PendudukRepository
     public function listPendudukProdeskel()
     {
         return QueryBuilder::for(Penduduk::with('prodeskelLembagaAdat')->withRef()->filterWilayah()->select([
-                'id',
-                'nik',
-                'nama',
-                'agama_id', 
-                'suku',
-                'config_id', // Pastikan config_id termasuk dalam query
-            ]))
+            'id',
+            'nik',
+            'nama',
+            'agama_id',
+            'suku',
+            'config_id', // Pastikan config_id termasuk dalam query
+        ]))
             ->allowedFields([
-                'id', 'nik', 'nama', 'agama_id', 'suku', 'prodeskelLembagaAdat.id', 'prodeskelLembagaAdat.kategori', 'prodeskelLembagaAdat.data'
+                'id', 'nik', 'nama', 'agama_id', 'suku', 'prodeskelLembagaAdat.id', 'prodeskelLembagaAdat.kategori', 'prodeskelLembagaAdat.data',
             ])
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -151,10 +151,9 @@ class PendudukRepository
                 }),
             ])
             ->allowedSorts(['nik', 'nama'])
-            ->jsonPaginate();  
+            ->jsonPaginate();
     }
 
-    
     public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         return collect(match ($kategori) {

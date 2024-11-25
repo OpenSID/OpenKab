@@ -6,7 +6,7 @@ class ProdeskelPotensi extends BaseModel
 {
     /** {@inheritdoc} */
     protected $table = 'prodeskel_potensi';
-    
+
     // Relasi ke Penduduk
     public function penduduk()
     {

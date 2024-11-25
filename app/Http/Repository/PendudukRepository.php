@@ -128,6 +128,33 @@ class PendudukRepository
         ->jsonPaginate();
     }
 
+    public function listPendudukProdeskel()
+    {
+        return QueryBuilder::for(Penduduk::with('prodeskelLembagaAdat')->withRef()->filterWilayah()->select([
+                'id',
+                'nik',
+                'nama',
+                'agama_id', 
+                'suku',
+                'config_id', // Pastikan config_id termasuk dalam query
+            ]))
+            ->allowedFields([
+                'id', 'nik', 'nama', 'agama_id', 'suku', 'prodeskelLembagaAdat.id', 'prodeskelLembagaAdat.kategori', 'prodeskelLembagaAdat.data'
+            ])
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama', 'like', "%{$value}%")
+                            ->orWhere('nik', 'like', "%{$value}%");
+                    });
+                }),
+            ])
+            ->allowedSorts(['nik', 'nama'])
+            ->jsonPaginate();  
+    }
+
+    
     public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         return collect(match ($kategori) {

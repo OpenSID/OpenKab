@@ -546,6 +546,18 @@ class Penduduk extends BaseModel
         return $this->hasOne(DtksAnggota::class, 'id_penduduk');  // Asumsi anak_id ada di Kia
     }
 
+    public function prodeskelLembagaAdat()
+    {
+        return $this->hasMany(ProdeskelPotensi::class, 'config_id', 'config_id')
+                    ->where('kategori', 'lembaga-adat');
+    }
+
+    public function prodeskelPrasaranaPeribadatan()
+    {
+        return $this->hasMany(ProdeskelPotensi::class, 'config_id', 'config_id')
+                    ->where('kategori', 'prasarana-peribadatan');
+    }
+
     /**
      * Scope query untuk status penduduk.
      *

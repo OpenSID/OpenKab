@@ -26,8 +26,6 @@ use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
-use App\Http\Controllers\Api\DTKSController;
-use App\Http\Controllers\Api\PariwisataController;
 use App\Http\Controllers\Api\KelembagaanController;
 
 /*

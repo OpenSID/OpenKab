@@ -4,7 +4,6 @@ namespace App\Http\Repository;
 
 use App\Models\DTKS;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class DTKSRepository

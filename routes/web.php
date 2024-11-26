@@ -148,6 +148,14 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
                 Route::middleware(['permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
             });
         });
+
+    // Satu Data
+    Route::prefix('satu-data')->group(function () {
+        Route::prefix('dtks')->group(function () {
+            Route::get('papan', [App\Http\Controllers\DTKSController::class, 'index'])->name('satu-data.dtks.index');
+            Route::get('cetak', [App\Http\Controllers\DTKSController::class, 'cetak'])->name('satu-data.dtks.cetak');
+        });
+    });
 });
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {

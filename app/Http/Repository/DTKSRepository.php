@@ -4,6 +4,7 @@ namespace App\Http\Repository;
 
 use App\Models\DTKS;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class DTKSRepository
@@ -11,10 +12,6 @@ class DTKSRepository
     public function index()
     {
         return QueryBuilder::for(DTKS::class)
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-                AllowedFilter::exact('rtm.kepalaKeluarga.nik'),
-            ])
             ->with([
                 'rtm',
                 'rtm.kepalaKeluarga' => static function ($builder): void {
@@ -27,6 +24,16 @@ class DTKSRepository
                     // hanya ambil data anggota yg masih hidup (tweb_penduduk)
                     $builder->where('status_dasar', 1);
                 },
+            ])
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('rtm.kepalaKeluarga.nik'),
+                AllowedFilter::callback('search', static function ($query, $value) {
+                    $query->whereRelation('rtm.kepalaKeluarga', 'nik', 'like', "%{$value}%");
+                }),
+            ])
+            ->allowedSorts([
+                'id',
             ])
             ->jsonPaginate();
     }

@@ -7,10 +7,10 @@ use App\Http\Transformers\PendidikanTransformer;
 
 class PendidikanController extends Controller
 {
-
     public function __construct(
         protected PendudukRepository $penduduk
-    ) {}
+    ) {
+    }
 
     public function __invoke()
     {

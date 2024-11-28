@@ -127,6 +127,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         ->prefix('data-pokok')
         ->group(function () {
             Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
         });
 
     // Statistik

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\DDKRepository;
 use App\Http\Transformers\DDKTransformer;
-use Illuminate\Http\Request;
 
 class DDKController extends Controller
 {

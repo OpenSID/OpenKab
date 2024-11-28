@@ -42,6 +42,12 @@ final class Modul extends Enum
                     'url' => 'data-pokok/pendidikan',
                     'permission' => 'datapokok-pendidikan',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pariwisata',
+                    'url' => 'data-pokok/pariwisata',
+                    'permission' => 'datapokok-pariwisata',
+                ],
             ],
         ],
         [

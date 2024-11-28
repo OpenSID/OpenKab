@@ -13,7 +13,7 @@ class PariwisataTransformer extends TransformerAbstract
     {
         $data = $komoditas->data;
 
-        $jenis_hiburan = array_key_exists('sarana_wisata', $data) && !empty($data['sarana_wisata'])
+        $jenis_hiburan = array_key_exists('sarana_wisata', $data) && ! empty($data['sarana_wisata'])
             ? SaranaWisataEnum::fromValue((int) $data['sarana_wisata'])
             : null;
 
@@ -23,15 +23,16 @@ class PariwisataTransformer extends TransformerAbstract
 
         return [
             'id' => $komoditas->id,
+            'nama_desa' => $komoditas->config?->nama_desa,
             'kode_desa' => $komoditas->config?->kode_desa,
-            'jenis_hiburan' => $jenis_hiburan ? SaranaWisataEnum::fromValue((int)$data['sarana_wisata'])->description : 'TIDAK TAHU',
+            'jenis_hiburan' => $jenis_hiburan ? SaranaWisataEnum::fromValue((int) $data['sarana_wisata'])->description : 'TIDAK TAHU',
             'jumlah_penginapan' => $data['jumlah'] ?? 'TIDAK TAHU',
-            'lokasi_tempat_area_wisata' => $lokasi_tempat_area_wisata ? KomoditasPotensiWisataEnum::fromValue((int)$komoditas->komoditas)->description : 'TIDAK TAHU',
-            'keberadaan' => !empty($data['keberadaan'])
+            'lokasi_tempat_area_wisata' => $lokasi_tempat_area_wisata ? KomoditasPotensiWisataEnum::fromValue((int) $komoditas->komoditas)->description : 'TIDAK TAHU',
+            'keberadaan' => ! empty($data['keberadaan'])
                 ? ($data['keberadaan'] == 1 ? 'Ada' : 'Tidak Ada')
                 : 'TIDAK TAHU',
             'luas' => $data['luas'] ?? 'TIDAK TAHU',
-            'tingkat_pemanfaatan' => !empty($data['tingkat_pemanfaatan'])
+            'tingkat_pemanfaatan' => ! empty($data['tingkat_pemanfaatan'])
                 ? ($data['tingkat_pemanfaatan'] == 1 ? 'Aktif' : 'Tidak Aktif')
                 : 'TIDAK TAHU',
         ];

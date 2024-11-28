@@ -3,9 +3,8 @@
 namespace App\Http\Repository;
 
 use App\Models\KeluargaDDK;
-use App\Models\Enums\StatusDasarEnum;
-use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class DDKRepository
 {

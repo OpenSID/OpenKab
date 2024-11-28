@@ -54,6 +54,12 @@ final class Modul extends Enum
                     'url' => 'data-pokok/ketenagakerjaan',
                     'permission' => 'datapokok-ketenagakerjaan',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Data Papan',
+                    'url' => 'satu-data/dtks/papan',
+                    'permission' => 'datapokok-papan',
+                ],
             ],
         ],
         [

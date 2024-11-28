@@ -2,9 +2,9 @@
 
 namespace App\Http\Transformers;
 
-use League\Fractal\TransformerAbstract;
-use App\Models\Potensi;
 use App\Models\Penduduk;
+use App\Models\Potensi;
+use League\Fractal\TransformerAbstract;
 
 class KelembagaanTransformer extends TransformerAbstract
 {
@@ -43,7 +43,7 @@ class KelembagaanTransformer extends TransformerAbstract
         // Calculate the sum
         $total = 0;
         foreach ($fieldsToSum as $field) {
-            $total += isset($kelembagaanData[$field]) ? (int)$kelembagaanData[$field] : 0;
+            $total += isset($kelembagaanData[$field]) ? (int) $kelembagaanData[$field] : 0;
         }
 
         // Query penduduk based on config_id

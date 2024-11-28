@@ -17,4 +17,11 @@ class DataPokokController extends Controller
     {
         return view('pendidikan.index');
     }
+
+    public function ketenagakerjaan()
+    {
+        $title = 'Data Pekerjaan dan Pelatihan';
+
+        return view('ketenagakerjaan.index', ['title' => $title]);
+    }
 }

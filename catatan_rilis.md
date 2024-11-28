@@ -26,8 +26,7 @@ Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 22. [#418](https://github.com/OpenSID/OpenKab/issues/418) Penambahan Api presisi prodeskel.
 23. [#440](https://github.com/OpenSID/OpenKab/issues/440) Penambahan tampilan data pariwisata pada halaman admin.
 24. [#444](https://github.com/OpenSID/OpenKab/issues/444) Penambahan tampilan data pendidikan pada halaman admin.
-
-
+24. [#446](https://github.com/OpenSID/OpenKab/issues/446) Penambahan tampilan data ketenagakerjaan pada halaman admin.
 
 #### Perbaikan BUG
 

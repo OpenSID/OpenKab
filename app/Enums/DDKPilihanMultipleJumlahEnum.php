@@ -5,15 +5,15 @@ namespace App\Enums;
 class DDKPilihanMultipleJumlahEnum
 {
     public const KEPEMILIKAN_JENIS_TERNAK_KELUARGA_TAHUN_INI = [
-        1  => 'Sapi',
-        2  => 'Kerbau',
-        3  => 'Babi',
-        4  => 'Ayam kampung',
-        5  => 'Ayam Broiler',
-        6  => 'Bebek',
-        7  => 'Kuda',
-        8  => 'Kambing',
-        9  => 'Domba',
+        1 => 'Sapi',
+        2 => 'Kerbau',
+        3 => 'Babi',
+        4 => 'Ayam kampung',
+        5 => 'Ayam Broiler',
+        6 => 'Bebek',
+        7 => 'Kuda',
+        8 => 'Kambing',
+        9 => 'Domba',
         10 => 'Angsa',
         11 => 'Burung Puyuh',
         12 => 'Kelinci',
@@ -30,6 +30,7 @@ class DDKPilihanMultipleJumlahEnum
         23 => 'Burung langka lainnya',
         24 => 'Buaya',
     ];
+
     public const ALAT_PRODUKSI_BUDIDAYA_IKAN = [
         1 => 'Karamba',
         2 => 'Tambak',
@@ -38,6 +39,7 @@ class DDKPilihanMultipleJumlahEnum
         5 => 'Pukat',
         6 => 'Jala',
     ];
+
     public const KUALITAS_PERTOLONGAN_PERSALINAN = [
         1 => 'Jumlah Persalinan ditolong Dokter',
         2 => 'Jumlah persalinan ditolong bidan',
@@ -47,14 +49,14 @@ class DDKPilihanMultipleJumlahEnum
     ];
 
     /**
-     * prodeskel_ddk_detail ~ jumlah
+     * prodeskel_ddk_detail ~ jumlah.
      */
     final public static function semuaJumlah(): array
     {
         return [
             DDKEnum::KODE_KEPEMILIKAN_JENIS_TERNAK_KELUARGA_TAHUN_INI => self::KEPEMILIKAN_JENIS_TERNAK_KELUARGA_TAHUN_INI,
-            DDKEnum::KODE_ALAT_PRODUKSI_BUDIDAYA_IKAN                 => self::ALAT_PRODUKSI_BUDIDAYA_IKAN,
-            DDKEnum::KODE_KUALITAS_PERTOLONGAN_PERSALINAN             => self::KUALITAS_PERTOLONGAN_PERSALINAN,
+            DDKEnum::KODE_ALAT_PRODUKSI_BUDIDAYA_IKAN => self::ALAT_PRODUKSI_BUDIDAYA_IKAN,
+            DDKEnum::KODE_KUALITAS_PERTOLONGAN_PERSALINAN => self::KUALITAS_PERTOLONGAN_PERSALINAN,
         ];
     }
 

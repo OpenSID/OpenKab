@@ -141,4 +141,9 @@ class Potensi extends BaseModel
     {
         return $query->where('kategori', 'badan-perwakilan-desa');
     }
+
+    protected function scopePrasaranaPeribadatan(Builder $query)
+    {
+        return $query->where('kategori', 'prasarana-peribadatan');
+    }
 }

@@ -12,4 +12,9 @@ class DataPokokController extends Controller
 
         return view('pariwisata.index', ['title' => $title]);
     }
+
+    public function pendidikan()
+    {
+        return view('pendidikan.index');
+    }
 }

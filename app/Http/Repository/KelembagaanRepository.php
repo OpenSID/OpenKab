@@ -3,8 +3,8 @@
 namespace App\Http\Repository;
 
 use App\Models\Potensi;
-use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class KelembagaanRepository
 {

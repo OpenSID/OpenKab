@@ -15,6 +15,7 @@ class DDKTransformer extends TransformerAbstract
     {
         return [
             'id' => $keluarga->id,
+            'nik' => $keluarga->no_kk,
             'kepemilikan_lahan' => collect(DDKPilihanCheckboxEnum::KEPEMILIKAN_LAHAN)
                 ->map(function ($item, $key) use ($keluarga) {
                     return [
@@ -27,7 +28,7 @@ class DDKTransformer extends TransformerAbstract
                                     ?->detail
                                     ?->where('kode_field', DDKEnum::KODE_KEPEMILIKAN_LAHAN)
                                     ?->first()
-                                    ?->value[$key]
+                                    ?->value[$key] ?? null
                             ),
                     ];
                 }
@@ -41,8 +42,7 @@ class DDKTransformer extends TransformerAbstract
             'pola_makan_keluarga' => collect(DDKPilihanSelectEnum::POLA_MAKAN_KELUARGA)
                 ->mapWithKeys(function ($item, $key) use ($keluarga) {
                     return [$item => $key == $keluarga?->prodeskelDDK?->detail?->where('kode_field', DDKEnum::KODE_POLA_MAKAN_KELUARGA)?->first()?->value];
-                }
-                ),
+                }),
         ];
     }
 

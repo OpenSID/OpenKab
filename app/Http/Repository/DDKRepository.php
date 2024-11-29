@@ -14,6 +14,7 @@ class DDKRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
+                AllowedFilter::callback('search', fn ($query, $search) => $query->where('no_kk', 'like', "%$search%")),
             ])
             ->without('wilayah')
             ->with([

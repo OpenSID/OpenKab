@@ -158,6 +158,13 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
                 Route::middleware(['permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
             });
         });
+
+    // Prodeskel
+    Route::prefix('prodeskel')->group(function () {
+        Route::prefix('ddk')->group(function () {
+            Route::get('pangan', [App\Http\Controllers\DDKPanganController::class, 'index'])->name('ddk.pangan');
+        });
+    });
 });
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {

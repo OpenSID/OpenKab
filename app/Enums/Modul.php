@@ -54,6 +54,12 @@ final class Modul extends Enum
                     'url' => 'data-pokok/ketenagakerjaan',
                     'permission' => 'datapokok-ketenagakerjaan',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Kepemilihan Lahan & Produksi',
+                    'url' => 'prodeskel/ddk/pangan',
+                    'permission' => 'prodeskel-ddk-pangan',
+                ],
             ],
         ],
         [

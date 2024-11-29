@@ -22,6 +22,7 @@ use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\DataPokokController;
 use App\Http\Controllers\Web\DownloadCounterController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 
@@ -120,6 +121,13 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/cetak', 'cetak');
             Route::get('/detail/{id}', 'show')->name('bantuan.detail');
         });
+
+    // Data Pokok
+    Route::middleware(['permission:datapokok-read'])->controller(DataPokokController::class)
+    ->prefix('data-pokok')
+    ->group(function () {
+        Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
+    });
 
     // Statistik
     Route::middleware(['permission:statistik-read'])->controller(StatistikController::class)

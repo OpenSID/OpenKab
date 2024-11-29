@@ -112,7 +112,7 @@ abstract class BaseRepository
     /**
      * Find model record for given id.
      *
-     * @return Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null
+     * @return Builder|Builder[]|Collection|Model|null
      */
     public function find(int $id, array $columns = ['*'])
     {
@@ -124,7 +124,7 @@ abstract class BaseRepository
     /**
      * Update model record for given id.
      *
-     * @return Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
+     * @return Builder|Builder[]|Collection|Model
      */
     public function update(array $input, int $id)
     {

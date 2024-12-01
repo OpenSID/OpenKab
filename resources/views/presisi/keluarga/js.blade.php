@@ -4,6 +4,11 @@
             var statistik = [];
             var data_grafik = [];
             let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
+            
+            @include('presisi.keluarga.filter-wilayah.kabupaten')
+            @include('presisi.keluarga.filter-wilayah.kecamatan')
+            @include('presisi.keluarga.filter-wilayah.desa')
+            @include('presisi.keluarga.filter-wilayah.button')
 
             $('#nav-statistik li a:first').addClass('active');
             $('#nav-statistik li').click(function(e) {
@@ -15,34 +20,34 @@
                 table.ajax.reload()
             });
 
-            $('#btn-tabel').click(function() {
-                $(this).prop('disabled', true);
-                $('#btn-grafik').prop('disabled', false);
-                $('#btn-pie').prop('disabled', false);
+            // $('#btn-tabel').click(function() {
+            //     $(this).prop('disabled', true);
+            //     $('#btn-grafik').prop('disabled', false);
+            //     $('#btn-pie').prop('disabled', false);
 
-                $('#grafik').hide();
-                $('#pie').hide()
-                $('#statistik').show()
-            })
+            //     $('#grafik').hide();
+            //     $('#pie').hide()
+            //     $('#statistik').show()
+            // })
 
             $('#btn-grafik').click(function() {
                 $(this).prop('disabled', true);
-                $('#btn-tabel').prop('disabled', false);
+                // $('#btn-tabel').prop('disabled', false);
                 $('#btn-pie').prop('disabled', false);
 
                 $('#grafik').show();
                 $('#pie').hide()
-                $('#statistik').hide()
+                // $('#statistik').hide()
             })
 
             $('#btn-pie').click(function() {
                 $(this).prop('disabled', true);
-                $('#btn-tabel').prop('disabled', false);
+                // $('#btn-tabel').prop('disabled', false);
                 $('#btn-grafik').prop('disabled', false);
 
                 $('#grafik').hide();
                 $('#pie').show()
-                $('#statistik').hide()
+                // $('#statistik').hide()
             })
 
 
@@ -66,6 +71,9 @@
                         var nav = $('#nav-statistik').find('li a.active')
                         d['filter[id]'] = nav.data('key');
                         d['filter[tahun]'] = '';
+                        d['filter[kabupaten]'] = $("#filter_kabupaten").val();
+                        d['filter[kecamatan]'] = $("#filter_kecamatan").val();
+                        d['filter[desa]'] = $("#filter_desa").val();
                         // d.config_desa = $('#position').val();
                     },
                     dataSrc: function(json) {

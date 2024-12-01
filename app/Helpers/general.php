@@ -14,7 +14,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2411.0.0';
+        return 'v2412.0.0';
     }
 }
 
@@ -294,7 +294,7 @@ if (! function_exists('generateMenuPresisi')) {
                     $result .= "<a class='item-menu dropdown-item' href='{$item->href}'>{$icon}{$item->text}</a>";
                 } else {
                     $href = $item->href;
-                    if ($href != '/presisi') {
+                    if ($href != '/presisi' and $href != '/presisi/kesehatan') {
                         $href = str_contains($item->href, 'module') ? $item->href : '/'.$item->href;
                     }
                     $result .= "<a type='button' class='item-menu btn bg-white p-2 text-muted' href='{$href}'>{$icon}{$item->text}</a>";

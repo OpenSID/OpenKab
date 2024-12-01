@@ -59,16 +59,111 @@ class PendudukRepository
             ->jsonPaginate();
     }
 
-    public function listStatistik($kategori): array|object
+    public function listPendudukKesehatan()
+    {
+        return QueryBuilder::for(Penduduk::select([
+            'id',
+            'nik',
+            'nama',
+            'golongan_darah_id',
+            'cacat_id',
+            'sakit_menahun_id',
+            'cara_kb_id',
+            'hamil',
+            'id_asuransi',
+            'no_asuransi',
+        ]))
+        ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
+        ->allowedFilters([  // Tentukan filter yang diizinkan
+            AllowedFilter::exact('id'),
+            AllowedFilter::exact('sex'),
+            AllowedFilter::exact('status'),
+            AllowedFilter::exact('status_dasar'),
+            AllowedFilter::exact('keluarga.no_kk'),
+            AllowedFilter::exact('clusterDesa.dusun'),
+            AllowedFilter::exact('clusterDesa.rw'),
+            AllowedFilter::exact('clusterDesa.rt'),
+            AllowedFilter::callback('search', function ($query, $value) {
+                $query->where(function ($query) use ($value) {
+                    $query->where('nama', 'like', "%{$value}%")
+                        ->orWhere('nik', 'like', "%{$value}%")
+                        ->orWhere('tag_id_card', 'like', "%{$value}%");
+                });
+            }),
+        ])
+        ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
+            'nik',
+            'nama',
+            'umur',
+            'created_at',
+        ])
+        ->jsonPaginate();
+    }
+
+    public function listPendudukJaminanSosial()
+    {
+        return QueryBuilder::for(Penduduk::withRef()->filterWilayah()->select([
+            'id',
+            'nik',
+            'nama',
+            'id_asuransi',
+            'no_asuransi',
+            'bpjs_ketenagakerjaan',
+            'cacat_id',
+        ]))
+        ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
+        ->allowedFilters([  // Tentukan filter yang diizinkan
+            AllowedFilter::exact('id'),
+            AllowedFilter::callback('search', function ($query, $value) {
+                $query->where(function ($query) use ($value) {
+                    $query->where('nama', 'like', "%{$value}%")
+                        ->orWhere('nik', 'like', "%{$value}%");
+                });
+            }),
+        ])
+        ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
+            'nik',
+            'nama',
+        ])
+        ->jsonPaginate();
+    }
+
+    public function listPendudukProdeskel()
+    {
+        return QueryBuilder::for(Penduduk::with('prodeskelLembagaAdat')->withRef()->filterWilayah()->select([
+            'id',
+            'nik',
+            'nama',
+            'agama_id',
+            'suku',
+            'config_id', // Pastikan config_id termasuk dalam query
+        ]))
+            ->allowedFields([
+                'id', 'nik', 'nama', 'agama_id', 'suku', 'prodeskelLembagaAdat.id', 'prodeskelLembagaAdat.kategori', 'prodeskelLembagaAdat.data',
+            ])
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama', 'like', "%{$value}%")
+                            ->orWhere('nik', 'like', "%{$value}%");
+                    });
+                }),
+            ])
+            ->allowedSorts(['nik', 'nama'])
+            ->jsonPaginate();
+    }
+
+    public function listStatistik($kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         return collect(match ($kategori) {
-            'rentang-umur' => $this->caseRentangUmur(),
-            'kategori-umur' => $this->caseKategoriUmur(),
-            'akta-kelahiran' => $this->caseAktaKelahiran(),
-            'status-covid' => $this->caseStatusCovid(),
-            'suku' => $this->caseSuku(),
-            'ktp' => $this->caseKtp(),
-            default => $this->caseWithReferensi($kategori),
+            'rentang-umur' => $this->caseRentangUmur($kabupaten, $kecamatan, $desa),
+            'kategori-umur' => $this->caseKategoriUmur($kabupaten, $kecamatan, $desa),
+            'akta-kelahiran' => $this->caseAktaKelahiran($kabupaten, $kecamatan, $desa),
+            'status-covid' => $this->caseStatusCovid($kabupaten, $kecamatan, $desa),
+            'suku' => $this->caseSuku($kabupaten, $kecamatan, $desa),
+            'ktp' => $this->caseKtp($kabupaten, $kecamatan, $desa),
+            default => $this->caseWithReferensi($kategori, $kabupaten, $kecamatan, $desa),
         })->toArray();
     }
 
@@ -225,7 +320,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseRentangUmur(): array|object
+    private function caseRentangUmur($kabupaten, $kecamatan, $desa): array|object
     {
         $umur = Umur::countStatistikUmur()->status(Umur::RENTANG)->get();
         $query = $this->countStatistikPendudukHidup();
@@ -236,7 +331,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseKategoriUmur(): array|object
+    private function caseKategoriUmur($kabupaten, $kecamatan, $desa): array|object
     {
         $umur = (new Umur())->setKlasifikasi(Umur::KATEGORI)->countStatistikUmur()->status(Umur::KATEGORI)->get();
         $query = $this->countStatistikPendudukHidup();
@@ -247,7 +342,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseAktaKelahiran(): array|object
+    private function caseAktaKelahiran($kabupaten, $kecamatan, $desa): array|object
     {
         $umur = Umur::countStatistikAkta()->status(Umur::RENTANG)->get();
         $query = $this->countStatistikPendudukHidup();
@@ -258,7 +353,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseWithReferensi(string $kategori): array|object
+    private function caseWithReferensi(string $kategori, $kabupaten, $kecamatan, $desa): array|object
     {
         $referensi = $this->tabelReferensi($kategori);
         $header = $this->countStatistikByKategori($referensi['tabelReferensi'], $referensi['idReferensi'], $referensi['whereHeader']);
@@ -322,6 +417,7 @@ class PendudukRepository
         $sql = $query->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', "tweb_penduduk.{$idReferensi}", '=', "{$tabelReferensi}.id", 'left')
+            ->join('config', 'config.id', '=', 'tweb_penduduk.config_id', 'left')
             ->where('tweb_penduduk.status_dasar', 1)
             ->join(DB::raw("($logPenduduk) as log"), 'log.id_pend', '=', 'tweb_penduduk.id')
             ->groupBy("{$tabelReferensi}.id", "{$tabelReferensi}.nama");
@@ -329,7 +425,7 @@ class PendudukRepository
         return $sql->get();
     }
 
-    private function caseSuku(): array|object
+    private function caseSuku($kabupaten, $kecamatan, $desa): array|object
     {
         $umur = Penduduk::CountStatistikSuku()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -340,7 +436,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseKtp()
+    private function caseKtp($kabupaten, $kecamatan, $desa)
     {
         $whereFooter = "((DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(tweb_penduduk.tanggallahir)), '%Y')+0)>=17 OR (tweb_penduduk.status_kawin IS NOT NULL AND tweb_penduduk.status_kawin <> 1))";
         $umur = Ktp::countStatistik()->orderBy('id')->get();
@@ -352,7 +448,7 @@ class PendudukRepository
         ];
     }
 
-    private function caseStatusCovid(): array|object
+    private function caseStatusCovid($kabupaten, $kecamatan, $desa): array|object
     {
         $covid = Covid::countStatistik()->orderBy('id')->get();
         $query = $this->countStatistikPendudukHidup();
@@ -366,5 +462,79 @@ class PendudukRepository
     public function summary()
     {
         return QueryBuilder::for(Penduduk::class)->count();
+    }
+
+    public function listPendudukPendidikan()
+    {
+        return QueryBuilder::for(Penduduk::class)
+            // ->select([
+            //     'p.id',
+            //     'p.nik',
+            //     'p.pendidikan_kk_id',
+            //     'p.pendidikan_sedang_id',
+            //     'da.kd_partisipasi_sekolah',
+            //     'da.kd_pendidikan_tertinggi',
+            //     'da.kd_kelas_tertinggi',
+            //     'da.kd_ijazah_tertinggi',
+            // ])
+            // ->from('tweb_penduduk as p')
+            // ->leftJoin('config as c', 'p.config_id', '=', 'c.id')
+            // ->leftJoin('dtks as d', 'd.config_id', '=', 'c.id')
+            // ->leftJoin('dtks_anggota as da', 'da.id_dtks', '=', 'd.id')
+            ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
+            ->allowedFilters([  // Tentukan filter yang diizinkan
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sex'),
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('status_dasar'),
+                AllowedFilter::exact('keluarga.no_kk'),
+                AllowedFilter::exact('clusterDesa.dusun'),
+                AllowedFilter::exact('clusterDesa.rw'),
+                AllowedFilter::exact('clusterDesa.rt'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('p.nama', 'like', "%{$value}%")
+                            ->orWhere('p.nik', 'like', "%{$value}%")
+                            ->orWhere('p.tag_id_card', 'like', "%{$value}%");
+                    });
+                }),
+            ])
+            ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
+                'p.nik',
+                'p.nama',
+                'p.umur',
+                'p.created_at',
+            ])
+            ->jsonPaginate();  // Melakukan pagination dan mengembalikan data dalam
+    }
+
+    public function listPendudukKetenagakerjaan()
+    {
+        return QueryBuilder::for(Penduduk::class)
+            ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
+            ->allowedFilters([  // Tentukan filter yang diizinkan
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sex'),
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('status_dasar'),
+                AllowedFilter::exact('keluarga.no_kk'),
+                AllowedFilter::exact('clusterDesa.dusun'),
+                AllowedFilter::exact('clusterDesa.rw'),
+                AllowedFilter::exact('clusterDesa.rt'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama', 'like', "%{$value}%")
+                            ->orWhere('nik', 'like', "%{$value}%")
+                            ->orWhere('tag_id_card', 'like', "%{$value}%");
+                    });
+                }),
+            ])
+            ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
+                'nik',
+                'nama',
+                'umur',
+                'created_at',
+            ])
+            ->jsonPaginate();
     }
 }

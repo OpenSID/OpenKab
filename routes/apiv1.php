@@ -1,24 +1,32 @@
 <?php
 
-use App\Http\Controllers\Api\ArtikelController;
-use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\BantuanController;
-use App\Http\Controllers\Api\BantuanKabupatenController;
-use App\Http\Controllers\Api\DasborController;
-use App\Http\Controllers\Api\DokumenController;
-use App\Http\Controllers\Api\IdentitasController;
-use App\Http\Controllers\Api\KategoriController;
-use App\Http\Controllers\Api\KategoriDesaController;
-use App\Http\Controllers\Api\KeluargaController;
-use App\Http\Controllers\Api\PendudukController;
-use App\Http\Controllers\Api\PengaturanController;
-use App\Http\Controllers\Api\StatistikController;
-use App\Http\Controllers\Api\SummaryController;
-use App\Http\Controllers\Api\TeamController;
-use App\Http\Controllers\Api\WebsiteController;
-use App\Http\Controllers\Api\WilayahController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\DDKController;
+use App\Http\Controllers\Api\DTKSController;
+use App\Http\Controllers\Api\PariwisataController;
+use App\Http\Controllers\Api\TeamController;
+use App\Http\Controllers\Api\DataController;
+use App\Http\Controllers\Api\DasborController;
+use App\Http\Controllers\Api\ArtikelController;
+use App\Http\Controllers\Api\BantuanController;
+use App\Http\Controllers\Api\DokumenController;
+use App\Http\Controllers\Api\SummaryController;
+use App\Http\Controllers\Api\WebsiteController;
+use App\Http\Controllers\Api\WilayahController;
+use App\Http\Controllers\Api\KategoriController;
+use App\Http\Controllers\Api\KeluargaController;
+use App\Http\Controllers\Api\PendudukController;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\IdentitasController;
+use App\Http\Controllers\Api\StatistikController;
+use App\Http\Controllers\Api\PendidikanController;
+use App\Http\Controllers\Api\PengaturanController;
+use App\Http\Controllers\Api\KategoriDesaController;
+use App\Http\Controllers\Api\KetenagakerjaanController;
+use App\Http\Controllers\Api\PrasaranaSaranaController;
+use App\Http\Controllers\Api\BantuanKabupatenController;
+use App\Http\Controllers\Api\KelembagaanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +81,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Dasbor
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
+    });
+
+    Route::get('/pariwisata', PariwisataController::class);
+
+    // API Data Presisi
+    Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
+
+    Route::get('/pendidikan', PendidikanController::class);
+
+    Route::controller(DataController::class)
+    ->prefix('data')->group(function () {
+        Route::get('/kategori-statistik', 'kategoriStatistik');
+        Route::get('/kesehatan', 'kesehatan');
+        Route::get('/jaminan-sosial', 'jaminan_sosial');
     });
 
     Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
@@ -172,15 +194,31 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/update', 'update');
 
             Route::controller(TeamController::class)
-            ->prefix('group')->group(function () {
-                Route::get('/', 'index');
-                Route::get('/show/{id}', 'show');
-                Route::post('/delete', 'delete');
-                Route::post('/', 'store');
-                Route::put('/{id}', 'update');
-                Route::get('/menu', 'menu');
-            });
+                ->prefix('group')->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/show/{id}', 'show');
+                    Route::post('/delete', 'delete');
+                    Route::post('/', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::get('/menu', 'menu');
+                });
         });
+
+    // Prodeskel
+    Route::prefix('prodeskel')->group(function () {
+        Route::prefix('ddk')->group(function () {
+            Route::get('pangan', [DDKController::class, 'pangan']);
+        });
+        Route::prefix('potensi')->group(function () {
+            Route::get('prasarana-sarana', [PrasaranaSaranaController::class, 'prasaranaSarana']);
+            Route::get('kelembagaan', [KelembagaanController::class, 'kelembagaan']);
+        });
+    });
+
+    // Satu Data
+    Route::prefix('satu-data')->group(function () {
+        Route::get('dtks', DTKSController::class);
+    });
 });
 
 // Statistik
@@ -207,12 +245,21 @@ Route::controller(StatistikController::class)
         Route::get('/get-list-kabupaten', 'getListKabupaten');
         Route::get('/get-list-kecamatan/{id}', 'getListKecamatan');
         Route::get('/get-list-desa/{id}', 'getListDesa');
+        Route::get('/get-list-coordinate', 'getListCoordinate');
         Route::get('/get-list-penerima', 'getListPenerimaBantuan');
     });
 
-// Bantuan
+// Data
+Route::controller(DataController::class)
+    ->prefix('data')->group(function () {
+        Route::get('/kesehatan', 'kesehatan');
+        Route::get('/jaminan-sosial', 'jaminanSosial');
+        Route::get('/penduduk-potensi-kelembagaan', 'pendudukPotensiKelembagaan');
+    });
+
 // Data utama website
 Route::get('data-website', WebsiteController::class);
 Route::get('data-summary', SummaryController::class);
+
 // Desa teraktif
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);

@@ -64,6 +64,16 @@ class Keluarga extends BaseModel
     }
 
     /**
+     * Define an inverse one-to-one or many relationship.
+     *
+     * @return BelongsTo
+     */
+    public function ProdeskelDDK()
+    {
+        return $this->hasOne(ProdeskelDDK::class, 'keluarga_id');
+    }
+
+    /**
      * Scope untuk Statistik.
      */
     public function scopeCountStatistik($query, $configId = null)

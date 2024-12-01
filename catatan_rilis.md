@@ -1,9 +1,9 @@
-Di rilis v2412.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pelayanan ke pelanggan.
+Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan perbaikan lain yang diminta pengguna.
 
 #### Penambahan Fitur
 
 1. [#411](https://github.com/OpenSID/OpenKab/issues/411) Penambahan filter wilayah pada estunting.
-12. [#415](https://github.com/OpenSID/OpenKab/issues/415) Penambahan API kebutuhan data presisi terkait Pendidikan.
+2. [#415](https://github.com/OpenSID/OpenKab/issues/415) Penambahan API kebutuhan data presisi terkait Pendidikan.
 3. [#417](https://github.com/OpenSID/OpenKab/issues/417) Penambahan API kebutuhan data presisi terkait ketenagakerjaan.
 4. [#414](https://github.com/OpenSID/OpenKab/issues/414) Penambahan API kebutuhan data presisi terkait kesehatan.
 5. [#416](https://github.com/OpenSID/OpenKab/issues/416) Penambahan API jaminan sosial.

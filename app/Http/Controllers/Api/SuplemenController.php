@@ -1,13 +1,14 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Suplemen;
-use Illuminate\Http\Request; 
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Repository\SuplemenRepository;
 use App\Http\Transformers\SuplemenTransformer;
+use App\Models\Suplemen;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class SuplemenController extends Controller
@@ -81,47 +82,44 @@ class SuplemenController extends Controller
     }
 
     public function sasaran()
-{
-    try {
-        $sasaran = unserialize(SASARAN);
-        if (!is_array($sasaran)) {
-            throw new \Exception('Invalid SASARAN format.');
+    {
+        try {
+            $sasaran = unserialize(SASARAN);
+            if (! is_array($sasaran)) {
+                throw new \Exception('Invalid SASARAN format.');
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => array_map(fn ($value, $key) => ['id' => $key, 'nama' => $value], $sasaran, array_keys($sasaran)),
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memproses SASARAN.',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return response()->json([
-            'success' => true,
-            'data' => array_map(fn($value, $key) => ['id' => $key, 'nama' => $value], $sasaran, array_keys($sasaran)),
-        ], Response::HTTP_OK);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Gagal memproses SASARAN.',
-            'error' => $e->getMessage(),
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-}
 
-public function status()
-{
-    try {
-        $status = unserialize(STATUS_SUPLEMEN);
-        if (!is_array($status)) {
-            throw new \Exception('Invalid STATUS_SUPLEMEN format.');
+    public function status()
+    {
+        try {
+            $status = unserialize(STATUS_SUPLEMEN);
+            if (! is_array($status)) {
+                throw new \Exception('Invalid STATUS_SUPLEMEN format.');
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => array_map(fn ($value, $key) => ['id' => $key, 'nama' => $value], $status, array_keys($status)),
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memproses STATUS_SUPLEMEN.',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return response()->json([
-            'success' => true,
-            'data' => array_map(fn($value, $key) => ['id' => $key, 'nama' => $value], $status, array_keys($status)),
-        ], Response::HTTP_OK);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Gagal memproses STATUS_SUPLEMEN.',
-            'error' => $e->getMessage(),
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-}
-
 }

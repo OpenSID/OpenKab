@@ -170,7 +170,8 @@ Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('p
 Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 
-Route::get('/suplemen', [SuplemenController::class, 'form'])->name('suplemen');
+Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
+Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

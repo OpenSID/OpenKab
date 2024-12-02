@@ -15,6 +15,11 @@ define('SASARAN', serialize([
     '4' => 'Kelompok/Organisasi Kemasyarakatan',
 ]));
 
+define('STATUS_SUPLEMEN', serialize([
+    '1' => 'Aktif',
+    '0' => 'Tidak Aktif',
+]));
+
 define('ATTRIBUTES', serialize([
     'text' => 'Input Teks',
     'number' => 'Input Angka',

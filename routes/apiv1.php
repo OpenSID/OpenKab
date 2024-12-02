@@ -266,3 +266,6 @@ Route::get('data-summary', SummaryController::class);
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
 
 Route::post('/suplemen', [SuplemenController::class, 'store']);
+Route::get('/suplemen', [SuplemenController::class, 'index']);
+Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
+Route::get('/suplemen/status', [SuplemenController::class, 'status']);

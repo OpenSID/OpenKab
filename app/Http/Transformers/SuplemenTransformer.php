@@ -23,9 +23,6 @@ class SuplemenTransformer extends TransformerAbstract
 
     /**
      * Generate "aksi" column for Suplemen data.
-     *
-     * @param Suplemen $suplemen
-     * @return string
      */
     protected function generateAksiColumn(Suplemen $suplemen): string
     {
@@ -35,10 +32,10 @@ class SuplemenTransformer extends TransformerAbstract
         // Rincian Data
         $aksi .= '<a href="#" class="btn bg-purple btn-sm" title="Rincian Data"><i class="fa fa-list-ol"></i></a> ';
 
-            $aksi .= '<a href="#" class="btn bg-navy btn-sm btn-import" title="Impor Data"><i class="fa fa-upload"></i></a> ';
-            $aksi .= '<a href="#" class="btn btn-warning btn-sm" title="Tanggapi Pengaduan"><i class="fa fa-pencil"></i></a> ';
-        
-            $aksi .= '<a href="#" class="btn bg-maroon btn-sm" title="Hapus Data" data-toggle="modal" ' . $disabled . '><i class="fa fa-trash"></i></a> ';
+        $aksi .= '<a href="#" class="btn bg-navy btn-sm btn-import" title="Impor Data"><i class="fa fa-upload"></i></a> ';
+        $aksi .= '<a href="#" class="btn btn-warning btn-sm" title="Tanggapi Pengaduan"><i class="fa fa-pencil"></i></a> ';
+
+        $aksi .= '<a href="#" class="btn bg-maroon btn-sm" title="Hapus Data" data-toggle="modal" '.$disabled.'><i class="fa fa-trash"></i></a> ';
 
         return $aksi;
     }

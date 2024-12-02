@@ -4,8 +4,8 @@ namespace App\Models;
 
 class SuplemenTerdata extends BaseModel
 {
-
     public const PENDUDUK = 1;
+
     public const KELUARGA = 2;
 
     /**

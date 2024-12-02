@@ -20,6 +20,7 @@ use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
+use App\Http\Controllers\SuplemenController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\Web\DownloadCounterController;
@@ -168,6 +169,8 @@ Route::get('/module/bantuan/{id}', [PresisiController::class, 'bantuan'])->name(
 Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
 Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+
+Route::get('/suplemen', [SuplemenController::class, 'form'])->name('suplemen');
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

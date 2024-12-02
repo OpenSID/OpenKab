@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\WebsiteController;
 use App\Http\Controllers\Api\WilayahController;
 use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
+use App\Http\Controllers\Api\SuplemenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -242,3 +243,5 @@ Route::get('data-summary', SummaryController::class);
 
 // Desa teraktif
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
+
+Route::post('/suplemen', [SuplemenController::class, 'store']);

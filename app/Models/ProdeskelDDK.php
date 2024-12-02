@@ -2,15 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Keluarga;
-use App\Models\BaseModel;
 use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProdeskelDDK extends BaseModel
 {
-
     use FilterWilayahTrait;
 
     /**
@@ -19,10 +15,11 @@ class ProdeskelDDK extends BaseModel
      * @var string
      */
     protected $table = 'prodeskel_ddk';
-    
+
     protected $with = [
         'config_id',
     ];
+
     /**
      * The guarded with the model.
      *
@@ -117,5 +114,4 @@ class ProdeskelDDK extends BaseModel
     {
         return $this->getKepalaKeluargaAttribute()->keluarga->no_kk;
     }
-
 }

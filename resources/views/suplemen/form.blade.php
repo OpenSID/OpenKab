@@ -89,14 +89,9 @@
 @endsection
 
 @section('js')
+@include('layouts.reset_form')
+@include('suplemen.kode_isian_js')
 <script>
-    function resetForm() {
-        const form = document.getElementById('formSuplemen');
-        if (form) {
-            form.reset();
-        }
-    }
-
     document.getElementById('formSuplemen').addEventListener('submit', async function (e) {
         const rows = document.querySelectorAll('#dragable-form-utama tr.duplikasi');
         let formDatas = [];

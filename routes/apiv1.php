@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DDKController;
 use App\Http\Controllers\Api\DTKSController;
 use App\Http\Controllers\Api\PariwisataController;

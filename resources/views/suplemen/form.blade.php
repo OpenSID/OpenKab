@@ -75,9 +75,7 @@
 
                     </div>
                     <div class="card-footer">
-                        <button type="reset" class="btn btn-danger btn-sm" onclick="resetForm();">
-                            <i class="fa fa-times"></i> Batal
-                        </button>
+                        @include('layouts.reset_form')
                         <button type="submit" class="btn btn-info btn-sm pull-right">
                             <i class="fa fa-check"></i> Simpan
                         </button>
@@ -89,7 +87,6 @@
 @endsection
 
 @section('js')
-@include('layouts.reset_form')
 @include('suplemen.kode_isian_js')
 <script>
     document.getElementById('formSuplemen').addEventListener('submit', async function (e) {

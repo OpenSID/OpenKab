@@ -29,7 +29,7 @@ class RekapService
         $ibuHamil = DB::connection('openkab')->table('ibu_hamil')
             ->join('kia', 'ibu_hamil.kia_id', '=', 'kia.id')
             ->join('tweb_penduduk', 'kia.ibu_id', '=', 'tweb_penduduk.id')
-            ->join('config', 'config.id', '=', "tweb_penduduk.config_id", 'left')
+            ->join('config', 'config.id', '=', 'tweb_penduduk.config_id', 'left')
             ->where('status_kehamilan', '!=', null)
             ->whereMonth('ibu_hamil.created_at', '>=', $batasBulanBawah)
             ->whereMonth('ibu_hamil.created_at', '<=', $batasBulanAtas)
@@ -340,7 +340,7 @@ class RekapService
         $bulananAnak = DB::connection('openkab')->table('bulanan_anak')
             ->join('kia', 'bulanan_anak.kia_id', '=', 'kia.id')
             ->join('tweb_penduduk', 'kia.anak_id', '=', 'tweb_penduduk.id')
-            ->join('config', 'config.id', '=', "tweb_penduduk.config_id", 'left')
+            ->join('config', 'config.id', '=', 'tweb_penduduk.config_id', 'left')
             ->where('bulanan_anak.config_id', ('id'))
             ->whereMonth('bulanan_anak.created_at', '>=', $batasBulanBawah)
             ->whereMonth('bulanan_anak.created_at', '<=', $batasBulanAtas)
@@ -354,7 +354,7 @@ class RekapService
                 'tweb_penduduk.nama',
                 'tweb_penduduk.sex',
             ]);
-        
+
         if ($kabupaten) {
             $bulananAnak->whereRaw('config.kode_kabupaten = '.$kabupaten);
         }

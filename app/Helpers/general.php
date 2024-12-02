@@ -16,17 +16,17 @@ define('SASARAN', serialize([
 ]));
 
 define('ATTRIBUTES', serialize([
-    'text'            => 'Input Teks',
-    'number'          => 'Input Angka',
-    'email'           => 'Input Email',
-    'url'             => 'Input Url',
-    'date'            => 'Input Tanggal',
-    'time'            => 'Input Jam',
-    'textarea'        => 'Text Area',
-    'select-manual'   => 'Pilihan (Kustom)',
+    'text' => 'Input Teks',
+    'number' => 'Input Angka',
+    'email' => 'Input Email',
+    'url' => 'Input Url',
+    'date' => 'Input Tanggal',
+    'time' => 'Input Jam',
+    'textarea' => 'Text Area',
+    'select-manual' => 'Pilihan (Kustom)',
     'select-otomatis' => 'Pilihan (Referensi)',
-    'hari'            => 'Input Hari',
-    'hari-tanggal'    => 'Input Hari dan Tanggal',
+    'hari' => 'Input Hari',
+    'hari-tanggal' => 'Input Hari dan Tanggal',
 ]));
 
 if (! function_exists('openkab_versi')) {
@@ -315,7 +315,7 @@ if (! function_exists('generateMenuPresisi')) {
                     $result .= "<a class='item-menu dropdown-item' href='{$item->href}'>{$icon}{$item->text}</a>";
                 } else {
                     $href = $item->href;
-                    if ($href != '/presisi' AND $href != '/presisi/kesehatan') {
+                    if ($href != '/presisi' and $href != '/presisi/kesehatan') {
                         $href = str_contains($item->href, 'module') ? $item->href : '/'.$item->href;
                     }
                     $result .= "<a type='button' class='item-menu btn bg-white p-2 text-muted' href='{$href}'>{$icon}{$item->text}</a>";

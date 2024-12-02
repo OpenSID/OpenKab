@@ -13,7 +13,7 @@ class KesehatanTransformer extends TransformerAbstract
             'id' => $penduduk->id,
             'nama' => $penduduk->nama,
             'nik' => $penduduk->nik,
-            'golongan_darah' => $penduduk->golonganDarah ?  $penduduk->golonganDarah->nama : 'TIDAK TAHU',
+            'golongan_darah' => $penduduk->golonganDarah ? $penduduk->golonganDarah->nama : 'TIDAK TAHU',
             'cacat' => $penduduk->cacat && $penduduk->cacat->nama ? $penduduk->cacat->nama : 'TIDAK TAHU',
             'sakit_menahun' => $penduduk->sakitMenahun && $penduduk->sakitMenahun->nama ? $penduduk->sakitMenahun->nama : 'TIDAK TAHU',
             'kb' => $penduduk->kb && $penduduk->kb->nama ? $penduduk->kb->nama : 'TIDAK TAHU',

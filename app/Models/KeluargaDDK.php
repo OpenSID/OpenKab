@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class KeluargaDDK extends \App\Models\Keluarga
+class KeluargaDDK extends Keluarga
 {
     public function scopeWithoutDefaultRelations($query)
     {

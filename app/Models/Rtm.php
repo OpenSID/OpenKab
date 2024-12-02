@@ -29,6 +29,16 @@ class Rtm extends BaseModel
     }
 
     /**
+     * Define a one-to-many relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function anggota()
+    {
+        return $this->hasMany(Penduduk::class, 'id_rtm', 'no_kk')->status();
+    }
+
+    /**
      * Scope query untuk bdt.
      *
      * @return Builder
@@ -48,7 +58,7 @@ class Rtm extends BaseModel
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 1 THEN tweb_penduduk.id END) AS laki_laki')
             ->selectRaw('COUNT(CASE WHEN tweb_penduduk.sex = 2 THEN tweb_penduduk.id END) AS perempuan')
             ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala')
-            ->join('config', 'config.id', '=', "tweb_penduduk.config_id", 'left')
+            ->join('config', 'config.id', '=', 'tweb_penduduk.config_id', 'left')
             ->where('tweb_penduduk.status_dasar', 1);
         if (isset(request('filter')['kabupaten'])) {
             $query->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);

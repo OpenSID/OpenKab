@@ -47,6 +47,4 @@ class PendudukProdeskelTransformer extends TransformerAbstract
             'jumlah' => $jumlah,  // Menambahkan jumlah total
         ];
     }
-
-
 }

@@ -16,17 +16,17 @@ define('SASARAN', serialize([
 ]));
 
 define('ATTRIBUTES', serialize([
-    'text'            => 'Input Teks',
-    'number'          => 'Input Angka',
-    'email'           => 'Input Email',
-    'url'             => 'Input Url',
-    'date'            => 'Input Tanggal',
-    'time'            => 'Input Jam',
-    'textarea'        => 'Text Area',
-    'select-manual'   => 'Pilihan (Kustom)',
+    'text' => 'Input Teks',
+    'number' => 'Input Angka',
+    'email' => 'Input Email',
+    'url' => 'Input Url',
+    'date' => 'Input Tanggal',
+    'time' => 'Input Jam',
+    'textarea' => 'Text Area',
+    'select-manual' => 'Pilihan (Kustom)',
     'select-otomatis' => 'Pilihan (Referensi)',
-    'hari'            => 'Input Hari',
-    'hari-tanggal'    => 'Input Hari dan Tanggal',
+    'hari' => 'Input Hari',
+    'hari-tanggal' => 'Input Hari dan Tanggal',
 ]));
 
 if (! function_exists('openkab_versi')) {

@@ -2,9 +2,8 @@
 
 namespace App\Http\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Models\Komoditas;
-use App\Models\Enums\SaranaTransportasiDaratEnum;
+use League\Fractal\TransformerAbstract;
 
 class PrasaraSaranaTransformer extends TransformerAbstract
 {

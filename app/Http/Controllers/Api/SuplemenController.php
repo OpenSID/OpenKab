@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Suplemen; // Sesuaikan nama model Anda
-use Illuminate\Support\Facades\Validator;
+use App\Models\Suplemen;
+use Illuminate\Http\Request; // Sesuaikan nama model Anda
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class SuplemenController extends Controller
 {
@@ -32,9 +33,9 @@ class SuplemenController extends Controller
         // Simpan data ke database
         try {
             if ($request->form_isian == '[{"tipe":"","nama_kode":"","label_kode":"","deskripsi_kode":"","required":0,"kolom":"","atribut":"","pilihan_kode":"","referensi_kode":""}]') {
-                $request->form_isian = "";
+                $request->form_isian = '';
             }
-            
+
             $suplemen = Suplemen::create([
                 'sasaran' => $request->sasaran,
                 'nama' => $request->nama,
@@ -63,5 +64,4 @@ class SuplemenController extends Controller
             ], 500);
         }
     }
-
 }

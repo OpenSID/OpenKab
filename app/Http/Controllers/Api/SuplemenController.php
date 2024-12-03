@@ -127,12 +127,11 @@ class SuplemenController extends Controller
     {
         try {
             Suplemen::where('id', $id)->delete();
-            
+
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-
             report($e);
 
             return response()->json([

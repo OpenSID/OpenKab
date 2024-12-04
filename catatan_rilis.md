@@ -2,20 +2,33 @@ Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan
 
 #### Penambahan Fitur
 
-1. [#411](https://github.com/OpenSID/OpenKab/issues/411) Penambahan filter wilayah pada estunting.
-2. [#415](https://github.com/OpenSID/OpenKab/issues/415) Penambahan API kebutuhan data presisi terkait Pendidikan.
-3. [#417](https://github.com/OpenSID/OpenKab/issues/417) Penambahan API kebutuhan data presisi terkait ketenagakerjaan.
-4. [#414](https://github.com/OpenSID/OpenKab/issues/414) Penambahan API kebutuhan data presisi terkait kesehatan.
-5. [#416](https://github.com/OpenSID/OpenKab/issues/416) Penambahan API jaminan sosial.
-6. [#412](https://github.com/OpenSID/OpenKab/issues/412) Penambahan API data pangan.
-7. [#419](https://github.com/OpenSID/OpenKab/issues/419) Penambahan API kebutuhan data presisi terkait pariwisata.
-8. [#413](https://github.com/OpenSID/OpenKab/issues/413) Penambahan API untuk papan.
-9. [#420](https://github.com/OpenSID/OpenKab/issues/420) Penambahan API kebutuhan data presisi terkait infrastruktur.
-10. [#418](https://github.com/OpenSID/OpenKab/issues/418) Penambahan Api presisi prodeskel.
+1. [#362](https://github.com/OpenSID/OpenKab/issues/362) Penambahan halaman statistik untuk stunting pada halaman public.
+2. [#372](https://github.com/OpenSID/OpenKab/issues/372) Penyesuaian tampilan baru dasbor presisi.
+3. [#385](https://github.com/OpenSID/OpenKab/issues/385) Penambahan fungsi group kabupaten pada API dan tampilkan pada filter wilayah sehingga kabupaten yang ada dapat di pilih.
+4. [#380](https://github.com/OpenSID/OpenKab/issues/380) Penambahan pengaturan menu statistik.
+5. [#398](https://github.com/OpenSID/OpenKab/issues/398) Penambahan pengaturan menu presisi.
+6. [#373](https://github.com/OpenSID/OpenKab/issues/373) Penambahan statistik bantuan.
+7. [#399](https://github.com/OpenSID/OpenKab/issues/399) Penambahan api dan peta.
+8. [#387](https://github.com/OpenSID/OpenKab/issues/387) Penambahan statistik keluarga presisi.
+9. [#383](https://github.com/OpenSID/OpenKab/issues/383) Penambahan statistik bantuan berdasarkan pengaturan menu.
+10. [#382](https://github.com/OpenSID/OpenKab/issues/382) Penambahan statistik rtm dasbor presisi.
+11. [#400](https://github.com/OpenSID/OpenKab/issues/400) Penambahan filter peta, data wilayah.
+12. [#381](https://github.com/OpenSID/OpenKab/issues/381) Penambahan statistik penduduk berdasarkan pengaturan menu.
+13. [#411](https://github.com/OpenSID/OpenKab/issues/411) Penambahan filter wilayah pada estunting.
+14. [#415](https://github.com/OpenSID/OpenKab/issues/415) Penambahan API kebutuhan data presisi terkait Pendidikan.
+15. [#417](https://github.com/OpenSID/OpenKab/issues/417) Penambahan API kebutuhan data presisi terkait ketenagakerjaan.
+16. [#414](https://github.com/OpenSID/OpenKab/issues/414) Penambahan API kebutuhan data presisi terkait kesehatan.
+17. [#416](https://github.com/OpenSID/OpenKab/issues/416) Penambahan API jaminan sosial.
+18. [#412](https://github.com/OpenSID/OpenKab/issues/412) Penambahan API data pangan.
+19. [#419](https://github.com/OpenSID/OpenKab/issues/419) Penambahan API kebutuhan data presisi terkait pariwisata.
+20. [#413](https://github.com/OpenSID/OpenKab/issues/413) Penambahan API untuk papan.
+21. [#420](https://github.com/OpenSID/OpenKab/issues/420) Penambahan API kebutuhan data presisi terkait infrastruktur.
+22. [#418](https://github.com/OpenSID/OpenKab/issues/418) Penambahan Api presisi prodeskel.
+23. [#440](https://github.com/OpenSID/OpenKab/issues/440) Penambahan tampilan data pariwisata pada halaman admin.
+24. [#444](https://github.com/OpenSID/OpenKab/issues/444) Penambahan tampilan data pendidikan pada halaman admin.
+24. [#446](https://github.com/OpenSID/OpenKab/issues/446) Penambahan tampilan data ketenagakerjaan pada halaman admin.
 
 #### Perbaikan BUG
 
 
 #### Perubahan Teknis
-
-1. [#451](https://github.com/OpenSID/OpenKab/issues/451) Tambahkan target branch bug-fix untuk phpcsfixer.

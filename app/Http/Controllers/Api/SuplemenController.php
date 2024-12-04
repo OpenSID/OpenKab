@@ -122,4 +122,22 @@ class SuplemenController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function destroy($id)
+    {
+        try {
+            Suplemen::where('id', $id)->delete();
+
+            return response()->json([
+                'success' => true,
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

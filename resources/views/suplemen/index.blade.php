@@ -10,6 +10,7 @@
 
 @section('content')
     @include('partials.breadcrumbs')
+    @include('partials.flash_message')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -43,7 +44,9 @@
         @include('suplemen.js.data_sasaran')
         @include('suplemen.js.data_status')
         @include('suplemen.js.filter')
-        
+        @include('suplemen.js.delete')
     })
+
+    
     </script>
 @endsection

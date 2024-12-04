@@ -27,7 +27,9 @@ class SuplemenTransformer extends TransformerAbstract
     protected function generateAksiColumn(Suplemen $suplemen): string
     {
         $aksi = '';
-        $disabled = $suplemen->terdata_count > 0 ? 'disabled' : 'data-target="#confirm-delete"';
+        $delete = $suplemen->terdata_count > 0 ? '' : '<button type="button" class="btn btn-danger btn-sm hapus" data-id="'.$suplemen->id.'" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>';
 
         // Rincian Data
         $aksi .= '<a href="#" class="btn bg-purple btn-sm" title="Rincian Data"><i class="fa fa-list-ol"></i></a> ';
@@ -35,7 +37,7 @@ class SuplemenTransformer extends TransformerAbstract
         $aksi .= '<a href="#" class="btn bg-navy btn-sm btn-import" title="Impor Data"><i class="fa fa-upload"></i></a> ';
         $aksi .= '<a href="#" class="btn btn-warning btn-sm" title="Tanggapi Pengaduan"><i class="fa fa-pencil"></i></a> ';
 
-        $aksi .= '<a href="#" class="btn bg-maroon btn-sm" title="Hapus Data" data-toggle="modal" '.$disabled.'><i class="fa fa-trash"></i></a> ';
+        $aksi .= $delete;
 
         return $aksi;
     }

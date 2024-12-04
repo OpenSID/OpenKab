@@ -54,6 +54,13 @@ final class Modul extends Enum
                     'url' => 'data-pokok/ketenagakerjaan',
                     'permission' => 'datapokok-ketenagakerjaan',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',  
+                    'text' => 'Jaminan Sosial',
+                    'url' => 'data-pokok/jaminan-sosial',
+                    'permission' => 'datapokok-jaminan-sosial',
+                ],
+              
             ],
         ],
         [

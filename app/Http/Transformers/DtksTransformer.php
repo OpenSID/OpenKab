@@ -14,7 +14,7 @@ class DtksTransformer extends TransformerAbstract
             'nama' => $penduduk->nama,
             'nik' => $penduduk->nik,
             'dtks' => $penduduk->dtksAnggota ? 'Terdaftar' : 'Tidak Terdaftar',
-            'asuransi' => $penduduk->asuransi ? $penduduk->asuransi->nama : 'TIDAK TAHU',
+            'asuransi' => $penduduk?->asuransi?->nama ?? 'TIDAK TAHU',
             'no_asuransi' => $penduduk->no_asuransi ? $penduduk->no_asuransi : 'TIDAK TAHU',
             'kd_ikut_prakerja' => $penduduk->dtksAnggota ? $penduduk->dtksAnggota->kd_ikut_prakerja : 'TIDAK TAHU',
             'kd_kur' => $penduduk->dtksAnggota ? $penduduk->dtksAnggota->kd_ikut_kur : 'TIDAK TAHU',

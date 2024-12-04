@@ -30,6 +30,9 @@ Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan
 25. [#445](https://github.com/OpenSID/OpenKab/issues/445) Penambahan tampilan data Jaminan Sosial pada halaman admin.
 26. [#443](https://github.com/OpenSID/OpenKab/issues/443) Penambahan tampilan data kesehatan pada halaman admin.
 27. [#429](hhttps://github.com/OpenSID/OpenKab/issues/429) Penambahan terlebih dahulu halaman suplemen pada OpenKab.
+28. [#430](https://github.com/OpenSID/OpenKab/issues/430) Penambahan data suplemen sesuai pengaturan. 
+29. [#461](https://github.com/OpenSID/OpenKab/issues/461) Penambahan fungsi hapus pada data suplemen.
+ 
 
 #### Perbaikan BUG
 

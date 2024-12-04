@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Suplemen;
 use App\Models\Wilayah;
 
@@ -23,9 +24,9 @@ class SuplemenController extends Controller
 
     public function detail($id)
     {
-        $sasaran  = unserialize(SASARAN);
+        $sasaran = unserialize(SASARAN);
         $suplemen = Suplemen::findOrFail($id);
-        $wilayah  = Wilayah::treeAccess();
+        $wilayah = Wilayah::treeAccess();
 
         return view('suplemen.detail', compact('id', 'sasaran', 'suplemen', 'wilayah'));
     }

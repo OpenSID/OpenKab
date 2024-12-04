@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repository\SuplemenRepository;
-use App\Http\Transformers\SuplemenTransformer;
 use App\Http\Transformers\SuplemenTerdataTransformer;
+use App\Http\Transformers\SuplemenTransformer;
 use App\Models\Suplemen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -128,12 +128,11 @@ class SuplemenController extends Controller
     {
         try {
             Suplemen::where('id', $id)->delete();
-            
+
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-
             report($e);
 
             return response()->json([

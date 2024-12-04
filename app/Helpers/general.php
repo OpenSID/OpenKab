@@ -11,8 +11,6 @@ use Intervention\Image\Facades\Image;
 define('SASARAN', serialize([
     '1' => 'Penduduk',
     '2' => 'Keluarga / KK',
-    '3' => 'Rumah Tangga',
-    '4' => 'Kelompok/Organisasi Kemasyarakatan',
 ]));
 
 define('STATUS_SUPLEMEN', serialize([
@@ -40,7 +38,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2411.0.0';
+        return 'v2412.0.0';
     }
 }
 

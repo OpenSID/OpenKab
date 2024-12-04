@@ -27,7 +27,8 @@ Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan
 23. [#440](https://github.com/OpenSID/OpenKab/issues/440) Penambahan tampilan data pariwisata pada halaman admin.
 24. [#444](https://github.com/OpenSID/OpenKab/issues/444) Penambahan tampilan data pendidikan pada halaman admin.
 24. [#446](https://github.com/OpenSID/OpenKab/issues/446) Penambahan tampilan data ketenagakerjaan pada halaman admin.
-25. [#445](https://github.com/OpenSID/OpenKab/issues/445) Penambahan suaikan tampilan data Jaminan Sosial pada halaman admin.
+25. [#445](https://github.com/OpenSID/OpenKab/issues/445) Penambahan tampilan data Jaminan Sosial pada halaman admin.
+26. [#443](https://github.com/OpenSID/OpenKab/issues/443) Penambahan tampilan data kesehatan pada halaman admin.
 
 #### Perbaikan BUG
 

@@ -538,7 +538,7 @@ class Penduduk extends BaseModel
 
     public function kia()
     {
-        return $this->hasOne(Kia::class, 'anak_id');  // Asumsi anak_id ada di Kia
+        return $this->hasOne(KIA::class, 'anak_id');  // Asumsi anak_id ada di Kia
     }
 
     public function dtksAnggota()

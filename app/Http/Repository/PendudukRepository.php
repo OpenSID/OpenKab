@@ -61,7 +61,7 @@ class PendudukRepository
 
     public function listPendudukKesehatan()
     {
-        return QueryBuilder::for(Penduduk::select([
+        return QueryBuilder::for(Penduduk::filterWilayah()->select([
             'id',
             'nik',
             'nama',
@@ -466,21 +466,7 @@ class PendudukRepository
 
     public function listPendudukPendidikan()
     {
-        return QueryBuilder::for(Penduduk::class)
-            // ->select([
-            //     'p.id',
-            //     'p.nik',
-            //     'p.pendidikan_kk_id',
-            //     'p.pendidikan_sedang_id',
-            //     'da.kd_partisipasi_sekolah',
-            //     'da.kd_pendidikan_tertinggi',
-            //     'da.kd_kelas_tertinggi',
-            //     'da.kd_ijazah_tertinggi',
-            // ])
-            // ->from('tweb_penduduk as p')
-            // ->leftJoin('config as c', 'p.config_id', '=', 'c.id')
-            // ->leftJoin('dtks as d', 'd.config_id', '=', 'c.id')
-            // ->leftJoin('dtks_anggota as da', 'da.id_dtks', '=', 'd.id')
+        return QueryBuilder::for(Penduduk::filterWilayah())
             ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
             ->allowedFilters([  // Tentukan filter yang diizinkan
                 AllowedFilter::exact('id'),
@@ -510,7 +496,7 @@ class PendudukRepository
 
     public function listPendudukKetenagakerjaan()
     {
-        return QueryBuilder::for(Penduduk::class)
+        return QueryBuilder::for(Penduduk::filterWilayah())
             ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
             ->allowedFilters([  // Tentukan filter yang diizinkan
                 AllowedFilter::exact('id'),

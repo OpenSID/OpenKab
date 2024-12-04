@@ -11,8 +11,6 @@ use Intervention\Image\Facades\Image;
 define('SASARAN', serialize([
     '1' => 'Penduduk',
     '2' => 'Keluarga / KK',
-    '3' => 'Rumah Tangga',
-    '4' => 'Kelompok/Organisasi Kemasyarakatan',
 ]));
 
 define('STATUS_SUPLEMEN', serialize([

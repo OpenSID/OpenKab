@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Suplemen;
+use App\Models\Wilayah;
 
 class SuplemenController extends Controller
 {
@@ -17,5 +19,14 @@ class SuplemenController extends Controller
         $attributes = unserialize(ATTRIBUTES);
 
         return view('suplemen.form', compact('list_sasaran', 'attributes'));
+    }
+
+    public function detail($id)
+    {
+        $sasaran  = unserialize(SASARAN);
+        $suplemen = Suplemen::findOrFail($id);
+        $wilayah  = Wilayah::treeAccess();
+
+        return view('suplemen.detail', compact('id', 'sasaran', 'suplemen', 'wilayah'));
     }
 }

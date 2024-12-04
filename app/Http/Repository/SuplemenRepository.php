@@ -3,6 +3,7 @@
 namespace App\Http\Repository;
 
 use App\Models\Suplemen;
+use App\Models\SuplemenTerdata;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -26,6 +27,25 @@ class SuplemenRepository
                 'nama',
                 'keterangan',
                 'sasaran',
+            ])->jsonPaginate();
+    }
+
+    public function listSuplemenTerdata($sasaran, $id)
+    {
+        return  QueryBuilder::for(SuplemenTerdata::anggota($sasaran, $id))
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('sex'),
+                AllowedFilter::exact('dusun'),
+                AllowedFilter::exact('rw'),
+                AllowedFilter::exact('rt'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('keterangan', 'LIKE', '%'.$value.'%');
+                }),
+
+            ])
+            ->allowedSorts([
+                'keterangan',
             ])->jsonPaginate();
     }
 }

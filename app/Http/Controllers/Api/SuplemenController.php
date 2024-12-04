@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Repository\SuplemenRepository;
 use App\Http\Transformers\SuplemenTransformer;
+use App\Http\Transformers\SuplemenTerdataTransformer;
 use App\Models\Suplemen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -140,5 +141,14 @@ class SuplemenController extends Controller
                 'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function detail($sasaran, $id)
+    {
+        $suplemenData = $this->suplemen->listSuplemenTerdata($sasaran, $id);
+
+        return fractal($suplemenData, new SuplemenTerdataTransformer())
+            ->addMeta(['message' => 'daftar suplemen'])
+            ->respond();
     }
 }

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class DataPokokController extends Controller
-{   
+{
     public function kesehatan()
     {
         $title = 'Data Kependudukan dan Statistik';
@@ -19,7 +17,7 @@ class DataPokokController extends Controller
 
         return view('jaminan_sosial.index', ['title' => $title]);
     }
-    
+
     public function pariwisata()
     {
         $title = 'Data Potensi Wita dan Sumber Daya';

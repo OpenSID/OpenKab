@@ -61,12 +61,12 @@ final class Modul extends Enum
                     'permission' => 'datapokok-ketenagakerjaan',
                 ],
                 [
-                    'icon' => 'fas fa-angle-right',  
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Jaminan Sosial',
                     'url' => 'data-pokok/jaminan-sosial',
                     'permission' => 'datapokok-jaminan-sosial',
                 ],
-              
+
             ],
         ],
         [
@@ -106,6 +106,12 @@ final class Modul extends Enum
             'icon' => 'fas fa-handshake',
             'url' => 'bantuan',
             'permission' => 'bantuan',
+        ],
+        [
+            'text' => 'Data Suplemen',
+            'icon' => 'fa fa-users',
+            'url' => 'suplemen',
+            'permission' => 'suplemen',
         ],
 
         [

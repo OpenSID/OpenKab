@@ -32,7 +32,7 @@ class SuplemenTransformer extends TransformerAbstract
                                     </button>';
 
         // Rincian Data
-        $aksi .= '<a href="' . url('suplemen/rincian', $suplemen->id) . '" class="btn bg-purple btn-sm" title="Rincian Data"><i class="fa fa-list-ol"></i></a> ';
+        $aksi .= '<a href="'.url('suplemen/rincian', $suplemen->id).'" class="btn bg-purple btn-sm" title="Rincian Data"><i class="fa fa-list-ol"></i></a> ';
 
         $aksi .= '<a href="#" class="btn bg-navy btn-sm btn-import" title="Impor Data"><i class="fa fa-upload"></i></a> ';
         $aksi .= '<a href="#" class="btn btn-warning btn-sm" title="Edit Data"><i class="fa fa-pencil"></i></a> ';

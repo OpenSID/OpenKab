@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Transformers;
+
 use App\Models\Enums\JenisKelaminEnum;
 use App\Models\SuplemenTerdata;
 use League\Fractal\TransformerAbstract;

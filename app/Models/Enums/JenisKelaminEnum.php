@@ -11,7 +11,7 @@ final class JenisKelaminEnum extends Enum
     public const perempuan = 2;
 
     /**
-     * Override method all()
+     * Override method all().
      */
     public static function all(): array
     {
@@ -22,7 +22,7 @@ final class JenisKelaminEnum extends Enum
     }
 
     /**
-     * Get label by value
+     * Get label by value.
      */
     public static function getLabel(int $value): ?string
     {

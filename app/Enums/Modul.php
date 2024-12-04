@@ -38,6 +38,12 @@ final class Modul extends Enum
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Kesehatan',
+                    'url' => 'data-pokok/kesehatan',
+                    'permission' => 'datapokok-kesehatan',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Pendidikan',
                     'url' => 'data-pokok/pendidikan',
                     'permission' => 'datapokok-pendidikan',

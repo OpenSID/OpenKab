@@ -11,6 +11,7 @@
 @section('content')
     @include('partials.breadcrumbs')
     @include('partials.flash_message')
+    @include('layouts.components.selec2_wilayah_referensi')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -39,16 +40,8 @@
                 <div class="card-body">
                     <div class="box-body">
                         <h5><b>Daftar Terdata</b></h5>
-                        <div class="row mepet">
-                            <div class="col-sm-2">
-                                <select class="form-control input-sm" id="sex" name="sex">
-                                    <option value="">Pilih Jenis Kelamin</option>
-                                    <option value="1">Laki-laki</option>
-                                    <option value="2">Perempuan</option>
-                                </select>
-                            </div>
-                            @include('layouts.components.wilayah')
-                        </div>
+                        @include('suplemen.filter_terdata')
+                        
                         <hr>
                         @include('suplemen.table_terdata')
                         
@@ -64,6 +57,7 @@
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
         @include('suplemen.js.data_suplemen_terdata')
+
     })
 
     

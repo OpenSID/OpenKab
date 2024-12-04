@@ -17,10 +17,10 @@ var suplemen = $('#suplemen').DataTable({
                 "filter[search]": row.search.value,
                 "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
                     ?.name,
-                "filter[sex]": $("#sex").val(),
-                "filter[dusun]": $("#dusun").val(),
-                "filter[rw]": $("#rw").val(),
-                "filter[rt]": $("#rt").val(),
+                "filter[tweb_penduduk.sex]": $("#sex").val(),
+                "filter[tweb_wil_clusterdesa.dusun]": $("#dusun").val(),
+                "filter[tweb_wil_clusterdesa.rw]": $("#rw").val(),
+                "filter[tweb_wil_clusterdesa.rt]": $("#rt").val(),
             };
         },
         dataSrc: function(json) {
@@ -106,5 +106,6 @@ suplemen.on('draw.dt', function() {
 });
 
 $('#sex, #dusun, #rw, #rt').change(function() {
+
     suplemen.draw()
 })

@@ -124,10 +124,14 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 
     // Data Pokok
     Route::middleware(['permission:datapokok-read'])->controller(DataPokokController::class)
-    ->prefix('data-pokok')
-    ->group(function () {
-        Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
-    });
+        ->prefix('data-pokok')
+        ->group(function () {
+            Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
+            Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
+            Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
+        });
 
     // Statistik
     Route::middleware(['permission:statistik-read'])->controller(StatistikController::class)

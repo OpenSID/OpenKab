@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\BaseModel;
 use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

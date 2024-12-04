@@ -38,10 +38,29 @@ final class Modul extends Enum
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Pendidikan',
+                    'url' => 'data-pokok/pendidikan',
+                    'permission' => 'datapokok-pendidikan',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pariwisata',
+                    'url' => 'data-pokok/pariwisata',
+                    'permission' => 'datapokok-pariwisata',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Ketenagakerjaan',
+                    'url' => 'data-pokok/ketenagakerjaan',
+                    'permission' => 'datapokok-ketenagakerjaan',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',  
                     'text' => 'Jaminan Sosial',
                     'url' => 'data-pokok/jaminan-sosial',
                     'permission' => 'datapokok-jaminan-sosial',
                 ],
+              
             ],
         ],
         [

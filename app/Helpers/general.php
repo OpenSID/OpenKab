@@ -14,7 +14,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2411.0.0';
+        return 'v2412.0.0';
     }
 }
 

@@ -19,8 +19,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             @include('layouts.components.tombol_cetak_unduh', [
-                                'cetak' => "suplemen/dialog_daftar/{$id}/cetak",
-                                'unduh' => "suplemen/dialog_daftar/{$id}/unduh",
+                                'cetak' => "suplemen/daftar/{$id}/cetak",
+                                'unduh' => "suplemen/daftar/{$id}/unduh",
                             ])
                             @include('layouts.components.tombol_ekspor', [
                                 'ekspor' => "suplemen/ekspor/{$id}",

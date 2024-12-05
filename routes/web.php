@@ -185,8 +185,7 @@ Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name(
 Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
 Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
 Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
-Route::get('/suplemen/dialog_daftar/{id}/{aksi}', [SuplemenController::class, 'dialog_daftar'])->name('suplemen.dialog_daftar');
-Route::get('/suplemen/impor_data/{id}', [SuplemenController::class, 'impor_data'])->name('suplemen.impor_data');
+Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
 Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {

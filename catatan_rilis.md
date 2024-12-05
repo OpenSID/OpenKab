@@ -1,4 +1,4 @@
-Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pelayanan ke pelanggan.
+Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan perbaikan lain yang diminta pengguna.
 
 #### Penambahan Fitur
 
@@ -27,15 +27,14 @@ Di rilis v2411.0.0 berisi penambahan fitur dan perbaikan lain sesuai dengan pela
 23. [#440](https://github.com/OpenSID/OpenKab/issues/440) Penambahan tampilan data pariwisata pada halaman admin.
 24. [#444](https://github.com/OpenSID/OpenKab/issues/444) Penambahan tampilan data pendidikan pada halaman admin.
 24. [#446](https://github.com/OpenSID/OpenKab/issues/446) Penambahan tampilan data ketenagakerjaan pada halaman admin.
+25. [#445](https://github.com/OpenSID/OpenKab/issues/445) Penambahan tampilan data Jaminan Sosial pada halaman admin.
+26. [#443](https://github.com/OpenSID/OpenKab/issues/443) Penambahan tampilan data kesehatan pada halaman admin.
+27. [#429](hhttps://github.com/OpenSID/OpenKab/issues/429) Penambahan terlebih dahulu halaman suplemen pada OpenKab.
+28. [#430](https://github.com/OpenSID/OpenKab/issues/430) Penambahan data suplemen sesuai pengaturan. 
+29. [#461](https://github.com/OpenSID/OpenKab/issues/461) Penambahan fungsi hapus pada data suplemen.
+ 
 
 #### Perbaikan BUG
 
-1. [#369](https://github.com/OpenSID/OpenKab/issues/369) Perbaikan status pengaturan dasbor presisi tidak bisa diaktifkan jika tidak memenuhi standar.
-2. [#397](https://github.com/OpenSID/OpenKab/issues/397) Perbaikan error pada pengaturan aplikasi.
 
 #### Perubahan Teknis
-
-1. [#368](https://github.com/OpenSID/OpenKab/issues/368) Sesuaikan pengaturan tidak dapat dihapus.
-2. [#394](https://github.com/OpenSID/OpenKab/issues/394) Sesuaikan auth gateway OpenKab.
-3. [#376](https://github.com/OpenSID/OpenKab/issues/376) Sesuaikan pengaturan API pada OpenKab.
-4. [#451](https://github.com/OpenSID/OpenKab/issues/451) Tambahkan target branch bug-fix untuk phpcsfixer.

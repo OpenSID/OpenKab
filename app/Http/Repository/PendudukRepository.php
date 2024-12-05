@@ -61,7 +61,7 @@ class PendudukRepository
 
     public function listPendudukKesehatan()
     {
-        return QueryBuilder::for(Penduduk::select([
+        return QueryBuilder::for(Penduduk::filterWilayah()->select([
             'id',
             'nik',
             'nama',

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Suplemen;
 use App\Models\Config;
+use App\Models\Suplemen;
 use App\Models\SuplemenTerdata;
 use App\Models\Wilayah;
 use OpenSpout\Common\Entity\Row;
@@ -146,18 +146,18 @@ class SuplemenController extends Controller
     public function daftar($id = 0, $aksi = '')
     {
         if ($id > 0) {
-            $data['suplemen']       = Suplemen::findOrFail($id)->toArray();
-            $data['terdata']        = SuplemenTerdata::anggota($data['suplemen']['sasaran'], $data['suplemen']['id'])->get()->toArray();
-            $data['sasaran']        = unserialize(SASARAN);
+            $data['suplemen'] = Suplemen::findOrFail($id)->toArray();
+            $data['terdata'] = SuplemenTerdata::anggota($data['suplemen']['sasaran'], $data['suplemen']['id'])->get()->toArray();
+            $data['sasaran'] = unserialize(SASARAN);
             $wilayah = Config::where('id', SuplemenTerdata::anggota($data['suplemen']['sasaran'], $data['suplemen']['id'])->first()->config_id)->first();
-            $data['nama_desa']      = $wilayah->nama_desa;
+            $data['nama_desa'] = $wilayah->nama_desa;
             $data['nama_kecamatan'] = $wilayah->nama_kecamatan;
             $data['nama_kabupaten'] = $wilayah->nama_kabupaten;
-            $data['aksi']           = $aksi;
+            $data['aksi'] = $aksi;
 
             //pengaturan data untuk format cetak/ unduh
-            $data['file']      = 'Laporan Suplemen ' . $data['suplemen']['nama'];
-            $data['isi']       = 'suplemen.cetak';
+            $data['file'] = 'Laporan Suplemen '.$data['suplemen']['nama'];
+            $data['isi'] = 'suplemen.cetak';
             $data['letak_ttd'] = ['2', '2', '3'];
 
             return view('layouts.components.format_cetak', $data);
@@ -165,5 +165,4 @@ class SuplemenController extends Controller
 
         return false;
     }
-
 }

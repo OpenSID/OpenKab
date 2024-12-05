@@ -74,10 +74,43 @@ class SuplemenTerdata extends BaseModel
                 return [];
         }
 
+        // $query->join('tweb_wil_clusterdesa', 'tweb_wil_clusterdesa.id', '=', 'tweb_penduduk.id_cluster', 'left')
+        //     ->selectRaw('suplemen_terdata.*, tweb_penduduk.nik, tweb_penduduk.nama, tweb_penduduk.tempatlahir, tweb_penduduk.tanggallahir, tweb_penduduk.sex, tweb_keluarga.no_kk, tweb_wil_clusterdesa.rt, tweb_wil_clusterdesa.rw, tweb_wil_clusterdesa.dusun, tweb_wil_clusterdesa.id as dusun_id')
+        //     ->selectRaw('(case when (tweb_penduduk.id_kk is null) then tweb_penduduk.alamat_sekarang else tweb_keluarga.alamat end) AS alamat')
+        //     ->where('id_suplemen', $suplemen);
+
         $query->join('tweb_wil_clusterdesa', 'tweb_wil_clusterdesa.id', '=', 'tweb_penduduk.id_cluster', 'left')
-            ->selectRaw('suplemen_terdata.*, tweb_penduduk.nik, tweb_penduduk.nama, tweb_penduduk.tempatlahir, tweb_penduduk.tanggallahir, tweb_penduduk.sex, tweb_keluarga.no_kk, tweb_wil_clusterdesa.rt, tweb_wil_clusterdesa.rw, tweb_wil_clusterdesa.dusun, tweb_wil_clusterdesa.id as dusun_id')
+            ->join('config', 'config.id', '=', 'tweb_wil_clusterdesa.config_id', 'left') // Tambahkan join ini
+            ->selectRaw('suplemen_terdata.*, 
+                   tweb_penduduk.nik, 
+                   tweb_penduduk.nama, 
+                   tweb_penduduk.tempatlahir, 
+                   tweb_penduduk.tanggallahir, 
+                   tweb_penduduk.sex, 
+                   tweb_keluarga.no_kk, 
+                   tweb_wil_clusterdesa.rt, 
+                   tweb_wil_clusterdesa.rw, 
+                   tweb_wil_clusterdesa.dusun, 
+                   tweb_wil_clusterdesa.id as dusun_id, 
+                   config.kode_desa,
+                   config.kode_kecamatan, 
+                   config.kode_kabupaten') // Ambil kolom dari tabel config jika dibutuhkan
             ->selectRaw('(case when (tweb_penduduk.id_kk is null) then tweb_penduduk.alamat_sekarang else tweb_keluarga.alamat end) AS alamat')
             ->where('id_suplemen', $suplemen);
+
+        // Tambahkan validasi berdasarkan session
+        if (session('desa.kode_desa')) {
+            $query->where('config.kode_desa', session('desa.kode_desa'));
+        }
+
+        if (session('kecamatan.kode_kecamatan')) {
+            $query->where('config.kode_kecamatan', session('kecamatan.kode_kecamatan'));
+        }
+
+        if (session('kabupaten.kode_kabupaten')) {
+            $query->where('config.kode_kabupaten', session('kabupaten.kode_kabupaten'));
+        }
+
 
         return null;
     }

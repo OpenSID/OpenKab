@@ -106,6 +106,5 @@ suplemen.on('draw.dt', function() {
 });
 
 $('#sex, #dusun, #rw, #rt').change(function() {
-
     suplemen.draw()
 })

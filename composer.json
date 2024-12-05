@@ -33,7 +33,9 @@
         "spatie/laravel-permission": "^5.10",
         "spatie/laravel-query-builder": "^5.2",
         "stevebauman/location": "^7.0",
-        "yajra/laravel-datatables": "9.0"
+        "yajra/laravel-datatables": "9.0",
+        "openspout/openspout": "^4.24"
+
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

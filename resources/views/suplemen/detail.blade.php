@@ -22,8 +22,7 @@
                                 'cetak' => "suplemen/dialog_daftar/{$id}/cetak",
                                 'unduh' => "suplemen/dialog_daftar/{$id}/unduh",
                             ])
-                            @include('layouts.components.tombol_impor_ekspor', [
-                                'impor' => "suplemen/impor_data/{$id}",
+                            @include('layouts.components.tombol_ekspor', [
                                 'ekspor' => "suplemen/ekspor/{$id}",
                             ])
                             <a href="#" title="Hapus Data" class="disabled btn btn-social btn-danger btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block hapus-terpilih"><i

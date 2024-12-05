@@ -2,7 +2,9 @@
 
 namespace App\Http\Transformers;
 
+use App\Enums\KomoditasJenisTempatIbadahEnum;
 use App\Http\Repository\KelembagaanRepository;
+use App\Models\Komoditas;
 use App\Models\Penduduk;
 use App\Models\Potensi;
 use League\Fractal\TransformerAbstract;
@@ -64,12 +66,35 @@ class KelembagaanTransformer extends TransformerAbstract
             $total += isset($kelembagaanData[$field]) ? (int) $kelembagaanData[$field] : 0;
         }
 
+        // Transform values
+        foreach ($fieldsToSum as $field) {
+            if (isset($kelembagaanData[$field])) {
+                $kelembagaanData[$field] = $kelembagaanData[$field] == 1 ? 'Ada' : 'Tidak';
+            }
+        }
+
         $penduduk = $this->fractal($this->prasarana->penduduk($potensi->config_id), new KelembagaanPendudukTransformer(), 'penduduk')->toArray();
 
-        $prasaranaPeribadatan = $potensi
-            ->prasaranaPeribadatan()
+        $prasaranaPeribadatan = Komoditas::prasaranaPeribadatan()
             ->where('config_id', $potensi->config_id)
-            ->get(); // Pilih kolom yang relevan
+            ->get()
+            ->map(function ($item) {
+                // Ambil data tempat ibadah dari properti 'data'
+                $obj = $item->data;
+            
+                // Ubah nilai 'jenis_tempat_ibadah' dengan deskripsi dari enum
+                $jenis_tempat_ibadah = isset($obj['jenis_tempat_ibadah']) 
+                    ? KomoditasJenisTempatIbadahEnum::fromValue((int) $obj['jenis_tempat_ibadah'])->description 
+                    : 'TIDAK TAHU';
+            
+                // Hilangkan kata "Jumlah " dari deskripsi enum
+                $obj['jenis_tempat_ibadah'] = str_replace('Jumlah ', '', $jenis_tempat_ibadah);
+            
+                // Update properti 'data' pada item
+                $item->data = $obj;
+            
+                return $item;
+            });
 
         // Add new fields to 'data'
         $kelembagaanData['penduduk'] = $penduduk;

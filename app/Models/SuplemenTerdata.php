@@ -111,7 +111,6 @@ class SuplemenTerdata extends BaseModel
             $query->where('config.kode_kabupaten', session('kabupaten.kode_kabupaten'));
         }
 
-
         return null;
     }
 

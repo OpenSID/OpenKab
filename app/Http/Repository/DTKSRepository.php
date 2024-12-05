@@ -34,6 +34,8 @@ class DTKSRepository
             ->allowedSorts([
                 'id',
             ])
+            ->filterKecamatan()
+            ->filterDesa()
             ->jsonPaginate();
     }
 }

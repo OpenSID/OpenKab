@@ -89,11 +89,17 @@
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
 
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })
+                        // Extract chart data from API response
+                        data_grafik = json.data.filter(item => item.attributes.status_kepemilikan_bangunan_tempat_tinggal_yang_ditempati)
+                            .map(item => ({
+                                label: item.attributes.status_kepemilikan_bangunan_tempat_tinggal_yang_ditempati,
+                                value: 1 // Count each occurrence (can aggregate here)
+                            }));
 
-                        tampilChart('bar', 'barChart', generateChartData(data_grafik, 'status_kepemilikan_bangunan_tempat_tinggal_yang_ditempati'));
+                        // Combine duplicate labels and aggregate values
+                        data_grafik = combineData(data_grafik);
+
+                        tampilChart('bar', 'barChart', generateChartData(data_grafik, 'label', 'Statistik Papan'));
 
                         return json.data
                     },
@@ -215,6 +221,19 @@
                 let queryString = new URLSearchParams(params).toString(); // Convert params to query string
                 window.open(`${baseUrl}?${queryString}`, '_blank'); // Open the URL with appended query
             });
+
+            // Combine data by aggregating values for duplicate labels
+            function combineData(data) {
+                const result = {};
+                data.forEach(item => {
+                    if (item.label in result) {
+                        result[item.label] += item.value;
+                    } else {
+                        result[item.label] = item.value;
+                    }
+                });
+                return Object.entries(result).map(([label, value]) => ({ label, value }));
+            }
         })
     </script>
 @endsection

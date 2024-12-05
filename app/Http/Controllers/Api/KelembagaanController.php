@@ -14,6 +14,7 @@ class KelembagaanController extends Controller
     public function Kelembagaan()
     {
         $kelembagaanRepository = resolve(KelembagaanRepository::class);
+
         return $this->fractal($this->prasarana->index(), new KelembagaanTransformer($kelembagaanRepository), 'kelembagaan')->toArray();
     }
 }

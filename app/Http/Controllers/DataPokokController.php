@@ -10,7 +10,7 @@ class DataPokokController extends Controller
 
         return view('data_pokok.agama_adat.index', ['title' => $title]);
     }
-    
+
     public function kesehatan()
     {
         $title = 'Data Kependudukan dan Statistik';

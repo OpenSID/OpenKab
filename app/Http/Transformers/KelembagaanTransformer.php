@@ -5,7 +5,6 @@ namespace App\Http\Transformers;
 use App\Enums\KomoditasJenisTempatIbadahEnum;
 use App\Http\Repository\KelembagaanRepository;
 use App\Models\Komoditas;
-use App\Models\Penduduk;
 use App\Models\Potensi;
 use League\Fractal\TransformerAbstract;
 
@@ -17,7 +16,7 @@ class KelembagaanTransformer extends TransformerAbstract
 
     protected function fractal(
         $data,
-        null|callable|\League\Fractal\TransformerAbstract $transformer,
+        null|callable|TransformerAbstract $transformer,
         null|string $resourceName = null,
     ): \Spatie\Fractal\Fractal {
         return fractal(
@@ -81,18 +80,18 @@ class KelembagaanTransformer extends TransformerAbstract
             ->map(function ($item) {
                 // Ambil data tempat ibadah dari properti 'data'
                 $obj = $item->data;
-            
+
                 // Ubah nilai 'jenis_tempat_ibadah' dengan deskripsi dari enum
-                $jenis_tempat_ibadah = isset($obj['jenis_tempat_ibadah']) 
-                    ? KomoditasJenisTempatIbadahEnum::fromValue((int) $obj['jenis_tempat_ibadah'])->description 
+                $jenis_tempat_ibadah = isset($obj['jenis_tempat_ibadah'])
+                    ? KomoditasJenisTempatIbadahEnum::fromValue((int) $obj['jenis_tempat_ibadah'])->description
                     : 'TIDAK TAHU';
-            
+
                 // Hilangkan kata "Jumlah " dari deskripsi enum
                 $obj['jenis_tempat_ibadah'] = str_replace('Jumlah ', '', $jenis_tempat_ibadah);
-            
+
                 // Update properti 'data' pada item
                 $item->data = $obj;
-            
+
                 return $item;
             });
 

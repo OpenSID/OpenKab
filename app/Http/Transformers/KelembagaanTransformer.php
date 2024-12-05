@@ -2,12 +2,30 @@
 
 namespace App\Http\Transformers;
 
+use App\Http\Repository\KelembagaanRepository;
 use App\Models\Penduduk;
 use App\Models\Potensi;
 use League\Fractal\TransformerAbstract;
 
 class KelembagaanTransformer extends TransformerAbstract
 {
+    public function __construct(protected KelembagaanRepository $prasarana)
+    {
+    }
+
+    protected function fractal(
+        $data,
+        null|callable|\League\Fractal\TransformerAbstract $transformer,
+        null|string $resourceName = null,
+    ): \Spatie\Fractal\Fractal {
+        return fractal(
+            $data,
+            $transformer,
+            \League\Fractal\Serializer\JsonApiSerializer::class
+        )
+            ->withResourceName($resourceName);
+    }
+
     public function transform(Potensi $potensi)
     {
         // Hide created and updated_at
@@ -46,19 +64,7 @@ class KelembagaanTransformer extends TransformerAbstract
             $total += isset($kelembagaanData[$field]) ? (int) $kelembagaanData[$field] : 0;
         }
 
-        // Query penduduk based on config_id
-        $penduduk = Penduduk::with('agama') // Pastikan relasi 'agama' sudah didefinisikan
-            ->select(['nik', 'agama_id', 'suku'])
-            ->where('config_id', $potensi->config_id)
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'nik' => $item->nik,
-                    'agama' => $item->agama->nama ?? null, // Mengambil nama agama dari relasi
-                    'suku' => $item->suku,
-                ];
-            })
-            ->toArray();
+        $penduduk = $this->fractal($this->prasarana->penduduk($potensi->config_id), new KelembagaanPendudukTransformer(), 'penduduk')->toArray();
 
         $prasaranaPeribadatan = $potensi
             ->prasaranaPeribadatan()

@@ -11,7 +11,6 @@ use OpenSpout\Common\Entity\Style\Border;
 use OpenSpout\Common\Entity\Style\BorderPart;
 use OpenSpout\Common\Entity\Style\Color;
 use OpenSpout\Common\Entity\Style\Style;
-use OpenSpout\Reader\XLSX\Reader;
 use OpenSpout\Writer\XLSX\Writer;
 
 class SuplemenController extends Controller
@@ -43,17 +42,17 @@ class SuplemenController extends Controller
     public function ekspor($id = 0)
     {
         $data_suplemen['suplemen'] = Suplemen::findOrFail($id)->toArray();
-        $data_suplemen['terdata']  = SuplemenTerdata::anggota($data_suplemen['suplemen']['sasaran'], $id)->get()->toArray();
+        $data_suplemen['terdata'] = SuplemenTerdata::anggota($data_suplemen['suplemen']['sasaran'], $id)->get()->toArray();
 
         // Nama file untuk ekspor
-        $file_name = $data_suplemen['suplemen']['nama'].'_'.date('d_m_Y'). '.xlsx';
+        $file_name = $data_suplemen['suplemen']['nama'].'_'.date('d_m_Y').'.xlsx';
 
         // Path untuk menyimpan file
-        $file_path = storage_path('app/exports/' . $file_name);
+        $file_path = storage_path('app/exports/'.$file_name);
 
         // Pastikan folder 'exports' ada
         $exportDir = storage_path('app/exports');
-        if (!file_exists($exportDir)) {
+        if (! file_exists($exportDir)) {
             // Buat folder 'exports' jika belum ada
             mkdir($exportDir, 0775, true);
         }
@@ -83,7 +82,7 @@ class SuplemenController extends Controller
             ->setBackgroundColor(Color::LIGHT_GREEN);
 
         // Cetak Header Tabel
-        $values        = ['Peserta', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Keterangan'];
+        $values = ['Peserta', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Keterangan'];
         $rowFromValues = Row::fromValues($values, $headerStyle);
         $writer->addRow($rowFromValues);
 
@@ -96,7 +95,7 @@ class SuplemenController extends Controller
                 strtoupper((string) $data['nama']),
                 $data['tempatlahir'],
                 tgl_indo_out($data['tanggallahir']),
-                strtoupper($data['alamat'] . ' RT ' . $data['rt'] . ' / RW ' . $data['rw'] . ' dusun ' . $data['dusun']),
+                strtoupper($data['alamat'].' RT '.$data['rt'].' / RW '.$data['rw'].' dusun '.$data['dusun']),
                 empty($data['keterangan']) ? '-' : $data['keterangan'],
             ];
 

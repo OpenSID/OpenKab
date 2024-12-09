@@ -66,7 +66,12 @@ final class Modul extends Enum
                     'url' => 'data-pokok/jaminan-sosial',
                     'permission' => 'datapokok-jaminan-sosial',
                 ],
-
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Data Papan',
+                    'url' => 'satu-data/dtks/papan',
+                    'permission' => 'datapokok-papan',
+                ],
             ],
         ],
         [

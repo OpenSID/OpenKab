@@ -149,10 +149,19 @@ class SuplemenController extends Controller
             $data['suplemen'] = Suplemen::findOrFail($id)->toArray();
             $data['terdata'] = SuplemenTerdata::anggota($data['suplemen']['sasaran'], $data['suplemen']['id'])->get()->toArray();
             $data['sasaran'] = unserialize(SASARAN);
-            $wilayah = Config::where('id', SuplemenTerdata::anggota($data['suplemen']['sasaran'], $data['suplemen']['id'])->first()->config_id)->first();
-            $data['nama_desa'] = $wilayah->nama_desa;
-            $data['nama_kecamatan'] = $wilayah->nama_kecamatan;
-            $data['nama_kabupaten'] = $wilayah->nama_kabupaten;
+            $suplemenTerdata = SuplemenTerdata::anggota($data['suplemen']['sasaran'], $data['suplemen']['id'])->first();
+
+            if ($suplemenTerdata) {
+                $wilayah = Config::where('id', $suplemenTerdata->config_id)->first() ?? '';
+                $data['nama_desa'] = $wilayah->nama_desa ?? '';
+                $data['nama_kecamatan'] = $wilayah->nama_kecamatan ?? '';
+                $data['nama_kabupaten'] = $wilayah->nama_kabupaten ?? '';
+            } else {
+                $data['nama_desa'] = '';
+                $data['nama_kecamatan'] = '';
+                $data['nama_kabupaten'] = '';
+            }
+
             $data['aksi'] = $aksi;
 
             //pengaturan data untuk format cetak/ unduh

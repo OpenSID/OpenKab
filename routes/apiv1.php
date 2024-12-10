@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DDKController;
 use App\Http\Controllers\Api\DTKSController;
 use App\Http\Controllers\Api\PariwisataController;
@@ -24,6 +22,9 @@ use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
+use App\Http\Controllers\Api\SuplemenController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\KelembagaanController;
@@ -263,3 +264,9 @@ Route::get('data-summary', SummaryController::class);
 
 // Desa teraktif
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
+
+Route::post('/suplemen', [SuplemenController::class, 'store']);
+Route::get('/suplemen', [SuplemenController::class, 'index']);
+Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
+Route::get('/suplemen/status', [SuplemenController::class, 'status']);
+Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');

@@ -38,6 +38,12 @@ final class Modul extends Enum
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Kesehatan',
+                    'url' => 'data-pokok/kesehatan',
+                    'permission' => 'datapokok-kesehatan',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Pendidikan',
                     'url' => 'data-pokok/pendidikan',
                     'permission' => 'datapokok-pendidikan',
@@ -53,6 +59,18 @@ final class Modul extends Enum
                     'text' => 'Ketenagakerjaan',
                     'url' => 'data-pokok/ketenagakerjaan',
                     'permission' => 'datapokok-ketenagakerjaan',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Jaminan Sosial',
+                    'url' => 'data-pokok/jaminan-sosial',
+                    'permission' => 'datapokok-jaminan-sosial',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Data Papan',
+                    'url' => 'satu-data/dtks/papan',
+                    'permission' => 'datapokok-papan',
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
@@ -99,6 +117,12 @@ final class Modul extends Enum
             'icon' => 'fas fa-handshake',
             'url' => 'bantuan',
             'permission' => 'bantuan',
+        ],
+        [
+            'text' => 'Data Suplemen',
+            'icon' => 'fa fa-users',
+            'url' => 'suplemen',
+            'permission' => 'suplemen',
         ],
 
         [

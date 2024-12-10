@@ -1,5 +1,5 @@
 <script nonce="{{ csp_nonce() }}"  >
-    function grafikPie() {
+    function grafik() {
         data = [];
         $('#barChart').remove();
         $('#donutChart').remove();
@@ -9,17 +9,13 @@
         $('#pie').append(
             '<canvas id="donutChart"></canvas>'
         );
-
         // Data untuk bar chart
-        tampilChart('bar', 'barChart', generateChartData(data_grafik, 'jumlah_penghasilan'));
-
+        tampilChart('bar', 'barChart', generateChartData(data_grafik, 'status_gizi'));
         // Data untuk pie chart
-        tampilChart('doughnut', 'donutChart', generateChartData(data_grafik, 'pelatihan'));
+        tampilChart('doughnut', 'donutChart', generateChartData(data_grafik, 'golongan_darah'));
     }
-
     function tampilChart(type, canvasId, chartData, chartOptions = {}) {
         var chartCanvas = $(`#${canvasId}`).get(0).getContext('2d');
-
         // Konfigurasi opsi default untuk chart
         var defaultOptions = {
             responsive: true,
@@ -34,10 +30,8 @@
                 },
             },
         };
-
         // Gabungkan opsi default dengan opsi spesifik yang diberikan
         var options = { ...defaultOptions, ...chartOptions };
-
         // Membuat chart baru
         new Chart(chartCanvas, {
             type: type, // Tipe chart (bar, doughnut, dll.)
@@ -48,14 +42,11 @@
             options: options,
         });
     }
-
-
-    function generateChartData(data, key, label = 'Jumlah Orang') {
+    function generateChartData(data, key) {
         var labelCounts = {}; // Objek untuk menghitung jumlah label unik
         var labels = [];
         var counts = [];
         var backgroundColors = [];
-
         // Hitung jumlah label unik berdasarkan kunci yang diberikan
         data.forEach(function (item) {
             var value = item[key]; // Ambil nilai berdasarkan kunci
@@ -64,7 +55,6 @@
             }
             labelCounts[value]++;
         });
-
         // Buat data untuk chart
         Object.keys(labelCounts).forEach(function (label) {
             let color = randColorRGB();
@@ -72,20 +62,18 @@
             counts.push(labelCounts[label]); // Tambahkan jumlah
             backgroundColors.push(color); // Tambahkan warna
         });
-
         // Struktur data chart
         return {
             labels: labels,
             datasets: [
                 {
-                    label: label,
+                    label: 'Jumlah',
                     data: counts,
                     backgroundColor: backgroundColors,
                 },
             ],
         };
     }
-
 </script>
 @push('css')
     <style nonce="{{ csp_nonce() }}" >

@@ -20,6 +20,7 @@ use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
+use App\Http\Controllers\SuplemenController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\DataPokokController;
@@ -129,6 +130,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
             Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
             Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
+            Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
+            Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
         });
 
     // Statistik
@@ -159,6 +162,14 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             });
         });
 
+    // Satu Data
+    Route::prefix('satu-data')->group(function () {
+        Route::prefix('dtks')->group(function () {
+            Route::get('papan', [App\Http\Controllers\DTKSController::class, 'index'])->name('satu-data.dtks.index');
+            Route::get('cetak', [App\Http\Controllers\DTKSController::class, 'cetak'])->name('satu-data.dtks.cetak');
+        });
+    });
+
     // Prodeskel
     Route::prefix('prodeskel')->group(function () {
         Route::prefix('ddk')->group(function () {
@@ -185,6 +196,9 @@ Route::get('/module/bantuan/{id}', [PresisiController::class, 'bantuan'])->name(
 Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
 Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+
+Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
+Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

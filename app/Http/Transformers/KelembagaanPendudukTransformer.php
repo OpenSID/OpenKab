@@ -12,7 +12,7 @@ class KelembagaanPendudukTransformer extends TransformerAbstract
             'id' => $penduduk->id,
             'nik' => $penduduk->nik,
             'agama' => $penduduk->agama->nama ?? 'TIDAK TAHU',
-            'suku' => $penduduk->suku ?: 'TIDAK TAHU'
+            'suku' => $penduduk->suku ?: 'TIDAK TAHU',
 
         ];
     }

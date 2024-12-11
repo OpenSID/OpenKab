@@ -210,7 +210,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ordering: true,
+            ordering: true, 
             searchPanes: {
                 viewTotal: false,
                 columns: [0]
@@ -272,7 +272,11 @@
                         grafikPie()
                         return json.data;
                     }
-                    return false;
+                    // Jika data kosong
+                    json.recordsTotal = 0;
+                    json.recordsFiltered = 0;
+
+                    return [];
                 },
 
             },

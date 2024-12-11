@@ -129,6 +129,10 @@
         var url = new URL("{{ url('api/v1/prodeskel/potensi/kelembagaan') }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
+        
+        var urlPerorangan = new URL("{{ url('api/v1/prodeskel/potensi/kelembagaan/penduduk') }}");
+        urlPerorangan.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+        urlPerorangan.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
 
         var tempatibadah = $('#tempatibadah').DataTable({
             processing: true,
@@ -137,6 +141,7 @@
             ordering: true,
             paging: false,
             searching: false,
+            info: false,
             searchPanes: {
                 viewTotal: false,
                 columns: [0]
@@ -211,47 +216,65 @@
                 columns: [0]
             },
             ajax: {
-                url: url.href,
+                url: urlPerorangan.href,
                 method: 'get',
-                // data: function(row) {
+                data: function(row) {
+                    return {
+                        "page[size]": row.length,
+                        "page[number]": (row.start / row.length) + 1,
+                        "filter[search]": row.search.value,
+                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            ?.name,
+                        "filter[kode_desa]": $("#kode_desa").val(),
+                    };
+                },
+                // dataSrc: function(json) {
+                //     if (json.data.length > 0) {
+                //         let obj = [];
+                //         data_grafik = [];
 
-                //     return {
-                //         "page[size]": row.length,
-                //         "page[number]": (row.start / row.length) + 1,
-                //         "filter[search]": row.search.value,
-                //         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
-                //             ?.name,
-                //         "filter[kode_desa]": $("#kode_desa").val(),
-                //     };
+                //         json.data.forEach(function(item, index) {
+                //             let penduduk = item.attributes.data.penduduk;
+
+                //             // Convert untuk kebutuhan grafik
+                //             penduduk.data.forEach(function(i, key) {
+                //                 data_grafik_pie.push(i.attributes);
+                //             });
+
+                //             // Mengambil pagination nested
+                //             json.recordsTotal = penduduk.meta.pagination.total;
+                //             json.recordsFiltered = penduduk.meta.pagination.total;
+
+                //             // Masukkan ke variabel object agar mudah di looping
+                //             obj = penduduk.data;
+                //         });
+
+                //         grafikPie();
+
+                //         return obj;
+                //     } 
+
+                //     // Jika data kosong
+                //     json.recordsTotal = 0;
+                //     json.recordsFiltered = 0;
+
+                //     return []; // Return array kosong
                 // },
                 dataSrc: function(json) {
-
+                    
                     if (json.data.length > 0) {
-                        let obj = [];
+                        json.recordsTotal = json.meta.pagination.total
+                        json.recordsFiltered = json.meta.pagination.total
                         data_grafik = [];
-
                         json.data.forEach(function(item, index) {
-
-                            let penduduk = item.attributes.data.penduduk
-
-                            // convert untuk kebutuhan grafik
-                            penduduk.data.forEach(function(i, key) {
-                                data_grafik_pie.push(i.attributes)
-                            })
-
-                            // mengambil pagination nested
-                            json.recordsTotal = penduduk.meta.pagination.total
-                            json.recordsFiltered = penduduk.meta.pagination.total
-
-                            // masukkan ke variabel object agar mudah di looping
-                            obj = penduduk.data
-
+                            data_grafik_pie.push(item.attributes)
                         })
                         grafikPie()
-                        return obj;
+                        return json.data;
                     }
                     return false;
                 },
+
             },
             columnDefs: [{
                         targets: '_all',
@@ -262,7 +285,7 @@
                     data: null,
                 },
                 {
-                    data: "attributes.nik", // Akses data penduduk
+                    data: "attributes.nik",
                     name: "nik",
                     orderable: false
                 },
@@ -298,6 +321,7 @@
             ordering: true,
             paging: false,
             searching: false,
+            info: false,
             searchPanes: {
                 viewTotal: false,
                 columns: [0]

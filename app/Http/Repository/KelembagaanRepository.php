@@ -11,21 +11,25 @@ class KelembagaanRepository
 {
     public function index()
     {
-        return QueryBuilder::for(Potensi::class)
+        return QueryBuilder::for(Potensi::filterWilayah())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('kategori'),
-            ])->where('kategori', 'lembaga-adat')
+                AllowedFilter::callback('search', function($query, $value) {
+                    $query->where('id', 'like', "%$value%")
+                          ->orWhere('kategori', 'like', "%$value%");
+                })
+            ])
+            ->where('kategori', 'lembaga-adat')
             ->jsonPaginate();
     }
 
-    public function penduduk($config_id)
+    public function penduduk()
     {
         return QueryBuilder::for(Penduduk::filterWilayah())
             ->with('agama')
-            ->select(['nik', 'agama_id', 'suku'])
-            ->where('config_id', $config_id)
+            ->select(['id','nik', 'agama_id', 'suku'])
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('sex'),

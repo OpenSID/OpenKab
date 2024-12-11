@@ -73,10 +73,9 @@ class KelembagaanTransformer extends TransformerAbstract
             }
         }
 
-        $penduduk = $this->fractal($this->prasarana->penduduk($potensi->config_id), new KelembagaanPendudukTransformer(), 'penduduk')->toArray();
+        $penduduk = $this->fractal($this->prasarana->penduduk(), new KelembagaanPendudukTransformer(), 'penduduk')->toArray();
 
-        $prasaranaPeribadatan = Komoditas::prasaranaPeribadatan()
-            ->where('config_id', $potensi->config_id)
+        $prasaranaPeribadatan = Komoditas::filterWilayah()->prasaranaPeribadatan()
             ->get()
             ->map(function ($item) {
                 // Ambil data tempat ibadah dari properti 'data'

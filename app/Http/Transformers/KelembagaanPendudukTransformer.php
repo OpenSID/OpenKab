@@ -9,7 +9,7 @@ class KelembagaanPendudukTransformer extends TransformerAbstract
     public function transform($penduduk)
     {
         return [
-            'id' => $penduduk->nik,
+            'id' => $penduduk->id,
             'nik' => $penduduk->nik,
             'agama' => $penduduk->agama->nama ?? 'TIDAK TAHU',
             'suku' => $penduduk->suku ?: 'TIDAK TAHU'

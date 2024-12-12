@@ -97,7 +97,7 @@
         function generateChildContent(data) {
             const createTable = (title, items, columns) => `
                 <h5>${title}</h5>
-                <table class="table table-sm">
+                <table class="table table-bordered table-sm">
                     <thead>
                         <tr>${columns.map(col => `<th>${col}</th>`).join('')}</tr>
                     </thead>
@@ -111,7 +111,7 @@
                                         return `<td>${item[key] ?? 'N/A'}</td>`;
                                     }).join('')}</tr>
                                 `).join('')
-                                : `<tr><td colspan="${columns.length}">Tidak ada data</td></tr>`
+                                : `<tr class="text-center"><td colspan="${columns.length}">Tidak ada data</td></tr>`
                         }
                     </tbody>
                 </table>`;

@@ -64,14 +64,14 @@ class DDKTransformer extends TransformerAbstract
                     'nilai_produksi' => $produksi?->nilai_produksi_per_satuan,
                     'pemasaran_hasil' => $produksi?->pemasaran_hasil,
                 ];
-        })
+            })
         ->filter(function ($item) {
             // Exclude items where any of the specified keys are null
-            return !is_null($item['jumlah_pohon']) 
-                || !is_null($item['luas_panen']) 
-                || !is_null($item['nilai_produksi']) 
-                || !is_null($item['pemasaran_hasil']);
+            return ! is_null($item['jumlah_pohon'])
+                || ! is_null($item['luas_panen'])
+                || ! is_null($item['nilai_produksi'])
+                || ! is_null($item['pemasaran_hasil']);
         })
-        ->values();;
+        ->values();
     }
 }

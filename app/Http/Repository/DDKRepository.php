@@ -24,6 +24,7 @@ class DDKRepository
                 'prodeskelDDK.bahanGalianAnggota',
             ])
             ->status()
+            ->filterWilayah()
             ->jsonPaginate();
     }
 }

@@ -16,10 +16,10 @@ class KelembagaanRepository
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('kategori'),
-                AllowedFilter::callback('search', function($query, $value) {
+                AllowedFilter::callback('search', function ($query, $value) {
                     $query->where('id', 'like', "%$value%")
                           ->orWhere('kategori', 'like', "%$value%");
-                })
+                }),
             ])
             ->where('kategori', 'lembaga-adat')
             ->jsonPaginate();
@@ -29,7 +29,7 @@ class KelembagaanRepository
     {
         return QueryBuilder::for(Penduduk::filterWilayah())
             ->with('agama')
-            ->select(['id','nik', 'agama_id', 'suku'])
+            ->select(['id', 'nik', 'agama_id', 'suku'])
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('sex'),

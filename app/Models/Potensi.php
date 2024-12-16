@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Potensi extends BaseModel
 {
     use FilterWilayahTrait;
+
     /**
      * The table associated with the model.
      *

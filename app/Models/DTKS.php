@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Enums\Dtks\DtksEnum;
+use App\Models\Traits\FilterWilayahTrait;
 
 class DTKS extends BaseModel
 {
+    use FilterWilayahTrait;
+
     /**
      * The table associated with the model.
      *

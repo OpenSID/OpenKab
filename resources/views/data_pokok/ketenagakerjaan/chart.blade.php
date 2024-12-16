@@ -50,7 +50,7 @@
     }
 
 
-    function generateChartData(data, key) {
+    function generateChartData(data, key, label = 'Jumlah Orang') {
         var labelCounts = {}; // Objek untuk menghitung jumlah label unik
         var labels = [];
         var counts = [];
@@ -78,7 +78,7 @@
             labels: labels,
             datasets: [
                 {
-                    label: 'Jumlah Orang',
+                    label: label,
                     data: counts,
                     backgroundColor: backgroundColors,
                 },

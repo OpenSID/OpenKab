@@ -267,6 +267,7 @@ Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
 
 Route::post('/suplemen', [SuplemenController::class, 'store']);
 Route::get('/suplemen', [SuplemenController::class, 'index']);
+Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'detail']);
 Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
 Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');

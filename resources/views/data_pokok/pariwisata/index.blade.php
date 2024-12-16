@@ -11,26 +11,26 @@
 @section('content')
     @include('partials.breadcrumbs')
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">Statistik Kepesertaan DTKS</div>
+                <div class="card-header">Statistik Jumlah Penginapan</div>
                 <div class="card-body">
                     <div>
-                        <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                        <div class="chart" id="grafik">
+                            <canvas id="barChart"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-4">
             <div class="card">
-                <div class="card-header">Statistik Jaminan Kesehatan</div>
+                <div class="card-header">Statistik Tingkat Pemanfaatan</div>
                 <div class="card-body">
                     <div>
-                        <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                        <div class="chart" id="pie">
+                            <canvas id="donutChart"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -46,18 +46,17 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="jaminansosial">
+                        <table class="table table-striped" id="pariwisata">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>NIK</th>
-                                    <th>Terdaftar DTKS</th>
-                                    <th>Memiliki Jaminan Kesehatan</th>
-                                    <th>Program Pra-Kerja</th>
-                                    <th>Program KUR</th>
-                                    <th>Program Ultra Mikro</th>
-                                    <th>Jaminan Ketenagakerjaan</th>
-                                    <th>Cacat</th>
+                                    <th>Desa</th>
+                                    <th>Jenis Hiburan</th>
+                                    <th>Jumlah Penginapan</th>
+                                    <th>Lokasi/Tempat/Area Wisata</th>
+                                    <th>Keberadaan</th>
+                                    <th>Luas (Ha)</th>
+                                    <th>Tingkat Pemanfaatan</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -70,14 +69,18 @@
 @endsection
 
 @section('js')
-    @include('jaminan_sosial.chart')
+    @include('data_pokok.pariwisata.chart')
     <script nonce="{{ csp_nonce() }}"  >
         let data_grafik = [];
+
+        
     document.addEventListener("DOMContentLoaded", function(event) {
-        var url = new URL("{{ url('api/v1/data/jaminan-sosial') }}");
+
+        var url = new URL("{{ url('api/v1/pariwisata') }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
-        var jaminansosial = $('#jaminansosial').DataTable({
+
+        var pariwisata = $('#pariwisata').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -102,16 +105,22 @@
                 dataSrc: function(json) {
                     
                     if (json.data.length > 0) {
+
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
+
                         data_grafik = [];
                         json.data.forEach(function(item, index) {
                             data_grafik.push(item.attributes)
                         })
+
                         grafikPie()
+
                         return json.data;
                     }
+
                     return false;
+
                 },
             },
             columnDefs: [{
@@ -123,43 +132,39 @@
                     data: null,
                 },
                 {
-                    data: "attributes.nik",
-                    name: "nik",
+                    data: "attributes.nama_desa",
+                    name: "desa",
                     orderable: false
                 },
                 {
-                    data: "attributes.dtks",
-                    name: "dtks",
+                    data: "attributes.jenis_hiburan",
+                    name: "jenis_hiburan",
                     orderable: false
                 },
                 {
-                    data: "attributes.asuransi",
-                    name: "asuransi",
+                    data: "attributes.jumlah_penginapan",
+                    name: "jumlah_penginapan",
                     orderable: false
                 },
                 {
-                    data: "attributes.kd_ikut_prakerja",
-                    name: "kd_ikut_prakerja",
+                    data: "attributes.lokasi_tempat_area_wisata",
+                    name: "lokasi_tempat_area_wisata",
+                    className: 'text-center',
                     orderable: false
                 },
                 {
-                    data: "attributes.kd_kur",
-                    name: "kd_kur",
+                    data: "attributes.keberadaan",
+                    name: "keberadaan",
                     orderable: false
                 },
                 {
-                    data: "attributes.kd_umi",
-                    name: "kd_umi",
+                    data: "attributes.luas",
+                    name: "luas",
                     orderable: false
                 },
                 {
-                    data: "attributes.bpjs_ketenagakerjaan",
-                    name: "bpjs_ketenagakerjaan",
-                    orderable: false
-                },
-                {
-                    data: "attributes.cacat",
-                    name: "cacat",
+                    data: "attributes.tingkat_pemanfaatan",
+                    name: "tingkat_pemanfaatan",
                     orderable: false
                 },
             ],
@@ -167,14 +172,17 @@
                 [0, 'asc']
             ]
         })
-        jaminansosial.on('draw.dt', function() {
-            var PageInfo = $('#jaminansosial').DataTable().page.info();
-            jaminansosial.column(0, {
+
+        pariwisata.on('draw.dt', function() {
+            var PageInfo = $('#pariwisata').DataTable().page.info();
+            pariwisata.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
         });
+
+        
     })
     </script>
 @endsection

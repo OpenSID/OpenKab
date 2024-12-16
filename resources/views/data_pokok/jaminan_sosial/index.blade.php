@@ -11,26 +11,26 @@
 @section('content')
     @include('partials.breadcrumbs')
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-4">
             <div class="card">
-                <div class="card-header">Statistik Jumlah Penghasilan</div>
+                <div class="card-header">Statistik Kepesertaan DTKS</div>
                 <div class="card-body">
                     <div>
-                        <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                        <div class="chart" id="pie">
+                            <canvas id="donutChart"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">Statistik Pelatihan</div>
+                <div class="card-header">Statistik Jaminan Kesehatan</div>
                 <div class="card-body">
                     <div>
-                        <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                        <div class="chart" id="grafik">
+                            <canvas id="barChart"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -46,15 +46,18 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="ketenagakerjaan">
+                        <table class="table table-striped" id="jaminansosial">
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>NIK</th>
-                                    <th>Pekerjaan</th>
-                                    <th>Jabatan</th>
-                                    <th>Jumlah Penghasilan</th>
-                                    <th>Pelatihan</th>
+                                    <th>Terdaftar DTKS</th>
+                                    <th>Memiliki Jaminan Kesehatan</th>
+                                    <th>Program Pra-Kerja</th>
+                                    <th>Program KUR</th>
+                                    <th>Program Ultra Mikro</th>
+                                    <th>Jaminan Ketenagakerjaan</th>
+                                    <th>Cacat</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -67,16 +70,14 @@
 @endsection
 
 @section('js')
-    @include('ketenagakerjaan.chart')
+    @include('data_pokok.jaminan_sosial.chart')
     <script nonce="{{ csp_nonce() }}"  >
         let data_grafik = [];
     document.addEventListener("DOMContentLoaded", function(event) {
-
-        var url = new URL("{{ url('api/v1/ketenagakerjaan') }}");
+        var url = new URL("{{ url('api/v1/data/jaminan-sosial') }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
-
-        var ketenagakerjaan = $('#ketenagakerjaan').DataTable({
+        var jaminansosial = $('#jaminansosial').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -127,23 +128,38 @@
                     orderable: false
                 },
                 {
-                    data: "attributes.pekerjaan",
-                    name: "pekerjaan",
+                    data: "attributes.dtks",
+                    name: "dtks",
                     orderable: false
                 },
                 {
-                    data: "attributes.jabatan",
-                    name: "jabatan",
+                    data: "attributes.asuransi",
+                    name: "asuransi",
                     orderable: false
                 },
                 {
-                    data: "attributes.jumlah_penghasilan",
-                    name: "jumlah_penghasilan",
+                    data: "attributes.kd_ikut_prakerja",
+                    name: "kd_ikut_prakerja",
                     orderable: false
                 },
                 {
-                    data: "attributes.pelatihan",
-                    name: "pelatihan",
+                    data: "attributes.kd_kur",
+                    name: "kd_kur",
+                    orderable: false
+                },
+                {
+                    data: "attributes.kd_umi",
+                    name: "kd_umi",
+                    orderable: false
+                },
+                {
+                    data: "attributes.bpjs_ketenagakerjaan",
+                    name: "bpjs_ketenagakerjaan",
+                    orderable: false
+                },
+                {
+                    data: "attributes.cacat",
+                    name: "cacat",
                     orderable: false
                 },
             ],
@@ -151,9 +167,9 @@
                 [0, 'asc']
             ]
         })
-        ketenagakerjaan.on('draw.dt', function() {
-            var PageInfo = $('#ketenagakerjaan').DataTable().page.info();
-            ketenagakerjaan.column(0, {
+        jaminansosial.on('draw.dt', function() {
+            var PageInfo = $('#jaminansosial').DataTable().page.info();
+            jaminansosial.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;

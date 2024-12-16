@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">Statistik Jumlah Penginapan</div>
+                <div class="card-header">Statistik Jumlah Penghasilan</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
@@ -26,7 +26,7 @@
         </div>
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header">Statistik Tingkat Pemanfaatan</div>
+                <div class="card-header">Statistik Pelatihan</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">
@@ -46,17 +46,15 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="pariwisata">
+                        <table class="table table-striped" id="ketenagakerjaan">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Desa</th>
-                                    <th>Jenis Hiburan</th>
-                                    <th>Jumlah Penginapan</th>
-                                    <th>Lokasi/Tempat/Area Wisata</th>
-                                    <th>Keberadaan</th>
-                                    <th>Luas (Ha)</th>
-                                    <th>Tingkat Pemanfaatan</th>
+                                    <th>NIK</th>
+                                    <th>Pekerjaan</th>
+                                    <th>Jabatan</th>
+                                    <th>Jumlah Penghasilan</th>
+                                    <th>Pelatihan</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -69,18 +67,16 @@
 @endsection
 
 @section('js')
-    @include('pariwisata.chart')
+    @include('data_pokok.ketenagakerjaan.chart')
     <script nonce="{{ csp_nonce() }}"  >
         let data_grafik = [];
-
-        
     document.addEventListener("DOMContentLoaded", function(event) {
 
-        var url = new URL("{{ url('api/v1/pariwisata') }}");
+        var url = new URL("{{ url('api/v1/ketenagakerjaan') }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
 
-        var pariwisata = $('#pariwisata').DataTable({
+        var ketenagakerjaan = $('#ketenagakerjaan').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -105,22 +101,16 @@
                 dataSrc: function(json) {
                     
                     if (json.data.length > 0) {
-
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
-
                         data_grafik = [];
                         json.data.forEach(function(item, index) {
                             data_grafik.push(item.attributes)
                         })
-
                         grafikPie()
-
                         return json.data;
                     }
-
                     return false;
-
                 },
             },
             columnDefs: [{
@@ -132,39 +122,28 @@
                     data: null,
                 },
                 {
-                    data: "attributes.nama_desa",
-                    name: "desa",
+                    data: "attributes.nik",
+                    name: "nik",
                     orderable: false
                 },
                 {
-                    data: "attributes.jenis_hiburan",
-                    name: "jenis_hiburan",
+                    data: "attributes.pekerjaan",
+                    name: "pekerjaan",
                     orderable: false
                 },
                 {
-                    data: "attributes.jumlah_penginapan",
-                    name: "jumlah_penginapan",
+                    data: "attributes.jabatan",
+                    name: "jabatan",
                     orderable: false
                 },
                 {
-                    data: "attributes.lokasi_tempat_area_wisata",
-                    name: "lokasi_tempat_area_wisata",
-                    className: 'text-center',
+                    data: "attributes.jumlah_penghasilan",
+                    name: "jumlah_penghasilan",
                     orderable: false
                 },
                 {
-                    data: "attributes.keberadaan",
-                    name: "keberadaan",
-                    orderable: false
-                },
-                {
-                    data: "attributes.luas",
-                    name: "luas",
-                    orderable: false
-                },
-                {
-                    data: "attributes.tingkat_pemanfaatan",
-                    name: "tingkat_pemanfaatan",
+                    data: "attributes.pelatihan",
+                    name: "pelatihan",
                     orderable: false
                 },
             ],
@@ -172,17 +151,14 @@
                 [0, 'asc']
             ]
         })
-
-        pariwisata.on('draw.dt', function() {
-            var PageInfo = $('#pariwisata').DataTable().page.info();
-            pariwisata.column(0, {
+        ketenagakerjaan.on('draw.dt', function() {
+            var PageInfo = $('#ketenagakerjaan').DataTable().page.info();
+            ketenagakerjaan.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
         });
-
-        
     })
     </script>
 @endsection

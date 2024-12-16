@@ -132,6 +132,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
             Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
+            Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama-adat', 'agama_adat')->name('agama-adat');
         });
 
     // Statistik

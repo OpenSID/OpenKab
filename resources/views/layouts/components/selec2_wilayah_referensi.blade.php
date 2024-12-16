@@ -70,7 +70,6 @@
         $('#rw').on('select2:select', function (e) {
             $('#rt').attr('disabled', false);
             $('#rt').val('').trigger('change');
-
             $('#rt').select2({
                 theme: 'bootstrap4',
                 ajax: {

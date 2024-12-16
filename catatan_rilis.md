@@ -33,6 +33,7 @@ Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan
 28. [#430](https://github.com/OpenSID/OpenKab/issues/430) Penambahan data suplemen sesuai pengaturan. 
 29. [#461](https://github.com/OpenSID/OpenKab/issues/461) Penambahan fungsi hapus pada data suplemen.
 30. [#437](https://github.com/OpenSID/OpenKab/issues/437) Penambahan tampilan untuk menampilan data dari API Papan. 
+31. [#433](https://github.com/OpenSID/OpenKab/issues/433) Penambahan detail suplemen.
 
 #### Perbaikan BUG
 

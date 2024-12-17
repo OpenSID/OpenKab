@@ -166,5 +166,4 @@ class Potensi extends BaseModel
 
         return $query;
     }
-
 }

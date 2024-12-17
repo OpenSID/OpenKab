@@ -263,7 +263,7 @@ class Komoditas extends BaseModel
     {
         return $query->where('kategori', 'sarana-komunikasi-informasi');
     }
-    
+
     public function scopeFilterBySession($query)
     {
         if (session('desa.kode_desa')) {
@@ -280,5 +280,4 @@ class Komoditas extends BaseModel
 
         return $query;
     }
-
 }

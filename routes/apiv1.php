@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\KelembagaanController;
+use App\Http\Controllers\Api\InfrastrukturController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +86,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::get('/pariwisata', PariwisataController::class);
+
 
     // API Data Presisi
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
@@ -272,3 +274,5 @@ Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'deta
 Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
 Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');
+Route::get('prasarana-sarana', [PrasaranaSaranaController::class, 'prasaranaSarana']);
+Route::get('infrastruktur', [InfrastrukturController::class, 'data']);

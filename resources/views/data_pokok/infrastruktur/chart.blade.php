@@ -116,7 +116,7 @@
             max-height: 250px;
             max-width: 100%;
         }
-        #donutChart1, #donutChart2 {
+        #sanitasiChart {
             min-height: 250px;
             height: 250px;
             max-height: 250px;

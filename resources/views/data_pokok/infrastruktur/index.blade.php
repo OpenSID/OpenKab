@@ -11,38 +11,23 @@
 @section('content')
     @include('partials.breadcrumbs')
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-7">
             <div class="card">
                 <div class="card-header">Statistik Kondisi Transportasi</div>
                 <div class="card-body">
-                    <div>
-                        <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
-                        </div>
-                        <hr class="hr-chart">
+                    <div class="chart" id="grafik">
+                        <canvas id="kondisiChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-7">
+        <div class="col-lg-5">
             <div class="card">
                 <div class="card-header">Statistik Sanitasi</div>
                 <div class="card-body">
-                    <div class="row">
-                        <!-- Chart Kiri -->
-                        <div class="col-md-6">
-                            <div class="chart" id="pie1">
-                                <canvas id="donutChart1"></canvas>
-                            </div>
-                        </div>
-                        <!-- Chart Kanan -->
-                        <div class="col-md-6">
-                            <div class="chart" id="pie2">
-                                <canvas id="donutChart2"></canvas>
-                            </div>
-                        </div>
+                    <div class="chart">
+                        <canvas id="sanitasiChart"></canvas>
                     </div>
-                    <hr class="hr-chart">
                 </div>
             </div>
         </div>
@@ -62,6 +47,8 @@
 @endsection
 
 @section('js')
+
+
 <script nonce="{{ csp_nonce() }}">
 document.addEventListener("DOMContentLoaded", function(event) {
    // Fungsi untuk mengambil data Komoditas dari API
@@ -101,4 +88,124 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 </script>
 
+<script>
+    // Ambil data dari API
+    fetch("{{ url('api/v1/infrastruktur') }}") // Ganti route dengan rute API Anda
+        .then(response => response.json())
+        .then(data => {
+            // Cari data Sanitasi (MCK Umum dan Sumur Resapan)
+            const sumurResapan = data.find(item => item.jenis_sarana === 'Sumur Resapan')?.jumlah || 0;
+            const mckUmum = data.find(item => item.jenis_sarana === 'MCK Umum')?.jumlah || 0;
+
+            // Buat pie chart menggunakan Chart.js
+            const ctx = document.getElementById('sanitasiChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Sumur Resapan', 'MCK Umum'],
+                    datasets: [{
+                        data: [sumurResapan, mckUmum],
+                        backgroundColor: ['#4caf50', '#ffc107'], // Warna untuk pie chart
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    let value = context.raw || 0;
+                                    return `${label}: ${value} Unit`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+</script>
+<script>
+    // Ambil data dari API
+    fetch("{{ url('api/v1/infrastruktur') }}") // Ganti dengan rute API Anda
+        .then(response => response.json())
+        .then(data => {
+            // Ambil data kondisi baik dan buruk
+            const jalanBaik = data.find(item => item.jenis_sarana === 'Jalan Raya Aspal')?.kondisi_baik || 0;
+            const jalanBuruk = data.find(item => item.jenis_sarana === 'Jalan Raya Aspal')?.kondisi_rusak || 0;
+
+            const jembatanBaik = data.find(item => item.jenis_sarana === 'Jembatan Besi Beton')?.kondisi_baik || 0;
+            const jembatanBuruk = data.find(item => item.jenis_sarana === 'Jembatan Besi Beton')?.kondisi_rusak || 0;
+
+
+            // Konfigurasi Chart.js
+            const ctx = document.getElementById('kondisiChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jalan Raya Aspal', 'Jembatan Besi Beton'],
+                    datasets: [
+                        {
+                            label: 'Kondisi Baik',
+                            data: [jalanBaik, jembatanBaik],
+                            backgroundColor: '#4CAF50', // Hijau untuk kondisi baik
+                            borderColor: '#388E3C',
+                        },
+                        {
+                            label: 'Kondisi Buruk',
+                            data: [jalanBuruk, jembatanBuruk],
+                            backgroundColor: '#F44336', // Merah untuk kondisi buruk
+                            borderColor: '#D32F2F',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: true
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: true
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+</script>
+
 @endsection
+@push('css')
+    
+<style nonce="{{ csp_nonce() }}" >
+        #kondisiChart {
+            min-height: 250px!important;
+            height: 250px!important;
+            max-height: 250px!important;
+            max-width: 100%;
+        }
+        #sanitasiChart {
+            min-height: 250px!important;
+            height: 250px!important;
+            max-height: 250px!important;
+            max-width: 100%;
+        }
+    </style>
+@endpush

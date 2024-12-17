@@ -13,68 +13,119 @@ class InfrastrukturController extends Controller
     {
     }
 
+    /**
+     * Mengambil data infrastruktur: jalan, jembatan, sanitasi, dan air bersih.
+     */
     public function data()
     {
-        $jalan_negara = Komoditas::where('komoditas', '5__497')->first();
-        $jalan_provinsi = Komoditas::where('komoditas', '4__491')->first();
+        // Data Jalan Raya Aspal
+        $jalanNegara = Komoditas::where('komoditas', '5__497')->first();
+        $jalanProvinsi = Komoditas::where('komoditas', '4__491')->first();
 
-        $jalan_baik =
-            ($jalan_negara ? $jalan_negara->data['kondisi_baik'] : 0) +
-            ($jalan_provinsi ? $jalan_provinsi->data['kondisi_baik'] : 0);
+        $jalanBaik = ($jalanNegara ? $jalanNegara->data['kondisi_baik'] : 0) +
+                     ($jalanProvinsi ? $jalanProvinsi->data['kondisi_baik'] : 0);
 
-        $jalan_rusak =
-        ($jalan_negara ? $jalan_negara->data['kondisi_rusak'] : 0) +
-        ($jalan_provinsi ? $jalan_provinsi->data['kondisi_rusak'] : 0);
+        $jalanRusak = ($jalanNegara ? $jalanNegara->data['kondisi_rusak'] : 0) +
+                      ($jalanProvinsi ? $jalanProvinsi->data['kondisi_rusak'] : 0);
 
-        $jalan_jumlah = $jalan_baik + $jalan_rusak;
+        $jalanJumlah = $jalanBaik + $jalanRusak;
 
-        $jembatan_beton = Komoditas::where('komoditas', '6__503')->first();
-        $jembatan_besi = Komoditas::where('komoditas', '6__504')->first();
+        // Data Jembatan Besi Beton
+        $jembatanBeton = Komoditas::where('komoditas', '6__503')->first();
+        $jembatanBesi = Komoditas::where('komoditas', '6__504')->first();
 
-        // Pastikan kondisi_baik bernilai 0 jika objek tidak ditemukan
-        $jembatan_baik =
-            ($jembatan_beton ? $jembatan_beton->data['kondisi_baik'] : 0) +
-            ($jembatan_besi ? $jembatan_besi->data['kondisi_baik'] : 0);
+        $jembatanBaik = ($jembatanBeton ? $jembatanBeton->data['kondisi_baik'] : 0) +
+                        ($jembatanBesi ? $jembatanBesi->data['kondisi_baik'] : 0);
 
-        $jembatan_rusak =
-        ($jembatan_beton ? $jembatan_beton->data['kondisi_rusak'] : 0) +
-        ($jembatan_besi ? $jembatan_besi->data['kondisi_rusak'] : 0);
+        $jembatanRusak = ($jembatanBeton ? $jembatanBeton->data['kondisi_rusak'] : 0) +
+                         ($jembatanBesi ? $jembatanBesi->data['kondisi_rusak'] : 0);
 
-        $jembatan_jumlah = $jembatan_baik + $jembatan_rusak;
+        $jembatanJumlah = $jembatanBaik + $jembatanRusak;
 
+        // Data Sanitasi
         $sanitasi = Potensi::sanitasi()->first();
-        $sumur_resapan = $sanitasi ? $sanitasi->data['sumur_resapan'] : '-';
-        $mck_umum = $sanitasi ? $sanitasi->data['mck_umum'] : '-';
+        $sumurResapan = $sanitasi ? $sanitasi->data['sumur_resapan'] : '-';
+        $mckUmum = $sanitasi ? $sanitasi->data['mck_umum'] : '-';
 
-        $air = Potensi::airBersih()->first();
-        $sumur_pompa = $air ? $air->data['air_bersih'] : '-';
-        $embung = $air ? $air->data['embung'] : '-';
+        // Data Air Bersih
+        $airBersih = Potensi::airBersih()->first();
+        $sumurPompa = $airBersih ? $airBersih->data['air_bersih'] : '-';
+        $embung = $airBersih ? $airBersih->data['embung'] : '-';
 
+        // Data Infrastruktur
         $data = [
-            ['kategori' => 'Transportasi Darat', 'jenis_sarana' => 'Jalan Raya Aspal', 'kondisi_baik' => $jalan_baik, 'kondisi_rusak' => $jalan_rusak, 'jumlah' => $jalan_jumlah, 'satuan' => 'KM'],
-            ['kategori' => 'Transportasi Darat', 'jenis_sarana' => 'Jembatan Besi Beton', 'kondisi_baik' => $jembatan_baik, 'kondisi_rusak' => $jembatan_rusak, 'jumlah' => $jembatan_jumlah, 'satuan' => 'Unit'],
-            ['kategori' => 'Sanitasi', 'jenis_sarana' => 'Sumur Resapan', 'kondisi_baik' => $sumur_resapan, 'kondisi_rusak' => '-', 'jumlah' => $sumur_resapan, 'satuan' => 'Unit'],
-            ['kategori' => 'Sanitasi', 'jenis_sarana' => 'MCK Umum', 'kondisi_baik' => $mck_umum, 'kondisi_rusak' => '-', 'jumlah' => $mck_umum, 'satuan' => 'Unit'],
-            ['kategori' => 'Air Bersih', 'jenis_sarana' => 'Sumur Pompa', 'kondisi_baik' => $sumur_pompa, 'kondisi_rusak' => '-', 'jumlah' => $sumur_pompa, 'satuan' => 'Unit'],
-            ['kategori' => 'Air Bersih', 'jenis_sarana' => 'Embung', 'kondisi_baik' => $embung, 'kondisi_rusak' => '-', 'jumlah' => $embung, 'satuan' => 'Unit'],
+            [
+                'kategori'       => 'Transportasi Darat',
+                'jenis_sarana'   => 'Jalan Raya Aspal',
+                'kondisi_baik'   => $jalanBaik,
+                'kondisi_rusak'  => $jalanRusak,
+                'jumlah'         => $jalanJumlah,
+                'satuan'         => 'KM'
+            ],
+            [
+                'kategori'       => 'Transportasi Darat',
+                'jenis_sarana'   => 'Jembatan Besi Beton',
+                'kondisi_baik'   => $jembatanBaik,
+                'kondisi_rusak'  => $jembatanRusak,
+                'jumlah'         => $jembatanJumlah,
+                'satuan'         => 'Unit'
+            ],
+            [
+                'kategori'       => 'Sanitasi',
+                'jenis_sarana'   => 'Sumur Resapan',
+                'kondisi_baik'   => $sumurResapan,
+                'kondisi_rusak'  => '-',
+                'jumlah'         => $sumurResapan,
+                'satuan'         => 'Unit'
+            ],
+            [
+                'kategori'       => 'Sanitasi',
+                'jenis_sarana'   => 'MCK Umum',
+                'kondisi_baik'   => $mckUmum,
+                'kondisi_rusak'  => '-',
+                'jumlah'         => $mckUmum,
+                'satuan'         => 'Unit'
+            ],
+            [
+                'kategori'       => 'Air Bersih',
+                'jenis_sarana'   => 'Sumur Pompa',
+                'kondisi_baik'   => $sumurPompa,
+                'kondisi_rusak'  => '-',
+                'jumlah'         => $sumurPompa,
+                'satuan'         => 'Unit'
+            ],
+            [
+                'kategori'       => 'Air Bersih',
+                'jenis_sarana'   => 'Embung',
+                'kondisi_baik'   => $embung,
+                'kondisi_rusak'  => '-',
+                'jumlah'         => $embung,
+                'satuan'         => 'Unit'
+            ],
         ];
 
-        // Ubah nilai 0 menjadi '-'
+        // Mengubah nilai 0 menjadi '-'
         $data = array_map(function ($item) {
             foreach ($item as $key => $value) {
                 if ($value === 0 || $value === '0') {
                     $item[$key] = '-';
                 }
             }
-
             return $item;
         }, $data);
 
         return response()->json($data);
     }
 
+    /**
+     * Mengambil data prasarana dan sarana.
+     */
     public function prasaranaSarana()
     {
-        return $this->fractal($this->prasarana->index(), new InfrastrukturTransformer(), 'prasarana-sarana')->toArray();
+        return $this->fractal(
+            $this->prasarana->index(),
+            new InfrastrukturTransformer(),
+            'prasarana-sarana'
+        )->toArray();
     }
 }

@@ -7,10 +7,10 @@
             max-width: 100%;
         }
         #sanitasiChart {
-            min-height: 250px!important;
+            /* min-height: 250px!important;
             height: 250px!important;
             max-height: 250px!important;
-            max-width: 100%;
+            max-width: 100%; */
         }
     </style>
 @endpush

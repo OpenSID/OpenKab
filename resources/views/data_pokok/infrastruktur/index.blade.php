@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <div class="chart">
                         <canvas id="sanitasiChart"></canvas>
-                    </div>
+                    </div><hr>
                 </div>
             </div>
         </div>

@@ -11,7 +11,7 @@ class InfrastrukturTransformer extends TransformerAbstract
     {
         // hide created and updated_at
         $komoditas = $komoditas->setHidden(['created_at', 'updated_at']);
-        
+
         return $komoditas->toArray();
     }
 }

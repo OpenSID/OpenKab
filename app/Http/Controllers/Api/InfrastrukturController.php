@@ -18,12 +18,12 @@ class InfrastrukturController extends Controller
         $jalan_negara = Komoditas::where('komoditas', '5__497')->first();
         $jalan_provinsi = Komoditas::where('komoditas', '4__491')->first();
 
-        $jalan_baik = 
-            ($jalan_negara ? $jalan_negara->data['kondisi_baik'] : 0) + 
+        $jalan_baik =
+            ($jalan_negara ? $jalan_negara->data['kondisi_baik'] : 0) +
             ($jalan_provinsi ? $jalan_provinsi->data['kondisi_baik'] : 0);
 
-        $jalan_rusak = 
-        ($jalan_negara ? $jalan_negara->data['kondisi_rusak'] : 0) + 
+        $jalan_rusak =
+        ($jalan_negara ? $jalan_negara->data['kondisi_rusak'] : 0) +
         ($jalan_provinsi ? $jalan_provinsi->data['kondisi_rusak'] : 0);
 
         $jalan_jumlah = $jalan_baik + $jalan_rusak;
@@ -32,12 +32,12 @@ class InfrastrukturController extends Controller
         $jembatan_besi = Komoditas::where('komoditas', '6__504')->first();
 
         // Pastikan kondisi_baik bernilai 0 jika objek tidak ditemukan
-        $jembatan_baik = 
-            ($jembatan_beton ? $jembatan_beton->data['kondisi_baik'] : 0) + 
+        $jembatan_baik =
+            ($jembatan_beton ? $jembatan_beton->data['kondisi_baik'] : 0) +
             ($jembatan_besi ? $jembatan_besi->data['kondisi_baik'] : 0);
 
-        $jembatan_rusak = 
-        ($jembatan_beton ? $jembatan_beton->data['kondisi_rusak'] : 0) + 
+        $jembatan_rusak =
+        ($jembatan_beton ? $jembatan_beton->data['kondisi_rusak'] : 0) +
         ($jembatan_besi ? $jembatan_besi->data['kondisi_rusak'] : 0);
 
         $jembatan_jumlah = $jembatan_baik + $jembatan_rusak;
@@ -58,7 +58,7 @@ class InfrastrukturController extends Controller
             ['kategori' => 'Air Bersih', 'jenis_sarana' => 'Sumur Pompa', 'kondisi_baik' => $sumur_pompa, 'kondisi_rusak' => '-', 'jumlah' => $sumur_pompa, 'satuan' => 'Unit'],
             ['kategori' => 'Air Bersih', 'jenis_sarana' => 'Embung', 'kondisi_baik' => $embung, 'kondisi_rusak' => '-', 'jumlah' => $embung, 'satuan' => 'Unit'],
         ];
-        
+
         // Ubah nilai 0 menjadi '-'
         $data = array_map(function ($item) {
             foreach ($item as $key => $value) {
@@ -66,10 +66,10 @@ class InfrastrukturController extends Controller
                     $item[$key] = '-';
                 }
             }
+
             return $item;
         }, $data);
-        
-        
+
         return response()->json($data);
     }
 

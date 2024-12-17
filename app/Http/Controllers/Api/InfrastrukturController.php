@@ -19,38 +19,60 @@ class InfrastrukturController extends Controller
     public function data()
     {
         // Data Jalan Raya Aspal
-        $jalanNegara = Komoditas::where('komoditas', '5__497')->first();
-        $jalanProvinsi = Komoditas::where('komoditas', '4__491')->first();
+        $jalanNegara = Komoditas::join('config', 'config.id', '=', 'prodeskel_komoditas.config_id', 'left')
+            ->where('komoditas', '5__497')
+            ->filterBySession()
+            ->get();
+            
+        $jalanProvinsi = Komoditas::join('config', 'config.id', '=', 'prodeskel_komoditas.config_id', 'left')
+            ->where('komoditas', '4__491')
+            ->filterBySession()
+            ->get();
 
-        $jalanBaik = ($jalanNegara ? $jalanNegara->data['kondisi_baik'] : 0) +
-                     ($jalanProvinsi ? $jalanProvinsi->data['kondisi_baik'] : 0);
+        $jalanBaik = $jalanNegara->sum(fn($item) => $item->data['kondisi_baik']) +
+                     $jalanProvinsi->sum(fn($item) => $item->data['kondisi_baik']);
 
-        $jalanRusak = ($jalanNegara ? $jalanNegara->data['kondisi_rusak'] : 0) +
-                      ($jalanProvinsi ? $jalanProvinsi->data['kondisi_rusak'] : 0);
+        $jalanRusak = $jalanNegara->sum(fn($item) => $item->data['kondisi_rusak']) +
+                      $jalanProvinsi->sum(fn($item) => $item->data['kondisi_rusak']);
 
         $jalanJumlah = $jalanBaik + $jalanRusak;
 
         // Data Jembatan Besi Beton
-        $jembatanBeton = Komoditas::where('komoditas', '6__503')->first();
-        $jembatanBesi = Komoditas::where('komoditas', '6__504')->first();
+        $jembatanBeton = Komoditas::join('config', 'config.id', '=', 'prodeskel_komoditas.config_id', 'left')
+            ->where('komoditas', '6__503')
+            ->filterBySession()
+            ->get();
+            
+        $jembatanBesi = Komoditas::join('config', 'config.id', '=', 'prodeskel_komoditas.config_id', 'left')
+            ->where('komoditas', '6__504')
+            ->filterBySession()
+            ->get();
 
-        $jembatanBaik = ($jembatanBeton ? $jembatanBeton->data['kondisi_baik'] : 0) +
-                        ($jembatanBesi ? $jembatanBesi->data['kondisi_baik'] : 0);
+        $jembatanBaik = $jembatanBeton->sum(fn($item) => $item->data['kondisi_baik']) +
+                        $jembatanBesi->sum(fn($item) => $item->data['kondisi_baik']);
 
-        $jembatanRusak = ($jembatanBeton ? $jembatanBeton->data['kondisi_rusak'] : 0) +
-                         ($jembatanBesi ? $jembatanBesi->data['kondisi_rusak'] : 0);
+        $jembatanRusak = $jembatanBeton->sum(fn($item) => $item->data['kondisi_rusak']) +
+                         $jembatanBesi->sum(fn($item) => $item->data['kondisi_rusak']);
 
         $jembatanJumlah = $jembatanBaik + $jembatanRusak;
 
-        // Data Sanitasi
-        $sanitasi = Potensi::sanitasi()->first();
-        $sumurResapan = $sanitasi ? $sanitasi->data['sumur_resapan'] : '-';
-        $mckUmum = $sanitasi ? $sanitasi->data['mck_umum'] : '-';
+        // Data Sanitasi (Potensi)
+        $sanitasi = Potensi::join('config', 'config.id', '=', 'prodeskel_potensi.config_id', 'left')
+            ->filterBySession()
+            ->sanitasi()
+            ->get();
+        
+        $sumurResapan = $sanitasi->sum(fn($item) => $item->data['sumur_resapan']) ?: '-';
+        $mckUmum = $sanitasi->sum(fn($item) => $item->data['mck_umum']) ?: '-';
 
-        // Data Air Bersih
-        $airBersih = Potensi::airBersih()->first();
-        $sumurPompa = $airBersih ? $airBersih->data['air_bersih'] : '-';
-        $embung = $airBersih ? $airBersih->data['embung'] : '-';
+        // Data Air Bersih (Potensi)
+        $airBersih = Potensi::join('config', 'config.id', '=', 'prodeskel_potensi.config_id', 'left')
+            ->filterBySession()
+            ->airBersih()
+            ->get();
+        
+        $sumurPompa = $airBersih->sum(fn($item) => $item->data['air_bersih']) ?: '-';
+        $embung = $airBersih->sum(fn($item) => $item->data['embung']) ?: '-';
 
         // Data Infrastruktur
         $data = [

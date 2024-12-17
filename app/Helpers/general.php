@@ -861,4 +861,24 @@ if (! function_exists('getStatistikLabel')) {
             'label' => $label,
         ];
     }
+
+    function tgl_indo_out($tgl, $replace_with = '-')
+    {
+        if (date_is_empty($tgl)) {
+            return $replace_with;
+        }
+
+        if ($tgl) {
+            $tanggal = substr($tgl, 8, 2);
+            $bulan = substr($tgl, 5, 2);
+            $tahun = substr($tgl, 0, 4);
+
+            return $tanggal.'-'.$bulan.'-'.$tahun;
+        }
+    }
+
+    function date_is_empty($tgl): bool
+    {
+        return empty($tgl) || substr($tgl, 0, 10) === '0000-00-00';
+    }
 }

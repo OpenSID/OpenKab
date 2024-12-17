@@ -2,12 +2,31 @@
 
 namespace App\Http\Transformers;
 
-use App\Models\Penduduk;
+use App\Enums\KomoditasJenisTempatIbadahEnum;
+use App\Http\Repository\KelembagaanRepository;
+use App\Models\Komoditas;
 use App\Models\Potensi;
 use League\Fractal\TransformerAbstract;
 
 class KelembagaanTransformer extends TransformerAbstract
 {
+    public function __construct(protected KelembagaanRepository $prasarana)
+    {
+    }
+
+    protected function fractal(
+        $data,
+        null|callable|TransformerAbstract $transformer,
+        null|string $resourceName = null,
+    ): \Spatie\Fractal\Fractal {
+        return fractal(
+            $data,
+            $transformer,
+            \League\Fractal\Serializer\JsonApiSerializer::class
+        )
+            ->withResourceName($resourceName);
+    }
+
     public function transform(Potensi $potensi)
     {
         // Hide created and updated_at
@@ -46,24 +65,34 @@ class KelembagaanTransformer extends TransformerAbstract
             $total += isset($kelembagaanData[$field]) ? (int) $kelembagaanData[$field] : 0;
         }
 
-        // Query penduduk based on config_id
-        $penduduk = Penduduk::with('agama') // Pastikan relasi 'agama' sudah didefinisikan
-            ->select(['nik', 'agama_id', 'suku'])
-            ->where('config_id', $potensi->config_id)
+        // Transform values
+        foreach ($fieldsToSum as $field) {
+            if (isset($kelembagaanData[$field])) {
+                $kelembagaanData[$field] = $kelembagaanData[$field] == 1 ? 'Ada' : 'Tidak';
+            }
+        }
+
+        $penduduk = $this->fractal($this->prasarana->penduduk(), new KelembagaanPendudukTransformer(), 'penduduk')->toArray();
+
+        $prasaranaPeribadatan = Komoditas::filterWilayah()->prasaranaPeribadatan()
             ->get()
             ->map(function ($item) {
-                return [
-                    'nik' => $item->nik,
-                    'agama' => $item->agama->nama ?? null, // Mengambil nama agama dari relasi
-                    'suku' => $item->suku,
-                ];
-            })
-            ->toArray();
+                // Ambil data tempat ibadah dari properti 'data'
+                $obj = $item->data;
 
-        $prasaranaPeribadatan = $potensi
-            ->prasaranaPeribadatan()
-            ->where('config_id', $potensi->config_id)
-            ->get(); // Pilih kolom yang relevan
+                // Ubah nilai 'jenis_tempat_ibadah' dengan deskripsi dari enum
+                $jenis_tempat_ibadah = isset($obj['jenis_tempat_ibadah'])
+                    ? KomoditasJenisTempatIbadahEnum::fromValue((int) $obj['jenis_tempat_ibadah'])->description
+                    : 'TIDAK TAHU';
+
+                // Hilangkan kata "Jumlah " dari deskripsi enum
+                $obj['jenis_tempat_ibadah'] = str_replace('Jumlah ', '', $jenis_tempat_ibadah);
+
+                // Update properti 'data' pada item
+                $item->data = $obj;
+
+                return $item;
+            });
 
         // Add new fields to 'data'
         $kelembagaanData['penduduk'] = $penduduk;

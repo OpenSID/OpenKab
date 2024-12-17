@@ -69,7 +69,7 @@
 @endsection
 
 @section('js')
-    @include('pendidikan.chart')
+    @include('data_pokok.pendidikan.chart')
     <script nonce="{{ csp_nonce() }}"  >
         let data_grafik = [];
     document.addEventListener("DOMContentLoaded", function(event) {

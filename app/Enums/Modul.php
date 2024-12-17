@@ -38,6 +38,12 @@ final class Modul extends Enum
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Data Agama & Adat',
+                    'url' => 'data-pokok/agama-adat',
+                    'permission' => 'datapokok-agama-adat',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Kesehatan',
                     'url' => 'data-pokok/kesehatan',
                     'permission' => 'datapokok-kesehatan',

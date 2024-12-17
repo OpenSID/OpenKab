@@ -205,7 +205,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 });
         });
 
-    // Prodeskel
+     // Prodeskel
     Route::prefix('prodeskel')->group(function () {
         Route::prefix('ddk')->group(function () {
             Route::get('pangan', [DDKController::class, 'pangan']);
@@ -213,6 +213,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('potensi')->group(function () {
             Route::get('prasarana-sarana', [PrasaranaSaranaController::class, 'prasaranaSarana']);
             Route::get('kelembagaan', [KelembagaanController::class, 'kelembagaan']);
+            Route::get('kelembagaan/penduduk', [KelembagaanController::class, 'kelembagaan_penduduk']);
         });
     });
 
@@ -267,6 +268,7 @@ Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
 
 Route::post('/suplemen', [SuplemenController::class, 'store']);
 Route::get('/suplemen', [SuplemenController::class, 'index']);
+Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'detail']);
 Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
 Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');

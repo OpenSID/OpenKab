@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\KelembagaanController;
+use App\Http\Controllers\Api\InfrastrukturController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +87,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/pariwisata', PariwisataController::class);
 
+    Route::get('infrastruktur', [InfrastrukturController::class, 'data']);
+
     // API Data Presisi
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
 
@@ -98,7 +101,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/jaminan-sosial', 'jaminan_sosial');
     });
 
-    Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
+    Route::prefix('penduduk')->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 
         // Referensi
@@ -114,7 +117,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Dokumen
-    Route::prefix('dokumen')->middleware(['can:penduduk-read'])->group(function () {
+    Route::prefix('dokumen')->group(function () {
         Route::get('/', DokumenController::class);
     });
 

@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\KelembagaanController;
-use App\Http\Controllers\Api\InfrastrukturController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,8 +85,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::get('/pariwisata', PariwisataController::class);
-
-    Route::get('infrastruktur', [InfrastrukturController::class, 'data']);
 
     // API Data Presisi
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);

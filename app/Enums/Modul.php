@@ -44,6 +44,12 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Data Infrastruktur',
+                    'url' => 'data-pokok/infrastruktur',
+                    'permission' => 'datapokok-infrastruktur',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Kesehatan',
                     'url' => 'data-pokok/kesehatan',
                     'permission' => 'datapokok-kesehatan',

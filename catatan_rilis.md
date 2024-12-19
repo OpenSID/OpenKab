@@ -35,6 +35,7 @@ Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan
 30. [#437](https://github.com/OpenSID/OpenKab/issues/437) Penambahan tampilan untuk menampilan data dari API Papan. 
 31. [#439](https://github.com/OpenSID/OpenKab/issues/439) Penambahan halaman di admin untuk menampilkan data agama,adat tradisi & seni. 
 32. [#433](https://github.com/OpenSID/OpenKab/issues/433) Penambahan detail suplemen.
+33. [#441](https://github.com/OpenSID/OpenKab/issues/441) Penambahan tampilan data infrastruktur pada halaman admin. 
 
 #### Perbaikan BUG
 

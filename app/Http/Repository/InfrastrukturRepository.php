@@ -6,7 +6,7 @@ use App\Models\Komoditas;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class PrasaranaSaranaRepository
+class InfrastrukturRepository
 {
     public function index()
     {

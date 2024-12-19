@@ -149,4 +149,21 @@ class Potensi extends BaseModel
     {
         return $query->where('kategori', 'prasarana-peribadatan');
     }
+
+    public function scopeFilterBySession($query)
+    {
+        if (session('desa.kode_desa')) {
+            $query->where('config.kode_desa', session('desa.kode_desa'));
+        }
+
+        if (session('kecamatan.kode_kecamatan')) {
+            $query->where('config.kode_kecamatan', session('kecamatan.kode_kecamatan'));
+        }
+
+        if (session('kabupaten.kode_kabupaten')) {
+            $query->where('config.kode_kabupaten', session('kabupaten.kode_kabupaten'));
+        }
+
+        return $query;
+    }
 }

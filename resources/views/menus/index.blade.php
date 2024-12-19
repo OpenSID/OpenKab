@@ -101,6 +101,7 @@
                     $('select[name=keluarga]').hide()
                     $('select[name=bantuan]').hide()
                     $('select[name=rtm]').hide()
+                    $('select[name=kesehatan]').hide()
                     const queryString = window.location.search;
                     const urlParams = new URLSearchParams(queryString);
                     const menutype = urlParams.get('type')
@@ -113,6 +114,7 @@
             $('select[name=keluarga]').hide()
             $('select[name=bantuan]').hide()
             $('select[name=rtm]').hide()
+            $('select[name=kesehatan]').hide()
             $('input[name=href]').show()
         })
         $('#frmEdit').submit(function(e) {

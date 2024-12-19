@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CMS;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\CMS\MenuRepository;
 use App\Http\Requests\UpdateMenuRequest;
+use App\Models\Anak;
 use App\Models\Bantuan;
 use App\Models\CMS\Category;
 use App\Models\CMS\Page;
@@ -44,6 +45,7 @@ class MenuController extends AppBaseController
                 'statistik-keluarga' => 'Statistik Keluarga',
                 'statistik-bantuan' => 'Statistik Bantuan',
                 'statistik-rtm' => 'Statistik RTM',
+                'statistik-kesehatan' => 'Statistik Kesehatan',
             ],
             'penduduk' => collect(['/module/penduduk' => 'Semua Statistik Penduduk'])
                 ->merge(
@@ -70,6 +72,13 @@ class MenuController extends AppBaseController
                 ->merge(
                     collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
+                    })
+                )->toArray(),
+
+            'kesehatan' => collect(['/module/kesehatan' => 'Semua Statistik Kesehatan'])
+                ->merge(
+                    collect(Anak::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                        return ["/module/kesehatan/{$key}" => ucwords("Statistik Kesehatan {$item}")];
                     })
                 )->toArray(),
         ];

@@ -57,6 +57,7 @@
         {!! Form::select('keluarga', $sourceItem['keluarga'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
         {!! Form::select('bantuan', $sourceItem['bantuan'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
         {!! Form::select('rtm', $sourceItem['rtm'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
+        {!! Form::select('kesehatan', $sourceItem['kesehatan'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
     </div>
 </div>
 
@@ -87,7 +88,7 @@
         $('select[name=sourcelist]').on('change', function() {
             let val = $(this).val();
             $('input[name=href]').val(val);
-            $('select[name=penduduk], select[name=keluarga], select[name=bantuan], select[name=rtm]').hide();
+            $('select[name=penduduk], select[name=keluarga], select[name=bantuan], select[name=rtm], select[name=kesehatan]').hide();
 
             switch ($(this).val()) {
                 case 'statistik-penduduk':
@@ -106,6 +107,10 @@
                     val = $('select[name=rtm]').val();
                     $('select[name=rtm]').show();
                     break;
+                case 'statistik-kesehatan':
+                    val = $('select[name=kesehatan]').val();
+                    $('select[name=kesehatan]').show();
+                    break;
                 default:
                     break;
             }
@@ -119,7 +124,7 @@
         const urlParams = new URLSearchParams(queryString);
         const menutype = urlParams.get('type')
         $('select[name=menu_type]').val((menutype == null ? 1 : menutype));
-        $('select[name=penduduk], select[name=keluarga], select[name=bantuan], select[name=rtm]').on('change', function() {
+        $('select[name=penduduk], select[name=keluarga], select[name=bantuan], select[name=rtm], select[name=kesehatan]').on('change', function() {
             updateHref();
         });
 

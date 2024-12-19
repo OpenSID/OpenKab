@@ -84,6 +84,12 @@ final class Modul extends Enum
                     'url' => 'satu-data/dtks/papan',
                     'permission' => 'datapokok-papan',
                 ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Kepemilihan Lahan & Produksi',
+                    'url' => 'prodeskel/ddk/pangan',
+                    'permission' => 'prodeskel-ddk-pangan',
+                ],
             ],
         ],
         [

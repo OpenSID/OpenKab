@@ -171,6 +171,13 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('cetak', [App\Http\Controllers\DTKSController::class, 'cetak'])->name('satu-data.dtks.cetak');
         });
     });
+
+    // Prodeskel
+    Route::prefix('prodeskel')->group(function () {
+        Route::prefix('ddk')->group(function () {
+            Route::get('pangan', [App\Http\Controllers\DDKPanganController::class, 'index'])->name('ddk.pangan');
+        });
+    });
 });
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {

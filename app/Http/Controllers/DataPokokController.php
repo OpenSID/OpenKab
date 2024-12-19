@@ -43,4 +43,11 @@ class DataPokokController extends Controller
 
         return view('data_pokok.ketenagakerjaan.index', ['title' => $title]);
     }
+
+    public function infrastruktur()
+    {
+        $title = 'Data Prasarana dan Sarana';
+
+        return view('data_pokok.infrastruktur.index', ['title' => $title]);
+    }
 }

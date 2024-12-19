@@ -44,6 +44,12 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
+                    'text' => 'Data Infrastruktur',
+                    'url' => 'data-pokok/infrastruktur',
+                    'permission' => 'datapokok-infrastruktur',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Kesehatan',
                     'url' => 'data-pokok/kesehatan',
                     'permission' => 'datapokok-kesehatan',
@@ -77,6 +83,12 @@ final class Modul extends Enum
                     'text' => 'Data Papan',
                     'url' => 'satu-data/dtks/papan',
                     'permission' => 'datapokok-papan',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Kepemilihan Lahan & Produksi',
+                    'url' => 'prodeskel/ddk/pangan',
+                    'permission' => 'prodeskel-ddk-pangan',
                 ],
             ],
         ],

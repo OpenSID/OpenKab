@@ -11,6 +11,7 @@ use App\Models\CMS\Page;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
 use App\Models\Rtm;
+use App\Models\Anak;
 use Illuminate\Support\Facades\Session;
 
 class MenuController extends AppBaseController
@@ -44,6 +45,7 @@ class MenuController extends AppBaseController
                 'statistik-keluarga' => 'Statistik Keluarga',
                 'statistik-bantuan' => 'Statistik Bantuan',
                 'statistik-rtm' => 'Statistik RTM',
+                'statistik-kesehatan' => 'Statistik Kesehatan',
             ],
             'penduduk' => collect(['/module/penduduk' => 'Semua Statistik Penduduk'])
                 ->merge(
@@ -70,6 +72,13 @@ class MenuController extends AppBaseController
                 ->merge(
                     collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
+                    })
+                )->toArray(),
+
+            'kesehatan' => collect(['/module/kesehatan' => 'Semua Statistik Kesehatan'])
+                ->merge(
+                    collect(Anak::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                        return ["/module/kesehatan/{$key}" => ucwords("Statistik Kesehatan {$item}")];
                     })
                 )->toArray(),
         ];

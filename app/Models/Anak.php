@@ -16,6 +16,10 @@ class Anak extends BaseModel
 
     public const TB_PENDEK = 3;
 
+    public const KATEGORI_STATISTIK = [
+        'stunting' => 'Stunting',
+    ];
+
     /**
      * Static data status gizi anak.
      *

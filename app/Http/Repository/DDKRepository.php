@@ -23,7 +23,7 @@ class DDKRepository
                 'prodeskelDDK.detail',
                 'prodeskelDDK.bahanGalianAnggota',
             ])
-            ->whereHas('prodeskelDDK', fn ($query) => $query->with(['produksi','detail','bahanGalianAnggota']))
+            ->whereHas('prodeskelDDK', fn ($query) => $query->with(['produksi', 'detail', 'bahanGalianAnggota']))
             ->status()
             ->filterWilayah()
             ->jsonPaginate();

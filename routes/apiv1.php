@@ -98,7 +98,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/jaminan-sosial', 'jaminan_sosial');
     });
 
-    Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
+    Route::prefix('penduduk')->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 
         // Referensi
@@ -114,7 +114,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Dokumen
-    Route::prefix('dokumen')->middleware(['can:penduduk-read'])->group(function () {
+    Route::prefix('dokumen')->group(function () {
         Route::get('/', DokumenController::class);
     });
 

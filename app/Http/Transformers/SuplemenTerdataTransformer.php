@@ -3,8 +3,8 @@
 namespace App\Http\Transformers;
 
 use App\Models\Enums\JenisKelaminEnum;
-use App\Models\SuplemenTerdata;
 use App\Models\Suplemen;
+use App\Models\SuplemenTerdata;
 use League\Fractal\TransformerAbstract;
 
 class SuplemenTerdataTransformer extends TransformerAbstract
@@ -14,14 +14,14 @@ class SuplemenTerdataTransformer extends TransformerAbstract
         // Ambil data_form_isian dari suplemen_terdata
         $dataFormIsian = $suplemen->data_form_isian;
 
-        if($dataFormIsian) {
+        if ($dataFormIsian) {
             // Cek jika data_form_isian berupa string JSON dan decode jika perlu
             if (is_string($dataFormIsian)) {
                 $dataFormIsian = json_decode($dataFormIsian, true);
             }
 
             // Cek jika data_form_isian sudah ter-decode menjadi array
-            if (!is_array($dataFormIsian)) {
+            if (! is_array($dataFormIsian)) {
                 return []; // Jika tidak ter-decode dengan benar, kembalikan array kosong
             }
 
@@ -33,7 +33,8 @@ class SuplemenTerdataTransformer extends TransformerAbstract
 
             // Validasi JSON decode
             if (json_last_error() !== JSON_ERROR_NONE) {
-                logger('JSON Decode Error: ' . json_last_error_msg());
+                logger('JSON Decode Error: '.json_last_error_msg());
+
                 return [];
             }
 

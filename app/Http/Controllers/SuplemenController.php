@@ -40,130 +40,129 @@ class SuplemenController extends Controller
     }
 
     public function ekspor($id = 0)
-{
-    $data_suplemen['suplemen'] = Suplemen::findOrFail($id)->toArray();
-    $data_suplemen['terdata'] = SuplemenTerdata::anggota($data_suplemen['suplemen']['sasaran'], $id)->get()->toArray();
+    {
+        $data_suplemen['suplemen'] = Suplemen::findOrFail($id)->toArray();
+        $data_suplemen['terdata'] = SuplemenTerdata::anggota($data_suplemen['suplemen']['sasaran'], $id)->get()->toArray();
 
     // Ambil form_isian dari suplemen dan dekode
-    $formIsian = json_decode($data_suplemen['suplemen']['form_isian'], true); // pastikan form_isian didecode menjadi array
+        $formIsian = json_decode($data_suplemen['suplemen']['form_isian'], true); // pastikan form_isian didecode menjadi array
 
-    // Nama file untuk ekspor
-    $file_name = $data_suplemen['suplemen']['nama'].'_'.date('d_m_Y').'.xlsx';
+        // Nama file untuk ekspor
+        $file_name = $data_suplemen['suplemen']['nama'].'_'.date('d_m_Y').'.xlsx';
 
-    // Path untuk menyimpan file
-    $file_path = storage_path('app/exports/'.$file_name);
+        // Path untuk menyimpan file
+        $file_path = storage_path('app/exports/'.$file_name);
 
-    // Pastikan folder 'exports' ada
-    $exportDir = storage_path('app/exports');
-    if (! file_exists($exportDir)) {
-        // Buat folder 'exports' jika belum ada
-        mkdir($exportDir, 0775, true);
-    }
-
-    // Buat instance writer
-    $writer = new Writer();
-    $writer->openToFile($file_path); // Gunakan openToFile daripada openToBrowser untuk menyimpan di server
-
-    // Ubah Nama Sheet
-    $sheet = $writer->getCurrentSheet();
-    $sheet->setName('Peserta');
-
-    // Deklarasi Style
-    $border = new Border(
-        new BorderPart(Border::TOP, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::BOTTOM, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::LEFT, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::RIGHT, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID)
-    );
-
-    $headerStyle = (new Style())
-        ->setBorder($border)
-        ->setBackgroundColor(Color::YELLOW)
-        ->setFontBold();
-
-    $footerStyle = (new Style())
-        ->setBackgroundColor(Color::LIGHT_GREEN);
-
-    // Cetak Header Tabel
-    $values = ['Peserta', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Keterangan'];
-    
-    // Ambil header dinamis berdasarkan label_kode dari form_isian
-    if($formIsian){
-        foreach ($formIsian as $field) {
-            $values[] = $field['label_kode']; // Tambahkan label_kode sebagai header
+        // Pastikan folder 'exports' ada
+        $exportDir = storage_path('app/exports');
+        if (! file_exists($exportDir)) {
+            // Buat folder 'exports' jika belum ada
+            mkdir($exportDir, 0775, true);
         }
-    }
 
-    $rowFromValues = Row::fromValues($values, $headerStyle);
-    $writer->addRow($rowFromValues);
+        // Buat instance writer
+        $writer = new Writer();
+        $writer->openToFile($file_path); // Gunakan openToFile daripada openToBrowser untuk menyimpan di server
 
-    // Cetak Data Anggota Suplemen
-    $data_anggota = $data_suplemen['terdata'];
+        // Ubah Nama Sheet
+        $sheet = $writer->getCurrentSheet();
+        $sheet->setName('Peserta');
 
-    foreach ($data_anggota as $data) {
-        $cells = [
-            $data['nik'],
-            strtoupper((string) $data['nama']),
-            $data['tempatlahir'],
-            tgl_indo_out($data['tanggallahir']),
-            strtoupper($data['alamat'].' RT '.$data['rt'].' / RW '.$data['rw'].' dusun '.$data['dusun']),
-            empty($data['keterangan']) ? '-' : $data['keterangan'],
-        ];
+        // Deklarasi Style
+        $border = new Border(
+            new BorderPart(Border::TOP, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::BOTTOM, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::LEFT, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::RIGHT, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID)
+        );
 
-        // Tambahkan data dari data_form_isian sesuai dengan form_isian
-        $dataFormIsian = json_decode($data['data_form_isian'], true); // Dekode data_form_isian
-        
-        if($formIsian){
+        $headerStyle = (new Style())
+            ->setBorder($border)
+            ->setBackgroundColor(Color::YELLOW)
+            ->setFontBold();
+
+        $footerStyle = (new Style())
+            ->setBackgroundColor(Color::LIGHT_GREEN);
+
+        // Cetak Header Tabel
+        $values = ['Peserta', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Keterangan'];
+
+        // Ambil header dinamis berdasarkan label_kode dari form_isian
+        if ($formIsian) {
             foreach ($formIsian as $field) {
-                $kode = $field['nama_kode']; // Ambil nama_kode dari form_isian
-                $cells[] = isset($dataFormIsian[$kode]) ? $dataFormIsian[$kode] : 'Tidak Ada Data'; // Tambahkan nilai sesuai nama_kode
+                $values[] = $field['label_kode']; // Tambahkan label_kode sebagai header
             }
         }
 
+        $rowFromValues = Row::fromValues($values, $headerStyle);
+        $writer->addRow($rowFromValues);
+
+        // Cetak Data Anggota Suplemen
+        $data_anggota = $data_suplemen['terdata'];
+
+        foreach ($data_anggota as $data) {
+            $cells = [
+                $data['nik'],
+                strtoupper((string) $data['nama']),
+                $data['tempatlahir'],
+                tgl_indo_out($data['tanggallahir']),
+                strtoupper($data['alamat'].' RT '.$data['rt'].' / RW '.$data['rw'].' dusun '.$data['dusun']),
+                empty($data['keterangan']) ? '-' : $data['keterangan'],
+            ];
+
+        // Tambahkan data dari data_form_isian sesuai dengan form_isian
+            $dataFormIsian = json_decode($data['data_form_isian'], true); // Dekode data_form_isian
+
+            if ($formIsian) {
+                foreach ($formIsian as $field) {
+                    $kode = $field['nama_kode']; // Ambil nama_kode dari form_isian
+                    $cells[] = isset($dataFormIsian[$kode]) ? $dataFormIsian[$kode] : 'Tidak Ada Data'; // Tambahkan nilai sesuai nama_kode
+                }
+            }
+
+            $singleRow = Row::fromValues($cells);
+            $writer->addRow($singleRow);
+        }
+
+        // Tambahkan Baris Kosong
+        $cells = [
+            '###', '', '', '', '', '',
+        ];
         $singleRow = Row::fromValues($cells);
         $writer->addRow($singleRow);
+
+        // Cetak Catatan
+        $array_catatan = [
+            [
+                'Catatan:', '', '', '', '', '',
+            ],
+            [
+                '1. Sesuaikan kolom peserta (A) berdasarkan sasaran : - penduduk = nik, - keluarga = no. kk', '', '', '', '', '',
+            ],
+            [
+                '2. Kolom Peserta (A) wajib di isi', '', '', '', '', '',
+            ],
+            [
+                '3. Kolom (B, C, D, E) diambil dari database kependudukan', '', '', '', '', '',
+            ],
+            [
+                '4. Kolom (F) opsional', '', '', '', '', '',
+            ],
+        ];
+
+        $rows_catatan = [];
+
+        foreach ($array_catatan as $catatan) {
+            $rows_catatan[] = Row::fromValues($catatan, $footerStyle);
+        }
+        $writer->addRows($rows_catatan);
+
+        // Tutup Writer
+        $writer->close();
+
+        // Mengirim file ke browser jika perlu
+        return response()->download($file_path);
     }
-
-    // Tambahkan Baris Kosong
-    $cells = [
-        '###', '', '', '', '', '',
-    ];
-    $singleRow = Row::fromValues($cells);
-    $writer->addRow($singleRow);
-
-    // Cetak Catatan
-    $array_catatan = [
-        [
-            'Catatan:', '', '', '', '', '',
-        ],
-        [
-            '1. Sesuaikan kolom peserta (A) berdasarkan sasaran : - penduduk = nik, - keluarga = no. kk', '', '', '', '', '',
-        ],
-        [
-            '2. Kolom Peserta (A) wajib di isi', '', '', '', '', '',
-        ],
-        [
-            '3. Kolom (B, C, D, E) diambil dari database kependudukan', '', '', '', '', '',
-        ],
-        [
-            '4. Kolom (F) opsional', '', '', '', '', '',
-        ],
-    ];
-
-    $rows_catatan = [];
-
-    foreach ($array_catatan as $catatan) {
-        $rows_catatan[] = Row::fromValues($catatan, $footerStyle);
-    }
-    $writer->addRows($rows_catatan);
-
-    // Tutup Writer
-    $writer->close();
-
-    // Mengirim file ke browser jika perlu
-    return response()->download($file_path);
-}
-
 
     public function daftar($id = 0, $aksi = '')
     {

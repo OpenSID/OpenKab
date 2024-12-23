@@ -39,7 +39,7 @@
                                     <option value="">Pilih Sasaran</option>
                                     @foreach ($list_sasaran as $key => $sasaran)
                                         @if (in_array($key, ['1', '2']))
-                                            <option value="{{ $key }}">{{ $sasaran }}</option>
+                                            <option value="{{ $key }}" {{ selected($key, $suplemen->sasaran) }}>{{ $sasaran }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -48,13 +48,13 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" for="nama">Nama Data Suplemen</label>
                             <div class="col-sm-9">
-                                <input class="form-control form-control-sm required" maxlength="100" placeholder="Nama Data Suplemen" type="text" name="nama" value="">
+                                <input class="form-control form-control-sm required" maxlength="100" placeholder="Nama Data Suplemen" type="text" name="nama" value="{{ $suplemen->nama }}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" for="keterangan">Keterangan</label>
                             <div class="col-sm-9">
-                                <textarea name="keterangan" class="form-control form-control-sm" maxlength="300" placeholder="Keterangan" rows="3" style="resize:none;"></textarea>
+                                <textarea name="keterangan" class="form-control form-control-sm" maxlength="300" placeholder="Keterangan" rows="3" style="resize:none;">{{ $suplemen->keterangan }}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -62,14 +62,17 @@
                             <div class="col-sm-9">
                                 <select class="form-control form-control-sm required" required name="status">
                                     <option value="">Pilih Status</option>
-                                    <option value="1">Aktif</option>
-                                    <option value="0">Tidak Aktif</option>
+                                    <option value="1" {{ selected(1, $suplemen->status) }}>Aktif</option>
+                                    <option value="0" {{ selected(0, $suplemen->status) }}>Tidak Aktif</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
+                            @if($suplemen->form_isian)
+                            @include('suplemen.kode_isian_edit')
+                            @else
                             @include('suplemen.kode_isian')
-
+                            @endif
                         </div>
 
 
@@ -87,6 +90,5 @@
 @endsection
 
 @section('js')
-@include('suplemen.kode_isian_js')
-@include('suplemen.form_js')
+@include('suplemen.edit_js')
 @endsection

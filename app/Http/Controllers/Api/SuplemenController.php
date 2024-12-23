@@ -49,7 +49,7 @@ class SuplemenController extends Controller
 
         // Simpan data ke database
         try {
-            if ($request->form_isian == '[{"tipe":"","nama_kode":"","label_kode":"","deskripsi_kode":"","required":0,"kolom":"","atribut":"","pilihan_kode":"","referensi_kode":""}]') {
+            if ($request->form_isian == '[{"tipe":"","nama_kode":"","label_kode":"","deskripsi_kode":"","required":0,"kolom":"","atribut":"","pilihan_kode":"","referensi_kode":""}]' OR $request->form_isian == '[]') {
                 $request->form_isian = '';
             }
 
@@ -81,6 +81,66 @@ class SuplemenController extends Controller
             ], 500);
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            'sasaran' => 'required|in:1,2',
+            'nama' => 'required|string|max:100',
+            'keterangan' => 'nullable|string|max:300',
+            'status' => 'required|in:0,1',
+            'sumber' => 'nullable|string',
+            'form_isian' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        try {
+            // Cari data berdasarkan ID
+            $suplemen = Suplemen::findOrFail($id);
+
+            // Jika form_isian kosong atau hanya data kosong, set null
+            if ($request->form_isian == '[{"tipe":"","nama_kode":"","label_kode":"","deskripsi_kode":"","required":0,"kolom":"","atribut":"","pilihan_kode":"","referensi_kode":""}]' OR $request->form_isian == '[]') {
+                $request->merge(['form_isian' => null]);
+            }
+
+            // Update data di database
+            $suplemen->update([
+                'sasaran' => $request->sasaran,
+                'nama' => $request->nama,
+                'keterangan' => $request->keterangan,
+                'status' => $request->status,
+                'sumber' => $request->sumber,
+                'form_isian' => $request->form_isian,
+            ]);
+
+            // Menyimpan pesan sukses ke session
+            Session::flash('success', 'Data berhasil diperbarui.');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil diperbarui.',
+                'data' => $suplemen,
+            ], 200);
+        } catch (\Exception $e) {
+            // Menyimpan pesan error ke session
+            Session::flash('error', 'Terjadi kesalahan saat memperbarui data.');
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memperbarui data.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 
     public function sasaran()
     {

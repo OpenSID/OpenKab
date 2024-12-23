@@ -22,12 +22,23 @@ class SuplemenController extends Controller
         return view('suplemen.index', compact('list_sasaran'));
     }
 
-    public function form()
+    public function form($id = '')
     {
         $list_sasaran = unserialize(SASARAN);
         $attributes = unserialize(ATTRIBUTES);
 
-        return view('suplemen.form', compact('list_sasaran', 'attributes'));
+        if ($id) {
+            $action      = 'Ubah';
+            $form_action = url('api/v1/suplemen/update', $id);
+            $suplemen    = Suplemen::with('terdata')->findOrFail($id);
+            return view('suplemen.edit', compact('list_sasaran', 'attributes', 'action', 'form_action', 'suplemen'));
+        } else {
+            $action      = 'Tambah';
+            $form_action = url('api/v1/suplemen');
+            $suplemen    = null;
+            return view('suplemen.form', compact('list_sasaran', 'attributes', 'action', 'form_action', 'suplemen'));
+        }
+
     }
 
     public function detail($id)
@@ -174,4 +185,6 @@ class SuplemenController extends Controller
 
         return false;
     }
+
+
 }

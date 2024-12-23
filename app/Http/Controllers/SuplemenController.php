@@ -28,17 +28,18 @@ class SuplemenController extends Controller
         $attributes = unserialize(ATTRIBUTES);
 
         if ($id) {
-            $action      = 'Ubah';
+            $action = 'Ubah';
             $form_action = url('api/v1/suplemen/update', $id);
-            $suplemen    = Suplemen::with('terdata')->findOrFail($id);
+            $suplemen = Suplemen::with('terdata')->findOrFail($id);
+
             return view('suplemen.edit', compact('list_sasaran', 'attributes', 'action', 'form_action', 'suplemen'));
         } else {
-            $action      = 'Tambah';
+            $action = 'Tambah';
             $form_action = url('api/v1/suplemen');
-            $suplemen    = null;
+            $suplemen = null;
+
             return view('suplemen.form', compact('list_sasaran', 'attributes', 'action', 'form_action', 'suplemen'));
         }
-
     }
 
     public function detail($id)
@@ -185,6 +186,4 @@ class SuplemenController extends Controller
 
         return false;
     }
-
-
 }

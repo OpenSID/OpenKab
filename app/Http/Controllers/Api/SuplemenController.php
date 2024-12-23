@@ -49,7 +49,7 @@ class SuplemenController extends Controller
 
         // Simpan data ke database
         try {
-            if ($request->form_isian == '[{"tipe":"","nama_kode":"","label_kode":"","deskripsi_kode":"","required":0,"kolom":"","atribut":"","pilihan_kode":"","referensi_kode":""}]' OR $request->form_isian == '[]') {
+            if ($request->form_isian == '[{"tipe":"","nama_kode":"","label_kode":"","deskripsi_kode":"","required":0,"kolom":"","atribut":"","pilihan_kode":"","referensi_kode":""}]' or $request->form_isian == '[]') {
                 $request->form_isian = '';
             }
 
@@ -107,7 +107,7 @@ class SuplemenController extends Controller
             $suplemen = Suplemen::findOrFail($id);
 
             // Jika form_isian kosong atau hanya data kosong, set null
-            if ($request->form_isian == '[{"tipe":"","nama_kode":"","label_kode":"","deskripsi_kode":"","required":0,"kolom":"","atribut":"","pilihan_kode":"","referensi_kode":""}]' OR $request->form_isian == '[]') {
+            if ($request->form_isian == '[{"tipe":"","nama_kode":"","label_kode":"","deskripsi_kode":"","required":0,"kolom":"","atribut":"","pilihan_kode":"","referensi_kode":""}]' or $request->form_isian == '[]') {
                 $request->merge(['form_isian' => null]);
             }
 
@@ -140,7 +140,6 @@ class SuplemenController extends Controller
             ], 500);
         }
     }
-
 
     public function sasaran()
     {

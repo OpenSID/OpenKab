@@ -37,7 +37,6 @@ class SuplemenTransformer extends TransformerAbstract
         $aksi .= '<a href="'.url('suplemen/rincian', $suplemen->id).'" class="btn bg-purple btn-sm" title="Rincian Data"><i class="fa fa-list-ol"></i></a> ';
 
         // $aksi .= '<a href="#" class="btn bg-navy btn-sm btn-import" title="Impor Data"><i class="fa fa-upload"></i></a> ';
-        
 
         $aksi .= $delete;
         $aksi .= $edit;

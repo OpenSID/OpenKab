@@ -882,12 +882,13 @@ if (! function_exists('getStatistikLabel')) {
         return empty($tgl) || substr($tgl, 0, 10) === '0000-00-00';
     }
 
-    if (!function_exists('selected')) {
+    if (! function_exists('selected')) {
         /**
          * Helper untuk menentukan apakah opsi harus dipilih.
          *
          * @param mixed $value
          * @param mixed $selected
+         *
          * @return string
          */
         function selected($value, $selected)

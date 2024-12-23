@@ -92,7 +92,7 @@
                     </div>
                 `;
             };
-            var datasource = {!! $tree[0] !!}
+            var datasource = {!! $tree[0] ?? '' !!}
 
             $('#chart-container').orgchart({
                 'exportButton': true,
@@ -101,10 +101,6 @@
                 'data': datasource,
                 'nodeTemplate': nodeTemplate,
                 'nodeID': 'id'
-                // 'createNode': function ($node, data) {
-                //     $node.find('.title').append(`<img class="avatar" src="https://dabeng.github.io/OrgChart/img/avatar/${data.id}.jpg" crossorigin="anonymous" />`);
-                //     $node.find('.content').prepend($node.find('.symbol'));
-                // }
             });
         });
 

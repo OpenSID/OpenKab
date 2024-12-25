@@ -43,5 +43,6 @@ Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan
 
 1. [#463](https://github.com/OpenSID/OpenKab/issues/463) Perbaikan error pada halaman penduduk.
 2. [#467](https://github.com/OpenSID/OpenKab/issues/467) Perbaikan data papan.
+3. [#468](https://github.com/OpenSID/OpenKab/issues/468) Perbaikan bug menu struktur bagan pada organisasi.
 
 #### Perubahan Teknis

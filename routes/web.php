@@ -206,6 +206,8 @@ Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('supleme
 Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
 Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
 Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
+Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
+
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

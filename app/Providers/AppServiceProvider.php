@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Http\Transformers\IdentitasTransformer;
+use App\Http\Transformers\SettingTransformer;
 use App\Models\Config;
 use App\Models\Identitas;
+use App\Models\Setting;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -48,9 +50,18 @@ class AppServiceProvider extends ServiceProvider
                 \League\Fractal\Serializer\JsonApiSerializer::class
             )->toArray()['data']['attributes'];
 
+            $settingAplikasi = collect(
+                fractal(
+                    Setting::all(),
+                    SettingTransformer::class,
+                    \League\Fractal\Serializer\JsonApiSerializer::class
+                )->toArray()['data']
+            )->pluck('attributes.value', 'attributes.key');
+
             // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
             View::share('identitasAplikasi', $identitasAplikasi);
-            $this->bootConfigAdminLTE($identitasAplikasi);
+            View::share('settingAplikasi', $settingAplikasi);
+            $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
         }
     }
 
@@ -106,10 +117,11 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootConfigAdminLTE($identitasAplikasi)
+    protected function bootConfigAdminLTE($identitasAplikasi, $settingAplikasi)
     {
-        $this->app->config['adminlte.title'] = $identitasAplikasi['nama_aplikasi'];
+        $this->app->config['adminlte.title']         = $identitasAplikasi['nama_aplikasi'];
         $this->app->config['adminlte.title_postfix'] = "| {$identitasAplikasi['sebutan_kab']}";
-        $this->app->config['adminlte.logo'] = $identitasAplikasi['nama_aplikasi'];
+        $this->app->config['adminlte.logo']          = $identitasAplikasi['nama_aplikasi'];
+        $this->app->config['adminlte.layout_topnav'] = $settingAplikasi->get('layout_menu') !== 'Vertikal';
     }
 }

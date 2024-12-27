@@ -18,11 +18,11 @@ return new class extends Migration
         ];
         Setting::create([
             'key' => 'layout_menu',
-            'name' => 'Pengaturan menu yang tampil bisa vertikal & horizontal',
+            'name' => 'Pengaturan layout menu yang tampil bisa vertikal atau horizontal',
             'value' => 'vertikal',
             'type' => 'dropdown',
             'attribute' => $attribute,
-            'description' => 'Pengaturan menu yang tampil bisa vertikal & horizontal',
+            'description' => 'Pengaturan layout menu yang tampil bisa vertikal atau horizontal',
         ]);
     }
 

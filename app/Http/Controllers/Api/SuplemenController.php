@@ -7,6 +7,7 @@ use App\Http\Repository\SuplemenRepository;
 use App\Http\Transformers\SuplemenTerdataTransformer;
 use App\Http\Transformers\SuplemenTransformer;
 use App\Models\Suplemen;
+use App\Models\SuplemenTerdata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -187,6 +188,26 @@ class SuplemenController extends Controller
     {
         try {
             Suplemen::where('id', $id)->delete();
+
+            return response()->json([
+                'success' => true,
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function delete_multiple(Request $request)
+    {
+        
+        try {
+            // Hapus data yang terpilih
+            SuplemenTerdata::whereIn('id', $request->ids)->delete();
 
             return response()->json([
                 'success' => true,

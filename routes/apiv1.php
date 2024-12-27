@@ -270,6 +270,7 @@ Route::get('data-summary', SummaryController::class);
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
 
 Route::post('/suplemen', [SuplemenController::class, 'store']);
+Route::post('/suplemen/terdata/hapus', [SuplemenController::class, 'delete_multiple']);
 Route::post('/suplemen/update/{id}', [SuplemenController::class, 'update']);
 Route::get('/suplemen', [SuplemenController::class, 'index']);
 Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'detail']);

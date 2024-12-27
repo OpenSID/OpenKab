@@ -204,7 +204,6 @@ class SuplemenController extends Controller
 
     public function delete_multiple(Request $request)
     {
-        
         try {
             // Hapus data yang terpilih
             SuplemenTerdata::whereIn('id', $request->ids)->delete();

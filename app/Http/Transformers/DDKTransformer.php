@@ -15,6 +15,7 @@ class DDKTransformer extends TransformerAbstract
     {
         return [
             'id' => $keluarga->id,
+            'nik' => $keluarga->no_kk,
             'kepemilikan_lahan' => collect(DDKPilihanCheckboxEnum::KEPEMILIKAN_LAHAN)
                 ->map(function ($item, $key) use ($keluarga) {
                     return [
@@ -27,7 +28,7 @@ class DDKTransformer extends TransformerAbstract
                                     ?->detail
                                     ?->where('kode_field', DDKEnum::KODE_KEPEMILIKAN_LAHAN)
                                     ?->first()
-                                    ?->value[$key]
+                                    ?->value[$key] ?? null
                             ),
                     ];
                 }
@@ -41,28 +42,36 @@ class DDKTransformer extends TransformerAbstract
             'pola_makan_keluarga' => collect(DDKPilihanSelectEnum::POLA_MAKAN_KELUARGA)
                 ->mapWithKeys(function ($item, $key) use ($keluarga) {
                     return [$item => $key == $keluarga?->prodeskelDDK?->detail?->where('kode_field', DDKEnum::KODE_POLA_MAKAN_KELUARGA)?->first()?->value];
-                }
-                ),
+                }),
         ];
     }
 
     private function transformProduksi($keluarga, $data, $prefix)
     {
-        return collect($data)->map(function ($item, $key) use ($keluarga, $prefix) {
-            $key++;
-            $produksi = $keluarga
-                ?->prodeskelDDK
-                ?->produksi
-                ?->firstWhere('kode_komoditas', "{$prefix}{$key}");
+        return collect($data)
+            ->map(function ($item, $key) use ($keluarga, $prefix) {
+                $key++;
+                $produksi = $keluarga
+                    ?->prodeskelDDK
+                    ?->produksi
+                    ?->firstWhere('kode_komoditas', "{$prefix}{$key}");
 
-            return [
-                'jenis_komoditas' => $item['komoditas'],
-                'satuan' => $item['satuan'],
-                'jumlah_pohon' => $produksi?->jumlah_pohon,
-                'luas_panen' => $produksi?->luas_panen,
-                'nilai_produksi' => $produksi?->nilai_produksi_per_satuan,
-                'pemasaran_hasil' => $produksi?->pemasaran_hasil,
-            ];
-        });
+                return [
+                    'jenis_komoditas' => $item['komoditas'],
+                    'satuan' => $item['satuan'],
+                    'jumlah_pohon' => $produksi?->jumlah_pohon,
+                    'luas_panen' => $produksi?->luas_panen,
+                    'nilai_produksi' => $produksi?->nilai_produksi_per_satuan,
+                    'pemasaran_hasil' => $produksi?->pemasaran_hasil,
+                ];
+            })
+        ->filter(function ($item) {
+            // Exclude items where any of the specified keys are null
+            return ! is_null($item['jumlah_pohon'])
+                || ! is_null($item['luas_panen'])
+                || ! is_null($item['nilai_produksi'])
+                || ! is_null($item['pemasaran_hasil']);
+        })
+        ->values();
     }
 }

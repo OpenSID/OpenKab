@@ -20,8 +20,10 @@ use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
+use App\Http\Controllers\SuplemenController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\DataPokokController;
 use App\Http\Controllers\Web\DownloadCounterController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 
@@ -121,6 +123,19 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/detail/{id}', 'show')->name('bantuan.detail');
         });
 
+    // Data Pokok
+    Route::middleware(['permission:datapokok-read'])->controller(DataPokokController::class)
+        ->prefix('data-pokok')
+        ->group(function () {
+            Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
+            Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
+            Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
+            Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama-adat', 'agama_adat')->name('agama-adat');
+            Route::middleware(['permission:datapokok-infrastruktur-read'])->get('/infrastruktur', 'infrastruktur')->name('infrastruktur');
+        });
+
     // Statistik
     Route::middleware(['permission:statistik-read'])->controller(StatistikController::class)
         ->prefix('statistik')
@@ -148,6 +163,21 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
                 Route::middleware(['permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
             });
         });
+
+    // Satu Data
+    Route::prefix('satu-data')->group(function () {
+        Route::prefix('dtks')->group(function () {
+            Route::get('papan', [App\Http\Controllers\DTKSController::class, 'index'])->name('satu-data.dtks.index');
+            Route::get('cetak', [App\Http\Controllers\DTKSController::class, 'cetak'])->name('satu-data.dtks.cetak');
+        });
+    });
+
+    // Prodeskel
+    Route::prefix('prodeskel')->group(function () {
+        Route::prefix('ddk')->group(function () {
+            Route::get('pangan', [App\Http\Controllers\DDKPanganController::class, 'index'])->name('ddk.pangan');
+        });
+    });
 });
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
@@ -168,6 +198,16 @@ Route::get('/module/bantuan/{id}', [PresisiController::class, 'bantuan'])->name(
 Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
 Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+
+Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
+Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
+Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
+Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
+Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
+Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
+
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

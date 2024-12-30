@@ -15,6 +15,11 @@ class PrasaranaSaranaRepository
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('kategori'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('data', 'like', "%{$value}%");
+                    });
+                }),
             ])
             ->jsonPaginate();
     }

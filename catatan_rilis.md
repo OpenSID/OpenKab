@@ -39,6 +39,8 @@ Di rilis ini, versi 2412.0.0 berisi penambahan filter wilayah pada estunting dan
 34. [#442](https://github.com/OpenSID/OpenKab/issues/442) Penambahan tampilan data pangan pada halaman admin.
 35. [#384](https://github.com/OpenSID/OpenKab/issues/384) Penambahan menu admin statistik kesehatan stunting.
 36. [#471](https://github.com/OpenSID/OpenKab/issues/471) Penambahan pengaturan form isian suplemen dan buat fungsi edit suplemen.
+37. [#470](https://github.com/OpenSID/OpenKab/issues/470) Penambahan tombol data selengkapnya pada detail suplemen terdata dan pada export data.
+38. [#477](https://github.com/OpenSID/OpenKab/issues/477) Penambahan pengaturan menu yang tampil bisa vertikal & horizontal.
 
 #### Perbaikan BUG
 

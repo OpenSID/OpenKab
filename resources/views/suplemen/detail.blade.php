@@ -54,6 +54,8 @@
         @include('suplemen.js.data_suplemen_terdata')
         @include('suplemen.js.checkbox')
         @include('suplemen.js.multiple_delete')
+        @include('suplemen.js.data_suplemen_terdata_detail')
+
     });
     </script>
 @endsection

@@ -6,6 +6,7 @@
                 <th class="padat">
                     <input type="checkbox" id="select-all"> <!-- Select All checkbox -->
                 </th>
+                <th>DETAIL</th>
                 <th>{{ $suplemen->sasaran == 1 ? 'NO.' : 'NIK' }} KK</th>
                 <th>{{ $suplemen->sasaran == 1 ? 'NIK PENDUDUK' : 'NO. KK' }}</th>
                 <th>{{ $suplemen->sasaran == 1 ? 'NAMA PENDUDUK' : 'KEPALA KELUARGA' }}</th>

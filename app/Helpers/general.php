@@ -8,13 +8,37 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
+define('SASARAN', serialize([
+    '1' => 'Penduduk',
+    '2' => 'Keluarga / KK',
+]));
+
+define('STATUS_SUPLEMEN', serialize([
+    '1' => 'Aktif',
+    '0' => 'Tidak Aktif',
+]));
+
+define('ATTRIBUTES', serialize([
+    'text' => 'Input Teks',
+    'number' => 'Input Angka',
+    'email' => 'Input Email',
+    'url' => 'Input Url',
+    'date' => 'Input Tanggal',
+    'time' => 'Input Jam',
+    'textarea' => 'Text Area',
+    'select-manual' => 'Pilihan (Kustom)',
+    'select-otomatis' => 'Pilihan (Referensi)',
+    'hari' => 'Input Hari',
+    'hari-tanggal' => 'Input Hari dan Tanggal',
+]));
+
 if (! function_exists('openkab_versi')) {
     /**
      * OpenKab database gabungan versi.
      */
     function openkab_versi()
     {
-        return 'v2412.0.0';
+        return 'v2501.0.0';
     }
 }
 
@@ -836,5 +860,40 @@ if (! function_exists('getStatistikLabel')) {
             'kategori' => $kategori,
             'label' => $label,
         ];
+    }
+
+    function tgl_indo_out($tgl, $replace_with = '-')
+    {
+        if (date_is_empty($tgl)) {
+            return $replace_with;
+        }
+
+        if ($tgl) {
+            $tanggal = substr($tgl, 8, 2);
+            $bulan = substr($tgl, 5, 2);
+            $tahun = substr($tgl, 0, 4);
+
+            return $tanggal.'-'.$bulan.'-'.$tahun;
+        }
+    }
+
+    function date_is_empty($tgl): bool
+    {
+        return empty($tgl) || substr($tgl, 0, 10) === '0000-00-00';
+    }
+
+    if (! function_exists('selected')) {
+        /**
+         * Helper untuk menentukan apakah opsi harus dipilih.
+         *
+         * @param mixed $value
+         * @param mixed $selected
+         *
+         * @return string
+         */
+        function selected($value, $selected)
+        {
+            return $value == $selected ? 'selected' : '';
+        }
     }
 }

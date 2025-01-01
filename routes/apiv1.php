@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DDKController;
 use App\Http\Controllers\Api\DTKSController;
 use App\Http\Controllers\Api\PariwisataController;
@@ -24,9 +22,13 @@ use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
+use App\Http\Controllers\Api\SuplemenController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\KelembagaanController;
+use App\Http\Controllers\Api\InfrastrukturController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +87,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/pariwisata', PariwisataController::class);
 
+    Route::get('infrastruktur', [InfrastrukturController::class, 'data']);
+
     // API Data Presisi
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
 
@@ -97,7 +101,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/jaminan-sosial', 'jaminan_sosial');
     });
 
-    Route::prefix('penduduk')->middleware(['can:penduduk-read'])->group(function () {
+    Route::prefix('penduduk')->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 
         // Referensi
@@ -113,7 +117,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Dokumen
-    Route::prefix('dokumen')->middleware(['can:penduduk-read'])->group(function () {
+    Route::prefix('dokumen')->group(function () {
         Route::get('/', DokumenController::class);
     });
 
@@ -204,7 +208,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 });
         });
 
-    // Prodeskel
+     // Prodeskel
     Route::prefix('prodeskel')->group(function () {
         Route::prefix('ddk')->group(function () {
             Route::get('pangan', [DDKController::class, 'pangan']);
@@ -212,6 +216,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('potensi')->group(function () {
             Route::get('prasarana-sarana', [PrasaranaSaranaController::class, 'prasaranaSarana']);
             Route::get('kelembagaan', [KelembagaanController::class, 'kelembagaan']);
+            Route::get('kelembagaan/penduduk', [KelembagaanController::class, 'kelembagaan_penduduk']);
         });
     });
 
@@ -263,3 +268,11 @@ Route::get('data-summary', SummaryController::class);
 
 // Desa teraktif
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
+
+Route::post('/suplemen', [SuplemenController::class, 'store']);
+Route::post('/suplemen/update/{id}', [SuplemenController::class, 'update']);
+Route::get('/suplemen', [SuplemenController::class, 'index']);
+Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'detail']);
+Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
+Route::get('/suplemen/status', [SuplemenController::class, 'status']);
+Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');

@@ -14,6 +14,7 @@ class DDKRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
+                AllowedFilter::callback('search', fn ($query, $search) => $query->where('no_kk', 'like', "%$search%")),
             ])
             ->without('wilayah')
             ->with([
@@ -22,7 +23,9 @@ class DDKRepository
                 'prodeskelDDK.detail',
                 'prodeskelDDK.bahanGalianAnggota',
             ])
+            ->whereHas('prodeskelDDK', fn ($query) => $query->with(['produksi', 'detail', 'bahanGalianAnggota']))
             ->status()
+            ->filterWilayah()
             ->jsonPaginate();
     }
 }

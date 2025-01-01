@@ -17,7 +17,6 @@ class ProdeskelDDK extends BaseModel
     protected $table = 'prodeskel_ddk';
 
     protected $with = [
-        'config_id',
     ];
 
     /**

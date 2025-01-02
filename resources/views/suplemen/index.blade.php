@@ -22,7 +22,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            <a href="{{ route('suplemen.create') }} ">
+                            <a href="{{ route('profile.kependudukan.suplemen.create') }} ">
                                 <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i>
                                     Tambah</button>
                             </a>

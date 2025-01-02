@@ -23,7 +23,7 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <a href="{{ route('suplemen') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('profile.kependudukan.suplemen.index') }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-arrow-circle-left"></i>&ensp;Kembali ke Daftar Data Suplemen
                     </a>
                 </div>

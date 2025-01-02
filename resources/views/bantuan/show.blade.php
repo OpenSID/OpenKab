@@ -14,7 +14,7 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <a href="{{ url('bantuan') }}" class="btn btn-primary btn-sm"><i class="fas fa-arrow-circle-left"></i>
+                    <a href="{{ route('profile.kependudukan.bantuan.index') }}" class="btn btn-primary btn-sm"><i class="fas fa-arrow-circle-left"></i>
                         Kembali ke Daftar Bantuan</a>
                 </div>
                 <div class="card-body">

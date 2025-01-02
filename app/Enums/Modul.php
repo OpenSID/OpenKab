@@ -19,81 +19,68 @@ final class Modul extends Enum
 
     const Menu = [
         [
-            'text' => 'Kependudukan',
+            'text' => 'Profile Kependudukan',
             'icon' => 'fa fa-users',
-            'permission' => 'kependudukan',
+            'permission' => 'profile-kependudukan',
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Penduduk',
-                    'url' => 'penduduk',
-                    'permission' => 'penduduk',
+                    'url' => 'profile-kependudukan/penduduk',
+                    'permission' => 'profile-kependudukan-penduduk',
                 ],
-            ],
-        ],
-        [
-            'text' => 'Data Pokok',
-            'icon' => 'fas fa-chart-pie',
-            'permission' => 'datapokok',
-            'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Data Agama & Adat',
-                    'url' => 'data-pokok/agama-adat',
-                    'permission' => 'datapokok-agama-adat',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Data Infrastruktur',
-                    'url' => 'data-pokok/infrastruktur',
-                    'permission' => 'datapokok-infrastruktur',
+                    'url' => 'profile-kependudukan/agama-adat',
+                    'permission' => 'profile-kependudukan-agama-adat',
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Kesehatan',
-                    'url' => 'data-pokok/kesehatan',
-                    'permission' => 'datapokok-kesehatan',
+                    'url' => 'profile-kependudukan/kesehatan',
+                    'permission' => 'profile-kependudukan-kesehatan',
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Pendidikan',
-                    'url' => 'data-pokok/pendidikan',
-                    'permission' => 'datapokok-pendidikan',
-                ],
-                [
-                    'icon' => 'fas fa-angle-right',
-                    'text' => 'Pariwisata',
-                    'url' => 'data-pokok/pariwisata',
-                    'permission' => 'datapokok-pariwisata',
+                    'url' => 'profile-kependudukan/pendidikan',
+                    'permission' => 'profile-kependudukan-pendidikan',
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Ketenagakerjaan',
-                    'url' => 'data-pokok/ketenagakerjaan',
-                    'permission' => 'datapokok-ketenagakerjaan',
+                    'url' => 'profile-kependudukan/ketenagakerjaan',
+                    'permission' => 'profile-kependudukan-ketenagakerjaan',
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Jaminan Sosial',
-                    'url' => 'data-pokok/jaminan-sosial',
-                    'permission' => 'datapokok-jaminan-sosial',
+                    'url' => 'profile-kependudukan/jaminan-sosial',
+                    'permission' => 'profile-kependudukan-jaminan-sosial',
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Data Papan',
-                    'url' => 'satu-data/dtks/papan',
-                    'permission' => 'datapokok-papan',
+                    'url' => 'profile-kependudukan/papan',
+                    'permission' => 'profile-kependudukan-papan',
                 ],
                 [
+                    'text' => 'Penerima Bantuan',
                     'icon' => 'fas fa-angle-right',
-                    'text' => 'Kepemilihan Lahan & Produksi',
-                    'url' => 'prodeskel/ddk/pangan',
-                    'permission' => 'prodeskel-ddk-pangan',
+                    'url' => 'profile-kependudukan/bantuan',
+                    'permission' => 'profile-kependudukan-bantuan',
+                ],
+                [
+                    'text' => 'Data Suplemen',
+                    'icon' => 'fa fafas fa-angle-right',
+                    'url' => 'profile-kependudukan/suplemen',
+                    'permission' => 'profile-kependudukan-suplemen',
                 ],
             ],
         ],
         [
-            'text' => 'Statistik',
+            'text' => 'Statistik Kependudukan',
             'icon' => 'fas fa-chart-pie',
             'permission' => 'statistik',
             'submenu' => [
@@ -125,28 +112,58 @@ final class Modul extends Enum
             ],
         ],
         [
-            'text' => 'Bantuan',
-            'icon' => 'fas fa-handshake',
-            'url' => 'bantuan',
-            'permission' => 'bantuan',
-        ],
-        [
-            'text' => 'Data Suplemen',
             'icon' => 'fa fa-users',
-            'url' => 'suplemen',
-            'permission' => 'suplemen',
+            'text' => 'Pariwisata',
+            'url' => 'pariwisata',
+            'permission' => 'pariwisata',
         ],
-
         [
-            'text' => 'Master Data',
+            'text' => 'SOTK',
             'icon' => 'fa fa-tags',
-            'permission' => 'master-data',
+            'permission' => 'organisasi',
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
-                    'text' => 'Bantuan',
+                    'text' => 'Departemen',
+                    'url' => 'departments',
+                    'permission' => 'organisasi-departemen',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Jabatan',
+                    'url' => 'positions',
+                    'permission' => 'organisasi-position',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Pejabat Daerah',
+                    'url' => 'employees',
+                    'permission' => 'organisasi-employee',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Struktur Bagan',
+                    'url' => 'orgchart',
+                    'permission' => 'organisasi-chart',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Pengaturan OpenSID',
+            'icon' => 'fa fa-tags',
+            'permission' => 'organisasi',
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Program Bantuan',
                     'url' => 'master/bantuan',
                     'permission' => 'master-data-bantuan',
+                ],
+                [
+                    'text' => 'Data Suplemen',
+                    'icon' => 'fas fa-angle-right',
+                    'url' => 'suplemen',
+                    'permission' => 'suplemen',
                 ],
                 [
                     'icon' => 'fas fa-angle-right',
@@ -156,81 +173,49 @@ final class Modul extends Enum
                 ],
             ],
         ],
-
         [
-            'text' => 'Organisasi',
-            'icon' => 'fa fa-tags',
-            'permission' => 'organisasi',
-            'submenu' => [
-                [
-                    'icon' => 'fa fa-building',
-                    'text' => 'Departemen',
-                    'url' => 'departments',
-                    'permission' => 'organisasi-departemen',
-                ],
-                [
-                    'icon' => 'fa fa-star',
-                    'text' => 'Jabatan',
-                    'url' => 'positions',
-                    'permission' => 'organisasi-position',
-                ],
-                [
-                    'icon' => 'fa fa-users',
-                    'text' => 'Pejabat Daerah',
-                    'url' => 'employees',
-                    'permission' => 'organisasi-employee',
-                ],
-                [
-                    'icon' => 'fa fa-sitemap',
-                    'text' => 'Struktur Bagan',
-                    'url' => 'orgchart',
-                    'permission' => 'organisasi-chart',
-                ],
-            ],
-        ],
-        [
-            'text' => 'Modul Web',
+            'text' => 'Kategori Artikel',
             'icon' => 'fa fa-globe',
             'permission' => 'website',
             'submenu' => [
                 [
-                    'icon' => 'fas fa-bars',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Menu Website',
                     'url' => 'cms/menus',
                     'permission' => 'website-menu',
                 ],
                 [
-                    'icon' => 'fas fa-file-text',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Halaman',
                     'url' => 'cms/pages',
                     'permission' => 'website-pages',
                 ],
                 [
-                    'icon' => 'fas fa-list',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Artikel',
                     'url' => 'cms/articles',
                     'permission' => 'website-article',
                 ],
                 [
-                    'icon' => 'fas fa-folder',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Kategori Artikel',
                     'url' => 'cms/categories',
                     'permission' => 'website-categories',
                 ],
                 [
-                    'icon' => 'fas fa-image',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Slider',
                     'url' => 'cms/slides',
                     'permission' => 'website-slider',
                 ],
                 [
-                    'icon' => 'fas fa-download',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Daftar Unduhan',
                     'url' => 'cms/downloads',
                     'permission' => 'website-downloads',
                 ],
                 [
-                    'icon' => 'fas fa-chart-line',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Statistik Pengunjung',
                     'url' => 'cms/statistik',
                     'permission' => 'website-statistik',
@@ -238,42 +223,48 @@ final class Modul extends Enum
             ],
         ],
         [
-            'text' => 'Pengaturan',
-            'icon' => 'fa fa-cog',
-            'permission' => 'pengaturan',
+            'text' => 'Pengaturan Pengguna',
+            'icon' => 'fa fa-globe',
+            'permission' => 'website',
             'submenu' => [
                 [
-                    'icon' => 'fas fa-cogs',
-                    'text' => 'Identitas',
-                    'url' => 'pengaturan/identitas',
-                    'permission' => 'pengaturan-identitas',
-                ],
-                [
-                    'icon' => 'fas fa-user',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Pengguna',
                     'url' => 'pengaturan/users',
                     'permission' => 'pengaturan-users',
                 ],
                 [
-                    'icon' => 'fas fa-users',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Grup',
                     'url' => 'pengaturan/groups',
                     'permission' => 'pengaturan-group',
                 ],
                 [
-                    'icon' => 'fas fa-history',
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Riwayat Pengguna',
                     'url' => 'pengaturan/activities',
                     'permission' => 'pengaturan-activities',
                 ],
+            ],
+        ],
+        [
+            'text' => 'Pengaturan Aplikasi',
+            'icon' => 'fa fa-cog',
+            'permission' => 'pengaturan',
+            'submenu' => [
                 [
-                    'icon' => 'fas fa-gear',
+                    'icon' => 'fas fa-angle-right',
+                    'text' => 'Identitas',
+                    'url' => 'pengaturan/identitas',
+                    'permission' => 'pengaturan-identitas',
+                ],
+                [
+                    'icon' => 'fas fa-angle-right',
                     'text' => 'Aplikasi',
                     'url' => 'pengaturan/settings',
                     'permission' => 'pengaturan-settings',
                 ],
             ],
         ],
-
     ];
 }

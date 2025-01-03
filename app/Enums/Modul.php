@@ -68,14 +68,14 @@ final class Modul extends Enum
                 [
                     'text' => 'Penerima Bantuan',
                     'icon' => 'fas fa-angle-right',
-                    'url' => 'profile-kependudukan/bantuan',
-                    'permission' => 'profile-kependudukan-bantuan',
+                    'url' => 'profile-kependudukan/penerima-bantuan',
+                    'permission' => 'profile-kependudukan-penerima-bantuan',
                 ],
                 [
                     'text' => 'Data Suplemen',
                     'icon' => 'fa fafas fa-angle-right',
-                    'url' => 'profile-kependudukan/suplemen',
-                    'permission' => 'profile-kependudukan-suplemen',
+                    'url' => 'suplemen',
+                    'permission' => 'suplemen',
                 ],
             ],
         ],
@@ -151,13 +151,13 @@ final class Modul extends Enum
         [
             'text' => 'Pengaturan OpenSID',
             'icon' => 'fa fa-tags',
-            'permission' => 'organisasi',
+            'permission' => 'pengaturan-opensid',
             'submenu' => [
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Program Bantuan',
-                    'url' => 'master/bantuan',
-                    'permission' => 'master-data-bantuan',
+                    'url' => 'pengaturan-opensid/program-bantuan',
+                    'permission' => 'pengaturan-opensid-program-bantuan',
                 ],
                 [
                     'text' => 'Data Suplemen',
@@ -165,11 +165,12 @@ final class Modul extends Enum
                     'url' => 'suplemen',
                     'permission' => 'suplemen',
                 ],
+                
                 [
                     'icon' => 'fas fa-angle-right',
                     'text' => 'Kategori Artikel',
-                    'url' => 'master/kategori/0',
-                    'permission' => 'master-data-artikel',
+                    'url' => 'pengaturan-opensid/kategori-artikel/0',
+                    'permission' => 'pengaturan-opensid-kategori-artikel',
                 ],
             ],
         ],

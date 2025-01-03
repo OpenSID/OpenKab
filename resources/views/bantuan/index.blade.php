@@ -147,7 +147,7 @@
                 },
                 {
                     data: function(data) {
-                        return `<a href="${'{{ route("profile.kependudukan.bantuan.detail", ["id" => "ID"]) }}'.replace('ID', data.id)}">
+                        return `<a href="${'{{ route("profile.kependudukan.penerima.bantuan.detail", ["id" => "ID"]) }}'.replace('ID', data.id)}">
                             <button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Detail</button>
                         </a>`;
 
@@ -255,7 +255,7 @@
         });
 
         $('#cetak').on('click', function() {
-            let url = new URL("{{ route('profile.kependudukan.bantuan.cetak') }}");
+            let url = new URL("{{ route('profile.kependudukan.penerima.bantuan.cetak') }}");
             url.searchParams.append("sasaran", $("#sasaran").val() ?? '');
             url.searchParams.append("tahun", $("#tahun").val() ?? '');
             url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');

@@ -53,7 +53,7 @@
 
             if (response.ok && data.success) {
                 // alert('Data berhasil disimpan!');
-                window.location.href = "{{ route('profile.kependudukan.suplemen.index') }}";
+                window.location.href = "{{ route('suplemen') }}";
             } else {
                 // alert('Gagal menyimpan data: ' + (data.message || 'Terjadi kesalahan.'));
             }

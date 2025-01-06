@@ -56,6 +56,9 @@ class SuplemenController extends Controller
         $data_suplemen['suplemen'] = Suplemen::findOrFail($id)->toArray();
         $data_suplemen['terdata'] = SuplemenTerdata::anggota($data_suplemen['suplemen']['sasaran'], $id)->get()->toArray();
 
+    // Ambil form_isian dari suplemen dan dekode
+        $formIsian = json_decode($data_suplemen['suplemen']['form_isian'], true); // pastikan form_isian didecode menjadi array
+
         // Nama file untuk ekspor
         $file_name = $data_suplemen['suplemen']['nama'].'_'.date('d_m_Y').'.xlsx';
 
@@ -95,6 +98,14 @@ class SuplemenController extends Controller
 
         // Cetak Header Tabel
         $values = ['Peserta', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Keterangan'];
+
+        // Ambil header dinamis berdasarkan label_kode dari form_isian
+        if ($formIsian) {
+            foreach ($formIsian as $field) {
+                $values[] = $field['label_kode']; // Tambahkan label_kode sebagai header
+            }
+        }
+
         $rowFromValues = Row::fromValues($values, $headerStyle);
         $writer->addRow($rowFromValues);
 
@@ -110,6 +121,16 @@ class SuplemenController extends Controller
                 strtoupper($data['alamat'].' RT '.$data['rt'].' / RW '.$data['rw'].' dusun '.$data['dusun']),
                 empty($data['keterangan']) ? '-' : $data['keterangan'],
             ];
+
+        // Tambahkan data dari data_form_isian sesuai dengan form_isian
+            $dataFormIsian = json_decode($data['data_form_isian'], true); // Dekode data_form_isian
+
+            if ($formIsian) {
+                foreach ($formIsian as $field) {
+                    $kode = $field['nama_kode']; // Ambil nama_kode dari form_isian
+                    $cells[] = isset($dataFormIsian[$kode]) ? $dataFormIsian[$kode] : 'Tidak Ada Data'; // Tambahkan nilai sesuai nama_kode
+                }
+            }
 
             $singleRow = Row::fromValues($cells);
             $writer->addRow($singleRow);

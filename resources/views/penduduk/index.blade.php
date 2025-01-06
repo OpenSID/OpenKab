@@ -343,7 +343,7 @@
         });
 
         $('#cetak').on('click', function() {
-            window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
+            window.open(`{{ route('profile.kependudukan.penduduk.cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
         });
     });
     </script>

@@ -34,13 +34,29 @@ var suplemen = $('#suplemen').DataTable({
             className: 'text-nowrap',
         },
         {
-            targets: [0, 1, 2, 3],
+            targets: [0, 1, 2, 3, 4],
             orderable: false,
             searchable: false,
         },
-    ],
+        {
+            targets: [1],  // Kolom "DETAIL"
+            visible: {!! $suplemen->form_isian ? 'true' : 'false' !!},  // Menyembunyikan atau menampilkan kolom berdasarkan kondisi
+        }],
     columns: [{
             data: null,
+        },
+        {
+            data: null,
+            orderable: false,
+            className: 'text-center',
+            render: function(data, type, row) {
+                // Cek apakah data_form_isian ada
+                if (row.data_form_isian && row.data_form_isian.trim() !== '') {
+                    return `<button class="btn btn-success btn-sm btn-details" data-id="${row.id}" data-json='${row.data_form_isian}'>Selengkapnya</button>`;
+                } else {
+                    return '';  // Jika tidak ada data, tidak tampilkan tombol
+                }
+            }
         },
         {
             data: 'terdata_info',
@@ -92,7 +108,7 @@ var suplemen = $('#suplemen').DataTable({
         },
     ],
     order: [
-        [8, 'asc']
+        [9, 'asc']
     ]
 })
 

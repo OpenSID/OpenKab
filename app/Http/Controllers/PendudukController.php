@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class PendudukController extends Controller
 {
-    protected $permission = 'penduduk';
+    protected $permission = 'profile-kependudukan-penduduk';
 
     public function index()
     {

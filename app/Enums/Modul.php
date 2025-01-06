@@ -165,7 +165,7 @@ final class Modul extends Enum
                     'url' => 'suplemen',
                     'permission' => 'suplemen',
                 ],
-                
+
                 [
                     'icon' => 'far fa-fw fa-circle',
                     'text' => 'Kategori Artikel',

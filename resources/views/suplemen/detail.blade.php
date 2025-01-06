@@ -56,7 +56,7 @@
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
         @include('suplemen.js.data_suplemen_terdata')
-
+        @include('suplemen.js.data_suplemen_terdata_detail')
     })
 
     

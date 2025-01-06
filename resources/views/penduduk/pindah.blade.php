@@ -14,7 +14,7 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ url('penduduk') }}" class="btn btn-sm btn-block btn-secondary"><i class="fas fa-arrow-left"></i>
+                            <a href="{{ url('profile-kependudukan/penduduk') }}" class="btn btn-sm btn-block btn-secondary"><i class="fas fa-arrow-left"></i>
                             </a>
                         </div>
                     </div>
@@ -226,7 +226,7 @@
                                     showConfirmButton: false,
                                     timer: 1500
                                 })
-                                window.location.replace("{{ url('penduduk') }}");
+                                window.location.replace("{{ url('profile-kependudukan/penduduk') }}");
                             } else {
                                 Swal.fire(
                                     'Error!',

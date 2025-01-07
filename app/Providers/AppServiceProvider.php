@@ -128,7 +128,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->config['adminlte.classes_sidebar'] = 'sidebar-dark-primary elevation-4';
             $this->app->config['adminlte.classes_topnav'] = 'navbar-white navbar-light p-0';
             $this->app->config['adminlte.classes_topnav_nav'] = 'navbar-expand-lg';
-            $this->app->config['adminlte.classes_topnav_container'] = 'container col-lg-12 pl-4';
+            $this->app->config['adminlte.classes_topnav_container'] = 'container col-lg-12 p-2 pl-4';
             $this->app->config['adminlte.classes_content_header'] = 'container ml-3';
         }
     }

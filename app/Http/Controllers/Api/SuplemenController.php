@@ -212,11 +212,12 @@ class SuplemenController extends Controller
                 'success' => true,
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            report($e);
+            // report($e);
 
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
+                'message' => '',
+                // 'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

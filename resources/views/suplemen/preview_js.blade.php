@@ -1,8 +1,32 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('previewButton').addEventListener('click', function () {
+            let isValid = true;
+            const requiredFields = document.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid'); // Tambahkan class error pada input
+                } else {
+                    field.classList.remove('is-invalid'); // Hapus class error jika sudah terisi
+                }
+            });
+
+            // Jika tidak valid, cegah modal tampil
+            if (!isValid) {
+                // alert('Harap isi semua bidang yang wajib (required).');
+                return;
+            }
             // Ambil nilai dari form
-            const sasaran = document.querySelector('select[name="sasaran"]').value || 'Belum dipilih';
+
+            // Ambil data dari PHP
+            const sasaranMap = JSON.parse('<?php echo json_encode(unserialize(SASARAN)); ?>');
+
+            // Ambil value yang dipilih dari dropdown
+            const selectedValue = document.querySelector('select[name="sasaran"]').value;
+
+            // Ambil nama sasaran berdasarkan value
+            const sasaran = sasaranMap[selectedValue] || 'Belum dipilih';
             const nama = document.querySelector('input[name="nama"]').value || 'Belum diisi';
             const keterangan = document.querySelector('textarea[name="keterangan"]').value || 'Belum diisi';
             const status = document.querySelector('select[name="status"]').value || 'Belum dipilih';

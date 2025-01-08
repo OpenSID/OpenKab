@@ -79,6 +79,9 @@
                     </div>
                     <div class="card-footer">
                         @include('layouts.reset_form')
+                        <button type="button" class="btn btn-secondary btn-sm pull-right" id="previewButton">
+                            <i class="fa fa-eye"></i> Preview
+                        </button>
                         <button type="submit" class="btn btn-info btn-sm pull-right">
                             <i class="fa fa-check"></i> Simpan
                         </button>
@@ -87,8 +90,12 @@
             </div>
         </div>
     </div>
+@include('suplemen.preview')
+
 @endsection
 
 @section('js')
 @include('suplemen.edit_js')
+@include('suplemen.preview_js')
+
 @endsection

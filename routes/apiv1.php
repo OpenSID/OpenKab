@@ -205,6 +205,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/', 'store');
                     Route::put('/{id}', 'update');
                     Route::get('/menu', 'menu');
+                    Route::get('/listModul/{id}', 'listModul');
+                    Route::put('/updateMenu/{id}', 'updateMenu');
                 });
         });
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Team;
+
 class GroupController extends Controller
 {
     private $nama_aplikasi;
@@ -24,11 +26,16 @@ class GroupController extends Controller
 
     public function create()
     {
-        return view('group.form');
+        $listPermission = $this->generateListPermission();
+
+        return view('group.form')->with($listPermission);
     }
 
     public function edit($id)
     {
-        return view('group.form', ['id' => $id]);
+        $listPermission = $this->generateListPermission();
+        $team = Team::find($id);
+        $isAdmin = $team->name == 'administrator' ? true : false;
+        return view('group.form', ['id' => $id])->with($listPermission)->with('isAdmin', $isAdmin);
     }
 }

@@ -22,11 +22,13 @@ class Team extends OpenKabModel
     protected $fillable = [
         'name',
         'menu',
+        'menu_order',
     ];
 
     /** {@inheritdoc} */
     protected $casts = [
         'menu' => 'json',
+        'menu_order' => 'json',
     ];
 
     public function role(): HasMany

@@ -28,7 +28,7 @@ class GroupController extends Controller
     {
         $listPermission = $this->generateListPermission();
 
-        return view('group.form')->with($listPermission);
+        return view('group.form')->with($listPermission)->with('isAdmin', false);
     }
 
     public function edit($id)

@@ -145,8 +145,9 @@ class TeamController extends Controller
             'data' => Modul::Menu,
         ], Response::HTTP_OK);
     }
+
     public function updateMenu(Request $request, $id)
-    {        
+    {
         $team = Team::find($id);
         $menuTeam = json_decode($request->menu_order, 1);
         $menu = [];
@@ -155,21 +156,23 @@ class TeamController extends Controller
         }
         $team->menu_order = $menu;
         $team->save();
+
         return response()->json([
-            'success' => true,            
+            'success' => true,
         ], Response::HTTP_OK);
     }
+
     public function listModul(Request $request)
     {
         $id = (int) $request->id;
         $team = Team::find($id);
-        $idCounter = 1; // Initialize the ID counter        
+        $idCounter = 1; // Initialize the ID counter
         $menuTeam = $team->menu_order ?? $team->menu;
         $menu = [];
         foreach ($menuTeam as $menuItem) {
             $menu[] = convertMenu($menuItem, null, $idCounter);
         }
-        
+
         $modul = collect($menuTeam)->flatMap(function ($item) {
             // Initialize an array to hold the results
             $results = [];
@@ -196,6 +199,7 @@ class TeamController extends Controller
 
             return $results;
         })->values()->pluck('text', 'url')->toArray();
+
         return response()->json([
             'success' => true,
             'data' => ['modul' => $modul, 'menu' => $menu],

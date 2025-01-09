@@ -22,13 +22,6 @@
                 </p>
             </a>
         </li>
-        <li class="nav-item mt-2 mb-2">
-            <a class="nav-link {{ Route::getCurrentRoute()->getName()== 'presisi.ekonomi' ? 'active' : '' }}" href="{{ url('presisi/ekonomi') }}">
-                <p>
-                    Ekonomi
-                </p>
-            </a>
-        </li>
 
         <li class="nav-item mt-2 mb-2">
             <a class="nav-link {{ Route::getCurrentRoute()->getName()== 'presisi.kesehatan' ? 'active' : '' }} " href="{{ url('presisi/kesehatan') }}">

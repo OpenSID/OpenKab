@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SuplemenTerdata extends BaseModel
 {
     use HasFactory;
-    
+
     public const PENDUDUK = 1;
 
     public const KELUARGA = 2;

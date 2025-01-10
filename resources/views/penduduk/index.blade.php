@@ -206,18 +206,18 @@
                     searchable: false,
                     name: "aksi",
                     orderable: false,
+                    visible: `{{ $canedit }}`,
                     data: function(data) {
-                        var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';
-                        let canEdit = `{{ $canedit }}`
-                        let pindahMenu = canEdit ? `<li>
+                        var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';                        
+                        let pindahMenu = `<li>
                                     <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
-                                </li>` : ``;
+                                </li>`;
                         return `<div class="btn-group open">
                             <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
                             <ul class="dropdown-menu" role="menu">
                                 ${pindahMenu}
                             </ul>
-                        </div>`
+                        </div>`;
                     }
                 },
                 {

@@ -8,6 +8,7 @@ Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan
 4. [#470](https://github.com/OpenSID/OpenKab/issues/470) Penambahan tombol data selengkapnya pada detail suplemen terdata dan pada export data.
 5. [#477](https://github.com/OpenSID/OpenKab/issues/477) Penambahan pengaturan menu yang tampil bisa vertikal & horizontal.
 6. [#475](https://github.com/OpenSID/OpenKab/issues/475) Penambahan fungsi multiple hapus pada halaman suplemen terdata.
+7. [#489](https://github.com/OpenSID/OpenKab/issues/489) Penambahan fungsi pengaturan menu pada halaman admin.
 
 #### Perbaikan BUG
 

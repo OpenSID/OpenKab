@@ -70,13 +70,7 @@ final class Modul extends Enum
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'bantuan',
                     'permission' => 'bantuan',
-                ],
-                [
-                    'text' => 'Data Suplemen',
-                    'icon' => 'fa fafar fa-fw fa-circle',
-                    'url' => 'suplemen',
-                    'permission' => 'suplemen',
-                ],
+                ]
             ],
         ],
         [

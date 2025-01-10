@@ -12,6 +12,7 @@
     @include('partials.breadcrumbs')
     @include('partials.flash_message')
     @include('layouts.components.selec2_wilayah_referensi')
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -25,11 +26,8 @@
                             @include('layouts.components.tombol_ekspor', [
                                 'ekspor' => "suplemen/ekspor/{$id}",
                             ])
-                            <a href="#" title="Hapus Data" class="disabled btn btn-social btn-danger btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block hapus-terpilih"><i
-                                    class='fa fa-trash-o'
-                                ></i> Hapus</a>
+                            <a href="#" title="Hapus Data" id="multiple-delete" class="disabled btn btn-social btn-danger btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-trash-o"></i> Hapus</a>
                             <a href="{{ route('suplemen') }}" class="btn btn-social btn-info btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Kembali Ke Daftar Data Suplemen</a>
-                        
                         </div>
                     </div>
                 </div>
@@ -43,8 +41,6 @@
                         
                         <hr>
                         @include('suplemen.table_terdata')
-                        
-                        </form>
                     </div>
                 </div>
             </div>
@@ -53,12 +49,14 @@
 @endsection
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
+    <script nonce="{{ csp_nonce() }}">
     document.addEventListener("DOMContentLoaded", function(event) {
         @include('suplemen.js.data_suplemen_terdata')
+        @include('suplemen.js.checkbox')
+        @include('suplemen.js.multiple_delete')
         @include('suplemen.js.data_suplemen_terdata_detail')
-    })
 
-    
+    });
     </script>
 @endsection
+

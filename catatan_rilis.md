@@ -11,6 +11,7 @@ Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan
 
 #### Perbaikan BUG
 
+1. [#485](https://github.com/OpenSID/OpenKab/issues/485) Perbaikan terkait menu pilih aksi pada OpenKab tidak berfungsi.
 
 #### Perubahan Teknis
 

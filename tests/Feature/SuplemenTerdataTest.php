@@ -1,10 +1,11 @@
 <?php
+
 namespace Tests\Feature;
 
+use App\Models\SuplemenTerdata;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
-use App\Models\SuplemenTerdata;
 
 class SuplemenTerdataTest extends TestCase
 {
@@ -29,7 +30,7 @@ class SuplemenTerdataTest extends TestCase
         ], [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . (session('api_token') ?? ''),
+            'Authorization' => 'Bearer '.(session('api_token') ?? ''),
         ]);
 
         // Pastikan responsnya berhasil
@@ -52,12 +53,11 @@ class SuplemenTerdataTest extends TestCase
         ], [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . (session('api_token') ?? ''),
+            'Authorization' => 'Bearer '.(session('api_token') ?? ''),
         ]);
 
         // Pastikan responsnya berhasil meskipun tidak ada data yang dihapus
         $response->assertStatus(Response::HTTP_OK)
                  ->assertJson(['success' => true]);
     }
-
 }

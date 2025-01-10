@@ -15,9 +15,9 @@ class ExampleTest extends TestCase
     public function test_the_application_returns_a_successful_response()
     {
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . session('api_token') ?? '', // Sesuaikan token jika perlu
+            'Authorization' => 'Bearer '.session('api_token') ?? '', // Sesuaikan token jika perlu
         ])->get('/');
-    
+
         $response->assertStatus(302);
     }
 }

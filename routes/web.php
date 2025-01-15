@@ -21,6 +21,7 @@ use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\SuplemenController;
+use App\Http\Controllers\PointController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\DataPokokController;
@@ -208,6 +209,16 @@ Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar']
 Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
 Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
 
+Route::get('/point', [PointController::class, 'index'])->name('point');
+Route::get('/point/form/', [PointController::class, 'form'])->name('point.create');
+Route::get('/point/form/{id}', [PointController::class, 'edit'])->name('point.create');
+Route::get('/point/sub/{id?}', [PointController::class, 'sub'])->name('point.create');
+Route::get('/point/rincian/{id}', [PointController::class, 'detail'])->name('point.detail');
+Route::get('/point/lock/{id}/{status}', [PointController::class, 'lock'])->name('point.lock');
+Route::post('/point/form', [PointController::class, 'store'])->name('point.create');
+Route::post('/point/update/{id}', [PointController::class, 'update'])->name('point.update');
+Route::post('/point/sub/{id?}', [PointController::class, 'store'])->name('point.create');
+Route::post('/point/form/{id}', [PointController::class, 'update'])->name('point.update');
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

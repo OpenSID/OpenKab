@@ -169,6 +169,19 @@ final class Modul extends Enum
             ],
         ],
         [
+            'text' => 'Pengaturan Peta',
+            'icon' => 'fa fa-map',
+            'permission' => 'pengaturan-peta',
+            'submenu' => [
+                [
+                    'text' => 'Tipe Lokasi',
+                    'icon' => 'far fa-fw fa-circle',
+                    'url' => 'point',
+                    'permission' => 'point',
+                ],
+            ],
+        ],
+        [
             'text' => 'Pengaturan Web',
             'icon' => 'fa fa-globe',
             'permission' => 'website',

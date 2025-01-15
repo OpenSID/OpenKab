@@ -1,15 +1,19 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Point extends BaseModel
 {
-    public const LOCK   = 1;
+    public const LOCK = 1;
+
     public const UNLOCK = 2;
-    public const ROOT   = 0;
-    public const CHILD  = 2;
+
+    public const ROOT = 0;
+
+    public const CHILD = 2;
 
     /**
      * The table associated with the model.
@@ -60,7 +64,7 @@ class Point extends BaseModel
     }
 
     /**
-     * Getter untuk path + simbol
+     * Getter untuk path + simbol.
      */
     public function getPathSimbolAttribute(): string
     {
@@ -74,7 +78,7 @@ class Point extends BaseModel
     }
 
     /**
-     * Get the parent that owns the Polygon
+     * Get the parent that owns the Polygon.
      */
     public function parent(): BelongsTo
     {

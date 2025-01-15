@@ -189,7 +189,7 @@ class PointController extends Controller
     {
         try {
             $status = [
-                Point::LOCK   => 'Aktif',
+                Point::LOCK => 'Aktif',
                 Point::UNLOCK => 'Tidak Aktif',
             ];
             if (! is_array($status)) {

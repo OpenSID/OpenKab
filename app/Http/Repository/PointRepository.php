@@ -3,7 +3,6 @@
 namespace App\Http\Repository;
 
 use App\Models\Point;
-use App\Models\Wilayah;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 

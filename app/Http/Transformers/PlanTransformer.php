@@ -25,7 +25,7 @@ class PlanTransformer extends TransformerAbstract
      */
     protected function generateAksiColumn(Lokasi $plan): string
     {
-        $aksi = '<a href="' . url('plan/ajax_lokasi_maps/'.$plan->point->parent->id.'/'.$plan->id) . '" class="btn bg-olive btn-sm" title="Lokasi ' . $plan->nama . '"><i class="fa fa-map"></i></a> ';
+        $aksi = '<a href="'.url('plan/ajax_lokasi_maps/'.$plan->point->parent->id.'/'.$plan->id).'" class="btn bg-olive btn-sm" title="Lokasi '.$plan->nama.'"><i class="fa fa-map"></i></a> ';
 
         return $aksi;
     }

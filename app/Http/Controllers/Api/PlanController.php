@@ -6,10 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Repository\PlanRepository;
 use App\Http\Transformers\PlanTransformer;
 use App\Models\Lokasi;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\Response;
 
 class PlanController extends Controller
 {

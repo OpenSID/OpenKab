@@ -7,13 +7,13 @@ use App\Models\Point;
 
 class PlanController extends Controller
 {
-    private int $tip        = 3;
+    private int $tip = 3;
 
     public function index($parent = 0)
     {
-        $data           = ['tip' => $this->tip, 'parent' => $parent];
+        $data = ['tip' => $this->tip, 'parent' => $parent];
         $data['status'] = [Point::LOCK => 'Aktif', Point::UNLOCK => 'Tidak Aktif'];
-        $data['point']  = Point::root()->with(['children'])->where('sumber', 'OpenKab')->get();
+        $data['point'] = Point::root()->with(['children'])->where('sumber', 'OpenKab')->get();
 
         return view('peta.lokasi.index', $data);
     }
@@ -23,6 +23,7 @@ class PlanController extends Controller
         $data['lokasi'] = Lokasi::with('point')->findOrFail($id)->toArray();
         $data['parent'] = $parent;
         $data['id'] = $id;
+
         return view('peta.lokasi.maps', $data);
     }
 
@@ -31,6 +32,7 @@ class PlanController extends Controller
         $data['lokasi'] = Lokasi::with('point')->findOrFail($id)->toArray();
         $data['parent'] = $parent;
         $data['id'] = $id;
+
         return view('peta.lokasi.template_maps', $data);
     }
 }

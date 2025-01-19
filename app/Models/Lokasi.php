@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Lokasi extends BaseModel
 {
+    public const LOCK = 1;
 
-    public const LOCK   = 1;
     public const UNLOCK = 2;
 
     /**
@@ -41,7 +41,7 @@ class Lokasi extends BaseModel
     }
 
     /**
-     * Get the point associated with the Lokasi
+     * Get the point associated with the Lokasi.
      */
     public function point(): HasOne
     {
@@ -57,9 +57,9 @@ class Lokasi extends BaseModel
     {
         return self::active()->with(['point' => static fn ($q) => $q->select(['id', 'nama', 'parrent', 'simbol'])->with(['parent' => static fn ($r) => $r->select(['id', 'nama', 'parrent', 'simbol'])]),
         ])->get()->map(function ($item) {
-            $item->jenis    = $item->point->parent->nama ?? '';
+            $item->jenis = $item->point->parent->nama ?? '';
             $item->kategori = $item->point->nama ?? '';
-            $item->simbol   = $item->point->simbol ?? '';
+            $item->simbol = $item->point->simbol ?? '';
             unset($item->point);
 
             return $item;

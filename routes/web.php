@@ -22,6 +22,7 @@ use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\SuplemenController;
 use App\Http\Controllers\PointController;
+use App\Http\Controllers\PlanController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\DataPokokController;
@@ -219,6 +220,10 @@ Route::post('/point/form', [PointController::class, 'store'])->name('point.creat
 Route::post('/point/update/{id}', [PointController::class, 'update'])->name('point.update');
 Route::post('/point/sub/{id?}', [PointController::class, 'store'])->name('point.create');
 Route::post('/point/form/{id}', [PointController::class, 'update'])->name('point.update');
+
+Route::get('/plan/{parent?}', [PlanController::class, 'index'])->name('plan');
+Route::get('/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'ajax_lokasi_maps'])->name('plan.ajax_lokasi_maps');
+Route::get('/show/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'show_ajax_lokasi_maps']);
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

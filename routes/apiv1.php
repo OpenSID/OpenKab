@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
 use App\Http\Controllers\Api\SuplemenController;
 use App\Http\Controllers\Api\PointController;
+use App\Http\Controllers\Api\PlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
@@ -287,3 +288,6 @@ Route::delete('/point/hapus/{id}', [PointController::class, 'destroy'])->name('p
 Route::post('/point/multiple-delete', [PointController::class, 'delete_multiple'])->name('point.delete-multiple');
 Route::get('/subpoint/{id}', [PointController::class, 'detail']);
 Route::post('/point', [PointController::class, 'store']);
+
+Route::get('/plan', [PlanController::class, 'index']);
+Route::get('/plan/get-list-coordinate/{parrent}/{id}', [PlanController::class, 'getListCoordinate']);

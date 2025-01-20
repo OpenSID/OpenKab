@@ -21,6 +21,8 @@ use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\SuplemenController;
+use App\Http\Controllers\PointController;
+use App\Http\Controllers\PlanController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\DataPokokController;
@@ -103,9 +105,9 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     });
 
     // Penduduk
-    // Route::middleware(['permission:penduduk-read'])->get('penduduk/cetak', [PendudukController::class, 'cetak']);
-    // Route::middleware(['permission:penduduk-edit'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah'])->name('penduduk.edit');
-    // Route::middleware(['permission:penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
+    Route::middleware(['permission:penduduk-read'])->get('penduduk/cetak', [PendudukController::class, 'cetak']);
+    Route::middleware(['permission:penduduk-edit'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah'])->name('penduduk.edit');
+    Route::middleware(['permission:penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
     // Keluarga
     Route::middleware(['permission:penduduk-read'])->controller(KeluargaController::class)
@@ -115,64 +117,26 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 
     // Bantuan
-    // Route::middleware(['permission:bantuan-read'])->controller(BantuanController::class)
-    //     ->prefix('bantuan')
-    //     ->group(function () {
-    //         Route::get('/', 'index')->name('bantuan');
-    //         Route::get('/cetak', 'cetak');
-    //         Route::get('/detail/{id}', 'show')->name('bantuan.detail');
-    //     });
-
-    // Data Pokok
-    Route::prefix('profile-kependudukan')
+    Route::middleware(['permission:bantuan-read'])->controller(BantuanController::class)
+        ->prefix('bantuan')
         ->group(function () {
-
-            // penduduk
-            Route::middleware(['permission:profile-kependudukan-penduduk-read'])->get('penduduk/cetak', [PendudukController::class, 'cetak'])->name('profile.kependudukan.penduduk.cetak');
-            Route::middleware(['permission:profile-kependudukan-penduduk-edit'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah'])->name('profile.kependudukan.penduduk.pindah');
-            Route::middleware(['permission:profile-kependudukan-penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
-
-            // agama & adat
-            Route::get('/agama-adat', [DataPokokController::class, 'agama_adat'])->name('profile.kependudukan.agama-adat');
-
-            // kesehatan
-            Route::get('/kesehatan', [DataPokokController::class, 'kesehatan'])->name('profile.kependudukan.kesehatan');
-
-            // pendidikan
-            Route::get('/pendidikan', [DataPokokController::class, 'pendidikan'])->name('profile.kependudukan.pendidikan');
-            
-            // ketenagakerjaan
-            Route::get('/ketenagakerjaan', [DataPokokController::class, 'ketenagakerjaan'])->name('profile.kependudukan.pendidikan');
-
-            // jaminan sosial
-            Route::get('/jaminan-sosial', [DataPokokController::class, 'jaminanSosial'])->name('profile.kependudukan.jaminan.sosial');
-
-            // data papan
-            Route::get('/papan', [App\Http\Controllers\DTKSController::class, 'index'])->name('profile.kependudukan.dtks.index');
-
-            // penerima bantuan
-            Route::middleware(['permission:profile-kependudukan-penerima-bantuan-read'])->controller(BantuanController::class)
-            ->prefix('penerima-bantuan')
-            ->group(function () {
-                Route::get('/', 'index')->name('profile.kependudukan.penerima.bantuan.index');
-                Route::get('/cetak', 'cetak')->name('profile.kependudukan.penerima.bantuan.cetak');
-                Route::get('/detail/{id}', 'show')->name('profile.kependudukan.penerima.bantuan.detail');
-            });
-            // Route::get('/infrastruktur', [DataPokokController::class, 'infrastruktur'])->name('profile.kependudukan.infrastruktur');
+            Route::get('/', 'index')->name('bantuan');
+            Route::get('/cetak', 'cetak');
+            Route::get('/detail/{id}', 'show')->name('bantuan.detail');
         });
 
-        
-    // Route::middleware(['permission:datapokok-read'])->controller(DataPokokController::class)
-    //     ->prefix('data-pokok')
-    //     ->group(function () {
-    //         Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
-    //         Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
-    //         Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
-    //         Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
-    //         Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
-    //         Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama-adat', 'agama_adat')->name('agama-adat');
-    //         Route::middleware(['permission:datapokok-infrastruktur-read'])->get('/infrastruktur', 'infrastruktur')->name('infrastruktur');
-    //     });
+    // Data Pokok
+    Route::middleware(['permission:datapokok-read'])->controller(DataPokokController::class)
+        ->prefix('data-pokok')
+        ->group(function () {
+            Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
+            Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
+            Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
+            Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama-adat', 'agama_adat')->name('agama-adat');
+            Route::middleware(['permission:datapokok-infrastruktur-read'])->get('/infrastruktur', 'infrastruktur')->name('infrastruktur');
+        });
 
     // Statistik
     Route::middleware(['permission:statistik-read'])->controller(StatistikController::class)
@@ -185,44 +149,22 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/cetak/{kategori}/{id}', 'cetak');
         });
 
-    // Pariwisata
-    Route::get('/pariwisata', [DataPokokController::class, 'pariwisata'])->name('pariwisata');
-
-
-    // SOTK
+    // Master Data
     Route::middleware('easyauthorize:organisasi-departemen')->resource('departments', App\Http\Controllers\DepartmentController::class)->except(['show']);
     Route::middleware('easyauthorize:organisasi-position')->resource('positions', App\Http\Controllers\PositionController::class)->except(['show']);
     Route::middleware('easyauthorize:organisasi-employee')->resource('employees', App\Http\Controllers\EmployeeController::class)->except(['show']);
     Route::middleware('permission:organisasi-chart-read')->get('orgchart', App\Http\Controllers\OrgChartController::class);
 
-    // Pengaturan OpenSID
-    Route::prefix('pengaturan-opensid')
+    Route::prefix('master')
         ->group(function () {
-
-            // Program Bantuan
-            Route::middleware(['easyauthorize:pengaturan-opensid-program-bantuan'])->resource('program-bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
-
-            // Kategori Artikel
-            Route::controller(AdminWebController::class)
-            ->prefix('kategori-artikel')
-            ->group(function () {
-                Route::middleware(['permission:pengaturan-opensid-kategori-artikel-read'])->get('/{parrent}', 'kategori_index')->name('pengaturan.opensid.kategori-artikel');
-                Route::middleware(['permission:pengaturan-opensid-kategori-artikel-edit'])->get('/edit/{id}/{parrent}', 'kategori_edit')->name('pengaturan.opensid.kategori-artikel-edit');
-                Route::middleware(['permission:pengaturan-opensid-kategori-artikel-write'])->get('/tambah/{parrent}', 'kategori_create')->name('pengaturan.opensid.kategori-artikel-create');
-                // Route::middleware(['permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
+            Route::middleware(['easyauthorize:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            Route::controller(AdminWebController::class)->group(function () {
+                Route::middleware(['permission:master-data-artikel-read'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
+                Route::middleware(['permission:master-data-artikel-edit'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
+                Route::middleware(['permission:master-data-artikel-write'])->get('/kategori/tambah/{parrent}', 'kategori_create')->name('master-data-artikel.kategori-create');
+                Route::middleware(['permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
             });
         });
-
-    // Route::prefix('master')
-    //     ->group(function () {
-    //         Route::middleware(['easyauthorize:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
-    //         Route::controller(AdminWebController::class)->group(function () {
-    //             Route::middleware(['permission:master-data-artikel-read'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
-    //             Route::middleware(['permission:master-data-artikel-edit'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
-    //             Route::middleware(['permission:master-data-artikel-write'])->get('/kategori/tambah/{parrent}', 'kategori_create')->name('master-data-artikel.kategori-create');
-    //             Route::middleware(['permission:master-data-pengaturan-read'])->get('/pengaturan', 'pengaturan_index')->name('master-data.pengaturan');
-    //         });
-    //     });
 
     // Satu Data
     Route::prefix('satu-data')->group(function () {
@@ -261,7 +203,6 @@ Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name(
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 
-// suplemen
 Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
 Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
 Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
@@ -269,6 +210,20 @@ Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar']
 Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
 Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
 
+Route::get('/point', [PointController::class, 'index'])->name('point');
+Route::get('/point/form/', [PointController::class, 'form'])->name('point.create');
+Route::get('/point/form/{id}', [PointController::class, 'edit'])->name('point.create');
+Route::get('/point/sub/{id?}', [PointController::class, 'sub'])->name('point.create');
+Route::get('/point/rincian/{id}', [PointController::class, 'detail'])->name('point.detail');
+Route::get('/point/lock/{id}/{status}', [PointController::class, 'lock'])->name('point.lock');
+Route::post('/point/form', [PointController::class, 'store'])->name('point.create');
+Route::post('/point/update/{id}', [PointController::class, 'update'])->name('point.update');
+Route::post('/point/sub/{id?}', [PointController::class, 'store'])->name('point.create');
+Route::post('/point/form/{id}', [PointController::class, 'update'])->name('point.update');
+
+Route::get('/plan/{parent?}', [PlanController::class, 'index'])->name('plan');
+Route::get('/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'ajax_lokasi_maps'])->name('plan.ajax_lokasi_maps');
+Route::get('/show/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'show_ajax_lokasi_maps']);
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

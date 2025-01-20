@@ -206,18 +206,18 @@
                     searchable: false,
                     name: "aksi",
                     orderable: false,
+                    visible: `{{ $canedit }}`,
                     data: function(data) {
-                        var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';
-                        let canEdit = `{{ $canedit }}`
-                        let pindahMenu = canEdit ? `<li>
-                                    <a href="${'{{ route("profile.kependudukan.penduduk.pindah", ["id" => "ID"]) }}'.replace('ID', data.id)}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
-                                </li>` : ``;
+                        var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';                        
+                        let pindahMenu = `<li>
+                                    <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
+                                </li>`;
                         return `<div class="btn-group open">
                             <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
                             <ul class="dropdown-menu" role="menu">
                                 ${pindahMenu}
                             </ul>
-                        </div>`
+                        </div>`;
                     }
                 },
                 {
@@ -343,7 +343,7 @@
         });
 
         $('#cetak').on('click', function() {
-            window.open(`{{ route('profile.kependudukan.penduduk.cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
+            window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
         });
     });
     </script>

@@ -290,4 +290,4 @@ Route::get('/subpoint/{id}', [PointController::class, 'detail']);
 Route::post('/point', [PointController::class, 'store']);
 
 Route::get('/plan', [PlanController::class, 'index']);
-Route::get('/plan/get-list-coordinate/{parrent}/{id}', [PlanController::class, 'getListCoordinate']);
+Route::get('/plan/get-list-coordinate/{parrent?}/{id?}', [PlanController::class, 'getListCoordinate']);

@@ -65,6 +65,14 @@ class Config extends Model
         return $this->hasMany(Komoditas::class, 'config_id', 'id');
     }
 
+    /**
+     * Get all of the Keluarga for the Config.
+     */
+    public function Lokasi(): HasMany
+    {
+        return $this->hasMany(Lokasi::class, 'config_id', 'id');
+    }
+
     public function hoKeluarga(): HasOne
     {
         return $this->hasOne(Keluarga::class, 'config_id', 'id');

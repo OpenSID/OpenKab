@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Lokasi extends BaseModel
 {
@@ -34,6 +36,11 @@ class Lokasi extends BaseModel
         'foto',
         'id_cluster',
     ];
+
+    public function config(): BelongsTo
+    {
+        return $this->belongsTo(Config::class, 'config_id');
+    }
 
     protected function scopeActive($query)
     {

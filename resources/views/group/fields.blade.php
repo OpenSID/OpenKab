@@ -46,6 +46,11 @@
                     $('input[name=href]').show()
             }
         })             
+
+        $('select[name=sourcelist]').change(function(){
+            let _val = $(this).val()
+            $('input[name=href]').val(_val)
+        })
     })
 </script>
 @endpush

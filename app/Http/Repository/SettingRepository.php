@@ -42,6 +42,12 @@ class SettingRepository extends BaseRepository
                         $q->orWhere('description', 'LIKE', '%'.$value.'%');
                     });
                 }),
+                AllowedFilter::callback ('notkey', function ($query, $value) {
+                    $query->whereNotIn('key', $value);
+                }),
+                AllowedFilter::callback ('key', function ($query, $value) {
+                    $query->whereIn('key', $value);
+                }),
             ])->allowedSorts($this->getFieldsSearchable())
             ->jsonPaginate();
     }

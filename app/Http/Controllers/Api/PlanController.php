@@ -14,7 +14,9 @@ class PlanController extends Controller
     protected $kecamatan;
 
     protected $desa;
+
     protected $kategori;
+
     protected $kata_kunci;
 
     public function __construct(protected PlanRepository $plan)
@@ -46,11 +48,11 @@ class PlanController extends Controller
                 $query->where('parent', $parent); // Pastikan kolom bernama 'parent'
                 $query->where('sumber', 'OpenKab'); // Pastikan kolom bernama 'parent'
             })->with('point');
-        } 
+        }
         // Filter berdasarkan ID
         elseif ($id) {
             $coordinate->where('id', $id)->with('point');
-        } 
+        }
         // Jika tidak ada filter parent atau ID, muat relasi
         else {
             $coordinate->with(['point', 'config']);
@@ -58,13 +60,13 @@ class PlanController extends Controller
 
         // Filter tambahan berdasarkan relasi 'config'
         $coordinate->whereHas('config', function ($query) {
-            if (!empty($this->kabupaten)) {
+            if (! empty($this->kabupaten)) {
                 $query->where('kode_kabupaten', $this->kabupaten);
             }
-            if (!empty($this->kecamatan)) {
+            if (! empty($this->kecamatan)) {
                 $query->where('kode_kecamatan', $this->kecamatan);
             }
-            if (!empty($this->desa)) {
+            if (! empty($this->desa)) {
                 $query->where('kode_desa', $this->desa);
             }
         });
@@ -72,19 +74,17 @@ class PlanController extends Controller
         $coordinate->whereHas('point', function ($query) {
             $query->where('sumber', 'OpenKab'); // Pastikan kolom bernama 'parent'
 
-            if (!empty($this->kategori)) {
+            if (! empty($this->kategori)) {
                 $query->where('parrent', $this->kategori);
-
             }
         });
 
-        if (!empty($this->kata_kunci)) {
+        if (! empty($this->kata_kunci)) {
             $coordinate->where(function ($query) {
-                $query->where('nama', 'LIKE', '%' . $this->kata_kunci . '%')
-                      ->orWhere('desk', 'LIKE', '%' . $this->kata_kunci . '%');
+                $query->where('nama', 'LIKE', '%'.$this->kata_kunci.'%')
+                      ->orWhere('desk', 'LIKE', '%'.$this->kata_kunci.'%');
             });
         }
-        
 
         // Eksekusi query
         $result = $coordinate->get();
@@ -92,5 +92,4 @@ class PlanController extends Controller
         // Kembalikan hasil dalam format JSON
         return response()->json($result);
     }
-
 }

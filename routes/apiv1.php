@@ -226,6 +226,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('satu-data')->group(function () {
         Route::get('dtks', DTKSController::class);
     });
+
+    /**
+     * Sync Penduduk
+     */
+    Route::group(['prefix' => 'penduduk', 'controller' => PendudukController::class], function () {
+        Route::post('/', 'syncRemovePenduduk');
+        Route::post('/storedata', 'syncStorePenduduk');
+    });
 });
 
 // Statistik

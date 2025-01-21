@@ -3,9 +3,9 @@
 namespace App\Imports;
 
 use App\Models\Config;
-use Exception;
 use App\Models\SyncPenduduk;
 use App\Models\SyncTingkatPendidikan;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -36,9 +36,6 @@ class SyncPendudukImport implements ToCollection, WithHeadingRow, WithChunkReadi
         return 1000;
     }
 
-    /**
-     * @param Collection $collection
-     */
     public function collection(Collection $collection)
     {
         DB::beginTransaction();
@@ -47,16 +44,15 @@ class SyncPendudukImport implements ToCollection, WithHeadingRow, WithChunkReadi
             $kode_desa = Arr::flatten(Config::where('kode_kecamatan', str_replace('.', '', $this->kode_kecamatan))->pluck('kode_desa'));
 
             foreach ($collection as $index => $value) {
-
                 $kd_desa = str_replace('.', '', $value['desa_id']);
 
-                if (!in_array($kd_desa, $kode_desa)) {
+                if (! in_array($kd_desa, $kode_desa)) {
                     Log::debug('Desa tidak terdaftar');
 
                     DB::rollBack(); // rollback data yang sudah masuk karena ada data yang bermasalah
                     Storage::deleteDirectory('temp'); // Hapus folder temp ketika gagal
 
-                    throw  new Exception('kode Desa pada baris ke-' . $index + 2 . ' tidak terdaftar . kode Desa yang bermasalah : ' . $value['desa_id']);
+                    throw  new Exception('kode Desa pada baris ke-'.$index + 2 .' tidak terdaftar . kode Desa yang bermasalah : '.$value['desa_id']);
                 }
 
                 $config = Config::where('kode_desa', $kd_desa)->first();
@@ -132,16 +128,16 @@ class SyncPendudukImport implements ToCollection, WithHeadingRow, WithChunkReadi
                     'kecamatan_id' => $this->kode_kecamatan,
                     'semester' => ($dt->format('n') <= 6) ? 1 : 2,
                     'tahun' => $dt->format('Y'),
-                    'tidak_tamat_sekolah' => $collection->filter(fn($value, $key) => $value['pendidikan_dlm_kk'] <= 2)->count(),
-                    'tamat_sd' => $collection->filter(fn($value, $key) => $value['pendidikan_dlm_kk'] == 3)->count(),
-                    'tamat_smp' => $collection->filter(fn($value, $key) => $value['pendidikan_dlm_kk'] == 4)->count(),
-                    'tamat_sma' => $collection->filter(fn($value, $key) => $value['pendidikan_dlm_kk'] == 5)->count(),
-                    'tamat_diploma_sederajat' => $collection->filter(fn($value, $key) => $value['pendidikan_dlm_kk'] >= 6)->count(),
+                    'tidak_tamat_sekolah' => $collection->filter(fn ($value, $key) => $value['pendidikan_dlm_kk'] <= 2)->count(),
+                    'tamat_sd' => $collection->filter(fn ($value, $key) => $value['pendidikan_dlm_kk'] == 3)->count(),
+                    'tamat_smp' => $collection->filter(fn ($value, $key) => $value['pendidikan_dlm_kk'] == 4)->count(),
+                    'tamat_sma' => $collection->filter(fn ($value, $key) => $value['pendidikan_dlm_kk'] == 5)->count(),
+                    'tamat_diploma_sederajat' => $collection->filter(fn ($value, $key) => $value['pendidikan_dlm_kk'] >= 6)->count(),
                 ]
             );
 
             DB::commit(); // Commit transaksi jika semua berhasil
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack(); // Rollback jika ada kesalahan
             throw $e->getMessage(); // Lempar ulang error untuk ditangani lebih lanjut
         }

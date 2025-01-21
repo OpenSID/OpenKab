@@ -16,10 +16,10 @@ use App\Models\PendudukStatus;
 use App\Models\PendudukStatusDasar;
 use App\Models\Sex;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
-use Illuminate\Support\Facades\Storage;
 
 class PendudukController extends Controller
 {
@@ -206,7 +206,7 @@ class PendudukController extends Controller
     }
 
     /**
-     * Hapus Data Penduduk Sesuai OpenSID
+     * Hapus Data Penduduk Sesuai OpenSID.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -222,7 +222,7 @@ class PendudukController extends Controller
     }
 
     /**
-     * Tambah dan Ubah Data dan Foto Penduduk Sesuai OpenSID
+     * Tambah dan Ubah Data dan Foto Penduduk Sesuai OpenSID.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -261,5 +261,4 @@ class PendudukController extends Controller
             'message' => 'Data Foto Telah Berhasil di Sinkronkan',
         ]);
     }
-
 }

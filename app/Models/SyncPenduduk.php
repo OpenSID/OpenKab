@@ -12,7 +12,7 @@ class SyncPenduduk extends Model
     protected $guarded = [];
 
     /**
-     * Relation Methods
+     * Relation Methods.
      * */
     public function getPendudukAktif($did, $year)
     {
@@ -56,5 +56,4 @@ class SyncPenduduk extends Model
     {
         return $this->hasMany(SuplemenTerdata::class, 'penduduk_id', 'id');
     }
-
 }

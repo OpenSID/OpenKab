@@ -24,7 +24,7 @@ class SyncStorePendudukRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'file|mimes:zip|max:5120'
+            'file' => 'file|mimes:zip|max:5120',
         ];
     }
 }

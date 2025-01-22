@@ -12,6 +12,7 @@ Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan
 8. [#491](https://github.com/OpenSID/OpenKab/issues/491) Penambahan halaman geo spasial.
 9. [#480](https://github.com/OpenSID/OpenKab/issues/480) Penambahan preview data suplemen.
 10. [#501](https://github.com/OpenSID/OpenKab/issues/501) Penambahan pengaturan token api key OpenDK.
+11. [#502](https://github.com/OpenSID/OpenKab/issues/502) Penambahan API kebutuhan untuk mengambil identitas desa dengan parameter kode kecamatan dari OpenDK. 
 
 #### Perbaikan BUG
 

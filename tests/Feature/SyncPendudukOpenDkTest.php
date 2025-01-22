@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\Config;
 use App\Models\Penduduk;
 use App\Models\Setting;
@@ -12,7 +10,6 @@ use Tests\TestCase;
 
 class SyncPendudukOpenDkTest extends TestCase
 {
-
     /**
      * A basic feature test example.
      *
@@ -23,7 +20,7 @@ class SyncPendudukOpenDkTest extends TestCase
         $token = Setting::where('key', 'opendk_api_key')->first()->value;
         $kodeKecamatan = Config::inRandomOrder()->first()->kode_kecamatan;
 
-        $totalKecamatan = Penduduk::whereRelation('config','kode_kecamatan', $kodeKecamatan)->count();
+        $totalKecamatan = Penduduk::whereRelation('config', 'kode_kecamatan', $kodeKecamatan)->count();
         if (! $token) {
             $this->fail('Token not found');
         }
@@ -37,7 +34,7 @@ class SyncPendudukOpenDkTest extends TestCase
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Authorization' => 'Bearer '.$token,
-        ]); 
+        ]);
 
         // Pastikan responsnya berhasil
         $response->assertStatus(Response::HTTP_OK);
@@ -45,10 +42,10 @@ class SyncPendudukOpenDkTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'attributes' => [                        
+                    'attributes' => [
                         'config_id',
                         'nama',
-                        'nik',                        
+                        'nik',
                     ],
                 ],
             ],

@@ -12,7 +12,6 @@ use App\Models\PendudukStatus;
 use App\Models\PendudukStatusDasar;
 use App\Models\Sex;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 

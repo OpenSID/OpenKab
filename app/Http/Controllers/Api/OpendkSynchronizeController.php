@@ -21,7 +21,6 @@ class OpendkSynchronizeController extends Controller
 
     public function getData(Request $request)
     {
-        \Log::error('message '.auth()->user());
         $namaKecamatan = $request->get('nama_kecamatan');
         $kodeKecamatan = $request->get('kode_kecamatan');
         OpendkSynchronize::upsert([

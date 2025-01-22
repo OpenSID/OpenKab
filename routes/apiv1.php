@@ -27,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
+use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\KelembagaanController;
 use App\Http\Controllers\Api\InfrastrukturController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
@@ -243,6 +244,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
         });        
     });
+
+    Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
+        Route::get('desa', [DesaController::class, 'index']);
+    });    
     
 });
 
@@ -287,7 +292,7 @@ Route::get('data-website', WebsiteController::class);
 Route::get('data-summary', SummaryController::class);
 
 // Desa teraktif
-Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
+Route::get('desa-aktif', [KategoriDesaController::class, 'index']);
 
 Route::post('/suplemen', [SuplemenController::class, 'store']);
 Route::post('/suplemen/terdata/hapus', [SuplemenController::class, 'delete_multiple'])->name('suplemen-terdata.delete-multiple');

@@ -26,8 +26,8 @@ class DesaRepository
                 'kode_kecamatan',
                 'kode_desa',
                 'nama_desa',
-                'website',                
-            ])    
+                'website',
+            ])
             ->allowedFields([
                 'id',
                 'kode_kecamatan',
@@ -35,7 +35,7 @@ class DesaRepository
                 'kode_pos',
                 'kode_desa',
                 'nama_desa',
-                'website',                
+                'website',
                 'path',
                 'lat',
                 'lng',

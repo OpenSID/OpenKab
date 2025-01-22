@@ -27,9 +27,6 @@ define('ATTRIBUTES', serialize([
     'time' => 'Input Jam',
     'textarea' => 'Text Area',
     'select-manual' => 'Pilihan (Kustom)',
-    'select-otomatis' => 'Pilihan (Referensi)',
-    'hari' => 'Input Hari',
-    'hari-tanggal' => 'Input Hari dan Tanggal',
 ]));
 
 if (! function_exists('openkab_versi')) {

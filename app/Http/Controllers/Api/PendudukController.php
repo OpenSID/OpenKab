@@ -4,11 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\PendudukRepository;
 use App\Http\Requests\PindahRequest;
-use App\Http\Requests\SyncRemovePendudukRequest;
-use App\Http\Requests\SyncStorePendudukRequest;
 use App\Http\Transformers\PendudukTransformer;
-use App\Imports\SyncPendudukImport;
-use App\Jobs\PendudukQueueJob;
 use App\Models\LogKeluarga;
 use App\Models\LogPenduduk;
 use App\Models\Penduduk;
@@ -18,8 +14,6 @@ use App\Models\Sex;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
-use ZipArchive;
-use Illuminate\Support\Facades\Storage;
 
 class PendudukController extends Controller
 {
@@ -204,62 +198,4 @@ class PendudukController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-    /**
-     * Hapus Data Penduduk Sesuai OpenSID
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function syncRemovePenduduk(SyncRemovePendudukRequest $request)
-    {
-        // dispatch queue job penduduk
-        PendudukQueueJob::dispatch($request->all());
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Proses sync Data Penduduk OpenSID sedang berjalan',
-        ]);
-    }
-
-    /**
-     * Tambah dan Ubah Data dan Foto Penduduk Sesuai OpenSID
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function syncStorePenduduk(SyncStorePendudukRequest $request)
-    {
-        try {
-            // Upload file zip temporary.
-            $file = $request->file('file');
-            $file->storeAs('temp', $name = $file->getClientOriginalName());
-
-            // Temporary path file
-            $path = storage_path("app/temp/{$name}");
-            $extract = storage_path('app/public/penduduk/foto/');
-
-            // Ekstrak file
-            $zip = new ZipArchive();
-            $zip->open($path);
-            $zip->extractTo($extract);
-            $zip->close();
-
-            // Proses impor excell
-            (new SyncPendudukImport($request->kode_kecamatan))
-                ->queue($extract.$excellName = Str::replaceLast('zip', 'xlsx', $name));
-        } catch (\Exception $e) {
-            report($e);
-
-            return back()->with('error', 'Import data gagal.');
-        }
-
-        // Hapus folder temp ketika sudah selesai
-        Storage::deleteDirectory('temp');
-        // Hapus file excell temp ketika sudah selesai
-        Storage::disk('public')->delete('penduduk/foto/'.$excellName);
-
-        return response()->json([
-            'message' => 'Data Foto Telah Berhasil di Sinkronkan',
-        ]);
-    }
-
 }

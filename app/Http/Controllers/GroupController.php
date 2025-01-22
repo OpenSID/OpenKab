@@ -36,7 +36,7 @@ class GroupController extends Controller
         $listPermission = $this->generateListPermission();
         $team = Team::find($id);
         $isAdmin = $team->name == 'administrator' ? true : false;
-        
+
         return view('group.form', ['id' => $id])->with($listPermission)->with('isAdmin', $isAdmin);
     }
 }

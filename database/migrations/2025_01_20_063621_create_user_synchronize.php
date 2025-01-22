@@ -5,7 +5,6 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
 use Illuminate\Database\Migrations\Migration;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 return new class extends Migration
@@ -35,17 +34,17 @@ return new class extends Migration
         UserTeam::create([
             'id_user' => $user->id,
             'id_team' => $team->id,
-        ]);        
-        // assign role berdasarkan team        
+        ]);
+        // assign role berdasarkan team
         $role = Role::create(
             [
                 'name' => $team->name,
                 'team_id' => $team->id,
                 'guard_name' => 'web',
             ]
-        );        
+        );
         setPermissionsTeamId($team->id);
-        $user->assignRole($role);        
+        $user->assignRole($role);
     }
 
     /**
@@ -55,10 +54,10 @@ return new class extends Migration
      */
     public function down()
     {
-        $team = Team::where('name', 'synchronize')->first();        
+        $team = Team::where('name', 'synchronize')->first();
         UserTeam::where('id_team', $team)->delete();
-        $user = User::where('username', 'synchronize')->first();        
-        $user->delete();                           
+        $user = User::where('username', 'synchronize')->first();
+        $user->delete();
         $team->role()->delete();
         $team->delete();
     }

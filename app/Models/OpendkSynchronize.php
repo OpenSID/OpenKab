@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OpendkSynchronize extends Model
 {
-    use HasFactory;    
+    use HasFactory;
 
     /** {@inheritdoc} */
     protected $table = 'opendk_synchronize';
@@ -20,5 +20,5 @@ class OpendkSynchronize extends Model
     protected $fillable = [
         'kode_kecamatan',
         'nama_kecamatan',
-    ];    
+    ];
 }

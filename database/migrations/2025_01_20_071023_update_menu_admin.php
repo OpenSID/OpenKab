@@ -18,23 +18,24 @@ return new class extends Migration
             'icon' => 'far fa-fw fa-circle',
             'text' => 'OpenDK',
             'url' => 'pengaturan/opendk',
-            'permission' => 'pengaturan-opendk',            
+            'permission' => 'pengaturan-opendk',
         ];
         $team = Team::where('name', 'administrator')->first();
         $menuOrder = $team->menu_order ?? [];
-        if(!$menuOrder) {
+        if (! $menuOrder) {
             return;
         }
-        $menuOrderBaru = collect($menuOrder)->map(function ($item) use($menuBaru) {                        
-            if($item['text'] == 'Pengaturan'){                
-                if(!isset($item['submenu'])) {
+        $menuOrderBaru = collect($menuOrder)->map(function ($item) use ($menuBaru) {
+            if ($item['text'] == 'Pengaturan') {
+                if (! isset($item['submenu'])) {
                     $item['submenu'] = [];
-                }                
+                }
                 $menuBaru['parent_id'] = $item['id'];
-                $item['submenu'][] = $menuBaru;                
+                $item['submenu'][] = $menuBaru;
             }
+
             return $item;
-        })->toArray();        
+        })->toArray();
         $team->menu_order = $menuOrderBaru;
         $team->save();
     }
@@ -50,21 +51,22 @@ return new class extends Migration
             'icon' => 'far fa-fw fa-circle',
             'text' => 'OpenDK',
             'url' => 'pengaturan/opendk',
-            'permission' => 'pengaturan-opendk',            
+            'permission' => 'pengaturan-opendk',
         ];
         $team = Team::where('name', 'administrator')->first();
         $menuOrder = $team->menu_order ?? [];
-        if(!$menuOrder) {
+        if (! $menuOrder) {
             return;
         }
-        $menuOrderBaru = collect($menuOrder)->map(function ($item) use($menuBaru) {            
-            if($item['text'] === 'Pengaturan'){                
-                $item['submenu'] = collect($item['submenu'])->filter(function ($submenu) use($menuBaru) {
+        $menuOrderBaru = collect($menuOrder)->map(function ($item) use ($menuBaru) {
+            if ($item['text'] === 'Pengaturan') {
+                $item['submenu'] = collect($item['submenu'])->filter(function ($submenu) use ($menuBaru) {
                     return $submenu['url'] !== $menuBaru['url'];
-                })->toArray();                
+                })->toArray();
             }
+
             return $item;
-        })->toArray();        
+        })->toArray();
 
         $team->menu_order = $menuOrderBaru;
         $team->save();

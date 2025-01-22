@@ -205,6 +205,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/', 'store');
                     Route::put('/{id}', 'update');
                     Route::get('/menu', 'menu');
+                    Route::get('/listModul/{id}', 'listModul');
+                    Route::put('/updateMenu/{id}', 'updateMenu');
                 });
         });
 
@@ -270,6 +272,7 @@ Route::get('data-summary', SummaryController::class);
 Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
 
 Route::post('/suplemen', [SuplemenController::class, 'store']);
+Route::post('/suplemen/terdata/hapus', [SuplemenController::class, 'delete_multiple'])->name('suplemen-terdata.delete-multiple');
 Route::post('/suplemen/update/{id}', [SuplemenController::class, 'update']);
 Route::get('/suplemen', [SuplemenController::class, 'index']);
 Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'detail']);

@@ -279,3 +279,5 @@ Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'deta
 Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
 Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');
+
+Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);

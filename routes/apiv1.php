@@ -226,6 +226,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('satu-data')->group(function () {
         Route::get('dtks', DTKSController::class);
     });
+
+    Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
+        Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
+    });    
+
 });
 
 // Statistik
@@ -279,5 +284,3 @@ Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'deta
 Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
 Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');
-
-Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);

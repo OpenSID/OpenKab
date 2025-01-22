@@ -530,7 +530,11 @@ class PendudukRepository
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                AllowedFilter::exact('kode_kecamatan'),
+                AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
+                    $query->whereHas('config', function ($query) use ($value) {
+                        $query->where('kode_kecamatan', $value);
+                    });
+                }),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where(function ($query) use ($value) {
                         $query->where('nama', 'like', "%{$value}%")

@@ -66,10 +66,6 @@
         </div>
     </div>
 
-    <a type="button" class="btn bg-white p-2 text-muted {{ Route::getCurrentRoute()->getName() == 'presisi.ekonomi' ? 'active' : '' }}" href="{{ url('presisi/ekonomi') }}">
-        <i class="fa fa-solid fa-briefcase"></i> Ekonomi
-    </a>
-
     <a type="button" class="btn bg-white p-2 text-muted {{ Route::getCurrentRoute()->getName() == 'presisi.kesehatan' ? 'active' : '' }}" href="{{ url('presisi/kesehatan') }}">
         <i class="fa fa-solid fa-camera-retro pl-1"></i> E-Stunting
     </a>

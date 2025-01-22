@@ -18,3 +18,4 @@ Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan
 
 1. [#482](https://github.com/OpenSID/OpenKab/issues/482) Susun ulang urutan menu pada OpenKab.
 2. [#487](https://github.com/OpenSID/OpenKab/issues/487) Rapikan tampilan menu horizontal.
+3. [#490](https://github.com/OpenSID/OpenKab/issues/490) Hapus menu yang tidak terpakai. 

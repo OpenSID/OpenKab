@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\SettingRepository;
-use App\Http\Requests\UpdateSettingRequest;
 use App\Http\Transformers\SettingTransformer;
 use App\Models\Setting;
 use App\Models\User;
@@ -25,19 +24,17 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         try {
             foreach ($request->all() as $key => $value) {
-                if($key == 'opendk_api_key'){
+                if ($key == 'opendk_api_key') {
                     $this->removeTokenSynchronize($value);
                 }
                 Setting::where('key', $key)->update(['value' => $value]);
-                activity('data-log')->event('updated')->withProperties($request)->log('setting Aplikasi');                                
+                activity('data-log')->event('updated')->withProperties($request)->log('setting Aplikasi');
             }
 
             return response()->json([
@@ -53,7 +50,8 @@ class SettingController extends Controller
         }
     }
 
-    private function removeTokenSynchronize($token){
+    private function removeTokenSynchronize($token)
+    {
         $user = User::whereUsername('synchronize')->first();
         $excludeToken = PersonalAccessToken::findToken($token);
         $user->tokens()->where('id', '!=', $excludeToken->id)->delete();

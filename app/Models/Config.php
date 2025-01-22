@@ -94,11 +94,9 @@ class Config extends Model
     {
         return $query->orderByRaw('(SELECT sum(jumlah) FROM sys_traffic WHERE config_id = config.id) DESC');
     }
-    
+
     /**
-     * Get the sebutanDesa associated with the Config
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Get the sebutanDesa associated with the Config.
      */
     public function sebutanDesa(): HasOne
     {

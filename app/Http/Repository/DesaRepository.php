@@ -20,14 +20,14 @@ class DesaRepository
                         $query->where('kode_desa', 'like', "%{$value}%");
                         $query->where('website', 'like', "%{$value}%");
                     });
-                }),              
+                }),
             ])->allowedSorts([
                 'kode_kecamatan',
                 'kode_desa',
                 'nama_desa',
-                'website',                
-            ])    
+                'website',
+            ])
             ->allowedFields('*')
             ->jsonPaginate();
-    }    
+    }
 }

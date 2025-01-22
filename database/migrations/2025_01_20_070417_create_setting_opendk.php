@@ -30,7 +30,7 @@ return new class extends Migration
             'value' => '',
             'type' => 'textarea',
             'description' => 'Pengaturan API Key Untuk Sinkronisasi OpenDK',
-        ]);        
+        ]);
     }
 
     /**

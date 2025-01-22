@@ -38,8 +38,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -74,10 +72,7 @@
                     data: null,
                 },
                 {
-                    data: function(data) {
-                        if (data.attributes.name == 'administrator') {
-                            return ``;
-                        }
+                    data: function(data) {                        
                         let canEdit = `{{ $canedit }}`
                         let canDelete = `{{ $candelete }}`
                         let buttonEdit = canEdit ? `<a href="{{ url('pengaturan/groups/edit/${data.id}') }}">
@@ -88,6 +83,9 @@
                         let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
                                     <i class="fas fa-trash"></i>
                                 </button>` : ``;
+                        if (data.attributes.name == 'administrator') {
+                            buttonDelete = '';
+                        }                                
                         return `${buttonEdit} ${buttonDelete}`;
                     },
                 },

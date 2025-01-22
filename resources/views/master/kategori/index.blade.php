@@ -112,8 +112,8 @@
                             let canEdit = `{{ $canedit }}`
                             let canDelete = `{{ $candelete }}`
                             var id = row.id;
-                            var sub = (row.attributes.parrent == 0) ? `<a href="{{ url('master/kategori/') }}/${id}" class="btn btn-info btn-sm edit" data-id="${id}" title="Ubah"><i class="fas fa-bars"></i></a>` : '';
-                            let buttonEdit = canEdit ? `<a href="{{ url('master/kategori/edit') }}/${id}/{{ (int) request()->route('parrent') }}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
+                            var sub = (row.attributes.parrent == 0) ? `<a href="{{ url('pengaturan-opensid/kategori-artikel/') }}/${id}" class="btn btn-info btn-sm edit" data-id="${id}" title="Ubah"><i class="fas fa-bars"></i></a>` : '';
+                            let buttonEdit = canEdit ? `<a href="{{ url('pengaturan-opensid/kategori-artikel/edit') }}/${id}/{{ (int) request()->route('parrent') }}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
                                         <i class="fas fa-edit"></i>
                                     </a>` : ``;
                             let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Ubah">

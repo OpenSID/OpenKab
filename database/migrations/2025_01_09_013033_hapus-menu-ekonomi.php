@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -12,7 +12,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Artisan::call('admin:menu-update');
+        // Insert data baru tanpa tag <i> di kolom name
+        DB::table('menus')->where('name', 'Ekonomi')->delete();
     }
 
     /**
@@ -22,6 +23,5 @@ return new class extends Migration
      */
     public function down()
     {
-        //
     }
 };

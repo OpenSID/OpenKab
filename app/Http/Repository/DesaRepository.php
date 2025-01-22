@@ -21,7 +21,7 @@ class DesaRepository
                         $query->orWhere('kode_desa', 'like', "%{$value}%");
                         $query->orWhere('website', 'like', "%{$value}%");
                     });
-                }),              
+                }),
             ])->allowedSorts([
                 'kode_kecamatan',
                 'kode_desa',
@@ -41,5 +41,5 @@ class DesaRepository
                 'lng',
             ])
             ->jsonPaginate();
-    }    
+    }
 }

@@ -17,7 +17,7 @@ class DesaControllerApiTest extends TestCase
     public function test_get_data_kecamatan_valid_token()
     {
         $token = Setting::where('key', 'opendk_api_key')->first()->value;
-        $kecamatan = Config::inRandomOrder()->first()->kode_kecamatan;        
+        $kecamatan = Config::inRandomOrder()->first()->kode_kecamatan;
         $totalDesa = Config::where('kode_kecamatan', $kecamatan)->count();
         if (! $token) {
             $this->fail('Token not found');
@@ -30,17 +30,17 @@ class DesaControllerApiTest extends TestCase
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Authorization' => 'Bearer '.$token,
-        ]);        
+        ]);
         // Pastikan responsnya berhasil
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonPath('meta.pagination.total', $totalDesa);
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'attributes' => [                        
+                    'attributes' => [
                         'kode_desa',
                         'nama_desa',
-                        'sebutan_desa',                        
+                        'sebutan_desa',
                     ],
                 ],
             ],

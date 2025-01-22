@@ -94,4 +94,14 @@ class Config extends Model
     {
         return $query->orderByRaw('(SELECT sum(jumlah) FROM sys_traffic WHERE config_id = config.id) DESC');
     }
+    
+    /**
+     * Get the sebutanDesa associated with the Config
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function sebutanDesa(): HasOne
+    {
+        return $this->hasOne(SettingAplikasi::class, 'config_id', 'id')->where('key', 'sebutan_desa');
+    }
 }

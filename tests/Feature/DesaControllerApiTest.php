@@ -17,7 +17,7 @@ class DesaControllerApiTest extends TestCase
     public function test_get_data_kecamatan_valid_token()
     {
         $token = Setting::where('key', 'opendk_api_key')->first()->value;
-        $kecamatan = Config::inRandomOrder()->first()->kode_kecamatan;
+        $kecamatan = Config::inRandomOrder()->first()->kode_kecamatan;        
         $totalDesa = Config::where('kode_kecamatan', $kecamatan)->count();
         if (! $token) {
             $this->fail('Token not found');

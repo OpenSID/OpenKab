@@ -2,6 +2,7 @@
 
 namespace App\Http\Transformers;
 
+use Carbon\Carbon;
 use App\Models\LaporanSinkronisasi;
 use League\Fractal\TransformerAbstract;
 
@@ -11,13 +12,13 @@ class LaporanPendudukTransform extends TransformerAbstract
     {
         return [
             'id' => $penduduk->id,
-            'config' => $penduduk->config_id,
-            'tipe' => $penduduk->tipe,
+            'config' => $penduduk->config,
             'judul' => $penduduk->judul,
             'tahun' => $penduduk->tahun,
             'bulan' => $penduduk->semester,
             'nama_file' => $penduduk->nama_file,
             'kirim' => $penduduk->kirim,
+            'tanggal_lapor' => Carbon::parse($penduduk->created_at)->format('d-m-Y H:i:s'),
         ];
     }
 }

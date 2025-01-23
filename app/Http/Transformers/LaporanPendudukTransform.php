@@ -2,8 +2,8 @@
 
 namespace App\Http\Transformers;
 
-use Carbon\Carbon;
 use App\Models\LaporanSinkronisasi;
+use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
 class LaporanPendudukTransform extends TransformerAbstract

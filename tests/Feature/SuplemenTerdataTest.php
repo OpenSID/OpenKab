@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class SuplemenTerdataTest extends TestCase
 {
-
     /**
      * Test delete_multiple function with valid IDs.
      */

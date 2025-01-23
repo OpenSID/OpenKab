@@ -259,6 +259,12 @@ final class Modul extends Enum
                     'url' => 'pengaturan/settings',
                     'permission' => 'pengaturan-settings',
                 ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'OpenDK',
+                    'url' => 'pengaturan/opendk',
+                    'permission' => 'pengaturan-opendk',
+                ],
             ],
         ],
     ];

@@ -33,7 +33,6 @@ class BantuanPesertaRepository
         return $bantuan->get();
     }
 
-    
     public function listBantuanPesertaSyncOpenDk($all = false)
     {
         $bantuan = QueryBuilder::for(BantuanPeserta::class)

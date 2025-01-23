@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Config;
 use App\Models\BantuanPeserta;
+use App\Models\Config;
 use App\Models\Setting;
 use Illuminate\Http\Response;
 use Tests\TestCase;

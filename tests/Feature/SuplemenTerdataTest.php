@@ -3,13 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\SuplemenTerdata;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class SuplemenTerdataTest extends TestCase
 {
-    use RefreshDatabase;
 
     /**
      * Test delete_multiple function with valid IDs.

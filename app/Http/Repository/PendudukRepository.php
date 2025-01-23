@@ -545,6 +545,7 @@ class PendudukRepository
             ])
             ->allowedSorts([
                 'nik',
+                'foto',
                 'nama',
                 'umur',
                 'created_at',

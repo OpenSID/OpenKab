@@ -3,7 +3,6 @@
 namespace App\Http\Repository;
 
 use App\Models\LaporanSinkronisasi;
-use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -28,5 +27,4 @@ class LaporanPendudukRepository
             ->allowedSorts(['id', 'tahun', 'semester'])
             ->jsonPaginate();
     }
-
 }

@@ -21,7 +21,6 @@ class SyncBantuanPesertaOpenDkTest extends TestCase
         $kodeKecamatan = Config::inRandomOrder()->first()->kode_kecamatan;
 
         $totalKecamatan = BantuanPeserta::whereRelation('config', 'kode_kecamatan', $kodeKecamatan)->count();
-       
 
         $url = '/api/v1/opendk/bantuan-peserta?'.http_build_query([
             'filter[kode_kecamatan]' => $kodeKecamatan,

@@ -21,11 +21,8 @@ class SyncBantuanOpenDkTest extends TestCase
         $kodeKecamatan = Config::inRandomOrder()->first()->kode_kecamatan;
 
         $totalKecamatan = Bantuan::whereRelation('config', 'kode_kecamatan', $kodeKecamatan)->count();
-        if (! $token) {
-            $this->fail('Token not found');
-        }
 
-        $url = '/api/v1/sync-bantuan-opendk?'.http_build_query([
+        $url = '/api/v1/opendk/bantuan?'.http_build_query([
             'filter[kode_kecamatan]' => $kodeKecamatan,
         ]);
 
@@ -44,7 +41,7 @@ class SyncBantuanOpenDkTest extends TestCase
                 '*' => [
                     'attributes' => [
                         'nama',
-                        'asal_dana',
+                        'asaldana',
                     ],
                 ],
             ],

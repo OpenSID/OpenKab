@@ -5,10 +5,8 @@ namespace Tests\Feature;
 use App\Models\Config;
 use App\Models\LaporanSinkronisasi;
 use App\Models\Setting;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Illuminate\Http\Response;
+use Tests\TestCase;
 
 class LaporanPendudukTest extends TestCase
 {
@@ -22,7 +20,7 @@ class LaporanPendudukTest extends TestCase
         $token = Setting::where('key', 'opendk_api_key')->first()->value;
         $kodeKecamatan = Config::inRandomOrder()->first()->kode_kecamatan;
 
-        $totalKecamatan = LaporanSinkronisasi::whereRelation('config','kode_kecamatan', $kodeKecamatan)->count();
+        $totalKecamatan = LaporanSinkronisasi::whereRelation('config', 'kode_kecamatan', $kodeKecamatan)->count();
         if (! $token) {
             $this->fail('Token not found');
         }
@@ -36,7 +34,7 @@ class LaporanPendudukTest extends TestCase
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Authorization' => 'Bearer '.$token,
-        ]); 
+        ]);
 
         // Pastikan responsnya berhasil
         $response->assertStatus(Response::HTTP_OK);
@@ -44,13 +42,13 @@ class LaporanPendudukTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'attributes' => [                        
+                    'attributes' => [
                         'tipe',
-                        'judul',                        
-                        'tahun',                        
-                        'bulan',                        
-                        'nama_file',                        
-                        'kirim',                        
+                        'judul',
+                        'tahun',
+                        'bulan',
+                        'nama_file',
+                        'kirim',
                     ],
                 ],
             ],

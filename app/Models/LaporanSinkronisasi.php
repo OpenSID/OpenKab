@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class LaporanSinkronisasi extends BaseModel
 {
@@ -25,5 +24,5 @@ class LaporanSinkronisasi extends BaseModel
     protected function scopeTipeLaporanPenduduk($query)
     {
         return $query->where('tipe', 'laporan_penduduk');
-    } 
+    }
 }

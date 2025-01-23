@@ -43,7 +43,6 @@ class SyncBantuanOpenDkTest extends TestCase
             'data' => [
                 '*' => [
                     'attributes' => [
-                        'config_id',
                         'nama',
                         'asal_dana',
                     ],

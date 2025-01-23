@@ -5,11 +5,9 @@ namespace App\Models;
 use App\Models\Traits\ConfigIdTrait;
 use App\Models\Traits\FilterWilayahTrait;
 
-
 class BantuanPeserta extends BaseModel
 {
     use FilterWilayahTrait;
-
     use ConfigIdTrait;
 
     /** {@inheritdoc} */

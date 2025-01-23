@@ -233,7 +233,7 @@ class Bantuan extends BaseModel
         return $query->selectRaw('YEAR(MIN(sdate)) AS tahun_awal, YEAR(MAX(edate)) AS tahun_akhir');
     }
 
-     /**
+    /**
      * Get the phone associated with the config.
      */
     public function config()

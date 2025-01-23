@@ -526,7 +526,7 @@ class PendudukRepository
 
     public function listPendudukSyncOpenDk()
     {
-        return QueryBuilder::for(Penduduk::class)
+        return QueryBuilder::for(Penduduk::withRef())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

@@ -45,4 +45,14 @@ class BantuanController extends Controller
             'data' => $this->bantuan->tahun(),
         ], Response::HTTP_OK);
     }
+
+    public function syncBantuanOpenDk()
+    {
+        return $this->fractal($this->bantuan->listBantuanSyncOpenDk(), new BantuanTransformer, 'daftar bantuan')->respond();
+    }
+
+    public function syncBantuanPesertaOpenDk()
+    {
+        return $this->fractal($this->bantuanPeserta->listBantuanPesertaSyncOpenDk(true), new BantuanPesertaTransformer, 'peserta bantuan')->respond();
+    }
 }

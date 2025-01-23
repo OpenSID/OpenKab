@@ -242,6 +242,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
         Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {            
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
+            Route::get('/sync-bantuan-opendk', [BantuanController::class, 'syncBantuanOpenDk']);
+            Route::get('/sync-bantuan-peserta-opendk', [BantuanController::class, 'syncBantuanPesertaOpenDk']);
         });        
     });
 

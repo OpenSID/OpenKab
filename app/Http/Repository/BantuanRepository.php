@@ -281,4 +281,27 @@ class BantuanRepository
     {
         return QueryBuilder::for(Bantuan::class)->count();
     }
+
+    public function listBantuanSyncOpenDk()
+    {
+        return  QueryBuilder::for(Bantuan::filterWilayah())
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sasaran'),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where('nama', 'LIKE', '%'.$value.'%')
+                        ->orWhere('asaldana', 'LIKE', '%'.$value.'%');
+                }),
+                AllowedFilter::callback('tahun', function ($query, $value) {
+                    $query->whereYear('sdate', '<=', $value)
+                        ->whereYear('edate', '>=', $value);
+                }),
+
+            ])
+            ->allowedSorts([
+                'nama',
+                'asaldana',
+            ])->jsonPaginate();
+    }
 }

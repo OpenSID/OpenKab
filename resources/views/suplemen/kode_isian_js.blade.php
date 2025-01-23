@@ -192,5 +192,4 @@
                 $(this).parents('.duplikasi').find('.isian').val('');
             });
 });
-
 </script>

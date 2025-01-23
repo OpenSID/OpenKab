@@ -25,7 +25,7 @@ class SyncPendudukOpenDkTest extends TestCase
             $this->fail('Token not found');
         }
 
-        $url = '/api/v1/sync-penduduk-opendk?'.http_build_query([
+        $url = '/api/v1/opendk/sync-penduduk-opendk?'.http_build_query([
             'filter[kode_kecamatan]' => $kodeKecamatan,
         ]);
 

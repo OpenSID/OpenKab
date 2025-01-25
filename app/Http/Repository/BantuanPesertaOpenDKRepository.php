@@ -38,7 +38,7 @@ class BantuanPesertaOpenDKRepository
         return $bantuan->get();
     }
 
-    public function getBantuanPeserta($all = false, $id, $kode_desa)
+    public function getBantuanPeserta($all, $id, $kode_desa)
     {
         $bantuan = QueryBuilder::for(BantuanPeserta::class)
             ->where('program_id', $id)
@@ -56,7 +56,7 @@ class BantuanPesertaOpenDKRepository
                     });
                 }),
                 AllowedFilter::callback('search', function ($query, $value) {
-                    $query->Where('kartu_nama', 'LIKE', '%' . $value . '%');
+                    $query->Where('kartu_nama', 'LIKE', '%'.$value.'%');
                 }),
             ])
             ->allowedSorts([
@@ -75,5 +75,4 @@ class BantuanPesertaOpenDKRepository
 
         return $bantuan->get();
     }
-
 }

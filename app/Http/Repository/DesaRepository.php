@@ -32,8 +32,8 @@ class DesaRepository
     }
 
     public function all()
-{
-    return Config::with('sebutanDesa')
-        ->get();  // Hanya get() tanpa filter dan sorting
-}
+    {
+        return Config::with('sebutanDesa')
+            ->get();  // Hanya get() tanpa filter dan sorting
+    }
 }

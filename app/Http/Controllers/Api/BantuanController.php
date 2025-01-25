@@ -6,12 +6,16 @@ use App\Http\Repository\BantuanPesertaRepository;
 use App\Http\Repository\BantuanRepository;
 use App\Http\Transformers\BantuanPesertaTransformer;
 use App\Http\Transformers\BantuanTransformer;
+use App\Http\Repository\BantuanPesertaOpenDKRepository;
+use App\Http\Repository\BantuanOpenDKRepository;
+use App\Http\Transformers\BantuanPesertaOpenDKTransformer;
+use App\Http\Transformers\BantuanOpenDKTransformer;
 use App\Models\Enums\SasaranEnum;
 use Symfony\Component\HttpFoundation\Response;
 
 class BantuanController extends Controller
 {
-    public function __construct(protected BantuanRepository $bantuan, protected BantuanPesertaRepository $bantuanPeserta)
+    public function __construct(protected BantuanRepository $bantuan, protected BantuanPesertaRepository $bantuanPeserta, protected BantuanOpenDKRepository $bantuanOpenDK, protected BantuanPesertaOpenDKRepository $bantuanPesertaOpenDK)
     {
     }
 
@@ -48,11 +52,21 @@ class BantuanController extends Controller
 
     public function syncBantuanOpenDk()
     {
-        return $this->fractal($this->bantuan->listBantuanSyncOpenDk(), new BantuanTransformer, 'daftar bantuan')->respond();
+        return $this->fractal($this->bantuanOpenDK->listBantuanSyncOpenDk(), new BantuanOpenDKTransformer, 'daftar bantuan')->respond();
+    }
+
+    public function getBantuanOpenDk($id)
+    {
+        return $this->fractal($this->bantuanOpenDK->getBantuan($id), new BantuanOpenDKTransformer, 'data bantuan')->respond();
     }
 
     public function syncBantuanPesertaOpenDk()
     {
-        return $this->fractal($this->bantuanPeserta->listBantuanPesertaSyncOpenDk(true), new BantuanPesertaTransformer, 'peserta bantuan')->respond();
+        return $this->fractal($this->bantuanPesertaOpenDK->listBantuanPesertaSyncOpenDk(true), new BantuanPesertaOpenDKTransformer, 'peserta bantuan')->respond();
+    }
+
+    public function getBantuanPesertaOpenDk($id, $kode_desa)
+    {
+        return $this->fractal($this->bantuanPesertaOpenDK->getBantuanPeserta(true, $id, $kode_desa), new BantuanPesertaOpenDKTransformer, 'peserta bantuan')->respond();
     }
 }

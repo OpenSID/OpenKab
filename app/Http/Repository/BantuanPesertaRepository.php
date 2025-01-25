@@ -32,34 +32,4 @@ class BantuanPesertaRepository
 
         return $bantuan->get();
     }
-
-    public function listBantuanPesertaSyncOpenDk($all = false)
-    {
-        $bantuan = QueryBuilder::for(BantuanPeserta::class)
-            ->allowedFields('*')
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-                AllowedFilter::exact('program_id'),
-                AllowedFilter::exact('peserta'),
-                AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
-                    $query->whereHas('config', function ($query) use ($value) {
-                        $query->where('kode_kecamatan', $value);
-                    });
-                }),
-                AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where('no_id_kartu', 'LIKE', '%'.$value.'%')
-                        ->orWhere('kartu_nama', 'LIKE', '%'.$value.'%');
-                }),
-            ])
-            ->allowedSorts([
-                'no_id_kartu',
-                'kartu_nama',
-            ]);
-
-        if ($all) {
-            return $bantuan->jsonPaginate();
-        }
-
-        return $bantuan->get();
-    }
 }

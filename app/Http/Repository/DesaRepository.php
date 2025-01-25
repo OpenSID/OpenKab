@@ -30,4 +30,10 @@ class DesaRepository
             ->allowedFields('*')
             ->jsonPaginate();
     }
+
+    public function all()
+{
+    return Config::with('sebutanDesa')
+        ->get();  // Hanya get() tanpa filter dan sorting
+}
 }

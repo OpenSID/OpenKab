@@ -5,7 +5,6 @@ namespace App\Http\Repository;
 use App\Models\Config;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Illuminate\Http\Request;
 
 class DesaRepository
 {
@@ -32,19 +31,17 @@ class DesaRepository
             ->jsonPaginate();
     }
 
-    public function all($kec = "")
-{
-    // Inisialisasi query
-    $query = Config::with('sebutanDesa');
+    public function all($kec = '')
+    {
+        // Inisialisasi query
+        $query = Config::with('sebutanDesa');
 
-    // Tambahkan filter berdasarkan kode_kecamatan
-    if ($kec) {
-        $query->where('kode_kecamatan', $kec);
-    }
+        // Tambahkan filter berdasarkan kode_kecamatan
+        if ($kec) {
+            $query->where('kode_kecamatan', $kec);
+        }
 
     // Eksekusi query dan kembalikan hasilnya
-    return $query->get(); // Mengambil semua data tanpa pagination
-}
-
-    
+        return $query->get(); // Mengambil semua data tanpa pagination
+    }
 }

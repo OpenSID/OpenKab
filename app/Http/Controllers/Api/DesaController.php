@@ -16,7 +16,7 @@ class DesaController extends Controller
         return $this->fractal($this->desa->list(), new DesaTransformer(), 'daftar desa')->respond();
     }
 
-    public function all($kec = "")
+    public function all($kec = '')
     {
         return $this->fractal($this->desa->all($kec), new DesaTransformer(), 'daftar desa')->respond();
     }

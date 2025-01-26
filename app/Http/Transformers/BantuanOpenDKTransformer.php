@@ -2,8 +2,8 @@
 
 namespace App\Http\Transformers;
 
-use App\Models\Bantuan;
 use App\Http\Repository\BantuanOpenDKRepository;
+use App\Models\Bantuan;
 use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
@@ -23,9 +23,9 @@ class BantuanOPenDKTransformer extends TransformerAbstract
             'status' => $bantuan->status,
             'nama_status' => $bantuan->nama_status,
             'asaldana' => $bantuan->asaldana,
-            'masa_berlaku' => (Carbon::parse($bantuan->sdate))->format(config('app.format.date')) .' - '. (Carbon::parse($bantuan->edate))->format(config('app.format.date')),
+            'masa_berlaku' => (Carbon::parse($bantuan->sdate))->format(config('app.format.date')).' - '.(Carbon::parse($bantuan->edate))->format(config('app.format.date')),
             'desa' => $bantuan->config->nama_desa,
-            'kode_desa' => $bantuan->config->kode_desa
+            'kode_desa' => $bantuan->config->kode_desa,
         ];
     }
 

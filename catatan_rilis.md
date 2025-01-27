@@ -9,6 +9,10 @@ Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan
 5. [#477](https://github.com/OpenSID/OpenKab/issues/477) Penambahan pengaturan menu yang tampil bisa vertikal & horizontal.
 6. [#475](https://github.com/OpenSID/OpenKab/issues/475) Penambahan fungsi multiple hapus pada halaman suplemen terdata.
 7. [#489](https://github.com/OpenSID/OpenKab/issues/489) Penambahan fungsi pengaturan menu pada halaman admin.
+8. [#491](https://github.com/OpenSID/OpenKab/issues/491) Penambahan halaman geo spasial.
+9. [#480](https://github.com/OpenSID/OpenKab/issues/480) Penambahan preview data suplemen.
+10. [#501](https://github.com/OpenSID/OpenKab/issues/501) Penambahan pengaturan token api key OpenDK.
+11. [#502](https://github.com/OpenSID/OpenKab/issues/502) Penambahan API kebutuhan untuk mengambil identitas desa dengan parameter kode kecamatan dari OpenDK. 
 
 #### Perbaikan BUG
 
@@ -18,3 +22,4 @@ Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan
 
 1. [#482](https://github.com/OpenSID/OpenKab/issues/482) Susun ulang urutan menu pada OpenKab.
 2. [#487](https://github.com/OpenSID/OpenKab/issues/487) Rapikan tampilan menu horizontal.
+3. [#490](https://github.com/OpenSID/OpenKab/issues/490) Hapus menu yang tidak terpakai. 

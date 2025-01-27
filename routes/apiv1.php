@@ -29,8 +29,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
+use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\KelembagaanController;
 use App\Http\Controllers\Api\InfrastrukturController;
+use App\Http\Controllers\Api\OpendkSynchronizeController;
+use App\Http\Controllers\Api\SettingController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +81,7 @@ Route::middleware('auth:sanctum')->get('validate-token', function (Request $requ
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/token', [AuthController::class, 'token']);
     Route::post('/logout', [AuthController::class, 'logOut']);
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -210,6 +215,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::get('/listModul/{id}', 'listModul');
                     Route::put('/updateMenu/{id}', 'updateMenu');
                 });
+            Route::controller(SettingController::class)
+                ->prefix('settings')->group(function () {
+                    Route::get('/', 'index');                                                            
+                    Route::put('/{id}', 'update');
+                });
         });
 
      // Prodeskel
@@ -228,6 +238,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('satu-data')->group(function () {
         Route::get('dtks', DTKSController::class);
     });
+
+    // Sinkronisasi OpenDK
+    Route::prefix('opendk')->group(function () {
+        Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
+        Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {            
+            Route::get('data', [OpendkSynchronizeController::class, 'getData']);
+        });        
+    });
+
+    Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
+        Route::get('desa', [DesaController::class, 'index']);
+    });    
+    
 });
 
 // Statistik
@@ -271,7 +294,7 @@ Route::get('data-website', WebsiteController::class);
 Route::get('data-summary', SummaryController::class);
 
 // Desa teraktif
-Route::get('/desa-aktif', [KategoriDesaController::class, 'index']);
+Route::get('desa-aktif', [KategoriDesaController::class, 'index']);
 
 Route::post('/suplemen', [SuplemenController::class, 'store']);
 Route::post('/suplemen/terdata/hapus', [SuplemenController::class, 'delete_multiple'])->name('suplemen-terdata.delete-multiple');

@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\KelembagaanController;
 use App\Http\Controllers\Api\InfrastrukturController;
+use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
 use App\Http\Controllers\Api\SettingController;
 use Illuminate\Support\Facades\Auth;
@@ -242,10 +243,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
         Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {            
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
-          Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
+            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
+            Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
         });        
     });
-
+    
     Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
         Route::get('desa', [DesaController::class, 'index']);
     });    

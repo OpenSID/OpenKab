@@ -244,13 +244,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {            
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
             Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
+            Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
         });        
     });
     
     Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
         Route::get('desa', [DesaController::class, 'index']);
     });    
-    
 });
 
 // Statistik

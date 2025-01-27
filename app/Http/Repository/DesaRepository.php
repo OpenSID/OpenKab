@@ -14,11 +14,12 @@ class DesaRepository
             ->allowedFilters([
                 AllowedFilter::exact('kode_kecamatan'),
                 AllowedFilter::exact('kode_desa'),
+                AllowedFilter::exact('id'),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where(function ($query) use ($value) {
-                        $query->where('nama_desa', 'like', "%{$value}%");
-                        $query->where('kode_desa', 'like', "%{$value}%");
-                        $query->where('website', 'like', "%{$value}%");
+                        $query->orWhere('nama_desa', 'like', "%{$value}%");
+                        $query->orWhere('kode_desa', 'like', "%{$value}%");
+                        $query->orWhere('website', 'like', "%{$value}%");
                     });
                 }),
             ])->allowedSorts([
@@ -27,7 +28,18 @@ class DesaRepository
                 'nama_desa',
                 'website',
             ])
-            ->allowedFields('*')
+            ->allowedFields([
+                'id',
+                'kode_kecamatan',
+                'nama_kecamatan',
+                'kode_pos',
+                'kode_desa',
+                'nama_desa',
+                'website',
+                'path',
+                'lat',
+                'lng',
+            ])
             ->jsonPaginate();
     }
 }

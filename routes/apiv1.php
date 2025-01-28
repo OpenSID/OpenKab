@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
 use App\Http\Controllers\Api\SuplemenController;
+use App\Http\Controllers\Api\PointController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
@@ -304,3 +305,10 @@ Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'deta
 Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
 Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');
+
+Route::get('/point', [PointController::class, 'index']);
+Route::get('/point/status', [PointController::class, 'status']);
+Route::delete('/point/hapus/{id}', [PointController::class, 'destroy'])->name('point.hapus');
+Route::post('/point/multiple-delete', [PointController::class, 'delete_multiple'])->name('point.delete-multiple');
+Route::get('/subpoint/{id}', [PointController::class, 'detail']);
+Route::post('/point', [PointController::class, 'store']);

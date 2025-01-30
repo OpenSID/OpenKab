@@ -248,6 +248,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
         Route::get('desa', [DesaController::class, 'index']);
+        Route::get('opendk/bantuan', [BantuanController::class, 'syncBantuanOpenDk']);
+        Route::get('opendk/bantuan/{id}', [BantuanController::class, 'getBantuanOpenDk']);
+        Route::get('/opendk/bantuan-peserta', [BantuanController::class, 'syncBantuanPesertaOpenDk']);
+        Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);
+        Route::get('/opendk/desa/{kec?}', [DesaController::class, 'all']);
     });    
     
 });
@@ -304,8 +309,4 @@ Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
 Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');
 
-Route::get('opendk/bantuan', [BantuanController::class, 'syncBantuanOpenDk']);
-Route::get('opendk/bantuan/{id}', [BantuanController::class, 'getBantuanOpenDk']);
-Route::get('/opendk/bantuan-peserta', [BantuanController::class, 'syncBantuanPesertaOpenDk']);
-Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);
-Route::get('/opendk/desa/{kec?}', [DesaController::class, 'all']);
+

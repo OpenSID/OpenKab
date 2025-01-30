@@ -12,7 +12,7 @@ class BantuanPesertaOpenDKTransformer extends TransformerAbstract
         return [
             'id' => $bantuanPeserta->id,
             'peserta' => $bantuanPeserta->peserta,
-            'nama' => $bantuanPeserta->penduduk->nama,
+            'nama' => $bantuanPeserta->penduduk->nama ?? '',
             'nik' => $bantuanPeserta->nik,
             'no_kk' => $bantuanPeserta->no_kk,
             'program_id' => $bantuanPeserta->program_id,

@@ -77,10 +77,23 @@ function GetListCoordinates(kabupaten = null, kecamatan = null, desa = null, kat
         success: function(data) {
             // Hapus semua marker dari peta sebelum menambahkan yang baru
             map.eachLayer((layer) => {
-                if (layer instanceof L.Marker) {
-                    layer.remove();
-                }
+            if (layer instanceof L.Marker) {
+                layer.remove();
+            }
             });
+            var isFirst = true;
+            for (var i=0; i < data.length; i++ ){
+                if (data[i].lat !=null && data[i].lng != null){
+                    var marker = L.marker([parseFloat(data[i].lat), parseFloat(data[i].lng)], {icon: markerIcon}).bindPopup(data[i].nama + '<br><strong>' + data[i].desk + '</strong><br>' + data[i].point.nama+"<hr>Provinsi :" + data[i].config.nama_propinsi + "<br>Kota :" + data[i].config.nama_kabupaten + "<br>Kecamatan :" + data[i].config.nama_kecamatan + "<br>Desa :" + data[i].config.nama_desa ).addTo(map)
+                    marker.on('mouseover',function(ev) {
+                        ev.target.openPopup();
+                    });
+                    if (isFirst){
+                        isFirst = false;
+                        map.panTo(new L.LatLng(parseFloat(data[i].lat), parseFloat(data[i].lng)));
+                    }
+                }
+            }
 
             // Hapus semua kartu dari container
             var cardContainer = document.getElementById('card-container');
@@ -149,5 +162,7 @@ function GetListCoordinates(kabupaten = null, kecamatan = null, desa = null, kat
         }
     });
 }
+
+
 
 

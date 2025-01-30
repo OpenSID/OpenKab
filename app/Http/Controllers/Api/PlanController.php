@@ -45,7 +45,7 @@ class PlanController extends Controller
         // Filter berdasarkan parent
         if ($parent) {
             $coordinate->whereHas('point', function ($query) use ($parent) {
-                $query->where('parent', $parent); // Pastikan kolom bernama 'parent'
+                $query->where('parrent', $parent); // Pastikan kolom bernama 'parent'
                 $query->where('sumber', 'OpenKab'); // Pastikan kolom bernama 'parent'
             })->with('point');
         }

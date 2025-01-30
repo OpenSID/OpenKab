@@ -91,4 +91,12 @@ class AuthController extends Controller
     {
         return Str::lower(request('credential')).'|'.request()->ip();
     }
+
+    public function token()
+    {
+        $user = User::whereUsername('synchronize')->first();
+        $token = $user->createToken('auth_token', ['synchronize-opendk-create'])->plainTextToken;
+
+        return response()->json(['message' => 'Token Synchronize', 'access_token' => $token, 'token_type' => 'Bearer']);
+    }
 }

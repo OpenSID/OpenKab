@@ -66,6 +66,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show'])->middleware('easyauthorize:pengaturan-activities');
         Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create', 'delete'])->middleware('easyauthorize:pengaturan-settings');
+        Route::resource('opendk', App\Http\Controllers\OpenDKController::class)->except(['show', 'create', 'delete'])->middleware('easyauthorize:pengaturan-opendk');
     });
 
     Route::prefix('cms')->group(function () {

@@ -173,7 +173,7 @@ class TeamController extends Controller
             $menu[] = convertMenu($menuItem, null, $idCounter);
         }
 
-        $modul = collect($menuTeam)->flatMap(function ($item) {
+        $modul = collect($team->menu)->flatMap(function ($item) {
             // Initialize an array to hold the results
             $results = [];
 

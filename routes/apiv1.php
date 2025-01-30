@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
 use App\Http\Controllers\Api\SuplemenController;
+use App\Http\Controllers\Api\PointController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrasaranaSaranaController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\KelembagaanController;
 use App\Http\Controllers\Api\InfrastrukturController;
+use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
 use App\Http\Controllers\Api\SettingController;
 use Illuminate\Support\Facades\Auth;
@@ -243,6 +245,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {            
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
             
+            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
+            Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
         });        
     });
     
@@ -254,7 +258,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);
         Route::get('/opendk/desa/{kec?}', [DesaController::class, 'all']);
     });    
-    
 });
 
 // Statistik
@@ -310,3 +313,9 @@ Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');
 
 
+Route::get('/point', [PointController::class, 'index']);
+Route::get('/point/status', [PointController::class, 'status']);
+Route::delete('/point/hapus/{id}', [PointController::class, 'destroy'])->name('point.hapus');
+Route::post('/point/multiple-delete', [PointController::class, 'delete_multiple'])->name('point.delete-multiple');
+Route::get('/subpoint/{id}', [PointController::class, 'detail']);
+Route::post('/point', [PointController::class, 'store']);

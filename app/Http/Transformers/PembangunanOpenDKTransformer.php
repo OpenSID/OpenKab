@@ -20,6 +20,7 @@ class PembangunanOPenDKTransformer extends TransformerAbstract
             'tahun_anggaran' => $pembangunan->tahun_anggaran,
             'pelaksana_kegiatan' => $pembangunan->pelaksana_kegiatan,
             'lokasi' => $pembangunan->lokasi,
+            'keterangan' => $pembangunan->keterangan,
             'config' => $pembangunan->config,
         ];
     }

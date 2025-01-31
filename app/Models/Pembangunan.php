@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\FilterWilayahTrait;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
 
 class Pembangunan extends BaseModel
 {

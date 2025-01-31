@@ -8,7 +8,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class PembangunanRincianOpenDKRepository
 {
-    public function getPembangunanRincian($all = false, $id, $kode_desa)
+    public function getPembangunanRincian($all, $id, $kode_desa)
     {
         $pembangunan = QueryBuilder::for(PembangunanRincian::class)
             ->where('id_pembangunan', $id)

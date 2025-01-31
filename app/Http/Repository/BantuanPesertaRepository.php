@@ -10,7 +10,7 @@ class BantuanPesertaRepository
 {
     public function listBantuanPeserta($all = false)
     {
-        $bantuan = QueryBuilder::for(BantuanPeserta::class)
+        $bantuan = QueryBuilder::for(BantuanPeserta::filterWilayah())
             ->allowedFields('*')
             ->allowedFilters([
                 AllowedFilter::exact('id'),

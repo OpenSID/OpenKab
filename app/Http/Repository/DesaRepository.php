@@ -42,4 +42,18 @@ class DesaRepository
             ])
             ->jsonPaginate();
     }
+
+    public function all($kec = '')
+    {
+        // Inisialisasi query
+        $query = Config::with('sebutanDesa');
+
+        // Tambahkan filter berdasarkan kode_kecamatan
+        if ($kec) {
+            $query->where('kode_kecamatan', $kec);
+        }
+
+    // Eksekusi query dan kembalikan hasilnya
+        return $query->get(); // Mengambil semua data tanpa pagination
+    }
 }

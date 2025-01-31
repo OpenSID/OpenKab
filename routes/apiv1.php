@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\KelembagaanController;
 use App\Http\Controllers\Api\InfrastrukturController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\PembangunanController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -253,6 +254,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/opendk/bantuan-peserta', [BantuanController::class, 'syncBantuanPesertaOpenDk']);
         Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);
         Route::get('/opendk/desa/{kec?}', [DesaController::class, 'all']);
+
+        Route::get('opendk/pembangunan', [PembangunanController::class, 'syncPembangunanOpenDk']);
+        Route::get('opendk/pembangunan/{id}', [PembangunanController::class, 'getPembangunanOpenDk']);
+        Route::get('/opendk/pembangunan-rincian/{id}/{kode_desa}', [PembangunanController::class, 'getPembangunanRincianOpenDk']);
     });    
     
 });

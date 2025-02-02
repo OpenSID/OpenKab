@@ -12,7 +12,12 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 8. [#491](https://github.com/OpenSID/OpenKab/issues/491) Penambahan halaman geo spasial.
 9. [#480](https://github.com/OpenSID/OpenKab/issues/480) Penambahan preview data suplemen.
 10. [#501](https://github.com/OpenSID/OpenKab/issues/501) Penambahan pengaturan token api key OpenDK.
-11. [#502](https://github.com/OpenSID/OpenKab/issues/502) Penambahan API kebutuhan untuk mengambil identitas desa dengan parameter kode kecamatan dari OpenDK. 
+11. [#502](https://github.com/OpenSID/OpenKab/issues/502) Penambahan API kebutuhan untuk mengambil identitas desa dengan parameter kode kecamatan dari OpenDK.
+12. [#503](https://github.com/OpenSID/OpenKab/issues/503) Penambahan API kebutuhan untuk mengirim data Penduduk Dengan Parameter Kode Kecamatan dari OpenDK.
+13. [#504](https://github.com/OpenSID/OpenKab/issues/504) Penambahan API kebutuhan untuk mengirim data laporan penduduk dengan parameter kode kecamatan.
+14. [#492](https://github.com/OpenSID/OpenKab/issues/492) Penambahan tipe lokasi.
+15. [#505](https://github.com/OpenSID/OpenKab/issues/505) Penambahan API sync bantuan dan bantuan peserta OpenDK.
+16. [#507](https://github.com/OpenSID/OpenKab/issues/507) Penambahan Api pembangunan OpenDK.
 
 #### Perbaikan BUG
 

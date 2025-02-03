@@ -35,7 +35,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2501.0.0';
+        return 'v2502.0.0';
     }
 }
 

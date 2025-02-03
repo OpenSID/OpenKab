@@ -523,4 +523,42 @@ class PendudukRepository
             ])
             ->jsonPaginate();
     }
+
+    public function listPendudukSyncOpenDk()
+    {
+        return QueryBuilder::for(Penduduk::withRef())
+            ->allowedFields('*')
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
+                    $query->whereHas('config', function ($query) use ($value) {
+                        $query->where('kode_kecamatan', $value);
+                    });
+                }),
+                AllowedFilter::callback('kode_desa', function ($query, $value) {
+                    $query->whereHas('config', function ($query) use ($value) {
+                        $query->where('kode_desa', $value);
+                    });
+                }),
+                AllowedFilter::callback('search', function ($query, $value) {
+                    $query->where(function ($query) use ($value) {
+                        $query->where('nama', 'like', "%{$value}%")
+                            ->orWhere('nik', 'like', "%{$value}%")
+                            ->orWhere('tag_id_card', 'like', "%{$value}%")
+                            ->orWhereHas('config', function ($query) use ($value) {
+                                $query->where('nama_desa', 'like', "%{$value}%");
+                            });
+                    });
+                }),
+            ])
+            ->allowedSorts([
+                'nik',
+                'foto',
+                'nama',
+                'umur',
+                'nama_desa',
+                'created_at',
+            ])
+            ->jsonPaginate();
+    }
 }

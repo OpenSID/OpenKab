@@ -11,25 +11,13 @@ class Keuangan extends BaseModel
      *
      * @var string
      */
-    protected $table = 'keuangan';   
-    
+    protected $table = 'keuangan';
+
     /**
-     * Get the template associated with the Keuangan
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Get the template associated with the Keuangan.
      */
     public function template(): HasOne
     {
         return $this->hasOne(KeuanganTemplate::class, 'uuid', 'template_uuid');
-    }
-    
-    /**
-     * Get the desa associated with the Keuangan
-     *
-     * @return \Illuminate\Database\EloquenConfiglations\HasOne
-     */
-    public function desa(): HasOne
-    {
-        return $this->hasOne(Config::class, 'id', 'config_id');
     }
 }

@@ -43,7 +43,7 @@ class KeuanganRepository
     
     public function laporan_apbdes()
     {   // pakai join agar bisa disorting berdasarkan nama desa dan uraian template
-        return  QueryBuilder::for(LaporanSinkronisasi::selectRaw('laporan_sinkronisasi.*, config.nama_desa')
+        return  QueryBuilder::for(LaporanSinkronisasi::selectRaw('laporan_sinkronisasi.*, config.nama_desa, config.website')
                 ->join('config', 'laporan_sinkronisasi.config_id','=', 'config.id')
                 ->apbdes())
 
@@ -51,11 +51,11 @@ class KeuanganRepository
                 AllowedFilter::exact('config_id'),
                 AllowedFilter::exact('tahun'),
                 AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
-                    $query->whereHas('config', static fn($query) => $query->where('kode_kecamatan', $value));
+                    $query->whereHas('desa', static fn($query) => $query->where('kode_kecamatan', $value));
                 }),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where(function ($query) use ($value) {
-                        $query->where('nama_file', 'like', "%{$value}%");
+                        $query->where('judul', 'like', "%{$value}%");
                         $query->orWhere('semester', 'like', "{$value}%");
                         $query->orWhere('tahun', 'like', "{$value}%");
                         $query->orWhere('config.nama_desa', 'like', "%{$value}%");
@@ -65,6 +65,7 @@ class KeuanganRepository
                 'config_id',
                 'tahun',
                 'semester',
+                'judul',
                 'nama_file',
                 'kirim',
                 'created_at',

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -85,5 +86,15 @@ class BaseModel extends Model
     {
         return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('data-log');
         // Chain fluent methods for configuration options
+    }
+
+    /**
+     * Get the desa associated with the Keuangan
+     *
+     * @return \Illuminate\Database\EloquenConfiglations\HasOne
+     */
+    public function desa(): HasOne
+    {
+        return $this->hasOne(Config::class, 'id', 'config_id');
     }
 }

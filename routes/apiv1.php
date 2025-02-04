@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\KelembagaanController;
 use App\Http\Controllers\Api\InfrastrukturController;
+use App\Http\Controllers\Api\KeuanganController;
 use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
 use App\Http\Controllers\Api\SettingController;
@@ -261,6 +262,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('opendk/pembangunan', [PembangunanController::class, 'syncPembangunanOpenDk']);
         Route::get('opendk/pembangunan/{id}', [PembangunanController::class, 'getPembangunanOpenDk']);
         Route::get('/opendk/pembangunan-rincian/{id}/{kode_desa}', [PembangunanController::class, 'getPembangunanRincianOpenDk']);
+
+        Route::prefix('keuangan')->group(function(){
+            Route::get('apbdes', [KeuanganController::class, 'apbdes']);
+            Route::get('laporan_apbdes', [KeuanganController::class, 'laporan_apbdes']);
+        });        
     });    
 });
 

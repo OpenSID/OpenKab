@@ -25,4 +25,9 @@ class LaporanSinkronisasi extends BaseModel
     {
         return $query->where('tipe', 'laporan_penduduk');
     }
+
+    protected function scopeApbdes($query)
+    {
+        return $query->where('tipe', 'laporan_apbdes');
+    }
 }

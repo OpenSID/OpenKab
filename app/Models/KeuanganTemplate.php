@@ -9,7 +9,7 @@ class KeuanganTemplate extends BaseModel
      *
      * @var string
      */
-    protected $table = 'keuangan_template';    
+    protected $table = 'keuangan_template';
 
     protected function scopeApbdes($query)
     {

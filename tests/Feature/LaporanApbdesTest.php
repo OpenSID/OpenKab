@@ -48,7 +48,7 @@ class LaporanApbdesTest extends TestCase
                         'tahun',
                         'bulan',
                         'nama_file',
-                        'url_file'                        
+                        'url_file',
                     ],
                 ],
             ],

@@ -10,7 +10,7 @@ class LaporanSinkronisasi extends BaseModel
 
     /** {@inheritdoc} */
     protected $table = 'laporan_sinkronisasi';
-    
+
     protected $guarded = [];
 
     /**
@@ -29,5 +29,5 @@ class LaporanSinkronisasi extends BaseModel
     protected function scopeApbdes($query)
     {
         return $query->where('tipe', 'laporan_apbdes');
-    }    
+    }
 }

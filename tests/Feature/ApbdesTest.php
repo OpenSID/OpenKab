@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Config;
 use App\Models\Keuangan;
-use App\Models\LaporanSinkronisasi;
 use App\Models\Setting;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -47,9 +46,9 @@ class ApbdesTest extends TestCase
                         'template_uuid',
                         'tahun',
                         'anggaran',
-                        'realisasi',                        
+                        'realisasi',
                         'nama_desa',
-                        'uraian'                        
+                        'uraian',
                     ],
                 ],
             ],

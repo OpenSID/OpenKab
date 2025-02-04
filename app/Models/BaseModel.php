@@ -89,7 +89,7 @@ class BaseModel extends Model
     }
 
     /**
-     * Get the desa associated with the Keuangan
+     * Get the desa associated with the Keuangan.
      *
      * @return \Illuminate\Database\EloquenConfiglations\HasOne
      */

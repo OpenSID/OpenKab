@@ -14,8 +14,9 @@ class KeuanganTransformer extends TransformerAbstract
      */
     public function transform(Keuangan $keuangan)
     {
-        $keuangan->anggaran_local = 'Rp. '. angka_lokal($keuangan->anggaran);
-        $keuangan->realisasi_local = 'Rp. '. angka_lokal($keuangan->realisasi);
+        $keuangan->anggaran_local = 'Rp. '.angka_lokal($keuangan->anggaran);
+        $keuangan->realisasi_local = 'Rp. '.angka_lokal($keuangan->realisasi);
+
         return $keuangan->toArray();
     }
 }

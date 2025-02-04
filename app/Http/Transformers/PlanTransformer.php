@@ -14,7 +14,7 @@ class PlanTransformer extends TransformerAbstract
             'id' => $plan->id,
             'nama' => $plan->nama,
             'enabled' => $plan->enabled == '1' ? 'Ya' : 'Tidak',
-            'jenis' => Point::find($plan->point->parrent)->nama,
+            'jenis' => Point::find($plan->point->parrent)->nama ?? '',
             'kategori' => $plan->point->nama,
             'aksi' => $this->generateAksiColumn($plan),
         ];

@@ -1,4 +1,4 @@
-Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan perbaikan lain yang diminta pengguna.
+Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan perbaikan lain yang diminta pengguna.
 
 #### Penambahan Fitur
 

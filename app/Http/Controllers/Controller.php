@@ -33,8 +33,8 @@ class Controller extends BaseController
         $this->identitas = Identitas::first();
         if ($this->identitas) {
             $this->kirimTrack();
-        }        
-        View::share('tokenUser', Cache::get('user_token_' . Auth::id()));
+        }
+        View::share('tokenUser', Cache::get('user_token_'.Auth::id()));
     }
 
     protected function generateListPermission()

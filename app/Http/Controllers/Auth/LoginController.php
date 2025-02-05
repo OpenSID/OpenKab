@@ -90,7 +90,7 @@ class LoginController extends Controller
             $this->credentials($request), $request->boolean('remember')
         );
 
-        if ($successLogin) {           
+        if ($successLogin) {
             try {
                 $request->validate(['password' => ['required', Password::min(8)
                     ->letters()
@@ -108,22 +108,22 @@ class LoginController extends Controller
             }
 
             $user = $this->guard()->user();
-            $cacheToken = Cache::get('user_token_' . $user->id);
+            $cacheToken = Cache::get('user_token_'.$user->id);
             $generateToken = false;
-            if (!$cacheToken) {
-                $generateToken = true;                
-            }else {
+            if (! $cacheToken) {
+                $generateToken = true;
+            } else {
                 $token = PersonalAccessToken::findToken($cacheToken);
-                if(!$token){                    
-                    $generateToken = true;                    
-                }                
+                if (! $token) {
+                    $generateToken = true;
+                }
             }
 
-            if($generateToken){
+            if ($generateToken) {
                 // Generate token
-                $token = $this->guard()->user()->createToken('auth-token-api')->plainTextToken;                
+                $token = $this->guard()->user()->createToken('auth-token-api')->plainTextToken;
                 // Store token in cache
-                Cache::rememberForever('user_token_' . $user->id, $token);
+                Cache::rememberForever('user_token_'.$user->id, $token);
             }
         }
 

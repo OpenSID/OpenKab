@@ -104,48 +104,66 @@ function GetListCoordinates(kabupaten = null, kecamatan = null, desa = null, kat
             row.classList.add('row', 'g-3'); // Menambahkan gap antar kolom dengan g-3 (atau g-4 untuk lebih besar)
 
             data.forEach((item, index) => {
-                // Buat kartu
                 // Membuat kartu
                 var card = document.createElement('div');
-                card.className = 'col-md-4 mb-4'; // Setiap kartu akan memiliki lebar 4 kolom dan margin bawah 3
-                card.style = 'border: 1px solid #ddd; border-radius: 5px; overflow: hidden; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); margin-bottom: 20px; padding: 0;'; // Hapus padding dan margin dari card
+                card.className = 'col-md-4 mb-4';
+                card.style = 'border: 1px solid #ddd; border-radius: 5px; overflow: hidden; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); margin-bottom: 20px; padding: 0; position: relative;';
 
+                // Gambar
                 var img = document.createElement('img');
-                img.src = item.thumbnail || '{{asset('assets/img/default-map.png')}}';
+                img.src = item.thumbnail || '{{asset("assets/img/default-map.png")}}';
                 img.alt = 'Thumbnail';
                 img.style = 'width: 100%; height: 150px; object-fit: cover;';
 
-                // Menambahkan pemisah antara gambar dan detail
+                // Pemisah
                 var separator = document.createElement('div');
                 separator.style = 'height: 1px; background-color: #ddd; margin: 0;';
 
-                // Card body untuk detail
+                // Card Body
                 var cardBody = document.createElement('div');
-                cardBody.style = 'padding: 0; background-color: #f7f7f7;'; // Hilangkan padding di dalam cardBody
+                cardBody.style = 'padding: 0; background-color: #f7f7f7;';
 
                 var description = document.createElement('span');
                 description.style = 'font-size: 14px; color: #666; display: block; padding: 10px 10px;';
                 description.innerHTML = item.nama + '<br><strong>' + item.desk + '</strong><br>' + item.point.nama;
 
-                // Menambahkan pemisah dan deskripsi ke cardBody
+                // Ikon Detail (menggunakan FontAwesome)
+                var detailIcon = document.createElement('i');
+                detailIcon.className = 'bi bi-info-circle-fill'; // Bootstrap Icons
+                detailIcon.style = 'position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px; color: #007bff;';
+                detailIcon.setAttribute('data-bs-toggle', 'modal');
+                detailIcon.setAttribute('data-bs-target', '#detailModal');
+
+                // Event Listener untuk ikon detail
+                detailIcon.addEventListener('click', function () {
+                    document.getElementById('modalContent').innerHTML = `
+                        <h5>${item.nama}</h5>
+                        <p>${item.desk}</p>
+                        <p><strong>Provinsi:</strong> ${item.config.nama_propinsi}</p>
+                        <p><strong>Kota:</strong> ${item.config.nama_kabupaten}</p>
+                        <p><strong>Kecamatan:</strong> ${item.config.nama_kecamatan}</p>
+                        <p><strong>Desa:</strong> ${item.config.nama_desa}</p>
+                        <p><strong>Latitude:</strong> ${item.lat}</p>
+                        <p><strong>Longitude:</strong> ${item.lng}</p>
+                    `;
+                });
+
+                // Menambahkan elemen ke kartu
+                card.appendChild(img);
+                card.appendChild(detailIcon);
                 cardBody.appendChild(separator);
                 cardBody.appendChild(description);
-
-                // Menambahkan gambar dan detail ke dalam kartu
-                card.appendChild(img);
                 card.appendChild(cardBody);
-
-                // Menambahkan kartu ke baris
                 row.appendChild(card);
 
-
-                // Jika sudah memiliki 3 kartu dalam satu baris, reset dan buat baris baru
+                // Reset baris setelah 3 kartu
                 if ((index + 1) % 3 === 0) {
                     cardContainer.appendChild(row);
                     row = document.createElement('div');
-                    row.classList.add('row', 'g-3'); // Membuat row baru dengan gap
+                    row.classList.add('row', 'g-3');
                 }
             });
+
 
             // Menambahkan baris terakhir jika ada sisa kartu yang belum dimasukkan ke baris
             if (row.children.length > 0) {

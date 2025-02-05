@@ -223,9 +223,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
         Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
-            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
             Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
-        });
+            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
+        });        
     });
 
     Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {

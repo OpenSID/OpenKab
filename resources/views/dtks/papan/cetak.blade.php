@@ -34,9 +34,10 @@
         document.addEventListener("DOMContentLoaded", function(event) {
             var str = `{{ $filter }}`
             var filter = str.replace(/&amp;/g, '&')
-
+            const header = @include('layouts.components.header_bearer_api_gabungan');
             $.ajax({
-                url: `{{ url('api/v1/satu-data/dtks') }}?${filter}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/satu-data/dtks' }}?${filter}`,
+                headers: header,
                 method: 'get',
                 success: function(json) {
                     var no = 1;

@@ -38,6 +38,7 @@
 @section('js')
 <script nonce="{{ csp_nonce() }}">
     document.addEventListener("DOMContentLoaded", function() {
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         const dtks = $('#table-dtks').DataTable({
             processing: true,
             serverSide: true,
@@ -48,7 +49,8 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/prodeskel/ddk/pangan') }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/prodeskel/ddk/pangan' }}`,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {

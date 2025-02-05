@@ -95,14 +95,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // API Data Presisi
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
 
-    Route::get('/pendidikan', PendidikanController::class);
-
-    Route::controller(DataController::class)
-    ->prefix('data')->group(function () {
-        Route::get('/kategori-statistik', 'kategoriStatistik');
-        Route::get('/kesehatan', 'kesehatan');
-        Route::get('/jaminan-sosial', 'jaminan_sosial');
-    });
+    Route::get('/pendidikan', PendidikanController::class);    
 
     Route::prefix('penduduk')->group(function () {
         Route::get('/', [PendudukController::class, 'index']);

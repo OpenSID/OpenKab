@@ -124,7 +124,7 @@ class LoginController extends Controller
                 Cache::forget('user_token_'.$user->id);
                 $token = $this->guard()->user()->createToken('auth-token-api')->plainTextToken;
                 // Store token in cache
-                Cache::rememberForever('user_token_'.$user->id, function() use ($token) {
+                Cache::rememberForever('user_token_'.$user->id, function () use ($token) {
                     return $token;
                 });
             }

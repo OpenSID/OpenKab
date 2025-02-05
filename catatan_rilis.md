@@ -18,6 +18,7 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 14. [#492](https://github.com/OpenSID/OpenKab/issues/492) Penambahan tipe lokasi.
 15. [#505](https://github.com/OpenSID/OpenKab/issues/505) Penambahan API sync bantuan dan bantuan peserta OpenDK.
 16. [#507](https://github.com/OpenSID/OpenKab/issues/507) Penambahan Api pembangunan OpenDK.
+17. [#528](https://github.com/OpenSID/OpenKab/issues/528) Hapus API dtks dari OpenKab dan sesuaikan API database gabungan.
 
 #### Perbaikan BUG
 

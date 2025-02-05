@@ -126,14 +126,14 @@
         let data_grafik_bar = [];
     document.addEventListener("DOMContentLoaded", function(event) {
 
-        var url = new URL("{{ url('api/v1/prodeskel/potensi/kelembagaan') }}");
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/prodeskel/potensi/kelembagaan' }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
         
-        var urlPerorangan = new URL("{{ url('api/v1/prodeskel/potensi/kelembagaan/penduduk') }}");
+        var urlPerorangan = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/prodeskel/potensi/kelembagaan/penduduk' }}");
         urlPerorangan.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         urlPerorangan.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
-
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         var tempatibadah = $('#tempatibadah').DataTable({
             processing: true,
             serverSide: true,
@@ -148,6 +148,7 @@
             },
             ajax: {
                 url: url.href,
+                headers: header,
                 method: 'get',
                 dataSrc: function(json) {
 
@@ -217,6 +218,7 @@
             },
             ajax: {
                 url: urlPerorangan.href,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -332,6 +334,7 @@
             },
             ajax: {
                 url: url.href,
+                headers: header,
                 method: 'get',
                 dataSrc: function(json) {
 

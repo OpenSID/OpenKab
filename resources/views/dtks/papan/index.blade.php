@@ -64,6 +64,7 @@
     <script nonce="{{ csp_nonce() }}">
         let data_grafik = [];
         document.addEventListener("DOMContentLoaded", function(event) {
+            const header = @include('layouts.components.header_bearer_api_gabungan');
             var dtks = $('#table-dtks').DataTable({
                 processing: true,
                 serverSide: true,
@@ -74,7 +75,8 @@
                     columns: [0]
                 },
                 ajax: {
-                    url: `{{ url('api/v1/satu-data/dtks') }}`,
+                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/satu-data/dtks' }}`,
+                    headers: header,  
                     method: 'get',
                     data: function(row) {
                         return {

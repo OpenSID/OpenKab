@@ -8,6 +8,8 @@ use App\Models\Config;
 use App\Models\Identitas;
 use App\Models\Setting;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
@@ -61,6 +63,8 @@ class AppServiceProvider extends ServiceProvider
             // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
             View::share('identitasAplikasi', $identitasAplikasi);
             View::share('settingAplikasi', $settingAplikasi);
+            
+            //View::share('tokenUser', Cache::get('user_token_' . Auth::id()));
             $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
         }
     }

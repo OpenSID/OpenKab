@@ -21,13 +21,10 @@ use App\Http\Controllers\Api\PariwisataController;
 use App\Http\Controllers\Api\PembangunanController;
 use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PendudukController;
-use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\PointController;
-use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\SuplemenController;
-use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
 use App\Http\Controllers\Api\WilayahController;
 use Illuminate\Http\Request;
@@ -186,30 +183,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::put('/perbarui/{id}', 'update');
             Route::post('/upload/{id}', 'upload');
             Route::post('/uploadFavicon/{id}', 'uploadFavicon');
-        });
-
-    // Pengaturan Aplikasi
-    Route::controller(PengaturanController::class)
-        ->prefix('pengaturan')->group(function () {
-            Route::get('/', 'index')->name('api.pengaturan_aplikasi');
-            Route::post('/update', 'update');
-
-            Route::controller(TeamController::class)
-                ->prefix('group')->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/show/{id}', 'show');
-                    Route::post('/delete', 'delete');
-                    Route::post('/', 'store');
-                    Route::put('/{id}', 'update');
-                    Route::get('/menu', 'menu');
-                    Route::get('/listModul/{id}', 'listModul');
-                    Route::put('/updateMenu/{id}', 'updateMenu');
-                });
-            Route::controller(SettingController::class)
-                ->prefix('settings')->group(function () {
-                    Route::get('/', 'index');
-                    Route::put('/{id}', 'update');
-                });
         });
 
     // Sinkronisasi OpenDK

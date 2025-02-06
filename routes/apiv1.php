@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DataController;
-use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\InfrastrukturController;
@@ -222,13 +221,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });        
     });
 
-    Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
-        Route::get('desa', [DesaController::class, 'index']);
+    Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {        
         Route::get('opendk/bantuan', [BantuanController::class, 'syncBantuanOpenDk']);
         Route::get('opendk/bantuan/{id}', [BantuanController::class, 'getBantuanOpenDk']);
         Route::get('/opendk/bantuan-peserta', [BantuanController::class, 'syncBantuanPesertaOpenDk']);
-        Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);
-        Route::get('/opendk/desa/{kec?}', [DesaController::class, 'all']);
+        Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);        
 
         Route::get('opendk/pembangunan', [PembangunanController::class, 'syncPembangunanOpenDk']);
         Route::get('opendk/pembangunan/{id}', [PembangunanController::class, 'getPembangunanOpenDk']);

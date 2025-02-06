@@ -112,6 +112,8 @@
                             url: url,
                             data: formData,
                             success: function(response) {
+
+                                console.log(response)
                                 if (response.success == true) {
                                     Swal.fire({
                                         title: 'Berhasil!',

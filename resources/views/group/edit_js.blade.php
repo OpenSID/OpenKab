@@ -1,4 +1,7 @@
-<script nonce="{{ csp_nonce() }}"  >
+<script nonce="{{ csp_nonce() }}">
+
+    const header = @include('layouts.components.header_bearer_api_gabungan');
+
     function group() {
         _.mixin({
             'mergeByKey': function(arr1, arr2, key) {
@@ -51,15 +54,24 @@
             },
 
             retriveMenu() {
-                fetch('{{ url('api/v1/pengaturan/group/menu') }}')
+
+                var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group/menu");
+
+                fetch(url, {
+                        method: "GET",
+                        headers: header
+                    })
                     .then(res => res.json())
                     .then(response => {
-                        // this.menu = response.data
                         this.retriveGroup(response.data)
                     });
             },
             retriveGroup(menu) {
-                fetch('{{ url('api/v1/pengaturan/group/show/' . $id) }}')
+                    var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group/show/{{$id}}");
+                    fetch(url, {
+                        method: "GET",
+                        headers: header
+                    })
                     .then(res => res.json())
                     .then(response => {
                         this.dataGroup.name = response.data.attributes.name;
@@ -117,12 +129,12 @@
                 })
                 var data = this.dataGroup;
 
+                var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group/{{ $id }}");
+
                 $.ajax({
                     type: "PUT",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '{{ url('api/v1/pengaturan/group/' . $id) }}',
+                    url: url,
+                    headers: header,
                     data: data,
                     dataType: "json",
                     success: function(response) {

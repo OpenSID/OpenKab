@@ -45,13 +45,18 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
         document.addEventListener("DOMContentLoaded", function(event) {
+
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+            var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group");
+
             var grup = $('#grup').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('api/v1/pengaturan/group') }}`,
+                url: url,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -129,15 +134,16 @@
                                     Swal.showLoading()
                                 },
                             })
+
+                            var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group/delete");
+
                             $.ajax({
                                 type: "POST",
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                url: '{{ url('api/v1/pengaturan/group/delete') }}',
+                                url: url,
                                 data: {
                                     id: id
                                 },
+                                headers: header,
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.success == true) {

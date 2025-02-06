@@ -24,6 +24,9 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function (event) {
+
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+
             function buildInputForm(data) {
                 let form = [], _tmp, _item;
                 for(let i in data) {
@@ -59,7 +62,13 @@
 
                 return form.join('');
             }
-            fetch(`{{ route('api.pengaturan_aplikasi') }}`)
+
+            var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan");
+
+            fetch(url, {
+                    method: 'GET',
+                    headers: header
+                })
                 .then(res => res.json())
                 .then(response => {
                     if (response.data.length != 0) {
@@ -93,13 +102,14 @@
                                 Swal.showLoading()
                             },
                         })
+
+                        var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/update");
+
                         $.ajax({
                             type: "POST",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
+                            headers: header,
                             dataType: "json",
-                            url: `{{ url('api/v1/pengaturan/update') }}`,
+                            url: url,
                             data: formData,
                             success: function(response) {
                                 if (response.success == true) {

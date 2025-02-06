@@ -1,4 +1,7 @@
-<script nonce="{{ csp_nonce() }}"  >
+<script nonce="{{ csp_nonce() }}">
+
+    const header = @include('layouts.components.header_bearer_api_gabungan');
+
     function group() {
         return {
             dataGroup: {
@@ -11,11 +14,16 @@
             },
 
             retriveMenu() {
-                fetch('{{ url('api/v1/pengaturan/group/menu') }}')
-                    .then(res => res.json())
-                    .then(response => {
-                        this.menu = response.data
-                    });
+                var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group/menu");
+
+                fetch(url, {
+                    method: "GET",
+                    headers: header
+                })
+                .then(res => res.json())
+                .then(response => {
+                    this.menu = response.data
+                });
             },
             simpan() {
                 if (isEmpty(_.trim(this.dataGroup.name))) {
@@ -58,12 +66,12 @@
                 })
                 var data = this.dataGroup;
 
+                var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group");
+
                 $.ajax({
                     type: "Post",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '{{ url('api/v1/pengaturan/group') }}',
+                    headers: header,
+                    url: url,
                     data: data,
                     dataType: "json",
                     success: function(response) {

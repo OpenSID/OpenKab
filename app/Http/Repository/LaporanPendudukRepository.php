@@ -18,13 +18,21 @@ class LaporanPendudukRepository
                         $query->where('kode_kecamatan', $value);
                     });
                 }),
+                AllowedFilter::callback('kode_desa', function ($query, $value) {
+                    $query->whereHas('config', function ($query) use ($value) {
+                        $query->where('kode_desa', $value);
+                    });
+                }),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where(function ($query) use ($value) {
-                        $query->where('judul', 'like', "%{$value}%");
+                        $query->where('judul', 'like', "%{$value}%")
+                        ->orWhereHas('config', function ($query) use ($value) {
+                            $query->where('nama_desa', 'like', "%{$value}%");
+                        });
                     });
                 }),
             ])
-            ->allowedSorts(['id', 'tahun', 'semester'])
+            ->allowedSorts(['id', 'tahun', 'semester', 'nama_desa'])
             ->jsonPaginate();
     }
 }

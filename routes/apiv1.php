@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\InfrastrukturController;
+use App\Http\Controllers\Api\KeuanganController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
@@ -216,9 +217,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
         Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
-            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
             Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
-        });
+            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
+        });        
     });
 
     Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
@@ -232,7 +233,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('opendk/pembangunan', [PembangunanController::class, 'syncPembangunanOpenDk']);
         Route::get('opendk/pembangunan/{id}', [PembangunanController::class, 'getPembangunanOpenDk']);
         Route::get('/opendk/pembangunan-rincian/{id}/{kode_desa}', [PembangunanController::class, 'getPembangunanRincianOpenDk']);
-    });
+
+        Route::prefix('keuangan')->group(function(){
+            Route::get('apbdes', [KeuanganController::class, 'apbdes']);
+            Route::get('laporan_apbdes', [KeuanganController::class, 'laporan_apbdes']);
+        });        
+    });    
 });
 
 

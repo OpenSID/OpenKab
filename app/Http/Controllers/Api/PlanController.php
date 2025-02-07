@@ -75,7 +75,7 @@ class PlanController extends Controller
             $query->where('sumber', 'OpenKab'); // Pastikan kolom bernama 'parent'
 
             if (! empty($this->kategori)) {
-                $query->where('parrent', $this->kategori);
+                $query->where('parrent', $this->kategori)->orWhere('id', $this->kategori);
             }
         });
 

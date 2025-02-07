@@ -14,7 +14,7 @@ class PlanTransformer extends TransformerAbstract
             'id' => $plan->id,
             'nama' => $plan->nama,
             'enabled' => $plan->enabled == '1' ? 'Ya' : 'Tidak',
-            'jenis' => Point::find($plan->point->parrent)->nama,
+            'jenis' => Point::find($plan->point->parrent)->nama ?? '',
             'kategori' => $plan->point->nama,
             'aksi' => $this->generateAksiColumn($plan),
         ];
@@ -25,8 +25,10 @@ class PlanTransformer extends TransformerAbstract
      */
     protected function generateAksiColumn(Lokasi $plan): string
     {
-        $aksi = '<a href="'.url('plan/ajax_lokasi_maps/'.$plan->point->parent->id.'/'.$plan->id).'" class="btn bg-olive btn-sm" title="Lokasi '.$plan->nama.'"><i class="fa fa-map"></i></a> ';
-
-        return $aksi;
+        if($plan->point->parent){
+            $aksi = '<a href="'.url('plan/ajax_lokasi_maps/'.$plan->point->parent->id.'/'.$plan->id).'" class="btn bg-olive btn-sm" title="Lokasi '.$plan->nama.'"><i class="fa fa-map"></i></a> ';
+        }
+        
+        return $aksi ?? '';
     }
 }

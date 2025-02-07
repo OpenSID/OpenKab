@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\IdentitasController;
-use App\Http\Controllers\Api\InfrastrukturController;
 use App\Http\Controllers\Api\KeuanganController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KategoriDesaController;
@@ -17,7 +16,6 @@ use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\KetenagakerjaanController;
 use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
-use App\Http\Controllers\Api\PariwisataController;
 use App\Http\Controllers\Api\PembangunanController;
 use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PendudukController;
@@ -88,10 +86,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
     });
-
-    Route::get('/pariwisata', PariwisataController::class);
-
-    Route::get('infrastruktur', [InfrastrukturController::class, 'data']);
 
     // API Data Presisi
     Route::get('/ketenagakerjaan', KetenagakerjaanController::class);

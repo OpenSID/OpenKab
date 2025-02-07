@@ -112,6 +112,12 @@ final class Modul extends Enum
             'permission' => 'datapokok-pariwisata',
         ],
         [
+            'icon' => 'fa fa-users',
+            'text' => 'Infrastruktur',
+            'url' => 'data-pokok/infrastruktur',
+            'permission' => 'datapokok-infrastruktur',
+        ],
+        [
             'text' => 'SOTK',
             'icon' => 'fa fa-tags',
             'permission' => 'organisasi',

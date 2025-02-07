@@ -182,6 +182,13 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
     });
     
+    Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
+    Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
+    Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
+    Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
+    Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
+    Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
+    
     Route::get('/point', [PointController::class, 'index'])->name('point');
     Route::get('/point/form/', [PointController::class, 'form'])->name('point.create');
     Route::get('/point/form/{id}', [PointController::class, 'edit'])->name('point.create');
@@ -219,13 +226,6 @@ Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->nam
 Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
-
-Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
-Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
-Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
-Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
-Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
-Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');

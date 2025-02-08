@@ -22,6 +22,9 @@ function reloadDataTablesIfAjaxRunning() {
 
 $('#bt_clear_filter').click(function() {
     GetListKabupaten();
+    GetListKecamatan();
+    GetListDesa();
+    $('#bt_clear_filter').hide();
 });
 
 $('#bt_filter').click(function() {

@@ -13,12 +13,10 @@ GetListKecamatan();
 GetListDesa();
 
 function reloadDataTablesIfAjaxRunning() {
-    setTimeout(() => {
-        if ($.active > 0) {
+    
             summaryPenduduk.ajax.reload();
-        }
-    }, 500); // Tunggu sedikit agar AJAX benar-benar berjalan
-}
+        
+    }
 
 $('#bt_clear_filter').click(function() {
     GetListKabupaten();

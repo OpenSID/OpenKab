@@ -11,17 +11,17 @@ $('#filter_desa').select2({
 GetListKabupaten();
 GetListKecamatan();
 GetListDesa();
-    
+
+function reloadDataTablesIfAjaxRunning() {
+    setTimeout(() => {
+        if ($.active > 0) {
+            summaryPenduduk.ajax.reload();
+        }
+    }, 500); // Tunggu sedikit agar AJAX benar-benar berjalan
+}
 
 $('#bt_clear_filter').click(function() {
-    $("#filter_kabupaten").val("").trigger("change");
-    $("#filter_kecamatan").val("").trigger("change");
-    $("#filter_desa").val("").trigger("change");
-    $('#filter_desa').empty().trigger("change");
-    $('#bt_clear_filter').hide();
-    updateWebsiteData();
-    GetListCoordinates();
-    GetSummary();
+    GetListKabupaten();
 });
 
 $('#bt_filter').click(function() {
@@ -37,6 +37,7 @@ $('#bt_filter').click(function() {
         $("#filter_desa").val()
     );
     GetSummary();
+    reloadDataTablesIfAjaxRunning();
 });
 
 function updateWebsiteData(kabupaten = null, kecamatan = null, desa = null) {

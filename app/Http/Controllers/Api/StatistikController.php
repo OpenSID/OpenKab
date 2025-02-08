@@ -155,6 +155,26 @@ class StatistikController extends Controller
         return $tahun->toJson();
     }
 
+    public function getListKabupatenData()
+    {
+        // Mengambil parameter filter[kode_kabupaten] dari request
+        $kodeKabupaten = request()->input('filter.kode_kabupaten');
+
+        $query = Config::selectRaw('config.kode_kabupaten, config.nama_kabupaten')
+                    ->distinct()
+                    ->orderBy('config.nama_kabupaten', 'ASC');
+
+        // Tambahkan kondisi filter jika kode_kabupaten disediakan
+        if (!empty($kodeKabupaten)) {
+            $query->where('config.kode_kabupaten', $kodeKabupaten);
+        }
+
+        $kabupaten = $query->get();
+
+        return $kabupaten->toJson();
+    }
+
+
     public function getListKecamatan($id = '')
     {
         if ($id) {

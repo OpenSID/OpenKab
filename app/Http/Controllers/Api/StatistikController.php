@@ -165,7 +165,7 @@ class StatistikController extends Controller
                     ->orderBy('config.nama_kabupaten', 'ASC');
 
         // Tambahkan kondisi filter jika kode_kabupaten disediakan
-        if (!empty($kodeKabupaten)) {
+        if (! empty($kodeKabupaten)) {
             $query->where('config.kode_kabupaten', $kodeKabupaten);
         }
 
@@ -173,7 +173,6 @@ class StatistikController extends Controller
 
         return $kabupaten->toJson();
     }
-
 
     public function getListKecamatan($id = '')
     {

@@ -60,7 +60,7 @@ class Config extends Model
     /**
      * Get all of the Keluarga for the Config.
      */
-    public function Keluarga(): HasMany
+    public function keluarga(): HasMany
     {
         return $this->hasMany(Keluarga::class, 'config_id', 'id');
     }
@@ -68,7 +68,7 @@ class Config extends Model
     /**
      * Get all of the Keluarga for the Config.
      */
-    public function Komoditas(): HasMany
+    public function komoditas(): HasMany
     {
         return $this->hasMany(Komoditas::class, 'config_id', 'id');
     }
@@ -76,7 +76,7 @@ class Config extends Model
     /**
      * Get all of the Keluarga for the Config.
      */
-    public function Lokasi(): HasMany
+    public function lokasi(): HasMany
     {
         return $this->hasMany(Lokasi::class, 'config_id', 'id');
     }

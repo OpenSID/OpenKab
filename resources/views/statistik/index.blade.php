@@ -213,8 +213,6 @@
                         var url = new URL(`${baseUrl}/statistik/${kategori}`);
                         url.searchParams.set('filter[id]', id);
 
-                        console.log(url.href)
-
                         statistik.ajax.url(url.href, {
                             headers: header
                         }).load();

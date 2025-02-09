@@ -51,6 +51,7 @@ class CustomCSPPolicy extends Basic
             'https://code.ionicframework.com/ionicons/2.0.1/fonts/',
         ])->addDirective(Directive::CONNECT, [
             config('app.serverPantau'),
+            config('app.databaseGabunganUrl'),
         ]);
     }
 

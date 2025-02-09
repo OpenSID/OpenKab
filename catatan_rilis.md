@@ -21,13 +21,11 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 17. [#528](https://github.com/OpenSID/OpenKab/issues/528) Hapus API dtks dari OpenKab dan sesuaikan API database gabungan.
 18. [#506](https://github.com/OpenSID/OpenKab/issues/506) Penambahan API kebutuhan untuk mengirim data laporan APBDes dengan parameter kode kecamatan dari OpenDK.
 19. [#529](https://github.com/OpenSID/OpenKab/issues/529) Hapus API kesehatan dari OpenKab sesuaikan pemanggilan API database gabungan.
+20. [#500](https://github.com/OpenSID/OpenKab/issues/500) Penambahan tampilkan data peta.
 
 #### Perbaikan BUG
 
-1. [#485](https://github.com/OpenSID/OpenKab/issues/485) Perbaikan terkait menu pilih aksi pada OpenKab tidak berfungsi.
+
 
 #### Perubahan Teknis
-
-1. [#482](https://github.com/OpenSID/OpenKab/issues/482) Susun ulang urutan menu pada OpenKab.
-2. [#487](https://github.com/OpenSID/OpenKab/issues/487) Rapikan tampilan menu horizontal.
-3. [#490](https://github.com/OpenSID/OpenKab/issues/490) Hapus menu yang tidak terpakai. 
+ 

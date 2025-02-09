@@ -23,6 +23,7 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 19. [#529](https://github.com/OpenSID/OpenKab/issues/529) Hapus API kesehatan dari OpenKab sesuaikan pemanggilan API database gabungan.
 20. [#500](https://github.com/OpenSID/OpenKab/issues/500) Penambahan tampilkan data peta.
 21. [#509](https://github.com/OpenSID/OpenKab/issues/509) Penambahan geospasial data sumber baru.
+22. [#516](https://github.com/OpenSID/OpenKab/issues/516) Penambahan jumlah kecamatan, desa, jumlah penduduk dan keluarga mengikuti filter wilayah.
 
 #### Perbaikan BUG
 

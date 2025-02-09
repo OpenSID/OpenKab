@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class LoginController extends Controller
 {
@@ -87,8 +89,32 @@ class LoginController extends Controller
         $successLogin = $this->guard()->attempt(
             $this->credentials($request), $request->boolean('remember')
         );
-
+   
         if ($successLogin) {
+            $user = $this->guard()->user();
+            $cacheToken = Cache::get('user_token_'.$user->id);
+           
+            $generateToken = false;            
+            if (! $cacheToken) {
+                $generateToken = true;
+            } else {
+                $token = PersonalAccessToken::findToken($cacheToken);
+                if (! $token) {
+                    $generateToken = true;
+                }
+            }
+
+            if ($generateToken) {
+                // Generate token
+                Cache::forget('user_token_'.$user->id);
+                $token = $this->guard()->user()->createToken('auth-token-api')->plainTextToken;
+                // Store token in cache
+          
+                Cache::rememberForever('user_token_'.$user->id, function () use ($token) {
+                    return $token;
+                });
+            }
+     
             try {
                 $request->validate(['password' => ['required', Password::min(8)
                     ->letters()
@@ -99,11 +125,14 @@ class LoginController extends Controller
                 ],
                 ]);
                 session(['weak_password' => false]);
+              
             } catch (ValidationException  $th) {
                 session(['weak_password' => true]);
 
                 return redirect(route('password.change'))->with('success-login', 'Ganti password dengan yang lebih kuat');
             }
+            
+           
         }
 
         return $successLogin;

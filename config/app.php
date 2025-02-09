@@ -26,6 +26,7 @@ return [
 
     'namaAplikasi' => env('APP_NAMA_APLIKASI', 'Simatik'),
     'demo' => env('APP_DEMO', false),
+    'databaseGabunganUrl' => env('API_DATABASE_GABUNGAN_HOST', 'https://api-database-gabungan.id/'),
 
     /*
     |--------------------------------------------------------------------------

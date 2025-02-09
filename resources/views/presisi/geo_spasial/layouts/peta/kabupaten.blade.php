@@ -29,9 +29,6 @@ function GetListKabupaten() {
                 $("#filter_kabupaten").val(sessionKodeKabupaten);
                 GetListKecamatan(sessionKodeKabupaten); // Panggil langsung
                 GetListCoordinates(sessionKodeKabupaten); // Panggil langsung
-                updateWebsiteData(sessionKodeKabupaten);
-                GetSummary(sessionKodeKabupaten);
-                reloadDataTablesIfAjaxRunning();
                 $("#filter_kabupaten").trigger("change");
             } else {
                 $("#filter_kabupaten").val("").trigger("change");

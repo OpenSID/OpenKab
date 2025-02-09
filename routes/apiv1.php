@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\PrasaranaSaranaController;
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DasborController;
@@ -90,12 +92,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/pariwisata', PariwisataController::class);
 
-    Route::get('infrastruktur', [InfrastrukturController::class, 'data']);
-
-    // API Data Presisi
-    Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
-
-    Route::get('/pendidikan', PendidikanController::class);    
+    Route::get('infrastruktur', [InfrastrukturController::class, 'data']);  
 
     Route::prefix('penduduk')->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
@@ -225,8 +222,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('opendk/bantuan', [BantuanController::class, 'syncBantuanOpenDk']);
         Route::get('opendk/bantuan/{id}', [BantuanController::class, 'getBantuanOpenDk']);
         Route::get('/opendk/bantuan-peserta', [BantuanController::class, 'syncBantuanPesertaOpenDk']);
-        Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);        
-
+        Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);
+        Route::get('/opendk/desa/{kec?}', [DesaController::class, 'all']);
         Route::get('opendk/pembangunan', [PembangunanController::class, 'syncPembangunanOpenDk']);
         Route::get('opendk/pembangunan/{id}', [PembangunanController::class, 'getPembangunanOpenDk']);
         Route::get('/opendk/pembangunan-rincian/{id}/{kode_desa}', [PembangunanController::class, 'getPembangunanRincianOpenDk']);
@@ -260,6 +257,7 @@ Route::controller(StatistikController::class)
         Route::get('/get-list-program', 'getListProgram');
         Route::get('/get-list-tahun', 'getListTahun');
         Route::get('/get-list-kabupaten', 'getListKabupaten');
+        Route::get('/get-list-kabupaten-data', 'getListKabupatenData');
         Route::get('/get-list-kecamatan/{id}', 'getListKecamatan');
         Route::get('/get-list-desa/{id}', 'getListDesa');
         Route::get('/get-list-coordinate', 'getListCoordinate');
@@ -290,9 +288,13 @@ Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
 Route::get('/suplemen/status', [SuplemenController::class, 'status']);
 Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');
 
+
 Route::get('/point', [PointController::class, 'index']);
 Route::get('/point/status', [PointController::class, 'status']);
 Route::delete('/point/hapus/{id}', [PointController::class, 'destroy'])->name('point.hapus');
 Route::post('/point/multiple-delete', [PointController::class, 'delete_multiple'])->name('point.delete-multiple');
 Route::get('/subpoint/{id}', [PointController::class, 'detail']);
 Route::post('/point', [PointController::class, 'store']);
+
+Route::get('/plan', [PlanController::class, 'index']);
+Route::get('/plan/get-list-coordinate/{parrent?}/{id?}', [PlanController::class, 'getListCoordinate']);

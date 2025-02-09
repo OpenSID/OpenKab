@@ -72,7 +72,8 @@
         let data_grafik = [];
     document.addEventListener("DOMContentLoaded", function(event) {
 
-        var url = new URL("{{ url('api/v1/ketenagakerjaan') }}");
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/ketenagakerjaan' }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
 
@@ -87,6 +88,7 @@
             },
             ajax: {
                 url: url.href,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {

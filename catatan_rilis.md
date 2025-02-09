@@ -25,6 +25,7 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 21. [#509](https://github.com/OpenSID/OpenKab/issues/509) Penambahan geospasial data sumber baru.
 22. [#516](https://github.com/OpenSID/OpenKab/issues/516) Penambahan jumlah kecamatan, desa, jumlah penduduk dan keluarga mengikuti filter wilayah.
 23. [#536](https://github.com/OpenSID/OpenKab/issues/536) Hapus API pendidikan & dtks dari OpenKab sesuaikan pemanggilan API database gabungan.
+24. [#538](https://github.com/OpenSID/OpenKab/issues/538) Hapus API Tarik data OpenDK dari OpenKab ke API database gabungan.
 
 
 #### Perbaikan BUG

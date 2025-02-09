@@ -264,6 +264,7 @@ Route::controller(StatistikController::class)
         Route::get('/get-list-program', 'getListProgram');
         Route::get('/get-list-tahun', 'getListTahun');
         Route::get('/get-list-kabupaten', 'getListKabupaten');
+        Route::get('/get-list-kabupaten-data', 'getListKabupatenData');
         Route::get('/get-list-kecamatan/{id}', 'getListKecamatan');
         Route::get('/get-list-desa/{id}', 'getListDesa');
         Route::get('/get-list-coordinate', 'getListCoordinate');
@@ -303,4 +304,4 @@ Route::get('/subpoint/{id}', [PointController::class, 'detail']);
 Route::post('/point', [PointController::class, 'store']);
 
 Route::get('/plan', [PlanController::class, 'index']);
-Route::get('/plan/get-list-coordinate/{parrent}/{id}', [PlanController::class, 'getListCoordinate']);
+Route::get('/plan/get-list-coordinate/{parrent?}/{id?}', [PlanController::class, 'getListCoordinate']);

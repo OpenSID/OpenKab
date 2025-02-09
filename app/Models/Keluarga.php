@@ -118,4 +118,12 @@ class Keluarga extends BaseModel
             $query->status($value)->where('kk_level', '1');
         });
     }
+
+    /**
+     * Get the phone associated with the config.
+     */
+    public function config()
+    {
+        return $this->hasOne(Config::class, 'id', 'config_id');
+    }
 }

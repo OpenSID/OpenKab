@@ -1,7 +1,9 @@
 @extends('layouts.index')
 @include('layouts.components.select2_tahun', [
-    'url' => url('api/v1/statistik/' . strtolower($judul) . '/tahun'),
+    'url' => config('app.databaseGabunganUrl').'/api/v1/statistik/' . strtolower($judul) . '/tahun',
 ])
+
+
 
 @section('plugins.chart', true)
 
@@ -171,8 +173,17 @@
     let default_id = `{{ $default_kategori }}`;
     document.addEventListener("DOMContentLoaded", function(event) {
 
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+
+        var baseUrl = {!! json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
+
+        var urlKategoriStatistik = new URL(`${baseUrl}/statistik/kategori-statistik`);
+
+        urlKategoriStatistik.searchParams.set('filter[id]', kategori);
+
         $.ajax({
-            url: `{{ url('api/v1/statistik/kategori-statistik') }}?filter[id]=${kategori}`,
+            url: urlKategoriStatistik.href,
+            headers: header,
             method: 'get',
             success: function(response) {
                 if (response.data.length == 0) {
@@ -198,8 +209,16 @@
                         $('#judul_kolom_nama').html(judul_kolom_nama)
                         $('#cetak').data('url',
                             `{{ url('statistik/cetak') }}/${kategori}/${id}`);
-                        statistik.ajax.url(
-                            `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${id}`);
+
+                        var url = new URL(`${baseUrl}/statistik/${kategori}`);
+                        url.searchParams.set('filter[id]', id);
+
+                        console.log(url.href)
+
+                        statistik.ajax.url(url.href, {
+                            headers: header
+                        }).load();
+
                     }
                     html += `
                         <li class="nav-item pilih-kategori">
@@ -245,9 +264,18 @@
             $(this).addClass('active')
             $('#judul_kolom_nama').html(judul_kolom_nama)
 
-            statistik.ajax.url(`{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${id}`).load();
+            var url = new URL(`${baseUrl}/statistik/${kategori}`);
+            url.searchParams.set('filter[id]', id);
+
+            statistik.ajax.url(url.href, {
+                headers: header
+            }).load();
+
             $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
         });
+
+        var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
+        urlStatistik.searchParams.set('filter[id]', default_id);
 
         var statistik = $('#tabel-data').DataTable({
             processing: true,
@@ -258,7 +286,8 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/statistik') }}/${kategori}?filter[id]=${default_id}`,
+                url: urlStatistik.href,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {

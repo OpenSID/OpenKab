@@ -8,6 +8,7 @@ use App\Models\Bantuan;
 use App\Models\IbuHamil;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
+use App\Models\Point;
 use App\Models\Posyandu;
 use App\Models\Rtm;
 use App\Models\SasaranPaud;
@@ -536,7 +537,8 @@ class PresisiController extends Controller
         ];
         $listKecamatan = ['' => 'Pilih Kecamatan'];
         $listDesa = ['' => 'Pilih Desa'];
+        $kategori = Point::root()->where('sumber', 'OpenKab')->get();
 
-        return view('presisi.geo_spasial.index', compact('categoriesItems', 'listKecamatan', 'listDesa'));
+        return view('presisi.geo_spasial.index', compact('categoriesItems', 'listKecamatan', 'listDesa', 'kategori'));
     }
 }

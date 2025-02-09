@@ -1,4 +1,4 @@
-Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan perbaikan lain yang diminta pengguna.
+Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan perbaikan lain yang diminta pengguna.
 
 #### Penambahan Fitur
 
@@ -12,14 +12,21 @@ Di rilis ini, versi 2501.0.0 berisi penambahan filter wilayah pada estunting dan
 8. [#491](https://github.com/OpenSID/OpenKab/issues/491) Penambahan halaman geo spasial.
 9. [#480](https://github.com/OpenSID/OpenKab/issues/480) Penambahan preview data suplemen.
 10. [#501](https://github.com/OpenSID/OpenKab/issues/501) Penambahan pengaturan token api key OpenDK.
-11. [#502](https://github.com/OpenSID/OpenKab/issues/502) Penambahan API kebutuhan untuk mengambil identitas desa dengan parameter kode kecamatan dari OpenDK. 
+11. [#502](https://github.com/OpenSID/OpenKab/issues/502) Penambahan API kebutuhan untuk mengambil identitas desa dengan parameter kode kecamatan dari OpenDK.
+12. [#503](https://github.com/OpenSID/OpenKab/issues/503) Penambahan API kebutuhan untuk mengirim data Penduduk Dengan Parameter Kode Kecamatan dari OpenDK.
+13. [#504](https://github.com/OpenSID/OpenKab/issues/504) Penambahan API kebutuhan untuk mengirim data laporan penduduk dengan parameter kode kecamatan.
+14. [#492](https://github.com/OpenSID/OpenKab/issues/492) Penambahan tipe lokasi.
+15. [#505](https://github.com/OpenSID/OpenKab/issues/505) Penambahan API sync bantuan dan bantuan peserta OpenDK.
+16. [#507](https://github.com/OpenSID/OpenKab/issues/507) Penambahan Api pembangunan OpenDK.
+17. [#528](https://github.com/OpenSID/OpenKab/issues/528) Hapus API dtks dari OpenKab dan sesuaikan API database gabungan.
+18. [#506](https://github.com/OpenSID/OpenKab/issues/506) Penambahan API kebutuhan untuk mengirim data laporan APBDes dengan parameter kode kecamatan dari OpenDK.
+19. [#529](https://github.com/OpenSID/OpenKab/issues/529) Hapus API kesehatan dari OpenKab sesuaikan pemanggilan API database gabungan.
+20. [#500](https://github.com/OpenSID/OpenKab/issues/500) Penambahan tampilkan data peta.
+21. [#509](https://github.com/OpenSID/OpenKab/issues/509) Penambahan geospasial data sumber baru.
 
 #### Perbaikan BUG
 
-1. [#485](https://github.com/OpenSID/OpenKab/issues/485) Perbaikan terkait menu pilih aksi pada OpenKab tidak berfungsi.
+
 
 #### Perubahan Teknis
-
-1. [#482](https://github.com/OpenSID/OpenKab/issues/482) Susun ulang urutan menu pada OpenKab.
-2. [#487](https://github.com/OpenSID/OpenKab/issues/487) Rapikan tampilan menu horizontal.
-3. [#490](https://github.com/OpenSID/OpenKab/issues/490) Hapus menu yang tidak terpakai. 
+ 

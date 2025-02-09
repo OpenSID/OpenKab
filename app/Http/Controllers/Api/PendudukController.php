@@ -198,4 +198,9 @@ class PendudukController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function syncPendudukOpenDk()
+    {
+        return $this->fractal($this->penduduk->listPendudukSyncOpenDk(), new PendudukTransformer, 'penduduk')->respond();
+    }
 }

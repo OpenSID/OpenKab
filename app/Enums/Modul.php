@@ -60,6 +60,18 @@ final class Modul extends Enum
                     'permission' => 'datapokok-jaminan-sosial',
                 ],
                 [
+                    'icon' => 'fa fa-users',
+                    'text' => 'Pariwisata',
+                    'url' => 'data-pokok/pariwisata',
+                    'permission' => 'datapokok-pariwisata',
+                ],
+                [
+                    'icon' => 'fa fa-users',
+                    'text' => 'Infrastruktur',
+                    'url' => 'data-pokok/infrastruktur',
+                    'permission' => 'datapokok-infrastruktur',
+                ],
+                [
                     'icon' => 'far fa-fw fa-circle',
                     'text' => 'Data Papan',
                     'url' => 'satu-data/dtks/papan',
@@ -104,12 +116,6 @@ final class Modul extends Enum
                 ],
 
             ],
-        ],
-        [
-            'icon' => 'fa fa-users',
-            'text' => 'Pariwisata',
-            'url' => 'data-pokok/pariwisata',
-            'permission' => 'datapokok-pariwisata',
         ],
         [
             'text' => 'SOTK',

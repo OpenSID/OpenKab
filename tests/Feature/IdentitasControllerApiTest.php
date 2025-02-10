@@ -26,7 +26,7 @@ class IdentitasControllerApiTest extends TestCase
         $identitas = \App\Models\Identitas::inRandomOrder()->first();
         $url = '/api/v1/identitas/perbarui/'.$identitas->id.'?'.http_build_query([
 
-        ]);        
+        ]);
         $dataUpdate = [
             'nama_aplikasi' => 'Kabupaten Baru',
             'nama_kabupaten' => 'Simanis',
@@ -45,19 +45,19 @@ class IdentitasControllerApiTest extends TestCase
         $identitas = \App\Models\Identitas::inRandomOrder()->first();
         $url = '/api/v1/identitas/upload/'.$identitas->id.'?'.http_build_query([
 
-        ]);        
+        ]);
         $dataUpdate = [
             'file' => UploadedFile::fake()->image('avatar.png'),
         ];
-        
+
         $response = $this->postJson($url, $dataUpdate);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'success',
             'data',
         ]);
-        $fileName = $response->json('data');        
-        $logoFileName = explode('/',$fileName);
+        $fileName = $response->json('data');
+        $logoFileName = explode('/', $fileName);
         $dataLogo = [
             'id' => $identitas->id,
             'logo' => end($logoFileName),
@@ -73,24 +73,24 @@ class IdentitasControllerApiTest extends TestCase
         $identitas = \App\Models\Identitas::inRandomOrder()->first();
         $url = '/api/v1/identitas/uploadFavicon/'.$identitas->id.'?'.http_build_query([
 
-        ]);        
+        ]);
         $dataUpdate = [
             'file' => UploadedFile::fake()->image('favicon.png'),
         ];
-        
+
         $response = $this->postJson($url, $dataUpdate);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'success',
             'data',
         ]);
-        $fileName = $response->json('data');              
-        $logoFileName = explode('/',$fileName);
+        $fileName = $response->json('data');
+        $logoFileName = explode('/', $fileName);
         $dataLogo = [
             'id' => $identitas->id,
             'favicon' => end($logoFileName),
         ];
-        
+
         $this->assertTrue(File::exists('public/favicons/favicon-96x96.png'));
         $this->assertDatabaseHas('identitas', $dataLogo);
     }

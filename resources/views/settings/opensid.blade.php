@@ -63,7 +63,7 @@
                 return form.join('');
             }
 
-            var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan");
+            var url = new URL("{{ url('api/v1/pengaturan') }}");
 
             fetch(url, {
                     method: 'GET',
@@ -103,7 +103,7 @@
                             },
                         })
 
-                        var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/update");
+                        var url = new URL("{{ url('api/v1/pengaturan/update') }}");
 
                         $.ajax({
                             type: "POST",

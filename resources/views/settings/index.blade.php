@@ -28,7 +28,7 @@
     <script nonce="{{ csp_nonce() }}">
 
         const header = @include('layouts.components.header_bearer_api_gabungan');
-        var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/settings");
+        var url = new URL("{{ url('api/v1/pengaturan/settings') }}");
 
         document.addEventListener("DOMContentLoaded", function(event) {
             let settings = $('#settings-table').DataTable({

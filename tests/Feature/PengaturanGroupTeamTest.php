@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Team;
 use App\Models\User;
-use Laravel\Sanctum\Sanctum;
 use Illuminate\Http\Response;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class PengaturanGroupTeamTest extends TestCase
@@ -21,7 +21,6 @@ class PengaturanGroupTeamTest extends TestCase
         Sanctum::actingAs($user);
 
         $this->team = Team::inRandomOrder()->first();
-
     }
 
     /**
@@ -38,10 +37,10 @@ class PengaturanGroupTeamTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'attributes' => [                        
+                    'attributes' => [
                         'name',
-                        'menu' => [],                    
-                    ]
+                        'menu' => [],
+                    ],
                 ],
             ],
         ]);
@@ -62,7 +61,7 @@ class PengaturanGroupTeamTest extends TestCase
                 'id',
                 'attributes' => [
                     'name',
-                    'menu' => [],    
+                    'menu' => [],
                     'menu_order',
                     'created_at',
                     'updated_at',
@@ -74,13 +73,12 @@ class PengaturanGroupTeamTest extends TestCase
                             'guard_name',
                             'created_at',
                             'updated_at',
-                            'permissions' => []
-                        ]
-                    ]
-                ]
-            ]
+                            'permissions' => [],
+                        ],
+                    ],
+                ],
+            ],
         ]);
-
     }
 
     public function test_get_data_group_menu(): void
@@ -98,8 +96,8 @@ class PengaturanGroupTeamTest extends TestCase
                     'text',
                     'icon',
                     'permission',
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
@@ -110,9 +108,9 @@ class PengaturanGroupTeamTest extends TestCase
             'name' => 'Test Menu',
             'menu' => [
                 [
-                    "icon" => "fa fa-users",
-                    "text" => "test Menu"
-                ]
+                    'icon' => 'fa fa-users',
+                    'text' => 'test Menu',
+                ],
             ],
             'menu_order' => null,
         ]);
@@ -125,7 +123,7 @@ class PengaturanGroupTeamTest extends TestCase
 
         // 4. Hapus data yang baru dibuat melalui API
         $deleteResponse = $this->postJson('/api/v1/pengaturan/group/delete', [
-            'id' => $team_id
+            'id' => $team_id,
         ]);
 
         // 5. Pastikan response sukses (200 OK)
@@ -134,6 +132,4 @@ class PengaturanGroupTeamTest extends TestCase
         // 6. Pastikan data benar-benar sudah terhapus
         $this->assertDatabaseMissing('team', ['id' => $team_id]);
     }
-
-
 }

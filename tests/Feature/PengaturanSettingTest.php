@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Setting;
 use App\Models\User;
-use Laravel\Sanctum\Sanctum;
 use Illuminate\Http\Response;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class PengaturanSettingTest extends TestCase
@@ -21,7 +21,6 @@ class PengaturanSettingTest extends TestCase
         Sanctum::actingAs($user);
 
         $this->setting = Setting::inRandomOrder()->first();
-
     }
 
     /**
@@ -31,7 +30,7 @@ class PengaturanSettingTest extends TestCase
     {
         $url = '/api/v1/pengaturan/settings';
 
-        $response = $this->getJson($url); 
+        $response = $this->getJson($url);
 
         // Pastikan responsnya berhasil
         $response->assertStatus(Response::HTTP_OK);
@@ -39,15 +38,15 @@ class PengaturanSettingTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'attributes' => [                        
+                    'attributes' => [
                         'key',
                         'name',
-                        'value',                        
-                        'type',   
+                        'value',
+                        'type',
                         'attribute' => [],
                         'description',
                         'created_at',
-                        'updated_at'                     
+                        'updated_at',
                     ],
                 ],
             ],
@@ -68,7 +67,7 @@ class PengaturanSettingTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
         $response->assertJsonStructure([
-            'success'
+            'success',
         ]);
     }
 
@@ -87,7 +86,7 @@ class PengaturanSettingTest extends TestCase
 
         $response->assertJsonStructure([
             'success',
-            'message'
+            'message',
         ]);
     }
 }

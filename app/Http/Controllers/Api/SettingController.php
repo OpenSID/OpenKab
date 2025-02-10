@@ -34,7 +34,7 @@ class SettingController extends Controller
 
             foreach ($request->all() as $key => $value) {
                 // Jika key tidak ditemukan di database, kembalikan error
-                if (!in_array($key, $validKeys)) {
+                if (! in_array($key, $validKeys)) {
                     return response()->json([
                         'success' => false,
                         'message' => "Key '{$key}' tidak ditemukan dalam pengaturan.",
@@ -53,7 +53,6 @@ class SettingController extends Controller
             return response()->json([
                 'success' => true,
             ], Response::HTTP_OK);
-
         } catch (\Exception $e) {
             report($e);
 

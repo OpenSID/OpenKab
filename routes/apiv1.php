@@ -24,13 +24,13 @@ use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\PointController;
+use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\SuplemenController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
 use App\Http\Controllers\Api\WilayahController;
-use App\Http\Controllers\Api\SettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

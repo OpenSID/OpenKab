@@ -152,17 +152,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/sasaran', 'sasaran');
             Route::get('/tahun', 'tahun');
             Route::get('/cetak', 'cetakBantuan');
-        });
-
-    // Master Data Kategori Artikel
-    Route::controller(KategoriController::class)
-        ->prefix('kategori')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/tampil', 'show');
-            Route::post('/buat', 'store');
-            Route::put('/perbarui/{id}', 'update');
-            Route::post('/hapus', 'destroy');
-        });
+        });   
 
     // Master Data Bantuan
     Route::controller(BantuanKabupatenController::class)

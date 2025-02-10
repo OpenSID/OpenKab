@@ -34,3 +34,4 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 3. [#538](https://github.com/OpenSID/OpenKab/issues/538) Hapus API Tarik data OpenDK dari OpenKab ke API database gabungan.
 4. [#529](https://github.com/OpenSID/OpenKab/issues/529) Hapus API kesehatan dari OpenKab sesuaikan pemanggilan API database gabungan.
 5. [#528](https://github.com/OpenSID/OpenKab/issues/528) Hapus API dtks dari OpenKab dan sesuaikan API database gabungan.
+6. [#537](https://github.com/OpenSID/OpenKab/issues/537) Hapus API get-list statistik dari OpenKab ke AP database gabungan.

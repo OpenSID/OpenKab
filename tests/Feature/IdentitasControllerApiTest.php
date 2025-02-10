@@ -84,8 +84,7 @@ class IdentitasControllerApiTest extends TestCase
             'success',
             'data',
         ]);
-        $fileName = $response->json('data');      
-        echo $fileName;  
+        $fileName = $response->json('data');              
         $logoFileName = explode('/',$fileName);
         $dataLogo = [
             'id' => $identitas->id,

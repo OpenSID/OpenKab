@@ -105,6 +105,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
+                        'filter[kode_kabupaten]' : $("#filter_kabupaten").val(),
+                        'filter[kode_kecamatan]' : $("#filter_kecamatan").val(),
+                        'filter[kode_desa]' : $("#filter_desa").val(),
                     };
                 },
                 dataSrc: function(json) {

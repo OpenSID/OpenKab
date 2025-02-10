@@ -18,16 +18,19 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 14. [#492](https://github.com/OpenSID/OpenKab/issues/492) Penambahan tipe lokasi.
 15. [#505](https://github.com/OpenSID/OpenKab/issues/505) Penambahan API sync bantuan dan bantuan peserta OpenDK.
 16. [#507](https://github.com/OpenSID/OpenKab/issues/507) Penambahan Api pembangunan OpenDK.
-17. [#528](https://github.com/OpenSID/OpenKab/issues/528) Hapus API dtks dari OpenKab dan sesuaikan API database gabungan.
-18. [#506](https://github.com/OpenSID/OpenKab/issues/506) Penambahan API kebutuhan untuk mengirim data laporan APBDes dengan parameter kode kecamatan dari OpenDK.
-19. [#529](https://github.com/OpenSID/OpenKab/issues/529) Hapus API kesehatan dari OpenKab sesuaikan pemanggilan API database gabungan.
+17. [#506](https://github.com/OpenSID/OpenKab/issues/506) Penambahan API kebutuhan untuk mengirim data laporan APBDes dengan parameter kode kecamatan dari OpenDK.
+18. [#500](https://github.com/OpenSID/OpenKab/issues/500) Penambahan tampilkan data peta.
+19. [#509](https://github.com/OpenSID/OpenKab/issues/509) Penambahan geospasial data sumber baru.
+20. [#516](https://github.com/OpenSID/OpenKab/issues/516) Penambahan jumlah kecamatan, desa, jumlah penduduk dan keluarga mengikuti filter wilayah.
+
 
 #### Perbaikan BUG
 
-1. [#485](https://github.com/OpenSID/OpenKab/issues/485) Perbaikan terkait menu pilih aksi pada OpenKab tidak berfungsi.
 
 #### Perubahan Teknis
 
-1. [#482](https://github.com/OpenSID/OpenKab/issues/482) Susun ulang urutan menu pada OpenKab.
-2. [#487](https://github.com/OpenSID/OpenKab/issues/487) Rapikan tampilan menu horizontal.
-3. [#490](https://github.com/OpenSID/OpenKab/issues/490) Hapus menu yang tidak terpakai. 
+1. [#542](https://github.com/OpenSID/OpenKab/issues/542) Hapus API Kategori Artikel yang sudah tersedia di API database gabungan.
+2. [#536](https://github.com/OpenSID/OpenKab/issues/536) Hapus API pendidikan & dtks dari OpenKab sesuaikan pemanggilan API database gabungan.
+3. [#538](https://github.com/OpenSID/OpenKab/issues/538) Hapus API Tarik data OpenDK dari OpenKab ke API database gabungan.
+4. [#529](https://github.com/OpenSID/OpenKab/issues/529) Hapus API kesehatan dari OpenKab sesuaikan pemanggilan API database gabungan.
+5. [#528](https://github.com/OpenSID/OpenKab/issues/528) Hapus API dtks dari OpenKab dan sesuaikan API database gabungan.

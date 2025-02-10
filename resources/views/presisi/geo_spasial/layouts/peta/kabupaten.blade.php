@@ -16,7 +16,7 @@ function GetListKabupaten() {
 
     $.ajax({
         type: 'GET',
-        url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-kabupaten' }}",
+        url: url,
         dataType: 'json',
         success: function(data) {
             for (var i = 0; i < data.length; i++) {
@@ -29,9 +29,6 @@ function GetListKabupaten() {
                 $("#filter_kabupaten").val(sessionKodeKabupaten);
                 GetListKecamatan(sessionKodeKabupaten); // Panggil langsung
                 GetListCoordinates(sessionKodeKabupaten); // Panggil langsung
-                updateWebsiteData(sessionKodeKabupaten);
-                GetSummary(sessionKodeKabupaten);
-                reloadDataTablesIfAjaxRunning();
                 $("#filter_kabupaten").trigger("change");
             } else {
                 $("#filter_kabupaten").val("").trigger("change");

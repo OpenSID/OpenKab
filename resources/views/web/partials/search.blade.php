@@ -88,7 +88,7 @@
                 let bulan = new Date().getMonth() + 1
                 let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
                 $.ajax({
-                    url: `{{ url('api/v1/statistik-web') }}/${kategori}?filter[id]=${default_id}&filter[tahun]=${tahun}&filter[bulan]=${bulan}&config_desa=${config_desa}`,
+                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web' }}/${kategori}?filter[id]=${default_id}&filter[tahun]=${tahun}&filter[bulan]=${bulan}&config_desa=${config_desa}`,
                     type: 'get',
                     dataType: 'json',
                     data: {},

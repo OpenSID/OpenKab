@@ -1,5 +1,5 @@
 function GetListCoordinates(kabupaten = null, kecamatan = null, desa= null) {
-    var coordUrl =  "{{ url('api/v1/statistik-web/get-list-coordinate') }}";
+    var coordUrl =  "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-coordinate' }}";
     if (kecamatan != null || desa != null){
         coordUrl =  coordUrl+= "?filter[kabupaten]=" + (kabupaten == null ? "" : kabupaten) + "&filter[kecamatan]=" + (kecamatan == null ? "" : kecamatan) + "&filter[desa]=" + (desa == null ? "" : desa);
     }

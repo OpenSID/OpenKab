@@ -116,7 +116,6 @@ class LoginController extends Controller
                 });
             }
 
-
             try {
                 $request->validate(['password' => ['required', Password::min(8)
                     ->letters()

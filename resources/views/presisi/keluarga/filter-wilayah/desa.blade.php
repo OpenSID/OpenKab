@@ -9,7 +9,7 @@ function GetListDesa($id) {
         $("#filter_desa").append(optionEmpty);
         $.ajax({
             type: 'GET',
-            url: "{{ url('api/v1/statistik-web/get-list-desa') }}" + "/" + $id,
+            url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-desa' }}" + "/" + $id,
             dataType: 'json',
             success: function(data) {
                 for (var i = 0; i < data.length; i++) {

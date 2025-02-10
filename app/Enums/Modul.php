@@ -180,6 +180,12 @@ final class Modul extends Enum
             'permission' => 'pengaturan-peta',
             'submenu' => [
                 [
+                    'text' => 'Lokasi',
+                    'icon' => 'far fa-fw fa-circle',
+                    'url' => 'plan',
+                    'permission' => 'plan',
+                ],
+                [
                     'text' => 'Tipe Lokasi',
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'point',

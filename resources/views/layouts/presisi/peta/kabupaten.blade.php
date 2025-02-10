@@ -16,7 +16,7 @@ function GetListKabupaten() {
 
     $.ajax({
         type: 'GET',
-        url: url,
+        url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-kabupaten' }}",
         dataType: 'json',
         success: function(data) {
             for (var i = 0; i < data.length; i++) {

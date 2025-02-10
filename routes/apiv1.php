@@ -225,42 +225,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });    
 });
 
-// Statistik
-Route::controller(StatistikController::class)
-    ->prefix('statistik-web')->group(function () {
-        Route::get('/kategori-statistik', 'kategoriStatistik');
-        Route::prefix('penduduk')->group(function () {
-            Route::get('/', 'penduduk');
-            Route::get('/tahun', 'refTahunPenduduk');
-        });
-        Route::prefix('keluarga')->group(function () {
-            Route::get('/', 'keluarga');
-            Route::get('/tahun', 'refTahunKeluarga');
-        });
-        Route::prefix('rtm')->group(function () {
-            Route::get('/', 'rtm');
-            Route::get('/tahun', 'refTahunRtm');
-        });
-        Route::get('/bantuan', 'bantuan');
-        Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
-        Route::get('/get-list-coordinate', 'getListCoordinate');
-        Route::get('/get-list-program', 'getListProgram');
-        Route::get('/get-list-tahun', 'getListTahun');
-        Route::get('/get-list-kabupaten', 'getListKabupaten');
-        Route::get('/get-list-kabupaten-data', 'getListKabupatenData');
-        Route::get('/get-list-kecamatan/{id}', 'getListKecamatan');
-        Route::get('/get-list-desa/{id}', 'getListDesa');
-        Route::get('/get-list-coordinate', 'getListCoordinate');
-        Route::get('/get-list-penerima', 'getListPenerimaBantuan');
-    });
-
-// Data
-Route::controller(DataController::class)
-    ->prefix('data')->group(function () {
-        Route::get('/kesehatan', 'kesehatan');
-        Route::get('/jaminan-sosial', 'jaminanSosial');
-        Route::get('/penduduk-potensi-kelembagaan', 'pendudukPotensiKelembagaan');
-    });
 
 // Data utama website
 Route::get('data-website', WebsiteController::class);

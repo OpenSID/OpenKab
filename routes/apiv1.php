@@ -88,11 +88,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', DasborController::class);
     });
 
-    // API Data Presisi
-    Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
-
-    Route::get('/pendidikan', PendidikanController::class);    
-
     Route::prefix('penduduk')->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 

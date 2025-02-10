@@ -65,7 +65,7 @@
                 ],
 
                 "ajax": {
-                    "url": "{{ url('api/v1/statistik-web/rtm') }}",
+                    "url": "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/rtm' }}",
                     "type": "get",
                     "data": function(d) {
                         var nav = $('#nav-statistik').find('li a.active')

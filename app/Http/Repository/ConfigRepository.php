@@ -4,18 +4,30 @@ namespace App\Http\Repository;
 
 use App\Models\Config;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ConfigRepository
 {
     public function desa()
     {
-        return QueryBuilder::for(Config::class)->get();
+        return QueryBuilder::for(Config::class)
+        ->allowedFilters([
+            AllowedFilter::exact('kode_kabupaten'),
+            AllowedFilter::exact('kode_kecamatan'),
+            AllowedFilter::exact('kode_desa'),
+        ])
+        ->get();
     }
 
     public function kabupaten()
     {
         return QueryBuilder::for(Config::class)
+            ->allowedFilters([
+                AllowedFilter::exact('kode_kabupaten'),
+                AllowedFilter::exact('kode_kecamatan'),
+                AllowedFilter::exact('kode_desa'),
+            ])
             ->select('kode_kabupaten', DB::raw('MAX(nama_kabupaten) as nama_kabupaten'), DB::raw('MIN(id) as id'))
             ->groupBy('kode_kabupaten')
             ->cursor();
@@ -24,6 +36,11 @@ class ConfigRepository
     public function kecamatan()
     {
         return QueryBuilder::for(Config::class)
+            ->allowedFilters([
+                AllowedFilter::exact('kode_kabupaten'),
+                AllowedFilter::exact('kode_kecamatan'),
+                AllowedFilter::exact('kode_desa'),
+            ])
             ->select('kode_kecamatan', DB::raw('MAX(nama_kecamatan) as nama_kecamatan'), DB::raw('MIN(id) as id'))
             ->groupBy('kode_kecamatan')
             ->cursor();

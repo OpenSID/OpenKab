@@ -50,9 +50,11 @@
     @section('js')
     <script nonce="{{ csp_nonce() }}"  >
         document.addEventListener("DOMContentLoaded", function(event) {
+            const header = @include('layouts.components.header_bearer_api_gabungan');
             $.ajax({
                 type: "get",
-                url: "{{ url('api/v1/kategori/tampil') }}",
+                url: "{{ config('app.databaseGabunganUrl').'/api/v1/kategori/tampil' }}",
+                headers: header,
                 data: {
                     id: {{ request()->route('parrent') }}
                 },
@@ -67,7 +69,8 @@
             var table = $('#kategori').DataTable({
 
                 ajax: {
-                    url: '{{ url('api/v1/kategori') }}',
+                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/kategori' }}`,
+                    headers: header,
                     dataSrc: function(json) {
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
@@ -112,8 +115,8 @@
                             let canEdit = `{{ $canedit }}`
                             let canDelete = `{{ $candelete }}`
                             var id = row.id;
-                            var sub = (row.attributes.parrent == 0) ? `<a href="{{ url('pengaturan-opensid/kategori-artikel/') }}/${id}" class="btn btn-info btn-sm edit" data-id="${id}" title="Ubah"><i class="fas fa-bars"></i></a>` : '';
-                            let buttonEdit = canEdit ? `<a href="{{ url('pengaturan-opensid/kategori-artikel/edit') }}/${id}/{{ (int) request()->route('parrent') }}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
+                            var sub = (row.attributes.parrent == 0) ? `<a href="{{ url('master/kategori/') }}/${id}" class="btn btn-info btn-sm edit" data-id="${id}" title="Ubah"><i class="fas fa-bars"></i></a>` : '';
+                            let buttonEdit = canEdit ? `<a href="{{ url('master/kategori/edit') }}/${id}/{{ (int) request()->route('parrent') }}" class="btn btn-warning btn-sm sub" data-id="${id}" title="Tambah Sub">
                                         <i class="fas fa-edit"></i>
                                     </a>` : ``;
                             let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Ubah">
@@ -174,12 +177,10 @@
 
                         $.ajax({
                             type: "PUT",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
+                            headers: header,
                             // contentType: "application/json; charset=utf-8",
                             dataType: "json",
-                            url: "{{ url('api/v1/kategori/perbarui') }}/" + id,
+                            url: "{{ config('app.databaseGabunganUrl').'/api/v1/kategori/perbarui' }}/" + id,
                             data: {
                                 kategori: result.value
                             },
@@ -238,11 +239,9 @@
                         })
                         $.ajax({
                             type: "post",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
+                            headers: header,
                             dataType: "json",
-                            url: "{{ url('api/v1/kategori/hapus') }}",
+                            url: "{{ config('app.databaseGabunganUrl').'/api/v1/kategori/hapus' }}",
                             data: {
                                 id: id
                             },
@@ -329,11 +328,9 @@
             function simpan(value, parrent = 0) {
                 $.ajax({
                     type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                    headers: header,
                     dataType: "json",
-                    url: `{{ url('api/v1/kategori/buat') }}`,
+                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/kategori/buat' }}`,
                     data: {
                         kategori: value,
                         parrent: parrent

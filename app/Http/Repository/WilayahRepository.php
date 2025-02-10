@@ -18,7 +18,7 @@ class WilayahRepository
                 AllowedFilter::exact('kode_desa'),
                 AllowedFilter::exact('nama_kecamatan'),
                 AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
-                    $query->where('kode_kecamatan', '!=', $value);
+                    $query->where('kode_kecamatan', $value);
                 }),
                 AllowedFilter::callback('search', function ($query, $value) {
                     $query->where(function ($query) use ($value) {
@@ -107,6 +107,15 @@ class WilayahRepository
                     $query->where(function ($query) use ($value) {
                         $query->where('nama_desa', 'like', "%{$value}%");
                     });
+                }),
+                AllowedFilter::callback('kode_kabupaten', function ($query, $value) {
+                    $query->where('kode_kabupaten', $value);
+                }),
+                AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
+                    $query->where('kode_kecamatan', $value);
+                }),
+                AllowedFilter::callback('kode_desa', function ($query, $value) {
+                    $query->where('kode_desa', $value);
                 }),
             ])
             ->allowedSorts(['nama_desa'])

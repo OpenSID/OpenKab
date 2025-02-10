@@ -11,7 +11,7 @@ function GetListKabupaten() {
     $("#filter_kabupaten").append(optionEmpty);
     $.ajax({
         type: 'GET',
-        url: "{{ url('api/v1/statistik-web/get-list-kabupaten') }}",
+        url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-kabupaten' }}",
         dataType: 'json',
         success: function(data) {
             for (var i = 0; i < data.length; i++) {

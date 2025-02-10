@@ -28,6 +28,4 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 
 #### Perubahan Teknis
 
-1. [#482](https://github.com/OpenSID/OpenKab/issues/482) Susun ulang urutan menu pada OpenKab.
-2. [#487](https://github.com/OpenSID/OpenKab/issues/487) Rapikan tampilan menu horizontal.
-3. [#490](https://github.com/OpenSID/OpenKab/issues/490) Hapus menu yang tidak terpakai. 
+1. [#542](https://github.com/OpenSID/OpenKab/issues/542) Hapus API Kategori Artikel yang sudah tersedia di API database gabungan.

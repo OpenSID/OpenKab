@@ -52,22 +52,14 @@
 <script defer src="{{ asset('vendor/menu-editor/bootstrap-iconpicker.min.js') }}"></script>
 <script defer src="{{ asset('vendor/menu-editor/jquery-menu-editor.js') }}"></script>
 <script nonce="{{  csp_nonce() }}">
-
-const headers = @include('layouts.components.header_bearer_api_gabungan');
-
 const menu = () => {
     const retrieveData = () => {
-        var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group/listModul/{{ $id }}");
-
-        fetch(url, {
-            method: "GET",
-            headers: headers
-        })
-        .then(res => res.json())
-        .then(response => {                 
-            buildEditor(response.data['menu'])
-            buildListModul(response.data['modul'])
-        });        
+        fetch('{{ url('api/v1/pengaturan/group/listModul/' . $id) }}')
+                    .then(res => res.json())
+                    .then(response => {                 
+                        buildEditor(response.data['menu'])
+                        buildListModul(response.data['modul'])
+                    });        
     }
     const buildListModul = (modul) => {                 
             let listModul = document.querySelector('select[name=sourcelist]')
@@ -130,12 +122,11 @@ const menu = () => {
                 return;
             }
             $('#frmEdit').find('textarea[name=json_menu]').val(str)
-
-            var url = new URL("{{ config('app.databaseGabunganUrl') }}/api/v1/pengaturan/group/updateMenu/{{ $id }}");
-
             $.ajax({
                     type: "PUT",
-                    headers: headers,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     beforeSend: function() {
                         Swal.fire({
                             title: 'Menyimpan',
@@ -144,7 +135,7 @@ const menu = () => {
                             },
                         })
                     },
-                    url: url,
+                    url: '{{ url('api/v1/pengaturan/group/updateMenu/' . $id) }}',
                     data: {
                         menu_order : str
                     },

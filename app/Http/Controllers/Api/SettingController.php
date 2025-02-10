@@ -29,25 +29,12 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         try {
-            // Ambil semua key yang valid dari database
-            $validKeys = Setting::pluck('key')->toArray();
-
             foreach ($request->all() as $key => $value) {
-                // Jika key tidak ditemukan di database, kembalikan error
-                if (! in_array($key, $validKeys)) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Key '{$key}' tidak ditemukan dalam pengaturan.",
-                    ], Response::HTTP_BAD_REQUEST);
-                }
-
-                // Jika key adalah 'opendk_api_key', lakukan aksi khusus
-                if ($key === 'opendk_api_key') {
+                if ($key == 'opendk_api_key') {
                     $this->removeTokenSynchronize($value);
                 }
-
-                // Lakukan update pada setting yang sesuai
                 Setting::where('key', $key)->update(['value' => $value]);
+                activity('data-log')->event('updated')->withProperties($request)->log('setting Aplikasi');
             }
 
             return response()->json([

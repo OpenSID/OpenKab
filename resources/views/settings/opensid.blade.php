@@ -24,9 +24,6 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function (event) {
-
-            const header = @include('layouts.components.header_bearer_api_gabungan');
-
             function buildInputForm(data) {
                 let form = [], _tmp, _item;
                 for(let i in data) {
@@ -62,13 +59,7 @@
 
                 return form.join('');
             }
-
-            var url = new URL("{{ url('api/v1/pengaturan') }}");
-
-            fetch(url, {
-                    method: 'GET',
-                    headers: header
-                })
+            fetch(`{{ route('api.pengaturan_aplikasi') }}`)
                 .then(res => res.json())
                 .then(response => {
                     if (response.data.length != 0) {
@@ -102,18 +93,15 @@
                                 Swal.showLoading()
                             },
                         })
-
-                        var url = new URL("{{ url('api/v1/pengaturan/update') }}");
-
                         $.ajax({
                             type: "POST",
-                            headers: header,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
                             dataType: "json",
-                            url: url,
+                            url: `{{ url('api/v1/pengaturan/update') }}`,
                             data: formData,
                             success: function(response) {
-
-                                console.log(response)
                                 if (response.success == true) {
                                     Swal.fire({
                                         title: 'Berhasil!',

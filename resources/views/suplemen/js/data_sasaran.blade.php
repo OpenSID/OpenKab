@@ -2,7 +2,8 @@ $('#sasaran').select2({
     theme: 'bootstrap4',
     minimumResultsForSearch: -1,
     ajax: {
-        url: '{{ url('api/v1/suplemen') }}/sasaran/',
+        url:urlSasaran,
+        headers: header,
         dataType: 'json',
         processResults: function(response) {
             return {

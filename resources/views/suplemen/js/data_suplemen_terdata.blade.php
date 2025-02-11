@@ -8,7 +8,7 @@ var suplemen = $('#suplemen').DataTable({
         columns: [0]
     },
     ajax: {
-        url: `{{ url('api/v1/suplemen/terdata/'.$suplemen->sasaran.'/'.$suplemen->id) }}`,
+        url: `${urlTerdata}/{{ $suplemen->sasaran }}/{{$suplemen->id}}`,
         method: 'get',
         data: function(row) {
             return {

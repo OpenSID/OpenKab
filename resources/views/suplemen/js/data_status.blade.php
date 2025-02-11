@@ -2,7 +2,8 @@ $('#status').select2({
     theme: 'bootstrap4',
     minimumResultsForSearch: -1,
     ajax: {
-        url: '{{ url('api/v1/suplemen') }}/status/',
+        url: urlStatus,
+        headers: header,
         dataType: 'json',
         processResults: function(response) {
             return {

@@ -41,6 +41,16 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+        var urlSuplemen = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/suplemen' }}");
+        var urlSuplemenHapus = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/suplemen/hapus' }}");
+        var urlSuplemenMultipleDelete = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/suplemen/terdata/hapus' }}");
+        var urlSasaran = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/suplemen/sasaran' }}");
+        var urlStatus = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/suplemen/status' }}");
+        // url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+        // url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
+
         @include('suplemen.js.data_suplemen')
         @include('suplemen.js.data_sasaran')
         @include('suplemen.js.data_status')

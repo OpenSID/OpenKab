@@ -26,7 +26,6 @@ use App\Http\Controllers\Api\PointController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\SummaryController;
-use App\Http\Controllers\Api\SuplemenController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
 use App\Http\Controllers\Api\WilayahController;
@@ -283,15 +282,6 @@ Route::get('data-summary', SummaryController::class);
 
 // Desa teraktif
 Route::get('desa-aktif', [KategoriDesaController::class, 'index']);
-
-Route::post('/suplemen', [SuplemenController::class, 'store']);
-Route::post('/suplemen/terdata/hapus', [SuplemenController::class, 'delete_multiple'])->name('suplemen-terdata.delete-multiple');
-Route::post('/suplemen/update/{id}', [SuplemenController::class, 'update']);
-Route::get('/suplemen', [SuplemenController::class, 'index']);
-Route::get('/suplemen/terdata/{sasaran}/{id}', [SuplemenController::class, 'detail']);
-Route::get('/suplemen/sasaran', [SuplemenController::class, 'sasaran']);
-Route::get('/suplemen/status', [SuplemenController::class, 'status']);
-Route::delete('/suplemen/hapus/{id}', [SuplemenController::class, 'destroy'])->name('suplemen.hapus');
 
 Route::get('/point', [PointController::class, 'index']);
 Route::get('/point/status', [PointController::class, 'status']);

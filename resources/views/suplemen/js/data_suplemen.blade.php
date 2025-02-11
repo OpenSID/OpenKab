@@ -8,7 +8,8 @@ var suplemen = $('#suplemen').DataTable({
         columns: [0]
     },
     ajax: {
-        url: `{{ url('api/v1/suplemen') }}`,
+        url: urlSuplemen,
+        headers: header,
         method: 'get',
         data: function(row) {
             return {

@@ -51,6 +51,10 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}">
     document.addEventListener("DOMContentLoaded", function(event) {
+
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+        var urlTerdata = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/suplemen/terdata' }}");
+        
         @include('suplemen.js.data_suplemen_terdata')
         @include('suplemen.js.checkbox')
         @include('suplemen.js.multiple_delete')

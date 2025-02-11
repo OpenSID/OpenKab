@@ -26,8 +26,9 @@ $('#multiple-delete').on('click', function(e) {
                 });
 
                 $.ajax({
-                    url: '{{ url("api/v1/suplemen/terdata/hapus") }}',
+                    url: urlSuplemenMultipleDelete,
                     method: 'POST',
+                    headers: header,
                     data: {
                         _token: '{{ csrf_token() }}',
                         ids: selectedIds,

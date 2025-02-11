@@ -17,14 +17,12 @@ $(document).on('click', 'button.hapus', function () {
             })
             $.ajax({
                 type: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
                 dataType: "json",
-                url: `{{ url('api/v1/suplemen/hapus') }}/${id}`,
+                url: `${urlSuplemenHapus}/${id}`,
                 data: {
                     id: id
                 },
+                headers: header,
                 success: function (response) {
 
                     if (response.success == true) {

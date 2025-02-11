@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
-use App\Http\Controllers\Api\KeuanganController;
 use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
 use App\Http\Controllers\Api\PendudukController;
@@ -201,11 +200,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('opendk/bantuan/{id}', [BantuanController::class, 'getBantuanOpenDk']);
         Route::get('/opendk/bantuan-peserta', [BantuanController::class, 'syncBantuanPesertaOpenDk']);
         Route::get('/opendk/bantuan-peserta/{id}/{kode_desa}', [BantuanController::class, 'getBantuanPesertaOpenDk']);
-
-        Route::prefix('keuangan')->group(function () {
-            Route::get('apbdes', [KeuanganController::class, 'apbdes']);
-            Route::get('laporan_apbdes', [KeuanganController::class, 'laporan_apbdes']);
-        });
     });
 });
 

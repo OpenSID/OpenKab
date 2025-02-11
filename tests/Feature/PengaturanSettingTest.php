@@ -81,12 +81,13 @@ class PengaturanSettingTest extends TestCase
 
         $response = $this->putJson($url, $data);
 
-        // Pastikan responsnya berhasil
-        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        // Sekarang akan gagal dengan error 422 (Unprocessable Entity)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $response->assertJsonStructure([
             'success',
             'message',
         ]);
     }
+
 }

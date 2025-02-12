@@ -102,18 +102,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('pindah', [PendudukController::class, 'pindah']);
         });
     });
-
-    // Dokumen
-    Route::prefix('dokumen')->group(function () {
-        Route::get('/', DokumenController::class);
-    });
-
-    // Keluarga
-    Route::controller(KeluargaController::class)
-        ->prefix('keluarga')->group(function () {
-            Route::get('/show', 'show')->name('api.keluarga.detail');
-        });
-
+   
     // Statistik
     Route::controller(StatistikController::class)
         ->prefix('statistik')->group(function () {

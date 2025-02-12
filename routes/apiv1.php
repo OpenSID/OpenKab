@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\BantuanController;
-use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DataController;
 use App\Http\Controllers\Api\DesaController;
@@ -153,22 +151,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/tahun', 'tahun');
             Route::get('/cetak', 'cetakBantuan');
         });   
-
-    // Master Data Bantuan
-    Route::controller(BantuanKabupatenController::class)
-        ->prefix('bantuan-kabupaten')->group(function () {
-            Route::get('/', 'index');
-            Route::post('/tambah', 'store');
-            Route::put('/perbarui/{id}', 'update');
-            Route::post('/hapus', 'destroy');
-        });
-
-    // Artikel
-    Route::controller(ArtikelController::class)
-        ->prefix('artikel')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/tahun', 'tahun');
-        });
 
     // Identitas
     Route::controller(IdentitasController::class)

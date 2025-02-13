@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
@@ -131,6 +132,9 @@ class LoginController extends Controller
                 return redirect(route('password.change'))->with('success-login', 'Ganti password dengan yang lebih kuat');
             }
         }
+
+        Artisan::call('optimize:clear');
+        Artisan::call('config:cache');
 
         return $successLogin;
     }

@@ -37,6 +37,7 @@
         </div>
     </div>
     <script nonce="{{ csp_nonce() }}"  >
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         function kategori() {
             return {
                 dataKategori: {
@@ -46,7 +47,7 @@
                 },
 
                 retriveData() {
-                    fetch(`{{ url('api/v1/kategori/tampil') }}?id=${this.dataKategori.parrent}`)
+                    fetch(`{{ config('app.databaseGabunganUrl').'/api/v1/kategori/tampil' }}?id=${this.dataKategori.parrent}`, { headers: header })
                         .then(res => res.json())
                         .then(response => {
 
@@ -77,14 +78,13 @@
                         },
                         allowOutsideClick: false
                     })
+                                        
                     $.ajax({
                         type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
+                        headers: header,
                         dataType: "json",
-                        url: `{{ url('api/v1/kategori/buat') }}`,
-                        data: this.dataKategori,
+                        url: `{{ config('app.databaseGabunganUrl').'/api/v1/kategori/buat' }}`,
+                        data: JSON.stringify(this.dataKategori),
                         success: function(response) {
                             if (response.success == true) {
                                 Swal.fire({

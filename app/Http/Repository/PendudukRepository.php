@@ -461,67 +461,26 @@ class PendudukRepository
 
     public function summary()
     {
-        return QueryBuilder::for(Penduduk::class)->count();
-    }
-
-    public function listPendudukPendidikan()
-    {
-        return QueryBuilder::for(Penduduk::filterWilayah())
-            ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
-            ->allowedFilters([  // Tentukan filter yang diizinkan
-                AllowedFilter::exact('id'),
-                AllowedFilter::exact('sex'),
-                AllowedFilter::exact('status'),
-                AllowedFilter::exact('status_dasar'),
-                AllowedFilter::exact('keluarga.no_kk'),
-                AllowedFilter::exact('clusterDesa.dusun'),
-                AllowedFilter::exact('clusterDesa.rw'),
-                AllowedFilter::exact('clusterDesa.rt'),
-                AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where(function ($query) use ($value) {
-                        $query->where('p.nama', 'like', "%{$value}%")
-                            ->orWhere('p.nik', 'like', "%{$value}%")
-                            ->orWhere('p.tag_id_card', 'like', "%{$value}%");
+        return QueryBuilder::for(Penduduk::class)
+            ->allowedFilters([
+                AllowedFilter::callback('kode_desa', function ($query, $value) {
+                    $query->whereHas('config', function ($query) use ($value) {
+                        $query->where('kode_desa', $value);
                     });
                 }),
-            ])
-            ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
-                'p.nik',
-                'p.nama',
-                'p.umur',
-                'p.created_at',
-            ])
-            ->jsonPaginate();  // Melakukan pagination dan mengembalikan data dalam
-    }
-
-    public function listPendudukKetenagakerjaan()
-    {
-        return QueryBuilder::for(Penduduk::filterWilayah())
-            ->allowedFields('*')  // Tentukan field yang diizinkan untuk dipilih
-            ->allowedFilters([  // Tentukan filter yang diizinkan
-                AllowedFilter::exact('id'),
-                AllowedFilter::exact('sex'),
-                AllowedFilter::exact('status'),
-                AllowedFilter::exact('status_dasar'),
-                AllowedFilter::exact('keluarga.no_kk'),
-                AllowedFilter::exact('clusterDesa.dusun'),
-                AllowedFilter::exact('clusterDesa.rw'),
-                AllowedFilter::exact('clusterDesa.rt'),
-                AllowedFilter::callback('search', function ($query, $value) {
-                    $query->where(function ($query) use ($value) {
-                        $query->where('nama', 'like', "%{$value}%")
-                            ->orWhere('nik', 'like', "%{$value}%")
-                            ->orWhere('tag_id_card', 'like', "%{$value}%");
+                AllowedFilter::callback('kode_kecamatan', function ($query, $value) {
+                    $query->whereHas('config', function ($query) use ($value) {
+                        $query->where('kode_kecamatan', $value);
                     });
                 }),
+                AllowedFilter::callback('kode_kabupaten', function ($query, $value) {
+                    $query->whereHas('config', function ($query) use ($value) {
+                        $query->where('kode_kabupaten', $value);
+                    });
+                }),
+
             ])
-            ->allowedSorts([  // Tentukan kolom yang dapat digunakan untuk sorting
-                'nik',
-                'nama',
-                'umur',
-                'created_at',
-            ])
-            ->jsonPaginate();
+            ->count();
     }
 
     public function listPendudukSyncOpenDk()

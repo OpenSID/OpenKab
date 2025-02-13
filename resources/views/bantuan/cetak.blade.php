@@ -7,16 +7,33 @@
     <div x-data="{
         data: {},
         async retrievePosts() {
-            let url = '{{ url('api/v1/bantuan/cetak') }}';
-            let create_url = new URL(url);
-            create_url.searchParams.set('kode_kecamatan', '{{ session('kecamatan.kode_kecamatan') ?? '' }}');
-            create_url.searchParams.set('config_desa', '{{ session('desa.id') ?? '' }}');
-            @foreach ($filter as $key => $value)
-                create_url.searchParams.append('filter[{{ $key }}]', '{{ $value }}'); @endforeach
-            const response = await (await fetch(create_url.href)).json();
-            this.data = response.data
-            await $nextTick();
-            window.print();
+            try {
+                const headers = @include('layouts.components.header_bearer_api_gabungan');
+                var create_url = new URL({{ json_encode(config('app.databaseGabunganUrl')) }} + '/api/v1/bantuan/cetak');
+
+                create_url.searchParams.set('kode_kecamatan', {{ json_encode(session('kecamatan.kode_kecamatan') ?? '') }});
+                create_url.searchParams.set('config_desa', {{ json_encode(session('desa.id') ?? '') }});
+
+                @foreach ($filter as $key => $value)
+                    create_url.searchParams.append('filter[{{ $key }}]', {{ json_encode($value) }});
+                @endforeach
+
+                const response = await fetch(create_url.href, {
+                    method: 'GET',
+                    headers: headers
+                });
+
+                if (!response.ok) throw new Error('Gagal mengambil data');
+
+                const result = await response.json();
+                this.data = result.data;
+
+                await $nextTick();
+                window.print();
+            } catch (error) {
+                console.error('Terjadi kesalahan:', error);
+                alert('Terjadi kesalahan saat mengambil data.');
+            }
         }
     }" x-init="retrievePosts">
         <table class="border thick" id="tabel-penduduk">

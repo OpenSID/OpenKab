@@ -18,14 +18,14 @@ return new class extends Migration
         $team = Team::where('name', 'administrator')->first();
         $menuOrder = $team->menu_order ?? [];
 
-        if (!$menuOrder) {
+        if (! $menuOrder) {
             return;
         }
 
         // Cek apakah "Pengaturan Peta" sudah ada
         $pengaturanPeta = collect($menuOrder)->firstWhere('text', 'Pengaturan Peta');
 
-        if (!$pengaturanPeta) {
+        if (! $pengaturanPeta) {
             $pengaturanPeta = [
                 'text' => 'Pengaturan Peta',
                 'icon' => 'fas fa-map', // Ikon peta
@@ -55,15 +55,16 @@ return new class extends Migration
         // Masukkan submenu ke "Pengaturan Peta"
         $menuOrder = collect($menuOrder)->map(function ($item) use ($submenuBaru) {
             if ($item['text'] === 'Pengaturan Peta') {
-                if (!isset($item['submenu'])) {
+                if (! isset($item['submenu'])) {
                     $item['submenu'] = [];
                 }
                 foreach ($submenuBaru as $submenu) {
-                    if (!collect($item['submenu'])->firstWhere('url', $submenu['url'])) {
+                    if (! collect($item['submenu'])->firstWhere('url', $submenu['url'])) {
                         $item['submenu'][] = $submenu;
                     }
                 }
             }
+
             return $item;
         })->toArray();
 
@@ -81,7 +82,7 @@ return new class extends Migration
         $team = Team::where('name', 'administrator')->first();
         $menuOrder = $team->menu_order ?? [];
 
-        if (!$menuOrder) {
+        if (! $menuOrder) {
             return;
         }
 
@@ -97,6 +98,7 @@ return new class extends Migration
                     return null;
                 }
             }
+
             return $item;
         })->filter()->toArray();
 

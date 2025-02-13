@@ -36,3 +36,5 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 5. [#528](https://github.com/OpenSID/OpenKab/issues/528) Hapus API dtks dari OpenKab dan sesuaikan API database gabungan.
 6. [#537](https://github.com/OpenSID/OpenKab/issues/537) Hapus API get-list statistik dari OpenKab ke API database gabungan.
 7. [#550](https://github.com/OpenSID/OpenKab/issues/550) Hapus API pariwisata & infrastruktur dari OpenKab ke API database gabungan.
+8. [#561](https://github.com/OpenSID/OpenKab/issues/561) Sesuaikan Unit Testing API pengaturan aplikasi.
+9. [#562](https://github.com/OpenSID/OpenKab/issues/562) Hapus API penerima bantuan dan statistik dan pindahi ke API database gabungan Teknis.

@@ -10,7 +10,7 @@ function GetListProgram() {
         @else
             $.ajax({
                 type: 'GET',
-                url: "{{ url('api/v1/statistik-web/get-list-program') }}",
+                url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-program' }}",
                 dataType: 'json',
                 success: function(data) {
                     for (var i = 0; i < data.length; i++) {
@@ -31,7 +31,7 @@ function GetListProgram() {
         $("#filter_program").append(optionKeluarga);
         $.ajax({
             type: 'GET',
-            url: "{{ url('api/v1/statistik-web/get-list-program') }}",
+            url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-program' }}",
             dataType: 'json',
             success: function(data) {
                 for (var i = 0; i < data.length; i++) {

@@ -5,26 +5,17 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\BantuanKabupatenController;
 use App\Http\Controllers\Api\DasborController;
-use App\Http\Controllers\Api\DataController;
-use App\Http\Controllers\Api\DesaController;
 use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\IdentitasController;
-use App\Http\Controllers\Api\InfrastrukturController;
-use App\Http\Controllers\Api\KeuanganController;
-use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
-use App\Http\Controllers\Api\KetenagakerjaanController;
 use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
-use App\Http\Controllers\Api\PariwisataController;
-use App\Http\Controllers\Api\PembangunanController;
-use App\Http\Controllers\Api\PendidikanController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\PengaturanController;
+use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\PointController;
 use App\Http\Controllers\Api\SettingController;
-use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\SuplemenController;
 use App\Http\Controllers\Api\TeamController;
@@ -89,15 +80,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', DasborController::class);
     });
 
-    Route::get('/pariwisata', PariwisataController::class);
-
-    Route::get('infrastruktur', [InfrastrukturController::class, 'data']);
-
-    // API Data Presisi
-    Route::get('/ketenagakerjaan', KetenagakerjaanController::class);
-
-    Route::get('/pendidikan', PendidikanController::class);    
-
     Route::prefix('penduduk')->group(function () {
         Route::get('/', [PendudukController::class, 'index']);
 
@@ -124,35 +106,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/show', 'show')->name('api.keluarga.detail');
         });
 
-    // Statistik
-    Route::controller(StatistikController::class)
-        ->prefix('statistik')->group(function () {
-            Route::get('/kategori-statistik', 'kategoriStatistik');
-            Route::prefix('penduduk')->group(function () {
-                Route::get('/', 'penduduk');
-                Route::get('/tahun', 'refTahunPenduduk');
-            });
-            Route::prefix('keluarga')->group(function () {
-                Route::get('/', 'keluarga');
-                Route::get('/tahun', 'refTahunKeluarga');
-            });
-            Route::prefix('rtm')->group(function () {
-                Route::get('/', 'rtm');
-                Route::get('/tahun', 'refTahunRtm');
-            });
-            Route::get('/bantuan', 'bantuan');
-            Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
-        });
-
-    // Bantuan
-    Route::controller(BantuanController::class)
-        ->prefix('bantuan')->group(function () {
+    // Master Data Kategori Artikel
+    Route::controller(KategoriController::class)
+        ->prefix('kategori')->group(function () {
             Route::get('/', 'index');
             Route::get('/peserta', 'peserta');
             Route::get('/sasaran', 'sasaran');
             Route::get('/tahun', 'tahun');
             Route::get('/cetak', 'cetakBantuan');
-        });   
+        });
 
     // Master Data Bantuan
     Route::controller(BantuanKabupatenController::class)
@@ -209,7 +171,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
             Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
             Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
-        });        
+        });
     });
 
     Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
@@ -227,42 +189,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });        
     });    
 });
-
-// Statistik
-Route::controller(StatistikController::class)
-    ->prefix('statistik-web')->group(function () {
-        Route::get('/kategori-statistik', 'kategoriStatistik');
-        Route::prefix('penduduk')->group(function () {
-            Route::get('/', 'penduduk');
-            Route::get('/tahun', 'refTahunPenduduk');
-        });
-        Route::prefix('keluarga')->group(function () {
-            Route::get('/', 'keluarga');
-            Route::get('/tahun', 'refTahunKeluarga');
-        });
-        Route::prefix('rtm')->group(function () {
-            Route::get('/', 'rtm');
-            Route::get('/tahun', 'refTahunRtm');
-        });
-        Route::get('/bantuan', 'bantuan');
-        Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
-        Route::get('/get-list-coordinate', 'getListCoordinate');
-        Route::get('/get-list-program', 'getListProgram');
-        Route::get('/get-list-tahun', 'getListTahun');
-        Route::get('/get-list-kabupaten', 'getListKabupaten');
-        Route::get('/get-list-kecamatan/{id}', 'getListKecamatan');
-        Route::get('/get-list-desa/{id}', 'getListDesa');
-        Route::get('/get-list-coordinate', 'getListCoordinate');
-        Route::get('/get-list-penerima', 'getListPenerimaBantuan');
-    });
-
-// Data
-Route::controller(DataController::class)
-    ->prefix('data')->group(function () {
-        Route::get('/kesehatan', 'kesehatan');
-        Route::get('/jaminan-sosial', 'jaminanSosial');
-        Route::get('/penduduk-potensi-kelembagaan', 'pendudukPotensiKelembagaan');
-    });
 
 // Data utama website
 Route::get('data-website', WebsiteController::class);
@@ -286,3 +212,6 @@ Route::delete('/point/hapus/{id}', [PointController::class, 'destroy'])->name('p
 Route::post('/point/multiple-delete', [PointController::class, 'delete_multiple'])->name('point.delete-multiple');
 Route::get('/subpoint/{id}', [PointController::class, 'detail']);
 Route::post('/point', [PointController::class, 'store']);
+
+Route::get('/plan', [PlanController::class, 'index']);
+Route::get('/plan/get-list-coordinate/{parrent?}/{id?}', [PlanController::class, 'getListCoordinate']);

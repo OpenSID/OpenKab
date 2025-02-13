@@ -1,6 +1,11 @@
 <script>
+    const header = @include('layouts.components.header_bearer_api_gabungan');
+    var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/infrastruktur' }}");
     // Ambil data dari API
-    fetch("{{ url('api/v1/infrastruktur') }}") // Ganti route dengan rute API Anda
+    fetch(url, {
+        method: 'GET',
+        headers: header
+    }) // Ganti route dengan rute API Anda
         .then(response => response.json())
         .then(data => {
             // Cari data Sanitasi (MCK Umum dan Sumur Resapan)

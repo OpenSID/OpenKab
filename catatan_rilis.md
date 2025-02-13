@@ -40,3 +40,4 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 9. [#562](https://github.com/OpenSID/OpenKab/issues/562) Hapus API penerima bantuan dan statistik dan pindahi ke API database gabungan Teknis.
 10. [#548](https://github.com/OpenSID/OpenKab/issues/548) Hapus API pembangunan.
 11. [#546](https://github.com/OpenSID/OpenKab/issues/546) Hapus API keuangan dari OpenKab ke API database gabungan.
+12. [#547](https://github.com/OpenSID/OpenKab/issues/547) Hapus API file yang tidak di gunakan lagi.

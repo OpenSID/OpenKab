@@ -1,8 +1,21 @@
-function GetSummary(){
-    var searchParam = {'search' : {'luas_wilayah' : 1, 'luas_pertanian' : 1, 'luas_perkebunan' : 1, 'luas_hutan' : 1, 'luas_peternakan' : 1},'filter' : {'kecamatan' :  $("#filter_kecamatan").val(), 'desa' : $("#filter_desa").val()}}
-    $.get('{{ url('api/v1/data-summary') }}', searchParam, function(result){
-        for(let i in result.data){
-            $(`#summary-${i}`).text(result.data[i])
+function GetSummary(kabupaten = null, kecamatan = null, desa = null) {
+    const indexSearch = {
+        search: {
+            luas_wilayah: 1,
+            luas_pertanian: 1,
+            luas_perkebunan: 1,
+            luas_hutan: 1,
+            luas_peternakan: 1
+        },
+        filter: {
+            kode_kabupaten: kabupaten || '',
+            kode_kecamatan: kecamatan || '',
+            kode_desa: desa || ''
         }
-    }, 'json')
+    };
+    $.get("{{ url('api/v1/data-summary') }}", indexSearch, function(result) {
+        for (let i in result.data) {
+            $(`#summary-${i}`).text(result.data[i]);
+        }
+    }, 'json');
 }

@@ -16,7 +16,6 @@ use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\PointController;
 use App\Http\Controllers\Api\SettingController;
-use App\Http\Controllers\Api\StatistikController;
 use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\SuplemenController;
 use App\Http\Controllers\Api\TeamController;
@@ -107,29 +106,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/show', 'show')->name('api.keluarga.detail');
         });
 
-    // Statistik
-    Route::controller(StatistikController::class)
-        ->prefix('statistik')->group(function () {
-            Route::get('/kategori-statistik', 'kategoriStatistik');
-            Route::prefix('penduduk')->group(function () {
-                Route::get('/', 'penduduk');
-                Route::get('/tahun', 'refTahunPenduduk');
-            });
-            Route::prefix('keluarga')->group(function () {
-                Route::get('/', 'keluarga');
-                Route::get('/tahun', 'refTahunKeluarga');
-            });
-            Route::prefix('rtm')->group(function () {
-                Route::get('/', 'rtm');
-                Route::get('/tahun', 'refTahunRtm');
-            });
-            Route::get('/bantuan', 'bantuan');
-            Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
-        });
-
-    // Bantuan
-    Route::controller(BantuanController::class)
-        ->prefix('bantuan')->group(function () {
+    // Master Data Kategori Artikel
+    Route::controller(KategoriController::class)
+        ->prefix('kategori')->group(function () {
             Route::get('/', 'index');
             Route::get('/peserta', 'peserta');
             Route::get('/sasaran', 'sasaran');

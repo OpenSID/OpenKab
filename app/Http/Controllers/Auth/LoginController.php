@@ -94,7 +94,7 @@ class LoginController extends Controller
         if ($successLogin) {
             $user = $this->guard()->user();
             $cacheToken = Cache::get('user_token_'.$user->id);
-
+            
             $generateToken = false;
             if (! $cacheToken) {
                 $generateToken = true;
@@ -104,13 +104,12 @@ class LoginController extends Controller
                     $generateToken = true;
                 }
             }
-
+            
             if ($generateToken) {
                 // Generate token
                 Cache::forget('user_token_'.$user->id);
                 $token = $this->guard()->user()->createToken('auth-token-api')->plainTextToken;
-                // Store token in cache
-
+                // Store token in cache                
                 Cache::rememberForever('user_token_'.$user->id, function () use ($token) {
                     return $token;
                 });
@@ -133,8 +132,8 @@ class LoginController extends Controller
             }
         }
 
-        Artisan::call('optimize:clear');
-        Artisan::call('config:cache');
+        // Artisan::call('optimize:clear');        
+        // Artisan::call('config:cache');
 
         return $successLogin;
     }

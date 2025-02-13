@@ -95,27 +95,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
     });
 
-    // Dokumen
-    Route::prefix('dokumen')->group(function () {
-        Route::get('/', DokumenController::class);
-    });
-
-    // Keluarga
-    Route::controller(KeluargaController::class)
-        ->prefix('keluarga')->group(function () {
-            Route::get('/show', 'show')->name('api.keluarga.detail');
-        });
-
-    // Master Data Kategori Artikel
-    Route::controller(KategoriController::class)
-        ->prefix('kategori')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/peserta', 'peserta');
-            Route::get('/sasaran', 'sasaran');
-            Route::get('/tahun', 'tahun');
-            Route::get('/cetak', 'cetakBantuan');
-        });
-
     // Master Data Bantuan
     Route::controller(BantuanKabupatenController::class)
         ->prefix('bantuan-kabupaten')->group(function () {

@@ -78,22 +78,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Dasbor
     Route::prefix('dasbor')->group(function () {
         Route::get('/', DasborController::class);
-    });
-
-    Route::prefix('penduduk')->group(function () {
-        Route::get('/', [PendudukController::class, 'index']);
-
-        // Referensi
-        Route::prefix('referensi')->group(function () {
-            Route::get('sex', [PendudukController::class, 'pendudukSex']);
-            Route::get('status', [PendudukController::class, 'pendudukStatus']);
-            Route::get('status-dasar', [PendudukController::class, 'pendudukStatusDasar']);
-        });
-
-        Route::prefix('aksi')->group(function () {
-            Route::post('pindah', [PendudukController::class, 'pindah']);
-        });
-    });
+    });    
 
     // Master Data Bantuan
     Route::controller(BantuanKabupatenController::class)
@@ -148,24 +133,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
         Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
-            Route::get('/sync-penduduk-opendk', [PendudukController::class, 'syncPendudukOpenDk']);
             Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
         });
-    });
-
-    Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
-        Route::get('desa', [DesaController::class, 'index']);
-
-        Route::get('/opendk/desa/{kec?}', [DesaController::class, 'all']);
-
-        Route::get('opendk/pembangunan', [PembangunanController::class, 'syncPembangunanOpenDk']);
-        Route::get('opendk/pembangunan/{id}', [PembangunanController::class, 'getPembangunanOpenDk']);
-        Route::get('/opendk/pembangunan-rincian/{id}/{kode_desa}', [PembangunanController::class, 'getPembangunanRincianOpenDk']);
-
-        Route::prefix('keuangan')->group(function(){
-            Route::get('apbdes', [KeuanganController::class, 'apbdes']);
-            Route::get('laporan_apbdes', [KeuanganController::class, 'laporan_apbdes']);
-        });        
     });    
 });
 

@@ -439,7 +439,8 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/bantuan/peserta') }}?filter[peserta]={{ $penduduk->nik }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/peserta' }}?filter[peserta]={{ $penduduk->nik }}`,
+                headers: header,
                 method: 'get',
             },
             columns: [{

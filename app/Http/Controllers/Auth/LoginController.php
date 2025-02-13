@@ -133,8 +133,8 @@ class LoginController extends Controller
             }
         }
 
-        Artisan::call('optimize:clear');
-        Artisan::call('config:cache');
+        // Artisan::call('optimize:clear');
+        // Artisan::call('config:cache');
 
         return $successLogin;
     }

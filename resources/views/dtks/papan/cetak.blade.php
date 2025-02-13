@@ -36,7 +36,7 @@
             var filter = str.replace(/&amp;/g, '&')
             const header = @include('layouts.components.header_bearer_api_gabungan');
             $.ajax({
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/satu-data/dtks' }}?${filter}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/presisi/papan' }}?${filter}`,
                 headers: header,
                 method: 'get',
                 success: function(json) {
@@ -47,12 +47,12 @@
                             <tr>
                                 <td class="padat">${no}</td>
                                 <td>${item.attributes.nik_kepala_rtm || 'N/A'}</td>
-                                <td>${item.attributes.status_kepemilikan_bangunan_tempat_tinggal_yang_ditempati || 'N/A'}</td>
-                                <td>${item.attributes.luas_lantai_m2 || 'N/A'}</td>
-                                <td>${item.attributes.jenis_lantai_terluas || 'N/A'}</td>
-                                <td>${item.attributes.jenis_dinding_terluas || 'N/A'}</td>
-                                <td>${item.attributes.sumber_air_minum || 'N/A'}</td>
-                                <td>${item.attributes.sumber_penerangan_utama || 'N/A'}</td>
+                                <td>${item.attributes.kd_stat_bangunan_tinggal || 'N/A'}</td>
+                                <td>${item.attributes.luas_lantai || 'N/A'}</td>
+                                <td>${item.attributes.kd_jenis_lantai_terluas || 'N/A'}</td>
+                                <td>${item.attributes.kd_jenis_dinding || 'N/A'}</td>
+                                <td>${item.attributes.kd_sumber_air_minum || 'N/A'}</td>
+                                <td>${item.attributes.kd_sumber_penerangan_utama || 'N/A'}</td>
                             </tr>
                             `
 

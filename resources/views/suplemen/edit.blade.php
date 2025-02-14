@@ -81,7 +81,6 @@
                     <button type="reset" class="btn btn-danger btn-sm" onclick="resetForm();">
                         <i class="fa fa-times"></i> Batal
                     </button>
-
                         <button type="button" class="btn btn-secondary btn-sm pull-right" id="previewButton">
                             <i class="fa fa-eye"></i> Preview
                         </button>
@@ -109,9 +108,12 @@
         }
     </style>
 @endpush
+
 @section('js')
 <script nonce="{{ csp_nonce() }}" type="text/javascript">
+
 @include('suplemen.edit_js')
 @include('suplemen.preview_js')
-<script>
+
+</script>
 @endsection

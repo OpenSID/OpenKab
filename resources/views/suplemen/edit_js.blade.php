@@ -41,14 +41,14 @@
 }
 
 
-
-    document.addEventListener('DOMContentLoaded', function() {
-        function resetForm() {
+function resetForm() {
             const form = document.getElementById('formSuplemen');
             if (form) {
                 form.reset();
             }
         }
+    document.addEventListener('DOMContentLoaded', function() {
+        
         const namaKodeInputs = document.querySelectorAll('input[name="nama_kode[]"]');
     
         namaKodeInputs.forEach(input => {

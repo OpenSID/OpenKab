@@ -180,6 +180,14 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('pangan', [App\Http\Controllers\DDKPanganController::class, 'index'])->name('ddk.pangan');
         });
     });
+
+        
+    Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
+    Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
+    Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
+    Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
+    Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
+    Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
 });
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
@@ -203,12 +211,6 @@ Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name(
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 
-Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
-Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
-Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
-Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
-Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
-Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
 
 Route::get('/point', [PointController::class, 'index'])->name('point');
 Route::get('/point/form/', [PointController::class, 'form'])->name('point.create');

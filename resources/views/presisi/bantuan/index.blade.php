@@ -238,6 +238,9 @@
 @push('js')
     <script>
         $(function() {
+            
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+
             var statistik = [];
             var data_grafik = [];
             let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL'];
@@ -716,8 +719,9 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/wilayah/penduduk') }}`,
+                url: new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/penduduk' }}"),
                 method: 'get',
+                headers: header,
                 data: function(row) {
                     return {
                         "page[size]": row.length,

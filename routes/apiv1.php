@@ -29,7 +29,6 @@ use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\SuplemenController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\WebsiteController;
-use App\Http\Controllers\Api\WilayahController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,14 +45,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signin', [AuthController::class, 'login']);
 Route::get('/identitas', [IdentitasController::class, 'index']);
-// Wilayah
-Route::prefix('wilayah')->group(function () {
-    Route::get('desa', [WilayahController::class, 'desa']);
-    Route::get('dusun', [WilayahController::class, 'dusun']);
-    Route::get('rw', [WilayahController::class, 'rw']);
-    Route::get('rt', [WilayahController::class, 'rt']);
-    Route::get('penduduk', [WilayahController::class, 'penduduk']);
-});
 
 Route::middleware('auth:sanctum')->get('validate-token', function (Request $request) {
     $user = $request->user();

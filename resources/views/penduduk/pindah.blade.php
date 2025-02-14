@@ -85,6 +85,11 @@
     <script src="{{ asset('vendor/moment/moment.js') }}"></script>
     <script src="{{ asset('vendor/moment/id.js') }}"></script>
     <script nonce="{{ csp_nonce() }}"  >
+
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+
+        var urlDesa = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/desa' }}");
+
         function pindah() {
             return {
                 dataPindah: {
@@ -125,7 +130,7 @@
                         theme: 'bootstrap4',
                         ajax: {
                             url: function() {
-                                return "{{ url('api/v1/wilayah/desa/') }}";
+                                return `${urlDesa}`;
                             },
                             dataType: 'json',
                             data: function(params) {

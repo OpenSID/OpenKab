@@ -1,4 +1,4 @@
-<script>
+
     let jumlahIsianBaru = {{ $jumlah_isian ?? 0 }}; // Menyimpan jumlah baris yang ada saat ini
 
     // Fungsi untuk menambahkan baris baru
@@ -41,9 +41,14 @@
 }
 
 
-</script>
-<script>
+
     document.addEventListener('DOMContentLoaded', function() {
+        function resetForm() {
+            const form = document.getElementById('formSuplemen');
+            if (form) {
+                form.reset();
+            }
+        }
         const namaKodeInputs = document.querySelectorAll('input[name="nama_kode[]"]');
     
         namaKodeInputs.forEach(input => {
@@ -237,8 +242,7 @@
             });
 });
 
-</script>
-<script>
+
     document.getElementById('formSuplemen').addEventListener('submit', async function (e) {
         const header = @include('layouts.components.header_bearer_api_gabungan');
         const rows = document.querySelectorAll('#dragable-form-utama tr.duplikasi');
@@ -298,5 +302,3 @@
             // alert('Terjadi kesalahan saat menyimpan data.');
         }
     });
-
-</script>

@@ -240,6 +240,7 @@
 </script>
 <script>
     document.getElementById('formSuplemen').addEventListener('submit', async function (e) {
+        const headers = @include('layouts.components.header_bearer_api_gabungan');
         const rows = document.querySelectorAll('#dragable-form-utama tr.duplikasi');
         let formDatas = [];
 
@@ -280,12 +281,7 @@
         try {
             const response = await fetch("{{ $form_action }}", {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    // Pastikan Bearer Token disesuaikan jika diperlukan
-                    'Authorization': 'Bearer {{ session('api_token') ?? '' }}'
-                },
+                headers: headers,
                 body: JSON.stringify(jsonData)
             });
 

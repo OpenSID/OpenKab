@@ -27,7 +27,7 @@
                         <i class="fas fa-arrow-circle-left"></i>&ensp;Kembali ke Daftar Data Suplemen
                     </a>
                 </div>
-                <form method="POST" class="form-horizontal" id="formSuplemen">
+                <form class="form-horizontal" id="formSuplemen">
                     @csrf
                     <input type="hidden" name="sumber" value="OpenKab">
                     <input type="hidden" name="form_isian" id="form_isian">

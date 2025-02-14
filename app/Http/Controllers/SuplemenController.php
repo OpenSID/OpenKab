@@ -29,13 +29,13 @@ class SuplemenController extends Controller
 
         if ($id) {
             $action = 'Ubah';
-            $form_action = url('api/v1/suplemen/update', $id);
+            $form_action = config('app.databaseGabunganUrl')."/api/v1/suplemen/update/{$id}";
             $suplemen = Suplemen::with('terdata')->findOrFail($id);
 
             return view('suplemen.edit', compact('list_sasaran', 'attributes', 'action', 'form_action', 'suplemen'));
         } else {
             $action = 'Tambah';
-            $form_action = url('api/v1/suplemen');
+            $form_action = config('app.databaseGabunganUrl')."/api/v1/suplemen";
             $suplemen = null;
 
             return view('suplemen.form', compact('list_sasaran', 'attributes', 'action', 'form_action', 'suplemen'));

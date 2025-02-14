@@ -23,7 +23,12 @@
             var code = 80;
             //if (code == 80 && !$('#print-modal').length) {
             // $.printPreview.loadPrintPreview();
-            window.print()
+            
+            window.onafterprint = function () {
+    window.close();
+};
+window.print();
+
             //return false;
             //}
             //});

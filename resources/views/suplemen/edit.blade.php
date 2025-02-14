@@ -78,7 +78,7 @@
 
                     </div>
                     <div class="card-footer">
-                    <button type="reset" class="btn btn-danger btn-sm" onclick="resetForm();">
+                         <button type="reset" class="btn btn-danger btn-sm" onclick="resetForm();">
                         <i class="fa fa-times"></i> Batal
                     </button>
                         <button type="button" class="btn btn-secondary btn-sm pull-right" id="previewButton">

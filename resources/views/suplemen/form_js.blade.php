@@ -44,7 +44,6 @@
 
         const formData = new FormData(this);
         const jsonData = Object.fromEntries(formData.entries());
-        console.log(new URL("{{ config('app.databaseGabunganUrl').''.$form_action }}"))
         try {
             const response = await fetch(new URL("{{ config('app.databaseGabunganUrl').''.$form_action }}"), {
                 method: 'POST',

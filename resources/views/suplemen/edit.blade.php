@@ -54,7 +54,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" for="keterangan">Keterangan</label>
                             <div class="col-sm-9">
-                                <textarea name="keterangan" class="form-control form-control-sm" maxlength="300" placeholder="Keterangan" rows="3" style="resize:none;">{{ $suplemen->keterangan }}</textarea>
+                                <textarea name="keterangan" class="form-control form-control-sm no-resize" maxlength="300" placeholder="Keterangan" rows="3">{{ $suplemen->keterangan }}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -78,7 +78,9 @@
 
                     </div>
                     <div class="card-footer">
-                        @include('layouts.reset_form')
+                         <button type="reset" class="btn btn-danger btn-sm" onclick="resetForm();">
+                        <i class="fa fa-times"></i> Batal
+                    </button>
                         <button type="button" class="btn btn-secondary btn-sm pull-right" id="previewButton">
                             <i class="fa fa-eye"></i> Preview
                         </button>
@@ -93,9 +95,25 @@
 @include('suplemen.preview')
 
 @endsection
+@push('css')
+    <style nonce="{{ csp_nonce() }}" >
+        .no-resize {
+            resize:none;    
+        }
+        .bold{
+            font-weight: bold;
+        }
+        .d-none{
+            display: none;
+        }
+    </style>
+@endpush
 
 @section('js')
+<script nonce="{{ csp_nonce() }}" type="text/javascript">
+
 @include('suplemen.edit_js')
 @include('suplemen.preview_js')
 
+</script>
 @endsection

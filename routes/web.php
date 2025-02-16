@@ -181,7 +181,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('pangan', [App\Http\Controllers\DDKPanganController::class, 'index'])->name('ddk.pangan');
         });
     });
-    
+
+        
     Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
     Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
     Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');

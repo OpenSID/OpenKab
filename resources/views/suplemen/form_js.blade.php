@@ -1,6 +1,14 @@
-<script>
+
+    function resetForm() {
+        const form = document.getElementById('formSuplemen');
+        if (form) {
+            form.reset();
+        }
+    }
     document.getElementById('formSuplemen').addEventListener('submit', async function (e) {
         const rows = document.querySelectorAll('#dragable-form-utama tr.duplikasi');
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+
         let formDatas = [];
 
         // Mengumpulkan data dari setiap row
@@ -36,16 +44,10 @@
 
         const formData = new FormData(this);
         const jsonData = Object.fromEntries(formData.entries());
-
         try {
-            const response = await fetch("{{ $form_action }}", {
+            const response = await fetch(new URL("{{ config('app.databaseGabunganUrl').''.$form_action }}"), {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    // Pastikan Bearer Token disesuaikan jika diperlukan
-                    'Authorization': 'Bearer {{ session('api_token') ?? '' }}'
-                },
+                headers: header,
                 body: JSON.stringify(jsonData)
             });
 
@@ -62,5 +64,3 @@
             // alert('Terjadi kesalahan saat menyimpan data.');
         }
     });
-
-</script>

@@ -1,4 +1,4 @@
-<script>
+
     document.addEventListener('DOMContentLoaded', function() {
         const namaKodeInputs = document.querySelectorAll('input[name="nama_kode[]"]');
     
@@ -192,4 +192,3 @@
                 $(this).parents('.duplikasi').find('.isian').val('');
             });
 });
-</script>

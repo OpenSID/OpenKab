@@ -423,7 +423,7 @@
                 $('#status-kawin').text(data.statusPerkawinan)
                 $('#gol-darah').text(data.golongan_darah?.nama)
                 $('#cacat').text(data.cacat?.nama)
-                $('#sakit').text(data.sakit_menahun?.nama)
+                $('#sakit').text(data.namaSakitMenahun)
                 $('#asuransi').text(data.namaAsuransi)
                 $('#bpjs').text(data.bpjs_ketenagakerjaan)
                 $('#bahasa').text(data.bahasa?.nama)

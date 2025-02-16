@@ -45,3 +45,4 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 14. [#540](https://github.com/OpenSID/OpenKab/issues/540) Hapus API data penduduk pada OpenKab dan sesuaikan API database gabungan.
 15. [#544](https://github.com/OpenSID/OpenKab/issues/544) Hapus API Suplemen dari OpenKab ke API database gabungan #544
 Open.
+16. [#539](https://github.com/OpenSID/OpenKab/issues/539) Hapus API wilayah Penduduk, Dusun, RT, RW dan Desa.

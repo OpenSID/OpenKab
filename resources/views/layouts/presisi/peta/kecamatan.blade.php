@@ -5,7 +5,7 @@ function GetListKecamatan($id) {
                 $("#filter_kecamatan").append(optionEmpty);
                 $.ajax({
                     type: 'GET',
-                    url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}" + "/" + $id,
+                    url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-kecamatan' }}" + "/" + $id,
                     dataType: 'json',
                     success: function(data) {
                         for (var i = 0; i < data.length; i++) {

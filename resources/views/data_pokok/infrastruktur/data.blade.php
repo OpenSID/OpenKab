@@ -1,7 +1,13 @@
 <script nonce="{{ csp_nonce() }}">
 document.addEventListener("DOMContentLoaded", function(event) {
+
+    const header = @include('layouts.components.header_bearer_api_gabungan');
+    var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/infrastruktur' }}");
    // Fungsi untuk mengambil data Komoditas dari API
-   fetch('/api/v1/infrastruktur')
+   fetch(url, {
+    method: 'GET',
+    headers: header
+   })
     .then(response => response.json())
     .then(data => {
         // Menampilkan data Komoditas di dalam div #komoditas-container

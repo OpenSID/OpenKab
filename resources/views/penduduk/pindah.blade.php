@@ -111,7 +111,10 @@
                 },
 
                 retrivePenduduk() {
-                    fetch('{{ url('api/v1/penduduk?filter[id]=' . request()->route('id')) }}')
+                    const header = @include('layouts.components.header_bearer_api_gabungan');
+                    fetch(`{{ config('app.databaseGabunganUrl').'/api/v1/penduduk?filter[id]=' . request()->route('id') }}`, {                            
+                            headers: header
+                        })
                         .then(res => res.json())
                         .then(response => {
                             this.dataPenduduk = response.data[0].attributes;
@@ -123,7 +126,7 @@
                         });
                 },
 
-                selectDesa() {
+                selectDesa() {                    
                     var dataPenduduk = this.dataPenduduk;
                     var dataPindah = this.dataPindah;
                     this.select2 = $(this.$refs.selectDesa).select2({
@@ -132,6 +135,7 @@
                             url: function() {
                                 return `${urlDesa}`;
                             },
+                            headers: header,
                             dataType: 'json',
                             data: function(params) {
                                 return {
@@ -217,10 +221,8 @@
 
                     $.ajax({
                         type: "Post",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{ url('api/v1/penduduk/aksi/pindah') }}',
+                        headers: header,
+                        url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk/aksi/pindah' }}`,
                         data: data,
                         dataType: "json",
                         success: function(response) {

@@ -24,15 +24,27 @@
             var kategori = `{{ $kategori }}`;
             var id = `{{ $id }}`;
 
-                let url = `{{ url('api/v1/statistik') }}/${kategori}/`;
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+
+            var baseUrl = {!! json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
+
+            var url = new URL(`${baseUrl}/statistik/${kategori}`);
+
+
                 let create_cetak = new URL(url);
                 @foreach ($filter as $key => $value)
                     create_cetak.searchParams.append('filter[{{ $key }}]', '{{ $value }}');
                 @endforeach
                 create_cetak.searchParams.append('filter[id]', id);
 
+                var urlKategoriStatistik = new URL(`${baseUrl}/statistik/kategori-statistik`);
+
+                urlKategoriStatistik.searchParams.set('filter[detail]', id);
+                urlKategoriStatistik.searchParams.set('filter[id]', kategori);
+
                 $.ajax({
-                    url: `{{ url('api/v1/statistik/kategori-statistik') }}?filter[detail]=${id}&filter[id]=${kategori}`,
+                    url: urlKategoriStatistik.href,
+                    headers: header,
                     method: 'get',
                     success: function(json) {
                         var data = json.data[0];
@@ -47,6 +59,7 @@
 
                 $.ajax({
                     url: create_cetak,
+                    headers: header,
                     method: 'get',
                     success: function(json) {
                         var statistik = json.data.attributes

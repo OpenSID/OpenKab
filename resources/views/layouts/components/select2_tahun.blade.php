@@ -1,11 +1,15 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+
         $('#tahun').select2({
             minimumResultsForSearch: -1,
             theme: "bootstrap4",
             ajax: {
                 url: ``,
+                headers: header,
                 dataType: 'json',
                 beforeSend: function(jqXHR, settings) {
                     let url = '{{ $url }}';

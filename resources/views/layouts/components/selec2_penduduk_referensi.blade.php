@@ -1,10 +1,12 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+        let header = @include('layouts.components.header_bearer_api_gabungan');
         $('#status').select2({
             theme: 'bootstrap4',
             ajax: {
-                url: `{{ url('api/v1/penduduk/referensi/status') }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk/referensi/status' }}`,
+                headers: header,
                 dataType: 'json',
                 delay: 400,
                 data: function(params) {
@@ -34,7 +36,8 @@
         $('#status-dasar').select2({
             theme: 'bootstrap4',
             ajax: {
-                url: `{{ url('api/v1/penduduk/referensi/status-dasar') }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk/referensi/status-dasar' }}`,
+                headers: header,
                 dataType: 'json',
                 delay: 400,
                 data: function(params) {
@@ -64,7 +67,8 @@
         $('#sex').select2({
             theme: 'bootstrap4',
             ajax: {
-                url: `{{ url('api/v1/penduduk/referensi/sex') }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk/referensi/sex' }}`,
+                headers: header,
                 dataType: 'json',
                 delay: 400,
                 data: function(params) {

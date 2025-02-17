@@ -1,10 +1,12 @@
 function GetListKabupaten() {
+    const header = @include('layouts.components.header_bearer_api_gabungan');
+
     $('#filter_kabupaten').empty().trigger("change");
 
     // Ambil kode_kabupaten dari session Laravel
     var sessionKodeKabupaten = "{{ session('kabupaten.kode_kabupaten') }}";
 
-    var url = "{{ url('api/v1/statistik-web/get-list-kabupaten-data') }}";
+    var url = "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-kabupaten' }}";
 
     // Tambahkan query filter jika session tersedia
     if (sessionKodeKabupaten) {

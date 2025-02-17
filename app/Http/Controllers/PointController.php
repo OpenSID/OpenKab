@@ -23,7 +23,7 @@ class PointController extends Controller
         $simbol = gis_simbols();
 
         $action = 'Tambah';
-        $form_action = url('api/v1/point');
+        $form_action = '/api/v1/point';
         $point = null;
         $parrent = 0;
         $tipe = Point::ROOT;
@@ -41,7 +41,7 @@ class PointController extends Controller
         $simbol = gis_simbols();
 
         $action = 'Ubah';
-        $form_action = url('api/v1/point/update', $id);
+        $form_action = '/api/v1/point/update/'.$id;
         $point = Point::findOrFail($id);
         $parrent = 0;
         $tipe = Point::ROOT;
@@ -59,7 +59,7 @@ class PointController extends Controller
         $simbol = gis_simbols();
 
         $action = 'Tambah';
-        $form_action = url('api/v1/point');
+        $form_action = '/api/v1/point';
         $point = null;
         $parrent = $parrent;
         $tipe = Point::CHILD;

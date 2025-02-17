@@ -1,3 +1,4 @@
+var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/subpoint/'.$point->id }}");
 var point = $('#point').DataTable({
     processing: true,
     serverSide: true,
@@ -8,7 +9,8 @@ var point = $('#point').DataTable({
         columns: [0]
     },
     ajax: {
-        url: `{{ url('api/v1/subpoint/'.$point->id) }}`,
+        url: url,
+        headers: header,
         method: 'get',
         data: function(row) {
             return {

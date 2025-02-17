@@ -1,9 +1,10 @@
 function GetListCoordinates(kabupaten = null, kecamatan = null, desa= null) {
-    var coordUrl =  "{{ url('api/v1/plan/get-list-coordinate/'.$parent.'/'.$id) }}";
-    
+    const header = @include('layouts.components.header_bearer_api_gabungan');
+    var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/plan/get-list-coordinate/'.$parent.'/'.$id }}");
     $.ajax({
         type: 'GET',
-        url: coordUrl,
+        url: url,
+        headers: header,
         dataType: 'json',
         success: function(data) {
             map.eachLayer((layer) => {

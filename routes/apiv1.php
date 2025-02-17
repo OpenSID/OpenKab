@@ -13,8 +13,6 @@ use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
 use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\PengaturanController;
-use App\Http\Controllers\Api\PlanController;
-use App\Http\Controllers\Api\PointController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\TeamController;
@@ -134,13 +132,3 @@ Route::get('data-summary', SummaryController::class);
 
 // Desa teraktif
 Route::get('desa-aktif', [KategoriDesaController::class, 'index']);
-
-Route::get('/point', [PointController::class, 'index']);
-Route::get('/point/status', [PointController::class, 'status']);
-Route::delete('/point/hapus/{id}', [PointController::class, 'destroy'])->name('point.hapus');
-Route::post('/point/multiple-delete', [PointController::class, 'delete_multiple'])->name('point.delete-multiple');
-Route::get('/subpoint/{id}', [PointController::class, 'detail']);
-Route::post('/point', [PointController::class, 'store']);
-
-Route::get('/plan', [PlanController::class, 'index']);
-Route::get('/plan/get-list-coordinate/{parrent?}/{id?}', [PlanController::class, 'getListCoordinate']);

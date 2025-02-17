@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\DasborController;
@@ -110,6 +111,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('pindah', [PendudukController::class, 'pindah']);
         });
     });
+
+    // Artikel
+    Route::controller(ArtikelController::class)
+        ->prefix('artikel')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/tahun', 'tahun');
+        });
 
     // Dokumen
     Route::prefix('dokumen')->group(function () {

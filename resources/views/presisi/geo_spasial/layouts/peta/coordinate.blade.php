@@ -1,3 +1,4 @@
+
 // Event listener untuk kategori
 $('#nav-kategori a').on('click', function() {
     var kategoriId = $(this).data('key');
@@ -47,7 +48,7 @@ function updateFilterAndFetchData(kategoriId, searchKeyword) {
 
 
 function GetListCoordinates(kabupaten = null, kecamatan = null, desa = null, kategoriId = null, searchKeyword = null) {
-    var coordUrl = "{{ url('api/v1/plan/get-list-coordinate') }}";
+    var coordUrl = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/plan/get-list-coordinate' }}");
     var filterParams = [];
 
     if (kategoriId != null) {
@@ -73,6 +74,7 @@ function GetListCoordinates(kabupaten = null, kecamatan = null, desa = null, kat
     $.ajax({
         type: 'GET',
         url: coordUrl,
+        headers: header,
         dataType: 'json',
         success: function(data) {
             // Hapus semua marker dari peta sebelum menambahkan yang baru

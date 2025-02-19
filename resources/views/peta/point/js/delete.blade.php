@@ -1,6 +1,7 @@
 $(document).on('click', 'button.hapus', function () {
     var id = $(this).data('id')
     var that = $(this);
+    var url = new URL(`{{ config('app.databaseGabunganUrl') }}/api/v1/point/hapus/${id}`);
     Swal.fire({
         title: 'Hapus',
         text: "Apakah anda yakin menghapus data ini?",
@@ -17,11 +18,9 @@ $(document).on('click', 'button.hapus', function () {
             })
             $.ajax({
                 type: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
+                headers: header,
                 dataType: "json",
-                url: `{{ url('api/v1/point/hapus') }}/${id}`,
+                url: url,
                 data: {
                     id: id
                 },

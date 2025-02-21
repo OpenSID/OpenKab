@@ -11,14 +11,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class BantuanRepository
 {
-    public const SASARAN_PENDUDUK = 1;
-
-    public const SASARAN_KELUARGA = 2;
-
-    public const SASARAN_RUMAH_TANGGA = 3;
-
-    public const SASARAN_KELOMPOK = 4;
-
     public function listBantuan()
     {
         return  QueryBuilder::for(Bantuan::filterWilayah())
@@ -61,141 +53,110 @@ class BantuanRepository
             ])->get();
     }
 
-    // public function listStatistik($kategori, $tahun, $kabupaten, $kecamatan, $desa): array
-    // {
-    //     return collect(match ($kategori) {
-    //         'penduduk' => $this->caseKategoriPenduduk($tahun, $kabupaten, $kecamatan, $desa),
-    //         'keluarga' => $this->caseKategoriKeluarga($tahun, $kabupaten, $kecamatan, $desa),
-    //         default => $this->caseNonKategori($kategori, $tahun, $kabupaten, $kecamatan, $desa),
-    //     })->toArray();
-    // }
+    public function listStatistik($kategori): array
+    {
+        return collect(match ($kategori) {
+            'penduduk' => $this->caseKategoriPenduduk(),
+            'keluarga' => $this->caseKategoriKeluarga(),
+            default => $this->caseNonKategori($kategori),
+        })->toArray();
+    }
 
-    // public function getBantuanNonKategori($id): array
-    // {
-    //     $bantuan = Bantuan::whereId($id)->first();
+    public function getBantuanNonKategori($id): array
+    {
+        $bantuan = Bantuan::whereId($id)->first();
 
-    //     if (isset(request('filter')['tahun'])) {
-    //         $bantuan = $bantuan->whereRaw('YEAR(program.sdate) = '.request('filter')['tahun']);
-    //     }
-    //     if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['desa'])) {
-    //         $bantuan = $bantuan->join('config', 'config.id', '=', "{$this->table}.config_id", 'left');
-    //         if (isset(request('filter')['kabupaten'])) {
-    //             $bantuan = $bantuan->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
-    //         }
-    //         if (isset(request('filter')['kecamatan'])) {
-    //             $bantuan = $bantuan->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
-    //         }
-    //         if (isset(request('filter')['desa'])) {
-    //             $bantuan = $bantuan->whereRaw('config.kode_desa = '.request('filter')['desa']);
-    //         }
-    //     }
+        return [
+            [
+                'nama' => 'PESERTA',
+                'laki_laki' => $bantuan->statistik['laki_laki'],
+                'perempuan' => $bantuan->statistik['perempuan'],
+            ],
+            $this->getTotal($bantuan->sasaran),
+        ];
+    }
 
-    //     return [
-    //         [
-    //             'nama' => 'PESERTA',
-    //             'laki_laki' => isset($bantuan->statistik) ? $bantuan->statistik['laki_laki'] : 0,
-    //             'perempuan' => isset($bantuan->statistik) ? $bantuan->statistik['perempuan'] : 0,
-    //         ],
-    //         $this->getTotal(isset($bantuan->sasaran) ? $bantuan->sasaran : null),
-    //     ];
-    // }
+    private function getTotal($sasaran): array
+    {
+        $total = match ($sasaran) {
+            Bantuan::SASARAN_PENDUDUK => $this->countStatistikKategoriPenduduk(),
+            Bantuan::SASARAN_KELUARGA => $this->countStatistikKategoriKeluarga(),
+            Bantuan::SASARAN_RUMAH_TANGGA => $this->countStatistikKategoriRtm(),
+            Bantuan::SASARAN_KELOMPOK => $this->countStatistikKategoriKelompok(),
+            default => [],
+        };
 
-    // private function getTotal($sasaran): array
-    // {
-    //     $total = match ($sasaran) {
-    //         Bantuan::SASARAN_PENDUDUK => $this->countStatistikKategoriPenduduk(),
-    //         Bantuan::SASARAN_KELUARGA => $this->countStatistikKategoriKeluarga(),
-    //         Bantuan::SASARAN_RUMAH_TANGGA => $this->countStatistikKategoriRtm(),
-    //         Bantuan::SASARAN_KELOMPOK => $this->countStatistikKategoriKelompok(),
-    //         default => [],
-    //     };
+        return [
+            'laki_laki' => $total[0]['laki_laki'] ?? 0,
+            'perempuan' => $total[0]['perempuan'] ?? 0,
+        ];
+    }
 
-    //     return [
-    //         'laki_laki' => $total[0]['laki_laki'] ?? 0,
-    //         'perempuan' => $total[0]['perempuan'] ?? 0,
-    //     ];
-    // }
+    public function caseKategoriPenduduk(): array
+    {
+        $header = Bantuan::countStatistikPenduduk()->get();
+        $footer = $this->countStatistikKategoriPenduduk();
 
-    // public function caseKategoriPenduduk($tahun, $kabupaten, $kecamatan, $desa): array
-    // {
-    //     $header = Bantuan::countStatistikPenduduk()->get();
-    //     $footer = $this->countStatistikKategoriPenduduk();
+        return [
+            'header' => $header,
+            'footer' => $this->listFooter($header, $footer),
+        ];
+    }
 
-    //     return [
-    //         'header' => $header,
-    //         'footer' => $this->listFooter($header, $footer),
-    //     ];
-    // }
+    private function countStatistikKategoriPenduduk(): object
+    {
+        $configDesa = request('config_desa') ?? null;
 
-    // private function countStatistikKategoriPenduduk(): object
-    // {
-    //     $configDesa = request('config_desa') ?? null;
+        $bantuan = new Bantuan();
+        // if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
+        //     $bantuan->status();
+        // }
 
-    //     $bantuan = new Bantuan();
-    //     // if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
-    //     //     $bantuan->status();
-    //     // }
-    //     if (isset(request('filter')['tahun'])) {
-    //         $bantuan = $bantuan->whereRaw('YEAR(program.sdate) = '.request('filter')['tahun']);
-    //     }
-    //     if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['desa'])) {
-    //         $bantuan = $bantuan->join('config', 'config.id', '=', 'program.config_id', 'left');
-    //         if (isset(request('filter')['kabupaten'])) {
-    //             $bantuan = $bantuan->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
-    //         }
-    //         if (isset(request('filter')['kecamatan'])) {
-    //             $bantuan = $bantuan->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
-    //         }
-    //         if (isset(request('filter')['desa'])) {
-    //             $bantuan = $bantuan->whereRaw('config.kode_desa = '.request('filter')['desa']);
-    //         }
-    //     }
-    //     if ($configDesa) {
-    //         $bantuan->where(function ($q) use ($configDesa) {
-    //             return $q->where('program.config_id', $configDesa)->orWhereNull('program.config_id');
-    //         });
-    //     }
-    //     $bantuan = $bantuan->where('program.sasaran', self::SASARAN_PENDUDUK);
+        if ($configDesa) {
+            $bantuan->where(function ($q) use ($configDesa) {
+                return $q->where('program.config_id', $configDesa)->orWhereNull('program.config_id');
+            });
+        }
 
-    //     return $bantuan->get();
-    // }
+        return $bantuan->get();
+    }
 
-    // public function caseKategoriKeluarga(): array
-    // {
-    //     $header = Bantuan::countStatistikKeluarga()->get();
-    //     $footer = $this->countStatistikKategoriKeluarga();
+    public function caseKategoriKeluarga(): array
+    {
+        $header = Bantuan::countStatistikKeluarga()->get();
+        $footer = $this->countStatistikKategoriKeluarga();
 
-    //     return [
-    //         'header' => $header,
-    //         'footer' => $this->listFooter($header, $footer),
-    //     ];
-    // }
+        return [
+            'header' => $header,
+            'footer' => $this->listFooter($header, $footer),
+        ];
+    }
 
-    // private function countStatistikKategoriKeluarga(): object
-    // {
-    //     return Keluarga::countStatistik()->status()->get();
-    // }
+    private function countStatistikKategoriKeluarga(): object
+    {
+        return Keluarga::countStatistik()->status()->get();
+    }
 
-    // private function countStatistikKategoriRtm(): object
-    // {
-    //     return Rtm::countStatistik()->status()->get();
-    // }
+    private function countStatistikKategoriRtm(): object
+    {
+        return Rtm::countStatistik()->status()->get();
+    }
 
-    // private function countStatistikKategoriKelompok(): object
-    // {
-    //     return Kelompok::countStatistik()->status()->get();
-    // }
+    private function countStatistikKategoriKelompok(): object
+    {
+        return Kelompok::countStatistik()->status()->get();
+    }
 
-    // public function caseNonKategori($id): array
-    // {
-    //     $header = [];
-    //     $bantuan = $this->getBantuanNonKategori($id);
+    public function caseNonKategori($id): array
+    {
+        $header = [];
+        $bantuan = $this->getBantuanNonKategori($id);
 
-    //     return [
-    //         'header' => $header,
-    //         'footer' => $this->listFooter($header, $bantuan),
-    //     ];
-    // }
+        return [
+            'header' => $header,
+            'footer' => $this->listFooter($header, $bantuan),
+        ];
+    }
 
     /**
      * @param $dataHeader  collection

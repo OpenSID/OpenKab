@@ -48,6 +48,7 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}">
     document.addEventListener("DOMContentLoaded", function(event) {
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         @include('peta.point.js.data_subpoint')
         @include('peta.point.js.checkbox')
         @include('peta.point.js.multiple_delete')

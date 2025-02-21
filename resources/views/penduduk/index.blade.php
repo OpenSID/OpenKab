@@ -155,13 +155,15 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         var penduduk = $('#penduduk').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('api/v1/penduduk') }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}`,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {

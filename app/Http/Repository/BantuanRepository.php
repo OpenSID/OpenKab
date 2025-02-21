@@ -164,44 +164,44 @@ class BantuanRepository
      *
      * return array
      */
-    private function listFooter($dataHeader, $queryFooter): array
-    {
-        if (count($dataHeader) > 0) {
-            $jumlahLakiLaki = $dataHeader->sum('laki_laki');
-            $jumlahPerempuan = $dataHeader->sum('perempuan');
-            $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
+    // private function listFooter($dataHeader, $queryFooter): array
+    // {
+    //     if (count($dataHeader) > 0) {
+    //         $jumlahLakiLaki = $dataHeader->sum('laki_laki');
+    //         $jumlahPerempuan = $dataHeader->sum('perempuan');
+    //         $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
 
-            $totalLakiLaki = $queryFooter[0]['laki_laki'];
-            $totalPerempuan = $queryFooter[0]['perempuan'];
-            $total = $totalLakiLaki + $totalPerempuan;
-        } else {
-            $jumlahLakiLaki = $queryFooter[0]['laki_laki'] ?? 0;
-            $jumlahPerempuan = $queryFooter[0]['perempuan'] ?? 0;
-            $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
+    //         $totalLakiLaki = $queryFooter[0]['laki_laki'];
+    //         $totalPerempuan = $queryFooter[0]['perempuan'];
+    //         $total = $totalLakiLaki + $totalPerempuan;
+    //     } else {
+    //         $jumlahLakiLaki = $queryFooter[0]['laki_laki'] ?? 0;
+    //         $jumlahPerempuan = $queryFooter[0]['perempuan'] ?? 0;
+    //         $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
 
-            $totalLakiLaki = $queryFooter[1]['laki_laki'] ?? 0;
-            $totalPerempuan = $queryFooter[1]['perempuan'] ?? 0;
-            $total = $totalLakiLaki + $totalPerempuan;
-        }
+    //         $totalLakiLaki = $queryFooter[1]['laki_laki'] ?? 0;
+    //         $totalPerempuan = $queryFooter[1]['perempuan'] ?? 0;
+    //         $total = $totalLakiLaki + $totalPerempuan;
+    //     }
 
-        return [
-            [
-                'nama' => 'Peserta',
-                'jumlah' => $jumlah,
-                'laki_laki' => $jumlahLakiLaki,
-                'perempuan' => $jumlahPerempuan,
-            ],
-            [
-                'nama' => 'Bukan Peserta',
-            ],
-            [
-                'nama' => 'Total',
-                'jumlah' => $total,
-                'laki_laki' => $totalLakiLaki,
-                'perempuan' => $totalPerempuan,
-            ],
-        ];
-    }
+    //     return [
+    //         [
+    //             'nama' => 'Peserta',
+    //             'jumlah' => $jumlah,
+    //             'laki_laki' => $jumlahLakiLaki,
+    //             'perempuan' => $jumlahPerempuan,
+    //         ],
+    //         [
+    //             'nama' => 'Bukan Peserta',
+    //         ],
+    //         [
+    //             'nama' => 'Total',
+    //             'jumlah' => $total,
+    //             'laki_laki' => $totalLakiLaki,
+    //             'perempuan' => $totalPerempuan,
+    //         ],
+    //     ];
+    // }
 
     public function tahun()
     {

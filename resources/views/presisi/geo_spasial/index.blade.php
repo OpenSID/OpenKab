@@ -6,30 +6,56 @@
     @include('presisi.partials.head')
 
 <div class="row m-1">
+@include('presisi.geo_spasial.wilayah.data-wilayah')
+
     <div class="col-md-12">
 
         <div class="card rounded-0 border-0 shadow-none">
-            @include('presisi.summary')
+            <!-- @include('presisi.summary') -->
             <div class="card-body">
-                @include('presisi.wilayah.filter')
+                @include('presisi.geo_spasial.wilayah.filter')
                 
-                @include('presisi.wilayah.peta')
+                @include('presisi.geo_spasial.wilayah.peta')
                 
             </div>
         </div>
     </div>
 
-    @include('presisi.wilayah.data-wilayah')
 
-    @include('presisi.wilayah.data-desa')
+    @include('presisi.geo_spasial.wilayah.data-desa')
     
 
     
+</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Detail Informasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- Konten detail akan diisi di sini -->
+            </div>
+        </div>
+    </div>
 </div>
 
 @endsection
 
 @push('styles')
+<style>
+    @media (min-width: 768px) {
+    .col-md-4 {
+        flex: 0 0 auto;
+        width: 31.1%!important;
+        margin: 10px!important;
+    }
+}
+</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 @endpush
 @push('js')
@@ -37,22 +63,20 @@
 <script nonce="{{ csp_nonce() }}" type="text/javascript">
 document.addEventListener("DOMContentLoaded", function (event) {
     "use strict";
+
+    const header = @include('layouts.components.header_bearer_api_gabungan');
+
     const position = [{{ env('LATTITUDE_MAP', -8.459556) }}, {{ env('LONGITUDE_MAP', 115.046600) }}]
     const map = L.map('map').setView( position, 13);
     const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
+		// maxZoom: 15,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map)
 
-    @include('layouts.presisi.peta.filter')
-    @include('layouts.presisi.peta.index')
-    @include('layouts.presisi.peta.style')
-    @include('layouts.presisi.wilayah.data')
-
-
-    @include('layouts.presisi.peta.index')
-    @include('layouts.presisi.peta.style')
-    
+    @include('presisi.geo_spasial.layouts.peta.filter')
+    @include('presisi.geo_spasial.layouts.peta.index')
+    @include('presisi.geo_spasial.layouts.peta.style')
+    @include('presisi.geo_spasial.layouts.wilayah.data')
 
     $.get('{{ url('api/v1/data-website') }}', {}, function(result){
         let category = result.data.categoriesItems
@@ -98,8 +122,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/wilayah/penduduk') }}`,
+                url: new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/penduduk' }}"),
                 method: 'get',
+                headers: header,
                 data: function(row) {
                     return {
                         "page[size]": row.length,

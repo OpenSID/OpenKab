@@ -41,6 +41,7 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         @include('suplemen.js.data_suplemen')
         @include('suplemen.js.data_sasaran')
         @include('suplemen.js.data_status')

@@ -11,14 +11,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class BantuanRepository
 {
-    public const SASARAN_PENDUDUK = 1;
-
-    public const SASARAN_KELUARGA = 2;
-
-    public const SASARAN_RUMAH_TANGGA = 3;
-
-    public const SASARAN_KELOMPOK = 4;
-
     public function listBantuan()
     {
         return  QueryBuilder::for(Bantuan::filterWilayah())
@@ -61,12 +53,12 @@ class BantuanRepository
             ])->get();
     }
 
-    public function listStatistik($kategori, $tahun, $kabupaten, $kecamatan, $desa): array
+    public function listStatistik($kategori): array
     {
         return collect(match ($kategori) {
-            'penduduk' => $this->caseKategoriPenduduk($tahun, $kabupaten, $kecamatan, $desa),
-            'keluarga' => $this->caseKategoriKeluarga($tahun, $kabupaten, $kecamatan, $desa),
-            default => $this->caseNonKategori($kategori, $tahun, $kabupaten, $kecamatan, $desa),
+            'penduduk' => $this->caseKategoriPenduduk(),
+            'keluarga' => $this->caseKategoriKeluarga(),
+            default => $this->caseNonKategori($kategori),
         })->toArray();
     }
 
@@ -74,29 +66,13 @@ class BantuanRepository
     {
         $bantuan = Bantuan::whereId($id)->first();
 
-        if (isset(request('filter')['tahun'])) {
-            $bantuan = $bantuan->whereRaw('YEAR(program.sdate) = '.request('filter')['tahun']);
-        }
-        if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['desa'])) {
-            $bantuan = $bantuan->join('config', 'config.id', '=', "{$this->table}.config_id", 'left');
-            if (isset(request('filter')['kabupaten'])) {
-                $bantuan = $bantuan->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
-            }
-            if (isset(request('filter')['kecamatan'])) {
-                $bantuan = $bantuan->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
-            }
-            if (isset(request('filter')['desa'])) {
-                $bantuan = $bantuan->whereRaw('config.kode_desa = '.request('filter')['desa']);
-            }
-        }
-
         return [
             [
                 'nama' => 'PESERTA',
-                'laki_laki' => isset($bantuan->statistik) ? $bantuan->statistik['laki_laki'] : 0,
-                'perempuan' => isset($bantuan->statistik) ? $bantuan->statistik['perempuan'] : 0,
+                'laki_laki' => $bantuan->statistik['laki_laki'],
+                'perempuan' => $bantuan->statistik['perempuan'],
             ],
-            $this->getTotal(isset($bantuan->sasaran) ? $bantuan->sasaran : null),
+            $this->getTotal($bantuan->sasaran),
         ];
     }
 
@@ -116,7 +92,7 @@ class BantuanRepository
         ];
     }
 
-    public function caseKategoriPenduduk($tahun, $kabupaten, $kecamatan, $desa): array
+    public function caseKategoriPenduduk(): array
     {
         $header = Bantuan::countStatistikPenduduk()->get();
         $footer = $this->countStatistikKategoriPenduduk();
@@ -135,27 +111,12 @@ class BantuanRepository
         // if (! isset(request('filter')['tahun']) && ! isset(request('filter')['bulan'])) {
         //     $bantuan->status();
         // }
-        if (isset(request('filter')['tahun'])) {
-            $bantuan = $bantuan->whereRaw('YEAR(program.sdate) = '.request('filter')['tahun']);
-        }
-        if (isset(request('filter')['kabupaten']) || isset(request('filter')['kecamatan']) || isset(request('filter')['desa'])) {
-            $bantuan = $bantuan->join('config', 'config.id', '=', 'program.config_id', 'left');
-            if (isset(request('filter')['kabupaten'])) {
-                $bantuan = $bantuan->whereRaw('config.kode_kabupaten = '.request('filter')['kabupaten']);
-            }
-            if (isset(request('filter')['kecamatan'])) {
-                $bantuan = $bantuan->whereRaw('config.kode_kecamatan = '.request('filter')['kecamatan']);
-            }
-            if (isset(request('filter')['desa'])) {
-                $bantuan = $bantuan->whereRaw('config.kode_desa = '.request('filter')['desa']);
-            }
-        }
+
         if ($configDesa) {
             $bantuan->where(function ($q) use ($configDesa) {
                 return $q->where('program.config_id', $configDesa)->orWhereNull('program.config_id');
             });
         }
-        $bantuan = $bantuan->where('program.sasaran', self::SASARAN_PENDUDUK);
 
         return $bantuan->get();
     }
@@ -203,44 +164,44 @@ class BantuanRepository
      *
      * return array
      */
-    private function listFooter($dataHeader, $queryFooter): array
-    {
-        if (count($dataHeader) > 0) {
-            $jumlahLakiLaki = $dataHeader->sum('laki_laki');
-            $jumlahPerempuan = $dataHeader->sum('perempuan');
-            $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
+    // private function listFooter($dataHeader, $queryFooter): array
+    // {
+    //     if (count($dataHeader) > 0) {
+    //         $jumlahLakiLaki = $dataHeader->sum('laki_laki');
+    //         $jumlahPerempuan = $dataHeader->sum('perempuan');
+    //         $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
 
-            $totalLakiLaki = $queryFooter[0]['laki_laki'];
-            $totalPerempuan = $queryFooter[0]['perempuan'];
-            $total = $totalLakiLaki + $totalPerempuan;
-        } else {
-            $jumlahLakiLaki = $queryFooter[0]['laki_laki'] ?? 0;
-            $jumlahPerempuan = $queryFooter[0]['perempuan'] ?? 0;
-            $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
+    //         $totalLakiLaki = $queryFooter[0]['laki_laki'];
+    //         $totalPerempuan = $queryFooter[0]['perempuan'];
+    //         $total = $totalLakiLaki + $totalPerempuan;
+    //     } else {
+    //         $jumlahLakiLaki = $queryFooter[0]['laki_laki'] ?? 0;
+    //         $jumlahPerempuan = $queryFooter[0]['perempuan'] ?? 0;
+    //         $jumlah = $jumlahLakiLaki + $jumlahPerempuan;
 
-            $totalLakiLaki = $queryFooter[1]['laki_laki'] ?? 0;
-            $totalPerempuan = $queryFooter[1]['perempuan'] ?? 0;
-            $total = $totalLakiLaki + $totalPerempuan;
-        }
+    //         $totalLakiLaki = $queryFooter[1]['laki_laki'] ?? 0;
+    //         $totalPerempuan = $queryFooter[1]['perempuan'] ?? 0;
+    //         $total = $totalLakiLaki + $totalPerempuan;
+    //     }
 
-        return [
-            [
-                'nama' => 'Peserta',
-                'jumlah' => $jumlah,
-                'laki_laki' => $jumlahLakiLaki,
-                'perempuan' => $jumlahPerempuan,
-            ],
-            [
-                'nama' => 'Bukan Peserta',
-            ],
-            [
-                'nama' => 'Total',
-                'jumlah' => $total,
-                'laki_laki' => $totalLakiLaki,
-                'perempuan' => $totalPerempuan,
-            ],
-        ];
-    }
+    //     return [
+    //         [
+    //             'nama' => 'Peserta',
+    //             'jumlah' => $jumlah,
+    //             'laki_laki' => $jumlahLakiLaki,
+    //             'perempuan' => $jumlahPerempuan,
+    //         ],
+    //         [
+    //             'nama' => 'Bukan Peserta',
+    //         ],
+    //         [
+    //             'nama' => 'Total',
+    //             'jumlah' => $total,
+    //             'laki_laki' => $totalLakiLaki,
+    //             'perempuan' => $totalPerempuan,
+    //         ],
+    //     ];
+    // }
 
     public function tahun()
     {

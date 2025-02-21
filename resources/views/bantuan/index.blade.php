@@ -100,6 +100,12 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+        var urlBantuan = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan' }}");
+        var urlSasaran = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/sasaran' }}");
+        var urlTahun = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/tahun' }}");
+
         var bantuan = $('#bantuan').DataTable({
             processing: true,
             serverSide: true,
@@ -110,7 +116,8 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/bantuan') }}`,
+                url: urlBantuan,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -200,7 +207,8 @@
             theme: 'bootstrap4',
             minimumResultsForSearch: -1,
             ajax: {
-                url: '{{ url('api/v1/bantuan') }}/sasaran/',
+                url: urlSasaran,
+                headers: header,
                 dataType: 'json',
                 processResults: function(response) {
                     return {
@@ -219,7 +227,8 @@
             minimumResultsForSearch: -1,
             theme: 'bootstrap4',
             ajax: {
-                url: '{{ url('api/v1/bantuan') }}/tahun/',
+                url: urlTahun,
+                headers: header,
                 dataType: 'json',
                 processResults: function(data) {
                     if (data.data.tahun_awal == null) {

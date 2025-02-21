@@ -1,3 +1,5 @@
+const header = @include('layouts.components.header_bearer_api_gabungan');
+var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/plan' }}");
 var point = $('#plan').DataTable({
 processing: true,
 serverSide: true,
@@ -8,7 +10,8 @@ searchPanes: {
     columns: [0]
 },
 ajax: {
-    url: `{{ url('api/v1/plan') }}`,
+    url: url,
+    headers: header,
     method: 'get',
     data: function(row) {
         return {

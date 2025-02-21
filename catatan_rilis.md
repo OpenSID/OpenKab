@@ -36,3 +36,15 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 5. [#528](https://github.com/OpenSID/OpenKab/issues/528) Hapus API dtks dari OpenKab dan sesuaikan API database gabungan.
 6. [#537](https://github.com/OpenSID/OpenKab/issues/537) Hapus API get-list statistik dari OpenKab ke API database gabungan.
 7. [#550](https://github.com/OpenSID/OpenKab/issues/550) Hapus API pariwisata & infrastruktur dari OpenKab ke API database gabungan.
+8. [#561](https://github.com/OpenSID/OpenKab/issues/561) Sesuaikan Unit Testing API pengaturan aplikasi.
+9. [#562](https://github.com/OpenSID/OpenKab/issues/562) Hapus API penerima bantuan dan statistik dan pindahi ke API database gabungan Teknis.
+10. [#548](https://github.com/OpenSID/OpenKab/issues/548) Hapus API pembangunan.
+11. [#546](https://github.com/OpenSID/OpenKab/issues/546) Hapus API keuangan dari OpenKab ke API database gabungan.
+12. [#547](https://github.com/OpenSID/OpenKab/issues/547) Hapus API file yang tidak di gunakan lagi.
+13. [#541](https://github.com/OpenSID/OpenKab/issues/541) Hapus API yang sudah tersedia di API database gabungan.
+14. [#540](https://github.com/OpenSID/OpenKab/issues/540) Hapus API data penduduk pada OpenKab dan sesuaikan API database gabungan.
+15. [#544](https://github.com/OpenSID/OpenKab/issues/544) Hapus API Suplemen dari OpenKab ke API database gabungan #544
+Open.
+16. [#539](https://github.com/OpenSID/OpenKab/issues/539) Hapus API wilayah Penduduk, Dusun, RT, RW dan Desa.
+17. [#545](https://github.com/OpenSID/OpenKab/issues/545) Hapus API Poin & Plan dari OpenKab ke API database gabungan.
+18. [#543](https://github.com/OpenSID/OpenKab/issues/543)  Hapus API BantuanKabupaten dari OpenKab ke API database gabungan.

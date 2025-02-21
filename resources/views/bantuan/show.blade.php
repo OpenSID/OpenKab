@@ -53,8 +53,13 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         var nama_desa = `{{ session('desa.nama_desa') }}`;
 
+        const headers = @include('layouts.components.header_bearer_api_gabungan');
+        var urlBantuan = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan' }}?filter[id]={{ $id }}");
+        var urlPeserta = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/peserta' }}?filter[program_id]={{ $id }}");
+
         $.ajax({
-            url: `{{ url('api/v1/bantuan') }}?filter[id]={{ $id }}`,
+            url:urlBantuan,
+            headers: headers,
             method: 'get',
             success: function(response) {
                 if (response.data[0].length == 0) {
@@ -108,7 +113,8 @@
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('api/v1/bantuan/peserta') }}?filter[program_id]={{ $id }}`,
+                url: urlPeserta,
+                headers: headers,
                 method: 'get',
                 data: function(row) {
                     return {

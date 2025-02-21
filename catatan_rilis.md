@@ -22,6 +22,7 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 18. [#500](https://github.com/OpenSID/OpenKab/issues/500) Penambahan tampilkan data peta.
 19. [#509](https://github.com/OpenSID/OpenKab/issues/509) Penambahan geospasial data sumber baru.
 20. [#516](https://github.com/OpenSID/OpenKab/issues/516) Penambahan jumlah kecamatan, desa, jumlah penduduk dan keluarga mengikuti filter wilayah.
+21. [#512](https://github.com/OpenSID/OpenKab/issues/512) Penambahan API data papan dari modul data presisi bagian papan.
 
 
 #### Perbaikan BUG

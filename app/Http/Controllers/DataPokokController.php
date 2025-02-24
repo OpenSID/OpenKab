@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class DataPokokController extends Controller
 {
     public function agama_adat()
@@ -49,5 +51,23 @@ class DataPokokController extends Controller
         $title = 'Data Prasarana dan Sarana';
 
         return view('data_pokok.infrastruktur.index', ['title' => $title]);
+    }
+
+    public function sandang()
+    {
+        $title = 'Data Sandang';
+
+        return view('dtks.sandang.index', ['title' => $title]);
+    }
+
+    public function detail_sandang(Request $request)
+    {
+        $data = json_decode($request->data);
+        return view('dtks.sandang.detail', ['data' => $data]);
+    }
+
+    public function cetak_sandang(Request $request)
+    {
+        return view('dtks.sandang.cetak', ['filter' => $request->getQueryString()]);
     }
 }

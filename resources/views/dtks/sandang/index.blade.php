@@ -117,7 +117,7 @@
 
                             let d = data.attributes
                             let obj = {
-                                'id_rtm' : data.id,
+                                'rtm_id' : data.id,
                                 'no_kartu_rumah': d.no_kk,
                                 'nama_kepala_keluarga': d.kepala_keluarga,
                                 'alamat': d.alamat,

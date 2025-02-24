@@ -63,6 +63,7 @@ class DataPokokController extends Controller
     public function detail_sandang(Request $request)
     {
         $data = json_decode($request->data);
+
         return view('dtks.sandang.detail', ['data' => $data]);
     }
 

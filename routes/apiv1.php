@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
-use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SummaryController;

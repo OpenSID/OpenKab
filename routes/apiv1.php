@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\BantuanController;
 use App\Http\Controllers\Api\DasborController;
 use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\IdentitasController;
@@ -66,8 +65,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', DasborController::class);
     });
 
-    Route::get('infrastruktur', [InfrastrukturController::class, 'data']);
-
     // Artikel
     Route::controller(ArtikelController::class)
         ->prefix('artikel')->group(function () {
@@ -86,35 +83,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/show', 'show')->name('api.keluarga.detail');
         });
 
-    // Statistik
-    Route::controller(StatistikController::class)
-        ->prefix('statistik')->group(function () {
-            Route::get('/kategori-statistik', 'kategoriStatistik');
-            Route::prefix('penduduk')->group(function () {
-                Route::get('/', 'penduduk');
-                Route::get('/tahun', 'refTahunPenduduk');
-            });
-            Route::prefix('keluarga')->group(function () {
-                Route::get('/', 'keluarga');
-                Route::get('/tahun', 'refTahunKeluarga');
-            });
-            Route::prefix('rtm')->group(function () {
-                Route::get('/', 'rtm');
-                Route::get('/tahun', 'refTahunRtm');
-            });
-            Route::get('/bantuan', 'bantuan');
-            Route::get('/bantuan/tahun', [BantuanController::class, 'tahun']);
-        });
-
-    // Bantuan
-    Route::controller(BantuanController::class)
-        ->prefix('bantuan')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/peserta', 'peserta');
-            Route::get('/sasaran', 'sasaran');
-            Route::get('/tahun', 'tahun');
-            Route::get('/cetak', 'cetakBantuan');
-        });   
 
     // Identitas
     Route::controller(IdentitasController::class)

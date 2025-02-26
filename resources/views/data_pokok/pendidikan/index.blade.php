@@ -2,7 +2,7 @@
 
 @include('components.progressive-image')
 
-@section('title', 'Data Bantuan')
+@section('title', 'Data Pendidikan Penduduk dan DTKS')
 
 @section('content_header')
     <h1>Data Pendidikan Penduduk dan DTKS</h1>
@@ -49,7 +49,7 @@
                         <table class="table table-striped" id="pendidikan">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>NIK</th>
                                     <th>Pendidikan dalam KK</th>
                                     <th>Pendidikan Sedang Ditempuh</th>
@@ -83,7 +83,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ordering: true,
+            ordering: false,
             searchPanes: {
                 viewTotal: false,
                 columns: [0]
@@ -97,8 +97,6 @@
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
-                            ?.name,
                         "filter[kode_desa]": $("#kode_desa").val(),
                     };
                 },
@@ -124,6 +122,7 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "attributes.nik",
@@ -160,9 +159,6 @@
                     name: "ijazah_tertinggi",
                     orderable: false
                 },
-            ],
-            order: [
-                [0, 'asc']
             ]
         })
         pendidikan.on('draw.dt', function() {

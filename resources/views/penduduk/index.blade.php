@@ -155,13 +155,15 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         var penduduk = $('#penduduk').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('api/v1/penduduk') }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}`,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -192,7 +194,7 @@
                     className: 'text-nowrap',
                 },
                 {
-                    targets: [0, 1, 3, 5, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    targets: [0, 1, 2, 3, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
                     orderable: false,
                     searchable: false,
                 },
@@ -237,7 +239,6 @@
                 {
                     data: "attributes.tag_id_card",
                     name: "tag_id_card",
-                    searchable: false,
                 },
                 {
                     data: "attributes.nama",

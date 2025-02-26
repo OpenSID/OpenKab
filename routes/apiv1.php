@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\KategoriDesaController;
 use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
-use App\Http\Controllers\Api\PendudukController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SummaryController;
@@ -68,21 +67,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::get('infrastruktur', [InfrastrukturController::class, 'data']);
-
-    Route::prefix('penduduk')->group(function () {
-        Route::get('/', [PendudukController::class, 'index']);
-
-        // Referensi
-        Route::prefix('referensi')->group(function () {
-            Route::get('sex', [PendudukController::class, 'pendudukSex']);
-            Route::get('status', [PendudukController::class, 'pendudukStatus']);
-            Route::get('status-dasar', [PendudukController::class, 'pendudukStatusDasar']);
-        });
-
-        Route::prefix('aksi')->group(function () {
-            Route::post('pindah', [PendudukController::class, 'pindah']);
-        });
-    });
 
     // Artikel
     Route::controller(ArtikelController::class)

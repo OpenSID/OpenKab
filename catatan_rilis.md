@@ -26,8 +26,8 @@ Di rilis ini, versi 2502.0.0 berisi penambahan filter wilayah pada estunting dan
 
 
 #### Perbaikan BUG
-
-
+1. [#575](https://github.com/OpenSID/OpenKab/issues/575) Perbaikan halaman penduduk di OpenKab ketika melakukan sorting tag id card
+2. [#576](https://github.com/OpenSID/OpenKab/issues/576) Perbaikan title pada halaman data agama
 #### Perubahan Teknis
 
 1. [#542](https://github.com/OpenSID/OpenKab/issues/542) Hapus API Kategori Artikel yang sudah tersedia di API database gabungan.

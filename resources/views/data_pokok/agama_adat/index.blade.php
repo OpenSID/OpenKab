@@ -2,7 +2,7 @@
 
 @include('components.progressive-image')
 
-@section('title', 'Data Bantuan')
+@section('title', 'Data Agama, Adat, Tradisi & Seni Budaya')
 
 @section('content_header')
     <h1>{{ $title }}</h1>
@@ -58,7 +58,7 @@
                         <table class="table table-striped" id="tempatibadah">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>Nama Tempat Ibadah</th>
                                     <th>Jumlah</th>
                                 </tr>
@@ -81,7 +81,7 @@
                         <table class="table table-striped" id="dataperorangan">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>NIK</th>
                                     <th>Agama</th>
                                     <th>Suku</th>
@@ -105,7 +105,7 @@
                         <table class="table table-striped" id="kelembagaan">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>Kategori</th>
                                     <th>Detail</th>
                                 </tr>
@@ -138,7 +138,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ordering: true,
+            ordering: false,
             paging: false,
             searching: false,
             info: false,
@@ -182,6 +182,7 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "data.jenis_tempat_ibadah",
@@ -193,9 +194,6 @@
                     name: "jumlah",
                     orderable: false
                 }
-            ],
-            order: [
-                [0, 'asc']
             ]
         })
         tempatibadah.on('draw.dt', function() {
@@ -289,11 +287,11 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "attributes.nik",
                     name: "nik",
-                    orderable: false
                 },
                 {
                     data: "attributes.agama",
@@ -307,7 +305,7 @@
                 }
             ],
             order: [
-                [0, 'asc']
+                [1, 'asc']
             ]
         })
         dataperorangan.on('draw.dt', function() {
@@ -324,7 +322,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ordering: true,
+            ordering: false,
             paging: false,
             searching: false,
             info: false,
@@ -397,6 +395,7 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "kategori",
@@ -408,9 +407,6 @@
                     name: "Detail",
                     orderable: false
                 },
-            ],
-            order: [
-                [0, 'asc']
             ]
         })
         kelembagaan.on('draw.dt', function() {

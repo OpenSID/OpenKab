@@ -2,7 +2,7 @@
 
 @include('components.progressive-image')
 
-@section('title', 'Data Bantuan')
+@section('title', 'Data Kepesertaan Program dan Statistik')
 
 @section('content_header')
     <h1>{{ $title }}</h1>
@@ -49,7 +49,7 @@
                         <table class="table table-striped" id="jaminansosial">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>NIK</th>
                                     <th>Terdaftar DTKS</th>
                                     <th>Memiliki Jaminan Kesehatan</th>
@@ -82,7 +82,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ordering: true,
+            ordering: false,
             searchPanes: {
                 viewTotal: false,
                 columns: [0]
@@ -96,8 +96,6 @@
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
-                            ?.name,
                         "filter[kode_desa]": $("#kode_desa").val(),
                     };
                 },
@@ -123,6 +121,7 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "attributes.nik",
@@ -165,9 +164,6 @@
                     orderable: false
                 },
             ],
-            order: [
-                [0, 'asc']
-            ]
         })
         jaminansosial.on('draw.dt', function() {
             var PageInfo = $('#jaminansosial').DataTable().page.info();

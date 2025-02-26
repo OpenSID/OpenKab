@@ -194,7 +194,7 @@
                     className: 'text-nowrap',
                 },
                 {
-                    targets: [0, 1, 3, 5, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+                    targets: [0, 1, 2, 3, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
                     orderable: false,
                     searchable: false,
                 },
@@ -239,7 +239,6 @@
                 {
                     data: "attributes.tag_id_card",
                     name: "tag_id_card",
-                    searchable: false,
                 },
                 {
                     data: "attributes.nama",

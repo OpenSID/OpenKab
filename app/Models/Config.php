@@ -39,7 +39,7 @@ class Config extends Model
     public function penduduk(): HasMany
     {
         return $this->hasMany(Penduduk::class, 'config_id', 'id');
-    }    
+    }
 
     /**
      * Get all of the rtm for the Config.

@@ -1,6 +1,11 @@
 <script>
+    const headers = @include('layouts.components.header_bearer_api_gabungan');
+    var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/infrastruktur' }}");
     // Ambil data dari API
-    fetch("{{ url('api/v1/infrastruktur') }}") // Ganti dengan rute API Anda
+    fetch(url, {
+        method: 'GET',
+        headers: headers
+    }) // Ganti dengan rute API Anda
         .then(response => response.json())
         .then(data => {
             // Ambil data kondisi baik dan buruk

@@ -2,7 +2,7 @@
 
 @include('components.progressive-image')
 
-@section('title', 'Data Bantuan')
+@section('title', 'Data Agama, Adat, Tradisi & Seni Budaya')
 
 @section('content_header')
     <h1>{{ $title }}</h1>
@@ -58,7 +58,7 @@
                         <table class="table table-striped" id="tempatibadah">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>Nama Tempat Ibadah</th>
                                     <th>Jumlah</th>
                                 </tr>
@@ -81,7 +81,7 @@
                         <table class="table table-striped" id="dataperorangan">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>NIK</th>
                                     <th>Agama</th>
                                     <th>Suku</th>
@@ -105,7 +105,7 @@
                         <table class="table table-striped" id="kelembagaan">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>Kategori</th>
                                     <th>Detail</th>
                                 </tr>
@@ -126,19 +126,19 @@
         let data_grafik_bar = [];
     document.addEventListener("DOMContentLoaded", function(event) {
 
-        var url = new URL("{{ url('api/v1/prodeskel/potensi/kelembagaan') }}");
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/prodeskel/potensi/kelembagaan' }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
         
-        var urlPerorangan = new URL("{{ url('api/v1/prodeskel/potensi/kelembagaan/penduduk') }}");
+        var urlPerorangan = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/prodeskel/potensi/kelembagaan/penduduk' }}");
         urlPerorangan.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         urlPerorangan.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
-
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         var tempatibadah = $('#tempatibadah').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ordering: true,
+            ordering: false,
             paging: false,
             searching: false,
             info: false,
@@ -148,6 +148,7 @@
             },
             ajax: {
                 url: url.href,
+                headers: header,
                 method: 'get',
                 dataSrc: function(json) {
 
@@ -181,6 +182,7 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "data.jenis_tempat_ibadah",
@@ -192,9 +194,6 @@
                     name: "jumlah",
                     orderable: false
                 }
-            ],
-            order: [
-                [0, 'asc']
             ]
         })
         tempatibadah.on('draw.dt', function() {
@@ -217,6 +216,7 @@
             },
             ajax: {
                 url: urlPerorangan.href,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -287,11 +287,11 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "attributes.nik",
                     name: "nik",
-                    orderable: false
                 },
                 {
                     data: "attributes.agama",
@@ -305,7 +305,7 @@
                 }
             ],
             order: [
-                [0, 'asc']
+                [1, 'asc']
             ]
         })
         dataperorangan.on('draw.dt', function() {
@@ -322,7 +322,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ordering: true,
+            ordering: false,
             paging: false,
             searching: false,
             info: false,
@@ -332,6 +332,7 @@
             },
             ajax: {
                 url: url.href,
+                headers: header,
                 method: 'get',
                 dataSrc: function(json) {
 
@@ -394,6 +395,7 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "kategori",
@@ -405,9 +407,6 @@
                     name: "Detail",
                     orderable: false
                 },
-            ],
-            order: [
-                [0, 'asc']
             ]
         })
         kelembagaan.on('draw.dt', function() {

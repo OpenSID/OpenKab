@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Models\Traits\ConfigIdTrait;
+use App\Models\Traits\FilterWilayahTrait;
 
 class BantuanPeserta extends BaseModel
 {
+    use FilterWilayahTrait;
     use ConfigIdTrait;
 
     /** {@inheritdoc} */
@@ -57,5 +59,13 @@ class BantuanPeserta extends BaseModel
     public function penduduk()
     {
         return $this->belongsTo(Penduduk::class, 'kartu_id_pend');
+    }
+
+    /**
+     * Get the phone associated with the config.
+     */
+    public function config()
+    {
+        return $this->hasOne(Config::class, 'id', 'config_id');
     }
 }

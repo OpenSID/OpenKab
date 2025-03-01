@@ -1,4 +1,4 @@
-<script>
+
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('previewButton').addEventListener('click', function () {
             let isValid = true;
@@ -187,4 +187,3 @@
             $('#previewModal').modal('show');
         });
     });
-</script>

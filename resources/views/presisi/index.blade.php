@@ -90,6 +90,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     }, 'json')
 
+    let url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/penduduk' }}");
+    url.searchParams.set("kode_kabupaten", $("#filter_kabupaten").val());
+    url.searchParams.set("kode_kecamatan", $("#filter_kecamatan").val());
+    url.searchParams.set("kode_desa", $("#filter_desa").val());
+
     var summaryPenduduk = $('#summary-penduduk').DataTable({
             processing: true,
             serverSide: true,
@@ -100,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 columns: [0]
             },
             ajax: {
-                url: new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/penduduk' }}"),
+                url: url.href,
                 method: 'get',
                 headers: header,
                 data: function(row) {
@@ -108,9 +113,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
-                        'filter[kode_kabupaten]' : $("#filter_kabupaten").val(),
-                        'filter[kode_kecamatan]' : $("#filter_kecamatan").val(),
-                        'filter[kode_desa]' : $("#filter_desa").val(),
                     };
                 },
                 dataSrc: function(json) {

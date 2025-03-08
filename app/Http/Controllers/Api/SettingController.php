@@ -34,7 +34,7 @@ class SettingController extends Controller
 
             foreach ($request->all() as $key => $value) {
                 // Jika key tidak ada di database, kembalikan error 422
-                if (!in_array($key, $validKeys)) {
+                if (! in_array($key, $validKeys)) {
                     return response()->json([
                         'success' => false,
                         'message' => "Key '{$key}' tidak ditemukan.",

@@ -89,5 +89,4 @@ class PengaturanSettingTest extends TestCase
             'message',
         ]);
     }
-
 }

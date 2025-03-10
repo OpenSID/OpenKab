@@ -50,6 +50,10 @@
 
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
+
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan-kabupaten' }}");
+
         document.addEventListener("DOMContentLoaded", function(event) {
             let nama_desa = `{{ session('desa.nama_desa') }}`;
             var bantuan = $('#bantuan').DataTable({
@@ -62,8 +66,9 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/bantuan-kabupaten') }}`,
+                url: url.href,
                 method: 'get',
+                headers: header,
                 data: function(row) {
                     return {
                         "page[size]": row.length,

@@ -117,6 +117,8 @@
                 let dateParam = $.param({ sdate: $('input[name=sdate]').data('daterangepicker').startDate.format('YYYY-MM-DD'), edate: $('input[name=edate]').data('daterangepicker').startDate.format('YYYY-MM-DD')})
                 let formData = $('#bantuan-form  input,textarea,select').not('.datepicker').serialize()+'&'+dateParam
 
+                var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan-kabupaten/tambah' }}");
+
                 Swal.fire({
                     title: 'Tambah',
                     text: "Apakah anda yakin menambah data ini?",
@@ -134,10 +136,11 @@
                         $.ajax({
                             type: "POST",
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                'Authorization': 'Bearer {{ cache()->get('user_token_'.auth()->id()) }}'
                             },
                             dataType: "json",
-                            url: `{{ url('api/v1/bantuan-kabupaten/tambah') }}`,
+                            url: url,
                             data: formData,
                             success: function(response) {
                                 if (response.success == true) {

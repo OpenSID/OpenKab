@@ -38,8 +38,6 @@
 document.addEventListener("DOMContentLoaded", function (event) {
     "use strict";
 
-    const header = @include('layouts.components.header_bearer_api_gabungan');
-
     const position = [{{ env('LATTITUDE_MAP', -8.459556) }}, {{ env('LONGITUDE_MAP', 115.046600) }}]
     const map = L.map('map').setView( position, 13);
     const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -107,7 +105,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
             ajax: {
                 url: url.href,
                 method: 'get',
-                headers: header,
                 data: function(row) {
                     return {
                         "page[size]": row.length,

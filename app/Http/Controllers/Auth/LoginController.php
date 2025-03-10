@@ -91,7 +91,11 @@ class LoginController extends Controller
         );
 
         if ($successLogin) {
+            
             $user = $this->guard()->user();
+            
+            Cache::forget('user_token_'.$user->id);
+
             $cacheToken = Cache::get('user_token_'.$user->id);
 
             $generateToken = false;

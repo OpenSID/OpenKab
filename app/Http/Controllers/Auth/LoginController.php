@@ -91,29 +91,6 @@ class LoginController extends Controller
         );
 
         if ($successLogin) {
-            $user = $this->guard()->user();
-            $cacheToken = Cache::get('user_token_'.$user->id);
-
-            $generateToken = false;
-            if (! $cacheToken) {
-                $generateToken = true;
-            } else {
-                $token = PersonalAccessToken::findToken($cacheToken);
-                if (! $token) {
-                    $generateToken = true;
-                }
-            }
-
-            if ($generateToken) {
-                // Generate token
-                Cache::forget('user_token_'.$user->id);
-                $token = $this->guard()->user()->createToken('auth-token-api')->plainTextToken;
-                // Store token in cache
-                Cache::rememberForever('user_token_'.$user->id, function () use ($token) {
-                    return $token;
-                });
-            }
-
             try {
                 $request->validate(['password' => ['required', Password::min(8)
                     ->letters()

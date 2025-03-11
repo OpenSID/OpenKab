@@ -64,7 +64,6 @@ class AppServiceProvider extends ServiceProvider
             View::share('identitasAplikasi', $identitasAplikasi);
             View::share('settingAplikasi', $settingAplikasi);
 
-            //View::share('tokenUser', Cache::get('user_token_' . Auth::id()));
             $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
         }
     }

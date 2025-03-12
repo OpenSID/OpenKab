@@ -37,6 +37,11 @@
                     
                                 if (result.data.length > 0) {
                                     this.data = result.data[0].attributes;
+
+                                    this.$nextTick(() => {
+                                        $('#sdate').data('daterangepicker').setStartDate(moment(this.data.sdate, '{{ config('app.format.date_js') }}'));
+                                        $('#edate').data('daterangepicker').setStartDate(moment(this.data.edate, '{{ config('app.format.date_js') }}'));
+                                    });
                                 } else {
                                     console.warn('Data tidak ditemukan');
                                 }
@@ -103,7 +108,7 @@
                                 <div class="col">
                                     <div class="mb-4">
                                         <label for="sdate">Tanggal Mulai<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control datepicker @error('sdate') is-invalid @enderror" x-model="data.sdate" name="sdate">
+                                        <input type="text" class="form-control datepicker @error('sdate') is-invalid @enderror" x-model="data.sdate" name="sdate" id="sdate">
                                         @error('sdate')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -112,7 +117,7 @@
                                 <div class="col">
                                     <div class="mb-4">
                                         <label for="edate">Tanggal Berakhir<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control datepicker @error('edate') is-invalid @enderror" x-model="data.edate" name="edate">
+                                        <input type="text" class="form-control datepicker @error('edate') is-invalid @enderror" x-model="data.edate" name="edate" id="edate">
                                         @error('edate')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror

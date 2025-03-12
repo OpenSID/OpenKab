@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
@@ -94,7 +93,7 @@ class LoginController extends Controller
         if ($successLogin) {
             $user = $this->guard()->user();
             $cacheToken = Cache::get('user_token_'.$user->id);
-            
+
             $generateToken = false;
             if (! $cacheToken) {
                 $generateToken = true;
@@ -104,12 +103,12 @@ class LoginController extends Controller
                     $generateToken = true;
                 }
             }
-            
+
             if ($generateToken) {
                 // Generate token
                 Cache::forget('user_token_'.$user->id);
                 $token = $this->guard()->user()->createToken('auth-token-api')->plainTextToken;
-                // Store token in cache                
+                // Store token in cache
                 Cache::rememberForever('user_token_'.$user->id, function () use ($token) {
                     return $token;
                 });

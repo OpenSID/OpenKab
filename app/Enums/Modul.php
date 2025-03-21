@@ -78,6 +78,12 @@ final class Modul extends Enum
                     'permission' => 'datapokok-papan',
                 ],
                 [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Kesehatan',
+                    'url' => 'data-presisi/kesehatan',
+                    'permission' => 'datapresisi-kesehatan',
+                ],
+                [
                     'text' => 'Penerima Bantuan',
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'bantuan',

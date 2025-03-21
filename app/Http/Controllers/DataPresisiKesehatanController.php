@@ -16,6 +16,7 @@ class DataPresisiKesehatanController extends Controller
     public function detail(Request $request)
     {
         $data = json_decode($request->data);
+
         return view('data_pokok.data_presisi.kesehatan.detail', ['data' => $data]);
     }
 

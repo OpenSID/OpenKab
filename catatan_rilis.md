@@ -9,3 +9,4 @@ Di rilis ini, versi 2503.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perubahan Teknis
 
+1. [#590](https://github.com/OpenSID/OpenKab/issues/590) Sesuaikan pemanggilan Token API database gabungan.

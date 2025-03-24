@@ -26,8 +26,8 @@
 
 @section('js')
     <script nonce="{{ csp_nonce() }}">
-            document.addEventListener("DOMContentLoaded", function(event) {
-                let settings = $('#settings-table').DataTable({
+        document.addEventListener("DOMContentLoaded", function(event) {
+            let settings = $('#settings-table').DataTable({
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -44,8 +44,8 @@
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
-                            "filter[notkey]" : ['opendk_synchronize','opendk_api_key'],
-                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
+                                    ?.column]
                                 ?.name,
                         };
                     },
@@ -57,10 +57,9 @@
                     },
                 },
                 columnDefs: [{
-                        targets: '_all',
-                        className: 'text-nowrap',
-                    },
-                ],
+                    targets: '_all',
+                    className: 'text-nowrap',
+                }, ],
                 columns: [{
                         data: null,
                     },
@@ -81,7 +80,7 @@
                         name: "description"
                     },
                     {
-                        data: function (data) {
+                        data: function(data) {
                             let canEdit = `{{ $canedit }}`
                             let buttonEdit = canEdit ? `<a href="{{ route('settings.index') }}/${data.id}/edit">
                                         <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
@@ -106,27 +105,26 @@
                 });
             });
 
-                $(document).on('click', 'button.hapus', function() {
-                    var id = $(this).data('id')
-                    var that = $(this);
-                    Swal.fire({
-                        title: 'Hapus',
-                        text: "Apakah anda yakin menghapus data ini?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Hapus'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire({
-                                title: 'Menyimpan',
-                                didOpen: () => {
-                                    Swal.showLoading()
-                                },
-                            })
-                        }
-                    })
-                });
+            $(document).on('click', 'button.hapus', function() {
+                var id = $(this).data('id')
+                var that = $(this);
+                Swal.fire({
+                    title: 'Hapus',
+                    text: "Apakah anda yakin menghapus data ini?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Hapus'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Menyimpan',
+                            didOpen: () => {
+                                Swal.showLoading()
+                            },
+                        })
+                    }
+                })
             });
-
+        });
     </script>
 @endsection

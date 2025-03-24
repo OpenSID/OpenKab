@@ -45,4 +45,16 @@
         }
     }
 
-    </script>
+    $(document).on('select2:open', function(e) {
+        // Pastikan ini adalah elemen Select2
+        let $element = $(e.target);
+        if ($element.hasClass('select2-hidden-accessible')) {
+            let searchBox = document.querySelector(
+                '.select2-container--open .select2-search__field');
+            if (searchBox) {
+                searchBox.focus();
+            }
+        }
+    });
+
+</script>

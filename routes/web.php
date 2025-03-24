@@ -207,6 +207,23 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 
 });
 
+Route::prefix('presisi')->middleware('check.presisi')->group(function () {
+    Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
+    Route::view('/sosial',   'presisi.sosial.index');
+    Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
+
+    Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
+    Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
+    Route::get('/keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+    Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+
+    Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+    Route::get('/kesehatan/{kuartal}/{tahun}/{id}/{kabupaten?}/{kecamatan?}/{desa?}', [PresisiController::class, 'kesehatan']);
+    Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+    Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+    Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
+});
+
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
@@ -228,19 +245,3 @@ Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name(
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 
-Route::prefix('presisi')->middleware('check.presisi')->group(function () {
-    Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
-    Route::view('/sosial',   'presisi.sosial.index');
-    Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
-
-    Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
-    Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
-    Route::get('/keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
-    Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
-
-    Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
-    Route::get('/kesehatan/{kuartal}/{tahun}/{id}/{kabupaten?}/{kecamatan?}/{desa?}', [PresisiController::class, 'kesehatan']);
-    Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
-    Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
-    Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
-});

@@ -2,6 +2,8 @@ Di rilis ini, versi 2503.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Penambahan Fitur
 
+1. [#598](https://github.com/OpenSID/OpenKab/issues/598) Penambahan halaman data presisi kesehatan.
+2. [#589](https://github.com/OpenSID/OpenKab/issues/589) Penambahan halaman data presisi sandang.
 
 #### Perbaikan BUG
 
@@ -10,3 +12,4 @@ Di rilis ini, versi 2503.0.0 berisi penambahan dan perbaikan yang diminta penggu
 #### Perubahan Teknis
 
 1. [#590](https://github.com/OpenSID/OpenKab/issues/590) Sesuaikan pemanggilan Token API database gabungan.
+2. [#597](https://github.com/OpenSID/OpenKab/issues/597) Hapus pengaturan key OpenDK.

@@ -173,7 +173,7 @@
                             type: "PUT",
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                                'Authorization': 'Bearer {{ cache()->get('user_token_'.auth()->id()) }}'
+                                'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                             },
                             dataType: "json",
                             url: `${url}/${id}`,

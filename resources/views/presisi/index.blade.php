@@ -37,6 +37,7 @@
 <script nonce="{{ csp_nonce() }}" type="text/javascript">
 document.addEventListener("DOMContentLoaded", function (event) {
     "use strict";
+
     const position = [{{ env('LATTITUDE_MAP', -8.459556) }}, {{ env('LONGITUDE_MAP', 115.046600) }}]
     const map = L.map('map').setView( position, 13);
     const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -87,6 +88,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     }, 'json')
 
+    let url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/penduduk' }}");
+    url.searchParams.set("kode_kabupaten", $("#filter_kabupaten").val());
+    url.searchParams.set("kode_kecamatan", $("#filter_kecamatan").val());
+    url.searchParams.set("kode_desa", $("#filter_desa").val());
 
     var summaryPenduduk = $('#summary-penduduk').DataTable({
             processing: true,
@@ -98,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/wilayah/penduduk') }}`,
+                url: url.href,
                 method: 'get',
                 data: function(row) {
                     return {

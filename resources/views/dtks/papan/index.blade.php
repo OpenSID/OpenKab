@@ -75,7 +75,7 @@
                     columns: [0]
                 },
                 ajax: {
-                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/satu-data/dtks' }}`,
+                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/presisi/papan' }}`,
                     headers: header,  
                     method: 'get',
                     data: function(row) {
@@ -92,15 +92,15 @@
                         json.recordsFiltered = json.meta.pagination.total
 
                         // Extract chart data from API response
-                        data_grafik = json.data.filter(item => item.attributes.status_kepemilikan_bangunan_tempat_tinggal_yang_ditempati)
+                        data_grafik = json.data.filter(item => item.attributes.kd_stat_bangunan_tinggal)
                             .map(item => ({
-                                label: item.attributes.status_kepemilikan_bangunan_tempat_tinggal_yang_ditempati,
+                                label: item.attributes.kd_stat_bangunan_tinggal,
                                 value: 1 // Count each occurrence (can aggregate here)
                             }));
 
                         // Combine duplicate labels and aggregate values
-                        data_grafik = combineData(data_grafik);
-
+                        //data_grafik = combineData(data_grafik);
+                            
                         tampilChart('bar', 'barChart', generateChartData(data_grafik, 'label', 'Statistik Papan'));
 
                         return json.data
@@ -130,29 +130,29 @@
                         render: (data) => data || 'N/A',
                     },
                     {
-                        data: "attributes.status_kepemilikan_bangunan_tempat_tinggal_yang_ditempati",
+                        data: "attributes.kd_stat_bangunan_tinggal",
                         render: (data) => data || 'N/A',
                     },
                     {
-                        data: "attributes.luas_lantai_m2",
+                        data: "attributes.luas_lantai",
                         render: (data) => data || 'N/A',
                     },
                     {
-                        data: "attributes.jenis_lantai_terluas",
+                        data: "attributes.kd_jenis_lantai_terluas",
                         render: (data) => data || 'N/A',
                     },
                     {
-                        data: "attributes.jenis_dinding_terluas",
+                        data: "attributes.kd_jenis_dinding",
                         name: "nama_sasaran",
                         render: (data) => data || 'N/A',
                     },
                     {
-                        data: "attributes.sumber_air_minum",
+                        data: "attributes.kd_sumber_air_minum",
                         name: "nama_sasaran",
                         render: (data) => data || 'N/A',
                     },
                     {
-                        data: "attributes.sumber_penerangan_utama",
+                        data: "attributes.kd_sumber_penerangan_utama",
                         render: (data) => data || 'N/A',
                     },
                 ],
@@ -183,35 +183,35 @@
                         </tr>
                         <tr>
                             <td><strong>Status Kepemilikan:</strong></td>
-                            <td>${data.attributes.status_kepemilikan_bangunan_tempat_tinggal_yang_ditempati || 'N/A'}</td>
+                            <td>${data.attributes.kd_stat_bangunan_tinggal || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Luas Lantai (m²):</strong></td>
-                            <td>${data.attributes.luas_lantai_m2 || 'N/A'}</td>
+                            <td>${data.attributes.luas_lantai || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Jenis Lantai Terluas:</strong></td>
-                            <td>${data.attributes.jenis_lantai_terluas || 'N/A'}</td>
+                            <td>${data.attributes.kd_jenis_lantai_terluas || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Jenis Dinding Terluas:</strong></td>
-                            <td>${data.attributes.jenis_dinding_terluas || 'N/A'}</td>
+                            <td>${data.attributes.kd_jenis_dinding || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Sumber Air Minum:</strong></td>
-                            <td>${data.attributes.sumber_air_minum || 'N/A'}</td>
+                            <td>${data.attributes.kd_sumber_air_minum || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Sumber Penerangan:</strong></td>
-                            <td>${data.attributes.sumber_penerangan_utama || 'N/A'}</td>
+                            <td>${data.attributes.kd_sumber_penerangan_utama || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Bahan Bakar untuk Memasak:</strong></td>
-                            <td>${data.attributes.bahan_bakar_energi_utama_untuk_memasak || 'N/A'}</td>
+                            <td>${data.attributes.kd_bahan_bakar_memasak || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Tempat Pembuangan Akhir Tinja:</strong></td>
-                            <td>${data.attributes.tempat_pembuangan_akhir_tinja  || 'N/A'}</td>
+                            <td>${data.attributes.kd_pembuangan_akhir_tinja  || 'N/A'}</td>
                         </tr>
                     </table>
                 `;

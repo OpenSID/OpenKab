@@ -76,7 +76,8 @@
         
     document.addEventListener("DOMContentLoaded", function(event) {
 
-        var url = new URL("{{ url('api/v1/pariwisata') }}");
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/pariwisata' }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
         url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
 
@@ -92,6 +93,7 @@
             ajax: {
                 url: url.href,
                 method: 'get',
+                headers: header,
                 data: function(row) {
                     return {
                         "page[size]": row.length,

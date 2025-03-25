@@ -367,8 +367,11 @@
 
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
-        $.ajax({
-                url: `{{ url('api/v1/penduduk') }}?filter[id]={{ $penduduk->id }}`,
+    document.addEventListener("DOMContentLoaded", function(event) {
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+        $.ajax({                
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}?filter[id]={{ $penduduk->id }}`,
+                headers: header,
                 method: 'get',
             })
             .then(function(response) {
@@ -420,7 +423,7 @@
                 $('#status-kawin').text(data.statusPerkawinan)
                 $('#gol-darah').text(data.golongan_darah?.nama)
                 $('#cacat').text(data.cacat?.nama)
-                $('#sakit').text(data.sakit_menahun?.nama)
+                $('#sakit').text(data.namaSakitMenahun)
                 $('#asuransi').text(data.namaAsuransi)
                 $('#bpjs').text(data.bpjs_ketenagakerjaan)
                 $('#bahasa').text(data.bahasa?.nama)
@@ -436,7 +439,8 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/bantuan/peserta') }}?filter[peserta]={{ $penduduk->nik }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/peserta' }}?filter[peserta]={{ $penduduk->nik }}`,
+                headers: header,
                 method: 'get',
             },
             columns: [{
@@ -474,7 +478,8 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ url('api/v1/dokumen') }}?filter[id_pend]={{ $penduduk->id }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/dokumen' }}?filter[id_pend]={{ $penduduk->id }}`,
+                headers: header,
                 method: 'get',
             },
             columns: [{
@@ -500,5 +505,6 @@
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
         });
+    });
     </script>
 @endsection

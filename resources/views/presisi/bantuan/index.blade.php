@@ -238,6 +238,7 @@
 @push('js')
     <script>
         $(function() {
+            
             var statistik = [];
             var data_grafik = [];
             let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL'];
@@ -322,7 +323,7 @@
                 ],
 
                 "ajax": {
-                    "url": "{{ url('api/v1/statistik-web/bantuan') }}",
+                    "url": "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/bantuan' }}",
                     "type": "get",
                     "data": function(d) {
                         // var nav = $('#nav-statistik').find('li a.active')
@@ -417,7 +418,7 @@
                 ],
 
                 "ajax": {
-                    "url": "{{ url('api/v1/statistik-web/get-list-penerima') }}",
+                    "url": "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-penerima' }}",
                     "type": "get",
                     "data": function(d) {
                         d['filter[id]'] =  $("#filter_program").val();
@@ -624,7 +625,7 @@
             $("#filter_tahun").append(optionEmpty);
             $.ajax({
                 type: 'GET',
-                url: "{{ url('api/v1/statistik-web/get-list-tahun') }}",
+                url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-tahun' }}",
                 dataType: 'json',
                 success: function(data) {
                     for (var i = 0; i < data.length; i++) {
@@ -644,7 +645,7 @@
             $("#filter_kabupaten").append(optionEmpty);
             $.ajax({
                 type: 'GET',
-                url: "{{ url('api/v1/statistik-web/get-list-kabupaten') }}",
+                url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-kabupaten' }}",
                 dataType: 'json',
                 success: function(data) {
                     for (var i = 0; i < data.length; i++) {
@@ -665,7 +666,7 @@
                 $("#filter_kecamatan").append(optionEmpty);
                 $.ajax({
                     type: 'GET',
-                    url: "{{ url('api/v1/statistik-web/get-list-kecamatan') }}" + "/" + $id,
+                    url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-kecamatan' }}" + "/" + $id,
                     dataType: 'json',
                     success: function(data) {
                         for (var i = 0; i < data.length; i++) {
@@ -687,7 +688,7 @@
                 $("#filter_desa").append(optionEmpty);
                 $.ajax({
                     type: 'GET',
-                    url: "{{ url('api/v1/statistik-web/get-list-desa') }}" + "/" + $id,
+                    url: "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/get-list-desa' }}" + "/" + $id,
                     dataType: 'json',
                     success: function(data) {
                         for (var i = 0; i < data.length; i++) {
@@ -716,7 +717,7 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/wilayah/penduduk') }}`,
+                url: new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/penduduk' }}"),
                 method: 'get',
                 data: function(row) {
                     return {

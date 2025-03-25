@@ -2,7 +2,7 @@
 
 @include('components.progressive-image')
 
-@section('title', 'Data Bantuan')
+@section('title', 'Data Kependudukan dan Statistik')
 
 @section('content_header')
     <h1>{{ $title }}</h1>
@@ -49,7 +49,7 @@
                         <table class="table table-striped" id="kesehatan">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>NIK</th>
                                     <th>Golongan Darah</th>
                                     <th>Cacat</th>
@@ -123,11 +123,11 @@
                 ],
             columns: [{
                     data: null,
+                    orderable: false
                 },
                 {
                     data: "attributes.nik",
                     name: "nik",
-                    orderable: false
                 },
                 {
                     data: "attributes.golongan_darah",
@@ -166,7 +166,7 @@
                 },
             ],
             order: [
-                [0, 'asc']
+                [1, 'asc']
             ]
         })
         kesehatan.on('draw.dt', function() {

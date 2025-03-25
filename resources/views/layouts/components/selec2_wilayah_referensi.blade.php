@@ -1,11 +1,19 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+
+        var urlDusun = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/dusun' }}");
+        var urlRw = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/rw' }}");
+        var urlRt = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/rt' }}");
+
         $('#dusun').select2({
             theme: 'bootstrap4',
             ajax: {
-                url: `{{ url('api/v1/wilayah/dusun') }}`,
+                url: urlDusun,
                 dataType: 'json',
+                headers: header,
                 delay: 400,
                 data: function(params) {
                     return {
@@ -38,7 +46,8 @@
             $('#rw').select2({
                 theme: 'bootstrap4',
                 ajax: {
-                    url: `{{ url('api/v1/wilayah/rw') }}`,
+                    url: urlRw,
+                    headers: header,
                     dataType: 'json',
                     delay: 400,
                     data: function(params) {
@@ -73,7 +82,8 @@
             $('#rt').select2({
                 theme: 'bootstrap4',
                 ajax: {
-                    url: `{{ url('api/v1/wilayah/rt') }}`,
+                    url: urlRt,
+                    headers: header,
                     dataType: 'json',
                     delay: 400,
                     data: function(params) {

@@ -43,6 +43,7 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         @include('peta.point.js.data_point')
         @include('peta.point.js.data_status')
         @include('peta.point.js.filter')

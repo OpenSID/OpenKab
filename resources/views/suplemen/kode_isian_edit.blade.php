@@ -2,7 +2,7 @@
 <div class="table-responsive">
     <table class="table table-hover table-striped kode-isian">
         <thead>
-            <tr style="font-weight: bold;">
+            <tr class="bold">
                 <td>#</td>
                 <td>TIPE</td>
                 <td>NAMA</td>
@@ -51,9 +51,9 @@
                     </td>
                     <td>
                         <textarea class="form-control input-sm isian isian-pilihan" name="pilihan_kode[]" rows="5" placeholder="Masukkan Pilihan">{{ $isian['pilihan_kode'] ?? '' }}</textarea>
-                        <select class="form-control input-sm isian select-manual" name="pilihan_kode[{{ $jumlah_isian }}][]" multiple placeholder="Masukkan Pilihan" style="display: none;">
+                        <select class="form-control input-sm isian select-manual d-none" name="pilihan_kode[{{ $jumlah_isian }}][]" multiple placeholder="Masukkan Pilihan">
                         </select>
-                        <select class="form-control input-sm isian isian-referensi" name="referensi_kode[]" placeholder="Masukkan Pilihan" style="display: none;">
+                        <select class="form-control input-sm isian isian-referensi d-none" name="referensi_kode[]" placeholder="Masukkan Pilihan">
                             <option value="" selected>Pilihan Referensi</option>
                             @foreach (\App\Models\Enums\ReferensiEnum::all() as $key => $value)
                                 <option value="{{ $value }}" {{ $isian['referensi_kode'] == $value ? 'selected' : '' }}>{{ $key }}</option>

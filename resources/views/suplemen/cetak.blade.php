@@ -16,7 +16,7 @@
         </tr>
         <tr>
             <td>
-                <table class="border thick" style="width: 100%;">
+                <table class="border thick w-full">
                     <thead>
                         @include('suplemen.cetak.table')
                     </thead>
@@ -29,3 +29,10 @@
         </tr>
     </tbody>
 </table>
+@push('css')
+    <style nonce="{{ csp_nonce() }}" >
+        .w-full{
+            width: 100%;
+        }
+    </style>
+@endpush

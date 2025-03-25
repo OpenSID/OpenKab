@@ -29,12 +29,26 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         try {
+            // Ambil daftar key yang valid dari database
+            $validKeys = Setting::pluck('key')->toArray();
+
             foreach ($request->all() as $key => $value) {
+                // Jika key tidak ada di database, kembalikan error 422
+                if (! in_array($key, $validKeys)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Key '{$key}' tidak ditemukan.",
+                    ], Response::HTTP_UNPROCESSABLE_ENTITY);
+                }
+
+                // Jika key adalah opendk_api_key, lakukan tindakan khusus
                 if ($key == 'opendk_api_key') {
                     $this->removeTokenSynchronize($value);
                 }
+
+                // Update setting
                 Setting::where('key', $key)->update(['value' => $value]);
-                activity('data-log')->event('updated')->withProperties($request)->log('setting Aplikasi');
+                activity('data-log')->event('updated')->withProperties($request)->log('Setting Aplikasi');
             }
 
             return response()->json([

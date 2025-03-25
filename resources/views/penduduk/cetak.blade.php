@@ -45,11 +45,13 @@
 @push('scripts')
     <script nonce="{{ csp_nonce() }}"  >
         document.addEventListener("DOMContentLoaded", function(event) {
+            const header = @include('layouts.components.header_bearer_api_gabungan');
             var str = `{{ $filter }}`
             var filter = str.replace(/&amp;/g, '&')
 
             $.ajax({
-                url: `{{ url('api/v1/penduduk') }}?${filter}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}?${filter}`,
+                headers: header,
                 method: 'get',
                 success: function(json) {
                     var no = 1;

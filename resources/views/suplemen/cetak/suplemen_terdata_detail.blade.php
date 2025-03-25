@@ -1,6 +1,6 @@
 @if($suplemen['form_isian'])
 <tr>
-    <td colspan="9" style="width: 100%; padding-left: 20px;">
+    <td colspan="9" class="cus-print">
         @foreach (json_decode($suplemen['form_isian']) as $kode)
             @php
                 // Dekode JSON dari data_form_isian menjadi array
@@ -12,4 +12,12 @@
         @endforeach
     </td>
 </tr>
+
+@push('css')
+    <style nonce="{{ csp_nonce() }}" >
+        .cus-print{
+            width: 100%; padding-left: 20px;
+        }
+    </style>
+@endpush
 @endif

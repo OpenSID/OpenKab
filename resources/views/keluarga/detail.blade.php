@@ -47,7 +47,7 @@
                         data: {},
 
                         async retrievePosts() {
-                            const response = await (await fetch('{{ route('api.keluarga.detail', ['no' => $no_kk]) }}')).json();
+                            const response = await (await fetch('{{ config('app.databaseGabunganUrl').'/api/v1/keluarga/show?no_kk='.$no_kk }}', { headers : @include('layouts.components.header_bearer_api_gabungan') })).json();
                             this.data = response.data[0].attributes
                         }
                     }" x-init="retrievePosts">

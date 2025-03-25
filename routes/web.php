@@ -22,6 +22,7 @@ use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\SuplemenController;
 use App\Http\Controllers\PointController;
+use App\Http\Controllers\PlanController;
 
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\DataPokokController;
@@ -183,6 +184,47 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('pangan', [App\Http\Controllers\DDKPanganController::class, 'index'])->name('ddk.pangan');
         });
     });
+
+        
+    Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
+    Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
+    Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
+    Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
+    Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
+    Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
+    
+    Route::get('/point', [PointController::class, 'index'])->name('point');
+    Route::get('/point/form/', [PointController::class, 'form'])->name('point.create');
+    Route::get('/point/form/{id}', [PointController::class, 'edit'])->name('point.create');
+    Route::get('/point/sub/{id?}', [PointController::class, 'sub'])->name('point.create');
+    Route::get('/point/rincian/{id}', [PointController::class, 'detail'])->name('point.detail');
+    Route::get('/point/lock/{id}/{status}', [PointController::class, 'lock'])->name('point.lock');
+    Route::post('/point/form', [PointController::class, 'store'])->name('point.create');
+    Route::post('/point/update/{id}', [PointController::class, 'update'])->name('point.update');
+    Route::post('/point/sub/{id?}', [PointController::class, 'store'])->name('point.create');
+    Route::post('/point/form/{id}', [PointController::class, 'update'])->name('point.update');
+
+    Route::get('/plan/{parent?}', [PlanController::class, 'index'])->name('plan');
+    Route::get('/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'ajax_lokasi_maps'])->name('plan.ajax_lokasi_maps');
+    Route::get('/show/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'show_ajax_lokasi_maps']);
+
+});
+
+Route::prefix('presisi')->middleware('check.presisi')->group(function () {
+    Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
+    Route::view('/sosial',   'presisi.sosial.index');
+    Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
+
+    Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
+    Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
+    Route::get('/keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+    Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+
+    Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+    Route::get('/kesehatan/{kuartal}/{tahun}/{id}/{kabupaten?}/{kecamatan?}/{desa?}', [PresisiController::class, 'kesehatan']);
+    Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+    Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+    Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
 });
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
@@ -206,37 +248,3 @@ Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name(
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 
-Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
-Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
-Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
-Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
-Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
-Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
-
-Route::get('/point', [PointController::class, 'index'])->name('point');
-Route::get('/point/form/', [PointController::class, 'form'])->name('point.create');
-Route::get('/point/form/{id}', [PointController::class, 'edit'])->name('point.create');
-Route::get('/point/sub/{id?}', [PointController::class, 'sub'])->name('point.create');
-Route::get('/point/rincian/{id}', [PointController::class, 'detail'])->name('point.detail');
-Route::get('/point/lock/{id}/{status}', [PointController::class, 'lock'])->name('point.lock');
-Route::post('/point/form', [PointController::class, 'store'])->name('point.create');
-Route::post('/point/update/{id}', [PointController::class, 'update'])->name('point.update');
-Route::post('/point/sub/{id?}', [PointController::class, 'store'])->name('point.create');
-Route::post('/point/form/{id}', [PointController::class, 'update'])->name('point.update');
-
-Route::prefix('presisi')->middleware('check.presisi')->group(function () {
-    Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
-    Route::view('/sosial',   'presisi.sosial.index');
-    Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
-
-    Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
-    Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
-    Route::get('/keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
-    Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
-
-    Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
-    Route::get('/kesehatan/{kuartal}/{tahun}/{id}/{kabupaten?}/{kecamatan?}/{desa?}', [PresisiController::class, 'kesehatan']);
-    Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
-    Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
-    Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
-});

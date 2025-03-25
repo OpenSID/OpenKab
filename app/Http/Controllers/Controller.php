@@ -14,11 +14,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\View;
 
 class Controller extends BaseController
 {
@@ -34,7 +31,6 @@ class Controller extends BaseController
         if ($this->identitas) {
             $this->kirimTrack();
         }
-        View::share('tokenUser', Cache::get('user_token_'.Auth::id()));
     }
 
     protected function generateListPermission()

@@ -1,33 +1,32 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CatatanRilis;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\GroupController;
-use App\Http\Controllers\DasborController;
-use App\Http\Middleware\WilayahMiddleware;
-use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\BantuanController;
+use App\Http\Controllers\CatatanRilis;
+use App\Http\Controllers\DasborController;
+use App\Http\Controllers\DataPokokController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KeluargaController;
+use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\PointController;
+use App\Http\Controllers\RiwayatPenggunaController;
+use App\Http\Controllers\StatistikController;
+use App\Http\Controllers\SuplemenController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Web\DownloadCounterController;
+use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\PageController;
+use App\Http\Controllers\Web\PresisiController;
+use App\Http\Controllers\Web\SearchController;
 use App\Http\Middleware\KabupatenMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
-use App\Http\Controllers\IdentitasController;
-use App\Http\Controllers\StatistikController;
-use App\Http\Controllers\Web\ModuleController;
-use App\Http\Controllers\Web\SearchController;
-use App\Http\Controllers\Web\PresisiController;
-use App\Http\Controllers\RiwayatPenggunaController;
-use App\Http\Controllers\SuplemenController;
-use App\Http\Controllers\PointController;
-use App\Http\Controllers\PlanController;
-
-use App\Http\Controllers\Auth\ChangePasswordController;
-use App\Http\Controllers\DataPokokController;
-use App\Http\Controllers\Web\DownloadCounterController;
-use App\Http\Controllers\Master\BantuanKabupatenController;
+use App\Http\Middleware\WilayahMiddleware;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +65,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show'])->middleware('easyauthorize:pengaturan-activities');
         Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create', 'delete'])->middleware('easyauthorize:pengaturan-settings');
-        Route::resource('opendk', App\Http\Controllers\OpenDKController::class)->except(['show', 'create', 'delete'])->middleware('easyauthorize:pengaturan-opendk');
     });
 
     Route::prefix('cms')->group(function () {
@@ -80,7 +78,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     });
 
     Route::prefix('sesi')->group(function () {
-
         // Kabupaten
         Route::middleware(KabupatenMiddleware::class)->get('kabupaten/{kodeKabupaten}', function () {
             return redirect()->back();
@@ -178,6 +175,17 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
     });
 
+    Route::prefix('data-presisi')->group(function () {
+
+        Route::prefix('kesehatan')->group(function () {
+            Route::get('/', [App\Http\Controllers\DataPresisiKesehatanController::class, 'index'])->name('data-pokok.data-presisi.index');
+            Route::get('/detail', [App\Http\Controllers\DataPresisiKesehatanController::class, 'detail'])->name('data-pokok.data-presisi.detail');
+            Route::get('cetak', [App\Http\Controllers\DataPresisiKesehatanController::class, 'cetak'])->name('data-pokok.data-presisi.cetak');
+        })
+        ->middleware(['permission:datapresisi-kesehatan-read']);
+
+    });
+
     // Prodeskel
     Route::prefix('prodeskel')->group(function () {
         Route::prefix('ddk')->group(function () {
@@ -185,14 +193,13 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
     });
 
-        
     Route::get('/suplemen', [SuplemenController::class, 'index'])->name('suplemen');
     Route::get('/suplemen/form', [SuplemenController::class, 'form'])->name('suplemen.create');
     Route::get('/suplemen/rincian/{id}', [SuplemenController::class, 'detail'])->name('suplemen.detail');
     Route::get('/suplemen/daftar/{id}/{aksi}', [SuplemenController::class, 'daftar'])->name('suplemen.daftar');
     Route::get('/suplemen/ekspor/{id}', [SuplemenController::class, 'ekspor'])->name('suplemen.ekspor');
     Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
-    
+
     Route::get('/point', [PointController::class, 'index'])->name('point');
     Route::get('/point/form/', [PointController::class, 'form'])->name('point.create');
     Route::get('/point/form/{id}', [PointController::class, 'edit'])->name('point.create');
@@ -207,12 +214,11 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::get('/plan/{parent?}', [PlanController::class, 'index'])->name('plan');
     Route::get('/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'ajax_lokasi_maps'])->name('plan.ajax_lokasi_maps');
     Route::get('/show/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'show_ajax_lokasi_maps']);
-
 });
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
-    Route::view('/sosial',   'presisi.sosial.index');
+    Route::view('/sosial', 'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
 
     Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
@@ -247,4 +253,3 @@ Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->nam
 Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
-

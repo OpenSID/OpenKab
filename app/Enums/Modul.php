@@ -84,6 +84,12 @@ final class Modul extends Enum
                     'permission' => 'datapokok-sandang',
                 ],
                 [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Kesehatan',
+                    'url' => 'data-presisi/kesehatan',
+                    'permission' => 'datapresisi-kesehatan',
+                ],
+                [
                     'text' => 'Penerima Bantuan',
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'bantuan',
@@ -289,12 +295,6 @@ final class Modul extends Enum
                     'text' => 'Aplikasi',
                     'url' => 'pengaturan/settings',
                     'permission' => 'pengaturan-settings',
-                ],
-                [
-                    'icon' => 'far fa-fw fa-circle',
-                    'text' => 'OpenDK',
-                    'url' => 'pengaturan/opendk',
-                    'permission' => 'pengaturan-opendk',
                 ],
             ],
         ],

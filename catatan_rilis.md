@@ -8,6 +8,7 @@ Di rilis ini, versi 2503.0.0 berisi penambahan dan perbaikan yang diminta penggu
 #### Perbaikan BUG
 
 1. [#587](https://github.com/OpenSID/OpenKab/issues/587) Perbaikan error ketika pertama kali buka halaman publik presisi.
+2. [#599](https://github.com/OpenSID/OpenKab/issues/599) Perbaikan halaman bantuan kabupaten ke api database gabungan dan perbaikan form edit dan create.
 
 #### Perubahan Teknis
 

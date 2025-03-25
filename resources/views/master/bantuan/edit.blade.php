@@ -19,12 +19,37 @@
                     <!-- /.card-header -->
                     <div x-data="{
                         data: {},
-
+                    
                         async retrievePosts() {
-                            const response = await (await fetch('{{ url('api/v1/bantuan-kabupaten') }}?filter[id]={{ $id }}')).json();
-                            this.data = response.data[0].attributes
+                            try {
+                                // Buat URL dan tambahkan parameter query
+                                const header = @include('layouts.components.header_bearer_api_gabungan');
+                                let url = new URL('{{ config('app.databaseGabunganUrl') }}/api/v1/bantuan-kabupaten');
+                                url.searchParams.append('filter[id]', '{{ $id }}');
+                    
+                                const response = await fetch(url, {
+                                    headers: header
+                                });
+                    
+                                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    
+                                const result = await response.json();
+                    
+                                if (result.data.length > 0) {
+                                    this.data = result.data[0].attributes;
+
+                                    this.$nextTick(() => {
+                                        $('#sdate').data('daterangepicker').setStartDate(moment(this.data.sdate, '{{ config('app.format.date_js') }}'));
+                                        $('#edate').data('daterangepicker').setStartDate(moment(this.data.edate, '{{ config('app.format.date_js') }}'));
+                                    });
+                                } else {
+                                    console.warn('Data tidak ditemukan');
+                                }
+                            } catch (error) {
+                                console.error('Error saat mengambil data:', error);
+                            }
                         }
-                    }" x-init="retrievePosts">
+                    }" x-init="retrievePosts()">
                         <div class="card-body">
                             <div class="col">
                                 <div class="mb-4">
@@ -83,7 +108,7 @@
                                 <div class="col">
                                     <div class="mb-4">
                                         <label for="sdate">Tanggal Mulai<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control datepicker @error('sdate') is-invalid @enderror" x-model="data.sdate" name="sdate">
+                                        <input type="text" class="form-control datepicker @error('sdate') is-invalid @enderror" x-model="data.sdate" name="sdate" id="sdate">
                                         @error('sdate')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -92,7 +117,7 @@
                                 <div class="col">
                                     <div class="mb-4">
                                         <label for="edate">Tanggal Berakhir<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control datepicker @error('edate') is-invalid @enderror" x-model="data.edate" name="edate">
+                                        <input type="text" class="form-control datepicker @error('edate') is-invalid @enderror" x-model="data.edate" name="edate" id="edate">
                                         @error('edate')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -127,6 +152,9 @@
                 let formData = $('#bantuan-form  input,textarea,select').not('.datepicker').serialize()+'&'+dateParam
                 var id = "{{ $id }}";
 
+                const header = @include('layouts.components.header_bearer_api_gabungan');
+                var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan-kabupaten/perbarui' }}");
+
                 Swal.fire({
                     title: 'Ubah',
                     text: "Apakah anda yakin mengubah data ini?",
@@ -144,10 +172,11 @@
                         $.ajax({
                             type: "PUT",
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                             },
                             dataType: "json",
-                            url: `{{ url('api/v1/bantuan-kabupaten/perbarui') }}/` + id,
+                            url: `${url}/${id}`,
                             data: formData,
                             success: function(response) {
                                 if (response.success == true) {

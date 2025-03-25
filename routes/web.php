@@ -172,6 +172,17 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
     });
 
+    Route::prefix('data-presisi')->group(function () {
+
+        Route::prefix('kesehatan')->group(function () {
+            Route::get('/', [App\Http\Controllers\DataPresisiKesehatanController::class, 'index'])->name('data-pokok.data-presisi.index');
+            Route::get('/detail', [App\Http\Controllers\DataPresisiKesehatanController::class, 'detail'])->name('data-pokok.data-presisi.detail');
+            Route::get('cetak', [App\Http\Controllers\DataPresisiKesehatanController::class, 'cetak'])->name('data-pokok.data-presisi.cetak');
+        })
+        ->middleware(['permission:datapresisi-kesehatan-read']);
+
+    });
+
     // Prodeskel
     Route::prefix('prodeskel')->group(function () {
         Route::prefix('ddk')->group(function () {

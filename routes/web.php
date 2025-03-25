@@ -134,6 +134,9 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
             Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama-adat', 'agama_adat')->name('agama-adat');
             Route::middleware(['permission:datapokok-infrastruktur-read'])->get('/infrastruktur', 'infrastruktur')->name('infrastruktur');
+            Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang', 'sandang')->name('datasandang');
+            Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang/detail', 'detail_sandang')->name('detail_datasandang');
+            Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang/cetak', 'cetak_sandang')->name('cetak_datasandang');
         });
 
     // Statistik

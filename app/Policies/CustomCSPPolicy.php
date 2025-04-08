@@ -24,7 +24,7 @@ class CustomCSPPolicy extends Basic
             $this->addDirective(Directive::IMG, ['blob:'])
                 ->addDirective(Directive::STYLE, ['unsafe-inline']);
         }
-        $this->addDirective(Directive::IMG, ['data:', 'https://tile.openstreetmap.org/', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/', 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/'])
+        $this->addDirective(Directive::IMG, ['data:', 'https://tile.openstreetmap.org/'])
         ->addDirective(Directive::STYLE, [
             // 'unsafe-inline',
             'https://fonts.googleapis.com/',

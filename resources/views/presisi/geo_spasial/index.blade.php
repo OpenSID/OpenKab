@@ -33,7 +33,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="detailModalLabel">Detail Informasi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalContent">
                     <!-- Konten detail akan diisi di sini -->
@@ -45,13 +45,55 @@
 @endsection
 
 @push('styles')
-    <style>
+    <style nonce="{{ csp_nonce() }}">
         @media (min-width: 768px) {
             .col-md-4 {
                 flex: 0 0 auto;
                 width: 31.1% !important;
                 margin: 10px !important;
             }
+        }
+
+        #map {
+            height: 350px;
+        }
+
+        .geospasial-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 0;
+            position: relative;
+        }
+
+        .geospasial-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .geospasial-card .detail-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .geospasial-card .description {
+            font-size: 14px;
+            color: rgb(102, 102, 102);
+            display: block;
+            padding: 10px;
+        }
+
+        .geospasial-card .separator {
+            height: 1px;
+            background-color: #ddd;
+            margin: 0 10px;
         }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"

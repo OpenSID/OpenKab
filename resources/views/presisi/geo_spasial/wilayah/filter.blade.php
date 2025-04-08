@@ -3,19 +3,19 @@
         <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
             <div class="card-header bg-primary rounded-0">
                 <div class="row">
-                    <div class="col-md-3" style="overflow:hidden">
+                    <div class="col-md-3" >
                         <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control"
                             title="Pilih Kabupaten">
                             <option value="">All</option>
                         </select>
                     </div>
-                    <div class="col-md-3" style="overflow:hidden">
+                    <div class="col-md-3" >
                         <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control"
                             title="Pilih Kecamatan">
                             <option value="">All</option>
                         </select>
                     </div>
-                    <div class="col-md-3" style="overflow:hidden">
+                    <div class="col-md-3" >
                         <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
                             <option value="">All</option>
                         </select>

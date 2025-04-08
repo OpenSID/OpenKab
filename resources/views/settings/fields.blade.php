@@ -13,12 +13,14 @@
 
 <!-- Name Field -->
 <div class="form-group">
-    {!! Form::label('value', 'Status:') !!}
     @switch($setting->type)
         @case('dropdown')
+            {!! Form::label('value', 'Status:') !!}
             {!! Form::select('value', collect($setting->attribute)->pluck('text', 'value'), $setting->value, ['class' => 'form-control', 'required']) !!}
             @break
         @default
+            {!! Form::label('value', 'Nilai:') !!}
+            {!! Form::text('value', null, ['class' => 'form-control', 'required', 'maxlength' => 255]) !!}
     @endswitch
 </div>
 

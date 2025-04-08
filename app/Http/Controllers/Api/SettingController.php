@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Repository\SettingRepository;
 use App\Http\Transformers\SettingTransformer;
 use App\Models\Setting;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
 
 class SettingController extends Controller
@@ -41,11 +39,6 @@ class SettingController extends Controller
                     ], Response::HTTP_UNPROCESSABLE_ENTITY);
                 }
 
-                // Jika key adalah opendk_api_key, lakukan tindakan khusus
-                if ($key == 'opendk_api_key') {
-                    $this->removeTokenSynchronize($value);
-                }
-
                 // Update setting
                 Setting::where('key', $key)->update(['value' => $value]);
                 activity('data-log')->event('updated')->withProperties($request)->log('Setting Aplikasi');
@@ -62,12 +55,5 @@ class SettingController extends Controller
                 'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private function removeTokenSynchronize($token)
-    {
-        $user = User::whereUsername('synchronize')->first();
-        $excludeToken = PersonalAccessToken::findToken($token);
-        $user->tokens()->where('id', '!=', $excludeToken->id)->delete();
     }
 }

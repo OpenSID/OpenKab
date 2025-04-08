@@ -142,6 +142,7 @@
 
 @push('js')
     <script nonce="{{ csp_nonce() }}"  >
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         document.addEventListener("DOMContentLoaded", function(event) {
             $('#bulan').select2({
                 minimumResultsForSearch: -1,
@@ -150,12 +151,16 @@
                 placeholder: "Pilih Bulan",
             });
 
-            var url = new URL("{{ url('api/v1/dasbor') }}");
+
+            var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/dasbor' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
             url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
+
+
             $.ajax({
                 url: url.href,
                 type: "GET",
+                headers: header,
                 dataType: "json",
                 success: function(response) {
                     res = response.data;
@@ -234,8 +239,9 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/artikel') }}`,
+                url: new URL("{{ config('app.databaseGabunganUrl').'/api/v1/artikel' }}"),
                 method: 'get',
+                headers: header,
                 data: function(row) {
                     return {
                         "page[size]": row.length,
@@ -246,6 +252,9 @@
                         "filter[id]": $("#id").val(),
                         "filter[bulan]": $("#bulan").val(),
                         "filter[tahun]": $("#tahun").val(),
+                        "filter[kode_kabupaten]": "{{ session('kabupaten.kode_kabupaten') ?? '' }}",
+                        "filter[kode_kecamatan]": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
+                        "filter[kode_desa]": "{{ session('desa.kode_desa') ?? '' }}",
                     };
                 },
                 dataSrc: function(json) {

@@ -50,6 +50,10 @@
 
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
+
+        const header = @include('layouts.components.header_bearer_api_gabungan');
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan-kabupaten' }}");
+
         document.addEventListener("DOMContentLoaded", function(event) {
             let nama_desa = `{{ session('desa.nama_desa') }}`;
             var bantuan = $('#bantuan').DataTable({
@@ -62,8 +66,9 @@
                 columns: [0]
             },
             ajax: {
-                url: `{{ url('api/v1/bantuan-kabupaten') }}`,
+                url: url.href,
                 method: 'get',
+                headers: header,
                 data: function(row) {
                     return {
                         "page[size]": row.length,
@@ -169,13 +174,17 @@
                                 Swal.showLoading()
                             },
                         })
+
+                        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan-kabupaten/hapus' }}");
+
                         $.ajax({
                             type: "POST",
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                             },
                             dataType: "json",
-                            url: "{{ url('api/v1/bantuan-kabupaten/hapus') }}",
+                            url: url,
                             data: {
                                 id: id
                             },

@@ -3,12 +3,14 @@
         <div class="card-header bg-primary rounded-0">
             <div class="row">
                 <div class="col-md-3">
-                    <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control" title="Pilih Kabupaten">
+                    <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control"
+                        title="Pilih Kabupaten">
                         <option value="">All</option>
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control" title="Pilih Kecamatan">
+                    <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control"
+                        title="Pilih Kecamatan">
                         <option value="">All</option>
                     </select>
                 </div>
@@ -22,10 +24,12 @@
                         <table>
                             <tr>
                                 <td>
-                                    <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right wh-full" style="display:none;">HAPUS FILTER</button>
+                                    <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right wh-full">HAPUS
+                                        FILTER</button>
                                 </td>
                                 <td>
-                                    <button id="bt_filter" class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
+                                    <button id="bt_filter"
+                                        class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
                                 </td>
                             </tr>
                         </table>

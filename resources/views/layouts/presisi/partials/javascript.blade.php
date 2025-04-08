@@ -1,11 +1,10 @@
-
 <!-- jQuery -->
 <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
+<script nonce="{{ csp_nonce() }}">
+    $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -27,20 +26,22 @@
 <script src="{{ asset('assets/js/highcharts/organization.js') }}"></script>
 <script src="{{ asset('assets/js/highcharts/accessibility.js') }}"></script>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
-<script>
+<script src="{{ asset('vendor/moment/moment.js') }}"></script>
+<script src="{{ asset('vendor/moment/id.js') }}"></script>
+<script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+
+<script nonce="{{ csp_nonce() }}">
     var selectedMenuObj = null;
 
     $('.item-menu').each(function(i, obj) {
-        if ($(obj).attr('href') ===window.location.pathname){
+        if ($(obj).attr('href') === window.location.pathname) {
             selectedMenuObj = obj;
         }
     });
     $(selectedMenuObj).addClass("active");
-    if ($(selectedMenuObj).closest('.parent-dropdown-menu').length > 0){
-        if ($(selectedMenuObj).closest('.parent-dropdown-menu').find('.parent-menu').length > 0){
+    if ($(selectedMenuObj).closest('.parent-dropdown-menu').length > 0) {
+        if ($(selectedMenuObj).closest('.parent-dropdown-menu').find('.parent-menu').length > 0) {
             $(selectedMenuObj).closest('.parent-dropdown-menu').find('.parent-menu').addClass("active");
         }
     }
@@ -56,5 +57,4 @@
             }
         }
     });
-
 </script>

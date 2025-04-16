@@ -90,6 +90,12 @@ final class Modul extends Enum
                     'permission' => 'datapresisi-kesehatan',
                 ],
                 [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Seni Budaya',
+                    'url' => 'data-presisi/seni-budaya',
+                    'permission' => 'datapresisi-seni-budaya',
+                ],
+                [
                     'text' => 'Penerima Bantuan',
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'bantuan',

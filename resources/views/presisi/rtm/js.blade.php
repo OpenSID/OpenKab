@@ -1,5 +1,5 @@
 @push('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         $(function() {
             var statistik = [];
             var data_grafik = [];
@@ -65,7 +65,7 @@
                 ],
 
                 "ajax": {
-                    "url": "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/rtm' }}",
+                    "url": "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/rtm' }}",
                     "type": "get",
                     "data": function(d) {
                         var nav = $('#nav-statistik').find('li a.active')
@@ -145,9 +145,9 @@
                 ],
             });
 
-            
-        
-        
+
+
+
 
             function grafikPie() {
                 $('#barChart').remove();
@@ -167,7 +167,7 @@
                 var temp1 = areaChartData.datasets[1] ?? []
                 barChartData.datasets[0] = temp1
                 barChartData.datasets[1] = temp0
-            
+
                 var barChartOptions = {
                     responsive: true,
                     maintainAspectRatio: false,

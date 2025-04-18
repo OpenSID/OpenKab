@@ -1,6 +1,9 @@
 
 
-GetListCoordinates();
+if (typeof window.hasCalledGetListCoordinates === 'undefined') {
+    window.hasCalledGetListCoordinates = true;
+    GetListCoordinates();
+}
 
 @include('layouts.presisi.peta.coordinate')
 @include('layouts.presisi.peta.kabupaten')

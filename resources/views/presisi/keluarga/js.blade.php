@@ -1,10 +1,10 @@
 @push('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         $(function() {
             var statistik = [];
             var data_grafik = [];
             let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
-            
+
             @include('presisi.keluarga.filter-wilayah.kabupaten')
             @include('presisi.keluarga.filter-wilayah.kecamatan')
             @include('presisi.keluarga.filter-wilayah.desa')
@@ -65,7 +65,7 @@
                 ],
 
                 "ajax": {
-                    "url": "{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web/keluarga' }}",
+                    "url": "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/keluarga' }}",
                     "type": "get",
                     "data": function(d) {
                         var nav = $('#nav-statistik').find('li a.active')
@@ -163,7 +163,7 @@
                 var temp1 = areaChartData.datasets[1] ?? []
                 barChartData.datasets[0] = temp1
                 barChartData.datasets[1] = temp0
-            
+
                 var barChartOptions = {
                     responsive: true,
                     maintainAspectRatio: false,

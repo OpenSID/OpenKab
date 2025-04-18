@@ -4,17 +4,19 @@
 @stop
 
 @section('content')
-@include('presisi.partials.head')
+    @include('presisi.partials.head')
     <div class="row">
         <div class="col-md-4">
         </div>
         <div class="col-md-8">
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <a class="btn btn-social bg-orange btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block grafikType" title="Grafik Data" id="grafikType" onclick="grafikType();">
+                    <a class="btn btn-social bg-orange btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block grafikType"
+                        title="Grafik Data" id="grafikType" onclick="grafikType();">
                         <i class="fa fa-bar-chart"></i>Grafik Data
                     </a>
-                    <a class="btn btn-social btn-primary btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block pieType" title="Pie Data" id="pieType" onclick="pieType();">
+                    <a class="btn btn-social btn-primary btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block pieType"
+                        title="Pie Data" id="pieType" onclick="pieType();">
                         <i class="fa fa-pie-chart"></i>Pie Data
                     </a>
                 </div>
@@ -41,7 +43,7 @@
                                 @endfor
                             </select>
                         </div>
-                        
+
 
                     </div>
                     <hr class="batas">
@@ -119,7 +121,7 @@
 @endsection
 
 @push('scripts')
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce() }}" type="text/javascript">
         $(document).ready(function() {
             var TableData = $('#tabeldata').DataTable({
                 responsive: true,
@@ -194,7 +196,8 @@
                     },
                 ],
                 createdRow: function(row, data, dataIndex) {
-                    if (data.nama == 'TOTAL' || data.nama == 'PENERIMA' || data.nama == 'BUKAN PENERIMA') {
+                    if (data.nama == 'TOTAL' || data.nama == 'PENERIMA' || data.nama ==
+                        'BUKAN PENERIMA') {
                         $(row).addClass('no-sort');
                         $(row).hide()
                     }

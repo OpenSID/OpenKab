@@ -19,32 +19,24 @@
         <div class="col-md-8">
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <a
-                        href="{{ ci_route('statistik.bantuan.' . $lap . '.dialog.program.cetak') }}"
+                    <a href="{{ ci_route('statistik.bantuan.' . $lap . '.dialog.program.cetak') }}"
                         class="btn btn-social bg-purple btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"
-                        title="Cetak Laporan"
-                        data-remote="false"
-                        data-toggle="modal"
-                        data-target="#modalBox"
-                        data-title="Cetak Laporan"
-                    >
+                        title="Cetak Laporan" data-remote="false" data-toggle="modal" data-target="#modalBox"
+                        data-title="Cetak Laporan">
                         <i class="fa fa-print "></i>Cetak
                     </a>
-                    <a
-                        href="{{ ci_route('statistik.bantuan.' . $lap . '.dialog.program.unduh') }}"
+                    <a href="{{ ci_route('statistik.bantuan.' . $lap . '.dialog.program.unduh') }}"
                         class="btn btn-social bg-navy btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"
-                        title="Unduh Laporan"
-                        data-remote="false"
-                        data-toggle="modal"
-                        data-target="#modalBox"
-                        data-title="Unduh Laporan"
-                    >
+                        title="Unduh Laporan" data-remote="false" data-toggle="modal" data-target="#modalBox"
+                        data-title="Unduh Laporan">
                         <i class="fa fa-print "></i>Unduh
                     </a>
-                    <a class="btn btn-social bg-orange btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block grafikType" title="Grafik Data" id="grafikType" onclick="grafikType();">
+                    <a class="btn btn-social bg-orange btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block grafikType"
+                        title="Grafik Data" id="grafikType" onclick="grafikType();">
                         <i class="fa fa-bar-chart"></i>Grafik Data
                     </a>
-                    <a class="btn btn-social btn-primary btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block pieType" title="Pie Data" id="pieType" onclick="pieType();">
+                    <a class="btn btn-social btn-primary btn-sm btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block pieType"
+                        title="Pie Data" id="pieType" onclick="pieType();">
                         <i class="fa fa-pie-chart"></i>Pie Data
                     </a>
                 </div>
@@ -95,7 +87,7 @@
 @endsection
 
 @push('scripts')
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce() }}" type="text/javascript">
         $(document).ready(function() {
             var TableData = $('#tabeldata').DataTable({
                 responsive: true,

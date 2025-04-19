@@ -96,6 +96,12 @@ final class Modul extends Enum
                     'permission' => 'datapresisi-pendidikan',
                 ],
                 [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Pangan',
+                    'url' => 'data-presisi/pangan',
+                    'permission' => 'datapresisi-pangan',
+                ],
+                [
                     'text' => 'Penerima Bantuan',
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'bantuan',

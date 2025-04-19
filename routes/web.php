@@ -190,6 +190,20 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('cetak', [App\Http\Controllers\DataPresisiKetenagakerjaanController::class, 'cetak'])->name('data-pokok.data-presisi-ketenagakerjaan.cetak');
         })
         ->middleware(['permission:datapresisi-ketenagakerjaan-read']);
+        
+        Route::prefix('pendidikan')->group(function () {
+            Route::get('/', [App\Http\Controllers\DataPresisiPendidikanController::class, 'index'])->name('data-pokok.data-presisi-pendidikan.index');
+            Route::get('/detail', [App\Http\Controllers\DataPresisiPendidikanController::class, 'detail'])->name('data-pokok.data-presisi-pendidikan.detail');
+            Route::get('cetak', [App\Http\Controllers\DataPresisiPendidikanController::class, 'cetak'])->name('data-pokok.data-presisi-pendidikan.cetak');
+        })
+        ->middleware(['permission:datapresisi-pendidikan-read']);
+        
+        Route::prefix('pangan')->group(function () {
+            Route::get('/', [App\Http\Controllers\DataPresisiPanganController::class, 'index'])->name('data-pokok.data-presisi-pangan.index');
+            Route::get('/detail', [App\Http\Controllers\DataPresisiPanganController::class, 'detail'])->name('data-pokok.data-presisi-pangan.detail');
+            Route::get('cetak', [App\Http\Controllers\DataPresisiPanganController::class, 'cetak'])->name('data-pokok.data-presisi-pangan.cetak');
+        })
+        ->middleware(['permission:datapresisi-pangan-read']);
 
     });
 

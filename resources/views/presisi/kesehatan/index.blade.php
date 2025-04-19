@@ -4,7 +4,7 @@
 @stop
 
 @section('content')
-@include('presisi.partials.head')
+    @include('presisi.partials.head')
     <div class="row">
         <div class="col-md-12">
             <div class="card rounded-0 border-0 shadow-none">
@@ -12,7 +12,7 @@
             </div>
         </div>
         @include('presisi.kesehatan.filter-wilayah.view')
-        </div>
+    </div>
     @include('presisi.kesehatan.widget')
     <div class="row">
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
@@ -28,7 +28,7 @@
     </div>
 @endsection
 @push('js')
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         $('#cari').click(function() {
             let kuartal = $('#kuartal option:selected').val();
             let tahun = $('#tahun option:selected').val();
@@ -39,7 +39,7 @@
             window.location.href = "{{ url('presisi/kesehatan/') }}/" + kuartal + "/" +
                 tahun + "/" + posyandu + "/" + kabupaten + "/" + kecamatan + "/" + desa;
         });
-        
+
         @include('presisi.kesehatan.filter-wilayah.kabupaten')
         @include('presisi.kesehatan.filter-wilayah.kecamatan')
         @include('presisi.kesehatan.filter-wilayah.desa')

@@ -141,7 +141,29 @@
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     font-size: 0.9rem!important;
 }
+
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 0;
+    height: auto;
+    margin-top: -9px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 31px;
+    right: 11px !important;
+}
+
 .btn-group-sm>.btn, .btn-sm {
     --bs-btn-padding-y: 0.63rem!important;
     --bs-btn-padding-x: 0.63rem!important;
+}
+
+p.label-widget-kesehatan {
+    font-size:40px;
+    margin-top:-20px
+}
+
+#bt_clear_filter {
+    display: none;
 }

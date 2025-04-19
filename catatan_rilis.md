@@ -3,6 +3,7 @@ Di rilis ini, versi 2504.0.0 berisi penambahan dan perbaikan yang diminta penggu
 #### Penambahan Fitur
 
 1. [#613](https://github.com/OpenSID/OpenKab/issues/613) Penambahan halaman pangan, grafik, detail dan cetak.
+2. [#614](https://github.com/OpenSID/OpenKab/issues/614) Penambahan halaman data presisi pendidikan, grafik, detail dan cetak.
 
 #### Perbaikan BUG
 

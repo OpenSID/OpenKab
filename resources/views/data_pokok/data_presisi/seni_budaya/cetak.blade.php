@@ -49,7 +49,11 @@
                                 <td>${item.attributes.no_kk || 'N/A'}</td>
                                 <td>${item.attributes.nama || 'N/A'}</td>
                                 <td>${item.attributes.jenis_seni_yang_dikuasai.jenis_seni_value || 'N/A'}</td>
-                                <td>${item.attributes.jumlah_penghasilan_dari_seni || 'N/A'}</td>
+                                <td>
+                                    ${item.attributes.jumlah_penghasilan_dari_seni && !isNaN(item.attributes.jumlah_penghasilan_dari_seni) 
+                                        ? 'Rp ' + parseInt(item.attributes.jumlah_penghasilan_dari_seni).toLocaleString('id-ID') 
+                                        : 'N/A'}
+                                </td>
                                 <td>${item.attributes.tanggal_pengisian || 'N/A'}</td>
                                 <td>${item.attributes.status_pengisian || 'N/A'}</td>
                             </tr>

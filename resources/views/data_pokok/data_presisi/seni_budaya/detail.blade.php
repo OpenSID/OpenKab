@@ -144,12 +144,16 @@
                     orderable: false,
                 },
                 {
-                    data: 'attributes.jenis_seni_yang_dikuasai.jenis_seni_value',
+                    data: 'attributes.jenis_seni_value',
                     orderable: false,
                 },
                 {
                     data: 'attributes.jumlah_penghasilan_dari_seni',
                     orderable: false,
+                    render: function (data, type, row, meta) {
+                        if (!data || data === 'TIDAK TAHU') return data; // kalau kosong atau tidak tahu, tampilkan apa adanya
+                        return 'Rp ' + parseInt(data).toLocaleString('id-ID');
+                    }
                 },
                 {
                     data: 'attributes.tanggal_pengisian',

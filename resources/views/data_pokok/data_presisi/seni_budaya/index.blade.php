@@ -67,6 +67,7 @@
             var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/seni-budaya/rtm' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
             url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
+
             var dtks = $('#table-kesehatan').DataTable({
                 processing: true,
                 serverSide: true,
@@ -90,28 +91,27 @@
                         };
                     },
                     dataSrc: function(json) {
-                        if (json.data.length > 0) {
-                        json.recordsTotal = json.meta.pagination.total
-                        json.recordsFiltered = json.meta.pagination.total
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })
-                        grafikPie()
-                        return json.data;
-                    }
-                    return false;
+                        if (json.data && json.data.length > 0) {
+                            json.recordsTotal = json.meta.pagination.total;
+                            json.recordsFiltered = json.meta.pagination.total;
+                            data_grafik = [];
+                            json.data.forEach(function(item, index) {
+                                data_grafik.push(item.attributes);
+                            });
+                            grafikPie();  // Pastikan grafikPie() ada
+                            return json.data;
+                        }
+                        return []; // Return empty array jika data kosong
                     },
                 },
                 columnDefs: [{
-                        targets: '_all',
-                        className: 'text-nowrap',
-                    },
-                ],
+                    targets: '_all',
+                    className: 'text-nowrap',
+                }],
                 columns: [
                     {
                         data: function(data) {
-                            let d = data.attributes
+                            let d = data.attributes;
                             let obj = {
                                 'rtm_id' : data.id,
                                 'no_kartu_rumah': d.no_kk,
@@ -119,9 +119,9 @@
                                 'alamat': d.alamat,
                                 'jumlah_anggota': d.jumlah_anggota,
                                 'jumlah_kk': d.jumlah_kk,
-                            }
+                            };
                             let jsonData = encodeURIComponent(JSON.stringify(obj));
-                            const _url =  "{{ route('data-pokok.data-presisi-seni-budaya.detail', ['data' => '__DATA__']) }}".replace('__DATA__', jsonData)
+                            const _url =  "{{ route('data-pokok.data-presisi-seni-budaya.detail', ['data' => '__DATA__']) }}".replace('__DATA__', jsonData);
                             return `<a href="${_url}" title="Detail" data-button="Detail">
                                 <button type="button" class="btn btn-info btn-sm">Detail</button>
                             </a>`;
@@ -147,15 +147,20 @@
                     },
                     {
                         data: "attributes.jenis_seni_yang_dikuasai.jenis_seni_value",
-                        render: (data) => data || 'N/A',
+                        render: function(data) {
+                            return data || 'N/A';
+                        },
                     },
                     {
                         data: "attributes.jumlah_penghasilan_dari_seni",
-                        render: (data) => data || 'N/A',
+                        render: function(data) {
+                            if (!data || data === 'TIDAK TAHU') return 'N/A';
+                            return 'Rp ' + parseInt(data).toLocaleString('id-ID');
+                        },
                     },
-                    
                 ],
-            })
+            });
+
             // Add event listener for opening and closing details
             dtks.on('click', 'td.details-control', function () {
                 let tr = $(this).closest('tr');
@@ -170,6 +175,7 @@
                     tr.addClass('shown');
                 }
             });
+
             function format(data) {
                 return `
                     <table class="table table-striped">
@@ -200,12 +206,13 @@
                     </table>
                 `;
             }
+
             $('#cetak').on('click', function() {
                 let baseUrl = "{{ route('data-pokok.data-presisi-seni-budaya.cetak') }}";
                 let params = dtks.ajax.params(); // Get DataTables params
                 let queryString = new URLSearchParams(params).toString(); // Convert params to query string
                 window.open(`${baseUrl}?${queryString}`, '_blank'); // Open the URL with appended query
             });
-        })
+        });
     </script>
 @endsection

@@ -41,6 +41,16 @@ function GetListKabupaten() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error("Gagal mengambil data kabupaten:", textStatus);
+            if (textStatus === "timeout") {
+                alert("Permintaan data kabupaten gagal karena waktu koneksi habis (timeout). Silakan coba lagi.");
+            } else {
+                try {
+                    var responseJSON = JSON.parse(jqXHR.responseText);
+                    alert("Terjadi kesalahan: " + responseJSON.message);
+                } catch (e) {
+                    alert("Terjadi kesalahan tidak terduga: " + errorThrown);
+                }
+            }
         }
     });
 }

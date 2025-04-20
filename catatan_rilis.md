@@ -2,15 +2,14 @@ Di rilis ini, versi 2504.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Penambahan Fitur
 
-1. [#598](https://github.com/OpenSID/OpenKab/issues/598) Penambahan halaman data presisi kesehatan.
-2. [#589](https://github.com/OpenSID/OpenKab/issues/589) Penambahan halaman data presisi sandang.
+1. [#613](https://github.com/OpenSID/OpenKab/issues/613) Penambahan halaman pangan, grafik, detail dan cetak.
+2. [#614](https://github.com/OpenSID/OpenKab/issues/614) Penambahan halaman data presisi pendidikan, grafik, detail dan cetak.
+3. [#616](https://github.com/OpenSID/OpenKab/issues/616) Penambahan halaman modul data presisi ketenagakerjaan.
 
 #### Perbaikan BUG
 
-1. [#587](https://github.com/OpenSID/OpenKab/issues/587) Perbaikan error ketika pertama kali buka halaman publik presisi.
-2. [#599](https://github.com/OpenSID/OpenKab/issues/599) Perbaikan halaman bantuan kabupaten ke api database gabungan dan perbaikan form edit dan create.
-
 #### Perubahan Teknis
 
-1. [#590](https://github.com/OpenSID/OpenKab/issues/590) Sesuaikan pemanggilan Token API database gabungan.
-2. [#597](https://github.com/OpenSID/OpenKab/issues/597) Hapus pengaturan key OpenDK.
+1. [#604](https://github.com/OpenSID/OpenKab/issues/604) Penyesuaian load CDN.
+2. [#602](https://github.com/OpenSID/OpenKab/issues/602) Penyesuaian api/v1/statistik-web/get-list-kabupaten terpanggil 3 x.
+3. [#603](https://github.com/OpenSID/OpenKab/issues/603) Penyesuaian Tampilkan notifikasi error saat request time out.

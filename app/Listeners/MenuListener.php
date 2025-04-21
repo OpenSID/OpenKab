@@ -109,7 +109,7 @@ class MenuListener
         if ($user) {
             $menuTeam = $user->team->first()?->menu_order ?? $user->team->first()?->menu;
             $presisiEnabled = session('presisi_enabled', false);
-            if(!$presisiEnabled){
+            if (! $presisiEnabled) {
                 $menuTeam = collect($menuTeam)->filter(function ($item) {
                     return ($item['permission'] ?? '') !== 'datapresisi';
                 })->values()->all();

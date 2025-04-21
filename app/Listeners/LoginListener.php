@@ -43,14 +43,13 @@ class LoginListener
             ])->get($url, [
                 'filter[slug]' => 'data-presisi',
                 'page[size]' => 1,
-                ])->throw()
+            ])->throw()
                 ->json();
 
             // Assuming the response contains a 'data' key with the status
             $presisiStatus = count($settingModul['data']) > 0 ? true : false;
         } catch (Exception $e) {
             Log::error('Error fetching setting-modul: '.$e->getMessage());
-
         }
         session(['presisi_enabled' => $presisiStatus]);
 

@@ -207,6 +207,13 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         })
         ->middleware(['permission:datapresisi-pangan-read']);
 
+        Route::prefix('adat')->group(function () {
+            Route::get('/', [App\Http\Controllers\DataPresisiAdatController::class, 'index'])->name('data-pokok.data-presisi-adat.index');
+            Route::get('/detail', [App\Http\Controllers\DataPresisiAdatController::class, 'detail'])->name('data-pokok.data-presisi-adat.detail');
+            Route::get('cetak', [App\Http\Controllers\DataPresisiAdatController::class, 'cetak'])->name('data-pokok.data-presisi-adat.cetak');
+        })
+        ->middleware(['permission:datapresisi-adat-read']);
+
     });
 
     // Prodeskel

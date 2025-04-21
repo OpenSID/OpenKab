@@ -41,7 +41,7 @@ class DataPokokController extends Controller
 
     public function pariwisata()
     {
-        $title = 'Data Potensi Wita dan Sumber Daya';
+        $title = 'Data Potensi Wisata dan Sumber Daya';
 
         return view('data_pokok.pariwisata.index', ['title' => $title]);
     }

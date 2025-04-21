@@ -67,6 +67,7 @@
                                 <tr>
                                     <th>NO</th>
                                     <th>NIK</th>
+                                    <th>NOMOR KK</th>
                                     <th>NAMA</th>
                                     <th>STATUS KEANGGOTAAN</th>
                                     <th>FREKWENSI MENGIKUTI KEGIATAN ADAT DALAM SETAHUN</th>
@@ -127,6 +128,11 @@
                                 .relationships.penduduk.data.id].nik;
                             item.attributes.nama = transformedIncluded.penduduk[item
                                 .relationships.penduduk.data.id].nama;
+                            item.attributes.no_kk = transformedIncluded.penduduk[item
+                                .relationships.penduduk.data.id].keluarga?.no_kk;
+                            if (!item.attributes.status_keanggotaan) {
+                                item.attributes.status_keanggotaan = 'TIDAK TAHU'
+                            }
                             if (!item.attributes.frekwensi) {
                                 item.attributes.frekwensi = 'TIDAK TAHU'
                             }
@@ -147,6 +153,10 @@
                     },
                     {
                         data: 'attributes.nik',
+                        orderable: false,
+                    },
+                    {
+                        data: 'attributes.no_kk',
                         orderable: false,
                     },
                     {

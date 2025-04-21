@@ -120,6 +120,9 @@
                                 if (!item.attributes.frekwensi) {
                                     item.attributes.frekwensi = 'TIDAK TAHU'
                                 }
+                                if (!item.attributes.status_keanggotaan) {
+                                    item.attributes.status_keanggotaan = 'TIDAK TAHU'
+                                }
                                 item.attributes.dtks = transformedIncluded.rtm[item
                                         .relationships.rtm.data.id].dtks ? 'Terdaftar' :
                                     'Tidak Terdaftar';

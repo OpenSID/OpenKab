@@ -2,8 +2,12 @@
 
 namespace App\Listeners;
 
+use App\Models\Setting;
+use Exception;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class LoginListener
 {
@@ -28,6 +32,28 @@ class LoginListener
      */
     public function handle(Login $event)
     {
+        $presisiStatus = false;
+        try {
+            $url = config('app.databaseGabunganUrl').'/api/v1/setting-modul';
+            $setting = Setting::where('key', 'database_gabungan_api_key')->first();
+            $settingModul = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '.$setting->value ?? '',
+            ])->get($url, [
+                'filter[slug]' => 'data-presisi',
+                'page[size]' => 1,
+                ])->throw()
+                ->json();
+
+            // Assuming the response contains a 'data' key with the status
+            $presisiStatus = count($settingModul['data']) > 0 ? true : false;
+        } catch (Exception $e) {
+            Log::error('Error fetching setting-modul: '.$e->getMessage());
+
+        }
+        session(['presisi_enabled' => $presisiStatus]);
+
         activity('authentication-log')->event('login')->withProperties($this->request)->log('Login');
     }
 }

@@ -91,6 +91,12 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Seni Budaya',
+                    'url' => 'data-presisi/seni-budaya',
+                    'permission' => 'datapresisi-seni-budaya',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
                     'text' => 'Data Presisi Ketenagakerjaan',
                     'url' => 'data-presisi/ketenagakerjaan',
                     'permission' => 'datapresisi-ketenagakerjaan',
@@ -106,6 +112,7 @@ final class Modul extends Enum
                     'text' => 'Data Presisi Pangan',
                     'url' => 'data-presisi/pangan',
                     'permission' => 'datapresisi-pangan',
+
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',

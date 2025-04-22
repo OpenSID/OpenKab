@@ -39,9 +39,21 @@ class DataPokokController extends Controller
         return view('data_pokok.jaminan_sosial.index', ['title' => $title]);
     }
 
+    public function detailJaminanSosial(Request $request)
+    {
+        $data = json_decode($request->data);
+
+        return view('data_pokok.jaminan_sosial.detail', ['data' => $data]);
+    }
+
+    public function cetakJaminanSosial(Request $request)
+    {
+        return view('data_pokok.jaminan_sosial.cetak', ['filter' => $request->getQueryString()]);
+    }
+
     public function pariwisata()
     {
-        $title = 'Data Potensi Wita dan Sumber Daya';
+        $title = 'Data Potensi Wisata dan Sumber Daya';
 
         return view('data_pokok.pariwisata.index', ['title' => $title]);
     }

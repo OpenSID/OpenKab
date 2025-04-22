@@ -9,6 +9,7 @@ Di rilis ini, versi 2504.0.0 berisi penambahan dan perbaikan yang diminta penggu
 5. [#617](https://github.com/OpenSID/OpenKab/issues/617) Penambahan halaman modul agama presisi.
 6. [#619](https://github.com/OpenSID/OpenKab/issues/619) Penambahan halaman jaminan sosial. 
 7. [#618](https://github.com/OpenSID/OpenKab/issues/618) Penambahan halaman modul data presisi adat.
+8. [#620](https://github.com/OpenSID/OpenKab/issues/620) Penambahan kelompokkan menu data presisi. 
 
 #### Perbaikan BUG
 

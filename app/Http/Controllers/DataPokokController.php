@@ -6,11 +6,23 @@ use Illuminate\Http\Request;
 
 class DataPokokController extends Controller
 {
-    public function agama_adat()
+    public function agama()
     {
-        $title = 'Data Agama, Adat, Tradisi & Seni Budaya';
+        $title = 'Data Agama';
 
-        return view('data_pokok.agama_adat.index', ['title' => $title]);
+        return view('data_pokok.agama.index', ['title' => $title]);
+    }
+
+    public function detail_agama(Request $request)
+    {
+        $data = json_decode($request->data);
+
+        return view('data_pokok.agama.detail', ['data' => $data]);
+    }
+
+    public function cetak_agama(Request $request)
+    {
+        return view('data_pokok.agama.cetak', ['filter' => $request->getQueryString()]);
     }
 
     public function kesehatan()

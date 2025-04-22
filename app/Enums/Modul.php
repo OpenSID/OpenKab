@@ -115,6 +115,12 @@ final class Modul extends Enum
 
                 ],
                 [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Adat',
+                    'url' => 'data-presisi/adat',
+                    'permission' => 'datapresisi-adat',
+                ],
+                [
                     'text' => 'Penerima Bantuan',
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'bantuan',

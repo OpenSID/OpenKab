@@ -6,6 +6,7 @@ Di rilis ini, versi 2504.0.0 berisi penambahan dan perbaikan yang diminta penggu
 2. [#614](https://github.com/OpenSID/OpenKab/issues/614) Penambahan halaman data presisi pendidikan, grafik, detail dan cetak.
 3. [#616](https://github.com/OpenSID/OpenKab/issues/616) Penambahan halaman modul data presisi ketenagakerjaan.
 4. [#615](https://github.com/OpenSID/OpenKab/issues/615) Penambahan halaman seni budaya.
+5. [#617](https://github.com/OpenSID/OpenKab/issues/617) Penambahan halaman modul agama presisi.
 
 #### Perbaikan BUG
 

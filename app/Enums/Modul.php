@@ -31,8 +31,8 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Data Agama & Adat',
-                    'url' => 'data-pokok/agama-adat',
+                    'text' => 'Data Agama',
+                    'url' => 'data-pokok/agama',
                     'permission' => 'datapokok-agama-adat',
                 ],
                 [
@@ -91,6 +91,12 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Seni Budaya',
+                    'url' => 'data-presisi/seni-budaya',
+                    'permission' => 'datapresisi-seni-budaya',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
                     'text' => 'Data Presisi Ketenagakerjaan',
                     'url' => 'data-presisi/ketenagakerjaan',
                     'permission' => 'datapresisi-ketenagakerjaan',
@@ -106,6 +112,7 @@ final class Modul extends Enum
                     'text' => 'Data Presisi Pangan',
                     'url' => 'data-presisi/pangan',
                     'permission' => 'datapresisi-pangan',
+
                 ],
                 [
                     'text' => 'Penerima Bantuan',

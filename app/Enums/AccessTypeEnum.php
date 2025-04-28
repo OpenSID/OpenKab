@@ -11,7 +11,7 @@ enum AccessTypeEnum
 
     public function value(): int
     {
-        return match($this) {
+        return match ($this) {
             self::LOCK => 1,
             self::UNLOCK => 2,
             self::ROOT => 0,

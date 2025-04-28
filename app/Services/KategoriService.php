@@ -3,13 +3,13 @@
 namespace App\Services;
 
 use App\Models\Setting;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class KategoriService
 {
-
     protected $baseUrl;
+
     protected $setting;
 
     public function __construct()
@@ -25,14 +25,14 @@ class KategoriService
 
         // Ambil dari cache dulu
         return Cache::remember($cacheKey, now()->addHours(6), function () use ($id) {
-            $url = $this->baseUrl . '/api/v1/kategori';
+            $url = $this->baseUrl.'/api/v1/kategori';
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . ($this->setting->value ?? ''),
+                'Authorization' => 'Bearer '.($this->setting->value ?? ''),
             ])->get($url, [
-                'filter[id]' => $id
+                'filter[id]' => $id,
             ]);
 
             if ($response->successful()) {
@@ -45,9 +45,7 @@ class KategoriService
                 return null;
             }
 
-            throw new \Exception("Gagal mengambil data kategori: " . $response->status());
+            throw new \Exception('Gagal mengambil data kategori: '.$response->status());
         });
-
     }
-
 }

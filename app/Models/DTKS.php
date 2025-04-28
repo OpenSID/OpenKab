@@ -195,5 +195,4 @@ class DTKS extends BaseModel
     {
         return $this->hasMany(DtksAnggota::class, 'id_dtks');
     }
-
 }

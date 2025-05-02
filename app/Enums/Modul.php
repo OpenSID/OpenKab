@@ -53,42 +53,7 @@ final class Modul extends Enum
                     'url' => 'data-pokok/ketenagakerjaan',
                     'permission' => 'datapokok-ketenagakerjaan',
                 ],
-                [
-                    'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Jaminan Sosial',
-                    'url' => 'data-pokok/jaminan-sosial',
-                    'permission' => 'datapokok-jaminan-sosial',
-                ],
-                [
-                    'icon' => 'fa fa-users',
-                    'text' => 'Pariwisata',
-                    'url' => 'data-pokok/pariwisata',
-                    'permission' => 'datapokok-pariwisata',
-                ],
-                [
-                    'icon' => 'fa fa-users',
-                    'text' => 'Infrastruktur',
-                    'url' => 'data-pokok/infrastruktur',
-                    'permission' => 'datapokok-infrastruktur',
-                ],
-                [
-                    'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Data Papan',
-                    'url' => 'satu-data/dtks/papan',
-                    'permission' => 'datapokok-papan',
-                ],
-                [
-                    'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Data Sandang',
-                    'url' => 'data-pokok/sandang',
-                    'permission' => 'datapokok-sandang',
-                ],
-                [
-                    'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Data Presisi Kesehatan',
-                    'url' => 'data-presisi/kesehatan',
-                    'permission' => 'datapresisi-kesehatan',
-                ],
+
                 [
                     'text' => 'Penerima Bantuan',
                     'icon' => 'far fa-fw fa-circle',
@@ -127,6 +92,85 @@ final class Modul extends Enum
                     'permission' => 'statistik-bantuan',
                 ],
 
+            ],
+        ],
+        [
+            'text' => 'Data Presisi',
+            'icon' => 'fa fa-chart-pie',
+            'permission' => 'datapresisi',
+            'submenu' => [
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Pangan',
+                    'url' => 'data-presisi/pangan',
+                    'permission' => 'datapresisi-pangan',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Sandang',
+                    'url' => 'data-pokok/sandang',
+                    'permission' => 'datapokok-sandang',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Papan',
+                    'url' => 'satu-data/dtks/papan',
+                    'permission' => 'datapokok-papan',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Pendidikan',
+                    'url' => 'data-presisi/pendidikan',
+                    'permission' => 'datapresisi-pendidikan',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Seni Budaya',
+                    'url' => 'data-presisi/seni-budaya',
+                    'permission' => 'datapresisi-seni-budaya',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Ketenagakerjaan',
+                    'url' => 'data-presisi/ketenagakerjaan',
+                    'permission' => 'datapresisi-ketenagakerjaan',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Presisi Kesehatan',
+                    'url' => 'data-presisi/kesehatan',
+                    'permission' => 'datapresisi-kesehatan',
+                ],
+                [
+                    'icon' => 'fa fa-fw fa-circle',
+                    'text' => 'Data Infrastruktur',
+                    'url' => 'data-pokok/infrastruktur',
+                    'permission' => 'datapokok-infrastruktur',
+                ],
+                [
+                    'icon' => 'fa fa-fw fa-circle',
+                    'text' => 'Data Pariwisata',
+                    'url' => 'data-pokok/pariwisata',
+                    'permission' => 'datapokok-pariwisata',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Jaminan Sosial',
+                    'url' => 'data-pokok/jaminan-sosial',
+                    'permission' => 'datapokok-jaminan-sosial',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Agama',
+                    'url' => 'data-pokok/agama',
+                    'permission' => 'datapokok-agama-adat',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Data Adat',
+                    'url' => 'data-presisi/adat',
+                    'permission' => 'datapresisi-adat',
+                ],
             ],
         ],
         [

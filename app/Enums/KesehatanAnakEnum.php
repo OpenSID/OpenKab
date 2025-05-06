@@ -5,11 +5,15 @@ namespace App\Enums;
 class KesehatanAnakEnum
 {
     public const NORMAL = 1;
+
     public const GIZI_KURANG = 2;
+
     public const GIZI_BURUK = 3;
+
     public const STUNTING = 4;
 
     public const TB_SANGAT_PENDEK = 2;
+
     public const TB_PENDEK = 3;
 
     public const KATEGORI_STATISTIK = [

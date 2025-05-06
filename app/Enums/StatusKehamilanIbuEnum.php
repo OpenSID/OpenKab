@@ -29,6 +29,7 @@ class StatusKehamilanIbuEnum
                 return $item['nama'];
             }
         }
+
         return null;
     }
 
@@ -39,6 +40,7 @@ class StatusKehamilanIbuEnum
                 return $item['simbol'];
             }
         }
+
         return null;
     }
 }

@@ -10,7 +10,6 @@ use App\Models\Anak;
 use App\Models\Bantuan;
 use App\Models\IbuHamil;
 use App\Models\Point;
-use App\Models\Posyandu;
 use App\Models\SasaranPaud;
 use App\Services\PosyanduService;
 use App\Services\RekapService;

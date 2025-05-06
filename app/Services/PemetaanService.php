@@ -4,12 +4,11 @@ namespace App\Services;
 
 use App\Models\Setting;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
 
 class PemetaanService
 {
-
     protected $baseUrl;
+
     protected $setting;
 
     public function __construct()
@@ -21,12 +20,12 @@ class PemetaanService
 
     public function getAllPoint(array $query = [])
     {
-        $url = $this->baseUrl . '/api/v1/point';
+        $url = $this->baseUrl.'/api/v1/point';
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . ($this->setting->value ?? ''),
+            'Authorization' => 'Bearer '.($this->setting->value ?? ''),
         ])->get($url, $query);
 
         if ($response->successful()) {
@@ -39,17 +38,17 @@ class PemetaanService
             return null;
         }
 
-        throw new \Exception("Gagal mengambil data point: " . $response->status());
+        throw new \Exception('Gagal mengambil data point: '.$response->status());
     }
 
     public function getAllPlan(array $query = [])
     {
-        $url = $this->baseUrl . '/api/v1/plan';
+        $url = $this->baseUrl.'/api/v1/plan';
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . ($this->setting->value ?? ''),
+            'Authorization' => 'Bearer '.($this->setting->value ?? ''),
         ])->get($url, $query);
 
         if ($response->successful()) {
@@ -62,7 +61,6 @@ class PemetaanService
             return null;
         }
 
-        throw new \Exception("Gagal mengambil data point: " . $response->status());
+        throw new \Exception('Gagal mengambil data point: '.$response->status());
     }
-
 }

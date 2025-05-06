@@ -3,13 +3,13 @@
 namespace App\Services;
 
 use App\Models\Setting;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class KeluargaService
 {
-
     protected $baseUrl;
+
     protected $setting;
 
     public function __construct()
@@ -21,24 +21,23 @@ class KeluargaService
 
     public function summary(array $query = [])
     {
-        $cacheKey = 'keluarga_summary_' . md5(json_encode($query));
+        $cacheKey = 'keluarga_summary_'.md5(json_encode($query));
         $ttl = now()->addMinutes(10); // Simpan cache selama 10 menit
 
         return Cache::remember($cacheKey, $ttl, function () use ($query) {
-            $url = $this->baseUrl . '/api/v1/keluarga/summary';
+            $url = $this->baseUrl.'/api/v1/keluarga/summary';
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . ($this->setting->value ?? ''),
+                'Authorization' => 'Bearer '.($this->setting->value ?? ''),
             ])->get($url, $query);
 
             if ($response->successful()) {
                 return $response->json();
             }
 
-            throw new \Exception("Gagal mengambil data summary: " . $response->status());
+            throw new \Exception('Gagal mengambil data summary: '.$response->status());
         });
     }
-
 }

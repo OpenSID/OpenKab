@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Repository\BantuanRepository;
 use App\Http\Repository\ConfigRepository;
-use App\Http\Repository\KeluargaRepository;
 use App\Http\Repository\PendudukRepository;
 use App\Models\Config;
 use App\Services\KeluargaService;

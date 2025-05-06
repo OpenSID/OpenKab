@@ -11,7 +11,9 @@ class PlanController extends Controller
 {
     private int $tip = 3;
 
-    public function __construct(private PemetaanService $peta){}
+    public function __construct(private PemetaanService $peta)
+    {
+    }
 
     public function index($parent = 0)
     {
@@ -32,9 +34,9 @@ class PlanController extends Controller
         // $data['lokasi'] = Lokasi::with('point')->findOrFail($id)->toArray();
 
         $data['lokasi'] = $this->peta->getAllPlan([
-            'filter[id]' => $id
+            'filter[id]' => $id,
         ]);
-        
+
         $data['parent'] = $parent;
         $data['id'] = $id;
 
@@ -44,7 +46,7 @@ class PlanController extends Controller
     public function show_ajax_lokasi_maps($parent, int $id)
     {
         $data['lokasi'] = $this->peta->getAllPlan([
-            'filter[id]' => $id
+            'filter[id]' => $id,
         ]);
         $data['parent'] = $parent;
         $data['id'] = $id;

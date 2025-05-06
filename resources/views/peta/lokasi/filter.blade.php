@@ -20,9 +20,12 @@
         <select id="subpoint" class="form-control input-sm select2">
             <option value="">Pilih Kategori</option>
             @foreach ($point as $item)
-                <optgroup label="{{ $item->nama }}">
+                {{-- <optgroup label="{{ $item->nama }}">
                     @foreach ($item->children as $child)
-                        <option value="{{ $child->id }}">{{ $child->nama }}</option>
+                        <option value="{{ $child->id }}">{{ $child->nama }}</option> --}}
+                <optgroup label="{{ $item['nama'] }}">
+                    @foreach ($item['children'] as $child)
+                        <option value="{{ $child['id'] }}">{{ $child['nama'] }}</option>
                     @endforeach
                 </optgroup>
             @endforeach

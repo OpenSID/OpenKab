@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Enums\AccessTypeEnum;
 use App\Models\Lokasi;
 use App\Models\Point;
+use App\Services\PemetaanService;
 
 class PlanController extends Controller
 {
     private int $tip = 3;
+
+    public function __construct(private PemetaanService $peta){}
 
     public function index($parent = 0)
     {
@@ -17,7 +20,14 @@ class PlanController extends Controller
             AccessTypeEnum::LOCK->value() => 'Aktif',
             AccessTypeEnum::UNLOCK->value() => 'Tidak Aktif',
         ];
-        $data['point'] = Point::root()->with(['children'])->where('sumber', 'OpenKab')->get();
+        // $data['point'] = Point::root()->with(['children'])->where('sumber', 'OpenKab')->get();
+
+        $data['plan'] = $this->peta->getAllPlan([
+            'filter[id]' => 15,
+            'include' => 'point'
+        ]);
+
+        dd($data['plan']);
 
         return view('peta.lokasi.index', $data);
     }

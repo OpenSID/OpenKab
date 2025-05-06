@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\KesehatanAnakEnum;
 use App\Models\Anak;
 use App\Models\UserGrup;
 use Illuminate\Support\Facades\DB;
@@ -383,7 +384,7 @@ class RekapService
             ->distinct()
             ->get();
 
-        $status_gizi_anak = collect(Anak::STATUS_GIZI_ANAK)->pluck('simbol', 'id');
+        $status_gizi_anak = collect(KesehatanAnakEnum::STATUS_GIZI_ANAK)->pluck('simbol', 'id');
 
         if ($bulananAnak) {
             foreach ($bulananAnak as $item) {

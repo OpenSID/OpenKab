@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\KesehatanAnakEnum;
 use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -427,7 +428,7 @@ class Penduduk extends BaseModel
         if ($this->kia) {
             $anak = Anak::where('kia_id', $this->kia->id)->first() ?? null;
             if ($anak) {
-                $statusGizi = collect(Anak::STATUS_GIZI_ANAK)->firstWhere('id', $anak->status_gizi);
+                $statusGizi = collect(KesehatanAnakEnum::STATUS_GIZI_ANAK)->firstWhere('id', $anak->status_gizi);
 
                 // Jika ditemukan, kembalikan nama, jika tidak ada kembalikan string default
                 return $statusGizi ? $statusGizi['nama'] : 'TIDAK TAHU';

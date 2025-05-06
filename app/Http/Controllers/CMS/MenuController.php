@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\CMS;
 
+use App\Enums\KategoriSasaranBantuanEnum;
+use App\Enums\KesehatanAnakEnum;
+use App\Enums\PendudukKategoriStatistikEnum;
+use App\Enums\RtmKategoriStatistikEnum;
+use App\Enums\SasaranStatistikKeluargaEnum;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\CMS\MenuRepository;
 use App\Http\Requests\UpdateMenuRequest;
@@ -49,35 +54,35 @@ class MenuController extends AppBaseController
             ],
             'penduduk' => collect(['/module/penduduk' => 'Semua Statistik Penduduk'])
                 ->merge(
-                    collect(Penduduk::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                    collect(PendudukKategoriStatistikEnum::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
                     })
                 )->toArray(),
 
             'keluarga' => collect(['/module/keluarga' => 'Semua Statistik Keluarga'])
                 ->merge(
-                    collect(Keluarga::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                    collect(SasaranStatistikKeluargaEnum::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/keluarga/{$key}" => ucwords("Statistik Keluarga {$item}")];
                     })
                 )->toArray(),
 
             'bantuan' => collect(['/module/bantuan' => 'Semua Statistik Bantuan'])
                 ->merge(
-                    collect(Bantuan::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                    collect(KategoriSasaranBantuanEnum::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/bantuan/{$key}" => ucwords("Statistik Bantuan {$item}")];
                     })
                 )->toArray(),
 
             'rtm' => collect(['/module/rtm' => 'Semua Statistik Rtm'])
                 ->merge(
-                    collect(Rtm::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                    collect(RtmKategoriStatistikEnum::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
                     })
                 )->toArray(),
 
             'kesehatan' => collect(['/module/kesehatan' => 'Semua Statistik Kesehatan'])
                 ->merge(
-                    collect(Anak::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                    collect(KesehatanAnakEnum::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/kesehatan/{$key}" => ucwords("Statistik Kesehatan {$item}")];
                     })
                 )->toArray(),

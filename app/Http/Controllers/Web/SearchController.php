@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\KategoriSasaranBantuanEnum;
+use App\Enums\PendudukKategoriStatistikEnum;
+use App\Enums\RtmKategoriStatistikEnum;
+use App\Enums\SasaranStatistikKeluargaEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Bantuan;
 use App\Models\Config;
@@ -27,10 +31,10 @@ class SearchController extends Controller
             ['text' => 'bantuan', 'key' => 'bantuan', 'value' => angka_lokal(Bantuan::filterDesa()->count()), 'icon' => 'web/img/bantuan.jpg'],
         ];
         $groupStatistik = [
-            ['text' => 'Penduduk', 'key' => 'penduduk', 'items' => Penduduk::KATEGORI_STATISTIK, 'icon' => 'fa-pie-chart'],
-            ['text' => 'Keluarga', 'key' => 'keluarga', 'items' => Keluarga::KATEGORI_STATISTIK, 'icon' => 'fa-bar-chart'],
-            ['text' => 'Bantuan', 'key' => 'bantuan', 'items' => Bantuan::KATEGORI_STATISTIK, 'icon' => 'fa-line-chart'],
-            ['text' => 'RTM', 'key' => 'rtm', 'items' => Rtm::KATEGORI_STATISTIK, 'icon' => 'fa-area-chart'],
+            ['text' => 'Penduduk', 'key' => 'penduduk', 'items' => PendudukKategoriStatistikEnum::KATEGORI_STATISTIK, 'icon' => 'fa-pie-chart'],
+            ['text' => 'Keluarga', 'key' => 'keluarga', 'items' => SasaranStatistikKeluargaEnum::KATEGORI_STATISTIK, 'icon' => 'fa-bar-chart'],
+            ['text' => 'Bantuan', 'key' => 'bantuan', 'items' => KategoriSasaranBantuanEnum::KATEGORI_STATISTIK, 'icon' => 'fa-line-chart'],
+            ['text' => 'RTM', 'key' => 'rtm', 'items' => RtmKategoriStatistikEnum::KATEGORI_STATISTIK, 'icon' => 'fa-area-chart'],
         ];
         $view = view('web.partials.statistik_result', compact('categoriesItems', 'desa', 'groupStatistik'))->render();
 

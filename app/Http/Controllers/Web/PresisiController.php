@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Enums\KeluargaKategoriStatistikEnum;
+use App\Enums\KesehatanAnakEnum;
 use App\Enums\PendudukKategoriStatistikEnum;
 use App\Enums\RtmKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
@@ -183,7 +184,7 @@ class PresisiController extends Controller
         }
 
         //HITUNG HASIL PENGUKURAN TIKAR PERTUMBUHAN
-        $status_tikar = collect(Anak::STATUS_TIKAR_ANAK)->pluck('simbol', 'id');
+        $status_tikar = collect(KesehatanAnakEnum::STATUS_TIKAR_ANAK)->pluck('simbol', 'id');
         $tikar = ['TD' => 0, 'M' => 0, 'K' => 0, 'H' => 0];
 
         if ($bulanan_anak['dataGrup'] != null) {

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\KesehatanAnakEnum;
 use App\Models\Anak;
 use App\Models\IbuHamil;
 use App\Models\Posyandu;
@@ -78,9 +79,9 @@ class StuntingService
     {
         $summary = collect([
             [
-                'range_1' => [Anak::TB_PENDEK => 0, Anak::TB_SANGAT_PENDEK => 0],
-                'range_2' => [Anak::TB_PENDEK => 0, Anak::TB_SANGAT_PENDEK => 0],
-                'range_3' => [Anak::TB_PENDEK => 0, Anak::TB_SANGAT_PENDEK => 0],
+                'range_1' => [KesehatanAnakEnum::TB_PENDEK => 0, KesehatanAnakEnum::TB_SANGAT_PENDEK => 0],
+                'range_2' => [KesehatanAnakEnum::TB_PENDEK => 0, KesehatanAnakEnum::TB_SANGAT_PENDEK => 0],
+                'range_3' => [KesehatanAnakEnum::TB_PENDEK => 0, KesehatanAnakEnum::TB_SANGAT_PENDEK => 0],
             ],
         ]);
         $stuntingObj = Anak::selectRaw('status_tikar')
@@ -115,26 +116,26 @@ class StuntingService
         if (! $stunting->isEmpty()) {
             $obj = $stunting->keyBy('status_tikar');
 
-            $totalRange1 = $obj[Anak::TB_SANGAT_PENDEK]->range_1 + ($obj[Anak::TB_PENDEK]->range_1 ?? 0);
-            $totalRange2 = $obj[Anak::TB_SANGAT_PENDEK]->range_2 + ($obj[Anak::TB_PENDEK]->range_2 ?? 0);
-            $totalRange3 = $obj[Anak::TB_SANGAT_PENDEK]->range_3 + ($obj[Anak::TB_PENDEK]->range_3 ?? 0);
+            $totalRange1 = $obj[KesehatanAnakEnum::TB_SANGAT_PENDEK]->range_1 + ($obj[KesehatanAnakEnum::TB_PENDEK]->range_1 ?? 0);
+            $totalRange2 = $obj[KesehatanAnakEnum::TB_SANGAT_PENDEK]->range_2 + ($obj[KesehatanAnakEnum::TB_PENDEK]->range_2 ?? 0);
+            $totalRange3 = $obj[KesehatanAnakEnum::TB_SANGAT_PENDEK]->range_3 + ($obj[KesehatanAnakEnum::TB_PENDEK]->range_3 ?? 0);
             $summary = collect([
-                'range_1' => [Anak::TB_PENDEK => $this->conversiPercent(($obj[Anak::TB_PENDEK]->range_1 ?? 0), $totalRange1), Anak::TB_SANGAT_PENDEK => $this->conversiPercent($obj[Anak::TB_SANGAT_PENDEK]->range_1, $totalRange1)],
-                'range_2' => [Anak::TB_PENDEK => $this->conversiPercent(($obj[Anak::TB_PENDEK]->range_2 ?? 0), $totalRange2), Anak::TB_SANGAT_PENDEK => $this->conversiPercent($obj[Anak::TB_SANGAT_PENDEK]->range_2, $totalRange2)],
-                'range_3' => [Anak::TB_PENDEK => $this->conversiPercent(($obj[Anak::TB_PENDEK]->range_3 ?? 0), $totalRange3), Anak::TB_SANGAT_PENDEK => $this->conversiPercent($obj[Anak::TB_SANGAT_PENDEK]->range_3, $totalRange3)],
+                'range_1' => [KesehatanAnakEnum::TB_PENDEK => $this->conversiPercent(($obj[KesehatanAnakEnum::TB_PENDEK]->range_1 ?? 0), $totalRange1), KesehatanAnakEnum::TB_SANGAT_PENDEK => $this->conversiPercent($obj[KesehatanAnakEnum::TB_SANGAT_PENDEK]->range_1, $totalRange1)],
+                'range_2' => [KesehatanAnakEnum::TB_PENDEK => $this->conversiPercent(($obj[KesehatanAnakEnum::TB_PENDEK]->range_2 ?? 0), $totalRange2), KesehatanAnakEnum::TB_SANGAT_PENDEK => $this->conversiPercent($obj[KesehatanAnakEnum::TB_SANGAT_PENDEK]->range_2, $totalRange2)],
+                'range_3' => [KesehatanAnakEnum::TB_PENDEK => $this->conversiPercent(($obj[KesehatanAnakEnum::TB_PENDEK]->range_3 ?? 0), $totalRange3), KesehatanAnakEnum::TB_SANGAT_PENDEK => $this->conversiPercent($obj[KesehatanAnakEnum::TB_SANGAT_PENDEK]->range_3, $totalRange3)],
             ]);
         }
         if (! empty($summary[0])) {
             return [
-                ['id' => 'chart_0_5', 'title' => 'Jumlah Per Gol Umur 0-5 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary[0]['range_1'][Anak::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary[0]['range_1'][Anak::TB_SANGAT_PENDEK]]]],
-                ['id' => 'chart_6_11', 'title' => 'Jumlah Per Gol Umur 6-11 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary[0]['range_2'][Anak::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary[0]['range_2'][Anak::TB_SANGAT_PENDEK]]]],
-                ['id' => 'chart_12_23', 'title' => 'Jumlah Per Gol Umur 12-23 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary[0]['range_3'][Anak::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary[0]['range_3'][Anak::TB_SANGAT_PENDEK]]]],
+                ['id' => 'chart_0_5', 'title' => 'Jumlah Per Gol Umur 0-5 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary[0]['range_1'][KesehatanAnakEnum::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary[0]['range_1'][KesehatanAnakEnum::TB_SANGAT_PENDEK]]]],
+                ['id' => 'chart_6_11', 'title' => 'Jumlah Per Gol Umur 6-11 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary[0]['range_2'][KesehatanAnakEnum::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary[0]['range_2'][KesehatanAnakEnum::TB_SANGAT_PENDEK]]]],
+                ['id' => 'chart_12_23', 'title' => 'Jumlah Per Gol Umur 12-23 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary[0]['range_3'][KesehatanAnakEnum::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary[0]['range_3'][KesehatanAnakEnum::TB_SANGAT_PENDEK]]]],
             ];
         } else {
             return [
-                ['id' => 'chart_0_5', 'title' => 'Jumlah Per Gol Umur 0-5 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary['range_1'][Anak::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary['range_1'][Anak::TB_SANGAT_PENDEK]]]],
-                ['id' => 'chart_6_11', 'title' => 'Jumlah Per Gol Umur 6-11 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary['range_2'][Anak::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary['range_2'][Anak::TB_SANGAT_PENDEK]]]],
-                ['id' => 'chart_12_23', 'title' => 'Jumlah Per Gol Umur 12-23 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary['range_3'][Anak::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary['range_3'][Anak::TB_SANGAT_PENDEK]]]],
+                ['id' => 'chart_0_5', 'title' => 'Jumlah Per Gol Umur 0-5 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary['range_1'][KesehatanAnakEnum::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary['range_1'][KesehatanAnakEnum::TB_SANGAT_PENDEK]]]],
+                ['id' => 'chart_6_11', 'title' => 'Jumlah Per Gol Umur 6-11 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary['range_2'][KesehatanAnakEnum::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary['range_2'][KesehatanAnakEnum::TB_SANGAT_PENDEK]]]],
+                ['id' => 'chart_12_23', 'title' => 'Jumlah Per Gol Umur 12-23 Bulan', 'data' => [['name' => 'Pendek (Stunting)', 'y' => $summary['range_3'][KesehatanAnakEnum::TB_PENDEK]], ['name' => 'Sangat Pendek (Severity Stunting)', 'y' => $summary['range_3'][KesehatanAnakEnum::TB_SANGAT_PENDEK]]]],
             ];
         }
     }
@@ -265,7 +266,7 @@ class StuntingService
         }
 
         //HITUNG HASIL PENGUKURAN TIKAR PERTUMBUHAN
-        $status_tikar = collect(Anak::STATUS_TIKAR_ANAK)->pluck('simbol', 'id');
+        $status_tikar = collect(KesehatanAnakEnum::STATUS_TIKAR_ANAK)->pluck('simbol', 'id');
         $tikar = ['TD' => 0, 'M' => 0, 'K' => 0, 'H' => 0];
 
         if ($bulanan_anak['dataGrup'] != null) {

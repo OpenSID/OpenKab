@@ -7,6 +7,7 @@ use App\Http\Repository\ConfigRepository;
 use App\Http\Repository\KeluargaRepository;
 use App\Http\Repository\PendudukRepository;
 use App\Models\Config;
+use App\Services\KeluargaService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -50,7 +51,8 @@ class WebsiteController extends Controller
 
         $bantuanSummary = (new BantuanRepository)->summary();
         $pendudukSummary = (new PendudukRepository)->summary();
-        $keluargaSummary = (new KeluargaRepository)->summary();
+        $keluargaSummary = (new KeluargaService)->summary();
+
         $categoriesItems = [
             'keluarga' => ['text' => 'keluarga', 'value' => angka_lokal($keluargaSummary), 'icon' => 'web/img/penduduk.jpg'],
             'penduduk' => ['text' => 'penduduk', 'value' => angka_lokal($pendudukSummary), 'icon' => 'web/img/penduduk.jpg'],

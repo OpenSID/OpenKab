@@ -22,19 +22,19 @@ class PlanController extends Controller
         ];
         // $data['point'] = Point::root()->with(['children'])->where('sumber', 'OpenKab')->get();
 
-        $data['plan'] = $this->peta->getAllPlan([
-            'filter[id]' => 15,
-            'include' => 'point'
-        ]);
-
-        dd($data['plan']);
+        $data['point'] = $this->peta->getAllPoint();
 
         return view('peta.lokasi.index', $data);
     }
 
     public function ajax_lokasi_maps($parent, int $id)
     {
-        $data['lokasi'] = Lokasi::with('point')->findOrFail($id)->toArray();
+        // $data['lokasi'] = Lokasi::with('point')->findOrFail($id)->toArray();
+
+        $data['lokasi'] = $this->peta->getAllPlan([
+            'filter[id]' => $id
+        ]);
+        
         $data['parent'] = $parent;
         $data['id'] = $id;
 
@@ -43,7 +43,9 @@ class PlanController extends Controller
 
     public function show_ajax_lokasi_maps($parent, int $id)
     {
-        $data['lokasi'] = Lokasi::with('point')->findOrFail($id)->toArray();
+        $data['lokasi'] = $this->peta->getAllPlan([
+            'filter[id]' => $id
+        ]);
         $data['parent'] = $parent;
         $data['id'] = $id;
 

@@ -12,6 +12,7 @@ use App\Models\IbuHamil;
 use App\Models\Point;
 use App\Models\Posyandu;
 use App\Models\SasaranPaud;
+use App\Services\PosyanduService;
 use App\Services\RekapService;
 use App\Services\StuntingService;
 
@@ -329,7 +330,7 @@ class PresisiController extends Controller
         $data['navigasi'] = 'scorcard-konvergensi';
         $data['dataAnak0sd2Tahun'] = $dataAnak0sd2Tahun;
         $data['id'] = $id;
-        $data['posyandu'] = Posyandu::get();
+        $data['posyandu'] = (new PosyanduService)->posyandu();
         $data['JTRT'] = count($dataNoKia);
         $data['jumlahKekRisti'] = $jumlahKekRisti;
         $data['jumlahGiziBukanNormal'] = $jumlahGiziBukanNormal;

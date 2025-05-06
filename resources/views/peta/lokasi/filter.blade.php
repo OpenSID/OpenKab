@@ -11,7 +11,8 @@
         <select id="point" class="form-control input-sm select2">
             <option value="">Pilih Jenis</option>
             @foreach ($point as $item)
-                <option data-children='{!! $item->children->toJson() !!}' value="{{ $item->id }}">{{ $item->nama }}</option>
+                {{-- <option data-children='{!! $item->children->toJson() !!}' value="{{ $item->id }}">{{ $item->nama }}</option> --}}
+                <option data-children='{!! json_encode($item['children']) !!}' value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
             @endforeach
         </select>
     </div>

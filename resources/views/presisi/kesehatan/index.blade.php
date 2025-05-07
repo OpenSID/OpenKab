@@ -39,12 +39,10 @@
             window.location.href = "{{ url('presisi/kesehatan/') }}/" + kuartal + "/" +
                 tahun + "/" + posyandu + "/" + kabupaten + "/" + kecamatan + "/" + desa;
         });
-
-        @include('presisi.kesehatan.filter-wilayah.kabupaten')
-        @include('presisi.kesehatan.filter-wilayah.kecamatan')
-        @include('presisi.kesehatan.filter-wilayah.desa')
         @include('presisi.kesehatan.filter-wilayah.button')
     </script>
-
+    @include('presisi.kesehatan.filter-wilayah.kabupaten', ['defaultKabupaten' => $kabupaten])
+    @include('presisi.kesehatan.filter-wilayah.kecamatan', ['defaultKecamatan' => $kecamatan])
+    @include('presisi.kesehatan.filter-wilayah.desa', ['defaultDesa' => $desa])
     @include('presisi.summary_js')
 @endpush

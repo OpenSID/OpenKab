@@ -5,14 +5,8 @@ namespace Database\Seeders;
 use App\Models\Config;
 use App\Models\Enums\JenisKelaminEnum;
 use App\Models\Enums\SHDKEnum;
-use App\Models\GolonganDarah;
-use App\Models\KelasSosial;
 use App\Models\Keluarga;
-use App\Models\Pekerjaan;
-use App\Models\Pendidikan;
-use App\Models\PendidikanKK;
 use App\Models\Penduduk;
-use App\Models\StatusKawin;
 use App\Models\Wilayah;
 use App\Services\ConfigService;
 use App\Services\GolonganDarahService;
@@ -59,9 +53,8 @@ class KeluargaDemoSeeder extends Seeder
         $configId = config('seeder.wilayah.desa_aktif', 1);
         $name = config('seeder.wilayah.desa_nama_aktif', 'Desa kita');
 
-
         $configData = (new ConfigService)->index([
-            'filter[id]' => $configId
+            'filter[id]' => $configId,
         ]);
 
         if ($configData && isset($configData->kode_kecamatan)) {
@@ -69,7 +62,7 @@ class KeluargaDemoSeeder extends Seeder
         } else {
             // Tangani jika data atau kode_kecamatan tidak ditemukan
             $kodeKecamatan = null;
-            
+
             $this->command->info("ID Config: {$configId} Tidak ditemukan di table config pada API Database Gabungan");
         }
 
@@ -83,7 +76,6 @@ class KeluargaDemoSeeder extends Seeder
 
     private function init($configId)
     {
-
         // $wilayah = (new WilayahApiService)->pluckId([
         //     'filter[config_id]' => $configId
         // ]);
@@ -94,9 +86,9 @@ class KeluargaDemoSeeder extends Seeder
         //     $data_wilayah = [];
         //     dd($configId);
         // }
-        
+
         $this->dataWilayah = (new WilayahApiService)->pluckId([
-            'filter[config_id]' => $configId
+            'filter[config_id]' => $configId,
         ]);
         $this->totalStatusKawin = (new StatusKawinService)->count();
         $this->totalPekerjaan = (new PekerjaanService)->count();

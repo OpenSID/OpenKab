@@ -552,3 +552,19 @@ tr.shown td.details-control {
 .pl-50 {
     padding-left: 50px
 }
+
+
+.m-only{
+    display: none!important;
+}
+.d-only{
+    display: inline-flex!important;
+}
+@media (max-width: 767px){
+    .m-only{
+        display: block!important;
+    }
+    .d-only{
+        display: none!important;
+    }
+}

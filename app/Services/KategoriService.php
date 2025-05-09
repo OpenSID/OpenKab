@@ -52,9 +52,10 @@ class KategoriService extends BaseApiService
     public function store($data)
     {
         $data = $this->apiPost('/api/v1/kategori/store-seeder', $data);
-        if(!$data) {
+        if (! $data) {
             return collect([]);
         }
+
         return $data;
     }
 }

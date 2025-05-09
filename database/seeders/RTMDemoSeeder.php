@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Config;
 use App\Models\Enums\HubunganRTMEnum;
 use App\Models\Enums\SHDKEnum;
-use App\Models\KelasSosial;
 use App\Models\Penduduk;
 use App\Models\Rtm;
 use App\Services\ConfigService;
@@ -30,7 +29,7 @@ class RTMDemoSeeder extends Seeder
         $configId = config('seeder.wilayah.desa_aktif', 1);
         $name = config('seeder.wilayah.desa_nama_aktif', 'Desa kita');
         $this->kodeDesa = (new ConfigService)->index([
-            'filter[id]' => $configId
+            'filter[id]' => $configId,
         ])->kode_desa;
         $this->init();
         $this->buatRumahTangga($configId);
@@ -53,7 +52,7 @@ class RTMDemoSeeder extends Seeder
 
         $penduduk = (new PendudukService)->penduduk([
             'filter[config_id]' => $configId,
-            'filter[kk_level]' => SHDKEnum::KEPALA_KELUARGA
+            'filter[kk_level]' => SHDKEnum::KEPALA_KELUARGA,
         ]);
 
         $noRtm = null;
@@ -74,7 +73,7 @@ class RTMDemoSeeder extends Seeder
                     'id_kk' => $pend->id_kk,
                     'id_rtm' => $noRtm,
                     'rtm_level' => HubunganRTMEnum::ANGGOTA,
-                    'hanya_kepala' => false
+                    'hanya_kepala' => false,
                 ]);
 
                 $noRtm = null;
@@ -120,7 +119,7 @@ class RTMDemoSeeder extends Seeder
             'id_kk' => $idKK,
             'id_rtm' => $noRtm,
             'rtm_level' => HubunganRTMEnum::KEPALA_RUMAH_TANGGA,
-            'hanya_kepala' => true
+            'hanya_kepala' => true,
         ]);
 
         // Update semua anggota keluarga kk_level = 1
@@ -139,7 +138,7 @@ class RTMDemoSeeder extends Seeder
             'id_kk' => $idKK,
             'id_rtm' => $noRtm,
             'rtm_level' => HubunganRTMEnum::ANGGOTA,
-            'hanya_kepala' => false
+            'hanya_kepala' => false,
         ]);
         // Penduduk::where('config_id', $configId)
         //     ->where('config_id', $configId)

@@ -125,7 +125,7 @@ class GenerateDataDemo extends Command
         }
         $this->seedKeluarga();
         $this->seedRumahTangga();
-        $this->seedBantuan();
+        // $this->seedBantuan();
     }
 
     private function seedWilayah()

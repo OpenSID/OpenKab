@@ -6,7 +6,7 @@ use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
-class KategoriService
+class KategoriService extends BaseApiService
 {
     protected $baseUrl;
 
@@ -47,5 +47,14 @@ class KategoriService
 
             throw new \Exception('Gagal mengambil data kategori: '.$response->status());
         });
+    }
+
+    public function store($data)
+    {
+        $data = $this->apiPost('/api/v1/kategori/store-seeder', $data);
+        if(!$data) {
+            return collect([]);
+        }
+        return $data;
     }
 }

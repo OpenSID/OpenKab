@@ -8,6 +8,10 @@ use App\Models\Enums\SHDKEnum;
 use App\Models\KelasSosial;
 use App\Models\Penduduk;
 use App\Models\Rtm;
+use App\Services\ConfigService;
+use App\Services\KelasSosialService;
+use App\Services\PendudukService;
+use App\Services\RtmService;
 use Illuminate\Database\Seeder;
 
 class RTMDemoSeeder extends Seeder
@@ -25,7 +29,9 @@ class RTMDemoSeeder extends Seeder
     {
         $configId = config('seeder.wilayah.desa_aktif', 1);
         $name = config('seeder.wilayah.desa_nama_aktif', 'Desa kita');
-        $this->kodeDesa = Config::find($configId)->kode_desa;
+        $this->kodeDesa = (new ConfigService)->index([
+            'filter[id]' => $configId
+        ])->kode_desa;
         $this->init();
         $this->buatRumahTangga($configId);
         $this->command->info('Isi data RTM untuk desa '.$name);
@@ -33,17 +39,22 @@ class RTMDemoSeeder extends Seeder
 
     private function init()
     {
-        $this->totalKeluargaSejahtera = KelasSosial::count();
+        $this->totalKeluargaSejahtera = (new KelasSosialService)->count();
     }
 
     public function buatRumahTangga($configId)
     {
         // ambil data dari penduduk dengan status kk_level 1 hanya data id, id_kk dan created_at
-        $penduduk = Penduduk::select(['id', 'id_kk', 'created_at'])
-            ->where('config_id', $configId)
-            ->where('kk_level', SHDKEnum::KEPALA_KELUARGA)
-            ->inRandomOrder()
-            ->get();
+        // $penduduk = Penduduk::select(['id', 'id_kk', 'created_at'])
+        //     ->where('config_id', $configId)
+        //     ->where('kk_level', SHDKEnum::KEPALA_KELUARGA)
+        //     ->inRandomOrder()
+        //     ->get();
+
+        $penduduk = (new PendudukService)->penduduk([
+            'filter[config_id]' => $configId,
+            'filter[kk_level]' => SHDKEnum::KEPALA_KELUARGA
+        ]);
 
         $noRtm = null;
 
@@ -51,12 +62,21 @@ class RTMDemoSeeder extends Seeder
             // buat baru atau gabungkan? 1= buat baru, 2= gabungkan, kemungkinan buat baru 60 % sisanya digabungkan
             $gabungkanRtm = fake()->randomElement([1, 2, 1, 1, 2, 1, 2, 1, 1, 2]);
             if ($gabungkanRtm == 2 && $noRtm != null) {
-                Penduduk::where('config_id', $configId)
-                    ->where('id_kk', $pend->id_kk)
-                    ->update([
-                        'id_rtm' => $noRtm,
-                        'rtm_level' => HubunganRTMEnum::ANGGOTA,
-                    ]);
+                // Penduduk::where('config_id', $configId)
+                //     ->where('id_kk', $pend->id_kk)
+                //     ->update([
+                //         'id_rtm' => $noRtm,
+                //         'rtm_level' => HubunganRTMEnum::ANGGOTA,
+                //     ]);
+
+                (new PendudukService)->updatePendudukByKkLevel([
+                    'config_id' => $configId,
+                    'id_kk' => $pend->id_kk,
+                    'id_rtm' => $noRtm,
+                    'rtm_level' => HubunganRTMEnum::ANGGOTA,
+                    'hanya_kepala' => false
+                ]);
+
                 $noRtm = null;
             } else {
                 $rtm = $this->buatAnggotaRtm($configId, $urut + 1, $pend->id, $pend->id_kk, $pend->created_at);
@@ -89,26 +109,46 @@ class RTMDemoSeeder extends Seeder
             'bdt' => $bdt,
         ];
 
-        $rtm = Rtm::create($data);
+        (new RtmService)->store($data);
+
+        // $rtm = Rtm::create($data);
 
         // Update semua anggota keluarga kk_level = 1
-        Penduduk::where('config_id', $configId)
-            ->where('kk_level', SHDKEnum::KEPALA_KELUARGA)
-            ->where('id_kk', $idKK)
-            ->update([
-                'id_rtm' => $noRtm,
-                'rtm_level' => HubunganRTMEnum::KEPALA_RUMAH_TANGGA,
-            ]);
+        (new PendudukService)->updatePendudukByKkLevel([
+            'config_id' => $configId,
+            'kk_level' => SHDKEnum::KEPALA_KELUARGA,
+            'id_kk' => $idKK,
+            'id_rtm' => $noRtm,
+            'rtm_level' => HubunganRTMEnum::KEPALA_RUMAH_TANGGA,
+            'hanya_kepala' => true
+        ]);
+
+        // Update semua anggota keluarga kk_level = 1
+        // Penduduk::where('config_id', $configId)
+        //     ->where('kk_level', SHDKEnum::KEPALA_KELUARGA)
+        //     ->where('id_kk', $idKK)
+        //     ->update([
+        //         'id_rtm' => $noRtm,
+        //         'rtm_level' => HubunganRTMEnum::KEPALA_RUMAH_TANGGA,
+        //     ]);
 
         // Update semua anggota keluarga selain kk_level = 1
-        Penduduk::where('config_id', $configId)
-            ->where('config_id', $configId)
-            ->where('kk_level', '!=', SHDKEnum::KEPALA_KELUARGA)
-            ->where('id_kk', $idKK)
-            ->update([
-                'id_rtm' => $noRtm,
-                'rtm_level' => HubunganRTMEnum::ANGGOTA,
-            ]);
+        (new PendudukService)->updatePendudukByKkLevel([
+            'config_id' => $configId,
+            'kk_level' => SHDKEnum::KEPALA_KELUARGA,
+            'id_kk' => $idKK,
+            'id_rtm' => $noRtm,
+            'rtm_level' => HubunganRTMEnum::ANGGOTA,
+            'hanya_kepala' => false
+        ]);
+        // Penduduk::where('config_id', $configId)
+        //     ->where('config_id', $configId)
+        //     ->where('kk_level', '!=', SHDKEnum::KEPALA_KELUARGA)
+        //     ->where('id_kk', $idKK)
+        //     ->update([
+        //         'id_rtm' => $noRtm,
+        //         'rtm_level' => HubunganRTMEnum::ANGGOTA,
+        //     ]);
 
         return $data;
     }

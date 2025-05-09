@@ -14,6 +14,16 @@ use App\Models\PendidikanKK;
 use App\Models\Penduduk;
 use App\Models\StatusKawin;
 use App\Models\Wilayah;
+use App\Services\ConfigService;
+use App\Services\GolonganDarahService;
+use App\Services\KelasSosialService;
+use App\Services\KeluargaService;
+use App\Services\LogService;
+use App\Services\PekerjaanService;
+use App\Services\PendidikanService;
+use App\Services\PendudukService;
+use App\Services\StatusKawinService;
+use App\Services\WilayahApiService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -48,7 +58,22 @@ class KeluargaDemoSeeder extends Seeder
     {
         $configId = config('seeder.wilayah.desa_aktif', 1);
         $name = config('seeder.wilayah.desa_nama_aktif', 'Desa kita');
-        $this->kodeKecamatan = Config::find($configId)->kode_kec;
+
+
+        $configData = (new ConfigService)->index([
+            'filter[id]' => $configId
+        ]);
+
+        if ($configData && isset($configData->kode_kecamatan)) {
+            $kodeKecamatan = $configData->kode_kecamatan;
+        } else {
+            // Tangani jika data atau kode_kecamatan tidak ditemukan
+            $kodeKecamatan = null;
+            
+            $this->command->info("ID Config: {$configId} Tidak ditemukan di table config pada API Database Gabungan");
+        }
+
+        $this->kodeKecamatan = $kodeKecamatan;
         $this->init($configId);
         $this->buatKeluarga($configId);
         $this->generateLogPenduduk($configId);
@@ -58,13 +83,27 @@ class KeluargaDemoSeeder extends Seeder
 
     private function init($configId)
     {
-        $this->dataWilayah = Wilayah::whereConfigId($configId)->pluck('id');
-        $this->totalStatusKawin = StatusKawin::count();
-        $this->totalPekerjaan = Pekerjaan::count();
-        $this->totalPendidikanKK = PendidikanKK::count();
-        $this->totalPendidikan = Pendidikan::count();
-        $this->totalGolonganDarah = GolonganDarah::count();
-        $this->totalKeluargaSejahtera = KelasSosial::count();
+
+        // $wilayah = (new WilayahApiService)->pluckId([
+        //     'filter[config_id]' => $configId
+        // ]);
+
+        // if (count($wilayah) > 0) {
+        //     $data_wilayah = $wilayah;
+        // } else {
+        //     $data_wilayah = [];
+        //     dd($configId);
+        // }
+        
+        $this->dataWilayah = (new WilayahApiService)->pluckId([
+            'filter[config_id]' => $configId
+        ]);
+        $this->totalStatusKawin = (new StatusKawinService)->count();
+        $this->totalPekerjaan = (new PekerjaanService)->count();
+        $this->totalPendidikanKK = (new PendidikanService)->countPendidikanKK();
+        $this->totalPendidikan = (new PendidikanService)->countPendidikan();
+        $this->totalGolonganDarah = (new GolonganDarahService)->count();
+        $this->totalKeluargaSejahtera = (new KelasSosialService)->count();
     }
 
     private function buatKeluarga($configId)
@@ -95,7 +134,7 @@ class KeluargaDemoSeeder extends Seeder
         $tglKK = substr($tglRekam, 8, 2).substr($tglRekam, 5, 2).substr($tglRekam, 2, 2);
         $noKk = $this->kodeKecamatan.$tglKK.$urut;
 
-        Keluarga::create([
+        $data = [
             'config_id' => $configId,
             'no_kk' => $noKk,
             'nik_kepala' => $kepalaKeluarga->id,
@@ -104,7 +143,10 @@ class KeluargaDemoSeeder extends Seeder
             'alamat' => $kepalaKeluarga->alamat_sekarang,
             'id_cluster' => $idCluster,
             'updated_by' => 1,
-        ]);
+        ];
+
+        (new KeluargaService)->store($data);
+
         // buat anggota keluarga
         $minAnggotaKeluarga = config('seeder.keluarga.anggota_min', 1);
         $maxAnggotaKeluarga = config('seeder.keluarga.anggota_max', 2);
@@ -180,7 +222,7 @@ class KeluargaDemoSeeder extends Seeder
             'config_id' => $configId,
             'nik' => $nik,
             'nama' => fake()->name($nameForSex),
-            'id_kk' => 0,
+            // 'id_kk' => 0,
             'kk_level' => $kkLevel,
             'id_rtm' => 0,
             'rtm_level' => 0,
@@ -205,7 +247,7 @@ class KeluargaDemoSeeder extends Seeder
             'created_by' => 1,
             'updated_by' => 1,
         ];
-        $penduduk = Penduduk::create($data);
+        $penduduk = (new PendudukService)->store($data);
         $this->totalPenduduk++;
 
         return $penduduk;
@@ -216,7 +258,9 @@ class KeluargaDemoSeeder extends Seeder
         $sql = "insert into log_penduduk (config_id, id_pend, kode_peristiwa, tgl_lapor, updated_by)
                 select {$configId} as config_id, id as id_pend, 5 as kode_peristiwa, DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 5 YEAR), INTERVAL FLOOR(RAND() * DATEDIFF(DATE_SUB(CURDATE(), INTERVAL 5 YEAR), CURDATE())) DAY) AS tgl_lapor, 1 as updated_by
                 from tweb_penduduk where config_id = '{$configId}'";
-        DB::connection('openkab')->statement($sql);
+        // DB::connection('openkab')->statement($sql);
+
+        (new LogService)->generateLogPenduduk($sql);
     }
 
     private function generateLogKeluarga($configId)
@@ -224,6 +268,8 @@ class KeluargaDemoSeeder extends Seeder
         $sql = "insert into log_keluarga (config_id, id_kk, id_peristiwa, tgl_peristiwa, updated_by)
                 select {$configId} as config_id, id as id_kk, 1 as id_peristiwa, tgl_daftar as tgl_peristiwa, 1 as updated_by
                 from tweb_keluarga where config_id = '{$configId}'";
-        DB::connection('openkab')->statement($sql);
+        // DB::connection('openkab')->statement($sql);
+
+        (new LogService)->generateLogKeluarga($sql);
     }
 }

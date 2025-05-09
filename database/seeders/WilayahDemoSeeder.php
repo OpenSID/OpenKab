@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Wilayah;
+use App\Services\WilayahApiService;
 use Illuminate\Database\Seeder;
 
 class WilayahDemoSeeder extends Seeder
@@ -45,7 +46,8 @@ class WilayahDemoSeeder extends Seeder
 
         $wilayah = collect($dusun)->flatten(1)->toArray();
 
-        Wilayah::insert($wilayah);
+        // Wilayah::insert($wilayah);
+        (new WilayahApiService)->storeDusun($wilayah);
     }
 
     // Wilayah Dusun

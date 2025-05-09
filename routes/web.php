@@ -44,6 +44,13 @@ Auth::routes([
     'verify' => true,
 ]);
 
+Route::get('/testing', function(){
+
+    dd((new \App\Services\WilayahApiService)->pluckId([
+        'filter[config_id]' => 2
+    ]));
+});
+
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {

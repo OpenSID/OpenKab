@@ -11,7 +11,6 @@ use App\Models\UserTeam;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
@@ -127,13 +126,12 @@ class UserController extends Controller
                 $this->pathFolder .= '/profile';
                 $insertData['foto'] = $this->uploadFile($request, 'foto');
             }
-            
+
             if ($request->filled('kode_kabupaten')) {
                 Session::put('kabupaten.kode_kabupaten', $data['kode_kabupaten']);
             }
 
             $user = User::create($insertData);
-
 
             // joinkan user ke group
             UserTeam::create([

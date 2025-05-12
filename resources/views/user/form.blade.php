@@ -21,7 +21,7 @@
 <div class="col">
     <div class="mb-4">
         <label for="group">Group<span class="text-danger">*</span></label>
-        <select class="form-control @error('group') is-invalid @enderror" name="group" required>
+        <select id="group" class="form-control select2 @error('group') is-invalid @enderror" name="group" required>
             @foreach ($groups as $group)
                 <option value="{{ $group->id }}" @selected($group->id == old('group', $user->group ?? $team)  )>{{ $group->name }}</option>
             @endforeach
@@ -70,6 +70,21 @@
         <label for="phone">Nomor HP</label>
         <input type="number" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone', $user->phone ?? '') }}">
         @error('phone')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
+
+<div class="col">
+    <div class="mb-4">
+        <label for="kode_kabupaten">Kabupaten<span class="text-danger">*</span></label>
+        <select id="kode_kecamatan" class="form-control select2 @error('kode_kabupaten') is-invalid @enderror" name="kode_kabupaten">
+            <option value="">Pilih Kabupaten</option>
+            @foreach ($kabupatens as $kabupaten)
+                <option value="{{ $kabupaten->kode_kabupaten }}" @selected(old('kode_kabupaten', optional($user)->kode_kabupaten) == $kabupaten->kode_kabupaten)>{{ $kabupaten->nama_kabupaten }}</option>
+            @endforeach
+        </select>
+        @error('kode_kabupaten')
             <div class="text-danger">{{ $message }}</div>
         @enderror
     </div>

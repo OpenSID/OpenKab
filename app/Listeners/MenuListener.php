@@ -3,10 +3,18 @@
 namespace App\Listeners;
 
 use App\Models\Config;
+use App\Models\Setting;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 class MenuListener
 {
+
+    public $settings;
+    
+    public function __construct()
+    {
+        $this->settings = Setting::pluck('value', 'key');
+    }
     /**
      * Handle the event.
      *
@@ -29,6 +37,9 @@ class MenuListener
         Config::query()
             ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
             ->groupBy('kode_kabupaten')
+            ->when($this->isDatabaseGabungan(), function($query){
+                $query->where('kode_kabupaten', session('kabupaten.kode_kabupaten'));
+            })
             ->get()
             ->each(function ($item) use ($event) {
                 $event->menu->addIn('kabupaten', [
@@ -119,5 +130,10 @@ class MenuListener
                 $event->menu->add($menu);
             }
         }
+    }
+
+    protected function isDatabaseGabungan()
+    {
+        return ($this->settings['sinkronisasi_database_gabungan'] ?? null) === '1';
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\Config;
 use App\Models\Enums\StatusEnum;
 use App\Models\Team;
 use App\Models\User;
@@ -10,7 +11,9 @@ use App\Models\UserTeam;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -38,6 +41,13 @@ class UserController extends Controller
 
             return DataTables::of(User::with('team')->get())
                 ->addIndexColumn()
+                ->addColumn('nama_kabupaten', function ($row) {
+                    $kabupaten = Config::where('kode_kabupaten', $row->kode_kabupaten)
+                                ->select('nama_kabupaten')
+                                ->first();
+
+                    return $kabupaten?->nama_kabupaten ?? '-';
+                })
                 ->addColumn('aksi', function ($row) use ($permission) {
                     $data = [];
                     if (! auth()->guest()) {
@@ -83,7 +93,12 @@ class UserController extends Controller
         $groups = Team::get();
         $team = false;
 
-        return view('user.create', compact('user', 'groups', 'team'));
+        $kabupatens = Config::query()
+            ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
+            ->groupBy('kode_kabupaten')
+            ->get();
+
+        return view('user.create', compact('user', 'groups', 'team', 'kabupatens'));
     }
 
     /**
@@ -105,13 +120,20 @@ class UserController extends Controller
                 'phone' => $data['phone'],
                 'password' => $data['password'],
                 'active' => 1,
+                'kode_kabupaten' => $data['kode_kabupaten'],
             ];
 
             if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $insertData['foto'] = $this->uploadFile($request, 'foto');
             }
+            
+            if ($request->filled('kode_kabupaten')) {
+                Session::put('kabupaten.kode_kabupaten', $data['kode_kabupaten']);
+            }
+
             $user = User::create($insertData);
+
 
             // joinkan user ke group
             UserTeam::create([
@@ -158,7 +180,12 @@ class UserController extends Controller
         $groups = Team::get();
         $team = $user->team->first()->id ?? false;
 
-        return view('user.edit', compact('user', 'groups', 'team'));
+        $kabupatens = Config::query()
+            ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
+            ->groupBy('kode_kabupaten')
+            ->get();
+
+        return view('user.edit', compact('user', 'groups', 'team', 'kabupatens'));
     }
 
     /**
@@ -192,11 +219,17 @@ class UserController extends Controller
                 'email' => $request->get('email'),
                 'company' => $request->get('company'),
                 'phone' => $request->get('phone'),
+                'kode_kabupaten' => $request->get('kode_kabupaten'),
             ];
             if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $updateData['foto'] = $this->uploadFile($request, 'foto');
             }
+
+            if ($request->filled('kode_kabupaten')) {
+                Session::put('kabupaten.kode_kabupaten', $request->get('kode_kabupaten'));
+            }
+
             $user->update($updateData);
 
             $routeCurrent = Route::currentRouteName();

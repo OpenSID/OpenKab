@@ -11,7 +11,7 @@
 
     <div class="btn-group bg-c2 d-md-none d-lg-block">
         <button type="button" class="btn bg-white cbg-white mr-1 rounded-0">
-            <div class="info-box-content text-center kategori-item m-3 text-primary rounded-circle c-badge">
+            <div class="info-box-content text-center kategori-item text-primary rounded-circle c-badge">
                 <h4><i class="fa-solid fa-chart-column"></i></h4>
             </div>
         </button>

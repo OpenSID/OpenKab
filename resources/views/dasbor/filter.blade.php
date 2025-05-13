@@ -1,4 +1,4 @@
-@include('presisi.wilayah.filter')
+@include('components.wilayah_filter')
 @push('js')
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {

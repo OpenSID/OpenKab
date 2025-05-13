@@ -1,5 +1,5 @@
 <div id="tabel_penduduk_block" class="col-12">
-    @include('presisi.wilayah.data-desa')
+    @include('dasbor.data-desa')
 </div>
 
 

@@ -1,5 +1,28 @@
 <div class="row" id="summary_block">
-    @include('presisi.summary')
+    <div class="row container m-only">
+        @php
+            $colors = ['primary', 'warning', 'success', 'info']; // Array warna
+        @endphp
+
+        @foreach ($categoriesItems as $item)
+            @include('dasbor.category_item', $item)
+        @endforeach
+    </div>
+
+    <div class="btn-group bg-c2 d-only">
+        <button type="button" class="btn bg-white cbg-white mr-1 rounded-0">
+            <div class="info-box-content text-center kategori-item m-3 text-primary rounded-circle c-badge">
+                <h4><i class="fa-solid fa-chart-column"></i></h4>
+            </div>
+        </button>
+        @php
+            $colors = ['primary', 'warning', 'success', 'info']; // Array warna
+        @endphp
+
+        @foreach ($categoriesItems as $item)
+            @include('dasbor.category_item', $item)
+        @endforeach
+    </div>
 </div>
 @push('js')
     <script nonce="{{ csp_nonce() }}">

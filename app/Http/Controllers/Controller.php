@@ -93,6 +93,6 @@ class Controller extends BaseController
 
     protected function isOpenKabSiapPakai()
     {        
-        return ($this->settings['OpenKab_SiapPakai'] ?? null) === '1';
+        return filter_var($this->settings['OpenKab_SiapPakai'] ?? false, FILTER_VALIDATE_BOOLEAN);
     }
 }

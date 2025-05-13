@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Models\Config;
 use App\Models\Enums\StatusEnum;
+use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
+use App\Services\ConfigApiService;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -92,10 +94,7 @@ class UserController extends Controller
         $groups = Team::get();
         $team = false;
 
-        $kabupatens = Config::query()
-            ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
-            ->groupBy('kode_kabupaten')
-            ->get();
+        $kabupatens = (new ConfigApiService)->kabupaten();
 
         $openkab_siapakai = $this->isOpenKabSiapPakai();
 
@@ -180,10 +179,8 @@ class UserController extends Controller
         $groups = Team::get();
         $team = $user->team->first()->id ?? false;
 
-        $kabupatens = Config::query()
-            ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
-            ->groupBy('kode_kabupaten')
-            ->get();
+        $kabupatens = (new ConfigApiService)->kabupaten();
+        
         $openkab_siapakai = $this->isOpenKabSiapPakai();
 
         return view('user.edit', compact('user', 'groups', 'team', 'kabupatens', 'openkab_siapakai'));

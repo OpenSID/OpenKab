@@ -75,6 +75,7 @@
     </div>
 </div>
 
+@if($openkab_siapakai)
 <div class="col">
     <div class="mb-4">
         <label for="kode_kabupaten">Kabupaten<span class="text-danger">*</span></label>
@@ -89,3 +90,4 @@
         @enderror
     </div>
 </div>
+@endif

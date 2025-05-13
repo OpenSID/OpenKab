@@ -21,8 +21,8 @@ return new class extends Migration
         ];
 
         Setting::create([            
-            'key' => 'sinkronisasi_database_gabungan',
-            'name' => 'Sinkronisasi Database Gabungan',
+            'key' => 'OpenKab_SiapPakai',
+            'name' => 'OpenKab SiapPakai',
             'value' => Status::TidakAktif,
             'type' => 'dropdown',
             'attribute' => $attribute,
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Setting::whereIn('key', ['sinkronisasi_database_gabungan'])->delete();
+        Setting::whereIn('key', ['OpenKab_SiapPakai'])->delete();
     }
 };

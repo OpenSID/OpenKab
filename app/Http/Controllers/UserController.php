@@ -98,7 +98,9 @@ class UserController extends Controller
             ->groupBy('kode_kabupaten')
             ->get();
 
-        return view('user.create', compact('user', 'groups', 'team', 'kabupatens'));
+        $openkab_siapakai = $this->isOpenKabSiapPakai();
+
+        return view('user.create', compact('user', 'groups', 'team', 'kabupatens', 'openkab_siapakai'));
     }
 
     /**
@@ -184,8 +186,9 @@ class UserController extends Controller
             ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
             ->groupBy('kode_kabupaten')
             ->get();
+        $openkab_siapakai = $this->isOpenKabSiapPakai();
 
-        return view('user.edit', compact('user', 'groups', 'team', 'kabupatens'));
+        return view('user.edit', compact('user', 'groups', 'team', 'kabupatens', 'openkab_siapakai'));
     }
 
     /**

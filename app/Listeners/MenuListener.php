@@ -37,7 +37,7 @@ class MenuListener
         Config::query()
             ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
             ->groupBy('kode_kabupaten')
-            ->when($this->isDatabaseGabungan(), function($query){
+            ->when($this->isOpenKabSiapPakai(), function($query){
                 $query->where('kode_kabupaten', session('kabupaten.kode_kabupaten'));
             })
             ->get()
@@ -132,8 +132,8 @@ class MenuListener
         }
     }
 
-    protected function isDatabaseGabungan()
+    protected function isOpenKabSiapPakai()
     {
-        return ($this->settings['sinkronisasi_database_gabungan'] ?? null) === '1';
+        return ($this->settings['OpenKab_SiapPakai'] ?? null) === '1';
     }
 }

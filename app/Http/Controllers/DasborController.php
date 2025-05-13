@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Identitas;
-use App\Models\Penduduk;
 
 class DasborController extends Controller
 {

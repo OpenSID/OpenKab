@@ -3,8 +3,6 @@
 use App\Enums\Status;
 use App\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -17,19 +15,19 @@ return new class extends Migration
     {
         $setting = Setting::where('key', 'sinkronisasi_database_gabungan')->first();
 
-        if($setting){
+        if ($setting) {
             $setting->update([
                 'key' => 'OpenKab_SiapPakai',
                 'name' => 'OpenKab SiapPakai',
                 'description' => 'Aktifkan Sinkronisasi ke OpenKab SiapPakai.',
             ]);
-        }else{
+        } else {
             $attribute = [
                 ['text' => Status::getDescription(Status::TidakAktif), 'value' => Status::TidakAktif],
                 ['text' => Status::getDescription(Status::Aktif), 'value' => Status::Aktif],
             ];
-    
-            Setting::create([            
+
+            Setting::create([
                 'key' => 'OpenKab_SiapPakai',
                 'name' => 'OpenKab SiapPakai',
                 'value' => Status::TidakAktif,

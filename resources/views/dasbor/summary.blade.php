@@ -1,5 +1,5 @@
 <div class="row" id="summary_block">
-    <div class="row container m-only">
+    <div class="row container d-md-block d-lg-none">
         @php
             $colors = ['primary', 'warning', 'success', 'info']; // Array warna
         @endphp
@@ -9,7 +9,7 @@
         @endforeach
     </div>
 
-    <div class="btn-group bg-c2 d-only">
+    <div class="btn-group bg-c2 d-md-none d-lg-block">
         <button type="button" class="btn bg-white cbg-white mr-1 rounded-0">
             <div class="info-box-content text-center kategori-item m-3 text-primary rounded-circle c-badge">
                 <h4><i class="fa-solid fa-chart-column"></i></h4>

@@ -12,8 +12,8 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             var markerIcon = new L.Icon({
-                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconUrl: '{{ asset('assets/img/map/marker-icon-2x-red.png') }}',
+                shadowUrl: '{{ asset('assets/img/map/marker-shadow.png') }}',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],

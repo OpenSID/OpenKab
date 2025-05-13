@@ -37,7 +37,7 @@ class MenuListener
         Config::query()
             ->selectRaw('max(nama_kabupaten) as nama_kabupaten, max(kode_kabupaten) as kode_kabupaten')
             ->groupBy('kode_kabupaten')
-            ->when($this->isOpenKabSiapPakai(), function($query){
+            ->when($this->isOpenKabSiapPakai(), function ($query) {
                 $query->where('kode_kabupaten', session('kabupaten.kode_kabupaten'));
             })
             ->get()

@@ -92,7 +92,7 @@ class Controller extends BaseController
     }
 
     protected function isOpenKabSiapPakai()
-    {        
+    {
         return ($this->settings['OpenKab_SiapPakai'] ?? null) === '1';
     }
 }

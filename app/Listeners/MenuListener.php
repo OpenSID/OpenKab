@@ -8,13 +8,13 @@ use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 class MenuListener
 {
-
     public $settings;
-    
+
     public function __construct()
     {
         $this->settings = Setting::pluck('value', 'key');
     }
+
     /**
      * Handle the event.
      *

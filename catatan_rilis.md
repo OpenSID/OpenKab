@@ -2,6 +2,7 @@ Di rilis ini, versi 2505.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Penambahan Fitur
 
+1. [#648](https://github.com/OpenSID/OpenKab/issues/648) Penyesuaian pengguna OpenKab untuk pengguna SiapPakai.
 
 #### Perbaikan BUG
 

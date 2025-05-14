@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="{{ asset('assets/progressive-image/progressive-image.css') }}">
 @endpush
 
-@section('title', 'Data Penduduk')
+@section('title', 'Data Keluarga')
 
 @section('content_header')
-    <h1>Data Penduduk</h1>
+    <h1>Data Keluarga</h1>
 @stop
 
 @section('content')
@@ -38,18 +38,12 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <div class="form-group">
-                                            <label>Status Penduduk</label>
-                                            <select class="select2 form-control-sm width-100" id="status" name="status"
+                                            <label>Status KK</label>
+                                            <select class="select2 form-control-sm width-100" id="status_kk" name="status"
                                                 data-placeholder="Semua Status">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Status Dasar</label>
-                                            <select class="select2 form-control-sm width-100" id="status-dasar"
-                                                name="status-dasar" data-placeholder="Semua Status Dasar">
-                                                <option value="1" selected>Hidup</option>
+                                                @foreach (App\Models\Enums\StatusDasarKKEnum::all() as $key => $value)
+                                                    <option value="{{ $key }}">{{ $value }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -152,28 +146,21 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped" id="penduduk">
+                        <table class="table table-striped" id="keluarga">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Aksi</th>
                                     <th>Foto</th>
+                                    <th>No. KK</th>
+                                    <th>Kepala Keluarga</th>
                                     <th>NIK</th>
                                     <th>Tag ID Card</th>
-                                    <th>Nama</th>
-                                    <th>No. KK</th>
-                                    <th>Nama Ayah</th>
-                                    <th>Nama Ibu</th>
-                                    <th>No. Rumah Tangga</th>
+                                    <th>Jumlah Anggota</th>
+                                    <th>Jenis Kelamin</th>
                                     <th>Alamat</th>
                                     <th>Dusun</th>
                                     <th>RW</th>
                                     <th>RT</th>
-                                    <th>Pendidikan dalam KK</th>
-                                    <th>Umur</th>
-                                    <th>Pekerjaan</th>
-                                    <th>Kawin</th>
-                                    <th>Tgl Peristiwa</th>
                                     <th>Tgl Terdaftar</th>
                                 </tr>
                             </thead>
@@ -194,13 +181,13 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
-            var penduduk = $('#penduduk').DataTable({
+            var keluarga = $('#keluarga').DataTable({
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 ordering: true,
                 ajax: {
-                    url: `{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk' }}`,
+                    url: `{{ config('app.databaseGabunganUrl') . '/api/v1/keluarga' }}`,
                     headers: header,
                     method: 'get',
                     data: function(row) {
@@ -208,11 +195,7 @@
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[sex]": $('#sex').val(),
-                            "filter[status]": $('#status').val(),
-                            "filter[status_dasar]": $('#status-dasar').val(),
-                            "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
-                            "filter[clusterDesa.rw]": $('#rw').val(),
-                            "filter[clusterDesa.rt]": $('#rt').val(),
+                            "filter[status]": $('#status_kk').val(),
                             "filter[kode_kabupaten]": $('#filter_kabupaten').val(),
                             "filter[kode_kecamatan]": $('#filter_kecamatan').val(),
                             "filter[kode_desa]": $('#filter_desa').val(),
@@ -236,7 +219,7 @@
                         className: 'text-nowrap',
                     },
                     {
-                        targets: [0, 1, 2, 3, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+                        targets: [0, 1, 2, 3, 6, 6, 7, 8, 9, 10, 11, 12],
                         orderable: false,
                         searchable: false,
                     },
@@ -245,24 +228,6 @@
                         data: null,
                         searchable: false,
                         orderable: false
-                    },
-                    {
-                        searchable: false,
-                        name: "aksi",
-                        orderable: false,
-                        visible: `{{ $canedit }}`,
-                        data: function(data) {
-                            var pindah = (data.attributes.status_dasar == 1) ? '' : 'disabled';
-                            let pindahMenu = `<li>
-                                    <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
-                                </li>`;
-                            return `<div class="btn-group open">
-                            <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
-                            <ul class="dropdown-menu" role="menu">
-                                ${pindahMenu}
-                            </ul>
-                        </div>`;
-                        }
                     },
                     {
                         data: function(data) {
@@ -275,7 +240,23 @@
                     },
                     {
                         data: function(data) {
-                            return `<a title="Lihat Detail Biodata Penduduk" href="penduduk/${data.id}">${data.attributes.nik}</a>`
+                            if (data.attributes.no_kk) {
+                                return `<a title="Lihat Detail Biodata Keluarga" href="keluarga/detail/${data.attributes.no_kk}">${data.attributes.no_kk}</a>`
+                            } else {
+                                return null
+                            }
+                        },
+                        name: "no_kk",
+                        searchable: true,
+                    },
+                    {
+                        data: "attributes.nama_kk",
+                        name: "nama",
+                        searchable: false,
+                    },
+                    {
+                        data: function(data) {
+                            return `<a title="Lihat Detail Biodata Penduduk" href="penduduk/${data.attributes.id_kepala}">${data.attributes.nik_kepala}</a>`
                         },
                         name: "nik"
                     },
@@ -284,86 +265,49 @@
                         name: "tag_id_card",
                     },
                     {
-                        data: "attributes.nama",
-                        name: "nama"
+                        data: "attributes.jumlah_anggota",
+                        sortable: false,
+                        searchable: false,
                     },
                     {
-                        data: function(data) {
-                            if (data.attributes.keluarga?.no_kk) {
-                                return `<a title="Lihat Detail Biodata Keluarga" href="keluarga/detail/${data.attributes.keluarga.no_kk}">${data.attributes.keluarga.no_kk}</a>`
-                            } else {
-                                return null
-                            }
-                        },
-                        name: "keluarga.no_kk",
-                        searchable: true,
+                        data: "attributes.sex",
+                        sortable: false,
+                        searchable: false,
                     },
                     {
-                        data: "attributes.nama_ayah"
+                        data: "attributes.alamat",
+                        sortable: false,
+                        searchable: false,
                     },
                     {
-                        data: "attributes.nama_ibu"
+                        data: "attributes.dusun",
+                        sortable: false,
+                        searchable: false,
                     },
                     {
-                        data: function(data) {
-                            return data.attributes.rtm?.no_kk ?? null
-                        },
+                        data: "attributes.jumlah_anggota",
+                        sortable: false,
+                        searchable: false,
                     },
                     {
-                        data: function(data) {
-                            return data.attributes.keluarga?.alamat ?? null
-                        },
+                        data: "attributes.rw",
+                        sortable: false,
+                        searchable: false,
                     },
                     {
-                        data: function(data) {
-                            return data.attributes.cluster_desa?.dusun ?? null
-                        },
-                    },
-                    {
-                        data: function(data) {
-                            return data.attributes.cluster_desa?.rw ?? null
-                        },
-                    },
-                    {
-                        data: function(data) {
-                            return data.attributes.cluster_desa?.rt ?? null
-                        },
-                    },
-                    {
-                        data: function(data) {
-                            return data.attributes.pendidikan_k_k?.nama ?? null
-                        },
-                    },
-                    {
-                        data: "attributes.umur"
-                    },
-                    {
-                        data: function(data) {
-                            return data.attributes.pekerjaan?.nama ?? null
-                        },
-                    },
-                    {
-                        data: function(data) {
-                            return data.attributes.status_kawin?.nama ?? null
-                        },
-                    },
-                    {
-                        data: function(data) {
-                            return data.attributes.log_penduduk?.tgl_peristiwa ?? null
-                        },
-                    },
-                    {
-                        data: "attributes.created_at"
+                        data: "attributes.tgl_terdaftar",
+                        name: "tgl_terdaftar",
+                        searchable: false,
                     }
                 ],
                 order: [
-                    [5, 'asc']
+                    [2, 'asc']
                 ]
             })
 
-            penduduk.on('draw.dt', function() {
-                var PageInfo = $('#penduduk').DataTable().page.info();
-                penduduk.column(0, {
+            keluarga.on('draw.dt', function() {
+                var PageInfo = $('#keluarga').DataTable().page.info();
+                keluarga.column(0, {
                     page: 'current'
                 }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1 + PageInfo.start;
@@ -371,7 +315,7 @@
             });
 
             $('#filter').on('click', function(e) {
-                penduduk.draw();
+                keluarga.draw();
             });
 
             $(document).on('click', '#reset', function(e) {
@@ -383,17 +327,22 @@
                 $('#filter_kecamatan').val('').change();
                 $('#filter_desa').val('').change();
 
-                penduduk.ajax.reload();
+                keluarga.ajax.reload();
             });
 
             $('#cetak').on('click', function() {
-                window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
+                window.open(`{{ url('keluarga/cetak') }}?${$.param(keluarga.ajax.params())}`, '_blank');
             });
 
             @if ($filters['kode_kabupaten'] ?? false)
                 $('a[href="#collapse-filter"]').click();
             @endif
 
+            $('#status_kk').select2({
+                theme: 'bootstrap4',
+                allowClear: true,
+                placeholder: "Semua Status",
+            });
         });
     </script>
 @endsection

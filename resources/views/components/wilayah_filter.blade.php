@@ -37,41 +37,8 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
-            <div class="card-body p-0">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="collapse-filter" class="collapse ">
-                            <div class="row m-0">
-                                <div class=" col-6">
-                                    <div class="form-group">
-                                        <label>Kecamatan</label>
-                                        <select class="form-control " name="search_kecamatan"> </select>
-                                    </div>
-
-                                </div>
-
-                                <div class=" col-6">
-                                    <div class="form-group">
-                                        <label>Desa</label>
-                                        <select class="form-control " name="search_desa"> </select>
-                                    </div>
-
-                                </div>
-
-
-
-                            </div>
-
-                            <hr class="mt-0">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
+@include('components.wilayah_filter_js')

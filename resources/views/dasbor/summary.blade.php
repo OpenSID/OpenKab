@@ -31,7 +31,7 @@
                 let kabupaten = $('#filter_kabupaten').val();
                 let kecamatan = $('#filter_kecamatan').val();
                 let desa = $('#filter_desa').val();
-                let url = "{{ url('api/v1/data-website') }}";
+                let url = "{{ config('app.databaseGabunganUrl') . '/api/v1/data-website' }}";
                 if (kabupaten || kecamatan || desa) {
                     url +=
                         `?filter[kode_kabupaten]=${kabupaten || ''}&filter[kode_kecamatan]=${kecamatan || ''}&filter[kode_desa]=${desa || ''}`;
@@ -43,31 +43,34 @@
 
                     for (let index in category) {
                         $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value']);
+                        $(`.kategori-item .jumlah-${index}-elm`).closest('.btn-detail').data(
+                            'filter', {
+                                'kode_kabupaten': kabupaten,
+                                'kode_kecamatan': kecamatan,
+                                'kode_desa': desa,
+                                'nama_kabupaten': $('#filter_kabupaten').find(':selected')
+                                    .text(),
+                                'nama_kecamatan': $('#filter_kecamatan').find(':selected')
+                                    .text(),
+                                'nama_desa': $('#filter_desa').find(':selected').text(),
+                            });
                     }
-
-                    let _optionKecamatan = [];
-                    let _optionDesa = [];
-                    for (let item in listKecamatan) {
-                        _optionKecamatan.push(`<option>${item}</option>`);
-                    }
-
-                    for (let item in listDesa) {
-                        _optionDesa.push(`<optgroup label='${item}'>`);
-                        for (let desa in listDesa[item]) {
-                            _optionDesa.push(
-                                `<option value='${desa}'>${listDesa[item][desa]}</option>`);
-                        }
-                        _optionDesa.push(`</optgroup>`);
-                    }
-
-                    $('select[name=search_kecamatan]').empty().append(_optionKecamatan.join(''))
-                        .trigger(
-                            "change");
-                    $('select[name=search_desa]').empty().append(_optionDesa.join('')).trigger(
-                        "change");
                 }, 'json');
             })
             $('#summary_block').trigger('change');
+
+            $('#summary_block .btn-detail').click(function(event) {
+                event.preventDefault();
+                let url = $(this).data('url');
+                let _url = new URL(url);
+                _url.searchParams.set('filter[kode_kabupaten]', $(this).data('filter')['kode_kabupaten']);
+                _url.searchParams.set('filter[kode_kecamatan]', $(this).data('filter')['kode_kecamatan']);
+                _url.searchParams.set('filter[kode_desa]', $(this).data('filter')['kode_desa']);
+                _url.searchParams.set('filter[nama_kabupaten]', $(this).data('filter')['nama_kabupaten']);
+                _url.searchParams.set('filter[nama_kecamatan]', $(this).data('filter')['nama_kecamatan']);
+                _url.searchParams.set('filter[nama_desa]', $(this).data('filter')['nama_desa']);
+                window.location.href = _url.href;
+            })
         })
     </script>
 @endpush

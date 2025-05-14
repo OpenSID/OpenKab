@@ -1,5 +1,4 @@
 @extends('layouts.index')
-@include('layouts.components.select2_tahun', ['url' => url('api/v1/artikel/tahun')])
 
 @section('plugins.chart', true)
 

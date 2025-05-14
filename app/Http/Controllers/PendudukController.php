@@ -17,6 +17,7 @@ class PendudukController extends Controller
             'kode_desa' => null,
             'kode_kecamatan' => null,
         ]);
+
         return view('penduduk.index', compact('filters'))->with($listPermission);
     }
 

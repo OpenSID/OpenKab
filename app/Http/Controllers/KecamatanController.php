@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class KecamatanController extends Controller
 {
-
     public function index()
     {
         $filters = request('filter', [
@@ -14,6 +13,7 @@ class KecamatanController extends Controller
             'kode_desa' => null,
             'kode_kecamatan' => null,
         ]);
+
         return view('kecamatan.index', compact('filters'));
     }
 

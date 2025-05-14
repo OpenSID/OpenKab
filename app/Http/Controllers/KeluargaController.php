@@ -13,8 +13,10 @@ class KeluargaController extends Controller
             'kode_desa' => null,
             'kode_kecamatan' => null,
         ]);
+
         return view('keluarga.index', compact('filters'));
     }
+
     /**
      * Display the specified resource.
      *

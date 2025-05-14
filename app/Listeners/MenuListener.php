@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Models\Setting;
 use App\Services\ConfigApiService;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
@@ -34,16 +33,16 @@ class MenuListener
         ]);
 
         // list menu daftar kabupaten
-        
-        if(! auth()->user()->hasRole('administrator')){
+
+        if (! auth()->user()->hasRole('administrator')) {
             $kabupatens = $this->configApiService->kabupaten([
-                'filter[kode_kabupaten]' => session('kabupaten.kode_kabupaten')
+                'filter[kode_kabupaten]' => session('kabupaten.kode_kabupaten'),
             ]);
-        }else{
+        } else {
             $kabupatens = $this->configApiService->kabupaten();
         }
 
-        foreach($kabupatens as $item){
+        foreach ($kabupatens as $item) {
             $event->menu->addIn('kabupaten', [
                 'classes' => '<style>height: 400px; overflow-y: scroll</style>',
                 'text' => $item->nama_kabupaten,
@@ -85,15 +84,15 @@ class MenuListener
                 ],
             ]);
 
-            if(session()->has('kabupaten')){
+            if (session()->has('kabupaten')) {
                 $kecamatans = $this->configApiService->kecamatan([
-                    'filter[kode_kabupaten]' => session('kabupaten.kode_kabupaten')
+                    'filter[kode_kabupaten]' => session('kabupaten.kode_kabupaten'),
                 ]);
-            }else{
+            } else {
                 $kecamatans = $this->configApiService->kecamatan();
             }
 
-            foreach($kecamatans as $item){
+            foreach ($kecamatans as $item) {
                 $event->menu->addIn('kecamatan', [
                     'classes' => '<style>height: 400px; overflow-y: scroll</style>',
                     'text' => $item->nama_kecamatan,
@@ -138,15 +137,15 @@ class MenuListener
             ]);
 
             // list menu daftar desa
-            if(session()->has('kecamatan')){
+            if (session()->has('kecamatan')) {
                 $desas = $this->configApiService->desa([
-                    'filter[kode_kecamatan]' => session('kecamatan.kode_kecamatan')
+                    'filter[kode_kecamatan]' => session('kecamatan.kode_kecamatan'),
                 ]);
-            }else{
+            } else {
                 $desas = $this->configApiService->desa();
             }
 
-            foreach($desas as $item){
+            foreach ($desas as $item) {
                 $event->menu->addIn('desa', [
                     'classes' => '<style>height: 400px; overflow-y: scroll</style>',
                     'text' => $item->nama_desa,
@@ -192,5 +191,4 @@ class MenuListener
             }
         }
     }
-
 }

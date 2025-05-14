@@ -46,7 +46,7 @@ class UserController extends Controller
                     }
 
                     $kabupaten = (new ConfigApiService)->kabupaten([
-                        'filter[kode_kabupaten]' => $row->kode_kabupaten
+                        'filter[kode_kabupaten]' => $row->kode_kabupaten,
                     ]);
 
                     return optional($kabupaten->first())->nama_kabupaten ?? '-';

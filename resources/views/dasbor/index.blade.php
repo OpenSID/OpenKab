@@ -8,7 +8,7 @@
 @section('content')
     @include('partials.breadcrumbs')
     <div class="row">
-        <div class="card rounded-0 border-0 shadow-none">
+        <div class="card rounded-0 border-0 shadow-none col-12">
             <div class="card-body">
                 @include('dasbor.filter')
                 @include('dasbor.summary')

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
-use App\Models\Config;
 use App\Models\Enums\StatusEnum;
 use App\Models\Team;
 use App\Models\User;
@@ -42,11 +41,15 @@ class UserController extends Controller
             return DataTables::of(User::with('team')->get())
                 ->addIndexColumn()
                 ->addColumn('nama_kabupaten', function ($row) {
-                    $kabupaten = Config::where('kode_kabupaten', $row->kode_kabupaten)
-                                ->select('nama_kabupaten')
-                                ->first();
+                    if (empty($row->kode_kabupaten)) {
+                        return '-';
+                    }
 
-                    return $kabupaten?->nama_kabupaten ?? '-';
+                    $kabupaten = (new ConfigApiService)->kabupaten([
+                        'filter[kode_kabupaten]' => $row->kode_kabupaten
+                    ]);
+
+                    return optional($kabupaten->first())->nama_kabupaten ?? '-';
                 })
                 ->addColumn('aksi', function ($row) use ($permission) {
                     $data = [];

@@ -51,7 +51,7 @@ class LoginListener
         } catch (Exception $e) {
             Log::error('Error fetching setting-modul: '.$e->getMessage());
         }
-        session(['presisi_enabled' => $presisiStatus]);
+        session(['presisi_enabled' => $presisiStatus, 'kabupaten.kode_kabupaten' => auth()->user()->kode_kabupaten ?? null]);
 
         activity('authentication-log')->event('login')->withProperties($this->request)->log('Login');
     }

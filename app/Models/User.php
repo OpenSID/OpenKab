@@ -38,6 +38,7 @@ class User extends Authenticatable
         'company',
         'phone',
         'foto',
+        'kode_kabupaten',
     ];
 
     /**

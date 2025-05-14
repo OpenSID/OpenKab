@@ -65,6 +65,7 @@
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/kesehatan/rtm' }}");
+            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
             url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
             var dtks = $('#table-kesehatan').DataTable({

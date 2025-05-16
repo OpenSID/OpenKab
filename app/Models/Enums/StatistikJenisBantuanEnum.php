@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-
-
 class StatistikJenisBantuanEnum extends BaseEnum
 {
     public const PENDUDUK = [

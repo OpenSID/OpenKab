@@ -4,7 +4,6 @@ namespace App\Models\Enums;
 
 use App\Models\Traits\EnumToArrayTrait;
 
-
 final class SasaranEnum extends BaseEnum
 {
     use EnumToArrayTrait;

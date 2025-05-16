@@ -19,7 +19,7 @@ class CovidEnum extends BaseEnum
     public const SELESAI_ISOLASI = 7;
 
     /**
-     * Override method all()
+     * Override method all().
      */
     public static function all(): array
     {

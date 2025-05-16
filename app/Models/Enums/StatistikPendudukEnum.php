@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-
-
 class StatistikPendudukEnum extends BaseEnum
 {
     public const RENTANG_UMUR = [

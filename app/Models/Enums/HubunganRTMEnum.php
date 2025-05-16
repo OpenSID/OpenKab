@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-
-
 class HubunganRTMEnum extends BaseEnum
 {
     public const KEPALA_RUMAH_TANGGA = 1;

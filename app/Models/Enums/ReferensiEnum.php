@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-
-
 class ReferensiEnum extends BaseEnum
 {
     public const JENIS_KELAMIN = 'Jenis Kelamin';

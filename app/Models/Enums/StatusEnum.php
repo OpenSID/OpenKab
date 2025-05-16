@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-use Illuminate\Validation\Rules\Enum;
-
 final class StatusEnum extends BaseEnum
 {
     const tidakAktif = 0;

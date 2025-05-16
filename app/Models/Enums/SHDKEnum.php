@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-
-
 class SHDKEnum extends BaseEnum
 {
     public const KEPALA_KELUARGA = 1;

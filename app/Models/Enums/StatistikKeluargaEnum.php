@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-
-
 class StatistikKeluargaEnum extends BaseEnum
 {
     public const KELAS_SOSIAL = [

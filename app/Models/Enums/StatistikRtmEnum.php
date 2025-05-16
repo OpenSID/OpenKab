@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-
-
 class StatistikRtmEnum extends BaseEnum
 {
     public const BDT = [

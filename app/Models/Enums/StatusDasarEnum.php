@@ -2,8 +2,6 @@
 
 namespace App\Models\Enums;
 
-
-
 final class StatusDasarEnum extends BaseEnum
 {
     const HIDUP = 1;

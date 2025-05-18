@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\CatatanRilis;
 use App\Http\Controllers\DasborController;
+use App\Http\Controllers\LaporanBulananController;
 use App\Http\Controllers\DataPokokController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IdentitasController;
@@ -152,6 +153,17 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm');
             Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan');
             Route::get('/cetak/{kategori}/{id}', 'cetak');
+
+            // Data > Kependudukan > Laporan Bulanan
+            Route::controller(LaporanBulananController::class)
+            ->middleware(['permission:statistik-laporan-bulanan-read'])
+            ->prefix('laporan-bulanan')
+            ->group(function () {
+                Route::get('/', 'index')->name('laporan-bulanan.index');
+                Route::post('/bulan', 'bulan')->name('laporan-bulanan.bulan');
+                Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
+                Route::get('/export-excel', 'exportExcel')->name('laporan-bulanan.export-excel');
+            });
         });
 
     // Master Data

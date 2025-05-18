@@ -18,8 +18,11 @@ class KabupatenMiddleware
     public function handle(Request $request, Closure $next)
     {
         // abort jika kabupaten tidak ada di list config.
+
+        $kodeKabupaten = $request->route('kodeKabupaten');
+
         abort_unless(
-            in_array($kodeKabupaten = $request->route('kodeKabupaten'), Config::get()->pluck('kode_kabupaten')?->toArray()),
+            in_array($kodeKabupaten, Config::get()->pluck('kode_kabupaten')?->toArray()),
             404,
             'Kabupaten tidak ditemukan, pastikan kabupaten tersebut sudah ditambahkan di OpenSID Gabungan!'
         );

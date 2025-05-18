@@ -31,6 +31,7 @@
                                     <th>Surel</th>
                                     <th>Instansi</th>
                                     <th>Nomor HP</th>
+                                    <th>Nama Kabupaten</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -98,10 +99,15 @@
                     name: 'phone'
                 },
                 {
+                    data: 'nama_kabupaten',
+                    name: 'nama_kabupaten',
+                    className: 'text-center'
+                },
+                {
                     data: 'active',
                     name: 'active',
                     className: 'text-center'
-                },
+                }
             ],
             order: [
                 [2, 'asc']

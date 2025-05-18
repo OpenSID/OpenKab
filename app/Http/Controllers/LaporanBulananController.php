@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\StatistikPendudukApiService;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use App\Services\StatistikPendudukApiService;
 use Illuminate\Support\Facades\Session;
 
 class LaporanBulananController extends Controller
 {
     public $penduduk;
 
-    public function __construct(StatistikPendudukApiService $penduduk){
-
+    public function __construct(StatistikPendudukApiService $penduduk)
+    {
         $this->penduduk = $penduduk;
 
         Session::put('bulanku', date('n'));
         Session::put('tahunku', date('Y'));
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,23 +30,22 @@ class LaporanBulananController extends Controller
         $data['page_title'] = 'Laporan Kependudukan Bulanan';
         $data['page_description'] = 'Laporan Kependudukan Bulanan';
 
-
         if (Session::has('bulanku')) {
             $data['bulanku'] = Session::get('bulanku');
         } else {
-            $data['bulanku']        = date('n');
+            $data['bulanku'] = date('n');
             Session::put('bulanku', $data['bulanku']);
         }
 
         if (Session::get('tahunku')) {
             $data['tahunku'] = Session::get('tahunku');
         } else {
-            $data['tahunku']        = date('Y');
+            $data['tahunku'] = date('Y');
             Session::put('tahunku', $data['tahunku']);
         }
 
-        $data['bulan']                = $data['bulanku'];
-        $data['tahun']                = $data['tahunku'];
+        $data['bulan'] = $data['bulanku'];
+        $data['tahun'] = $data['tahunku'];
 
         $data['data_lengkap'] = true;
         $data['sesudah_data_lengkap'] = true;
@@ -57,18 +56,20 @@ class LaporanBulananController extends Controller
 
         if (! $dataLengkap) {
             $data['data_lengkap'] = false;
+
             return view('laporan-bulanan.index', $data);
         }
 
         $tahun_bulan = (new DateTime($tanggal_lengkap))->format('Y-m');
-        if ($tahun_bulan > $data['tahun'] . '-' . $data['bulan']) {
+        if ($tahun_bulan > $data['tahun'].'-'.$data['bulan']) {
             $data['sesudah_data_lengkap'] = false;
+
             return view('laporan-bulanan.index', $data);
         }
 
-        $data['tgl_lengkap']        = $tanggal_lengkap;
-        $data['tahun_lengkap']      = (new DateTime($tanggal_lengkap))->format('Y');
-        $dataPenduduk               = $this->penduduk->laporanBulanan($data['tahun'], $data['bulan']);
+        $data['tgl_lengkap'] = $tanggal_lengkap;
+        $data['tahun_lengkap'] = (new DateTime($tanggal_lengkap))->format('Y');
+        $dataPenduduk = $this->penduduk->laporanBulanan($data['tahun'], $data['bulan']);
 
         return view('laporan-bulanan.index', array_merge($data, $dataPenduduk));
     }
@@ -88,16 +89,16 @@ class LaporanBulananController extends Controller
         } else {
             Session::forget('tahunku');
         }
-        
+
         return redirect()->route('laporan-bulanan.index');
     }
 
     public function detailPenduduk($rincian, $tipe)
     {
-        $data            = $this->penduduk->sumberData($rincian, $tipe, session('tahunku'), session('bulanku'));
+        $data = $this->penduduk->sumberData($rincian, $tipe, session('tahunku'), session('bulanku'));
 
         $data['rincian'] = $rincian;
-        $data['tipe']    = $tipe;
+        $data['tipe'] = $tipe;
 
         $data['page_title'] = 'Laporan Kependudukan Bulanan';
         $data['page_description'] = 'Rincian Kependudukan Bulanan';
@@ -116,7 +117,5 @@ class LaporanBulananController extends Controller
         return response($html)
         ->header('Content-Type', 'application/vnd.ms-excel')
         ->header('Content-Disposition', 'attachment; filename="laporan.xls"');
-        
     }
-
 }

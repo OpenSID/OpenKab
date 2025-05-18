@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\SettingAplikasi;
-
 class StatistikPendudukApiService extends BaseApiService
 {
     /**
-     * Get Unique Desa
+     * Get Unique Desa.
      */
     public function laporanBulanan($tahun, $bulan)
     {
@@ -24,9 +22,9 @@ class StatistikPendudukApiService extends BaseApiService
     }
 
     /**
-     * Get Unique Desa
+     * Get Unique Desa.
      */
-    public function sumberData($rincian,$tipe,$tahun, $bulan)
+    public function sumberData($rincian, $tipe, $tahun, $bulan)
     {
         $kode_kabupaten = session('kabupaten.kode_kabupaten');
 
@@ -40,7 +38,7 @@ class StatistikPendudukApiService extends BaseApiService
     }
 
     /**
-     * Get Unique Desa
+     * Get Unique Desa.
      */
     public function logPenduduk(array $filters = [])
     {

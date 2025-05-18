@@ -84,7 +84,6 @@ class MenuListener
                     ],
                 ]);
             }
-
         }
 
         // tampilkan jika kecamatan sudah terpilih
@@ -118,7 +117,6 @@ class MenuListener
                     ],
                 ]);
             }
-
         }
 
         // tambahkan menu dari group

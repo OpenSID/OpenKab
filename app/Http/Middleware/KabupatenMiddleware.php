@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Services\ConfigApiService;
+use Closure;
 use Illuminate\Http\Request;
 
 class KabupatenMiddleware
@@ -20,7 +20,7 @@ class KabupatenMiddleware
         // abort jika kabupaten tidak ada di list config.
         $kodeKabupaten = $request->route('kodeKabupaten');
         $semuaKode = collect((new ConfigApiService)->kabupaten())->pluck('kode_kabupaten')->toArray();
-        
+
         abort_unless(
             in_array($kodeKabupaten, $semuaKode),
             404,
@@ -37,4 +37,3 @@ class KabupatenMiddleware
         return $next($request);
     }
 }
-	

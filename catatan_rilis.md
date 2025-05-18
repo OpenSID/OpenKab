@@ -15,3 +15,5 @@ Di rilis ini, versi 2505.0.0 berisi penambahan dan perbaikan yang diminta penggu
 3. [#630](https://github.com/OpenSID/OpenKab/issues/630) Hapus ketergantungan terhadap database gabungan secara langsung.
 4. [#634](https://github.com/OpenSID/OpenKab/issues/634) Sesuaikan RekapService.php dengan Api database gabungan bulanan anak dan sesuaikan RekapService.php sesuai dengan api.
 5. [#635](https://github.com/OpenSID/OpenKab/issues/635) Sesuaikan RekapService.php dengan Api database gabungan ibu hamil dan sesuaikan RekapService.php sesuai dengan api.
+6. [#638](https://github.com/OpenSID/OpenKab/issues/638) Sesuaikan ConfigDemoSeeder, BantuanDemoSeeder dan ArtikelDemoSeeder ke Api database gabungan.
+7. [#637](https://github.com/OpenSID/OpenKab/issues/637) Sesuikan WilayahDemoSeeder, RTMDemoSeeder, KeluargaDemoSeeder dan KategoriDemoSeeder ke Api database gabungan.

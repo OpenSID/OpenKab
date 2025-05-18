@@ -2,11 +2,8 @@
 
 use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\DasborController;
-use App\Http\Controllers\Api\DokumenController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\KategoriDesaController;
-use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
 use App\Http\Controllers\Api\PengaturanController;
@@ -60,11 +57,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
 
-    // Dasbor
-    Route::prefix('dasbor')->group(function () {
-        Route::get('/', DasborController::class);
-    });
-
     // Artikel
     Route::controller(ArtikelController::class)
         ->prefix('artikel')->group(function () {
@@ -72,25 +64,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/tahun', 'tahun');
         });
 
-    // Dokumen
-    Route::prefix('dokumen')->group(function () {
-        Route::get('/', DokumenController::class);
-    });
-
-    // Keluarga
-    Route::controller(KeluargaController::class)
-        ->prefix('keluarga')->group(function () {
-            Route::get('/show', 'show')->name('api.keluarga.detail');
-        });
-
-
     // Identitas
-    Route::controller(IdentitasController::class)
-        ->prefix('identitas')->group(function () {
-            Route::put('/perbarui/{id}', 'update');
-            Route::post('/upload/{id}', 'upload');
-            Route::post('/uploadFavicon/{id}', 'uploadFavicon');
-        });
+    // Route::controller(IdentitasController::class)
+    //     ->prefix('identitas')->group(function () {
+    //         Route::put('/perbarui/{id}', 'update');
+    //         Route::post('/upload/{id}', 'upload');
+    //         Route::post('/uploadFavicon/{id}', 'uploadFavicon');
+    //     });
 
     // Pengaturan Aplikasi
     Route::controller(PengaturanController::class)

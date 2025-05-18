@@ -128,7 +128,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 
     // Data Pokok
-    Route::middleware(['permission:datapokok-read'])->controller(DataPokokController::class)
+    Route::middleware(['permission:datapresisi-read'])->controller(DataPokokController::class)
         ->prefix('data-pokok')
         ->group(function () {
             Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');

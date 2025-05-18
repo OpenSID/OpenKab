@@ -136,13 +136,13 @@ final class Modul extends Enum
                     'permission' => 'datapresisi-kesehatan',
                 ],
                 [
-                    'icon' => 'fa fa-fw fa-circle',
+                    'icon' => 'far fa-fw fa-circle',
                     'text' => 'Data Infrastruktur',
                     'url' => 'data-pokok/infrastruktur',
                     'permission' => 'datapokok-infrastruktur',
                 ],
                 [
-                    'icon' => 'fa fa-fw fa-circle',
+                    'icon' => 'far fa-fw fa-circle',
                     'text' => 'Data Pariwisata',
                     'url' => 'data-pokok/pariwisata',
                     'permission' => 'datapokok-pariwisata',

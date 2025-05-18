@@ -26,14 +26,6 @@ class Config extends Model
     }
 
     /**
-     * Get all of the traffic for the Config.
-     */
-    public function traffic(): HasMany
-    {
-        return $this->hasMany(Traffic::class, 'config_id', 'id');
-    }
-
-    /**
      * Get all of the penduduk for the Config.
      */
     public function penduduk(): HasMany
@@ -55,14 +47,6 @@ class Config extends Model
     public function keluarga(): HasMany
     {
         return $this->hasMany(Keluarga::class, 'config_id', 'id');
-    }
-
-    /**
-     * Get all of the Keluarga for the Config.
-     */
-    public function komoditas(): HasMany
-    {
-        return $this->hasMany(Komoditas::class, 'config_id', 'id');
     }
 
     /**

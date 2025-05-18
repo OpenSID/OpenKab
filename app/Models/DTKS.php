@@ -195,9 +195,4 @@ class DTKS extends BaseModel
     {
         return $this->hasMany(DtksAnggota::class, 'id_dtks');
     }
-
-    public function lampiran()
-    {
-        return $this->belongsToMany(DtksLampiran::class, 'dtks_ref_lampiran', 'id_dtks', 'id_lampiran');
-    }
 }

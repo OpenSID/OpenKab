@@ -59,7 +59,12 @@
 
                 return form.join('');
             }
-            fetch(`{{ route('api.pengaturan_aplikasi') }}`)
+
+            const header = @include('layouts.components.header_bearer_api_gabungan')
+
+            fetch(`{{ route('api.pengaturan_aplikasi') }}`, {
+                    headers: header,
+                })
                 .then(res => res.json())
                 .then(response => {
                     if (response.data.length != 0) {
@@ -96,6 +101,8 @@
                         $.ajax({
                             type: "POST",
                             headers: {
+                                'Accept': 'application/json',
+                                'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}',
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             dataType: "json",

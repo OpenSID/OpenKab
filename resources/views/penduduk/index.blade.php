@@ -156,13 +156,20 @@
     <script nonce="{{ csp_nonce() }}"  >
     document.addEventListener("DOMContentLoaded", function(event) {
         const header = @include('layouts.components.header_bearer_api_gabungan');
+
+        var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk' }}");
+
+        url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+        url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+        url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
+
         var penduduk = $('#penduduk').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}`,
+                url: url.href,
                 headers: header,
                 method: 'get',
                 data: function(row) {

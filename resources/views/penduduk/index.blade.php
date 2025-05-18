@@ -113,7 +113,7 @@
                             "filter[pendidikan_kk_id]": $('#pendidikan_kk_id').val(),
                             "filter[pendidikan_sedang_id]": $('#pendidikan_sedang_id').val(),
                             "filter[pekerjaan_id]": $('#pekerjaan_id').val(),
-                            "filter[status_kawin": $('#status_kawin').val(),
+                            "filter[status_kawin]": $('#status_kawin').val(),
                             "filter[id_kk]": $('#id_kk').val(),
                             "filter[tag_id_card]": $("#tag_id_card").val(),
                             "filter[agama_id]": $('#agama_id').val(),

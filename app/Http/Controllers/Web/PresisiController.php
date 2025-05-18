@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\KeluargaKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Anak;
 use App\Models\Bantuan;
+use App\Models\Enums\StatistikPendudukEnum;
+use App\Models\Enums\StatistikRtmEnum;
 use App\Models\IbuHamil;
-use App\Models\Keluarga;
-use App\Models\Penduduk;
 use App\Models\Point;
 use App\Models\Posyandu;
-use App\Models\Rtm;
 use App\Models\SasaranPaud;
 use App\Services\RekapService;
 use App\Services\StuntingService;
@@ -50,7 +50,7 @@ class PresisiController extends Controller
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
-        $statistik = Penduduk::KATEGORI_STATISTIK;
+        $statistik = StatistikPendudukEnum::allKeyLabel();
 
         return view('presisi.kependudukan.index', compact('statistik', 'id', 'categoriesItems'));
     }
@@ -468,7 +468,7 @@ class PresisiController extends Controller
 
     public function rtm($id = '')
     {
-        $statistik = Rtm::KATEGORI_STATISTIK;
+        $statistik = StatistikRtmEnum::allKeyLabel();
         $totalDesa = 0;
         $pendudukSummary = 0;
         $configSummary = 0;
@@ -488,7 +488,7 @@ class PresisiController extends Controller
         if ($id != 'kelas-sosial') {
             $id = '';
         }
-        $statistik = Keluarga::KATEGORI_STATISTIK;
+        $statistik = KeluargaKategoriStatistikEnum::KATEGORI_STATISTIK;
         $totalDesa = 0;
         $pendudukSummary = 0;
         $configSummary = 0;

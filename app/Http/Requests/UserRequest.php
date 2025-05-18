@@ -37,6 +37,7 @@ class UserRequest extends FormRequest
                 'company' => 'nullable|string',
                 'phone' => 'nullable|numeric|digits_between:10,13',
                 'foto' => 'nullable|image|max:1024|mimes:png,jpg',
+                'kode_kabupaten' => 'nullable',
             ];
         }
 
@@ -49,6 +50,7 @@ class UserRequest extends FormRequest
             'phone' => 'nullable|numeric|digits_between:10,13',
             'group' => ' required|exists:App\Models\Team,id',
             'foto' => 'image|max:1024|mimes:png,jpg',
+            'kode_kabupaten' => 'nullable',
         ];
     }
 }

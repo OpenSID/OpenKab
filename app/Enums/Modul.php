@@ -31,12 +31,6 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Data Agama & Adat',
-                    'url' => 'data-pokok/agama-adat',
-                    'permission' => 'datapokok-agama-adat',
-                ],
-                [
-                    'icon' => 'far fa-fw fa-circle',
                     'text' => 'Kesehatan',
                     'url' => 'data-pokok/kesehatan',
                     'permission' => 'datapokok-kesehatan',

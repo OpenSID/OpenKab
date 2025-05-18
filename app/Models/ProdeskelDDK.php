@@ -39,21 +39,6 @@ class ProdeskelDDK extends BaseModel
         return $this->belongsTo(Keluarga::class, 'keluarga_id');
     }
 
-    public function produksi()
-    {
-        return $this->hasMany(ProdeskelDDKProduksi::class, 'prodeskel_ddk_id', 'id');
-    }
-
-    public function detail()
-    {
-        return $this->hasMany(ProdeskelDDKDetail::class, 'prodeskel_ddk_id', 'id');
-    }
-
-    public function bahanGalianAnggota()
-    {
-        return $this->hasMany(ProdeskelDDKBahanGalianAnggota::class, 'prodeskel_ddk_id', 'id');
-    }
-
     public function getKepalaKeluargaAttribute()
     {
         $this->loadMissing([

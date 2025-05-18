@@ -7,10 +7,12 @@ use App\Models\Enums\StatusEnum;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
+use App\Services\ConfigApiService;
 use App\Traits\UploadedFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -38,6 +40,17 @@ class UserController extends Controller
 
             return DataTables::of(User::with('team')->get())
                 ->addIndexColumn()
+                ->addColumn('nama_kabupaten', function ($row) {
+                    if (empty($row->kode_kabupaten)) {
+                        return '-';
+                    }
+
+                    $kabupaten = (new ConfigApiService)->kabupaten([
+                        'filter[kode_kabupaten]' => $row->kode_kabupaten,
+                    ]);
+
+                    return optional($kabupaten->first())->nama_kabupaten ?? '-';
+                })
                 ->addColumn('aksi', function ($row) use ($permission) {
                     $data = [];
                     if (! auth()->guest()) {
@@ -83,7 +96,11 @@ class UserController extends Controller
         $groups = Team::get();
         $team = false;
 
-        return view('user.create', compact('user', 'groups', 'team'));
+        $kabupatens = (new ConfigApiService)->kabupaten();
+
+        $openkab_siapakai = $this->isOpenKabSiapPakai();
+
+        return view('user.create', compact('user', 'groups', 'team', 'kabupatens', 'openkab_siapakai'));
     }
 
     /**
@@ -105,12 +122,18 @@ class UserController extends Controller
                 'phone' => $data['phone'],
                 'password' => $data['password'],
                 'active' => 1,
+                'kode_kabupaten' => $data['kode_kabupaten'],
             ];
 
             if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $insertData['foto'] = $this->uploadFile($request, 'foto');
             }
+
+            if ($request->filled('kode_kabupaten')) {
+                Session::put('kabupaten.kode_kabupaten', $data['kode_kabupaten']);
+            }
+
             $user = User::create($insertData);
 
             // joinkan user ke group
@@ -158,7 +181,11 @@ class UserController extends Controller
         $groups = Team::get();
         $team = $user->team->first()->id ?? false;
 
-        return view('user.edit', compact('user', 'groups', 'team'));
+        $kabupatens = (new ConfigApiService)->kabupaten();
+
+        $openkab_siapakai = $this->isOpenKabSiapPakai();
+
+        return view('user.edit', compact('user', 'groups', 'team', 'kabupatens', 'openkab_siapakai'));
     }
 
     /**
@@ -192,11 +219,17 @@ class UserController extends Controller
                 'email' => $request->get('email'),
                 'company' => $request->get('company'),
                 'phone' => $request->get('phone'),
+                'kode_kabupaten' => $request->get('kode_kabupaten'),
             ];
             if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $updateData['foto'] = $this->uploadFile($request, 'foto');
             }
+
+            if ($request->filled('kode_kabupaten')) {
+                Session::put('kabupaten.kode_kabupaten', $request->get('kode_kabupaten'));
+            }
+
             $user->update($updateData);
 
             $routeCurrent = Route::currentRouteName();

@@ -7,7 +7,6 @@ use App\Http\Requests\CreateSettingRequest;
 use App\Http\Requests\UpdateSettingRequest;
 use App\Http\Transformers\SettingTransformer;
 use App\Models\Setting;
-use App\Models\SettingModul;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -95,7 +94,7 @@ class SettingController extends AppBaseController
      */
     public function update($id, UpdateSettingRequest $request)
     {
-        if (empty(SettingModul::where('url', 'like', '%prodeskel%')->first()) && $request->value == 'presisi') {
+        if (session()->get('prodeskel_enabled') == false && $request->value == 'presisi') {
             $setting = Setting::where('key', 'home_page')->where('value', 'presisi')->first();
 
             if ($setting) {

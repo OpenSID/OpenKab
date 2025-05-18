@@ -6,8 +6,10 @@ use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\CatatanRilis;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\DataPokokController;
+use App\Http\Controllers\DesaController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IdentitasController;
+use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
@@ -111,7 +113,9 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::middleware(['permission:penduduk-read'])->controller(KeluargaController::class)
         ->prefix('keluarga')
         ->group(function () {
-            Route::middleware(['permission:penduduk-read'])->get('/detail/{no_kk}', 'show')->name('keluarga.detail');
+            Route::get('', 'index')->name('keluarga.index');
+            Route::get('cetak', 'cetak')->name('keluarga.cetak');
+            Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
     // Bantuan
@@ -124,7 +128,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 
     // Data Pokok
-    Route::middleware(['permission:datapokok-read'])->controller(DataPokokController::class)
+    Route::middleware(['permission:datapresisi-read'])->controller(DataPokokController::class)
         ->prefix('data-pokok')
         ->group(function () {
             Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
@@ -254,6 +258,11 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::get('/plan/{parent?}', [PlanController::class, 'index'])->name('plan');
     Route::get('/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'ajax_lokasi_maps'])->name('plan.ajax_lokasi_maps');
     Route::get('/show/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'show_ajax_lokasi_maps']);
+
+    Route::resource('desa', DesaController::class)->only(['index']);
+    Route::get('desa/cetak', [DesaController::class, 'cetak']);
+    Route::resource('kecamatan', KecamatanController::class)->only(['index']);
+    Route::get('kecamatan/cetak', [KecamatanController::class, 'cetak']);
 });
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {

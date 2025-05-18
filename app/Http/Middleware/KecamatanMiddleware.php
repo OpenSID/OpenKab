@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Config;
+use App\Services\ConfigApiService;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -18,8 +19,11 @@ class KecamatanMiddleware
     public function handle(Request $request, Closure $next)
     {
         // abort jika kecamatan tidak ada di list config.
+        $kodeKecamatan = $request->route('kodeKecamatan');
+        $semuaKode = collect((new ConfigApiService)->kecamatan())->pluck('kode_kecamatan')->toArray();
+
         abort_unless(
-            in_array($kodeKecamatan = $request->route('kodeKecamatan'), Config::get()->pluck('kode_kecamatan')?->toArray()),
+            in_array($kodeKecamatan, $semuaKode),
             404,
             'Kecamatan tidak ditemukan, pastikan kecamatan tersebut sudah ditambahkan di OpenSID Gabungan!'
         );
@@ -27,7 +31,7 @@ class KecamatanMiddleware
         // set session kecamatan
         session()->put(
             'kecamatan',
-            Config::where('kode_kecamatan', $kodeKecamatan)->first()
+            (new ConfigApiService)->kecamatanByKode($kodeKecamatan)
         );
 
         return $next($request);

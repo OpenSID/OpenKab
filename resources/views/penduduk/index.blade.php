@@ -82,6 +82,8 @@
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
             const filterDefault = {!! json_encode($filters) !!}
+            let kriteria_jumlah = filterDefault['jumlah'] ?? null
+            let kriteria_belum_mengisi = filterDefault['belum_mengisi'] ?? null
 
             var penduduk = $('#penduduk').DataTable({
                 processing: true,
@@ -96,6 +98,8 @@
                         const params = {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
+                            "filter[jumlah]": kriteria_jumlah,
+                            "filter[belum_mengisi]": kriteria_belum_mengisi,
                             "filter[sex]": $('#sex').val(),
                             "filter[status]": $('#status').val(),
                             "filter[kk_level]": $('#kk_level').val(),
@@ -308,6 +312,8 @@
                 $('#filter_kecamatan').val('').change();
                 $('#filter_desa').val('').change();
                 $('.select2-filter').val('').change();
+                kriteria_belum_mengisi = null;
+                kriteria_jumlah = null;
                 penduduk.ajax.reload();
             });
 

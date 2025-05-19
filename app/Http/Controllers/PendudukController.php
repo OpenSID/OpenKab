@@ -27,6 +27,7 @@ class PendudukController extends Controller
                 }
             }
         }
+
         $judul = request('judul', '');
 
         return view('penduduk.index', compact('filters', 'judul'))->with($listPermission);

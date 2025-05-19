@@ -9,6 +9,8 @@ use App\Enums\RtmKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Anak;
 use App\Models\Bantuan;
+use App\Models\Enums\StatistikPendudukEnum;
+use App\Models\Enums\StatistikRtmEnum;
 use App\Models\IbuHamil;
 use App\Models\Point;
 use App\Models\Posyandu;
@@ -469,7 +471,7 @@ class PresisiController extends Controller
 
     public function rtm($id = '')
     {
-        $statistik = RtmKategoriStatistikEnum::KATEGORI_STATISTIK;
+        $statistik = StatistikRtmEnum::allKeyLabel();
         $totalDesa = 0;
         $pendudukSummary = 0;
         $configSummary = 0;

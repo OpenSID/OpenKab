@@ -4,14 +4,14 @@ namespace App\Http\Controllers\CMS;
 
 use App\Enums\KategoriSasaranBantuanEnum;
 use App\Enums\KesehatanAnakEnum;
-use App\Enums\PendudukKategoriStatistikEnum;
-use App\Enums\RtmKategoriStatistikEnum;
 use App\Enums\SasaranStatistikKeluargaEnum;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Repository\CMS\MenuRepository;
 use App\Http\Requests\UpdateMenuRequest;
 use App\Models\CMS\Category;
 use App\Models\CMS\Page;
+use App\Models\Enums\StatistikPendudukEnum;
+use App\Models\Enums\StatistikRtmEnum;
 use Illuminate\Support\Facades\Session;
 
 class MenuController extends AppBaseController
@@ -49,7 +49,7 @@ class MenuController extends AppBaseController
             ],
             'penduduk' => collect(['/module/penduduk' => 'Semua Statistik Penduduk'])
                 ->merge(
-                    collect(PendudukKategoriStatistikEnum::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                    collect(StatistikPendudukEnum::allKeyLabel())->mapWithKeys(function ($item, $key) {
                         return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
                     })
                 )->toArray(),
@@ -70,7 +70,7 @@ class MenuController extends AppBaseController
 
             'rtm' => collect(['/module/rtm' => 'Semua Statistik Rtm'])
                 ->merge(
-                    collect(RtmKategoriStatistikEnum::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
+                    collect(StatistikRtmEnum::allKeyLabel())->mapWithKeys(function ($item, $key) {
                         return ["/module/rtm/{$key}" => ucwords("Statistik Rtm {$item}")];
                     })
                 )->toArray(),

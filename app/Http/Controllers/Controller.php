@@ -9,6 +9,7 @@ use App\Models\Identitas;
 use App\Models\Keluarga;
 use App\Models\Penduduk;
 use App\Models\Rtm;
+use App\Models\Setting;
 use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -25,8 +26,12 @@ class Controller extends BaseController
 
     protected $permission;
 
+    protected $settings;
+
     public function __construct()
     {
+        $this->settings = Setting::pluck('value', 'key');
+
         $this->identitas = Identitas::first();
         if ($this->identitas) {
             $this->kirimTrack();
@@ -84,5 +89,10 @@ class Controller extends BaseController
 
             return;
         }
+    }
+
+    protected function isOpenKabSiapPakai()
+    {
+        return ($this->settings['OpenKab_SiapPakai'] ?? null) === '1';
     }
 }

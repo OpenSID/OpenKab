@@ -12,8 +12,13 @@ class PendudukController extends Controller
     public function index()
     {
         $listPermission = $this->generateListPermission();
+        $filters = request('filter', [
+            'kode_kabupaten' => null,
+            'kode_desa' => null,
+            'kode_kecamatan' => null,
+        ]);
 
-        return view('penduduk.index')->with($listPermission);
+        return view('penduduk.index', compact('filters'))->with($listPermission);
     }
 
     public function show(Penduduk $penduduk)

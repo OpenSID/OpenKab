@@ -3,17 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Enums\KeluargaKategoriStatistikEnum;
-
-use App\Enums\KesehatanAnakEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Bantuan;
 use App\Models\Enums\StatistikPendudukEnum;
 use App\Models\Enums\StatistikRtmEnum;
-use App\Models\IbuHamil;
-use App\Models\Keluarga;
-use App\Models\Penduduk;
 use App\Models\Point;
-use App\Models\Rtm;
 use App\Services\KesehatanApiService;
 
 class PresisiController extends Controller
@@ -53,7 +47,6 @@ class PresisiController extends Controller
         ];
 
         $statistik = StatistikPendudukEnum::KATEGORI_STATISTIK;
-
 
         return view('presisi.kependudukan.index', compact('statistik', 'id', 'categoriesItems'));
     }

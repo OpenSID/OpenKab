@@ -18,7 +18,7 @@ class ConfigApiService extends BaseApiService
                 return collect([]);
             }
 
-            return collect($data)->map(fn($item) => (object) $item['attributes']);
+            return collect($data)->map(fn ($item) => (object) $item['attributes']);
         });
     }
 
@@ -32,7 +32,7 @@ class ConfigApiService extends BaseApiService
                 return collect([]);
             }
 
-            return collect($data)->map(fn($item) => (object) $item['attributes']);
+            return collect($data)->map(fn ($item) => (object) $item['attributes']);
         });
     }
 
@@ -46,7 +46,7 @@ class ConfigApiService extends BaseApiService
                 return collect([]);
             }
 
-            return collect($data)->map(fn($item) => (object) $item['attributes']);
+            return collect($data)->map(fn ($item) => (object) $item['attributes']);
         });
     }
 
@@ -56,6 +56,7 @@ class ConfigApiService extends BaseApiService
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($kode_kabupaten) {
             $data = $this->apiRequest("/api/v1/config/kabupaten-by-kode/{$kode_kabupaten}");
+
             return $data ?: collect([]);
         });
     }
@@ -66,8 +67,8 @@ class ConfigApiService extends BaseApiService
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($kode_kecamatan) {
             $data = $this->apiRequest("/api/v1/config/kecamatan-by-kode/{$kode_kecamatan}");
+
             return $data ?: collect([]);
         });
     }
-
 }

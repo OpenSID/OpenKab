@@ -36,7 +36,7 @@ class BaseApiService
             return $prefix;
         }
 
-        return $prefix . '_' . md5(json_encode($filters));
+        return $prefix.'_'.md5(json_encode($filters));
     }
 
     /**

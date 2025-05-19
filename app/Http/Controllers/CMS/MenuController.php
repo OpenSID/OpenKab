@@ -49,7 +49,7 @@ class MenuController extends AppBaseController
             ],
             'penduduk' => collect(['/module/penduduk' => 'Semua Statistik Penduduk'])
                 ->merge(
-                    collect(StatistikPendudukEnum::allKeyLabel())->mapWithKeys(function ($item, $key) {
+                    collect(StatistikPendudukEnum::KATEGORI_STATISTIK)->mapWithKeys(function ($item, $key) {
                         return ["/module/penduduk/{$key}" => ucwords("Statistik Penduduk {$item}")];
                     })
                 )->toArray(),

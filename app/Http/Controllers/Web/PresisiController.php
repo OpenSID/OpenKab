@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Web;
 
 use App\Enums\KeluargaKategoriStatistikEnum;
 use App\Enums\KesehatanAnakEnum;
-use App\Enums\PendudukKategoriStatistikEnum;
-use App\Enums\RtmKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Anak;
 use App\Models\Bantuan;
@@ -53,7 +51,7 @@ class PresisiController extends Controller
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
-        $statistik = PendudukKategoriStatistikEnum::KATEGORI_STATISTIK;
+        $statistik = StatistikPendudukEnum::KATEGORI_STATISTIK;
 
         return view('presisi.kependudukan.index', compact('statistik', 'id', 'categoriesItems'));
     }

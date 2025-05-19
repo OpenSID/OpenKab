@@ -30,6 +30,15 @@ class BaseApiService
         $this->kodeKecamatan = str_replace('.', '', config('profil.kecamatan_id'));
     }
 
+    protected function buildCacheKey(string $prefix, array $filters = []): string
+    {
+        if (empty($filters)) {
+            return $prefix;
+        }
+
+        return $prefix . '_' . md5(json_encode($filters));
+    }
+
     /**
      * General API Call Method.
      */

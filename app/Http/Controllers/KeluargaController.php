@@ -14,7 +14,18 @@ class KeluargaController extends Controller
             'kode_kecamatan' => null,
         ]);
 
-        return view('keluarga.index', compact('filters'));
+        if (isset($filters['kriteria'])) {
+            parse_str($filters['kriteria'], $kriteria);
+            unset($filters['kriteria']);
+            if ($kriteria) {
+                foreach ($kriteria as $key => $value) {
+                    $filters[$key] = $value;
+                }
+            }
+        }
+
+        $judul = request('judul', '');
+        return view('keluarga.index', compact('filters', 'judul'));
     }
 
     /**

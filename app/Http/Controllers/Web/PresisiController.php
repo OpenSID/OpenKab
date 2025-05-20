@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\AccessTypeEnum;
 use App\Enums\KeluargaKategoriStatistikEnum;
 use App\Enums\PendudukKategoriStatistikEnum;
 use App\Enums\RtmKategoriStatistikEnum;
@@ -11,6 +12,7 @@ use App\Models\Bantuan;
 use App\Models\IbuHamil;
 use App\Models\Point;
 use App\Models\SasaranPaud;
+use App\Services\PemetaanService;
 use App\Services\PosyanduService;
 use App\Services\RekapService;
 use App\Services\StuntingService;
@@ -537,7 +539,14 @@ class PresisiController extends Controller
         ];
         $listKecamatan = ['' => 'Pilih Kecamatan'];
         $listDesa = ['' => 'Pilih Desa'];
-        $kategori = Point::root()->where('sumber', 'OpenKab')->get();
+
+        $data = (new PemetaanService)->getAllPoint([
+            'filter[tipe]' => AccessTypeEnum::ROOT->value()
+        ]);
+
+        $object = json_decode(json_encode($data));
+
+        $kategori = (array) $object;
 
         return view('presisi.geo_spasial.index', compact('categoriesItems', 'listKecamatan', 'listDesa', 'kategori'));
     }

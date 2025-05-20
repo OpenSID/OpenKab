@@ -25,6 +25,7 @@ class KeluargaController extends Controller
         }
 
         $judul = request('judul', '');
+
         return view('keluarga.index', compact('filters', 'judul'));
     }
 

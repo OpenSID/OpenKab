@@ -5,9 +5,13 @@ namespace App\Models\Enums;
 final class KelasSosialEnum extends BaseEnum
 {
     const PRA_SEJAHTERA = 1;
+
     const SEJAHTERA_I = 2;
+
     const SEJAHTERA_II = 3;
+
     const SEJAHTERA_III = 4;
+
     const SEJAHTERA_III_PLUS = 5;
 
     /**

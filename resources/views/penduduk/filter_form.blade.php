@@ -245,6 +245,15 @@
                     </select>
                 </div>
             </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Wajib KTP</label>
+                    <select id="ktp" class="form-control select2-filter" data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}'
+                        placeholder="Pilih Wajib KTP">
+
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-6">

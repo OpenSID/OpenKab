@@ -41,6 +41,52 @@ class PemetaanService
         throw new \Exception('Gagal mengambil data point: '.$response->status());
     }
 
+    public function pointLock(array $data, string $id): ?array
+    {
+        $url = "{$this->baseUrl}/api/v1/point/lock/{$id}";
+
+        $response = Http::withToken($this->setting->value ?? '')
+            ->acceptJson()
+            ->put($url, $data);
+
+        if ($response->successful()) {
+            return $response->json('data') ?? null;
+        }
+
+        throw new \Exception('Gagal mengupdate data point: ' . $response->status() . ' - ' . $response->body());
+    }
+
+    public function pointUpdate(array $data, string $id): ?array
+    {
+        $url = "{$this->baseUrl}/api/v1/point/update/{$id}";
+
+        $response = Http::withToken($this->setting->value ?? '')
+            ->acceptJson()
+            ->put($url, $data);
+
+        if ($response->successful()) {
+            return $response->json('data') ?? null;
+        }
+
+        throw new \Exception('Gagal mengupdate data point: ' . $response->status() . ' - ' . $response->body());
+    }
+
+    public function pointStore(array $data): ?array
+    {
+        $url = "{$this->baseUrl}/api/v1/point/store";
+
+        $response = Http::withToken($this->setting->value ?? '')
+            ->acceptJson()
+            ->post($url, $data);
+
+        if ($response->successful()) {
+            return $response->json('data') ?? null;
+        }
+
+        throw new \Exception('Gagal store data point: ' . $response->status() . ' - ' . $response->body());
+    }
+
+
     public function getAllPlan(array $query = [])
     {
         $url = $this->baseUrl.'/api/v1/plan';

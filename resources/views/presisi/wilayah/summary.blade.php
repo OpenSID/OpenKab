@@ -35,19 +35,6 @@
                 }, 'json');
             })
             $('#summary_block').trigger('change');
-
-            $('#summary_block .btn-detail').click(function(event) {
-                event.preventDefault();
-                let url = $(this).data('url');
-                let _url = new URL(url);
-                _url.searchParams.set('filter[kode_kabupaten]', $(this).data('filter')['kode_kabupaten']);
-                _url.searchParams.set('filter[kode_kecamatan]', $(this).data('filter')['kode_kecamatan']);
-                _url.searchParams.set('filter[kode_desa]', $(this).data('filter')['kode_desa']);
-                _url.searchParams.set('filter[nama_kabupaten]', $(this).data('filter')['nama_kabupaten']);
-                _url.searchParams.set('filter[nama_kecamatan]', $(this).data('filter')['nama_kecamatan']);
-                _url.searchParams.set('filter[nama_desa]', $(this).data('filter')['nama_desa']);
-                window.location.href = _url.href;
-            })
         })
     </script>
 @endpush

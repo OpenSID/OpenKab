@@ -272,6 +272,7 @@
             $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
         });
 
+        var urlDetail = `{{ url('statistik/rtm/detail') }}`;
         var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
         urlStatistik.searchParams.set('filter[id]', default_id);
 
@@ -325,7 +326,7 @@
                 },
             }, {
                 data: function(data) {
-                    return data.attributes.jumlah
+                    return generateDetailLink(urlDetail, 'bdt', data.id, 0, data.attributes.jumlah);
                 },
             }, {
                 data: function(data) {
@@ -333,7 +334,7 @@
                 },
             }, {
                 data: function(data) {
-                    return data.attributes.laki_laki
+                    return generateDetailLink(urlDetail, 'bdt', data.id, 1, data.attributes.laki_laki);
                 },
             }, {
                 data: function(data) {
@@ -341,7 +342,7 @@
                 },
             }, {
                 data: function(data) {
-                    return data.attributes.perempuan
+                    return generateDetailLink(urlDetail, 'bdt', data.id, 2, data.attributes.perempuan);
                 },
             }, {
                 data: function(data) {
@@ -386,6 +387,12 @@
             });
         });
     });
+
+    function generateDetailLink(baseUrl, tipe, nomor, sex, label) {
+        let queryString = `${tipe}/${nomor}/${sex}`;
+        return `<a href="${baseUrl}/${queryString}" style="color: blue;">${label}</a>`;
+    }
+
     </script>
 @endsection
 @push('css')

@@ -58,6 +58,23 @@ class User extends Authenticatable
         'tempat_dilahirkan' => Enums\StatusEnum::class,
     ];
 
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'user_team', 'id_user', 'id_team');
+    }
+
+    public function scopeVisibleTo($query, $user)
+    {
+        if (!$user->hasRole('administrator')) {
+            $query->where('kode_kabupaten', $user->kode_kabupaten)
+                ->whereDoesntHave('roles', function ($q) {
+                    $q->where('name', 'administrator');
+                });
+        }
+
+        return $query;
+    }
+
     /**
      * Get the user's password.
      */
@@ -128,4 +145,12 @@ class User extends Authenticatable
         return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('user-log');
         // Chain fluent methods for configuration options
     }
+
+    public function getEffectiveKodeKabupaten($input = null)
+    {
+        return $this->hasRole('administrator') && $input
+            ? $input
+            : $this->kode_kabupaten;
+    }
+
 }

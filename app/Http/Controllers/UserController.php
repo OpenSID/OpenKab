@@ -38,7 +38,7 @@ class UserController extends Controller
         if ($request->ajax()) {
             $permission = $this->generateListPermission();
 
-            return DataTables::of(User::with('team')->get())
+            return DataTables::of(User::with('team')->visibleTo(auth()->user())->get())
                 ->addIndexColumn()
                 ->addColumn('nama_kabupaten', function ($row) {
                     if (empty($row->kode_kabupaten)) {
@@ -92,8 +92,11 @@ class UserController extends Controller
      */
     public function create()
     {
+        // dd(UserTeam::get());
         $user = null;
-        $groups = Team::get();
+        
+        $groups = Team::withoutAdminUsers()->get();
+
         $team = false;
 
         $kabupatens = (new ConfigApiService)->kabupaten();
@@ -114,6 +117,9 @@ class UserController extends Controller
     {
         try {
             $data = $request->validated();
+
+            $currentUser = auth()->user();
+
             $insertData = [
                 'name' => $data['name'],
                 'username' => $data['username'],
@@ -122,7 +128,7 @@ class UserController extends Controller
                 'phone' => $data['phone'],
                 'password' => $data['password'],
                 'active' => 1,
-                'kode_kabupaten' => $data['kode_kabupaten'],
+                'kode_kabupaten' => $currentUser->getEffectiveKodeKabupaten($request->input('kode_kabupaten')),
             ];
 
             if ($request->file('foto')) {
@@ -178,7 +184,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::with('team')->where('id', $id)->first();
-        $groups = Team::get();
+        $groups = Team::withoutAdminUsers()->get();
         $team = $user->team->first()->id ?? false;
 
         $kabupatens = (new ConfigApiService)->kabupaten();
@@ -213,13 +219,15 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         try {
+            $currentUser = auth()->user();
+
             $updateData = [
                 'name' => $request->get('name'),
                 'username' => $request->get('username') ?? $user->username,
                 'email' => $request->get('email'),
                 'company' => $request->get('company'),
                 'phone' => $request->get('phone'),
-                'kode_kabupaten' => $request->get('kode_kabupaten'),
+                 'kode_kabupaten' => $currentUser->getEffectiveKodeKabupaten($request->input('kode_kabupaten')),
             ];
             if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';

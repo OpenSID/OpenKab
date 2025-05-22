@@ -25,4 +25,14 @@ class UserTeam extends Model
     ];
 
     public $timestamps = false;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class, 'id_team');
+    }
 }

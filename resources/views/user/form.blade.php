@@ -75,7 +75,7 @@
     </div>
 </div>
 
-@if($openkab_siapakai)
+@if($openkab_siapakai && auth()->user()->hasRole('administrator'))
 <div class="col">
     <div class="mb-4">
         <label for="kode_kabupaten">Kabupaten<span class="text-danger">*</span></label>

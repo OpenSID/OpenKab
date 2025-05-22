@@ -45,13 +45,18 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
         document.addEventListener("DOMContentLoaded", function(event) {
+
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+            var url = new URL("{{ url('api/v1/pengaturan/group') }}");
+
             var grup = $('#grup').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('api/v1/pengaturan/group') }}`,
+                url: url,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {

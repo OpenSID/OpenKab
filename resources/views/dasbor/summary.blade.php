@@ -1,12 +1,12 @@
-<div class="row">
-        @php
-            $colors = ['primary', 'warning', 'success', 'info']; // Array warna
-        @endphp
+<div class="row" id="summary_block">
+    @php
+        $colors = ['primary', 'warning', 'success', 'info']; // Array warna
+    @endphp
 
-        @foreach ($categoriesItems as $item)
-            @include('dasbor.category_item', $item)
-        @endforeach
-        </div>
+    @foreach ($categoriesItems as $item)
+        @include('dasbor.category_item', $item)
+    @endforeach
+</div>
 
 @push('js')
     <script nonce="{{ csp_nonce() }}">
@@ -27,23 +27,24 @@
 
                     for (let index in category) {
                         $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value']);
-                        $(`.kategori-item .jumlah-${index}-elm`).closest('.btn-detail').data(
-                            'filter', {
-                                'kode_kabupaten': kabupaten,
-                                'kode_kecamatan': kecamatan,
-                                'kode_desa': desa,
-                                'nama_kabupaten': $('#filter_kabupaten').find(':selected')
-                                    .text(),
-                                'nama_kecamatan': $('#filter_kecamatan').find(':selected')
-                                    .text(),
-                                'nama_desa': $('#filter_desa').find(':selected').text(),
-                            });
+                        $(`.kategori-item .jumlah-${index}-elm`).closest('.item-box').find('a')
+                            .data(
+                                'filter', {
+                                    'kode_kabupaten': kabupaten,
+                                    'kode_kecamatan': kecamatan,
+                                    'kode_desa': desa,
+                                    'nama_kabupaten': $('#filter_kabupaten').find(':selected')
+                                        .text(),
+                                    'nama_kecamatan': $('#filter_kecamatan').find(':selected')
+                                        .text(),
+                                    'nama_desa': $('#filter_desa').find(':selected').text(),
+                                });
                     }
                 }, 'json');
             })
             $('#summary_block').trigger('change');
 
-            $('#summary_block .btn-detail').click(function(event) {
+            $('#summary_block a.btn-detail').click(function(event) {
                 event.preventDefault();
                 let url = $(this).data('url');
                 let _url = new URL(url);

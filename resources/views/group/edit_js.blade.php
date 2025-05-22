@@ -1,4 +1,6 @@
 <script nonce="{{ csp_nonce() }}"  >
+    const headers = @include('layouts.components.header_bearer_api_gabungan');
+    
     function group() {
         _.mixin({
             'mergeByKey': function(arr1, arr2, key) {
@@ -50,8 +52,11 @@
                 this.retriveMenu();
             },
 
+
             retriveMenu() {
-                fetch('{{ url('api/v1/pengaturan/group/menu') }}')
+                fetch(`{{ url('api/v1/pengaturan/group/menu') }}`, {
+                    headers: headers
+                })
                     .then(res => res.json())
                     .then(response => {
                         // this.menu = response.data
@@ -59,7 +64,9 @@
                     });
             },
             retriveGroup(menu) {
-                fetch('{{ url('api/v1/pengaturan/group/show/' . $id) }}')
+                fetch('{{ url('api/v1/pengaturan/group/show/' . $id) }}', {
+                    headers: headers
+                })
                     .then(res => res.json())
                     .then(response => {
                         this.dataGroup.name = response.data.attributes.name;
@@ -120,7 +127,8 @@
                 $.ajax({
                     type: "PUT",
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                     },
                     url: '{{ url('api/v1/pengaturan/group/' . $id) }}',
                     data: data,

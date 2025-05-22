@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Enums\KeluargaKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Bantuan;
-use App\Models\Keluarga;
-use App\Models\Penduduk;
 use App\Models\Point;
-use App\Models\Rtm;
 use App\Services\KesehatanApiService;
 
 class PresisiController extends Controller

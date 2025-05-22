@@ -44,9 +44,7 @@ class Team extends OpenKabModel
     public function scopeWithoutAdminUsers($query)
     {
         return $query->whereDoesntHave('role', function ($q) {
-                $q->where('name', 'administrator');
-            });
+            $q->where('name', 'administrator');
+        });
     }
-
-
 }

@@ -94,7 +94,7 @@ class UserController extends Controller
     {
         // dd(UserTeam::get());
         $user = null;
-        
+
         $groups = Team::withoutAdminUsers()->get();
 
         $team = false;
@@ -227,7 +227,7 @@ class UserController extends Controller
                 'email' => $request->get('email'),
                 'company' => $request->get('company'),
                 'phone' => $request->get('phone'),
-                 'kode_kabupaten' => $currentUser->getEffectiveKodeKabupaten($request->input('kode_kabupaten')),
+                'kode_kabupaten' => $currentUser->getEffectiveKodeKabupaten($request->input('kode_kabupaten')),
             ];
             if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';

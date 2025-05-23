@@ -54,11 +54,24 @@ class StatistikController extends Controller
         ]);
     }
 
-    public function detail($tipe = '0', $nomor = 0, $sex = null)
+    public function detail($tipe = '0', $nomor = 0, $sex = null, $kategori = null, $kategori_id = null)
     {
         return view('statistik.detail', [
-            'judul' => 'RTM',
-            'default_kategori' => 'bdt',
+            'route_back' => "statistik.{$kategori}",
+            'judul' => strtoupper($kategori),
+            'default_kategori' => $kategori_id,
+            'tipe' => $tipe,
+            'nomor' => $nomor,
+            'sex' => $sex,
+        ]);
+    }
+
+    public function detailPenduduk($tipe = '0', $nomor = 0, $sex = null, $kategori = null, $kategori_id = null)
+    {
+        return view('statistik.detail-bantuan', [
+            'route_back' => "statistik.{$kategori}",
+            'judul' => strtoupper($kategori),
+            'default_kategori' => $kategori_id,
             'tipe' => $tipe,
             'nomor' => $nomor,
             'sex' => $sex,

@@ -272,7 +272,7 @@
             $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
         });
 
-        var urlDetail = `{{ url('statistik/rtm/detail') }}`;
+        var urlDetail = `{{ url('statistik/${kategori}/detail') }}`;
         var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
         urlStatistik.searchParams.set('filter[id]', default_id);
 
@@ -326,7 +326,7 @@
                 },
             }, {
                 data: function(data) {
-                    return generateDetailLink(urlDetail, 'bdt', data.id, 0, data.attributes.jumlah);
+                    return generateDetailLink(urlDetail, default_id, data.id, 0, data.attributes.jumlah, kategori, default_id);
                 },
             }, {
                 data: function(data) {
@@ -334,7 +334,7 @@
                 },
             }, {
                 data: function(data) {
-                    return generateDetailLink(urlDetail, 'bdt', data.id, 1, data.attributes.laki_laki);
+                    return generateDetailLink(urlDetail, default_id, data.id, 1, data.attributes.laki_laki, kategori, default_id);
                 },
             }, {
                 data: function(data) {
@@ -342,7 +342,7 @@
                 },
             }, {
                 data: function(data) {
-                    return generateDetailLink(urlDetail, 'bdt', data.id, 2, data.attributes.perempuan);
+                    return generateDetailLink(urlDetail, default_id, data.id, 2, data.attributes.perempuan, kategori, default_id);
                 },
             }, {
                 data: function(data) {
@@ -388,8 +388,8 @@
         });
     });
 
-    function generateDetailLink(baseUrl, tipe, nomor, sex, label) {
-        let queryString = `${tipe}/${nomor}/${sex}`;
+    function generateDetailLink(baseUrl, tipe, nomor, sex, label, kategori, default_id) {
+        let queryString = `${tipe}/${nomor}/${sex}/${kategori}/${default_id}`;
         return `<a href="${baseUrl}/${queryString}" style="color: blue;">${label}</a>`;
     }
 

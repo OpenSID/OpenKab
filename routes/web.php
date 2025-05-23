@@ -153,9 +153,13 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         ->group(function () {
             Route::middleware(['permission:statistik-penduduk-read'])->get('/penduduk', 'penduduk');
             Route::middleware(['permission:statistik-keluarga-read'])->get('/keluarga', 'keluarga');
+
             Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm')->name('statistik.rtm');
-            Route::get('/rtm/detail/{tipe?}/{no?}/{sex?}', 'detail')->name('statistik.detail');
-            Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan');
+            Route::get('/rtm/detail/{tipe?}/{no?}/{sex?}/{kategori}/{kategori_id}', 'detail')->name('statistik.detail');
+
+            Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan')->name('statistik.bantuan');
+            Route::get('/bantuan/detail/{tipe?}/{no?}/{sex?}/{kategori}/{kategori_id}', 'detailPenduduk')->name('statistik.detail.bantuan');
+
             Route::get('/cetak/{kategori}/{id}', 'cetak');
         });
 

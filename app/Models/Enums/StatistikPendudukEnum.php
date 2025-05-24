@@ -30,7 +30,7 @@ class StatistikPendudukEnum extends Enum
         'bpjs-ketenagakerjaan' => 'BPJS Ketenagakerjaan',
         'status-kehamilan' => 'Status Kehamilan',
     ];
-    
+
     public const RENTANG_UMUR = [
         'key' => 13,
         'slug' => 'rentang-umur',

@@ -34,4 +34,5 @@
     </div>
 @endsection
 
+@include('user.select2')
 @include('partials.reset_form')

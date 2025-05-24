@@ -103,7 +103,7 @@ function MenuEditor(e, s) {
             var r = $("<li>").addClass("list-group-item pr-0");
             r.data(o);
             var a = $("<div>").addClass('d-flex'),
-                c = $("<i>").addClass(s.icon),
+                c = $("<i>").addClass('mt-1 '+ s.icon),
                 d = $("<span>").addClass("mr-auto txt").append(s.text),
                 e = $("<span>").addClass("mr-2 href").text(s.href),
                 p = u();
@@ -140,6 +140,7 @@ function MenuEditor(e, s) {
                 var s = e.data();
                 $.each(s, (function (e, s) {
                     i.find("[name=" + e + "]").val(s)
+                    i.find("[name=" + e + "]").trigger("change")
                 })), i.find(".item-menu").first().focus(), s.hasOwnProperty("icon") ? c.iconpicker("setIcon", s.icon) : c.iconpicker("setIcon", "empty");
                 r.removeAttr("disabled")
             }(n = $(this).closest("li"))

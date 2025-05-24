@@ -26,9 +26,10 @@
         <select name="id" id="id" required class="form-control input-sm" title="Pilih salah satu">
             <option value="null">Posyandu</option>
             @foreach ($data['posyandu'] as $item)
-                <option value="{{ $item['id'] ?? '' }}" @selected(($item['id'] ?? '') == $id)>
-                    {{ $item['nama'] ?? '' }}</option>
+                <option value="{{ $item['id'] }}" {{ $item['id'] == $data['id'] ? 'selected' : '' }}>
+                    {{ $item['attributes']['nama'] }}</option>
             @endforeach
         </select>
     </div>
+</div>
 </div>

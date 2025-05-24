@@ -53,7 +53,7 @@ class PemetaanService
             return $response->json('data') ?? null;
         }
 
-        throw new \Exception('Gagal mengupdate data point: ' . $response->status() . ' - ' . $response->body());
+        throw new \Exception('Gagal mengupdate data point: '.$response->status().' - '.$response->body());
     }
 
     public function pointUpdate(array $data, string $id): ?array
@@ -68,7 +68,7 @@ class PemetaanService
             return $response->json('data') ?? null;
         }
 
-        throw new \Exception('Gagal mengupdate data point: ' . $response->status() . ' - ' . $response->body());
+        throw new \Exception('Gagal mengupdate data point: '.$response->status().' - '.$response->body());
     }
 
     public function pointStore(array $data): ?array
@@ -83,9 +83,8 @@ class PemetaanService
             return $response->json('data') ?? null;
         }
 
-        throw new \Exception('Gagal store data point: ' . $response->status() . ' - ' . $response->body());
+        throw new \Exception('Gagal store data point: '.$response->status().' - '.$response->body());
     }
-
 
     public function getAllPlan(array $query = [])
     {

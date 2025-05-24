@@ -45,9 +45,9 @@ class PointController extends Controller
         $action = 'Ubah';
         $form_action = '/api/v1/point/update/'.$id;
         $point = (object) collect((new PemetaanService)->getAllPoint([
-            'filter[id]' => $id
+            'filter[id]' => $id,
         ]))->first();
-        
+
         // $point = Point::findOrFail($id);
         $parrent = 0;
         $tipe = AccessTypeEnum::ROOT->value();
@@ -81,7 +81,7 @@ class PointController extends Controller
         ];
         // $point = Point::findOrFail($id);
         $point = (object) collect((new PemetaanService)->getAllPoint([
-            'filter[id]' => $id
+            'filter[id]' => $id,
         ]))->first();
 
         // dd($point, $status);
@@ -118,7 +118,7 @@ class PointController extends Controller
                 'tipe' => $request->tipe,
                 'sumber' => $request->sumber,
             ];
-            
+
             $point = (object) (new PemetaanService)->pointStore($data);
 
             // Menyimpan pesan sukses ke session
@@ -140,9 +140,9 @@ class PointController extends Controller
     {
         try {
             $point = (object) collect((new PemetaanService)->getAllPoint([
-                        'filter[id]' => $id
-                    ]))->first();
-        
+                'filter[id]' => $id,
+            ]))->first();
+
             $data = [
                 'nama' => $request->nama,
                 'simbol' => $request->simbol ?? $point->simbol,

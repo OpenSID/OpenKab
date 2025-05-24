@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Bantuan;
 use App\Models\Enums\StatistikPendudukEnum;
 use App\Models\Enums\StatistikRtmEnum;
-use App\Services\PemetaanService;
 use App\Services\KesehatanApiService;
+use App\Services\PemetaanService;
 
 class PresisiController extends Controller
 {
@@ -186,7 +186,7 @@ class PresisiController extends Controller
         $listDesa = ['' => 'Pilih Desa'];
 
         $data = (new PemetaanService)->getAllPoint([
-            'filter[tipe]' => AccessTypeEnum::ROOT->value()
+            'filter[tipe]' => AccessTypeEnum::ROOT->value(),
         ]);
 
         $object = json_decode(json_encode($data));

@@ -57,4 +57,15 @@ class StatistikController extends Controller
             'filter' => $filter['filter'],
         ]);
     }
+
+    public function detail($tipe = '0', $nomor = 0, $sex = null)
+    {
+        return view('statistik.detail', [
+            'judul' => 'RTM',
+            'default_kategori' => 'bdt',
+            'tipe' => $tipe,
+            'nomor' => $nomor,
+            'sex' => $sex,
+        ]);
+    }
 }

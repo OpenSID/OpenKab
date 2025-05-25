@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-class StatistikPendudukEnum extends Enum
+class StatistikPendudukEnum extends BaseEnum
 {
     public const KATEGORI_STATISTIK = [
         'rentang-umur' => 'Rentang Umur',

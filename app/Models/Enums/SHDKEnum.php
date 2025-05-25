@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-class SHDKEnum extends Enum
+class SHDKEnum extends BaseEnum
 {
     public const KEPALA_KELUARGA = 1;
 

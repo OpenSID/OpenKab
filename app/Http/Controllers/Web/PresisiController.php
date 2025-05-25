@@ -6,6 +6,7 @@ use App\Enums\AccessTypeEnum;
 use App\Enums\KeluargaKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Bantuan;
+use App\Models\Point;
 use App\Models\Enums\StatistikPendudukEnum;
 use App\Models\Enums\StatistikRtmEnum;
 use App\Services\KesehatanApiService;

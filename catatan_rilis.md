@@ -19,3 +19,4 @@ Di rilis ini, versi 2505.0.0 berisi penambahan dan perbaikan yang diminta penggu
 6. [#638](https://github.com/OpenSID/OpenKab/issues/638) Sesuaikan ConfigDemoSeeder, BantuanDemoSeeder dan ArtikelDemoSeeder ke Api database gabungan.
 7. [#637](https://github.com/OpenSID/OpenKab/issues/637) Sesuikan WilayahDemoSeeder, RTMDemoSeeder, KeluargaDemoSeeder dan KategoriDemoSeeder ke Api database gabungan.
 8. [#633](https://github.com/OpenSID/OpenKab/issues/633) Penyesuaian Plan dan penambahan include point, childer pada api dan sesuaikan halaman openkab dengan api database gabungan.
+9. [#636](https://github.com/OpenSID/OpenKab/issues/636) Pisahkan Enum yang melekat pada model yang extends ke BaseModel dan sesuaikan pemanggilan enum pada halaman yang sebelumnya menggunakan.

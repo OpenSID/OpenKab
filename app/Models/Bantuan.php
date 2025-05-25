@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\KategoriSasaranBantuanEnum;
 use App\Models\Traits\FilterWilayahTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -99,21 +100,21 @@ class Bantuan extends BaseModel
         }
 
         switch ($sasaran) {
-            case Bantuan::SASARAN_PENDUDUK:
+            case KategoriSasaranBantuanEnum::SASARAN_PENDUDUK:
                 $query->join('tweb_penduduk', 'tweb_penduduk.nik', '=', 'program_peserta.peserta', 'left');
 
                 break;
-            case Bantuan::SASARAN_KELUARGA:
+            case KategoriSasaranBantuanEnum::SASARAN_KELUARGA:
                 $query->join('tweb_keluarga', 'tweb_keluarga.no_kk', '=', 'program_peserta.peserta', 'left')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left');
 
                 break;
-            case Bantuan::SASARAN_RUMAH_TANGGA:
+            case KategoriSasaranBantuanEnum::SASARAN_RUMAH_TANGGA:
                 $query->join('tweb_rtm', 'tweb_rtm.no_kk', '=', 'program_peserta.peserta', 'left')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_rtm.nik_kepala', 'left');
 
                 break;
-            case Bantuan::SASARAN_KELOMPOK:
+            case KategoriSasaranBantuanEnum::SASARAN_KELOMPOK:
                 $query->join('kelompok', 'kelompok.id', '=', 'program_peserta.peserta', 'left')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'kelompok.id_ketua', 'left')
                     ->where('kelompok.tipe', 'kelompok');

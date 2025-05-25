@@ -16,6 +16,7 @@
                 <tr>
                     <td>Simbol</td>
                     <td>:</td>
+                    {{-- <td><img src="{{ $point->path_simbol}}" /></td> --}}
                     <td><img src="{{asset('assets/img/gis/lokasi/point/'.$point->simbol)}}" /></td>
                 </tr>
             </tbody>

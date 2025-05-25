@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-class StatistikRtmEnum extends Enum
+class StatistikRtmEnum extends BaseEnum
 {
     public const BDT = [
         'key' => 'bdt',

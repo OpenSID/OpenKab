@@ -55,6 +55,15 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Kelas Sosial</label>
+                                            <select class="select2-filter form-control-sm width-100" id="kelas_sosial"
+                                                name="kelas_sosial" data-option='{!! json_encode(App\Models\Enums\KelasSosialEnum::select2()) !!}'
+                                                data-placeholder="Semua Kelas Sosial">
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm">
@@ -146,6 +155,9 @@
                         </div>
                     </div>
                     <div class="table-responsive">
+                        @if ($judul)
+                            <h4 class="text-center">{{ $judul }}</h4>
+                        @endif
                         <table class="table table-striped" id="keluarga">
                             <thead>
                                 <tr>
@@ -181,6 +193,11 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            const filterDefault = {!! json_encode($filters) !!}
+            let kriteria_jumlah = filterDefault['jumlah'] ?? null
+            let kriteria_belum_mengisi = filterDefault['belum_mengisi'] ?? null
+            let kriteria_total = filterDefault['total'] ?? null
+
             var keluarga = $('#keluarga').DataTable({
                 processing: true,
                 serverSide: true,
@@ -194,8 +211,12 @@
                         return {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
+                            "filter[jumlah]": kriteria_jumlah,
+                            "filter[belum_mengisi]": kriteria_belum_mengisi,
+                            "filter[total]": kriteria_total,
                             "filter[sex]": $('#sex').val(),
                             "filter[status]": $('#status_kk').val(),
+                            "filter[kelas_sosial]": $('#kelas_sosial').val(),
                             "filter[kode_kabupaten]": $('#filter_kabupaten').val(),
                             "filter[kode_kecamatan]": $('#filter_kecamatan').val(),
                             "filter[kode_desa]": $('#filter_desa').val(),
@@ -326,6 +347,10 @@
                 $('#filter_kabupaten').val('').change();
                 $('#filter_kecamatan').val('').change();
                 $('#filter_desa').val('').change();
+                $('.select2-filter').val('').change();
+                kriteria_belum_mengisi = null;
+                kriteria_jumlah = null;
+                kriteria_total = null;
 
                 keluarga.ajax.reload();
             });
@@ -334,15 +359,29 @@
                 window.open(`{{ url('keluarga/cetak') }}?${$.param(keluarga.ajax.params())}`, '_blank');
             });
 
-            @if ($filters['kode_kabupaten'] ?? false)
-                $('a[href="#collapse-filter"]').click();
-            @endif
-
             $('#status_kk').select2({
                 theme: 'bootstrap4',
                 allowClear: true,
                 placeholder: "Semua Status",
             });
+
+            $('select.select2-filter').each(function() {
+                $(this).select2({
+                    width: '100%',
+                    theme: 'bootstrap4',
+                    placeholder: $(this).attr('placeholder'),
+                    allowClear: true,
+                    data: $(this).data('option') ?? null,
+                })
+            });
+
+            for (let i in filterDefault) {
+                $(`#${i}`).val(filterDefault[i]).trigger('change');
+            }
+
+            @if ($filters['kode_kabupaten'] ?? false)
+                $('a[href="#collapse-filter"]').click();
+            @endif
         });
     </script>
 @endsection

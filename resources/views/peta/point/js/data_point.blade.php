@@ -61,8 +61,8 @@ var point = $('#point').DataTable({
             orderable: true
         },
         {
-            data: 'enabled',
-            name: 'enabled',
+            data: 'enabled_str',
+            name: 'enabled_str',
             searchable: false,
             orderable: false,
             class: 'padat'

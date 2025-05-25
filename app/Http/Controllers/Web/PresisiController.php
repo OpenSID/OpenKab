@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\AccessTypeEnum;
 use App\Enums\KeluargaKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Bantuan;
 use App\Models\Point;
+use App\Models\Enums\StatistikPendudukEnum;
+use App\Models\Enums\StatistikRtmEnum;
 use App\Services\KesehatanApiService;
+use App\Services\PemetaanService;
 
 class PresisiController extends Controller
 {
@@ -43,7 +47,7 @@ class PresisiController extends Controller
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
-        $statistik = StatistikPendudukEnum::allKeyLabel();
+        $statistik = StatistikPendudukEnum::KATEGORI_STATISTIK;
 
         return view('presisi.kependudukan.index', compact('statistik', 'id', 'categoriesItems'));
     }
@@ -181,7 +185,14 @@ class PresisiController extends Controller
         ];
         $listKecamatan = ['' => 'Pilih Kecamatan'];
         $listDesa = ['' => 'Pilih Desa'];
-        $kategori = Point::root()->where('sumber', 'OpenKab')->get();
+
+        $data = (new PemetaanService)->getAllPoint([
+            'filter[tipe]' => AccessTypeEnum::ROOT->value(),
+        ]);
+
+        $object = json_decode(json_encode($data));
+
+        $kategori = (array) $object;
 
         return view('presisi.geo_spasial.index', compact('categoriesItems', 'listKecamatan', 'listDesa', 'kategori'));
     }

@@ -1,8 +1,6 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
-
-            const headerFilter = @include('layouts.components.header_bearer_api_gabungan');
             let urlKabupaten =
                 "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/get-list-kabupaten' }}";
             let urlKecamatan =
@@ -10,33 +8,19 @@
             let urlDesa =
                 "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/get-list-desa' }}";
 
+            $.get(urlKabupaten, {}, function(data) {
+                var optionEmpty = new Option("", "");
+                $("#filter_kabupaten").append(optionEmpty);
+
+                for (var i = 0; i < data.length; i++) {
+                    var newOption = new Option(data[i].nama_kabupaten, data[i]
+                        .kode_kabupaten, false, false);
+                    $("#filter_kabupaten").append(newOption);
+                }
+            }, 'json')
+
             $('#filter_kabupaten').select2({
-                theme: 'bootstrap4',
-                ajax: {
-                    url: urlKabupaten,
-                    dataType: 'json',
-                    headers: headerFilter,
-                    delay: 400,
-                    data: function(params) {
-                        return {
-                            "filter[search]": params.term,
-                            "page[number]": params.page
-                        };
-                    },
-                    processResults: function(response, params) {
-                        params.page = params.page || 1;
-                        return {
-                            results: $.map(response, function(item) {
-                                return {
-                                    id: item.kode_kabupaten,
-                                    text: item.nama_kabupaten,
-                                }
-                            }),
-                        };
-                    },
-                },
                 placeholder: "Pilih Kabupaten",
-                cache: true,
                 allowClear: true,
                 width: '100%',
             })
@@ -60,7 +44,6 @@
                     $.ajax({
                         url: urlKecamatan + '/' + id,
                         type: 'GET',
-                        headers: headerFilter,
                         dataType: 'json',
                         data: {
                             "filter[search]": id
@@ -85,7 +68,6 @@
                     $.ajax({
                         url: urlDesa + '/' + id,
                         type: 'GET',
-                        headers: headerFilter,
                         dataType: 'json',
                         data: {
                             "filter[search]": id

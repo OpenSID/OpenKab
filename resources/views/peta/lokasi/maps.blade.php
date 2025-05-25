@@ -20,6 +20,7 @@
                         <i class="fas fa-arrow-circle-left"></i>&ensp;Kembali ke Data Lokasi
                     </a>
                 </div>
+                {{-- @dd(url('show/plan/ajax_lokasi_maps/'.$parent.'/'.$id)) --}}
                 <iframe src="{{url('show/plan/ajax_lokasi_maps/'.$parent.'/'.$id)}}" width="100%" height="600px" frameborder="0"></iframe>
             </div>
         </div>

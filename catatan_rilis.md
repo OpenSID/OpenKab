@@ -2,8 +2,10 @@ Di rilis ini, versi 2505.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Penambahan Fitur
 
-1. [#648](https://github.com/OpenSID/OpenKab/issues/648) Penyesuaian pengguna OpenKab untuk pengguna SiapPakai.
-2. [#645](https://github.com/OpenSID/OpenKab/issues/645) Penyesuaian dasbor permintaan tabanan.
+1. [#648](https://github.com/OpenSID/OpenKab/issues/648) Penambahan pengguna OpenKab untuk pengguna SiapPakai.
+2. [#645](https://github.com/OpenSID/OpenKab/issues/645) Penambahan dasbor permintaan tabanan.
+3. [#662](https://github.com/OpenSID/OpenKab/issues/662) Penambahan navigasi link selengkapnya untuk desa & jumlah penduduk.
+4. [#658](https://github.com/OpenSID/OpenKab/issues/658) Penambahan details penduduk pada statistik keluarga OpenKab.
 
 #### Perbaikan BUG
 
@@ -18,3 +20,6 @@ Di rilis ini, versi 2505.0.0 berisi penambahan dan perbaikan yang diminta penggu
 5. [#635](https://github.com/OpenSID/OpenKab/issues/635) Sesuaikan RekapService.php dengan Api database gabungan ibu hamil dan sesuaikan RekapService.php sesuai dengan api.
 6. [#638](https://github.com/OpenSID/OpenKab/issues/638) Sesuaikan ConfigDemoSeeder, BantuanDemoSeeder dan ArtikelDemoSeeder ke Api database gabungan.
 7. [#637](https://github.com/OpenSID/OpenKab/issues/637) Sesuikan WilayahDemoSeeder, RTMDemoSeeder, KeluargaDemoSeeder dan KategoriDemoSeeder ke Api database gabungan.
+8. [#633](https://github.com/OpenSID/OpenKab/issues/633) Penyesuaian Plan dan penambahan include point, childer pada api dan sesuaikan halaman openkab dengan api database gabungan.
+9. [#636](https://github.com/OpenSID/OpenKab/issues/636) Pisahkan Enum yang melekat pada model yang extends ke BaseModel dan sesuaikan pemanggilan enum pada halaman yang sebelumnya menggunakan.
+10. [#657](https://github.com/OpenSID/OpenKab/issues/657) Sesuaikan statistik penduduk.

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AccessTypeEnum;
 use App\Models\Point;
+use App\Services\PemetaanService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -16,8 +18,8 @@ class PointController extends Controller
     public function form()
     {
         $status = [
-            Point::LOCK => 'Aktif',
-            Point::UNLOCK => 'Tidak Aktif',
+            AccessTypeEnum::LOCK->value() => 'Aktif',
+            AccessTypeEnum::UNLOCK->value() => 'Tidak Aktif',
         ];
 
         $simbol = gis_simbols();
@@ -26,7 +28,7 @@ class PointController extends Controller
         $form_action = '/api/v1/point';
         $point = null;
         $parrent = 0;
-        $tipe = Point::ROOT;
+        $tipe = AccessTypeEnum::ROOT->value();
 
         return view('peta.point.form', compact('status', 'action', 'form_action', 'point', 'simbol', 'parrent', 'tipe'));
     }
@@ -34,17 +36,21 @@ class PointController extends Controller
     public function edit($id = '')
     {
         $status = [
-            Point::LOCK => 'Aktif',
-            Point::UNLOCK => 'Tidak Aktif',
+            AccessTypeEnum::LOCK->value() => 'Aktif',
+            AccessTypeEnum::UNLOCK->value() => 'Tidak Aktif',
         ];
 
         $simbol = gis_simbols();
 
         $action = 'Ubah';
         $form_action = '/api/v1/point/update/'.$id;
-        $point = Point::findOrFail($id);
+        $point = (object) collect((new PemetaanService)->getAllPoint([
+            'filter[id]' => $id,
+        ]))->first();
+
+        // $point = Point::findOrFail($id);
         $parrent = 0;
-        $tipe = Point::ROOT;
+        $tipe = AccessTypeEnum::ROOT->value();
 
         return view('peta.point.form', compact('status', 'action', 'form_action', 'point', 'simbol', 'parrent', 'tipe'));
     }
@@ -52,8 +58,8 @@ class PointController extends Controller
     public function sub($parrent = '')
     {
         $status = [
-            Point::LOCK => 'Aktif',
-            Point::UNLOCK => 'Tidak Aktif',
+            AccessTypeEnum::LOCK->value() => 'Aktif',
+            AccessTypeEnum::UNLOCK->value() => 'Tidak Aktif',
         ];
 
         $simbol = gis_simbols();
@@ -62,7 +68,7 @@ class PointController extends Controller
         $form_action = '/api/v1/point';
         $point = null;
         $parrent = $parrent;
-        $tipe = Point::CHILD;
+        $tipe = AccessTypeEnum::CHILD->value();
 
         return view('peta.point.form', compact('status', 'action', 'form_action', 'point', 'simbol', 'parrent', 'tipe'));
     }
@@ -70,10 +76,15 @@ class PointController extends Controller
     public function detail($id)
     {
         $status = [
-            Point::LOCK => 'Aktif',
-            Point::UNLOCK => 'Tidak Aktif',
+            AccessTypeEnum::LOCK->value() => 'Aktif',
+            AccessTypeEnum::UNLOCK->value() => 'Tidak Aktif',
         ];
-        $point = Point::findOrFail($id);
+        // $point = Point::findOrFail($id);
+        $point = (object) collect((new PemetaanService)->getAllPoint([
+            'filter[id]' => $id,
+        ]))->first();
+
+        // dd($point, $status);
 
         return view('peta.point.detail', compact('id', 'point', 'status'));
     }
@@ -81,7 +92,8 @@ class PointController extends Controller
     public function lock($id, $val = 1)
     {
         try {
-            Point::findOrFail($id)->update(['enabled' => $val]);
+            $data = ['enabled' => $val];
+            (new PemetaanService)->pointLock($data, $id);
 
             Session::flash('success', 'Status berhasil diupdate.');
 
@@ -99,13 +111,15 @@ class PointController extends Controller
     {
         // Simpan data ke database
         try {
-            $point = Point::create([
+            $data = [
                 'nama' => $request->nama,
                 'simbol' => $request->simbol ?? 'default.png',
                 'parrent' => $request->parrent ?? 0,
                 'tipe' => $request->tipe,
                 'sumber' => $request->sumber,
-            ]);
+            ];
+
+            $point = (object) (new PemetaanService)->pointStore($data);
 
             // Menyimpan pesan sukses ke session
             Session::flash('success', 'Data berhasil disimpan.');
@@ -125,14 +139,16 @@ class PointController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            // Cari data berdasarkan ID
-            $point = Point::findOrFail($id);
+            $point = (object) collect((new PemetaanService)->getAllPoint([
+                'filter[id]' => $id,
+            ]))->first();
 
-            // Update data di database
-            $point->update([
+            $data = [
                 'nama' => $request->nama,
                 'simbol' => $request->simbol ?? $point->simbol,
-            ]);
+            ];
+
+            $point = (object) (new PemetaanService)->pointUpdate($data, $id);
 
             // Menyimpan pesan sukses ke session
             Session::flash('success', 'Data berhasil diperbarui.');

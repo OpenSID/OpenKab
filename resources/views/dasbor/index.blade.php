@@ -14,8 +14,8 @@
                 @include('dasbor.summary')
             </div>
         </div>
-        @include('dasbor.peta')
         @include('dasbor.statistik_penduduk')
+        @include('dasbor.peta')
         @include('dasbor.tabel_penduduk')
     </div>
 

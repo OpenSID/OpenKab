@@ -12,6 +12,7 @@ Di rilis ini, versi 2505.0.0 berisi penambahan dan perbaikan yang diminta penggu
 #### Perbaikan BUG
 
 1. [#642](https://github.com/OpenSID/OpenKab/issues/642) Perbaikan hak akses untuk data presisi.
+2. [#675](https://github.com/OpenSID/OpenKab/issues/675) Perbaikan bug di kategori artikel.
 
 #### Perubahan Teknis
 

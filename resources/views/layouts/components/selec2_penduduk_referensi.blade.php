@@ -4,64 +4,18 @@
             let header = @include('layouts.components.header_bearer_api_gabungan');
             $('#status').select2({
                 theme: 'bootstrap4',
-                ajax: {
-                    url: `{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk/referensi/status' }}`,
-                    headers: header,
-                    dataType: 'json',
-                    delay: 400,
-                    data: function(params) {
-                        return {
-                            "filter[search]": params.term,
-                            "page[number]": params.page
-                        };
-                    },
-                    processResults: function(response, params) {
-                        params.page = params.page || 1;
-
-                        return {
-                            results: $.map(response.data, function(item) {
-                                return {
-                                    id: item.id,
-                                    text: item.attributes.nama,
-                                }
-                            }),
-                            pagination: {
-                                more: params.page < response.meta.pagination.total_pages
-                            }
-                        };
-                    }
-                }
+                data: {!! json_encode(App\Models\Enums\StatusPendudukEnum::select2()) !!},
+                allowClear: true,
+                placeholder: "Pilih Status",
+                width: '100%',
             })
 
             $('#status-dasar').select2({
                 theme: 'bootstrap4',
-                ajax: {
-                    url: `{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk/referensi/status-dasar' }}`,
-                    headers: header,
-                    dataType: 'json',
-                    delay: 400,
-                    data: function(params) {
-                        return {
-                            "filter[search]": params.term,
-                            "page[number]": params.page
-                        };
-                    },
-                    processResults: function(response, params) {
-                        params.page = params.page || 1;
-
-                        return {
-                            results: $.map(response.data, function(item) {
-                                return {
-                                    id: item.id,
-                                    text: item.attributes.nama,
-                                }
-                            }),
-                            pagination: {
-                                more: params.page < response.meta.pagination.total_pages
-                            }
-                        };
-                    }
-                }
+                data: {!! json_encode(App\Models\Enums\StatusDasarEnum::select2()) !!},
+                allowClear: true,
+                placeholder: "Pilih Status Dasar",
+                width: '100%',
             })
 
             $('#sex').select2({

@@ -42,11 +42,57 @@ $('#bt_filter').click(function() {
 });
 
 function updateWebsiteData(kabupaten = null, kecamatan = null, desa = null) {
-    let url = "{{ url('api/v1/data-website') }}";
+    {{-- let url = "{{ url('api/v1/data-website') }}"; --}}
+
+    const header = @include('layouts.components.header_bearer_api_gabungan');
+    var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-website' }}");
+
     if (kabupaten || kecamatan || desa) {
         url += `?filter[kode_kabupaten]=${kabupaten || ''}&filter[kode_kecamatan]=${kecamatan || ''}&filter[kode_desa]=${desa || ''}`;
     }
-    $.get(url, {}, function(result) {
+    $.ajax({
+        url: url.href,
+        method: 'GET',
+        dataType: 'json',
+        headers: header,
+        success: function(result) {
+            let category = result.data.categoriesItems;
+            let listDesa = result.data.listDesa;
+            let listKecamatan = result.data.listKecamatan;
+    
+            // Update category items
+            for (let index in category) {
+                $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value']);
+            }
+    
+            let _optionKecamatan = [];
+            let _optionDesa = [];
+    
+            // Prepare options for Kecamatan
+            for (let item in listKecamatan) {
+                _optionKecamatan.push(`<option>${item}</option>`);
+            }
+    
+            // Prepare options for Desa
+            for (let item in listDesa) {
+                _optionDesa.push(`<optgroup label='${item}'>`);
+                for (let desa in listDesa[item]) {
+                    _optionDesa.push(`<option value='${desa}'>${listDesa[item][desa]}</option>`);
+                }
+                _optionDesa.push(`</optgroup>`);
+            }
+    
+            // Append options to select elements
+            $('select[name=search_kecamatan]').empty().append(_optionKecamatan.join('')).trigger("change");
+            $('select[name=search_desa]').empty().append(_optionDesa.join('')).trigger("change");
+        },
+        error: function(xhr, status, error) {
+            // Handle error response here if necessary
+            console.error("Error fetching data: ", status, error);
+        }
+    });
+
+    {{-- $.get(url, {}, function(result) {
         let category = result.data.categoriesItems;
         let listDesa = result.data.listDesa;
         let listKecamatan = result.data.listKecamatan;
@@ -71,7 +117,7 @@ function updateWebsiteData(kabupaten = null, kecamatan = null, desa = null) {
 
         $('select[name=search_kecamatan]').empty().append(_optionKecamatan.join('')).trigger("change");
         $('select[name=search_desa]').empty().append(_optionDesa.join('')).trigger("change");
-    }, 'json');
+    }, 'json'); --}}
 }
 
 

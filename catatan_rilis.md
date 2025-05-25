@@ -2,8 +2,9 @@ Di rilis ini, versi 2505.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Penambahan Fitur
 
-1. [#648](https://github.com/OpenSID/OpenKab/issues/648) Penyesuaian pengguna OpenKab untuk pengguna SiapPakai.
-2. [#645](https://github.com/OpenSID/OpenKab/issues/645) Penyesuaian dasbor permintaan tabanan.
+1. [#648](https://github.com/OpenSID/OpenKab/issues/648) Penambahan pengguna OpenKab untuk pengguna SiapPakai.
+2. [#645](https://github.com/OpenSID/OpenKab/issues/645) Penambahan dasbor permintaan tabanan.
+3. [#662](https://github.com/OpenSID/OpenKab/issues/662) Penambahan navigasi link selengkapnya untuk desa & jumlah penduduk.
 
 #### Perbaikan BUG
 

@@ -7,6 +7,7 @@ Di rilis ini, versi 2505.0.0 berisi penambahan dan perbaikan yang diminta penggu
 3. [#662](https://github.com/OpenSID/OpenKab/issues/662) Penambahan navigasi link selengkapnya untuk desa & jumlah penduduk.
 4. [#658](https://github.com/OpenSID/OpenKab/issues/658) Penambahan details penduduk pada statistik keluarga OpenKab.
 5. [#667](https://github.com/OpenSID/OpenKab/issues/667) Penambahan filter pada bagian demografi halaman publik.
+6. [#663](https://github.com/OpenSID/OpenKab/issues/663) Penambahan details penduduk pada statistik RTM OpenKab.
 
 #### Perbaikan BUG
 

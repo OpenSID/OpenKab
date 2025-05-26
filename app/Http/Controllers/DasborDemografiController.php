@@ -20,6 +20,7 @@ class DasborDemografiController extends Controller
             ['key' => 'suku', 'text' => StatistikPendudukEnum::SUKU_ETNIS['label']],
             ['key' => StatistikPendudukEnum::PENYANDANG_CACAT['slug'], 'text' => StatistikPendudukEnum::PENYANDANG_CACAT['label']],
         ];
+
         return view('demografi.index', compact('chartItems', 'statistikUrl'));
     }
 }

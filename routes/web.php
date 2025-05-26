@@ -5,9 +5,12 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\CatatanRilis;
 use App\Http\Controllers\DasborController;
+use App\Http\Controllers\DasborDemografiController;
 use App\Http\Controllers\DataPokokController;
+use App\Http\Controllers\DesaController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IdentitasController;
+use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
@@ -49,6 +52,7 @@ Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {
     Route::get('catatan-rilis', CatatanRilis::class);
     Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
+    Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->name('dasbor-demografi');
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
@@ -111,7 +115,9 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::middleware(['permission:penduduk-read'])->controller(KeluargaController::class)
         ->prefix('keluarga')
         ->group(function () {
-            Route::middleware(['permission:penduduk-read'])->get('/detail/{no_kk}', 'show')->name('keluarga.detail');
+            Route::get('', 'index')->name('keluarga.index');
+            Route::get('cetak', 'cetak')->name('keluarga.cetak');
+            Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
     // Bantuan
@@ -124,7 +130,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         });
 
     // Data Pokok
-    Route::middleware(['permission:datapokok-read'])->controller(DataPokokController::class)
+    Route::middleware(['permission:datapresisi-read'])->controller(DataPokokController::class)
         ->prefix('data-pokok')
         ->group(function () {
             Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
@@ -149,7 +155,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         ->group(function () {
             Route::middleware(['permission:statistik-penduduk-read'])->get('/penduduk', 'penduduk');
             Route::middleware(['permission:statistik-keluarga-read'])->get('/keluarga', 'keluarga');
-            Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm');
+            Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm')->name('statistik.rtm');
+            Route::get('/rtm/detail/{tipe?}/{no?}/{sex?}', 'detail')->name('statistik.detail');
             Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan');
             Route::get('/cetak/{kategori}/{id}', 'cetak');
         });
@@ -254,6 +261,11 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::get('/plan/{parent?}', [PlanController::class, 'index'])->name('plan');
     Route::get('/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'ajax_lokasi_maps'])->name('plan.ajax_lokasi_maps');
     Route::get('/show/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'show_ajax_lokasi_maps']);
+
+    Route::resource('desa', DesaController::class)->only(['index']);
+    Route::get('desa/cetak', [DesaController::class, 'cetak']);
+    Route::resource('kecamatan', KecamatanController::class)->only(['index']);
+    Route::get('kecamatan/cetak', [KecamatanController::class, 'cetak']);
 });
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {

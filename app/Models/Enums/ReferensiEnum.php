@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-class ReferensiEnum extends Enum
+class ReferensiEnum extends BaseEnum
 {
     public const JENIS_KELAMIN = 'Jenis Kelamin';
 

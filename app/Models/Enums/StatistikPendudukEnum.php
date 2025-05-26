@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-class StatistikPendudukEnum extends Enum
+class StatistikPendudukEnum extends BaseEnum
 {
     public const RENTANG_UMUR = [
         'key' => 13,

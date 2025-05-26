@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-final class StatusDasarEnum extends Enum
+final class StatusDasarEnum extends BaseEnum
 {
     const HIDUP = 1;
 

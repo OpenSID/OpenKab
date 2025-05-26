@@ -271,7 +271,7 @@
 
                 $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
             });
-            const urlDetailLink = `{{ url('penduduk') }}?kategori=${kategori}`;
+            const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
             var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
             urlStatistik.searchParams.set('filter[id]', default_id);
 

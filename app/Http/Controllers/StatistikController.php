@@ -27,7 +27,7 @@ class StatistikController extends Controller
     public function rtm()
     {
         return view('statistik.index', [
-            'detailLink' => url('keluarga'),
+            'detailLink' => url('rtm'),
             'judul' => 'RTM',
             'default_kategori' => 'bdt',
         ]);

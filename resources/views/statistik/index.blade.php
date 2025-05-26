@@ -434,5 +434,10 @@
             margin-right: -20px;
             margin-left: -20px;
         }
+        
+        a[target="_blank"] {
+            color: blue;
+        }
+
     </style>
 @endpush

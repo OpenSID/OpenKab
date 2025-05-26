@@ -16,6 +16,7 @@ use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\RiwayatPenggunaController;
+use App\Http\Controllers\RtmController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\SuplemenController;
 use App\Http\Controllers\UserController;
@@ -116,6 +117,16 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('', 'index')->name('keluarga.index');
             Route::get('cetak', 'cetak')->name('keluarga.cetak');
             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
+        });
+
+
+    // rtm
+    Route::middleware(['permission:penduduk-read'])->controller(RtmController::class)
+        ->prefix('rtm')
+        ->group(function () {
+            Route::get('', 'index')->name('rtm.index');
+            Route::get('cetak', 'cetak')->name('rtm.cetak');
+            Route::get('/detail/{no_kk}', 'show')->name('rtm.detail');
         });
 
     // Bantuan

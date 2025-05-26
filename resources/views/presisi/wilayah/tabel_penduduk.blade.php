@@ -1,5 +1,5 @@
-<div id="tabel_penduduk_block" class="col-12">
-    @include('dasbor.data-desa')
+<div id="tabel_penduduk_block">
+    @include('presisi.wilayah.data-desa')
 </div>
 
 
@@ -9,7 +9,6 @@
         document.addEventListener("DOMContentLoaded", function(event) {
             let urlPenduduk = new URL(
                 "{{ config('app.databaseGabunganUrl') . '/api/v1/wilayah/penduduk' }}");
-            const urlDetailLink = `{{ url('penduduk') }}`;
             const pendudukDatatable = $('#summary-penduduk').DataTable({
                 processing: true,
                 serverSide: true,
@@ -69,23 +68,7 @@
                         name: "nama_kecamatan"
                     },
                     {
-                        data: function(data) {
-                            let urlDetail = new URL(urlDetailLink);
-                            urlDetail.searchParams.set('filter[kode_desa]', data
-                                .attributes.kode_desa);
-                            urlDetail.searchParams.set('filter[kode_kecamatan]', data
-                                .attributes.kode_kecamatan);
-                            urlDetail.searchParams.set('filter[kode_kabupaten]', data
-                                .attributes.kode_kabupaten);
-                            urlDetail.searchParams.set('filter[nama_desa]', data
-                                .attributes.nama_desa);
-                            urlDetail.searchParams.set('filter[nama_kecamatan]', data
-                                .attributes.nama_kecamatan);
-                            urlDetail.searchParams.set('filter[nama_kabupaten]', data
-                                .attributes.nama_kabupaten);
-
-                            return `<a target="_blank" href=${urlDetail.href}>${data.attributes.penduduk_count}</a>`
-                        },
+                        data: "attributes.penduduk_count",
                         name: "penduduk_count",
                         className: 'text-center'
                     },

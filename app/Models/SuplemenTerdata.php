@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SasaranSuplemenEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -59,7 +60,7 @@ class SuplemenTerdata extends BaseModel
     public function scopeAnggota($query, $sasaran, $suplemen): ?array
     {
         switch ($sasaran) {
-            case SuplemenTerdata::PENDUDUK:
+            case SasaranSuplemenEnum::PENDUDUK:
                 $query->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'suplemen_terdata.penduduk_id', 'left')
                     ->join('tweb_keluarga', 'tweb_keluarga.id', '=', 'tweb_penduduk.id_kk', 'left')
                     ->selectRaw('no_kk as terdata_info')
@@ -67,7 +68,7 @@ class SuplemenTerdata extends BaseModel
                     ->selectRaw('nama as terdata_nama');
                 break;
 
-            case SuplemenTerdata::KELUARGA:
+            case SasaranSuplemenEnum::KELUARGA:
                 $query->join('tweb_keluarga', 'tweb_keluarga.id', '=', 'suplemen_terdata.keluarga_id', 'left')
                     ->join('tweb_penduduk', 'tweb_penduduk.id', '=', 'tweb_keluarga.nik_kepala', 'left')
                     ->selectRaw('nik as terdata_info')

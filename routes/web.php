@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\CatatanRilis;
 use App\Http\Controllers\DasborController;
+use App\Http\Controllers\DasborDemografiController;
 use App\Http\Controllers\DataPokokController;
 use App\Http\Controllers\DesaController;
 use App\Http\Controllers\GroupController;
@@ -51,6 +52,7 @@ Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {
     Route::get('catatan-rilis', CatatanRilis::class);
     Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
+    Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->name('dasbor-demografi');
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
@@ -153,7 +155,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         ->group(function () {
             Route::middleware(['permission:statistik-penduduk-read'])->get('/penduduk', 'penduduk');
             Route::middleware(['permission:statistik-keluarga-read'])->get('/keluarga', 'keluarga');
-            Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm');
+            Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm')->name('statistik.rtm');
+            Route::get('/rtm/detail/{tipe?}/{no?}/{sex?}', 'detail')->name('statistik.detail');
             Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan');
             Route::get('/cetak/{kategori}/{id}', 'cetak');
         });

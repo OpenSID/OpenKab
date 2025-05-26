@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-class StatistikJenisBantuanEnum extends Enum
+class StatistikJenisBantuanEnum extends BaseEnum
 {
     public const PENDUDUK = [
         'key' => 'bantuan_penduduk',

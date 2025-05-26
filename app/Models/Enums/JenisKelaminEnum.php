@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use Illuminate\Validation\Rules\Enum;
-
-final class JenisKelaminEnum extends Enum
+final class JenisKelaminEnum extends BaseEnum
 {
     public const laki_laki = 1;
 

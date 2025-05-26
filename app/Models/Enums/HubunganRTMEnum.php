@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-class HubunganRTMEnum extends Enum
+class HubunganRTMEnum extends BaseEnum
 {
     public const KEPALA_RUMAH_TANGGA = 1;
 

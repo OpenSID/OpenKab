@@ -36,13 +36,21 @@
                                 <tr>
                                     <th>No</th>
                                     <th class="dt-head-center">Foto</th>
-                                    <th class="dt-head-center">Nomor Rumah Tangga</th>
-                                    <th class="dt-head-center">Kepala Rumah Tangga</th>
                                     <th class="dt-head-center">NIK</th>
-                                    <th class="dt-head-center">Jumlah KK</th>
-                                    <th class="dt-head-center">Jumlah Anggota</th>
+                                    <th class="dt-head-center">Nama</th>
+                                    <th class="dt-head-center">No KK</th>
+                                    <th class="dt-head-center">Nama Ayah</th>
+                                    <th class="dt-head-center">Nama Ibu</th>
+                                    <th class="dt-head-center">No Rumah Tangga</th>
                                     <th class="dt-head-center">Alamat</th>
-                                    <th class="dt-head-center">Tanggal Terdaftar</th>
+                                    <th class="dt-head-center">Dusun</th>
+                                    <th class="dt-head-center">RT</th>
+                                    <th class="dt-head-center">RW</th>
+                                    <th class="dt-head-center">Pendidikan dalam KK</th>
+                                    <th class="dt-head-center">Umur</th>
+                                    <th class="dt-head-center">Pekerjaan</th>
+                                    <th class="dt-head-center">Kawin</th>
+                                    <th class="dt-head-center">Tgl Terdaftar</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -74,8 +82,6 @@
         urlStatistik.searchParams.set('filter[id]', default_id);
         urlStatistik.searchParams.set('filter[nomor]', `{{ $nomor }}`);
         urlStatistik.searchParams.set('filter[sex]', `{{ $sex }}`);
-
-        console.log(urlStatistik)
 
         var statistik = $('#tabel-data').DataTable({
             processing: true,
@@ -135,26 +141,96 @@
                         }
                 },
                 {
-                    data: "attributes.kepala_keluarga.id_rtm"
+                    data: "attributes.nik",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
                 },
                 {
-                    data: "attributes.kepala_keluarga.nama"
+                    data: "attributes.kartu_nama",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
                 },
                 {
-                    data: "attributes.kepala_keluarga.nik"
+                    data: "attributes.no_kk",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
                 },
                 {
-                    data: "attributes.jumlah_kk"
+                    data: "attributes.penduduk.nama_ayah",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
                 },
                 {
-                    data: "attributes.anggota_count"
+                    data: "attributes.penduduk.nama_ibu",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
                 },
                 {
-                    data: "attributes.kepala_keluarga.alamat_wilayah"
+                    data: "attributes.penduduk.id_rtm",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
                 },
                 {
-                    data: "attributes.tgl_daftar"
+                    data: "attributes.kartu_alamat",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
                 },
+                {
+                    data: "attributes.penduduk.cluster_desa.dusun",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
+                },
+                {
+                    data: "attributes.penduduk.cluster_desa.rt",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
+                },
+                {
+                    data: "attributes.penduduk.cluster_desa.rw",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
+                },
+                {
+                    data: "attributes.penduduk.pendidikan_k_k.nama",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
+                },
+                {
+                    data: "attributes.penduduk.umur",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
+                },
+                {
+                    data: "attributes.penduduk.pekerjaan.nama",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
+                },
+                {
+                    data: "attributes.penduduk.status_kawin.nama",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
+                },
+                {
+                    data: "attributes.penduduk.keluarga.tgl_daftar",
+                    render: function(data) {
+                        return data ?? "TIDAK TAHU";
+                    }
+                }
+
             ]
         });
 
@@ -192,3 +268,4 @@
         }
     </style>
 @endpush
+	

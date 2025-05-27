@@ -205,6 +205,19 @@
                         var nama = item.nama;
                         var judul_kolom_nama = item.judul_kolom_nama;
 
+                        if (index == 0) {
+                            $('#judul_kolom_nama').html(judul_kolom_nama)
+                            $('#cetak').data('url',
+                                `{{ url('statistik/cetak') }}/${kategori}/${id}`);
+
+                            var url = new URL(`${baseUrl}/statistik/${kategori}`);
+                            url.searchParams.set('filter[id]', id);
+
+                            statistik.ajax.url(url.href, {
+                                headers: header
+                            }).load();
+
+                        }
                         html += `
                         <li class="nav-item pilih-kategori">
                             <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link">
@@ -213,18 +226,12 @@
                         </li>
                     `
                     });
+
                     $('#daftar-statistik').html(html)
-                    if ($('.pilih-kategori>a[data-id="' + default_id + '"]').length > 0) {
-                        $('a[data-id="' + default_id + '"]').addClass('active');
-                        $('#judul_kolom_nama').html($('a[data-id="' + default_id + '"]').data(
-                            'judul_kolom_nama'));
-                    } else {
-                        $('#daftar-statistik .pilih-kategori>a:first').addClass('active');
-                        $('#judul_kolom_nama').html($('#daftar-statistik .pilih-kategori>a:first').data(
-                            'judul_kolom_nama'));
-                    }
                 }
             });
+
+            $('.pilih-kategori > a.active').trigger('click');
 
             $('#daftar-statistik').on('mouseenter', '.pilih-kategori > a', function() {
                 $(this).css('cursor', 'pointer')
@@ -264,7 +271,6 @@
 
                 $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
             });
-
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
             var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
             urlStatistik.searchParams.set('filter[id]', default_id);
@@ -428,9 +434,10 @@
             margin-right: -20px;
             margin-left: -20px;
         }
-
+        
         a[target="_blank"] {
             color: blue;
         }
+
     </style>
 @endpush

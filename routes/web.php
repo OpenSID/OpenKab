@@ -17,6 +17,7 @@ use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\RiwayatPenggunaController;
+use App\Http\Controllers\RtmController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\SuplemenController;
 use App\Http\Controllers\UserController;
@@ -120,6 +121,16 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
+
+    // rtm
+    Route::middleware(['permission:penduduk-read'])->controller(RtmController::class)
+        ->prefix('rtm')
+        ->group(function () {
+            Route::get('', 'index')->name('rtm.index');
+            Route::get('cetak', 'cetak')->name('rtm.cetak');
+            Route::get('/detail/{no_kk}', 'show')->name('rtm.detail');
+        });
+
     // Bantuan
     Route::middleware(['permission:bantuan-read'])->controller(BantuanController::class)
         ->prefix('bantuan')
@@ -155,9 +166,13 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         ->group(function () {
             Route::middleware(['permission:statistik-penduduk-read'])->get('/penduduk', 'penduduk');
             Route::middleware(['permission:statistik-keluarga-read'])->get('/keluarga', 'keluarga');
+
             Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm')->name('statistik.rtm');
-            Route::get('/rtm/detail/{tipe?}/{no?}/{sex?}', 'detail')->name('statistik.detail');
-            Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan');
+            Route::get('/rtm/detail/{tipe?}/{no?}/{sex?}/{kategori}/{kategori_id}', 'detail')->name('statistik.detail');
+
+            Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan')->name('statistik.bantuan');
+            Route::get('/bantuan/detail/{tipe?}/{no?}/{sex?}/{kategori}/{kategori_id}', 'detailPenduduk')->name('statistik.detail.bantuan');
+
             Route::get('/cetak/{kategori}/{id}', 'cetak');
         });
 

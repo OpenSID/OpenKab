@@ -254,6 +254,14 @@
                     </select>
                 </div>
             </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Bantuan</label>
+                    <select id="bantuan-penduduk" class="form-control select2-filter" data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}'
+                        placeholder="Pilih Bantuan">
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-6">

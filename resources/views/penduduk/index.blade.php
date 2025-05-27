@@ -130,6 +130,7 @@
                             "filter[kode_kabupaten]": $('#filter_kabupaten').val(),
                             "filter[kode_kecamatan]": $('#filter_kecamatan').val(),
                             "filter[kode_desa]": $('#filter_desa').val(),
+                            "filter[bantuan-penduduk]": $('#bantuan-penduduk').val(),
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[search]": row.search.value,

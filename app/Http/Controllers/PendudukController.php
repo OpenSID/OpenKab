@@ -31,7 +31,7 @@ class PendudukController extends Controller
 
         $judul = request('judul', '');
 
-        if(!empty($judul)){
+        if(request()->has('chart-view')){
             $chart = $this->chart();
             return view('penduduk.index', compact('filters', 'judul', 'chart'))->with($listPermission);
         }

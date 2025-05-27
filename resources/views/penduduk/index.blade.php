@@ -206,6 +206,9 @@
                         return params;
                     },
                     dataSrc: function(json) {
+                        json.recordsTotal = json.meta.pagination.total
+                        json.recordsFiltered = json.meta.pagination.total
+                        
                         if (json.data.length > 0) {
 
                             // jika chart di akses dari halaman statistik penduduk

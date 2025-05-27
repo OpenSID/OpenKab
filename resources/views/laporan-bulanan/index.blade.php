@@ -29,14 +29,50 @@
                             <div class="form-group row">
                                 <label for="kabupaten" class="col-sm-2 col-form-label">Kabupaten</label>
                                 <div class="col-sm-7 col-md-5">
-                                    <input type="text" class="form-control form-control-sm" value="{{ ucwords($identitasAplikasi['nama_kabupaten']) }}" disabled>
+                                    <select name="kabupaten" class="form-control form-control-sm select2" id="kabupaten" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
+                                        <option value="">Pilih Kabupaten</option>
+                                        @foreach ($kabupatens as $item)
+                                        <option value="{{ $item->kode_kabupaten }}" @if($item->kode_kabupaten == $kode_kabupaten) selected @endif>{{ $item->nama_kabupaten }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="form-group row">
+                                <label for="kecamatan" class="col-sm-2 col-form-label">Kecamatan</label>
+                                <div class="col-sm-7 col-md-5">
+                                    <select name="kecamatan" class="form-control form-control-sm select2" id="kecamatan" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
+                                        <option value="">Pilih Kecamatan</option>
+                                        @foreach ($kecamatans as $item)
+                                        <option value="{{ $item->kode_kecamatan }}" @if($item->kode_kecamatan == session('kecamatan.kode_kecamatan')) selected @endif>{{ $item->nama_kecamatan }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="desa" class="col-sm-2 col-form-label">Desa</label>
+                                <div class="col-sm-7 col-md-5">
+                                    <select name="desa" class="form-control form-control-sm select2" id="desa" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
+                                        <option value="">Pilih Desa</option>
+                                        @foreach ($desas as $item)
+                                        <option value="{{ $item->kode_desa }}" @if($item->kode_desa == session('desa.kode_desa')) selected @endif>{{ $item->nama_desa }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- <div class="form-group row">
+                                <label for="kabupaten" class="col-sm-2 col-form-label">Kecamatan</label>
+                                <div class="col-sm-7 col-md-5">
+                                    <input type="text" class="form-control form-control-sm" value="{{ ucwords($identitasAplikasi['nama_kabupaten']) }}">
+                                </div>
+                            </div> --}}
+
+                            <div class="form-group row">
                                 <label for="tahun" class="col-sm-2 col-form-label">Tahun</label>
                                 <div class="col-sm-2">
-                                    <select class="form-control form-control-sm select2" onchange="formAction('mainform','{{ route('laporan-bulanan.bulan') }}')" name="tahun">
+                                    <select class="form-control form-control-sm select2" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')" name="tahun">
                                         <option value="">Pilih tahun</option>
                                         @for ($t = date('Y'); $t >= $tahun_lengkap; $t--)
                                             <option value="{{ $t }}" @selected($tahun == $t)>{{ $t }}</option>
@@ -46,7 +82,7 @@
 
                                 <label for="bulan" class="col-sm-1 col-form-label text-right">Bulan</label>
                                 <div class="col-sm-2">
-                                    <select class="form-control form-control-sm select2" name="bulan" onchange="formAction('mainform','{{ route('laporan-bulanan.bulan') }}')">
+                                    <select class="form-control form-control-sm select2" name="bulan" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
                                         <option value="">Pilih bulan</option>
                                         @foreach (getAllBulan() as $no_bulan => $nama_bulan)
                                             <option value="{{ $no_bulan }}" @selected($bulan == $no_bulan)>{{ $nama_bulan }}</option>
@@ -79,7 +115,52 @@
 @endsection
 
 @section('js')
-    <script type="text/javascript">
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+            var urlKecamatan = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/config/kecamatan' }}");
+            
+            $('#kabupaten').on('change', function () {
+                let kodeKabupaten = $(this).val();
+                $('#kecamatan').html('<option value="">Memuat...</option>');
+                $('#desa').html('<option value="">Pilih Desa</option>');
+                
+                console.log(kodeKabupaten)
+                console.log('kdddk')
+                url.searchParams.set("kode_kabupaten", kodeKabupaten);
+                if (kodeKabupaten) {
+                    $.get(urlKecamatan, { headers: header }, function (data) {
+                        let options = '<option value="">Pilih Kecamatan</option>';
+                        data.forEach(function (item) {
+                            options += `<option value="${item.kode_kecamatan}">${item.nama_kecamatan}</option>`;
+                        });
+                        $('#kecamatan').html(options);
+                    });
+                } else {
+                    $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
+                }
+            });
+
+            $('#kecamatan').on('change', function () {
+                let kodeKecamatan = $(this).val();
+                $('#desa').html('<option value="">Memuat...</option>');
+
+                if (kodeKecamatan) {
+                    $.get('/api/desa/' + kodeKecamatan, function (data) {
+                        let options = '<option value="">Pilih Desa</option>';
+                        data.forEach(function (item) {
+                            options += `<option value="${item.kode_desa}">${item.nama_desa}</option>`;
+                        });
+                        $('#desa').html(options);
+                    });
+                } else {
+                    $('#desa').html('<option value="">Pilih Desa</option>');
+                }
+            });
+        });
+
+
         function formAction(formId, actionUrl) {
             const form = document.getElementById(formId);
             if (form) {

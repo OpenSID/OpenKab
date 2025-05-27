@@ -11,9 +11,20 @@ class StatistikPendudukApiService extends BaseApiService
     {
         // $filters['kode_kabupaten'] = 5306;
         $kode_kabupaten = session('kabupaten.kode_kabupaten');
+        $kode_kecamatan = session('kecamatan.kode_kecamatan');
+        $kode_desa = session('desa.kode_desa');
 
         // Panggil API dan ambil data
-        $data = $this->apiRequest("/api/v1/statistik/laporan-bulanan/{$tahun}/{$bulan}/{$kode_kabupaten}");
+        $data = $this->apiRequest("/api/v1/statistik/laporan-bulanan", [
+            'filter[tahun]' => $tahun,
+            'filter[bulan]' => $bulan,
+            'filter[kode_kabupaten]' => $kode_kabupaten,
+            'filter[kode_kecamatan]' => $kode_kecamatan,
+            'filter[kode_desa]' => $kode_desa,
+            'kode_kabupaten' => $kode_kabupaten,
+            'kode_kecamatan' => $kode_kecamatan,
+            'kode_desa' => $kode_desa,
+        ]);
         if (! $data) {
             return collect([]);
         }
@@ -27,9 +38,22 @@ class StatistikPendudukApiService extends BaseApiService
     public function sumberData($rincian, $tipe, $tahun, $bulan)
     {
         $kode_kabupaten = session('kabupaten.kode_kabupaten');
+        $kode_kecamatan = session('kecamatan.kode_kecamatan');
+        $kode_desa = session('desa.kode_desa');
 
         // Panggil API dan ambil data
-        $data = $this->apiRequest("/api/v1/statistik/laporan-bulanan/sumber-data/{$rincian}/{$tipe}/{$tahun}/{$bulan}/{$kode_kabupaten}");
+        $data = $this->apiRequest("/api/v1/statistik/laporan-bulanan/sumber-data", [
+            'filter[rincian]' => $rincian,
+            'filter[tipe]' => $tipe,
+            'filter[tahun]' => $tahun,
+            'filter[bulan]' => $bulan,
+            'filter[kode_kabupaten]' => $kode_kabupaten,
+            'filter[kode_kecamatan]' => $kode_kecamatan,
+            'filter[kode_desa]' => $kode_desa,
+            'kode_kabupaten' => $kode_kabupaten,
+            'kode_kecamatan' => $kode_kecamatan,
+            'kode_desa' => $kode_desa,
+        ]);
         if (! $data) {
             return collect([]);
         }

@@ -160,7 +160,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             ->prefix('laporan-bulanan')
             ->group(function () {
                 Route::get('/', 'index')->name('laporan-bulanan.index');
-                Route::post('/bulan', 'bulan')->name('laporan-bulanan.bulan');
+                Route::post('/filter', 'filter')->name('laporan-bulanan.filter');
                 Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
                 Route::get('/export-excel', 'exportExcel')->name('laporan-bulanan.export-excel');
             });

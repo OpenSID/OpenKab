@@ -216,8 +216,12 @@
                     $('#daftar-statistik').html(html)
                     if ($('.pilih-kategori>a[data-id="' + default_id + '"]').length > 0) {
                         $('a[data-id="' + default_id + '"]').addClass('active');
+                        $('#judul_kolom_nama').html($('a[data-id="' + default_id + '"]').data(
+                            'judul_kolom_nama'));
                     } else {
                         $('#daftar-statistik .pilih-kategori>a:first').addClass('active');
+                        $('#judul_kolom_nama').html($('#daftar-statistik .pilih-kategori>a:first').data(
+                            'judul_kolom_nama'));
                     }
                 }
             });

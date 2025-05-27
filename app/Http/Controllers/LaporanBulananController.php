@@ -53,24 +53,46 @@ class LaporanBulananController extends Controller
         $tanggal_lengkap = $this->penduduk->logPenduduk();
         $dataLengkap = true;
 
-        $tahun_bulan = (new DateTime($tanggal_lengkap))->format('Y-m');
+        // $tahun_bulan = (new DateTime($tanggal_lengkap))->format('Y-m');
+
+        if (!empty($tanggal_lengkap) && strtotime($tanggal_lengkap)) {
+            $tahun_bulan = (new DateTime($tanggal_lengkap))->format('Y-m');
+        } else {
+            $tahun_bulan = date('Y-m');
+        }
 
         if (! $dataLengkap) {
             $data['data_lengkap'] = false;
             return view('laporan-bulanan.index', $data);
         }
 
-        $tahun_bulan = (new DateTime($tanggal_lengkap))->format('Y-m');
         if ($tahun_bulan > $data['tahun'] . '-' . $data['bulan']) {
             $data['sesudah_data_lengkap'] = false;
             return view('laporan-bulanan.index', $data);
         }
 
         $data['tgl_lengkap']        = $tanggal_lengkap;
-        $data['tahun_lengkap']      = (new DateTime($tanggal_lengkap))->format('Y');
+        // $data['tahun_lengkap']      = (new DateTime($tanggal_lengkap))->format('Y');
+        if (!empty($tanggal_lengkap) && is_string($tanggal_lengkap) && strtotime($tanggal_lengkap)) {
+            $data['tahun_lengkap'] = (new DateTime($tanggal_lengkap))->format('Y');
+        } else {
+            $data['tahun_lengkap'] = date('Y');
+        }
+
         $dataPenduduk               = $this->penduduk->laporanBulanan($data['tahun'], $data['bulan']);
 
-        return view('laporan-bulanan.index', array_merge($data, $dataPenduduk));
+        // dd($dataPenduduk);
+        // dd(collect($dataPenduduk)->isEmpty(), empty($dataPenduduk), count($dataPenduduk) < 1);
+
+        if (collect($dataPenduduk)->isEmpty()) {
+            $data['dataPenduduk'] = false;
+            return view('laporan-bulanan.index', $data);
+        }else{
+            $data['dataPenduduk'] = true;
+            return view('laporan-bulanan.index', array_merge($data, $dataPenduduk));
+
+        }
+
     }
 
     public function bulan(Request $request)

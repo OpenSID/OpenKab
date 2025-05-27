@@ -56,6 +56,7 @@
             </tr>
         </thead>
         <tbody>
+            @if($dataPenduduk)
             <tr>
                 <td class="no_urut">1</td>
                 <td colspan="2">Penduduk/Keluarga awal bulan ini</td>
@@ -163,6 +164,11 @@
                 <td class="bilangan">{!! $penduduk_akhir['KK_P'] ? '<a href="' . route('laporan-bulanan.detail-penduduk', ['rincian' => 'akhir', 'tipe' => 'kk_p']) . '">' . $penduduk_akhir['KK_P'] . '</a>' : '-' !!}</td>
                 <td class="bilangan">{!! $penduduk_akhir['KK'] ? '<a href="' . route('laporan-bulanan.detail-penduduk', ['rincian' => 'akhir', 'tipe' => 'kk']) . '">' . $penduduk_akhir['KK'] . '</a>' : '-' !!}</td>
             </tr>
+            @else
+            <tr>
+                <td colspan="13" align="center">DATA TIDAK DI TEMUKAND</td>
+            </tr>
+            @endif
         </tbody>
 
     </table>

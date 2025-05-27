@@ -205,33 +205,22 @@
                         var nama = item.nama;
                         var judul_kolom_nama = item.judul_kolom_nama;
 
-                        if (index == 0) {
-                            $('#judul_kolom_nama').html(judul_kolom_nama)
-                            $('#cetak').data('url',
-                                `{{ url('statistik/cetak') }}/${kategori}/${id}`);
-
-                            var url = new URL(`${baseUrl}/statistik/${kategori}`);
-                            url.searchParams.set('filter[id]', id);
-
-                            statistik.ajax.url(url.href, {
-                                headers: header
-                            }).load();
-
-                        }
                         html += `
                         <li class="nav-item pilih-kategori">
-                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link ${index == 0 ? 'active' : ''}">
+                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link">
                                 <i class="fas fa-angle-right"></i> ${nama}
                             </a>
                         </li>
                     `
                     });
-
                     $('#daftar-statistik').html(html)
+                    if ($('.pilih-kategori>a[data-id="' + default_id + '"]').length > 0) {
+                        $('a[data-id="' + default_id + '"]').addClass('active');
+                    } else {
+                        $('#daftar-statistik .pilih-kategori>a:first').addClass('active');
+                    }
                 }
             });
-
-            $('.pilih-kategori > a.active').trigger('click');
 
             $('#daftar-statistik').on('mouseenter', '.pilih-kategori > a', function() {
                 $(this).css('cursor', 'pointer')
@@ -271,6 +260,7 @@
 
                 $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
             });
+
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
             var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
             urlStatistik.searchParams.set('filter[id]', default_id);

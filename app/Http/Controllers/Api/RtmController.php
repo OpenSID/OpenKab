@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Repository\RtmRepository;
-
 class RtmController extends Controller
 {
     public function index()

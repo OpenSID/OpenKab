@@ -33,6 +33,7 @@ class PendudukController extends Controller
 
         if(request()->has('chart-view')){
             $chart = $this->chart();
+
             return view('penduduk.index', compact('filters', 'judul', 'chart'))->with($listPermission);
         }
 
@@ -48,7 +49,6 @@ class PendudukController extends Controller
             'nama' => request()->nama,
             'view' => true,
         ];
-
     }
 
     public function show(Penduduk $penduduk)

@@ -29,6 +29,7 @@ class KeluargaController extends Controller
 
         if(request()->has('chart-view')){
             $chart = $this->chart();
+
             return view('keluarga.index', compact('filters', 'judul', 'chart'));
         }
 
@@ -44,7 +45,6 @@ class KeluargaController extends Controller
             'nama' => request()->nama,
             'view' => true,
         ];
-
     }
 
     /**

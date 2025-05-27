@@ -27,8 +27,9 @@ class KeluargaController extends Controller
 
         $judul = request('judul', '');
 
-        if(!empty($judul)){
+        if (! empty($judul)) {
             $chart = $this->chart();
+
             return view('keluarga.index', compact('filters', 'judul', 'chart'));
         }
 
@@ -44,7 +45,6 @@ class KeluargaController extends Controller
             'nama' => request()->nama,
             'view' => true,
         ];
-
     }
 
     /**

@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="card-footer text-center">
-            <a class="btn btn-primary" href="{{ $chart['url_detail'] }}?item_selected={{ $chart['key'] }}"
+            <a href="{{ $chart['url_detail'] }}?item_selected={{ $chart['key'] }}"
                 target="_blank" rel="noopener noreferrer">Selengkapnya</a>
         </div>
     </div>

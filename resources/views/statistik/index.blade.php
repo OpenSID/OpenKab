@@ -320,8 +320,23 @@
                 columns: [{
                     data: null,
                 }, {
-                    data: function(data) {
-                        return data.attributes.nama;
+                    // data: function(data) {
+                    //     return data.attributes.nama;
+                    // },
+                     data: function(data) {
+
+                        let kriteria = new URLSearchParams(JSON.parse(data.attributes
+                            .kriteria));
+
+                        let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
+                            .attributes.nama;
+                        let urlDetail = new URL(urlDetailLink);
+                        urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());
+                        urlDetail.searchParams.set('judul', judul);
+                        urlDetail.searchParams.set('nama', data.attributes.nama);
+                        urlDetail.searchParams.set('tipe', $('.pilih-kategori > a.active').text().trim());
+
+                        return `<a target="_blank" href=${urlDetail.href}>${data.attributes.nama}</a>`
                     },
                 }, {
                     data: function(data) {

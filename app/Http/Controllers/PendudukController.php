@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Penduduk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PendudukController extends Controller
 {
@@ -30,7 +31,24 @@ class PendudukController extends Controller
 
         $judul = request('judul', '');
 
-        return view('penduduk.index', compact('filters', 'judul'))->with($listPermission);
+        if(!empty($judul)){
+            $chart = $this->chart();
+            return view('penduduk.index', compact('filters', 'judul', 'chart'))->with($listPermission);
+        }
+
+        $chart = [];
+
+        return view('penduduk.index', compact('filters', 'judul', 'chart'))->with($listPermission);
+    }
+
+    public function chart()
+    {
+        return [
+            'kategori' => Str::slug(strtolower(request()->tipe)),
+            'nama' => request()->nama,
+            'view' => true,
+        ];
+
     }
 
     public function show(Penduduk $penduduk)

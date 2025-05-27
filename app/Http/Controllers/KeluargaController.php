@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class KeluargaController extends Controller
 {
@@ -26,7 +27,24 @@ class KeluargaController extends Controller
 
         $judul = request('judul', '');
 
-        return view('keluarga.index', compact('filters', 'judul'));
+        if(!empty($judul)){
+            $chart = $this->chart();
+            return view('keluarga.index', compact('filters', 'judul', 'chart'));
+        }
+
+        $chart = [];
+
+        return view('keluarga.index', compact('filters', 'judul', 'chart'));
+    }
+
+    public function chart()
+    {
+        return [
+            'kategori' => Str::slug(strtolower(request()->tipe)),
+            'nama' => request()->nama,
+            'view' => true,
+        ];
+
     }
 
     /**

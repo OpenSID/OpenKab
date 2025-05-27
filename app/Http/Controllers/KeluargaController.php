@@ -27,7 +27,7 @@ class KeluargaController extends Controller
 
         $judul = request('judul', '');
 
-        if(request()->has('chart-view')){
+        if (request()->has('chart-view')) {
             $chart = $this->chart();
 
             return view('keluarga.index', compact('filters', 'judul', 'chart'));

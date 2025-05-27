@@ -166,7 +166,7 @@
             </tr>
             @else
             <tr>
-                <td colspan="13" align="center">DATA TIDAK DI TEMUKAND</td>
+                <td colspan="13" align="center">DATA TIDAK DI TEMUKAN</td>
             </tr>
             @endif
         </tbody>

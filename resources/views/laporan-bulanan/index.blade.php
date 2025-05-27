@@ -32,7 +32,7 @@
                                     <select name="kabupaten" class="form-control form-control-sm select2" id="kabupaten" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
                                         <option value="">Pilih Kabupaten</option>
                                         @foreach ($kabupatens as $item)
-                                        <option value="{{ $item->kode_kabupaten }}" @if($item->kode_kabupaten == $kode_kabupaten) selected @endif>{{ $item->nama_kabupaten }}</option>
+                                        <option value="{{ $item->kode_kabupaten }}" @if($item->kode_kabupaten == session('kabupaten.kode_kabupaten')) selected @endif>{{ $item->nama_kabupaten }}</option>
                                         @endforeach
                                     </select>
                                 </div>

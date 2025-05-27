@@ -220,7 +220,7 @@
                         }
                         html += `
                         <li class="nav-item pilih-kategori">
-                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link ${index == 0 ? 'active' : ''}">
+                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link">
                                 <i class="fas fa-angle-right"></i> ${nama}
                             </a>
                         </li>

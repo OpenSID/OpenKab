@@ -97,7 +97,6 @@ class MenuListener
                 ],
             ]);
 
-            
             // list menu daftar desa
             if (session()->has('kecamatan')) {
                 $desas = $this->configApiService->desa([

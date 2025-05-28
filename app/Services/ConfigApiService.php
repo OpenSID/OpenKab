@@ -33,7 +33,7 @@ class ConfigApiService extends BaseApiService
         return collect($data)->map(function ($item) {
             return (object) [
                 'id' => $item['id'],
-                ...$item['attributes']
+                ...$item['attributes'],
             ];
         });
     }

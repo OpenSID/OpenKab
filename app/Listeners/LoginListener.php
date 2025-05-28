@@ -46,8 +46,23 @@ class LoginListener
             ])->throw()
                 ->json();
 
+            $prodeskel = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '.$setting->value ?? '',
+            ])->get($url, [
+                'filter[slug]' => 'prodeskel',
+                'page[size]' => 1,
+            ])->throw()
+                ->json();
+
             // Assuming the response contains a 'data' key with the status
             $presisiStatus = count($settingModul['data']) > 0 ? true : false;
+            $prodeskelStatus = count($prodeskel['data']) > 0 ? true : false;
+
+            session(['presisi_enabled' => $presisiStatus, 'prodeskel_enabled' => $prodeskelStatus]);
+
+            activity('authentication-log')->event('login')->withProperties($this->request)->log('Login');
         } catch (Exception $e) {
             Log::error('Error fetching setting-modul: '.$e->getMessage());
         }

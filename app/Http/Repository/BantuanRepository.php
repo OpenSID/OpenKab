@@ -2,6 +2,7 @@
 
 namespace App\Http\Repository;
 
+use App\Enums\KategoriSasaranBantuanEnum;
 use App\Models\Bantuan;
 use App\Models\Kelompok;
 use App\Models\Keluarga;
@@ -79,10 +80,10 @@ class BantuanRepository
     private function getTotal($sasaran): array
     {
         $total = match ($sasaran) {
-            Bantuan::SASARAN_PENDUDUK => $this->countStatistikKategoriPenduduk(),
-            Bantuan::SASARAN_KELUARGA => $this->countStatistikKategoriKeluarga(),
-            Bantuan::SASARAN_RUMAH_TANGGA => $this->countStatistikKategoriRtm(),
-            Bantuan::SASARAN_KELOMPOK => $this->countStatistikKategoriKelompok(),
+            KategoriSasaranBantuanEnum::SASARAN_PENDUDUK => $this->countStatistikKategoriPenduduk(),
+            KategoriSasaranBantuanEnum::SASARAN_KELUARGA => $this->countStatistikKategoriKeluarga(),
+            KategoriSasaranBantuanEnum::SASARAN_RUMAH_TANGGA => $this->countStatistikKategoriRtm(),
+            KategoriSasaranBantuanEnum::SASARAN_KELOMPOK => $this->countStatistikKategoriKelompok(),
             default => [],
         };
 

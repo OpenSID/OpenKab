@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Config;
+use App\Services\ConfigApiService;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -20,9 +20,10 @@ class KabupatenMiddleware
         // abort jika kabupaten tidak ada di list config.
 
         $kodeKabupaten = $request->route('kodeKabupaten');
+        $semuaKode = collect((new ConfigApiService)->kabupaten())->pluck('kode_kabupaten')->toArray();
 
         abort_unless(
-            in_array($kodeKabupaten, Config::get()->pluck('kode_kabupaten')?->toArray()),
+            in_array($kodeKabupaten, $semuaKode),
             404,
             'Kabupaten tidak ditemukan, pastikan kabupaten tersebut sudah ditambahkan di OpenSID Gabungan!'
         );
@@ -30,7 +31,8 @@ class KabupatenMiddleware
         // set session kabupaten
         session()->put(
             'kabupaten',
-            Config::where('kode_kabupaten', $kodeKabupaten)->first()
+            (new ConfigApiService)->kabupatenByKode($kodeKabupaten)
+
         );
 
         return $next($request);

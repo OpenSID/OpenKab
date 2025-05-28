@@ -32,7 +32,7 @@
                                     <select name="kabupaten" class="form-control form-control-sm select2" id="kabupaten" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
                                         <option value="">Pilih Kabupaten</option>
                                         @foreach ($kabupatens as $item)
-                                        <option value="{{ $item->kode_kabupaten }}" @if($item->kode_kabupaten == session('kabupaten.kode_kabupaten')) selected @endif>{{ $item->nama_kabupaten }}</option>
+                                        <option value="{{ $item->kode_kabupaten }}" @if($item->kode_kabupaten == session('kode_kabupaten')) selected @endif>{{ $item->nama_kabupaten }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -44,7 +44,7 @@
                                     <select name="kecamatan" class="form-control form-control-sm select2" id="kecamatan" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
                                         <option value="">Pilih Kecamatan</option>
                                         @foreach ($kecamatans as $item)
-                                        <option value="{{ $item->kode_kecamatan }}" @if($item->kode_kecamatan == session('kecamatan.kode_kecamatan')) selected @endif>{{ $item->nama_kecamatan }}</option>
+                                        <option value="{{ $item->kode_kecamatan }}" @if($item->kode_kecamatan == session('kode_kecamatan')) selected @endif>{{ $item->nama_kecamatan }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -56,7 +56,7 @@
                                     <select name="desa" class="form-control form-control-sm select2" id="desa" onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
                                         <option value="">Pilih Desa</option>
                                         @foreach ($desas as $item)
-                                        <option value="{{ $item->kode_desa }}" @if($item->kode_desa == session('desa.kode_desa')) selected @endif>{{ $item->nama_desa }}</option>
+                                        <option value="{{ $item->kode_desa }}" @if($item->kode_desa == session('kode_desa')) selected @endif>{{ $item->nama_desa }}</option>
                                         @endforeach
                                     </select>
                                 </div>

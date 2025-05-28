@@ -10,9 +10,9 @@ class StatistikPendudukApiService extends BaseApiService
     public function laporanBulanan($tahun, $bulan)
     {
         // $filters['kode_kabupaten'] = 5306;
-        $kode_kabupaten = session('kabupaten.kode_kabupaten');
-        $kode_kecamatan = session('kecamatan.kode_kecamatan');
-        $kode_desa = session('desa.kode_desa');
+        $kode_kabupaten = session('kode_kabupaten');
+        $kode_kecamatan = session('kode_kecamatan');
+        $config_id = $this->getConfigId();
 
         // Panggil API dan ambil data
         $data = $this->apiRequest("/api/v1/statistik/laporan-bulanan", [
@@ -20,10 +20,10 @@ class StatistikPendudukApiService extends BaseApiService
             'filter[bulan]' => $bulan,
             'filter[kode_kabupaten]' => $kode_kabupaten,
             'filter[kode_kecamatan]' => $kode_kecamatan,
-            'filter[kode_desa]' => $kode_desa,
+            'filter[config_desa]' => $config_id,
             'kode_kabupaten' => $kode_kabupaten,
             'kode_kecamatan' => $kode_kecamatan,
-            'kode_desa' => $kode_desa,
+            'config_desa' => $config_id,
         ]);
         if (! $data) {
             return collect([]);
@@ -37,9 +37,9 @@ class StatistikPendudukApiService extends BaseApiService
      */
     public function sumberData($rincian, $tipe, $tahun, $bulan)
     {
-        $kode_kabupaten = session('kabupaten.kode_kabupaten');
-        $kode_kecamatan = session('kecamatan.kode_kecamatan');
-        $kode_desa = session('desa.kode_desa');
+        $kode_kabupaten = session('kode_kabupaten');
+        $kode_kecamatan = session('kode_kecamatan');
+        $config_id = $this->getConfigId();
 
         // Panggil API dan ambil data
         $data = $this->apiRequest("/api/v1/statistik/laporan-bulanan/sumber-data", [
@@ -49,10 +49,10 @@ class StatistikPendudukApiService extends BaseApiService
             'filter[bulan]' => $bulan,
             'filter[kode_kabupaten]' => $kode_kabupaten,
             'filter[kode_kecamatan]' => $kode_kecamatan,
-            'filter[kode_desa]' => $kode_desa,
+            'filter[config_desa]' => $config_id,
             'kode_kabupaten' => $kode_kabupaten,
             'kode_kecamatan' => $kode_kecamatan,
-            'kode_desa' => $kode_desa,
+            'config_desa' => $config_id,
         ]);
         if (! $data) {
             return collect([]);
@@ -73,5 +73,20 @@ class StatistikPendudukApiService extends BaseApiService
         }
 
         return $data;
+    }
+
+    public function getConfigId()
+    {
+        $config = (new ConfigApiService)->desaConfig([
+            'filter[kode_desa]' => session('kode_desa')
+        ]);
+
+        if($config->count() > 0)
+        {
+            $data = $config[0];
+            return $data->id ?? null;
+        }else{
+            return null;
+        }
     }
 }

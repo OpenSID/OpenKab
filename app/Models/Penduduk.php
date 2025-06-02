@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\KesehatanAnakEnum;
 use App\Models\Traits\FilterWilayahTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -109,36 +110,6 @@ class Penduduk extends BaseModel
      *
      * @return BelongsTo
      */
-    public function jenisKelamin()
-    {
-        return $this->belongsTo(Sex::class, 'sex')->withDefault();
-    }
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
-    public function agama()
-    {
-        return $this->belongsTo(Agama::class, 'agama_id')->withDefault();
-    }
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
-    public function bahasa()
-    {
-        return $this->belongsTo(Bahasa::class, 'bahasa_id')->withDefault();
-    }
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
     public function pendidikan()
     {
         return $this->belongsTo(Pendidikan::class, 'pendidikan_sedang_id')->withDefault();
@@ -169,29 +140,9 @@ class Penduduk extends BaseModel
      *
      * @return BelongsTo
      */
-    public function wargaNegara()
-    {
-        return $this->belongsTo(WargaNegara::class, 'warganegara_id')->withDefault();
-    }
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
     public function golonganDarah()
     {
         return $this->belongsTo(GolonganDarah::class, 'golongan_darah_id')->withDefault();
-    }
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
-    public function cacat()
-    {
-        return $this->belongsTo(Cacat::class, 'cacat_id')->withDefault();
     }
 
     /**
@@ -205,29 +156,11 @@ class Penduduk extends BaseModel
     }
 
     /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
-    public function kb()
-    {
-        return $this->belongsTo(KB::class, 'cara_kb_id')->withDefault();
-    }
-
-    /**
      * Get the phone associated with the config.
      */
     public function config()
     {
         return $this->hasOne(Config::class, 'id', 'config_id');
-    }
-
-    /**
-     * Get the phone associated with the config.
-     */
-    public function kaderPemberdayaanMasyarakat()
-    {
-        return $this->hasOne(KaderPemberdayaanMasyarakat::class, 'penduduk_id');
     }
 
     public function dtks_anggota()
@@ -243,26 +176,6 @@ class Penduduk extends BaseModel
     public function statusKawin()
     {
         return $this->belongsTo(StatusKawin::class, 'status_kawin')->withDefault();
-    }
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
-    public function statusRekamKtp()
-    {
-        return $this->belongsTo(Ktp::class, 'status_rekam')->withDefault();
-    }
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
-    public function pendudukHubungan()
-    {
-        return $this->belongsTo(PendudukHubungan::class, 'kk_level')->withDefault();
     }
 
     /**
@@ -338,16 +251,6 @@ class Penduduk extends BaseModel
     public function dokumenHidup()
     {
         return $this->hasMany(DokumenHidup::class, 'id_pend');
-    }
-
-    /**
-     * Define an inverse one-to-one or many relationship.
-     *
-     * @return BelongsTo
-     */
-    public function asuransi()
-    {
-        return $this->belongsTo(Asuransi::class, 'id_asuransi')->withDefault();
     }
 
     /**
@@ -525,7 +428,7 @@ class Penduduk extends BaseModel
         if ($this->kia) {
             $anak = Anak::where('kia_id', $this->kia->id)->first() ?? null;
             if ($anak) {
-                $statusGizi = collect(Anak::STATUS_GIZI_ANAK)->firstWhere('id', $anak->status_gizi);
+                $statusGizi = collect(KesehatanAnakEnum::STATUS_GIZI_ANAK)->firstWhere('id', $anak->status_gizi);
 
                 // Jika ditemukan, kembalikan nama, jika tidak ada kembalikan string default
                 return $statusGizi ? $statusGizi['nama'] : 'TIDAK TAHU';
@@ -544,18 +447,6 @@ class Penduduk extends BaseModel
     public function dtksAnggota()
     {
         return $this->hasOne(DtksAnggota::class, 'id_penduduk');  // Asumsi anak_id ada di Kia
-    }
-
-    public function prodeskelLembagaAdat()
-    {
-        return $this->hasMany(ProdeskelPotensi::class, 'config_id', 'config_id')
-                    ->where('kategori', 'lembaga-adat');
-    }
-
-    public function prodeskelPrasaranaPeribadatan()
-    {
-        return $this->hasMany(ProdeskelPotensi::class, 'config_id', 'config_id')
-                    ->where('kategori', 'prasarana-peribadatan');
     }
 
     /**
@@ -635,7 +526,6 @@ class Penduduk extends BaseModel
             'kb',
             'statusKawin',
             'statusRekamKtp',
-            'pendudukHubungan',
             'pendudukStatus',
             'pendudukStatusDasar',
             'keluarga',

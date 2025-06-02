@@ -35,18 +35,19 @@ class ConfigDemoSeeder extends Seeder
                 $desa['nama_propinsi'] = $desa['nama_prov'];
                 Config::factory(1)->create([
                     'nama_desa' => $desa['nama_desa'],
-                    'kode_desa' => $desa['kode_desa'],
+                    'kode_desa' => str_replace('.', '', $desa['kode_desa']),
                     'kode_pos' => fake()->postcode,
                     'nama_kecamatan' => $desa['nama_kec'],
-                    'kode_kecamatan' => $desa['kode_kec'],
+                    'kode_kecamatan' => str_replace('.', '', $desa['kode_kec']),
                     'nama_kabupaten' => $desa['nama_kab'],
-                    'kode_kabupaten' => $desa['kode_kab'],
+                    'kode_kabupaten' => str_replace('.', '', $desa['kode_kab']),
                     'nama_propinsi' => $desa['nama_prov'],
-                    'kode_propinsi' => $desa['kode_prov'],
+                    'kode_propinsi' => str_replace('.', '', $desa['kode_prov']),
                 ]);
                 $this->command->info('data config desa '.$desa['nama_desa'].' berhasil dibuat');
             }
         }
+        $this->command->info('selesai config desa');
     }
 
     private function getKecamatan($kodeKabupaten)

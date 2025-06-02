@@ -2,9 +2,7 @@
 
 namespace App\Models\Enums;
 
-use BenSampo\Enum\Enum;
-
-class StatistikKeluargaEnum extends Enum
+class StatistikKeluargaEnum extends BaseEnum
 {
     public const KELAS_SOSIAL = [
         'key' => 'kelas_sosial',

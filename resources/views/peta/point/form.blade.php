@@ -99,7 +99,7 @@
                                     placeholder="Nama Jenis Lokasi"
                                     name="nama"
                                     required=""
-                                    value="{{$point['nama'] ?? ''}}"
+                                    value="{{$point->nama ?? ''}}"
                                 >
                             </div>
                         </div>
@@ -107,8 +107,8 @@
                         <div class="form-group row">
                             <label for="nomor" class="col-sm-2 control-label">Simbol</label>
                             <div class="col-sm-10">
-                                @if (($point['simbol'] ?? '') != '')
-                                    <img src="{{ asset('assets/img/gis/lokasi/point/'. $point['simbol']) }}" />
+                                @if (($point->simbol ?? '') != '')
+                                    <img src="{{ asset('assets/img/gis/lokasi/point/'. $point->simbol) }}" />
                                 @else
                                     <img src="{{ asset('assets/img/gis/lokasi/point/default.png') }}" />
                                 @endif
@@ -120,9 +120,9 @@
                                 <div class="vertical-scrollbar" style="max-height:300px;">
                                     <ul id="icons" class="bs-glyphicons">
                                         @foreach ($simbol as $data)
-                                            <li @if (($point['simbol'] ?? '') == $data['simbol']) class="active" id="simbol_active" @endif onclick="li_active($(this).val());">
+                                            <li @if (($point->simbol ?? '') == $data['simbol']) class="active" id="simbol_active" @endif onclick="li_active($(this).val());">
                                                 <label>
-                                                    <input type="radio" name="simbol" id="simbol" class="hidden" value="{{ $data['simbol'] }}" @checked(($point['simbol'] ?? '') == $data['simbol'])>
+                                                    <input type="radio" name="simbol" id="simbol" class="hidden" value="{{ $data['simbol'] }}" @checked(($point->simbol ?? '') == $data['simbol'])>
                                                     <img src="{{ asset('assets/img/gis/lokasi/point/'. $data['simbol']) }}">
                                                     <span class="glyphicon-class">{{ $data['simbol'] }}</span>
                                                 </label>

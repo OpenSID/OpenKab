@@ -41,8 +41,7 @@ class PageController extends Controller
     public function getCategory(Category $category)
     {
         return view('web.articles', [
-            'title' => $category->title,
-            'description' => $category->description,
+            'title' => $category->name,
             'articles' => Article::where('category_id', $category->id)->paginate(4),
         ]);
     }

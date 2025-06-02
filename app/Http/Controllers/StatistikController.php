@@ -9,14 +9,16 @@ class StatistikController extends Controller
     public function penduduk()
     {
         return view('statistik.index', [
+            'detailLink' => url('penduduk'),
             'judul' => 'Penduduk',
-            'default_kategori' => 'rentang-umur',
+            'default_kategori' => request('item_selected', 'rentang-umur'),
         ]);
     }
 
     public function keluarga()
     {
         return view('statistik.index', [
+            'detailLink' => url('keluarga'),
             'judul' => 'Keluarga',
             'default_kategori' => 'kelas-sosial',
         ]);
@@ -25,6 +27,7 @@ class StatistikController extends Controller
     public function rtm()
     {
         return view('statistik.index', [
+            'detailLink' => url('rtm'),
             'judul' => 'RTM',
             'default_kategori' => 'bdt',
         ]);
@@ -38,6 +41,7 @@ class StatistikController extends Controller
     public function bantuan()
     {
         return view('statistik.index', [
+            'detailLink' => url('penduduk'),
             'judul' => 'Bantuan',
             'default_kategori' => 'penduduk',
         ]);
@@ -51,6 +55,30 @@ class StatistikController extends Controller
             'kategori' => $kategori,
             'id' => $id,
             'filter' => $filter['filter'],
+        ]);
+    }
+
+    public function detail($tipe = '0', $nomor = 0, $sex = null, $kategori = null, $kategori_id = null)
+    {
+        return view('statistik.detail', [
+            'route_back' => "statistik.{$kategori}",
+            'judul' => strtoupper($kategori),
+            'default_kategori' => $kategori_id,
+            'tipe' => $tipe,
+            'nomor' => $nomor,
+            'sex' => $sex,
+        ]);
+    }
+
+    public function detailPenduduk($tipe = '0', $nomor = 0, $sex = null, $kategori = null, $kategori_id = null)
+    {
+        return view('statistik.detail-bantuan', [
+            'route_back' => "statistik.{$kategori}",
+            'judul' => strtoupper($kategori),
+            'default_kategori' => $kategori_id,
+            'tipe' => $tipe,
+            'nomor' => $nomor,
+            'sex' => $sex,
         ]);
     }
 }

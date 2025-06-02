@@ -14,7 +14,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-12">
-                            <a href="{{ route('laporan-bulanan.export-excel') }}" class="btn btn-primary btn-sm">
+                            <a href="{{ route('laporan-bulanan.export-excel-detail', ['rincian' => $rincian, 'tipe' => $tipe]) }}" class="btn btn-primary btn-sm">
                                 <i class="fa fa-print"></i>
                                 Cetak
                             </a>

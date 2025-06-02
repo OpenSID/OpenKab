@@ -212,6 +212,25 @@ class LaporanBulananController extends Controller
         ->header('Content-Disposition', 'attachment; filename="laporan.xls"');
     }
 
+    public function exportExcelDetail($rincian, $tipe)
+    {
+
+        $data['tahun'] = session('tahunku');
+        $data['bulan'] = session('bulanku');
+        $data = $this->penduduk->sumberData($rincian, $tipe, session('tahunku'), session('bulanku'));
+        $data['rincian'] = $rincian;
+        $data['tipe'] = $tipe;
+
+        $data['page_title'] = 'Laporan Kependudukan Bulanan';
+        $data['page_description'] = 'Rincian Kependudukan Bulanan';
+        
+        $html = view('laporan-bulanan.cetak_detail', $data)->render();
+
+        return response($html)
+        ->header('Content-Type', 'application/vnd.ms-excel')
+        ->header('Content-Disposition', 'attachment; filename="laporan.xls"');
+    }
+
     public function getSesi()
     {
         if(auth()->user()->hasRole('administrator')){

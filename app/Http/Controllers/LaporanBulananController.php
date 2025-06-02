@@ -209,7 +209,6 @@ class LaporanBulananController extends Controller
 
     public function exportExcelDetail($rincian, $tipe)
     {
-
         $data['tahun'] = session('tahunku');
         $data['bulan'] = session('bulanku');
         $data = $this->penduduk->sumberData($rincian, $tipe, session('tahunku'), session('bulanku'));
@@ -218,7 +217,7 @@ class LaporanBulananController extends Controller
 
         $data['page_title'] = 'Laporan Kependudukan Bulanan';
         $data['page_description'] = 'Rincian Kependudukan Bulanan';
-        
+
         $html = view('laporan-bulanan.cetak_detail', $data)->render();
 
         return response($html)

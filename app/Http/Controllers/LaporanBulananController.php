@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 class LaporanBulananController extends Controller
 {
     public $penduduk;
+
     public $config;
 
     public function __construct(StatistikPendudukApiService $penduduk, ConfigApiService $config)
@@ -55,7 +56,7 @@ class LaporanBulananController extends Controller
         $tanggal_lengkap = $this->penduduk->logPenduduk();
         $dataLengkap = true;
 
-        if (!empty($tanggal_lengkap) && strtotime($tanggal_lengkap)) {
+        if (! empty($tanggal_lengkap) && strtotime($tanggal_lengkap)) {
             $tahun_bulan = (new DateTime($tanggal_lengkap))->format('Y-m');
         } else {
             $tahun_bulan = date('Y-m');
@@ -67,80 +68,75 @@ class LaporanBulananController extends Controller
             return view('laporan-bulanan.index', $data);
         }
 
-        if ($tahun_bulan > $data['tahun'] . '-' . $data['bulan']) {
+        if ($tahun_bulan > $data['tahun'].'-'.$data['bulan']) {
             $data['sesudah_data_lengkap'] = false;
 
             return view('laporan-bulanan.index', $data);
         }
 
-        $data['tgl_lengkap']        = $tanggal_lengkap;
+        $data['tgl_lengkap'] = $tanggal_lengkap;
         // $data['tahun_lengkap']      = (new DateTime($tanggal_lengkap))->format('Y');
-        if (!empty($tanggal_lengkap) && is_string($tanggal_lengkap) && strtotime($tanggal_lengkap)) {
+        if (! empty($tanggal_lengkap) && is_string($tanggal_lengkap) && strtotime($tanggal_lengkap)) {
             $data['tahun_lengkap'] = (new DateTime($tanggal_lengkap))->format('Y');
         } else {
             $data['tahun_lengkap'] = date('Y');
         }
 
-        $dataPenduduk               = $this->penduduk->laporanBulanan($data['tahun'], $data['bulan']);
+        $dataPenduduk = $this->penduduk->laporanBulanan($data['tahun'], $data['bulan']);
 
-        if(auth()->user()->hasRole('administrator')){
-            
+        if (auth()->user()->hasRole('administrator')) {
             $data['kabupatens'] = $this->config->kabupaten();
 
             $sesi = session()->has('kode_kabupaten') ? session('kode_kabupaten') : auth()->user()->kode_kabupaten;
             Session::put('kode_kabupaten', $sesi);
             $data['kode_kabupaten'] = session('kode_kabupaten');
 
-            if(session()->has('kode_kabupaten')){
+            if (session()->has('kode_kabupaten')) {
                 $data['kecamatans'] = $this->config->kecamatan([
-                    'filter[kode_kabupaten]' => session('kode_kabupaten')
+                    'filter[kode_kabupaten]' => session('kode_kabupaten'),
                 ]);
-            }else{
+            } else {
                 $data['kecamatans'] = [];
             }
 
-            if(session()->has('kode_kecamatan')){
+            if (session()->has('kode_kecamatan')) {
                 $data['desas'] = $this->config->desa([
                     'filter[kode_kecamatan]' => session('kode_kecamatan'),
                 ]);
-            }else{
-
+            } else {
                 $data['desas'] = [];
             }
-
-        }else{
+        } else {
             $data['kabupatens'] = $this->config->kabupaten([
-                'filter[id]' => auth()->user()->kode_kabupaten
+                'filter[id]' => auth()->user()->kode_kabupaten,
             ]);
-            
-            if(session()->has('kode_kabupaten')){
+
+            if (session()->has('kode_kabupaten')) {
                 $data['kecamatans'] = $this->config->kecamatan([
-                    'filter[kode_kabupaten]' => session('kode_kabupaten')
+                    'filter[kode_kabupaten]' => session('kode_kabupaten'),
                 ]);
-            }else{
+            } else {
                 $data['kecamatans'] = [];
             }
 
-            if(session()->has('kode_kecamatan')){
+            if (session()->has('kode_kecamatan')) {
                 $data['desas'] = $this->config->desa([
                     'filter[kode_kecamatan]' => session('kode_kecamatan'),
                 ]);
-            }else{
-
+            } else {
                 $data['desas'] = [];
             }
-
         }
 
         if (collect($dataPenduduk)->isEmpty()) {
             $data['dataPenduduk'] = false;
+
             return view('laporan-bulanan.index', $data);
-        }else{
+        } else {
             $data['dataPenduduk'] = true;
+
             return view('laporan-bulanan.index', array_merge($data, $dataPenduduk));
-
         }
-
     }
 
     public function filter(Request $request)
@@ -174,7 +170,7 @@ class LaporanBulananController extends Controller
             Session::put('kode_desa', $desa);
             Session::put('kode_kecamatan', $kecamatan);
             Session::put('kode_kabupaten', $kabupaten);
-        } 
+        }
 
         return redirect()->route('laporan-bulanan.index');
     }
@@ -194,15 +190,14 @@ class LaporanBulananController extends Controller
 
     public function exportExcel()
     {
-
         $data['tahun'] = session('tahunku');
         $data['bulan'] = session('bulanku');
         $dataPenduduk = (array) $this->penduduk->laporanBulanan($data['tahun'], $data['bulan']);
-        
+
         if (collect($dataPenduduk)->isEmpty()) {
             $data['dataPenduduk'] = false;
             $html = view('laporan-bulanan.cetak', $data)->render();
-        }else{
+        } else {
             $data['dataPenduduk'] = true;
             $html = view('laporan-bulanan.cetak', array_merge($data, $dataPenduduk))->render();
         }
@@ -233,53 +228,48 @@ class LaporanBulananController extends Controller
 
     public function getSesi()
     {
-        if(auth()->user()->hasRole('administrator')){
-            
+        if (auth()->user()->hasRole('administrator')) {
             $data['kabupatens'] = $this->config->kabupaten();
 
             $sesi = session()->has('kabupaten.kode_kabupaten') ? session('kabupaten.kode_kabupaten') : auth()->user()->kode_kabupaten;
             Session::put('kabupaten.kode_kabupaten', $sesi);
             $data['kode_kabupaten'] = session('kabupaten.kode_kabupaten');
 
-            if(session()->has('kabupaten.kode_kabupaten')){
+            if (session()->has('kabupaten.kode_kabupaten')) {
                 $data['kecamatans'] = $this->config->kecamatan([
-                    'filter[kode_kabupaten]' => session('kabupaten.kode_kabupaten')
+                    'filter[kode_kabupaten]' => session('kabupaten.kode_kabupaten'),
                 ]);
-            }else{
+            } else {
                 $data['kecamatans'] = [];
             }
 
-            if(session()->has('kecamatan.kode_kecamatan')){
+            if (session()->has('kecamatan.kode_kecamatan')) {
                 $data['desas'] = $this->config->desa([
                     'filter[kode_kecamatan]' => session('kecamatan.kode_kecamatan'),
                 ]);
-            }else{
-
+            } else {
                 $data['desas'] = [];
             }
-
-        }else{
+        } else {
             $data['kabupatens'] = $this->config->kabupaten([
-                'filter[id]' => auth()->user()->kode_kabupaten
+                'filter[id]' => auth()->user()->kode_kabupaten,
             ]);
-            
-            if(session()->has('kabupaten.kode_kabupaten')){
+
+            if (session()->has('kabupaten.kode_kabupaten')) {
                 $data['kecamatans'] = $this->config->kecamatan([
-                    'filter[kode_kabupaten]' => session('kabupaten.kode_kabupaten')
+                    'filter[kode_kabupaten]' => session('kabupaten.kode_kabupaten'),
                 ]);
-            }else{
+            } else {
                 $data['kecamatans'] = [];
             }
 
-            if(session()->has('kecamatan.kode_kecamatan')){
+            if (session()->has('kecamatan.kode_kecamatan')) {
                 $data['desas'] = $this->config->desa([
                     'filter[kode_kecamatan]' => session('kecamatan.kode_kecamatan'),
                 ]);
-            }else{
-
+            } else {
                 $data['desas'] = [];
             }
-
         }
 
         return $data;

@@ -180,6 +180,14 @@
             var urlKategoriStatistik = new URL(`${baseUrl}/statistik/kategori-statistik`);
 
             urlKategoriStatistik.searchParams.set('filter[id]', kategori);
+            urlKategoriStatistik.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[kabupaten]", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            urlKategoriStatistik.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[kecamatan]", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[desa]", "{{ session('desa.kode_desa') ?? '' }}");
+
+            const desaKategoriId = parseInt("{{ session('desa.id') ?? '0' }}", 10);
+            urlKategoriStatistik.searchParams.set("config_desa", isNaN(desaKategoriId) ? 0 : desaKategoriId);
 
             $.ajax({
                 url: urlKategoriStatistik.href,
@@ -274,7 +282,15 @@
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
             var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
             urlStatistik.searchParams.set('filter[id]', default_id);
+            urlStatistik.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[kabupaten]", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            urlStatistik.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[kecamatan]", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[desa]", "{{ session('desa.kode_desa') ?? '' }}");
 
+            const desaId = parseInt("{{ session('desa.id') ?? '0' }}", 10);
+            urlStatistik.searchParams.set("config_desa", isNaN(desaId) ? 0 : desaId);
+            
             var statistik = $('#tabel-data').DataTable({
                 processing: true,
                 serverSide: true,

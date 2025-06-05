@@ -59,4 +59,9 @@ jobs:
         DB_DATABASE: testing_db
         DB_USERNAME: root
         DB_PASSWORD: secret
+
+        OPENKAB_DB_HOST: 127.0.0.1
+        OPENKAB_DB_DATABASE: testing_gabungan_db
+        OPENKAB_DB_USERNAME: root
+        OPENKAB_DB_PASSWORD: secret
       run: php artisan migrate && php artisan test

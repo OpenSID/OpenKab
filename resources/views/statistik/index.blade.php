@@ -180,6 +180,16 @@
             var urlKategoriStatistik = new URL(`${baseUrl}/statistik/kategori-statistik`);
 
             urlKategoriStatistik.searchParams.set('filter[id]', kategori);
+            urlKategoriStatistik.searchParams.set("kode_kabupaten",
+                "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[kabupaten]", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            urlKategoriStatistik.searchParams.set("kode_kecamatan",
+                "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[kecamatan]", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[desa]", "{{ session('desa.kode_desa') ?? '' }}");
+
+            const desaKategoriId = parseInt("{{ session('desa.id') ?? '0' }}", 10);
+            urlKategoriStatistik.searchParams.set("config_desa", isNaN(desaKategoriId) ? 0 : desaKategoriId);
 
             $.ajax({
                 url: urlKategoriStatistik.href,
@@ -205,22 +215,9 @@
                         var nama = item.nama;
                         var judul_kolom_nama = item.judul_kolom_nama;
 
-                        if (index == 0) {
-                            $('#judul_kolom_nama').html(judul_kolom_nama)
-                            $('#cetak').data('url',
-                                `{{ url('statistik/cetak') }}/${kategori}/${id}`);
-
-                            var url = new URL(`${baseUrl}/statistik/${kategori}`);
-                            url.searchParams.set('filter[id]', id);
-
-                            statistik.ajax.url(url.href, {
-                                headers: header
-                            }).load();
-
-                        }
                         html += `
                         <li class="nav-item pilih-kategori">
-                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link">
+                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link ${id == default_id ? 'active' : ''}" href="#">
                                 <i class="fas fa-angle-right"></i> ${nama}
                             </a>
                         </li>
@@ -230,8 +227,6 @@
                     $('#daftar-statistik').html(html)
                 }
             });
-
-            $('.pilih-kategori > a.active').trigger('click');
 
             $('#daftar-statistik').on('mouseenter', '.pilih-kategori > a', function() {
                 $(this).css('cursor', 'pointer')
@@ -262,10 +257,9 @@
                 $(this).addClass('active')
                 $('#judul_kolom_nama').html(judul_kolom_nama)
 
-                var url = new URL(`${baseUrl}/statistik/${kategori}`);
-                url.searchParams.set('filter[id]', id);
+                urlStatistik.searchParams.set('filter[id]', id);
 
-                statistik.ajax.url(url.href, {
+                statistik.ajax.url(urlStatistik.href, {
                     headers: header
                 }).load();
 
@@ -274,6 +268,14 @@
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
             var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
             urlStatistik.searchParams.set('filter[id]', default_id);
+            urlStatistik.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[kabupaten]", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            urlStatistik.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[kecamatan]", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[desa]", "{{ session('desa.kode_desa') ?? '' }}");
+
+            const desaId = parseInt("{{ session('desa.id') ?? '0' }}", 10);
+            urlStatistik.searchParams.set("config_desa", isNaN(desaId) ? 0 : desaId);
 
             var statistik = $('#tabel-data').DataTable({
                 processing: true,
@@ -434,10 +436,9 @@
             margin-right: -20px;
             margin-left: -20px;
         }
-        
+
         a[target="_blank"] {
             color: blue;
         }
-
     </style>
 @endpush

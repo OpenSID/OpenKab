@@ -71,4 +71,15 @@ class ConfigApiService extends BaseApiService
             return $data ?: collect([]);
         });
     }
+
+    public function desaByKode(string $kode_desa)
+    {
+        $cacheKey = "config_desa_kode_{$kode_desa}";
+
+        return Cache::remember($cacheKey, $this->cacheTtl, function () use ($kode_desa) {
+            $data = $this->apiRequest("/api/v1/config/desa-by-kode/{$kode_desa}");
+
+            return $data ?: collect([]);
+        });
+    }
 }

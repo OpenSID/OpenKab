@@ -31,6 +31,7 @@ jobs:
         coverage: none
 
     - uses: actions/checkout@v4
+
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
@@ -48,6 +49,9 @@ jobs:
     - name: Wait for MySQL
       run: sleep 15
 
+    - name: Create second database
+      run: mysql -h 127.0.0.1 -P 3306 -u root -psecret -e "CREATE DATABASE IF NOT EXISTS testing_gabungan_db;"
+
     - name: Import SQL file into MySQL
       run: |
         mysql -h 127.0.0.1 -P 3306 -u root -psecret testing_db < ./database/database_test.sql
@@ -61,6 +65,7 @@ jobs:
         DB_PASSWORD: secret
 
         OPENKAB_DB_HOST: 127.0.0.1
+        OPENKAB_DB_PORT: 3306
         OPENKAB_DB_DATABASE: testing_gabungan_db
         OPENKAB_DB_USERNAME: root
         OPENKAB_DB_PASSWORD: secret

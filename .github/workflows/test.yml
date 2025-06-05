@@ -43,6 +43,7 @@ jobs:
     - name: Extract database testing
       run: |
         tar -xzf database/database_test.sql.tar.gz -C database
+        tar -xzf database/database_gabungan_test.sql.tar.gz -C database
 
     - name: Wait for MySQL
       run: sleep 15
@@ -50,6 +51,7 @@ jobs:
     - name: Import SQL file into MySQL
       run: |
         mysql -h 127.0.0.1 -P 3306 -u root -psecret testing_db < ./database/database_test.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -psecret testing_gabungan_db < ./database/testing_gabungan_db.sql
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       env:

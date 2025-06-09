@@ -113,14 +113,19 @@
         <b x-text="dataIdentitas.nama_aplikasi"></b>
     </span>
 
-   <script nonce="{{ csp_nonce() }}"  >
+   <script nonce="{{ csp_nonce() }}">
+
+        const header = @include('layouts.components.header_bearer_api_gabungan')
+
        function identitas() {
            return {
                id: 1,
                edit: '',
                dataIdentitas: {},
                retrieveData() {
-                   fetch('{{ url('api/v1/identitas') }}')
+                   fetch('{{ url('api/v1/identitas') }}', {
+                    headers: header
+                   })
                        .then(res => res.json())
                        .then(response => {
                            this.dataIdentitas = response.data.attributes;

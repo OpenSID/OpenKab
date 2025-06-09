@@ -33,125 +33,12 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div id="collapse-filter" class="collapse">
-                                <div class="row">
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Status Penduduk</label>
-                                            <select class="select2 form-control-sm width-100" id="status" name="status"
-                                                data-placeholder="Semua Status">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Status Dasar</label>
-                                            <select class="select2 form-control-sm width-100" id="status-dasar"
-                                                name="status-dasar" data-placeholder="Semua Status Dasar">
-                                                <option value="1" selected>Hidup</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Jenis Kelamin</label>
-                                            <select class="select2 form-control-sm width-100" id="sex" name="sex"
-                                                data-placeholder="Semua Jenis Kelamin">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Kabupaten</label>
-                                            <select name="Filter Kabupaten" id="filter_kabupaten" class="form-control-sm"
-                                                title="Pilih Kabupaten">
-                                                @if ($filters['kode_kabupaten'] ?? false)
-                                                    <option value="{{ $filters['kode_kabupaten'] }}" selected>
-                                                        {{ $filters['nama_kabupaten'] }}</option>
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Kecamatan</label>
-                                            <select name="Filter Kecamatan" id="filter_kecamatan" class="form-control"
-                                                title="Pilih Kecamatan">
-                                                @if ($filters['kode_kecamatan'] ?? false)
-                                                    <option value="{{ $filters['kode_kecamatan'] }}" selected>
-                                                        {{ $filters['nama_kecamatan'] }}</option>
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Desa</label>
-                                            <select name="Filter Desa" id="filter_desa" class="form-control"
-                                                title="Pilih Desa">
-                                                @if ($filters['kode_desa'] ?? false)
-                                                    <option value="{{ $filters['kode_desa'] }}" selected>
-                                                        {{ $filters['nama_desa'] }}</option>
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
-                                    {{-- TODO: Aktifikan jika digunakan filter untuk tingkat dusun --}}
-                                    {{-- <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Pilih Dusun</label>
-                                            <select class="select2 form-control-sm width-100" id="dusun" name="dusun"
-                                                data-placeholder="Semua Dusun">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Pilih RW</label>
-                                            <select class="select2 form-control-sm width-100" id="rw" name="rw"
-                                                data-placeholder="Semua RW" disabled>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label>Pilih RT</label>
-                                            <select class="select2 form-control-sm width-100" id="rt" name="rt"
-                                                data-placeholder="Semua RT" disabled>
-                                            </select>
-                                        </div>
-                                    </div> --}}
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="reset" class="btn btn-secondary"><span
-                                                            class="fas fa-ban"></span></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="filter" class="btn btn-primary"><span
-                                                            class="fas fa-search"></span></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="mt-0">
-                            </div>
-                        </div>
+                        @include('penduduk.filter_form')
                     </div>
                     <div class="table-responsive">
+                        @if ($judul)
+                            <h4 class="text-center">{{ $judul }}</h4>
+                        @endif
                         <table class="table table-striped" id="penduduk">
                             <thead>
                                 <tr>
@@ -194,6 +81,11 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            const filterDefault = {!! json_encode($filters) !!}
+            let kriteria_jumlah = filterDefault['jumlah'] ?? null
+            let kriteria_belum_mengisi = filterDefault['belum_mengisi'] ?? null
+            let kriteria_total = filterDefault['total'] ?? null
+
             var penduduk = $('#penduduk').DataTable({
                 processing: true,
                 serverSide: true,
@@ -204,25 +96,66 @@
                     headers: header,
                     method: 'get',
                     data: function(row) {
-                        return {
+                        const params = {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
+                            "filter[jumlah]": kriteria_jumlah,
+                            "filter[belum_mengisi]": kriteria_belum_mengisi,
+                            "filter[total]": kriteria_total,
+                            "filter[ktp]": $('#ktp').val(),
                             "filter[sex]": $('#sex').val(),
                             "filter[status]": $('#status').val(),
+                            "filter[kk_level]": $('#kk_level').val(),
+                            "filter[warganegara_id]": $('#warganegara_id').val(),
                             "filter[status_dasar]": $('#status-dasar').val(),
+                            "filter[golongan_darah_id]": $('#golongan_darah_id').val(),
+                            "filter[cacat_id]": $('#cacat_id').val(),
+                            "filter[sakit_menahun_id]": $('#sakit_menahun_id').val(),
+                            "filter[cara_kb_id]": $('#cara_kb_id').val(),
+                            "filter[id_asuransi]": $('#id_asuransi').val(),
+                            "filter[hamil]": $('#hamil').val(),
+                            "filter[suku]": $('#suku').val(),
+                            "filter[status_covid]": $('#status_covid').val(),
+                            "filter[status_rekam]": $('#status_rekam').val(),
+                            "filter[pendidikan_kk_id]": $('#pendidikan_kk_id').val(),
+                            "filter[pendidikan_sedang_id]": $('#pendidikan_sedang_id').val(),
+                            "filter[pekerjaan_id]": $('#pekerjaan_id').val(),
+                            "filter[status_kawin]": $('#status_kawin').val(),
+                            "filter[id_kk]": $('#id_kk').val(),
+                            "filter[tag_id_card]": $("#tag_id_card").val(),
+                            "filter[agama_id]": $('#agama_id').val(),
                             "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
                             "filter[clusterDesa.rw]": $('#rw').val(),
                             "filter[clusterDesa.rt]": $('#rt').val(),
                             "filter[kode_kabupaten]": $('#filter_kabupaten').val(),
                             "filter[kode_kecamatan]": $('#filter_kecamatan').val(),
                             "filter[kode_desa]": $('#filter_desa').val(),
+                            "filter[bantuan-penduduk]": $('#bantuan-penduduk').val(),
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[search]": row.search.value,
-                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
+                                    .order[0]
                                     ?.column]
                                 ?.name
                         };
+                        const umurMin = $('#filter_umur_dari').val();
+                        const umurMax = $('#filter_umur_sampai').val();
+                        const umurObj = {
+                            min: '',
+                            max: '',
+                            satuan: 'tahun'
+                        };
+                        if (umurMin != '') {
+                            umurObj.min = umurMin;
+                        }
+                        if (umurMax != '') {
+                            umurObj.max = umurMax;
+                        }
+                        if (umurObj.min || umurObj.max) {
+                            params['filter[umur]'] = umurObj;
+                        }
+                        return params;
                     },
                     dataSrc: function(json) {
                         json.recordsTotal = json.meta.pagination.total
@@ -382,7 +315,10 @@
                 $('#filter_kabupaten').val('').change();
                 $('#filter_kecamatan').val('').change();
                 $('#filter_desa').val('').change();
-
+                $('.select2-filter').val('').change();
+                kriteria_belum_mengisi = null;
+                kriteria_jumlah = null;
+                kriteria_total = null;
                 penduduk.ajax.reload();
             });
 
@@ -390,9 +326,19 @@
                 window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
             });
 
-            @if ($filters['kode_kabupaten'] ?? false)
-                $('a[href="#collapse-filter"]').click();
-            @endif
+            $('select.select2-filter').each(function() {
+                $(this).select2({
+                    width: '100%',
+                    theme: 'bootstrap4',
+                    placeholder: $(this).attr('placeholder'),
+                    allowClear: true,
+                    data: $(this).data('option') ?? null,
+                })
+            });
+            for (let i in filterDefault) {
+                $(`#${i}`).val(filterDefault[i]).trigger('change');
+            }
+
 
         });
     </script>

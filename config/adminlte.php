@@ -350,6 +350,11 @@ return [
             'icon' => 'fas fa-home',
             'url' => '/dasbor',
         ],
+        [
+            'text' => 'Dasbor Demografi',
+            'icon' => 'fas fa-home',
+            'url' => '/dasbor-demografi',
+        ],
 
     ],
 

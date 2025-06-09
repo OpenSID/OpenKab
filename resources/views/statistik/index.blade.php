@@ -1,6 +1,6 @@
 @extends('layouts.index')
 @include('layouts.components.select2_tahun', [
-    'url' => config('app.databaseGabunganUrl').'/api/v1/statistik/' . strtolower($judul) . '/tahun',
+    'url' => config('app.databaseGabunganUrl') . '/api/v1/statistik/' . strtolower($judul) . '/tahun',
 ])
 
 
@@ -166,28 +166,38 @@
 
 @section('js')
     @include('statistik.chart')
-    <script nonce="{{ csp_nonce() }}"  >
-    let data_grafik = [];
-    let nama_desa = `{{ session('desa.nama_desa') }}`;
-    let kategori = `{{ strtolower($judul) }}`;
-    let default_id = `{{ $default_kategori }}`;
-    document.addEventListener("DOMContentLoaded", function(event) {
+    <script nonce="{{ csp_nonce() }}">
+        let data_grafik = [];
+        let nama_desa = `{{ session('desa.nama_desa') }}`;
+        let kategori = `{{ strtolower($judul) }}`;
+        let default_id = `{{ $default_kategori }}`;
+        document.addEventListener("DOMContentLoaded", function(event) {
 
-        const header = @include('layouts.components.header_bearer_api_gabungan');
+            const header = @include('layouts.components.header_bearer_api_gabungan');
 
-        var baseUrl = {!! json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
+            var baseUrl = {!! json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
 
-        var urlKategoriStatistik = new URL(`${baseUrl}/statistik/kategori-statistik`);
+            var urlKategoriStatistik = new URL(`${baseUrl}/statistik/kategori-statistik`);
 
-        urlKategoriStatistik.searchParams.set('filter[id]', kategori);
+            urlKategoriStatistik.searchParams.set('filter[id]', kategori);
+            urlKategoriStatistik.searchParams.set("kode_kabupaten",
+                "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[kabupaten]", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            urlKategoriStatistik.searchParams.set("kode_kecamatan",
+                "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[kecamatan]", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlKategoriStatistik.searchParams.set("filter[desa]", "{{ session('desa.kode_desa') ?? '' }}");
 
-        $.ajax({
-            url: urlKategoriStatistik.href,
-            headers: header,
-            method: 'get',
-            success: function(response) {
-                if (response.data.length == 0) {
-                    $('#tampilkan-statistik').html(`
+            const desaKategoriId = parseInt("{{ session('desa.id') ?? '0' }}", 10);
+            urlKategoriStatistik.searchParams.set("config_desa", isNaN(desaKategoriId) ? 0 : desaKategoriId);
+
+            $.ajax({
+                url: urlKategoriStatistik.href,
+                headers: header,
+                method: 'get',
+                success: function(response) {
+                    if (response.data.length == 0) {
+                        $('#tampilkan-statistik').html(`
                             <div class="col-lg-12">
                                 <div class="alert alert-warning">
                                     <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
@@ -195,207 +205,226 @@
                                 </div>
                             </div>
                         `);
-                }
-
-                var daftarKategoriStatistik = response.data
-                var html = ''
-
-                daftarKategoriStatistik.forEach(function(item, index) {
-                    var id = item.id;
-                    var nama = item.nama;
-                    var judul_kolom_nama = item.judul_kolom_nama;
-
-                    if (index == 0) {
-                        $('#judul_kolom_nama').html(judul_kolom_nama)
-                        $('#cetak').data('url',
-                            `{{ url('statistik/cetak') }}/${kategori}/${id}`);
-
-                        var url = new URL(`${baseUrl}/statistik/${kategori}`);
-                        url.searchParams.set('filter[id]', id);
-
-                        statistik.ajax.url(url.href, {
-                            headers: header
-                        }).load();
-
                     }
-                    html += `
+
+                    var daftarKategoriStatistik = response.data
+                    var html = ''
+
+                    daftarKategoriStatistik.forEach(function(item, index) {
+                        var id = item.id;
+                        var nama = item.nama;
+                        var judul_kolom_nama = item.judul_kolom_nama;
+
+                        html += `
                         <li class="nav-item pilih-kategori">
-                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link ${index == 0 ? 'active' : ''}">
+                            <a data-id="${id}" data-judul_kolom_nama="${judul_kolom_nama}" data-nama="${nama}" class="nav-link ${id == default_id ? 'active' : ''}" href="#">
                                 <i class="fas fa-angle-right"></i> ${nama}
                             </a>
                         </li>
                     `
-                });
+                    });
 
-                $('#daftar-statistik').html(html)
-            }
-        });
-
-        $('.pilih-kategori > a.active').trigger('click');
-
-        $('#daftar-statistik').on('mouseenter', '.pilih-kategori > a', function() {
-            $(this).css('cursor', 'pointer')
-        });
-
-        $('#cetak').on('click', function() {
-            var id = $('#daftar-statistik .active').data('id');
-
-            let url = new URL(`{{ url('statistik/cetak') }}/${kategori}/${id}`);
-            url.searchParams.append("filter[tahun]", $("#tahun").val() ?? '');
-            url.searchParams.append("filter[bulan]", $("#bulan").val() ?? '');
-            window.open(url, '_blank');
-        });
-
-        $('#btn-grafik').on('click', function() {
-            $("#pie-statistik").collapse('hide');
-        });
-
-        $('#btn-pie').on('click', function() {
-            $("#grafik-statistik").collapse('hide')
-        });
-
-        $('#daftar-statistik').on('click', '.pilih-kategori > a', function() {
-            var id = $(this).data('id')
-            var judul_kolom_nama = $(this).data('judul_kolom_nama')
-
-            $('.pilih-kategori > a').removeClass('active')
-            $(this).addClass('active')
-            $('#judul_kolom_nama').html(judul_kolom_nama)
-
-            var url = new URL(`${baseUrl}/statistik/${kategori}`);
-            url.searchParams.set('filter[id]', id);
-
-            statistik.ajax.url(url.href, {
-                headers: header
-            }).load();
-
-            $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
-        });
-
-        var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
-        urlStatistik.searchParams.set('filter[id]', default_id);
-
-        var statistik = $('#tabel-data').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ordering: false,
-            searching: false,
-            paging: false,
-            info: false,
-            ajax: {
-                url: urlStatistik.href,
-                headers: header,
-                method: 'get',
-                data: function(row) {
-                    return {
-                        "filter[bulan]": $("#bulan").val(),
-                        "filter[tahun]": $("#tahun").val(),
-                    };
-                },
-                dataSrc: function(json) {
-                    if (json.data.length > 0) {
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })
-
-                        grafikPie()
-
-                        return json.data;
-                    }
-
-                    return false;
-                },
-            },
-            columnDefs: [{
-                    targets: '_all',
-                    className: 'text-nowrap',
-                },
-                {
-                    targets: [2, 3, 4, 5, 6, 7],
-                    className: 'dt-body-right',
-                },
-            ],
-            columns: [{
-                data: null,
-            }, {
-                data: function(data) {
-                    return data.attributes.nama;
-                },
-            }, {
-                data: function(data) {
-                    return data.attributes.jumlah
-                },
-            }, {
-                data: function(data) {
-                    return data.attributes.persentase_jumlah;
-                },
-            }, {
-                data: function(data) {
-                    return data.attributes.laki_laki
-                },
-            }, {
-                data: function(data) {
-                    return data.attributes.persentase_laki_laki;
-                },
-            }, {
-                data: function(data) {
-                    return data.attributes.perempuan
-                },
-            }, {
-                data: function(data) {
-                    return data.attributes.persentase_perempuan;
-                },
-            }]
-        });
-
-        statistik.on('draw.dt', function() {
-            var dataTable = $('#tabel-data').DataTable();
-            var pageInfo = dataTable.page.info();
-            var recordsTotal = dataTable.data().count();
-
-            statistik.column(0, {
-                page: 'current'
-            }).nodes().each(function(cell, i) {
-                if ((recordsTotal - i) <= 3) {
-                    cell.innerHTML = '';
-                } else {
-                    cell.innerHTML = i + 1 + pageInfo.start;
+                    $('#daftar-statistik').html(html)
                 }
             });
-        });
 
-        $('#filter').on('click', function(e) {
-            statistik.draw();
-        });
+            $('#daftar-statistik').on('mouseenter', '.pilih-kategori > a', function() {
+                $(this).css('cursor', 'pointer')
+            });
 
-        $(document).on('click', '#reset', function(e) {
-            e.preventDefault();
-            $('#tahun').val('').change();
-            $('#bulan').val('').change(); $('#bulan').val('').change();
-            statistik.ajax.reload();
-        });
+            $('#cetak').on('click', function() {
+                var id = $('#daftar-statistik .active').data('id');
 
-        document.addEventListener("DOMContentLoaded", function(event) {
-            $('#bulan').select2({
-                minimumResultsForSearch: -1,
-                allowClear: true,
-                theme: "bootstrap4",
-                placeholder: "Pilih Bulan",
+                let url = new URL(`{{ url('statistik/cetak') }}/${kategori}/${id}`);
+                url.searchParams.append("filter[tahun]", $("#tahun").val() ?? '');
+                url.searchParams.append("filter[bulan]", $("#bulan").val() ?? '');
+                window.open(url, '_blank');
+            });
+
+            $('#btn-grafik').on('click', function() {
+                $("#pie-statistik").collapse('hide');
+            });
+
+            $('#btn-pie').on('click', function() {
+                $("#grafik-statistik").collapse('hide')
+            });
+
+            $('#daftar-statistik').on('click', '.pilih-kategori > a', function() {
+                var id = $(this).data('id')
+                var judul_kolom_nama = $(this).data('judul_kolom_nama')
+
+                $('.pilih-kategori > a').removeClass('active')
+                $(this).addClass('active')
+                $('#judul_kolom_nama').html(judul_kolom_nama)
+
+                urlStatistik.searchParams.set('filter[id]', id);
+
+                statistik.ajax.url(urlStatistik.href, {
+                    headers: header
+                }).load();
+
+                $('#cetak').data('url', `{{ url('statistik/cetak') }}/${kategori}/${id}`);
+            });
+            const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
+            var urlStatistik = new URL(`${baseUrl}/statistik/${kategori}`);
+            urlStatistik.searchParams.set('filter[id]', default_id);
+            urlStatistik.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[kabupaten]", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            urlStatistik.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[kecamatan]", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            // urlStatistik.searchParams.set("filter[desa]", "{{ session('desa.kode_desa') ?? '' }}");
+
+            const desaId = parseInt("{{ session('desa.id') ?? '0' }}", 10);
+            urlStatistik.searchParams.set("config_desa", isNaN(desaId) ? 0 : desaId);
+
+            var statistik = $('#tabel-data').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                ordering: false,
+                searching: false,
+                paging: false,
+                info: false,
+                ajax: {
+                    url: urlStatistik.href,
+                    headers: header,
+                    method: 'get',
+                    data: function(row) {
+                        return {
+                            "filter[bulan]": $("#bulan").val(),
+                            "filter[tahun]": $("#tahun").val(),
+                        };
+                    },
+                    dataSrc: function(json) {
+                        if (json.data.length > 0) {
+                            data_grafik = [];
+                            json.data.forEach(function(item, index) {
+                                data_grafik.push(item.attributes)
+                            })
+
+                            grafikPie()
+
+                            return json.data;
+                        }
+
+                        return false;
+                    },
+                },
+                columnDefs: [{
+                        targets: '_all',
+                        className: 'text-nowrap',
+                    },
+                    {
+                        targets: [2, 3, 4, 5, 6, 7],
+                        className: 'dt-body-right',
+                    },
+                ],
+                columns: [{
+                    data: null,
+                }, {
+                    data: function(data) {
+                        return data.attributes.nama;
+                    },
+                }, {
+                    data: function(data) {
+                        let kriteria = new URLSearchParams(JSON.parse(data.attributes
+                            .kriteria));
+                        let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
+                            .attributes.nama;
+                        let urlDetail = new URL(urlDetailLink);
+                        urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());
+                        urlDetail.searchParams.set('judul', judul);
+                        return `<a target="_blank" href=${urlDetail.href}>${data.attributes.jumlah}</a>`
+                    },
+                }, {
+                    data: function(data) {
+                        return data.attributes.persentase_jumlah;
+                    },
+                }, {
+                    data: function(data) {
+                        let kriteria = new URLSearchParams(JSON.parse(data.attributes
+                            .kriteria));
+                        let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
+                            .attributes.nama + ' - Laki-laki';
+                        let urlDetail = new URL(urlDetailLink);
+                        urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());
+                        urlDetail.searchParams.set('filter[sex]',
+                            {{ App\Models\Enums\JenisKelaminEnum::laki_laki }});
+                        urlDetail.searchParams.set('judul', judul);
+                        return `<a target="_blank" href=${urlDetail.href}>${data.attributes.laki_laki}</a>`
+                    },
+                }, {
+                    data: function(data) {
+                        return data.attributes.persentase_laki_laki;
+                    },
+                }, {
+                    data: function(data) {
+                        let kriteria = new URLSearchParams(JSON.parse(data.attributes
+                            .kriteria));
+                        let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
+                            .attributes.nama + ' - Perempuan';
+                        let urlDetail = new URL(urlDetailLink);
+                        urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());
+                        urlDetail.searchParams.set('filter[sex]',
+                            {{ App\Models\Enums\JenisKelaminEnum::perempuan }});
+                        urlDetail.searchParams.set('judul', judul);
+                        return `<a target="_blank" href=${urlDetail.href}>${data.attributes.perempuan}</a>`
+                    },
+                }, {
+                    data: function(data) {
+                        return data.attributes.persentase_perempuan;
+                    },
+                }]
+            });
+
+            statistik.on('draw.dt', function() {
+                var dataTable = $('#tabel-data').DataTable();
+                var pageInfo = dataTable.page.info();
+                var recordsTotal = dataTable.data().count();
+
+                statistik.column(0, {
+                    page: 'current'
+                }).nodes().each(function(cell, i) {
+                    if ((recordsTotal - i) <= 3) {
+                        cell.innerHTML = '';
+                    } else {
+                        cell.innerHTML = i + 1 + pageInfo.start;
+                    }
+                });
+            });
+
+            $('#filter').on('click', function(e) {
+                statistik.draw();
+            });
+
+            $(document).on('click', '#reset', function(e) {
+                e.preventDefault();
+                $('#tahun').val('').change();
+                $('#bulan').val('').change();
+                $('#bulan').val('').change();
+                statistik.ajax.reload();
+            });
+
+            document.addEventListener("DOMContentLoaded", function(event) {
+                $('#bulan').select2({
+                    minimumResultsForSearch: -1,
+                    allowClear: true,
+                    theme: "bootstrap4",
+                    placeholder: "Pilih Bulan",
+                });
             });
         });
-    });
     </script>
 @endsection
 @push('css')
-    <style nonce="{{ csp_nonce() }}" >
+    <style nonce="{{ csp_nonce() }}">
         #barChart {
             min-height: 250px;
             height: 250px;
             max-height: 250px;
             max-width: 100%;
         }
+
         #donutChart {
             min-height: 250px;
             height: 250px;
@@ -406,6 +435,10 @@
         hr.hr-chart {
             margin-right: -20px;
             margin-left: -20px;
+        }
+
+        a[target="_blank"] {
+            color: blue;
         }
     </style>
 @endpush

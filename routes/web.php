@@ -5,17 +5,20 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\CatatanRilis;
 use App\Http\Controllers\DasborController;
+use App\Http\Controllers\DasborDemografiController;
 use App\Http\Controllers\DataPokokController;
 use App\Http\Controllers\DesaController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\KeluargaController;
+use App\Http\Controllers\LaporanBulananController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\RiwayatPenggunaController;
+use App\Http\Controllers\RtmController;
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\SuplemenController;
 use App\Http\Controllers\UserController;
@@ -51,6 +54,7 @@ Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function () {
     Route::get('catatan-rilis', CatatanRilis::class);
     Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
+    Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->name('dasbor-demografi');
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
@@ -118,6 +122,16 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
+
+    // rtm
+    Route::middleware(['permission:penduduk-read'])->controller(RtmController::class)
+        ->prefix('rtm')
+        ->group(function () {
+            Route::get('', 'index')->name('rtm.index');
+            Route::get('cetak', 'cetak')->name('rtm.cetak');
+            Route::get('/detail/{no_kk}', 'show')->name('rtm.detail');
+        });
+
     // Bantuan
     Route::middleware(['permission:bantuan-read'])->controller(BantuanController::class)
         ->prefix('bantuan')
@@ -153,9 +167,26 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         ->group(function () {
             Route::middleware(['permission:statistik-penduduk-read'])->get('/penduduk', 'penduduk');
             Route::middleware(['permission:statistik-keluarga-read'])->get('/keluarga', 'keluarga');
-            Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm');
-            Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan');
+
+            Route::middleware(['permission:statistik-rtm-read'])->get('/rtm', 'rtm')->name('statistik.rtm');
+            Route::get('/rtm/detail/{tipe?}/{no?}/{sex?}/{kategori}/{kategori_id}', 'detail')->name('statistik.detail');
+
+            Route::middleware(['permission:statistik-bantuan-read'])->get('/bantuan', 'bantuan')->name('statistik.bantuan');
+            Route::get('/bantuan/detail/{tipe?}/{no?}/{sex?}/{kategori}/{kategori_id}', 'detailPenduduk')->name('statistik.detail.bantuan');
+
             Route::get('/cetak/{kategori}/{id}', 'cetak');
+
+            // Data > Kependudukan > Laporan Bulanan
+            Route::controller(LaporanBulananController::class)
+            ->middleware(['permission:statistik-laporan-bulanan-read'])
+            ->prefix('laporan-bulanan')
+            ->group(function () {
+                Route::get('/', 'index')->name('laporan-bulanan.index');
+                Route::post('/filter', 'filter')->name('laporan-bulanan.filter');
+                Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
+                Route::get('/export-excel', 'exportExcel')->name('laporan-bulanan.export-excel');
+                Route::get('/export-excel-detail/{rincian}/{tipe}', 'exportExcelDetail')->name('laporan-bulanan.export-excel-detail');
+            });
         });
 
     // Master Data

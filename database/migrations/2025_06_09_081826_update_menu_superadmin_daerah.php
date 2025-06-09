@@ -19,9 +19,6 @@ return new class extends Migration
 
         if (!$team) return;
 
-        // update ke [] dulu, agar tidak berntrok jika sudah di set manual
-        $team->update(['menu' => []]);
-
         // baru update yang baru tanpa pengaturan group
         $filteredMenu = array_map(function ($item) {
             if (!isset($item['submenu'])) return $item;

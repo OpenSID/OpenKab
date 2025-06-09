@@ -2,6 +2,7 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Penambahan Fitur
 
+1. [#680](https://github.com/OpenSID/OpenKab/issues/680) Penambahan halaman laporan bulanan kependudukan.
 
 #### Perbaikan BUG
 

@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/signin', [AuthController::class, 'login']);
-Route::get('/identitas', [IdentitasController::class, 'index']);
 
 Route::middleware('auth:sanctum')->get('validate-token', function (Request $request) {
     $user = $request->user();
@@ -63,6 +62,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/', 'index');
             Route::get('/tahun', 'tahun');
         });
+
+    // Identitas
+    Route::controller(IdentitasController::class)
+    ->prefix('identitas')->group(function () {
+        Route::get('/', 'index');
+        Route::put('/perbarui/{id}', 'update');
+        Route::post('/upload/{id}', 'upload');
+        Route::post('/uploadFavicon/{id}', 'uploadFavicon');
+    });
 
     // Identitas
     // Route::controller(IdentitasController::class)

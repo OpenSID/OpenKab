@@ -18,6 +18,7 @@ class KabupatenMiddleware
     public function handle(Request $request, Closure $next)
     {
         // abort jika kabupaten tidak ada di list config.
+
         $kodeKabupaten = $request->route('kodeKabupaten');
         $semuaKode = collect((new ConfigApiService)->kabupaten())->pluck('kode_kabupaten')->toArray();
 

@@ -65,7 +65,7 @@ class User extends Authenticatable
 
     public function scopeVisibleTo($query, $user)
     {
-        if (!$user->hasRole('administrator')) {
+        if (! $user->hasRole('administrator')) {
             $query->where('kode_kabupaten', $user->kode_kabupaten)
                 ->whereDoesntHave('roles', function ($q) {
                     $q->where('name', 'administrator');
@@ -152,5 +152,4 @@ class User extends Authenticatable
             ? $input
             : $this->kode_kabupaten;
     }
-
 }

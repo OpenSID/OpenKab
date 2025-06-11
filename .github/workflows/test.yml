@@ -44,18 +44,13 @@ jobs:
     - name: Extract database testing
       run: |
         tar -xzf database/database_test.sql.tar.gz -C database
-        tar -xzf database/database_gabungan_test.sql.tar.gz -C database
 
     - name: Wait for MySQL
       run: sleep 15
 
-    - name: Create second database
-      run: mysql -h 127.0.0.1 -P 3306 -u root -psecret -e "CREATE DATABASE IF NOT EXISTS testing_gabungan_db;"
-
     - name: Import SQL file into MySQL
       run: |
         mysql -h 127.0.0.1 -P 3306 -u root -psecret testing_db < ./database/database_test.sql
-        mysql -h 127.0.0.1 -P 3306 -u root -psecret testing_gabungan_db < ./database/database_gabungan_test.sql
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       env:
@@ -63,10 +58,4 @@ jobs:
         DB_DATABASE: testing_db
         DB_USERNAME: root
         DB_PASSWORD: secret
-
-        OPENKAB_DB_HOST: 127.0.0.1
-        OPENKAB_DB_PORT: 3306
-        OPENKAB_DB_DATABASE: testing_gabungan_db
-        OPENKAB_DB_USERNAME: root
-        OPENKAB_DB_PASSWORD: secret
       run: php artisan migrate && php artisan test

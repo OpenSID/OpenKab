@@ -145,8 +145,6 @@
                 ],
             });
 
-
-
             function grafikPie() {
                 $('#barChart').remove();
                 $('#donutChart').remove();

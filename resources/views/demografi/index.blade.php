@@ -97,6 +97,14 @@
                 var backgroundColorPie = [];
 
                 data.forEach(function(item, index) {
+                    if (item.nama == 'TOTAL') {
+                        // Skip item with nama 'TOTAL'
+                        return;
+                    }
+                    if (item.nama == 'JUMLAH') {
+                        // Skip item with nama 'JUMLAH'
+                        return;
+                    }
                     let color = randColorRGB();
                     let colorPoint = randColorHex();
 

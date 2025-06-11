@@ -197,8 +197,8 @@
                             }
 
 
-                            return json.data;
                         }
+                        return json.data;
 
                         // if (json.data.length) {
 
@@ -212,7 +212,7 @@
                         //     return json.data;
                         // }
 
-                        return false;
+                        // return false;
                     },
                 },
                 columnDefs: [{

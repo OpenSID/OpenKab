@@ -324,7 +324,7 @@
 
                         const id = data.id?.toString() ?? '';
 
-                        if(id.length < 5){
+                        if(data.attributes.nama !== 'JUMLAH' && data.attributes.nama !== 'BELUM MENGISI' && data.attributes.nama !== 'TOTAL'){
 
                             let kriteria = new URLSearchParams(JSON.parse(data.attributes
                                 .kriteria));

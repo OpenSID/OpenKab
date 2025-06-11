@@ -196,7 +196,6 @@
                                 grafik()    
                             }
 
-
                         }
                         return json.data;
 

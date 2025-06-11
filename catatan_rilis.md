@@ -4,6 +4,7 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 1. [#680](https://github.com/OpenSID/OpenKab/issues/680) Penambahan halaman laporan bulanan kependudukan.
 2. [#691](https://github.com/OpenSID/OpenKab/issues/691) Penambahan filter tertutup setelah klik details dari dasbor. 
+3. [#676](https://github.com/OpenSID/OpenKab/issues/676) Penambahan halam details rincian statistik per judul.
 
 #### Perbaikan BUG
 

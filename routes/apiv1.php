@@ -64,47 +64,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
     // Identitas
-    Route::controller(IdentitasController::class)
-    ->prefix('identitas')->group(function () {
-        Route::get('/', 'index');
-        Route::put('/perbarui/{id}', 'update');
-        Route::post('/upload/{id}', 'upload');
-        Route::post('/uploadFavicon/{id}', 'uploadFavicon');
-    });
-
-    // Identitas
     // Route::controller(IdentitasController::class)
     //     ->prefix('identitas')->group(function () {
     //         Route::put('/perbarui/{id}', 'update');
     //         Route::post('/upload/{id}', 'upload');
     //         Route::post('/uploadFavicon/{id}', 'uploadFavicon');
     //     });
-
-    // Pengaturan Aplikasi
-
-    Route::controller(TeamController::class)
-    ->prefix('pengaturan/group')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/show/{id}', 'show');
-        Route::post('/delete', 'delete');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
-        Route::get('/menu', 'menu');
-        Route::get('/listModul/{id}', 'listModul');
-        Route::put('/updateMenu/{id}', 'updateMenu');
-    });
-    
-    Route::controller(SettingController::class)
-    ->prefix('pengaturan/settings')->group(function () {
-        Route::get('/', 'index');
-        Route::put('/{id}', 'update');
-    });
-
-    Route::controller(PengaturanController::class)
-        ->prefix('pengaturan')->group(function () {
-            Route::get('/', 'index')->name('api.pengaturan_aplikasi');
-            Route::post('/update', 'update');
-        });
 
     // Sinkronisasi OpenDK
     Route::prefix('opendk')->group(function () {
@@ -122,3 +87,36 @@ Route::get('data-summary', SummaryController::class);
 
 // Desa teraktif
 Route::get('desa-aktif', [KategoriDesaController::class, 'index']);
+
+// Identitas
+Route::controller(IdentitasController::class)
+->prefix('identitas')->group(function () {
+    Route::get('/', 'index');
+    Route::put('/perbarui/{id}', 'update');
+    Route::post('/upload/{id}', 'upload');
+    Route::post('/uploadFavicon/{id}', 'uploadFavicon');
+});
+
+// Pengaturan Aplikasi
+Route::controller(PengaturanController::class)
+    ->prefix('pengaturan')->group(function () {
+        Route::get('/', 'index')->name('api.pengaturan_aplikasi');
+        Route::post('/update', 'update');
+
+        Route::controller(TeamController::class)
+            ->prefix('group')->group(function () {
+                Route::get('/', 'index');
+                Route::get('/show/{id}', 'show');
+                Route::post('/delete', 'delete');
+                Route::post('/', 'store');
+                Route::put('/{id}', 'update');
+                Route::get('/menu', 'menu');
+                Route::get('/listModul/{id}', 'listModul');
+                Route::put('/updateMenu/{id}', 'updateMenu');
+            });
+        Route::controller(SettingController::class)
+            ->prefix('settings')->group(function () {
+                Route::get('/', 'index');
+                Route::put('/{id}', 'update');
+            });
+    });

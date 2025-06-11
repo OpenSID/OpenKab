@@ -53,7 +53,10 @@
             ordering: true,
             ajax: {
                 url: `{{ url('api/v1/pengaturan/group') }}`,
-                headers: header,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
+                },
                 method: 'get',
                 data: function(row) {
                     return {

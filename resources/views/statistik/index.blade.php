@@ -326,7 +326,7 @@
 
                         const id = data.id?.toString() ?? '';
 
-                        if(data.attributes.nama !== 'JUMLAH' && data.attributes.nama !== 'BELUM MENGISI' && data.attributes.nama !== 'TOTAL'){
+                        // if(data.attributes.nama !== 'JUMLAH' && data.attributes.nama !== 'BELUM MENGISI' && data.attributes.nama !== 'TOTAL'){
 
                             let kriteria = new URLSearchParams(JSON.parse(data.attributes
                                 .kriteria));
@@ -341,7 +341,7 @@
                             urlDetail.searchParams.set('chart-view', true);
     
                             return `<a target="_blank" href=${urlDetail.href}>${data.attributes.nama}</a>`
-                        }
+                        // }
 
                         return data.attributes.nama;
 

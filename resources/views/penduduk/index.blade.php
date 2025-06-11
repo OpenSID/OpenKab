@@ -389,10 +389,6 @@
                 $(`#${i}`).val(filterDefault[i]).trigger('change');
             }
 
-            @if ($filters['kode_kabupaten'] ?? false)
-                $('a[href="#collapse-filter"]').click();
-            @endif
-
 
         });
 

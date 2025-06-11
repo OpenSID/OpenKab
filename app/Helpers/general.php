@@ -36,7 +36,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2505.0.0';
+        return 'v2506.0.0';
     }
 }
 
@@ -393,6 +393,13 @@ if (! function_exists('bulan')) {
             case 12:
                 return 'Desember';
         }
+    }
+}
+
+if (! function_exists('getAllBulan')) {
+    function getAllBulan()
+    {
+        return [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'];
     }
 }
 

@@ -85,6 +85,12 @@ final class Modul extends Enum
                     'url' => 'statistik/bantuan',
                     'permission' => 'statistik-bantuan',
                 ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Laporan Bulanan',
+                    'url' => 'statistik/laporan-bulanan',
+                    'permission' => 'statistik-laporan-bulanan',
+                ],
 
             ],
         ],

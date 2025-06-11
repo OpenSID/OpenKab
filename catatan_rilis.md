@@ -12,3 +12,4 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perubahan Teknis
 
+1. [#695](https://github.com/OpenSID/OpenKab/issues/695) Sesuaikan total pada Statistik di dasbor tidak digunakan pada chart.

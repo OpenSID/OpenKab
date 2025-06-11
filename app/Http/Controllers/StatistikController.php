@@ -11,7 +11,7 @@ class StatistikController extends Controller
         return view('statistik.index', [
             'detailLink' => url('penduduk'),
             'judul' => 'Penduduk',
-            'default_kategori' => 'rentang-umur',
+            'default_kategori' => request('item_selected', 'rentang-umur'),
         ]);
     }
 

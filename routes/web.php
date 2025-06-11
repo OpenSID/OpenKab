@@ -99,10 +99,22 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             return redirect()->back();
         });
 
-        Route::get('hapus', function () {
-            session()->remove('kabupaten');
-            session()->remove('kecamatan');
-            session()->remove('desa');
+        // Hapus session berdasarkan level
+        Route::get('hapus/{level}', function ($level) {
+            if (in_array($level, ['kabupaten', 'kecamatan', 'desa'])) {
+                session()->remove($level);
+
+                // Jika kabupaten dihapus, hapus juga kecamatan dan desa
+                if ($level === 'kabupaten') {
+                    session()->remove('kecamatan');
+                    session()->remove('desa');
+                }
+
+                // Jika kecamatan dihapus, hapus juga desa
+                if ($level === 'kecamatan') {
+                    session()->remove('desa');
+                }
+            }
 
             return redirect()->back();
         });

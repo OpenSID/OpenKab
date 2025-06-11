@@ -52,9 +52,12 @@
 <script defer src="{{ asset('vendor/menu-editor/bootstrap-iconpicker.min.js') }}"></script>
 <script defer src="{{ asset('vendor/menu-editor/jquery-menu-editor.js') }}"></script>
 <script nonce="{{  csp_nonce() }}">
+    const header = @include('layouts.components.header_bearer_api_gabungan');
 const menu = () => {
     const retrieveData = () => {
-        fetch('{{ url('api/v1/pengaturan/group/listModul/' . $id) }}')
+        fetch('{{ url('api/v1/pengaturan/group/listModul/' . $id) }}', {
+            headers: header
+        })
                     .then(res => res.json())
                     .then(response => {                 
                         buildEditor(response.data['menu'])
@@ -125,7 +128,8 @@ const menu = () => {
             $.ajax({
                     type: "PUT",
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                     },
                     beforeSend: function() {
                         Swal.fire({

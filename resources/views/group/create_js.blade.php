@@ -1,4 +1,5 @@
-<script nonce="{{ csp_nonce() }}"  >
+<script nonce="{{ csp_nonce() }}">
+    const header = @include('layouts.components.header_bearer_api_gabungan');
     function group() {
         return {
             dataGroup: {
@@ -11,7 +12,9 @@
             },
 
             retriveMenu() {
-                fetch('{{ url('api/v1/pengaturan/group/menu') }}')
+                fetch('{{ url('api/v1/pengaturan/group/menu') }}', {
+                    headers: header
+                })
                     .then(res => res.json())
                     .then(response => {
                         this.menu = response.data
@@ -61,7 +64,8 @@
                 $.ajax({
                     type: "Post",
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                     },
                     url: '{{ url('api/v1/pengaturan/group') }}',
                     data: data,

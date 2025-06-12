@@ -3,11 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 
 class KategoriService extends BaseApiService
 {
-
     public function kategori(int $id)
     {
         $cacheKey = "kategori_$id";
@@ -19,8 +17,8 @@ class KategoriService extends BaseApiService
             ]);
 
             if (is_array($data) && count($data) > 0) {
-                    return $data[0];
-                }
+                return $data[0];
+            }
 
             return null;
         });

@@ -67,8 +67,12 @@
 
 
             var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/sandang/rtm' }}");
+            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-            url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
+
+            const desaKategoriId = parseInt("{{ session('desa.id') ?? '0' }}", 10);
+            url.searchParams.set("config_desa", isNaN(desaKategoriId) ? 0 : desaKategoriId);
+            // url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
 
             var dtks = $('#table-dtks').DataTable({
                 processing: true,
@@ -88,22 +92,32 @@
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
-                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                            "config_desa": "{{ session('desa.id') ?? '' }}",
+                            // "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
+                            // "config_desa": "{{ session('desa.id') ?? '' }}",
                         };
                     },
                     dataSrc: function(json) {
-                        if (json.data.length > 0) {
-                        json.recordsTotal = json.meta.pagination.total
-                        json.recordsFiltered = json.meta.pagination.total
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })
-                        grafikPie()
-                        return json.data;
-                    }
-                    return false;
+                        // if (json.data.length > 0) {
+                        //     json.recordsTotal = json.meta.pagination.total
+                        //     json.recordsFiltered = json.meta.pagination.total
+                        //     data_grafik = [];
+                        //     json.data.forEach(function(item, index) {
+                        //         data_grafik.push(item.attributes)
+                        //     })
+                        //     grafikPie()
+                        //     return json.data;
+                        // }
+                        // return false;
+
+                        json.recordsTotal = json.meta?.pagination?.total || 0;
+                        json.recordsFiltered = json.meta?.pagination?.total || 0;
+
+                        if (json.data && json.data.length > 0) {
+                            data_grafik = json.data.map(item => item.attributes);
+                            grafikPie();
+                        }
+
+                        return json.data || [];
                     },
                 },
                 columnDefs: [{

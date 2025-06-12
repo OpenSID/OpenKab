@@ -3,7 +3,6 @@
 use App\Models\Bantuan;
 use App\Models\CMS\Article;
 use App\Models\CMS\Category;
-use App\Models\BaseModel;
 use App\Models\CMS\Download;
 use App\Models\Department;
 use App\Models\Employee;
@@ -14,13 +13,12 @@ use App\Models\Position;
 use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
-use App\Services\KategoriService;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Illuminate\Support\Facades\Auth;
 
 Breadcrumbs::for('master-data.pengaturan', function (BreadcrumbTrail $trail) {
-     $trail->push('Pengaturan Aplikasi');
+    $trail->push('Pengaturan Aplikasi');
 });
 Breadcrumbs::for('bantuan', function (BreadcrumbTrail $trail) {
     $trail->push('Bantuan', route('bantuan'));
@@ -44,8 +42,7 @@ Breadcrumbs::for('bantuan.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push($bantuan);
 });
 Breadcrumbs::for('master-data-artikel.kategori', function (BreadcrumbTrail $trail, $parent) {
-    $service = (new KategoriService)->kategori($parent);
-    $name = $service ? $service['attributes']['kategori'] : 'Artikel';
+    $name = Kategori::find($parent)?->kategori ?? 'Artikel';
     $trail->push('Master Kategori '.$name, route('master-data-artikel.kategori', $parent));
 });
 Breadcrumbs::for('master-data-artikel.kategori-create', function (BreadcrumbTrail $trail, $parent) {
@@ -53,8 +50,7 @@ Breadcrumbs::for('master-data-artikel.kategori-create', function (BreadcrumbTrai
     $trail->push('Baru');
 });
 Breadcrumbs::for('master-data-artikel.kategori-edit', function (BreadcrumbTrail $trail, $id, $parent) {
-    $service = (new KategoriService)->kategori($id);
-    $name = $service ? $service['attributes']['kategori'] : 'Artikel';
+    $name = Kategori::find($id)?->kategori ?? 'Artikel';
     $trail->parent('master-data-artikel.kategori', $parent);
     $trail->push($name);
 });
@@ -76,7 +72,6 @@ Breadcrumbs::for('password.change', function (BreadcrumbTrail $trail) {
     $trail->push('Profil Pengguna', route('users.edit', $id));
     $trail->push('Ganti Password');
 });
-
 
 Breadcrumbs::for('identitas.index', function (BreadcrumbTrail $trail) {
     $trail->push('Pengaturan Identitas', route('identitas.index'));
@@ -173,7 +168,6 @@ Breadcrumbs::for('positions.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->parent('positions.index');
     $trail->push($item);
 });
-
 
 Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
     $trail->push('Setting', route('settings.index'));

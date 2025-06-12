@@ -7,12 +7,12 @@ use App\Models\CMS\Download;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Identitas;
-use App\Models\Kategori;
 use App\Models\Penduduk;
 use App\Models\Position;
 use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
+use App\Services\KategoriService;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +42,8 @@ Breadcrumbs::for('bantuan.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push($bantuan);
 });
 Breadcrumbs::for('master-data-artikel.kategori', function (BreadcrumbTrail $trail, $parent) {
-    $name = Kategori::find($parent)?->kategori ?? 'Artikel';
+    $service = (new KategoriService)->kategori($parent);
+    $name = $service ? $service['attributes']['kategori'] : 'Artikel';
     $trail->push('Master Kategori '.$name, route('master-data-artikel.kategori', $parent));
 });
 Breadcrumbs::for('master-data-artikel.kategori-create', function (BreadcrumbTrail $trail, $parent) {
@@ -50,7 +51,8 @@ Breadcrumbs::for('master-data-artikel.kategori-create', function (BreadcrumbTrai
     $trail->push('Baru');
 });
 Breadcrumbs::for('master-data-artikel.kategori-edit', function (BreadcrumbTrail $trail, $id, $parent) {
-    $name = Kategori::find($id)?->kategori ?? 'Artikel';
+    $service = (new KategoriService)->kategori($id);
+    $name = $service ? $service['attributes']['kategori'] : 'Artikel';
     $trail->parent('master-data-artikel.kategori', $parent);
     $trail->push($name);
 });

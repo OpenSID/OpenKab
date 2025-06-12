@@ -64,45 +64,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
     // Identitas
-    // Route::controller(IdentitasController::class)
-    //     ->prefix('identitas')->group(function () {
-    //         Route::put('/perbarui/{id}', 'update');
-    //         Route::post('/upload/{id}', 'upload');
-    //         Route::post('/uploadFavicon/{id}', 'uploadFavicon');
-    //     });
+    Route::controller(IdentitasController::class)
+    ->prefix('identitas')->group(function () {
+        Route::get('/', 'index');
+        Route::put('/perbarui/{id}', 'update');
+        Route::post('/upload/{id}', 'upload');
+        Route::post('/uploadFavicon/{id}', 'uploadFavicon');
+    });
 
-    // Sinkronisasi OpenDK
-    Route::prefix('opendk')->group(function () {
-        Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
-        Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
-            Route::get('data', [OpendkSynchronizeController::class, 'getData']);
-            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
-        });
-    });    
-});
-
-// Data utama website
-Route::get('data-website', WebsiteController::class);
-Route::get('data-summary', SummaryController::class);
-
-// Desa teraktif
-Route::get('desa-aktif', [KategoriDesaController::class, 'index']);
-
-// Identitas
-Route::controller(IdentitasController::class)
-->prefix('identitas')->group(function () {
-    Route::get('/', 'index');
-    Route::put('/perbarui/{id}', 'update');
-    Route::post('/upload/{id}', 'upload');
-    Route::post('/uploadFavicon/{id}', 'uploadFavicon');
-});
-
-// Pengaturan Aplikasi
-Route::controller(PengaturanController::class)
-    ->prefix('pengaturan')->group(function () {
-        Route::get('/', 'index')->name('api.pengaturan_aplikasi');
-        Route::post('/update', 'update');
-
+    // Pengaturan Aplikasi
+    Route::prefix('pengaturan')->group(function () {
         Route::controller(TeamController::class)
             ->prefix('group')->group(function () {
                 Route::get('/', 'index');
@@ -120,3 +91,20 @@ Route::controller(PengaturanController::class)
                 Route::put('/{id}', 'update');
             });
     });
+
+    // Sinkronisasi OpenDK
+    Route::prefix('opendk')->group(function () {
+        Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
+        Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
+            Route::get('data', [OpendkSynchronizeController::class, 'getData']);
+            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
+        });
+    });    
+});
+
+// Data utama website
+Route::get('data-website', WebsiteController::class);
+Route::get('data-summary', SummaryController::class);
+
+// Desa teraktif
+Route::get('desa-aktif', [KategoriDesaController::class, 'index']);

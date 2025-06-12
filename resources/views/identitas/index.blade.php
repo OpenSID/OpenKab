@@ -85,7 +85,7 @@
                 dataIdentitas: {},
                 retrieveData() {
                     fetch('{{ url('api/v1/identitas') }}', {
-                        headers: header,
+                        // headers: header,
                     })
                         .then(res => res.json())
                         .then(response => {

@@ -8,7 +8,8 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    public function actingAsAdmin($admin) {
+    public function actingAsAdmin($admin)
+    {
         $defaultGuard = config('auth.defaults.guard');
         $this->actingAs($admin, 'web');
         \Auth::shouldUse($defaultGuard);

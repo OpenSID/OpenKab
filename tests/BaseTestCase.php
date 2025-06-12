@@ -1,6 +1,7 @@
 <?php
 
 namespace Tests;
+
 use App\Http\Transformers\IdentitasTransformer;
 use App\Http\Transformers\SettingTransformer;
 use App\Models\Identitas;
@@ -21,32 +22,31 @@ class BaseTestCase extends TestCase
         $this->actingAsAdmin($user);
         // set share view data
         $identitasAplikasi = fractal(
-                Identitas::first(),
-                IdentitasTransformer::class,
+            Identitas::first(),
+            IdentitasTransformer::class,
+            \League\Fractal\Serializer\JsonApiSerializer::class
+        )->toArray()['data']['attributes'];
+
+        $settingAplikasi = collect(
+            fractal(
+                Setting::all(),
+                SettingTransformer::class,
                 \League\Fractal\Serializer\JsonApiSerializer::class
-            )->toArray()['data']['attributes'];
+            )->toArray()['data']
+        )->pluck('attributes.value', 'attributes.key');
 
-            $settingAplikasi = collect(
-                fractal(
-                    Setting::all(),
-                    SettingTransformer::class,
-                    \League\Fractal\Serializer\JsonApiSerializer::class
-                )->toArray()['data']
-            )->pluck('attributes.value', 'attributes.key');
-
-            // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
+        // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
 
         View::share('identitasAplikasi', $identitasAplikasi);
         View::share('settingAplikasi', $settingAplikasi);
     }
 
-    public function actingAsAdmin($admin) {
+    public function actingAsAdmin($admin)
+    {
         $defaultGuard = config('auth.defaults.guard');
         $this->actingAs($admin, 'web');
         \Auth::shouldUse($defaultGuard);
 
         return $this;
     }
-
-
 }

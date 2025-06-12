@@ -96,8 +96,6 @@
         url.searchParams.set("filter[id_rtm]", "{{ $data->no_kartu_rumah }}");
         // url.searchParams.set("filter[rtm_id]", "{{ $data->rtm_id }}");
 
-        console.log(url.href)
-
         var sandang = $('#detail-sandang').DataTable({
             processing: true,
             serverSide: true,

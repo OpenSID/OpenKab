@@ -80,6 +80,14 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Bantuan</label>
+                                            <select id="bantuan-keluarga" class="form-control select2-filter" data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}'
+                                                placeholder="Pilih Bantuan">
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm">
@@ -242,6 +250,7 @@
                             "filter[kode_kabupaten]": $('#filter_kabupaten').val(),
                             "filter[kode_kecamatan]": $('#filter_kecamatan').val(),
                             "filter[kode_desa]": $('#filter_desa').val(),
+                            "filter[bantuan-keluarga]": $('#bantuan-keluarga').val(),
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[search]": row.search.value,

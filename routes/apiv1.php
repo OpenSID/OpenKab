@@ -65,20 +65,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Identitas
     Route::controller(IdentitasController::class)
-    ->prefix('identitas')->group(function () {
-        Route::get('/', 'index');
-        Route::put('/perbarui/{id}', 'update');
-        Route::post('/upload/{id}', 'upload');
-        Route::post('/uploadFavicon/{id}', 'uploadFavicon');
-    });
-
-    // Identitas
-    // Route::controller(IdentitasController::class)
-    //     ->prefix('identitas')->group(function () {
-    //         Route::put('/perbarui/{id}', 'update');
-    //         Route::post('/upload/{id}', 'upload');
-    //         Route::post('/uploadFavicon/{id}', 'uploadFavicon');
-    //     });
+        ->prefix('identitas')->group(function () {
+            Route::get('/', 'index');
+            Route::put('/perbarui/{id}', 'update');
+            Route::post('/upload/{id}', 'upload');
+            Route::post('/uploadFavicon/{id}', 'uploadFavicon');
+        });
 
     // Pengaturan Aplikasi
     Route::controller(PengaturanController::class)

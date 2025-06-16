@@ -123,7 +123,9 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     // Penduduk
     Route::middleware(['permission:penduduk-read'])->get('penduduk/cetak', [PendudukController::class, 'cetak']);
     Route::middleware(['permission:penduduk-edit'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah'])->name('penduduk.edit');
-    Route::middleware(['permission:penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
+    Route::middleware(['permission:penduduk-read'])->get('penduduk', [PendudukController::class, 'index'])->name('penduduk.index');
+    Route::middleware(['permission:penduduk-read'])->get('penduduk/{id}', [PendudukController::class, 'show'])->name('penduduk.show');
+    // Route::middleware(['permission:penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
     // Keluarga
     Route::middleware(['permission:penduduk-read'])->controller(KeluargaController::class)
@@ -310,7 +312,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
-    Route::view('/sosial', 'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
 
     Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');

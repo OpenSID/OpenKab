@@ -3,12 +3,10 @@
 use App\Models\Bantuan;
 use App\Models\CMS\Article;
 use App\Models\CMS\Category;
-use App\Models\BaseModel;
 use App\Models\CMS\Download;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Identitas;
-use App\Models\Kategori;
 use App\Models\Penduduk;
 use App\Models\Position;
 use App\Models\Setting;
@@ -20,7 +18,7 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Illuminate\Support\Facades\Auth;
 
 Breadcrumbs::for('master-data.pengaturan', function (BreadcrumbTrail $trail) {
-     $trail->push('Pengaturan Aplikasi');
+    $trail->push('Pengaturan Aplikasi');
 });
 Breadcrumbs::for('bantuan', function (BreadcrumbTrail $trail) {
     $trail->push('Bantuan', route('bantuan'));
@@ -76,7 +74,6 @@ Breadcrumbs::for('password.change', function (BreadcrumbTrail $trail) {
     $trail->push('Profil Pengguna', route('users.edit', $id));
     $trail->push('Ganti Password');
 });
-
 
 Breadcrumbs::for('identitas.index', function (BreadcrumbTrail $trail) {
     $trail->push('Pengaturan Identitas', route('identitas.index'));
@@ -173,7 +170,6 @@ Breadcrumbs::for('positions.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->parent('positions.index');
     $trail->push($item);
 });
-
 
 Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
     $trail->push('Setting', route('settings.index'));

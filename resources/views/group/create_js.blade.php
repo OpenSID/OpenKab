@@ -1,8 +1,6 @@
-<script nonce="{{ csp_nonce() }}"  >
 
-    const headers = @include('layouts.components.header_bearer_api_gabungan');
-    var urlMenu = new URL("{{ url('api/v1/pengaturan/group/menu') }}");
-
+<script nonce="{{ csp_nonce() }}">
+    const header = @include('layouts.components.header_bearer_api_gabungan');
     function group() {
         return {
             dataGroup: {
@@ -15,9 +13,9 @@
             },
 
             retriveMenu() {
-                fetch(urlMenu, {
-                        headers: headers
-                    })
+                fetch('{{ url('api/v1/pengaturan/group/menu') }}', {
+                    headers: header
+                })
                     .then(res => res.json())
                     .then(response => {
                         this.menu = response.data

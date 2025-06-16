@@ -1,6 +1,5 @@
 <script nonce="{{ csp_nonce() }}"  >
     const headers = @include('layouts.components.header_bearer_api_gabungan');
-    
     function group() {
         _.mixin({
             'mergeByKey': function(arr1, arr2, key) {
@@ -54,7 +53,7 @@
 
 
             retriveMenu() {
-                fetch(`{{ url('api/v1/pengaturan/group/menu') }}`, {
+                fetch('{{ url('api/v1/pengaturan/group/menu') }}', {
                     headers: headers
                 })
                     .then(res => res.json())

@@ -43,19 +43,16 @@
     </div>
 @endsection
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
+    <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
-
             const header = @include('layouts.components.header_bearer_api_gabungan');
-            var url = new URL("{{ url('api/v1/pengaturan/group') }}");
-
             var grup = $('#grup').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: url,
+                url: `{{ url('api/v1/pengaturan/group') }}`,
                 headers: header,
                 method: 'get',
                 data: function(row) {

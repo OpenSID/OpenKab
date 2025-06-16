@@ -310,7 +310,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
-    Route::view('/sosial', 'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
 
     Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');

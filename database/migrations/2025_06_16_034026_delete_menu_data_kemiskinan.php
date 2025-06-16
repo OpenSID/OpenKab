@@ -14,11 +14,20 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::table('menus')
-            ->where('id', '194')
-            ->where('name', 'Data Kemiskinan')
-            ->where('url', '/presisi/sosial')
-            ->delete();
+        $migrationName = '2025_06_16_034026_delete_menu_data_kemiskinan';
+
+        $exists = DB::table('migrations')->where('migration', $migrationName)->exists();
+
+        if ($exists) {
+            DB::table('migrations')->where('migration', $migrationName)->delete();
+        }
+
+        $deleted = DB::table('menus')->where('name', 'Data Kemiskinan')->delete();
+
+        if ($deleted === 0) {
+            DB::table('menus')->where('url', '/presisi/sosial')->delete();
+        }
+
     }
 
     /**

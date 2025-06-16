@@ -6,12 +6,12 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 2. [#691](https://github.com/OpenSID/OpenKab/issues/691) Penambahan filter tertutup setelah klik details dari dasbor. 
 3. [#676](https://github.com/OpenSID/OpenKab/issues/676) Penambahan halam details rincian statistik per judul.
 
-
 #### Perbaikan BUG
 
 1. [#690](https://github.com/OpenSID/OpenKab/issues/690) Perbaikan trigger filter wilayah pada statistik.
 2. [#686](https://github.com/OpenSID/OpenKab/issues/686) Perbaikan halaman update identitas.
 3. [#706](https://github.com/OpenSID/OpenKab/issues/706) Perbaikan breadcrumb kategori.
+4. [#704](https://github.com/OpenSID/OpenKab/issues/704) Perbaikan Data penduduk tidak muncul pada details data sandang.
 
 #### Perubahan Teknis
 

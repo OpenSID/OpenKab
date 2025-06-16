@@ -12,6 +12,7 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 1. [#690](https://github.com/OpenSID/OpenKab/issues/690) Perbaikan trigger filter wilayah pada statistik.
 2. [#686](https://github.com/OpenSID/OpenKab/issues/686) Perbaikan halaman update identitas.
 3. [#706](https://github.com/OpenSID/OpenKab/issues/706) Perbaikan breadcrumb kategori.
+4. [#708](https://github.com/OpenSID/OpenKab/issues/708) Perbaikan menu data kemiskinan presisi.
 
 #### Perubahan Teknis
 

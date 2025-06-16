@@ -25,7 +25,6 @@ return new class extends Migration
         if ($deleted === 0) {
             DB::table('menus')->where('url', '/presisi/sosial')->delete();
         }
-
     }
 
     /**

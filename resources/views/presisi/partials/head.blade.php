@@ -46,7 +46,6 @@
             <i class="fas fa-table"></i> Sosial
         </button>
         <div class="dropdown-menu" aria-labelledby="sosialDropdown">
-            <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.sosial' ? 'active' : '' }}" href="{{ url('presisi/sosial') }}">Data Kemiskinan</a>
             <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.bantuan' ? 'active' : '' }}" href="{{ url('presisi/bantuan') }}">Program Bantuan</a>
         </div>
     </div>
@@ -88,9 +87,6 @@
         </a> -->
         <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.index' ? 'active' : '' }}" href="{{ url('presisi') }}">
             <i class="fa-solid fa-chart-column"></i> Demografi
-        </a>
-        <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.sosial' ? 'active' : '' }}" href="{{ url('presisi/sosial') }}">
-            <i class="fas fa-table"></i> Sosial - Data Kemiskinan
         </a>
         <a class="dropdown-item" href="#"><i class="fas fa-table"></i> Sosial - Program Bantuan</a>
         <a class="dropdown-item {{ Route::getCurrentRoute()->getName() == 'presisi.kependudukan' ? 'active' : '' }}" href="{{ url('presisi/kependudukan') }}">

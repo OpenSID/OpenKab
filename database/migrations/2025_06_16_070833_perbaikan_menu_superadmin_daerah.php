@@ -6,9 +6,7 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -34,7 +32,9 @@ return new class extends Migration
 
         // 2. Filter menu, hilangkan submenu 'pengaturan/groups'
         $filteredMenu = array_map(function ($item) {
-            if (! isset($item['submenu'])) return $item;
+            if (! isset($item['submenu'])) {
+                return $item;
+            }
 
             $item['submenu'] = array_filter($item['submenu'], function ($submenuItem) {
                 return $submenuItem['url'] !== 'pengaturan/groups';
@@ -89,7 +89,6 @@ return new class extends Migration
         if (! $user->hasRole($role->name)) {
             $user->assignRole($role);
         }
-
     }
 
     /**

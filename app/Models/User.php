@@ -152,4 +152,22 @@ class User extends Authenticatable
             ? $input
             : $this->kode_kabupaten;
     }
+
+    public function scopeVisibleForAuthenticatedUser($query)
+    {
+        $authUser = auth()->user();
+
+        if ($authUser->hasRole('administrator')) {
+            return $query; // Lihat semua user
+        }
+
+        if ($authUser->hasAnyRole(['superadmin_daerah', 'kabupaten'])) {
+            return $query
+                ->where('kode_kabupaten', $authUser->kode_kabupaten)
+                ->whereDoesntHave('roles', function ($q) {
+                    $q->where('name', 'administrator');
+                });
+        }
+    }
+
 }

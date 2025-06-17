@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -38,7 +39,7 @@ class UserController extends Controller
         if ($request->ajax()) {
             $permission = $this->generateListPermission();
 
-            return DataTables::of(User::with('team')->visibleTo(auth()->user())->get())
+            return DataTables::of(User::with('team')->visibleForAuthenticatedUser()->get())
                 ->addIndexColumn()
                 ->addColumn('nama_kabupaten', function ($row) {
                     if (empty($row->kode_kabupaten)) {
@@ -229,6 +230,7 @@ class UserController extends Controller
                 'phone' => $request->get('phone'),
                 'kode_kabupaten' => $currentUser->getEffectiveKodeKabupaten($request->input('kode_kabupaten')),
             ];
+
             if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $updateData['foto'] = $this->uploadFile($request, 'foto');
@@ -239,6 +241,38 @@ class UserController extends Controller
             }
 
             $user->update($updateData);
+
+            // logika untuk update massal user kabupaten jika role administrator menupdate kode_kabupaten role superadmin_daerah
+            setPermissionsTeamId($user->getTeamId());
+
+            $wasSuperadminDaerah = $user->hasRole('superadmin_daerah');
+            $wasChangedByAdmin = $currentUser->hasRole('administrator');
+            $kodeBaru = $updateData['kode_kabupaten'] ?? null;
+
+            if ($wasChangedByAdmin && $wasSuperadminDaerah && $kodeBaru) {
+
+                $team = Team::where('name', 'kabupaten')->first();
+
+                if($team)
+                {
+                    setPermissionsTeamId($team->id);
+
+                    $roleKabupaten = Role::where([
+                        'name' => 'kabupaten',
+                        'team_id' => $team->id,
+                    ])->first();
+
+                    if ($roleKabupaten) {
+                        $kabupatenUsers = User::role('kabupaten')->get();
+    
+                        foreach ($kabupatenUsers as $kabupatenUser) {
+                            $kabupatenUser->update([
+                                'kode_kabupaten' => $kodeBaru,
+                            ]);
+                        }
+                    }
+                }
+            }
 
             $routeCurrent = Route::currentRouteName();
             if ($routeCurrent == 'profile.update') {
@@ -259,6 +293,7 @@ class UserController extends Controller
             }
 
             setPermissionsTeamId($idGroup);
+
             // assign role berdasarkan team
             foreach (Team::find($idGroup)->role as $role) {
                 $user->syncRoles($role);
@@ -267,10 +302,10 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {
             report($e);
-
             return back()->withInput()->with('error', $e->getMessage());
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -73,28 +73,24 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
     // Pengaturan Aplikasi
-    Route::controller(PengaturanController::class)
-        ->prefix('pengaturan')->group(function () {
-            Route::get('/', 'index')->name('api.pengaturan_aplikasi');
-            Route::post('/update', 'update');
-
-            Route::controller(TeamController::class)
-                ->prefix('group')->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/show/{id}', 'show');
-                    Route::post('/delete', 'delete');
-                    Route::post('/', 'store');
-                    Route::put('/{id}', 'update');
-                    Route::get('/menu', 'menu');
-                    Route::get('/listModul/{id}', 'listModul');
-                    Route::put('/updateMenu/{id}', 'updateMenu');
-                });
-            Route::controller(SettingController::class)
-                ->prefix('settings')->group(function () {
-                    Route::get('/', 'index');
-                    Route::put('/{id}', 'update');
-                });
-        });
+    Route::prefix('pengaturan')->group(function () {
+        Route::controller(TeamController::class)
+            ->prefix('group')->group(function () {
+                Route::get('/', 'index');
+                Route::get('/show/{id}', 'show');
+                Route::post('/delete', 'delete');
+                Route::post('/', 'store');
+                Route::put('/{id}', 'update');
+                Route::get('/menu', 'menu');
+                Route::get('/listModul/{id}', 'listModul');
+                Route::put('/updateMenu/{id}', 'updateMenu');
+            });
+        Route::controller(SettingController::class)
+            ->prefix('settings')->group(function () {
+                Route::get('/', 'index');
+                Route::put('/{id}', 'update');
+            });
+    });
 
     // Sinkronisasi OpenDK
     Route::prefix('opendk')->group(function () {

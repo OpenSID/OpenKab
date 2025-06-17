@@ -18,3 +18,4 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 1. [#695](https://github.com/OpenSID/OpenKab/issues/695) Sesuaikan total pada Statistik di dasbor tidak digunakan pada chart.
 2. [#697](https://github.com/OpenSID/OpenKab/issues/697) Sesuaikan Manajemen Session Wilayah (Kabupaten, Kecamatan, Desa).
 3. [#708](https://github.com/OpenSID/OpenKab/issues/708) Perbaikan menu data kemiskinan presisi.
+4. [#717](https://github.com/OpenSID/OpenKab/issues/717) Sesuaikan route api pengaturan.

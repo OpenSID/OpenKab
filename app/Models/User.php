@@ -158,16 +158,32 @@ class User extends Authenticatable
         $authUser = auth()->user();
 
         if ($authUser->hasRole('administrator')) {
-            return $query; // Lihat semua user
+            return $query;
         }
 
-        if ($authUser->hasAnyRole(['superadmin_daerah', 'kabupaten'])) {
+        // Jika superadmin_daerah & kode_kabupaten NULL
+        if (
+            $authUser->hasRole('superadmin_daerah') &&
+            is_null($authUser->kode_kabupaten)
+        ) {
+            // Hanya tampilkan user itu sendiri
+            return $query->where('id', $authUser->id);
+        }
+
+        // Jika superadmin_daerah biasa
+        if (
+            $authUser->hasAnyRole(['superadmin_daerah', 'kabupaten']) &&
+            $authUser->kode_kabupaten
+        ) {
             return $query
                 ->where('kode_kabupaten', $authUser->kode_kabupaten)
                 ->whereDoesntHave('roles', function ($q) {
                     $q->where('name', 'administrator');
                 });
         }
+
+        // Fallback default
+        return $query->whereRaw('1 = 0');
     }
 
 }

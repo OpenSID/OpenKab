@@ -185,5 +185,4 @@ class User extends Authenticatable
         // Fallback default
         return $query->whereRaw('1 = 0');
     }
-
 }

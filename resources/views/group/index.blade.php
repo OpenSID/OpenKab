@@ -53,7 +53,7 @@
             ordering: true,
             ajax: {
                 url: `{{ url('api/v1/pengaturan/group') }}`,
-                headers: header,
+                // headers: header,
                 method: 'get',
                 data: function(row) {
                     return {

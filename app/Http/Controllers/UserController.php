@@ -250,11 +250,9 @@ class UserController extends Controller
             $kodeBaru = $updateData['kode_kabupaten'] ?? null;
 
             if ($wasChangedByAdmin && $wasSuperadminDaerah && $kodeBaru) {
-
                 $team = Team::where('name', 'kabupaten')->first();
 
-                if($team)
-                {
+                if ($team) {
                     setPermissionsTeamId($team->id);
 
                     $roleKabupaten = Role::where([
@@ -264,7 +262,7 @@ class UserController extends Controller
 
                     if ($roleKabupaten) {
                         $kabupatenUsers = User::role('kabupaten')->get();
-    
+
                         foreach ($kabupatenUsers as $kabupatenUser) {
                             $kabupatenUser->update([
                                 'kode_kabupaten' => $kodeBaru,
@@ -302,10 +300,10 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {
             report($e);
+
             return back()->withInput()->with('error', $e->getMessage());
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

@@ -15,10 +15,15 @@ class CheckPresisiStatus
      */
     public function handle(Request $request, Closure $next)
     {
-        // Cek apakah status di model Pengaturan adalah 'presisi'
-        $status = Setting::where('key', 'home_page')->first()->value; // Sesuaikan logika pengambilan datanya
+        $website = Setting::where(['key' => 'website_enable'])->first()?->value ?? 0;
 
-        if ($status !== 'presisi') {
+        if (! $website) {
+            return redirect('login');
+        }
+        // Cek apakah status di model Pengaturan adalah 'presisi'
+        $homePage = Setting::where('key', 'home_page')->first()->value; // Sesuaikan logika pengambilan datanya
+
+        if ($homePage !== 'presisi') {
             // Jika status bukan 'presisi', arahkan pengguna ke halaman lain atau tampilkan pesan error
             return redirect('/');
         }

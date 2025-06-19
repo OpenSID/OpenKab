@@ -54,7 +54,7 @@ class PendudukController extends Controller
     public function show($id_penduduk)
     {
         $result = (new PendudukApiService())->penduduk([
-            'filter[id]' => $id_penduduk
+            'filter[id]' => $id_penduduk,
         ]);
 
         $penduduk = $result->first();

@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
-
 class PendudukApiService extends BaseApiService
 {
     public function penduduk(array $filters = [])
@@ -15,5 +13,4 @@ class PendudukApiService extends BaseApiService
 
         return collect($data)->map(fn ($item) => (object) $item['attributes']);
     }
-    
 }

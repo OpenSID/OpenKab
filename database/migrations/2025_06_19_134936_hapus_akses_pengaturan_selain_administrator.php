@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -15,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        $sql = <<<SQL
+        $sql = <<<'SQL'
             delete from role_has_permissions where permission_id in (
                 select id from permissions where name like 'pengaturan-settings%'
                 union

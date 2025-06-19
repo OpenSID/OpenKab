@@ -35,4 +35,16 @@ class Team extends OpenKabModel
     {
         return $this->hasMany(Role::class, 'team_id', 'id');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_team', 'id_team', 'id_user');
+    }
+
+    public function scopeWithoutAdminUsers($query)
+    {
+        return $query->whereDoesntHave('role', function ($q) {
+            $q->where('name', 'administrator');
+        });
+    }
 }

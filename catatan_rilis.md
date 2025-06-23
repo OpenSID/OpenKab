@@ -13,6 +13,7 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 2. [#686](https://github.com/OpenSID/OpenKab/issues/686) Perbaikan halaman update identitas.
 3. [#706](https://github.com/OpenSID/OpenKab/issues/706) Perbaikan breadcrumb kategori.
 4. [#704](https://github.com/OpenSID/OpenKab/issues/704) Perbaikan Data penduduk tidak muncul pada details data sandang.
+5. [#702](https://github.com/OpenSID/OpenKab/issues/702) Perbaikan error pada halaman details dari menu peserta / bukan peserta di statistik bantuan.
 
 #### Perubahan Teknis
 

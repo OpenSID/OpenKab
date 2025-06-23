@@ -23,3 +23,4 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 3. [#708](https://github.com/OpenSID/OpenKab/issues/708) Perbaikan menu data kemiskinan presisi.
 4. [#717](https://github.com/OpenSID/OpenKab/issues/717) Sesuaikan route api pengaturan.
 5. [#709](https://github.com/OpenSID/OpenKab/issues/709) Sesuaikan kunci halaman presisi jika pengaturan enable website.
+6. [#715](https://github.com/OpenSID/OpenKab/issues/715) Sesuaikan data filter pada data program bantuan & dokumen kelengkapan penduduk.

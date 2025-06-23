@@ -1,3 +1,4 @@
+
 <script nonce="{{ csp_nonce() }}">
     const header = @include('layouts.components.header_bearer_api_gabungan');
     function group() {
@@ -61,13 +62,15 @@
                 })
                 var data = this.dataGroup;
 
+                var urlGroup = new URL("{{ url('api/v1/pengaturan/group') }}");
+
                 $.ajax({
                     type: "Post",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                         'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                     },
-                    url: '{{ url('api/v1/pengaturan/group') }}',
+                    url: urlGroup,
                     data: data,
                     dataType: "json",
                     success: function(response) {

@@ -5,6 +5,8 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 1. [#680](https://github.com/OpenSID/OpenKab/issues/680) Penambahan halaman laporan bulanan kependudukan.
 2. [#691](https://github.com/OpenSID/OpenKab/issues/691) Penambahan filter tertutup setelah klik details dari dasbor. 
 3. [#676](https://github.com/OpenSID/OpenKab/issues/676) Penambahan halam details rincian statistik per judul.
+4. [#670](https://github.com/OpenSID/OpenKab/issues/670) Penambahan pengaturan group adinistrator daerah.
+5. [#718](https://github.com/OpenSID/OpenKab/issues/718) Penambahan pengaturan aplikasi ( Identitas dan Aplikasi ) hanya tersedia untuk grup administrator.
 
 #### Perbaikan BUG
 
@@ -12,6 +14,7 @@ Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta penggu
 2. [#686](https://github.com/OpenSID/OpenKab/issues/686) Perbaikan halaman update identitas.
 3. [#706](https://github.com/OpenSID/OpenKab/issues/706) Perbaikan breadcrumb kategori.
 4. [#704](https://github.com/OpenSID/OpenKab/issues/704) Perbaikan Data penduduk tidak muncul pada details data sandang.
+5. [#702](https://github.com/OpenSID/OpenKab/issues/702) Perbaikan error pada halaman details dari menu peserta / bukan peserta di statistik bantuan.
 
 #### Perubahan Teknis
 

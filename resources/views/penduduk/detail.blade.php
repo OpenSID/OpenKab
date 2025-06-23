@@ -377,8 +377,11 @@
             .then(function(response) {
                 var data = response.data[0]?.attributes
 
+                let hrefTag = data.urlFoto ? 'src=' + data
+                                .urlFoto : `src="{{ asset('assets/img/avatar.png') }}"`;
+
                 $('#nik').text(`Biodata Penduduk (NIK : ${data.nik})`)
-                $('#foto').html(`<img class="penduduk" src="${data.urlFoto}"alt="Foto Penduduk">`)
+                $('#foto').html(`<img class="penduduk" ${hrefTag} alt="Foto Penduduk">`)
                 $('#status-dasar').html(`<strong>${data.penduduk_status_dasar?.nama}</strong>`)
                 $('#nama').text(data.nama)
                 $('#terdaftar-pada').html(`Terdaftar pada: <i class="fa fa-clock-o"></i>${data.created_at}`)

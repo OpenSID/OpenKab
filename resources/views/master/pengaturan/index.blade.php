@@ -90,7 +90,12 @@
                 data: {},
 
                 retriveData() {
-                    fetch(`{{ route('api.pengaturan_aplikasi', ['filter[key][]' => 'warna_tema']) }}`)
+
+                    const header = @include('layouts.components.header_bearer_api_gabungan');
+                    var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/pengaturan' }}");
+                    url.searchParams.set("filter[key][]", "warna_tema}");
+
+                    fetch(url.href)
                         .then(res => res.json())
                         .then(response => {
                             if (response.data.length != 0) {

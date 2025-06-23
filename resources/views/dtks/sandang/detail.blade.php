@@ -93,7 +93,8 @@
         const headers = @include('layouts.components.header_bearer_api_gabungan');
 
         var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/sandang' }}");
-        url.searchParams.set("filter[rtm_id]", "{{ $data->rtm_id }}");
+        url.searchParams.set("filter[id_rtm]", "{{ $data->no_kartu_rumah }}");
+        // url.searchParams.set("filter[rtm_id]", "{{ $data->rtm_id }}");
 
         var sandang = $('#detail-sandang').DataTable({
             processing: true,

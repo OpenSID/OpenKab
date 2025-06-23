@@ -62,7 +62,7 @@
 
             const header = @include('layouts.components.header_bearer_api_gabungan')
 
-            fetch(`{{ route('api.pengaturan_aplikasi') }}`, {
+            fetch(`{{ config('app.databaseGabunganUrl') . '/api/v1/pengaturan' }}`, {
                     headers: header,
                 })
                 .then(res => res.json())
@@ -106,7 +106,7 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             dataType: "json",
-                            url: `{{ url('api/v1/pengaturan/update') }}`,
+                            url:`{{ config('app.databaseGabunganUrl') . '/api/v1/pengaturan/update' }}`,
                             data: formData,
                             success: function(response) {
                                 if (response.success == true) {

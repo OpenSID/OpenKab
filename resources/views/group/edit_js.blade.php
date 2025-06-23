@@ -51,6 +51,7 @@
                 this.retriveMenu();
             },
 
+
             retriveMenu() {
                 fetch('{{ url('api/v1/pengaturan/group/menu') }}', {
                     headers: headers

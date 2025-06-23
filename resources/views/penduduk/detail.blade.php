@@ -370,7 +370,7 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         const header = @include('layouts.components.header_bearer_api_gabungan');
         $.ajax({                
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}?filter[id]={{ $penduduk->id }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}?filter[id]={{ $id_penduduk }}`,
                 headers: header,
                 method: 'get',
             })
@@ -442,7 +442,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/peserta' }}?filter[peserta]={{ $penduduk->nik }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/peserta' }}?filter[peserta]={{ $penduduk->nik }}&filter[detail_penduduk]=1`,
                 headers: header,
                 method: 'get',
             },
@@ -481,7 +481,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/dokumen' }}?filter[id_pend]={{ $penduduk->id }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/dokumen' }}?filter[id_pend]={{ $id_penduduk }}&filter[detail_penduduk]=1`,
                 headers: header,
                 method: 'get',
             },

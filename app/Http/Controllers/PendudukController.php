@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Penduduk;
+use App\Services\PendudukApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -51,9 +51,15 @@ class PendudukController extends Controller
         ];
     }
 
-    public function show(Penduduk $penduduk)
+    public function show($id_penduduk)
     {
-        return view('penduduk.detail', compact('penduduk'));
+        $result = (new PendudukApiService())->penduduk([
+            'filter[id]' => $id_penduduk,
+        ]);
+
+        $penduduk = $result->first();
+
+        return view('penduduk.detail', compact('penduduk', 'id_penduduk'));
     }
 
     public function pindah($id)

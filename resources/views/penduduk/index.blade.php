@@ -398,6 +398,11 @@
             const grouped = {};
             judul = chart.nama
 
+            const params = new URLSearchParams(window.location.search);
+            const kategoriQuery = params.get('kategori');
+            const namaQuery = params.get('nama');
+            const isKategoriBantuan = kategoriQuery === 'bantuan';
+
             const getLabel = {
                 'rentang-umur': attr => parseInt(attr.umur),
                 'kategori-umur': attr => parseInt(attr.umur),
@@ -421,6 +426,7 @@
                 'suku': attr => attr.suku,
                 'bpjs-ketenagakerjaan': attr => attr.bpjs_ketenagakerjaan,
                 'status-kehamilan': attr => attr.statusHamil,
+                ...(isKategoriBantuan && { [kategori]: attr => namaQuery }),
             };
 
             const isMatch = {
@@ -452,6 +458,7 @@
                 'suku': (label) => label === judul,
                 'bpjs-ketenagakerjaan': (label) => label === judul,
                 'status-kehamilan': (label) => label === judul,
+                ...(isKategoriBantuan && { [kategori]: (label) => label === judul }),
             };
 
             data.forEach(item => {

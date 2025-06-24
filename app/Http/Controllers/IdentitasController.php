@@ -28,6 +28,9 @@ class IdentitasController extends Controller
     public function logo()
     {
         $path = Identitas::first();
+        if (is_null($path) || is_null($path->logo)) {
+            $path->logo = 'opensid_logo.png';
+        }
         ambilBerkas(public_path('storage/img/').$path->logo);
     }
 }

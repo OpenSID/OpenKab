@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Enums\StatusEnum;
 use App\Services\PendudukApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -26,6 +27,7 @@ class PendudukController extends Controller
                 foreach ($kriteria as $key => $value) {
                     $filters[$key] = $value;
                 }
+                $filters['status'] = StatusEnum::aktif;
             }
         }
 

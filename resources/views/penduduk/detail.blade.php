@@ -219,6 +219,16 @@
                                     <td id="alamat">DONUJHY</td>
                                 </tr>
                                 <tr>
+                                    <td>Desa</td>
+                                    <td>:</td>
+                                    <td id="nama_desa"></td>
+                                </tr>
+                                <tr>
+                                    <td>Kecamatan</td>
+                                    <td>:</td>
+                                    <td id="nama_kecamatan"></td>
+                                </tr>
+                                <tr>
                                     <td>Dusun</td>
                                     <td>:</td>
                                     <td id="dusun"></td>
@@ -417,6 +427,8 @@
                 $('#nama-ibu').text(data.nama_ibu)
                 $('#alamat').text(data.keluarga?.alamat)
                 $('#dusun').text(data.cluster_desa?.dusun)
+                $('#nama_desa').text(data.config?.nama_desa)
+                $('#nama_kecamatan').text(data.config?.nama_kecamatan)
                 $('#rt-rw').text(`${data.cluster_desa?.rt} / ${data.cluster_desa?.rw}`)
                 $('#alm-sebelum').text(data.alamat_sebelumnya)
                 $('#telepon').text(data.telepon)

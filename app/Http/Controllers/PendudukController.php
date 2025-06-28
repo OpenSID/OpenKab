@@ -6,7 +6,6 @@ use App\Models\Enums\JenisKelaminEnum;
 use App\Models\Enums\StatusEnum;
 use App\Services\PendudukApiService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PendudukController extends Controller
@@ -32,13 +31,13 @@ class PendudukController extends Controller
                         $filters['sex'] = JenisKelaminEnum::perempuan;
                     }
                 }
-                if(isset($kriteria['belum_mengisi']) && $kriteria['belum_mengisi'] === 'status-kehamilan') {
+                if (isset($kriteria['belum_mengisi']) && $kriteria['belum_mengisi'] === 'status-kehamilan') {
                     $filters['sex'] = JenisKelaminEnum::perempuan;
                 }
-                if(isset($kriteria['jumlah']) && $kriteria['jumlah'] === 'status-kehamilan') {
+                if (isset($kriteria['jumlah']) && $kriteria['jumlah'] === 'status-kehamilan') {
                     $filters['sex'] = JenisKelaminEnum::perempuan;
                 }
-                if(isset($kriteria['total']) && $kriteria['total'] === 'status-kehamilan') {
+                if (isset($kriteria['total']) && $kriteria['total'] === 'status-kehamilan') {
                     $filters['sex'] = JenisKelaminEnum::perempuan;
                 }
                 $filters['status'] = StatusEnum::aktif;

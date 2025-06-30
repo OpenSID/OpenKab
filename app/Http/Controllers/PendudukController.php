@@ -40,7 +40,7 @@ class PendudukController extends Controller
                 if (isset($kriteria['total']) && $kriteria['total'] === 'status-kehamilan') {
                     $filters['sex'] = JenisKelaminEnum::perempuan;
                 }
-                $filters['status'] = StatusEnum::aktif;
+                // $filters['status'] = StatusEnum::aktif;
             }
         }
 

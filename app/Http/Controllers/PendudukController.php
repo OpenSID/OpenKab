@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Enums\JenisKelaminEnum;
-use App\Models\Enums\StatusEnum;
 use App\Services\PendudukApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

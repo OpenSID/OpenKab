@@ -1,4 +1,4 @@
-<script nonce="{{ csp_nonce() }}"  >
+<script nonce="{{ csp_nonce() }}">
     function grafikPie() {
         data = [];
         $('#barChart').remove();
@@ -57,7 +57,14 @@
         data.forEach(function(item, index) {
             let color = randColorRGB();
             let colorPoint = randColorHex();
-
+            if (item.nama == 'TOTAL') {
+                // Skip item with nama 'TOTAL'
+                return;
+            }
+            if (item.nama == 'JUMLAH') {
+                // Skip item with nama 'JUMLAH'
+                return;
+            }
             dataBaruGrafik.push({
                 label: item.nama,
                 backgroundColor: color,
@@ -90,13 +97,14 @@
     }
 </script>
 @push('css')
-    <style nonce="{{ csp_nonce() }}" >
+    <style nonce="{{ csp_nonce() }}">
         #barChart {
             min-height: 250px;
             height: 250px;
             max-height: 250px;
             max-width: 100%;
         }
+
         #donutChart {
             min-height: 250px;
             height: 250px;

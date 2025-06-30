@@ -120,10 +120,11 @@ if (! function_exists('url_title')) {
      *
      * @todo	Remove old 'dash' and 'underscore' usage in 3.1+.
      *
-     * @param  string  $str  Input string
-     * @param  string  $separator  Word separator
-     *                             (usually '-' or '_')
-     * @param  bool  $lowercase  Whether to transform the output string to lowercase
+     * @param string $str       Input string
+     * @param string $separator Word separator
+     *                          (usually '-' or '_')
+     * @param bool   $lowercase Whether to transform the output string to lowercase
+     *
      * @return string
      */
     function url_title($str, $separator = '-', $lowercase = false)
@@ -792,8 +793,9 @@ if (! function_exists('convertMenu')) {
     /**
      * Helper untuk menentukan convert menu agar sesuai dengan editor.
      *
-     * @param  mixed  $value
-     * @param  mixed  $checked
+     * @param mixed $value
+     * @param mixed $checked
+     *
      * @return string
      */
     function convertMenu($menu, $parentId = null, &$idCounter = 1)

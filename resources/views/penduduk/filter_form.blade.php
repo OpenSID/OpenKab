@@ -262,6 +262,10 @@
                 </div>
             </div>
         </div>
+        <div class="row fade">
+            <input id="program_id" class="form-control" placeholder="program id" type="hidden"
+                value="{{ $filters['program_id'] ?? '' }}">
+        </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">

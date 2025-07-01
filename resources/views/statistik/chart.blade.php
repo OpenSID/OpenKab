@@ -27,7 +27,7 @@
             maintainAspectRatio: false,
             datasetFill: false
         }
-
+        console.log(barChartData);
         new Chart(barChartCanvas, {
             type: 'bar',
             data: barChartData,

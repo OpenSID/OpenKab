@@ -22,6 +22,22 @@ class ConfigApiService extends BaseApiService
         });
     }
 
+    public function desaConfig(array $filters = [])
+    {
+        // Panggil API dan ambil data
+        $data = $this->apiRequest('/api/v1/config/desa', $filters);
+        if (! $data) {
+            return collect([]);
+        }
+
+        return collect($data)->map(function ($item) {
+            return (object) [
+                'id' => $item['id'],
+                ...$item['attributes'],
+            ];
+        });
+    }
+
     public function kecamatan(array $filters = [])
     {
         $cacheKey = $this->buildCacheKey('config_kecamatan', $filters);
@@ -67,6 +83,17 @@ class ConfigApiService extends BaseApiService
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($kode_kecamatan) {
             $data = $this->apiRequest("/api/v1/config/kecamatan-by-kode/{$kode_kecamatan}");
+
+            return $data ?: collect([]);
+        });
+    }
+
+    public function desaByKode(string $kode_desa)
+    {
+        $cacheKey = "config_desa_kode_{$kode_desa}";
+
+        return Cache::remember($cacheKey, $this->cacheTtl, function () use ($kode_desa) {
+            $data = $this->apiRequest("/api/v1/config/desa-by-kode/{$kode_desa}");
 
             return $data ?: collect([]);
         });

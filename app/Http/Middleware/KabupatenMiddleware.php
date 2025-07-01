@@ -18,6 +18,7 @@ class KabupatenMiddleware
     public function handle(Request $request, Closure $next)
     {
         // abort jika kabupaten tidak ada di list config.
+
         $kodeKabupaten = $request->route('kodeKabupaten');
         $semuaKode = collect((new ConfigApiService)->kabupaten())->pluck('kode_kabupaten')->toArray();
 
@@ -27,12 +28,14 @@ class KabupatenMiddleware
             'Kabupaten tidak ditemukan, pastikan kabupaten tersebut sudah ditambahkan di OpenSID Gabungan!'
         );
 
-        // set session kabupaten
-        session()->put(
-            'kabupaten',
-            (new ConfigApiService)->kabupatenByKode($kodeKabupaten)
+        $currentKabupaten = (new ConfigApiService)->kabupatenByKode($kodeKabupaten);
 
-        );
+        // Hapus session kecamatan dan desa jika kabupaten berubah
+        if (session()->has('kabupaten') && session('kabupaten.kode_kabupaten') !== $currentKabupaten['kode_kabupaten']) {
+            session()->forget(['kecamatan', 'desa']);
+        }
+
+        session()->put('kabupaten', $currentKabupaten);
 
         return $next($request);
     }

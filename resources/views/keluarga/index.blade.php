@@ -14,6 +14,22 @@
 
 @section('content')
     @include('partials.breadcrumbs')
+    @if (isset($chart['view']))
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <div class="chart" id="grafik">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                        <hr class="hr-chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -61,6 +77,14 @@
                                             <select class="select2-filter form-control-sm width-100" id="kelas_sosial"
                                                 name="kelas_sosial" data-option='{!! json_encode(App\Models\Enums\KelasSosialEnum::select2()) !!}'
                                                 data-placeholder="Semua Kelas Sosial">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Bantuan</label>
+                                            <select id="bantuan-keluarga" class="form-control select2-filter" data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}'
+                                                placeholder="Pilih Bantuan">
                                             </select>
                                         </div>
                                     </div>
@@ -190,10 +214,16 @@
 @endpush
 
 @section('js')
+
+    @if (isset($chart['view']))
+        @include('penduduk.chart')
+    @endif
+
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
             const filterDefault = {!! json_encode($filters) !!}
+            const chart = {!! json_encode($chart) !!}
             let kriteria_jumlah = filterDefault['jumlah'] ?? null
             let kriteria_belum_mengisi = filterDefault['belum_mengisi'] ?? null
             let kriteria_total = filterDefault['total'] ?? null
@@ -220,6 +250,7 @@
                             "filter[kode_kabupaten]": $('#filter_kabupaten').val(),
                             "filter[kode_kecamatan]": $('#filter_kecamatan').val(),
                             "filter[kode_desa]": $('#filter_desa').val(),
+                            "filter[bantuan-keluarga]": $('#bantuan-keluarga').val(),
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[search]": row.search.value,
@@ -232,7 +263,19 @@
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
 
-                        return json.data
+                        if (json.data.length > 0) {
+
+                            // jika chart di akses dari halaman statistik keluarga
+                            if(chart && chart.view){
+                                getDataset(json.data, chart)
+                                grafik()
+                            }
+
+
+                            return json.data;
+                        }
+
+                        return false;
                     },
                 },
                 columnDefs: [{
@@ -383,5 +426,42 @@
                 $('a[href="#collapse-filter"]').click();
             @endif
         });
+
+        function getDataset(data, chart) {
+            const kategori = chart.kategori;
+            data_grafik = [];
+            const grouped = {};
+            judul = chart.nama
+
+            const getLabel = {
+                'kelas-sosial': attr => attr.kelas_sosial,
+            };
+
+            const isMatch = {
+                'kelas-sosial': (label) => label === judul,
+            };
+
+            data.forEach(item => {
+                const attr = item.attributes;
+                const config = attr.config || {};
+                const kode = config.kode_kecamatan;
+                const nama = config.nama_kecamatan;
+
+                if (!grouped[kode]) {
+                    grouped[kode] = { nama: nama, total: 0 };
+                }
+
+                const label = getLabel[kategori]?.(attr);
+
+                if (label !== undefined && isMatch[kategori]?.(label)) {
+                    grouped[kode].total += 1;
+                }
+            });
+
+            data_grafik = Object.entries(grouped).map(([kode, val]) => ({
+                label: val.nama,
+                value: val.total
+            }));
+        }
     </script>
 @endsection

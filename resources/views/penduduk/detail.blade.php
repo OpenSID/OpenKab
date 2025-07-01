@@ -219,6 +219,16 @@
                                     <td id="alamat">DONUJHY</td>
                                 </tr>
                                 <tr>
+                                    <td>Desa</td>
+                                    <td>:</td>
+                                    <td id="nama_desa"></td>
+                                </tr>
+                                <tr>
+                                    <td>Kecamatan</td>
+                                    <td>:</td>
+                                    <td id="nama_kecamatan"></td>
+                                </tr>
+                                <tr>
                                     <td>Dusun</td>
                                     <td>:</td>
                                     <td id="dusun"></td>
@@ -370,15 +380,18 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         const header = @include('layouts.components.header_bearer_api_gabungan');
         $.ajax({                
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}?filter[id]={{ $penduduk->id }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk' }}?filter[id]={{ $id_penduduk }}`,
                 headers: header,
                 method: 'get',
             })
             .then(function(response) {
                 var data = response.data[0]?.attributes
 
+                let hrefTag = data.urlFoto ? 'src=' + data
+                                .urlFoto : `src="{{ asset('assets/img/avatar.png') }}"`;
+
                 $('#nik').text(`Biodata Penduduk (NIK : ${data.nik})`)
-                $('#foto').html(`<img class="penduduk" src="${data.urlFoto}"alt="Foto Penduduk">`)
+                $('#foto').html(`<img class="penduduk" ${hrefTag} alt="Foto Penduduk">`)
                 $('#status-dasar').html(`<strong>${data.penduduk_status_dasar?.nama}</strong>`)
                 $('#nama').text(data.nama)
                 $('#terdaftar-pada').html(`Terdaftar pada: <i class="fa fa-clock-o"></i>${data.created_at}`)
@@ -414,6 +427,8 @@
                 $('#nama-ibu').text(data.nama_ibu)
                 $('#alamat').text(data.keluarga?.alamat)
                 $('#dusun').text(data.cluster_desa?.dusun)
+                $('#nama_desa').text(data.config?.nama_desa)
+                $('#nama_kecamatan').text(data.config?.nama_kecamatan)
                 $('#rt-rw').text(`${data.cluster_desa?.rt} / ${data.cluster_desa?.rw}`)
                 $('#alm-sebelum').text(data.alamat_sebelumnya)
                 $('#telepon').text(data.telepon)
@@ -439,7 +454,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/peserta' }}?filter[peserta]={{ $penduduk->nik }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/peserta' }}?filter[peserta]={{ $penduduk->nik }}&filter[detail_penduduk]=1`,
                 headers: header,
                 method: 'get',
             },
@@ -478,7 +493,7 @@
             paging: false,
             info: false,
             ajax: {
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/dokumen' }}?filter[id_pend]={{ $penduduk->id }}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/dokumen' }}?filter[id_pend]={{ $id_penduduk }}&filter[detail_penduduk]=1`,
                 headers: header,
                 method: 'get',
             },

@@ -12,6 +12,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\KeluargaController;
+use App\Http\Controllers\LaporanBulananController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\PlanController;
@@ -98,10 +99,22 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             return redirect()->back();
         });
 
-        Route::get('hapus', function () {
-            session()->remove('kabupaten');
-            session()->remove('kecamatan');
-            session()->remove('desa');
+        // Hapus session berdasarkan level
+        Route::get('hapus/{level}', function ($level) {
+            if (in_array($level, ['kabupaten', 'kecamatan', 'desa'])) {
+                session()->remove($level);
+
+                // Jika kabupaten dihapus, hapus juga kecamatan dan desa
+                if ($level === 'kabupaten') {
+                    session()->remove('kecamatan');
+                    session()->remove('desa');
+                }
+
+                // Jika kecamatan dihapus, hapus juga desa
+                if ($level === 'kecamatan') {
+                    session()->remove('desa');
+                }
+            }
 
             return redirect()->back();
         });
@@ -110,7 +123,9 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     // Penduduk
     Route::middleware(['permission:penduduk-read'])->get('penduduk/cetak', [PendudukController::class, 'cetak']);
     Route::middleware(['permission:penduduk-edit'])->get('penduduk/pindah/{id}', [PendudukController::class, 'pindah'])->name('penduduk.edit');
-    Route::middleware(['permission:penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
+    Route::middleware(['permission:penduduk-read'])->get('penduduk', [PendudukController::class, 'index'])->name('penduduk.index');
+    Route::middleware(['permission:penduduk-read'])->get('penduduk/{id}', [PendudukController::class, 'show'])->name('penduduk.show');
+    // Route::middleware(['permission:penduduk-read'])->resource('penduduk', PendudukController::class)->only(['index', 'show']);
 
     // Keluarga
     Route::middleware(['permission:penduduk-read'])->controller(KeluargaController::class)
@@ -174,6 +189,18 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/bantuan/detail/{tipe?}/{no?}/{sex?}/{kategori}/{kategori_id}', 'detailPenduduk')->name('statistik.detail.bantuan');
 
             Route::get('/cetak/{kategori}/{id}', 'cetak');
+
+            // Data > Kependudukan > Laporan Bulanan
+            Route::controller(LaporanBulananController::class)
+            ->middleware(['permission:statistik-laporan-bulanan-read'])
+            ->prefix('laporan-bulanan')
+            ->group(function () {
+                Route::get('/', 'index')->name('laporan-bulanan.index');
+                Route::post('/filter', 'filter')->name('laporan-bulanan.filter');
+                Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
+                Route::get('/export-excel', 'exportExcel')->name('laporan-bulanan.export-excel');
+                Route::get('/export-excel-detail/{rincian}/{tipe}', 'exportExcelDetail')->name('laporan-bulanan.export-excel-detail');
+            });
         });
 
     // Master Data
@@ -285,7 +312,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
 
 Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/', [PresisiController::class, 'index'])->name('presisi.index');
-    Route::view('/sosial', 'presisi.sosial.index');
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
 
     Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');

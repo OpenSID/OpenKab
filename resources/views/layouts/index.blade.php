@@ -11,10 +11,12 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}" type="application/javascript">
     document.addEventListener("DOMContentLoaded", function(event) {
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         var base_url = '{{ url('/') }}';
         $.ajax({
         type: "get",
         url: base_url + "/api/v1/identitas",
+        headers: header,
         success: function (response) {
             var data = response.data.attributes;
             $('.brand-link').children('img').attr('alt', data.nama_aplikasi);

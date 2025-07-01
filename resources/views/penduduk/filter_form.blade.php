@@ -230,9 +230,8 @@
             <div class="col-sm">
                 <div class="form-group">
                     <label>Suku</label>
-                    <select id="suku" class="form-control select2-filter" data-option='{!! json_encode(App\Models\Enums\SukuEnum::select2()) !!}'
-                        placeholder="Pilih Suku">
-                    </select>
+                    <input id="suku" class="form-control" placeholder="Suku" type="text"
+                        value="{{ $filters['suku'] ?? '' }}">
                 </div>
             </div>
         </div>
@@ -257,8 +256,8 @@
             <div class="col-sm">
                 <div class="form-group">
                     <label>Bantuan</label>
-                    <select id="bantuan-penduduk" class="form-control select2-filter" data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}'
-                        placeholder="Pilih Bantuan">
+                    <select id="bantuan-penduduk" class="form-control select2-filter"
+                        data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}' placeholder="Pilih Bantuan">
                     </select>
                 </div>
             </div>

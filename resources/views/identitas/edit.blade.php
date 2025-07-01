@@ -100,6 +100,7 @@
         </div>
     </div>
     <script nonce="{{ csp_nonce() }}"  >
+        const header = @include('layouts.components.header_bearer_api_gabungan');
         function identitas() {
             return {
                 dataIdentitas: {},
@@ -107,7 +108,9 @@
                 retrieveData() {
                     var server_pantau = "{{ config('app.serverPantau') }}";
                     var token_pantau = "{{ config('app.tokenPantau') }}";
-                    fetch('{{ url('api/v1/identitas') }}')
+                    fetch('{{ url('api/v1/identitas') }}', {
+                        headers: header
+                    })
                         .then(res => res.json())
                         .then(response => {
                             this.dataIdentitas = response.data.attributes;
@@ -237,6 +240,8 @@
                             $.ajax({
                                 url: '{{ url('api/v1/identitas/upload') }}/' + this.id,
                                 headers: {
+                                    'Accept': 'application/json',
+                                    'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}',
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 type: 'POST',
@@ -302,6 +307,8 @@
                             $.ajax({
                                 url: '{{ url('api/v1/identitas/uploadFavicon') }}/' + this.id,
                                 headers: {
+                                    'Accept': 'application/json',
+                                    'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}',
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 type: 'POST',
@@ -357,6 +364,8 @@
                         type: "Put",
                         url: '{{ url('api/v1/identitas/perbarui') }}/' + this.id,
                         headers: {
+                            'Accept': 'application/json',
+                            'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}',
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         data: this.dataIdentitas,

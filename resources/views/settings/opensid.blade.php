@@ -10,10 +10,11 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    @if($canedit)
-                    <button type="button" id="reset" class="btn btn-danger btn-sm"><i class="fas fa-times"></i>&nbsp; Batal</button>
-                    <button id="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i>&nbsp;
-                        Simpan</button>
+                    @if ($canedit)
+                        <button type="button" id="reset" class="btn btn-danger btn-sm"><i
+                                class="fas fa-times"></i>&nbsp; Batal</button>
+                        <button id="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i>&nbsp;
+                            Simpan</button>
                     @endif
                 </div>
             </form>
@@ -23,16 +24,17 @@
 
 @push('js')
     <script nonce="{{ csp_nonce() }}">
-        document.addEventListener("DOMContentLoaded", function (event) {
+        document.addEventListener("DOMContentLoaded", function(event) {
             function buildInputForm(data) {
-                let form = [], _tmp, _item;
-                for(let i in data) {
+                let form = [],
+                    _tmp, _item;
+                for (let i in data) {
                     _item = data[i]
                     _tmp = `<div class="form-group">
                         <label for="${_item.attributes.key}">${_item.attributes.judul}</label>`
-                    switch(_item.attributes.jenis){
+                    switch (_item.attributes.jenis) {
                         case 'color':
-                        _tmp += `<div class="input-group">
+                            _tmp += `<div class="input-group">
                             <input type="text" name="${_item.attributes.key}" class="form-control color" required value="${_item.attributes.value}" />
                                         <div class="input-group-append">
                                             <div class="input-group-text bg-danger">
@@ -44,14 +46,18 @@
                         case 'option':
                             let _options = []
                             let _optionObj = JSON.parse(_item.attributes.option)
-                            for(let i in _optionObj){
-                                _options.push(`<option value="${i}" ${i == _item.attributes.value ? 'selected' : ''} >${_optionObj[i]}</option>`)
+                            for (let i in _optionObj) {
+                                _options.push(
+                                    `<option value="${i}" ${i == _item.attributes.value ? 'selected' : ''} >${_optionObj[i]}</option>`
+                                )
                             }
 
-                            _tmp += `<select name="${_item.attributes.key}" class="form-control">${_options.join('')}</select>`
+                            _tmp +=
+                                `<select name="${_item.attributes.key}" class="form-control">${_options.join('')}</select>`
                             break;
                         default:
-                            _tmp += `<input type="text" name="${_item.attributes.key}" class="form-control" required value="${_item.attributes.value}" />`
+                            _tmp +=
+                                `<input type="text" name="${_item.attributes.key}" class="form-control" required value="${_item.attributes.value}" />`
                     }
                     _tmp += `</div>`
                     form.push(_tmp)
@@ -60,9 +66,9 @@
                 return form.join('');
             }
 
-            const header = @include('layouts.components.header_bearer_api_gabungan')
-
-            fetch(`{{ route('api.pengaturan_aplikasi') }}`, {
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+            const _url = `{{ config('app.databaseGabunganUrl') . '/api/v1/pengaturan' }}`;
+            fetch(_url, {
                     headers: header,
                 })
                 .then(res => res.json())
@@ -72,10 +78,12 @@
                     }
                 }).then(() => {
                     $('.color').colorpicker()
-                }).catch(err => {
+                }).catch((xhr, ajaxOptions, thrownError) => {
+                    console.log(xhr?.message);
                     Swal.fire(
                         'Error!',
-                        err,
+                        xhr?.responseJSON?.message ||
+                        `Terjadi kesalahan saat mengambil data pengaturan dari ${_url}`,
                         'error'
                     )
                 }); // Catch errors;
@@ -106,7 +114,7 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             dataType: "json",
-                            url: `{{ url('api/v1/pengaturan/update') }}`,
+                            url: `{{ config('app.databaseGabunganUrl') . '/api/v1/pengaturan/update' }}`,
                             data: formData,
                             success: function(response) {
                                 if (response.success == true) {
@@ -138,6 +146,5 @@
                 })
             });
         });
-
     </script>
 @endpush

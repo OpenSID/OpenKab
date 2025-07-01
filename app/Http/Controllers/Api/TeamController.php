@@ -211,6 +211,9 @@ class TeamController extends Controller
         $permissions = [];
         foreach ($data['menu'] as $main_menu) {
             foreach (Modul::permision as $permission) {
+                if (! isset($main_menu['permission'])) {
+                    continue;
+                }
                 $permissionName = $main_menu['permission'].'-'.$permission;
                 Permission::findOrCreate($permissionName, 'web');
                 if (isset($main_menu[$permissionName])) {
@@ -222,6 +225,9 @@ class TeamController extends Controller
             if (isset($main_menu['submenu'])) {
                 foreach ($main_menu['submenu'] as $sub_menu) {
                     foreach (Modul::permision as $permission) {
+                        if (! isset($main_menu['permission'])) {
+                            continue;
+                        }
                         $permissionName = $sub_menu['permission'].'-'.$permission;
                         Permission::findOrCreate($permissionName, 'web');
                         if (isset($sub_menu[$permissionName])) {

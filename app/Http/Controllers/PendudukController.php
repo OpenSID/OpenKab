@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Penduduk;
+use App\Models\Enums\JenisKelaminEnum;
+use App\Services\PendudukApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PendudukController extends Controller
 {
@@ -24,18 +26,54 @@ class PendudukController extends Controller
             if ($kriteria) {
                 foreach ($kriteria as $key => $value) {
                     $filters[$key] = $value;
+                    if ($key === 'hamil') {
+                        $filters['sex'] = JenisKelaminEnum::perempuan;
+                    }
                 }
+                if (isset($kriteria['belum_mengisi']) && $kriteria['belum_mengisi'] === 'status-kehamilan') {
+                    $filters['sex'] = JenisKelaminEnum::perempuan;
+                }
+                if (isset($kriteria['jumlah']) && $kriteria['jumlah'] === 'status-kehamilan') {
+                    $filters['sex'] = JenisKelaminEnum::perempuan;
+                }
+                if (isset($kriteria['total']) && $kriteria['total'] === 'status-kehamilan') {
+                    $filters['sex'] = JenisKelaminEnum::perempuan;
+                }
+                // $filters['status'] = StatusEnum::aktif;
             }
         }
 
         $judul = request('judul', '');
 
-        return view('penduduk.index', compact('filters', 'judul'))->with($listPermission);
+        if (request()->has('chart-view')) {
+            $chart = $this->chart();
+
+            return view('penduduk.index', compact('filters', 'judul', 'chart'))->with($listPermission);
+        }
+
+        $chart = [];
+
+        return view('penduduk.index', compact('filters', 'judul', 'chart'))->with($listPermission);
     }
 
-    public function show(Penduduk $penduduk)
+    public function chart()
     {
-        return view('penduduk.detail', compact('penduduk'));
+        return [
+            'kategori' => Str::slug(strtolower(request()->tipe)),
+            'nama' => request()->nama,
+            'view' => true,
+        ];
+    }
+
+    public function show($id_penduduk)
+    {
+        $result = (new PendudukApiService())->penduduk([
+            'filter[id]' => $id_penduduk,
+        ]);
+
+        $penduduk = $result->first();
+
+        return view('penduduk.detail', compact('penduduk', 'id_penduduk'));
     }
 
     public function pindah($id)

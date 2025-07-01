@@ -43,8 +43,9 @@
     </div>
 @endsection
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
+    <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
+            const header = @include('layouts.components.header_bearer_api_gabungan');
             var grup = $('#grup').DataTable({
             processing: true,
             serverSide: true,
@@ -52,6 +53,7 @@
             ordering: true,
             ajax: {
                 url: `{{ url('api/v1/pengaturan/group') }}`,
+                // headers: header,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -132,7 +134,8 @@
                             $.ajax({
                                 type: "POST",
                                 headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                    'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                                 },
                                 url: '{{ url('api/v1/pengaturan/group/delete') }}',
                                 data: {

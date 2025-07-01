@@ -28,11 +28,14 @@ class KecamatanMiddleware
             'Kecamatan tidak ditemukan, pastikan kecamatan tersebut sudah ditambahkan di OpenSID Gabungan!'
         );
 
-        // set session kecamatan
-        session()->put(
-            'kecamatan',
-            (new ConfigApiService)->kecamatanByKode($kodeKecamatan)
-        );
+        $currentKecamatan = (new ConfigApiService)->kecamatanByKode($kodeKecamatan);
+
+        // Hapus session desa jika berpindah kecamatan
+        if (session()->has('kecamatan') && session('kecamatan.kode_kecamatan') !== $currentKecamatan['kode_kecamatan']) {
+            session()->forget('desa');
+        }
+
+        session()->put('kecamatan', $currentKecamatan);
 
         return $next($request);
     }

@@ -1,31 +1,27 @@
-Di rilis ini, versi 2506.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
-1. [#648](https://github.com/OpenSID/OpenKab/issues/648) Penambahan pengguna OpenKab untuk pengguna SiapPakai.
-2. [#645](https://github.com/OpenSID/OpenKab/issues/645) Penambahan dasbor permintaan tabanan.
-3. [#662](https://github.com/OpenSID/OpenKab/issues/662) Penambahan navigasi link selengkapnya untuk desa & jumlah penduduk.
-4. [#658](https://github.com/OpenSID/OpenKab/issues/658) Penambahan details penduduk pada statistik keluarga OpenKab.
-5. [#667](https://github.com/OpenSID/OpenKab/issues/667) Penambahan filter pada bagian demografi halaman publik.
-6. [#663](https://github.com/OpenSID/OpenKab/issues/663) Penambahan details penduduk pada statistik RTM OpenKab.
-7. [#674](https://github.com/OpenSID/OpenKab/issues/674) Penambahan dasbor baru untuk statistik demografi.
-8. [#664](https://github.com/OpenSID/OpenKab/issues/664) Penambahan details penduduk pada statistik Bantuan OpenKab.
+1. [#680](https://github.com/OpenSID/OpenKab/issues/680) Penambahan halaman laporan bulanan kependudukan.
+2. [#691](https://github.com/OpenSID/OpenKab/issues/691) Penambahan filter tertutup setelah klik details dari dasbor.
+3. [#676](https://github.com/OpenSID/OpenKab/issues/676) Penambahan halam details rincian statistik per judul.
+4. [#670](https://github.com/OpenSID/OpenKab/issues/670) Penambahan pengaturan group adinistrator daerah.
+5. [#718](https://github.com/OpenSID/OpenKab/issues/718) Penambahan pengaturan aplikasi ( Identitas dan Aplikasi ) hanya tersedia untuk grup administrator.
 
 #### Perbaikan BUG
 
-1. [#642](https://github.com/OpenSID/OpenKab/issues/642) Perbaikan hak akses untuk data presisi.
-2. [#675](https://github.com/OpenSID/OpenKab/issues/675) Perbaikan bug di kategori artikel.
+1. [#690](https://github.com/OpenSID/OpenKab/issues/690) Perbaikan trigger filter wilayah pada statistik.
+2. [#686](https://github.com/OpenSID/OpenKab/issues/686) Perbaikan halaman update identitas.
+3. [#706](https://github.com/OpenSID/OpenKab/issues/706) Perbaikan breadcrumb kategori.
+4. [#704](https://github.com/OpenSID/OpenKab/issues/704) Perbaikan Data penduduk tidak muncul pada details data sandang.
+5. [#702](https://github.com/OpenSID/OpenKab/issues/702) Perbaikan error pada halaman details dari menu peserta / bukan peserta di statistik bantuan.
+6. [#722](https://github.com/OpenSID/OpenKab/issues/722) Perbaikan filter penduduk.
 
 #### Perubahan Teknis
 
-1. [#651](https://github.com/OpenSID/OpenKab/issues/651) Hapus daftar menu berikut ini karena sudah tidak digunakan.
-2. [#655](https://github.com/OpenSID/OpenKab/issues/655) Penyesuaian MenuListener Kebutuhan OpenKab SiapPakai.
-3. [#630](https://github.com/OpenSID/OpenKab/issues/630) Hapus ketergantungan terhadap database gabungan secara langsung.
-4. [#634](https://github.com/OpenSID/OpenKab/issues/634) Sesuaikan RekapService.php dengan Api database gabungan bulanan anak dan sesuaikan RekapService.php sesuai dengan api.
-5. [#635](https://github.com/OpenSID/OpenKab/issues/635) Sesuaikan RekapService.php dengan Api database gabungan ibu hamil dan sesuaikan RekapService.php sesuai dengan api.
-6. [#638](https://github.com/OpenSID/OpenKab/issues/638) Sesuaikan ConfigDemoSeeder, BantuanDemoSeeder dan ArtikelDemoSeeder ke Api database gabungan.
-7. [#637](https://github.com/OpenSID/OpenKab/issues/637) Sesuikan WilayahDemoSeeder, RTMDemoSeeder, KeluargaDemoSeeder dan KategoriDemoSeeder ke Api database gabungan.
-8. [#633](https://github.com/OpenSID/OpenKab/issues/633) Penyesuaian Plan dan penambahan include point, childer pada api dan sesuaikan halaman openkab dengan api database gabungan.
-9. [#636](https://github.com/OpenSID/OpenKab/issues/636) Pisahkan Enum yang melekat pada model yang extends ke BaseModel dan sesuaikan pemanggilan enum pada halaman yang sebelumnya menggunakan.
-10. [#657](https://github.com/OpenSID/OpenKab/issues/657) Sesuaikan statistik penduduk.
-11. [#682](https://github.com/OpenSID/OpenKab/issues/682) Sesuaikan api config untuk KabupatenMiddleware, KecamatanMiddleware dan MenuListener.
+1. [#695](https://github.com/OpenSID/OpenKab/issues/695) Sesuaikan total pada Statistik di dasbor tidak digunakan pada chart.
+2. [#697](https://github.com/OpenSID/OpenKab/issues/697) Sesuaikan Manajemen Session Wilayah (Kabupaten, Kecamatan, Desa).
+3. [#708](https://github.com/OpenSID/OpenKab/issues/708) Perbaikan menu data kemiskinan presisi.
+4. [#717](https://github.com/OpenSID/OpenKab/issues/717) Sesuaikan route api pengaturan.
+5. [#709](https://github.com/OpenSID/OpenKab/issues/709) Sesuaikan kunci halaman presisi jika pengaturan enable website.
+6. [#715](https://github.com/OpenSID/OpenKab/issues/715) Sesuaikan data filter pada data program bantuan & dokumen kelengkapan penduduk.

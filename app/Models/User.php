@@ -58,6 +58,23 @@ class User extends Authenticatable
         'tempat_dilahirkan' => Enums\StatusEnum::class,
     ];
 
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'user_team', 'id_user', 'id_team');
+    }
+
+    public function scopeVisibleTo($query, $user)
+    {
+        if (! $user->hasRole('administrator')) {
+            $query->where('kode_kabupaten', $user->kode_kabupaten)
+                ->whereDoesntHave('roles', function ($q) {
+                    $q->where('name', 'administrator');
+                });
+        }
+
+        return $query;
+    }
+
     /**
      * Get the user's password.
      */
@@ -127,5 +144,45 @@ class User extends Authenticatable
     {
         return LogOptions::defaults()->logAll()->logOnlyDirty()->useLogName('user-log');
         // Chain fluent methods for configuration options
+    }
+
+    public function getEffectiveKodeKabupaten($input = null)
+    {
+        return $this->hasRole('administrator') && $input
+            ? $input
+            : $this->kode_kabupaten;
+    }
+
+    public function scopeVisibleForAuthenticatedUser($query)
+    {
+        $authUser = auth()->user();
+
+        if ($authUser->hasRole('administrator')) {
+            return $query;
+        }
+
+        // Jika superadmin_daerah & kode_kabupaten NULL
+        if (
+            $authUser->hasRole('superadmin_daerah') &&
+            is_null($authUser->kode_kabupaten)
+        ) {
+            // Hanya tampilkan user itu sendiri
+            return $query->where('id', $authUser->id);
+        }
+
+        // Jika superadmin_daerah biasa
+        if (
+            $authUser->hasAnyRole(['superadmin_daerah', 'kabupaten']) &&
+            $authUser->kode_kabupaten
+        ) {
+            return $query
+                ->where('kode_kabupaten', $authUser->kode_kabupaten)
+                ->whereDoesntHave('roles', function ($q) {
+                    $q->where('name', 'administrator');
+                });
+        }
+
+        // Fallback default
+        return $query->whereRaw('1 = 0');
     }
 }

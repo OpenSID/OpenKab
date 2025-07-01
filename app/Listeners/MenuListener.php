@@ -25,7 +25,7 @@ class MenuListener
     {
         $event->menu->addIn('kabupaten', [
             'text' => 'Semua',
-            'url' => 'sesi/hapus',
+            'url' => 'sesi/hapus/kabupaten',
             'active' => ! session()->has('kabupaten'),
             'data' => [
                 'kabupaten' => 'Kabupaten',
@@ -58,7 +58,7 @@ class MenuListener
         if (session()->has('kabupaten')) {
             $event->menu->addIn('kecamatan', [
                 'text' => 'Semua',
-                'url' => 'sesi/hapus',
+                'url' => 'sesi/hapus/kecamatan',
                 'active' => ! session()->has('kecamatan'),
                 'data' => [
                     'kecamatan' => 'Kecamatan',
@@ -90,7 +90,7 @@ class MenuListener
         if (session()->has('kecamatan')) {
             $event->menu->addIn('desa', [
                 'text' => 'Semua',
-                'url' => 'sesi/hapus',
+                'url' => 'sesi/hapus/desa',
                 'active' => ! session()->has('desa'),
                 'data' => [
                     'desa' => 'Desa',

@@ -14,6 +14,22 @@
 
 @section('content')
     @include('partials.breadcrumbs')
+    @if (isset($chart['view']))
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <div class="chart" id="grafik">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                        <hr class="hr-chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -78,13 +94,22 @@
 @endpush
 
 @section('js')
+
+    @if (isset($chart['view']))
+    @include('penduduk.chart')
+    @endif
+
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
             const filterDefault = {!! json_encode($filters) !!}
+            const chart = {!! json_encode($chart) !!}
+
             let kriteria_jumlah = filterDefault['jumlah'] ?? null
             let kriteria_belum_mengisi = filterDefault['belum_mengisi'] ?? null
             let kriteria_total = filterDefault['total'] ?? null
+
+            var urlPenduduk = new URL(`{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk' }}`);
 
             var penduduk = $('#penduduk').DataTable({
                 processing: true,
@@ -92,7 +117,7 @@
                 autoWidth: false,
                 ordering: true,
                 ajax: {
-                    url: `{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk' }}`,
+                    url: urlPenduduk,
                     headers: header,
                     method: 'get',
                     data: function(row) {
@@ -133,12 +158,14 @@
                             "filter[bantuan-penduduk]": $('#bantuan-penduduk').val(),
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
+                            "chart-view": chart?.view ?? null,
                             "filter[search]": row.search.value,
                             "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
                                     .order[0]
                                     ?.column]
                                 ?.name
                         };
+
                         const umurMin = $('#filter_umur_dari').val();
                         const umurMax = $('#filter_umur_sampai').val();
                         const umurObj = {
@@ -161,7 +188,30 @@
                         json.recordsTotal = json.meta.pagination.total
                         json.recordsFiltered = json.meta.pagination.total
 
-                        return json.data
+                        if (json.data.length > 0 && json.meta && json.meta.all_data) {
+
+                            // jika chart di akses dari halaman statistik penduduk
+                            if(chart && chart.view){
+                                getDataset(json.meta.all_data, chart)
+                                grafik()    
+                            }
+
+                        }
+                        return json.data;
+
+                        // if (json.data.length) {
+
+                        //     // jika chart di akses dari halaman statistik penduduk
+                        //     if(chart && chart.view){
+                        //         getDataset(json.data, chart)
+                        //         grafik()    
+                        //     }
+
+
+                        //     return json.data;
+                        // }
+
+                        // return false;
                     },
                 },
                 columnDefs: [{
@@ -339,11 +389,184 @@
                 $(`#${i}`).val(filterDefault[i]).trigger('change');
             }
 
-            @if ($filters['kode_kabupaten'] ?? false)
-                $('a[href="#collapse-filter"]').click();
-            @endif
-
 
         });
+
+        function getDataset(data, chart) {
+            const kategori = chart.kategori;
+            data_grafik = [];
+            const grouped = {};
+            judul = chart.nama
+
+            const params = new URLSearchParams(window.location.search);
+            const kategoriQuery = params.get('kategori');
+            const namaQuery = params.get('nama');
+            const isKategoriBantuan = kategoriQuery === 'bantuan';
+
+            const getLabel = {
+                'rentang-umur': attr => parseInt(attr.umur),
+                'kategori-umur': attr => parseInt(attr.umur),
+                'pendidikan-dalam-kk': attr => attr.pendidikan_kk,
+                'pendidikan-sedang-ditempuh': attr => attr.pendidikan,
+                'agama': attr => attr.agama,
+                'jenis-kelamin': attr => attr.jenis_kelamin,
+                'pekerjaan': attr => attr.pekerjaan,
+                'status-perkawinan': attr => attr.status_kawin,
+                'hubungan-dalam-kk': attr => attr.penduduk_hubungan,
+                'warga-negara': attr => attr.warga_negara,
+                'status-penduduk': attr => attr.penduduk_status,
+                'golongan-darah': attr => attr.golongan_darah,
+                'penyandang-cacat': attr => attr.cacat,
+                'penyakit-menahun': attr => attr.namaSakitMenahun,
+                'akseptor-kb': attr => attr.kb,
+                'akta-kelahiran': attr => parseInt(attr.umur),
+                'ktp': attr => attr.status_rekam_ktp,
+                'asuransi-kesehatan': attr => attr.namaAsuransi,
+                'status-covid': attr => null,
+                'suku': attr => attr.suku,
+                'bpjs-ketenagakerjaan': attr => attr.bpjs_ketenagakerjaan,
+                'status-kehamilan': attr => attr.statusHamil,
+                ...(isKategoriBantuan && { [kategori]: attr => namaQuery }),
+            };
+
+            const isMatch = {
+                'rentang-umur': (label) => {
+                    const [awal, akhir] = judul.match(/\d+/g).map(Number);
+                    return label >= awal && label <= akhir;
+                },
+                'kategori-umur': (label) => label === judul,
+                'pendidikan-dalam-kk': (label) => label === judul,
+                'pendidikan-sedang-ditempuh': (label) => label === judul,
+                'agama': (label) => label === judul,
+                'jenis-kelamin': (label) => label === judul,
+                'pekerjaan': (label) => label === judul,
+                'status-perkawinan': (label) => label === judul,
+                'hubungan-dalam-kk': (label) => label === judul,
+                'warga-negara': (label) => label === judul,
+                'status-penduduk': (label) => label === judul,
+                'golongan-darah': (label) => label === judul,
+                'penyandang-cacat': (label) => label === judul,
+                'penyakit-menahun': (label) => label === judul,
+                'akseptor-kb': (label) => label === judul,
+                'akta-kelahiran': (label) => {
+                    const [awal, akhir] = judul.match(/\d+/g).map(Number);
+                    return label >= awal && label <= akhir;
+                },
+                'ktp': (label) => label === judul,
+                'asuransi-kesehatan': (label) => label === judul,
+                'status-covid': (label) => label === judul,
+                'suku': (label) => label === judul,
+                'bpjs-ketenagakerjaan': (label) => label === judul,
+                'status-kehamilan': (label) => label === judul,
+                ...(isKategoriBantuan && { [kategori]: (label) => label === judul }),
+            };
+
+            data.forEach(item => {
+                const attr = item;
+                const kode = attr.kode_kecamatan;
+                const nama = attr.nama_kecamatan;
+
+                if (!grouped[kode]) {
+                    grouped[kode] = { nama: nama, total: 0 };
+                }
+
+                const label = getLabel[kategori]?.(attr);
+
+                if (label !== undefined && isMatch[kategori]?.(label)) {
+                    grouped[kode].total += 1;
+                }
+            });
+
+            data_grafik = Object.entries(grouped).map(([kode, val]) => ({
+                label: val.nama,
+                value: val.total
+            }));
+        }
+
+        // function getDataset(data, chart) {
+        //     const kategori = chart.kategori;
+        //     data_grafik = [];
+        //     const grouped = {};
+        //     judul = chart.nama
+
+        //     const getLabel = {
+        //         'rentang-umur': attr => parseInt(attr.umur),
+        //         'kategori-umur': attr => attr.kategori_umur?.nama,
+        //         'pendidikan-dalam-kk': attr => attr.pendidikan_k_k?.nama,
+        //         'pendidikan-sedang-ditempuh': attr => attr.pendidikan?.nama,
+        //         'agama': attr => attr.agama?.nama,
+        //         'jenis-kelamin': attr => attr.jenis_kelamin?.nama,
+        //         'pekerjaan': attr => attr.pekerjaan?.nama,
+        //         'status-perkawinan': attr => attr.status_kawin?.nama,
+        //         'hubungan-dalam-kk': attr => attr.penduduk_hubungan?.nama,
+        //         'warga-negara': attr => attr.warga_negara?.nama,
+        //         'status-penduduk': attr => attr.penduduk_status?.nama,
+        //         'golongan-darah': attr => attr.golongan_darah?.nama,
+        //         'penyandang-cacat': attr => attr.cacat?.nama,
+        //         'penyakit-menahun': attr => attr.namaSakitMenahun,
+        //         'akseptor-kb': attr => attr.kb?.nama,
+        //         'akta-kelahiran': attr => parseInt(attr.umur),
+        //         'ktp': attr => attr.status_rekam_ktp?.nama,
+        //         'asuransi-kesehatan': attr => attr.namaAsuransi,
+        //         'status-covid': attr => null,
+        //         'suku': attr => attr.suku,
+        //         'bpjs-ketenagakerjaan': attr => attr.bpjs_ketenagakerjaan,
+        //         'status-kehamilan': attr => attr.statusHamil,
+        //     };
+
+        //     const isMatch = {
+        //         'rentang-umur': (label) => {
+        //             const [awal, akhir] = judul.match(/\d+/g).map(Number);
+        //             return label >= awal && label <= akhir;
+        //         },
+        //         'kategori-umur': (label) => label === judul,
+        //         'pendidikan-dalam-kk': (label) => label === judul,
+        //         'pendidikan-sedang-ditempuh': (label) => label === judul,
+        //         'agama': (label) => label === judul,
+        //         'jenis-kelamin': (label) => label === judul,
+        //         'pekerjaan': (label) => label === judul,
+        //         'status-perkawinan': (label) => label === judul,
+        //         'hubungan-dalam-kk': (label) => label === judul,
+        //         'warga-negara': (label) => label === judul,
+        //         'status-penduduk': (label) => label === judul,
+        //         'golongan-darah': (label) => label === judul,
+        //         'penyandang-cacat': (label) => label === judul,
+        //         'penyakit-menahun': (label) => label === judul,
+        //         'akseptor-kb': (label) => label === judul,
+        //         'akta-kelahiran': (label) => {
+        //             const [awal, akhir] = judul.match(/\d+/g).map(Number);
+        //             return label >= awal && label <= akhir;
+        //         },
+        //         'ktp': (label) => label === judul,
+        //         'asuransi-kesehatan': (label) => label === judul,
+        //         'status-covid': (label) => label === judul,
+        //         'suku': (label) => label === judul,
+        //         'bpjs-ketenagakerjaan': (label) => label === judul,
+        //         'status-kehamilan': (label) => label === judul,
+        //     };
+
+        //     data.forEach(item => {
+        //         const attr = item.attributes;
+        //         const config = attr.config || {};
+        //         const kode = config.kode_kecamatan;
+        //         const nama = config.nama_kecamatan;
+
+        //         if (!grouped[kode]) {
+        //             grouped[kode] = { nama: nama, total: 0 };
+        //         }
+
+        //         const label = getLabel[kategori]?.(attr);
+
+        //         if (label !== undefined && isMatch[kategori]?.(label)) {
+        //             grouped[kode].total += 1;
+        //         }
+        //     });
+
+        //     data_grafik = Object.entries(grouped).map(([kode, val]) => ({
+        //         label: val.nama,
+        //         value: val.total
+        //     }));
+        // }
+
     </script>
 @endsection

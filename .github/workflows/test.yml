@@ -2,7 +2,7 @@ name: Laravel Test
 
 on:
   pull_request:
-    branches: [master, rilis-dev, bug-fix, dev]
+    branches: [master, main, rilis-dev, bug-fix, dev]
 
 jobs:
   laravel-tests:

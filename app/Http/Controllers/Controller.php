@@ -3,12 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Modul;
-use App\Models\Bantuan;
-use App\Models\Config;
 use App\Models\Identitas;
-use App\Models\Keluarga;
-use App\Models\Penduduk;
-use App\Models\Rtm;
 use App\Models\Setting;
 use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -70,11 +65,17 @@ class Controller extends BaseController
             'nama_prov' => $this->identitas->nama_provinsi,
             'nama_aplikasi' => $this->identitas->nama_aplikasi,
             'sebutan_kab' => $this->identitas->sebutan_kab,
-            'jumlah_desa' => Config::count(),
-            'jumlah_penduduk' => Penduduk::status()->count(),
-            'jumlah_keluarga' => Keluarga::status()->count(),
-            'jumlah_rtm' => Rtm::status()->count(),
-            'jumlah_bantuan' => Bantuan::count(),
+            // 'jumlah_desa' => Config::count(),
+            // 'jumlah_penduduk' => Penduduk::status()->count(),
+            // 'jumlah_keluarga' => Keluarga::status()->count(),
+            // 'jumlah_rtm' => Rtm::status()->count(),
+            // 'jumlah_bantuan' => Bantuan::count(),
+            'jumlah_desa' => 0,
+            'jumlah_penduduk' => 0,
+            'jumlah_keluarga' => 0,
+            'jumlah_rtm' => 0,
+            'jumlah_bantuan' => 0,
+
         ];
 
         try {

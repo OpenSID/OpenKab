@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Http\Transformers\IdentitasTransformer;
 use App\Http\Transformers\SettingTransformer;
-use App\Models\Config;
 use App\Models\Identitas;
 use App\Models\Setting;
 use Illuminate\Support\Facades\App;

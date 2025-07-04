@@ -4,18 +4,15 @@ namespace Tests\Feature;
 
 use App\Models\CMS\Article;
 use App\Models\CMS\Category;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\BaseTestCase;
-use Tests\TestCase;
 
 class ArticleControllerCmsTest extends BaseTestCase
 {
     use DatabaseTransactions;
-    
+
     public function test_index_menampilkan_halaman_dengan_status_200()
     {
         $response = $this->get(route('articles.index'));
@@ -56,7 +53,6 @@ class ArticleControllerCmsTest extends BaseTestCase
         $response->assertRedirect(route('articles.index'));
         $this->assertDatabaseHas('articles', ['title' => 'Judul Artikel Baru']);
     }
-
 
     // public function test_show_menampilkan_artikel()
     // {
@@ -115,5 +111,4 @@ class ArticleControllerCmsTest extends BaseTestCase
         $response->assertJson(['success' => true]);
         $this->assertSoftDeleted('articles', ['id' => $article->id]);
     }
-
 }

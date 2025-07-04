@@ -20,7 +20,7 @@ class TeamFactory extends Factory
                     'icon' => 'fa fa-users',
                     'text' => 'Profile',
                     'url' => '/profile',
-                ]
+                ],
             ]),
             'menu_order' => null,
             'created_at' => now(),

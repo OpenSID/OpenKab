@@ -108,11 +108,11 @@
                                         </div>
                                     </div>
                                     <!-- <div class="row justify-content-end pt-1">
-                                                <div class="col-md-4 pull-right text-right">
-                                                    <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right">HAPUS FILTER</button>
-                                                    <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
-                                                </div>
-                                            </div> -->
+                                                    <div class="col-md-4 pull-right text-right">
+                                                        <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right">HAPUS FILTER</button>
+                                                        <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
+                                                    </div>
+                                                </div> -->
                                     <hr class="@if ($id) d-none @endif">
                                     <div class="row @if ($id) d-none @endif">
                                         <div class="col-md-2">
@@ -558,7 +558,7 @@
             "use strict";
 
             const header = @include('layouts.components.header_bearer_api_gabungan');
-            var urlDataWebsite = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-website' }}");
+            var urlDataWebsite = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-website' }}");
 
             $.ajax({
                 url: urlDataWebsite.href,
@@ -586,7 +586,9 @@
                     for (let item in listKecamatan) {
                         _optionKecamatan.push(`<optgroup label='${item}'>`);
                         for (let kecamatan in listKecamatan[item]) {
-                            _optionKecamatan.push(`<option value='${kecamatan}'>${listKecamatan[item][kecamatan]}</option>`);
+                            _optionKecamatan.push(
+                                `<option value='${kecamatan}'>${listKecamatan[item][kecamatan]}</option>`
+                                );
                         }
                         _optionKecamatan.push(`</optgroup>`);
                         _optionKabupaten.push(`<option>${item}</option>`);
@@ -595,7 +597,8 @@
                     for (let item in listDesa) {
                         _optionDesa.push(`<optgroup label='${item}'>`);
                         for (let desa in listDesa[item]) {
-                            _optionDesa.push(`<option value='${desa}'>${listDesa[item][desa]}</option>`);
+                            _optionDesa.push(
+                            `<option value='${desa}'>${listDesa[item][desa]}</option>`);
                         }
                         _optionDesa.push(`</optgroup>`);
                         _optionKecamatan.push(`<option>${item}</option>`);
@@ -607,56 +610,7 @@
                 }
             });
 
-            // $.get('{{ url('index.php/api/v1/data-website') }}', {}, function(result) {
-            //     let category = result.data.categoriesItems
-            //     let listDesa = result.data.listDesa
-            //     let listKecamatan = result.data.listKecamatan
-            //     let listKabupaten = result.data.listKabupaten
-
-            //     for (let index in category) {
-            //         $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value'])
-            //     };
-            //     let _optionKabupaten = []
-            //     let _optionKecamatan = []
-            //     let _optionDesa = []
-            //     for (let item in listKabupaten) {
-            //         _optionKabupaten.push(`<option>${item}</option>`)
-            //     }
-
-            //     for (let item in listKecamatan) {
-            //         _optionKecamatan.push(`<optgroup label='${item}'>`)
-            //         for (let kecamatan in listKecamatan[item]) {
-            //             _optionKecamatan.push(
-            //                 `<option value='${kecamatan}'>${listKecamatan[item][kecamatan]}</option>`)
-            //         }
-            //         _optionKecamatan.push(`</optgroup>`)
-            //         _optionKabupaten.push(`<option>${item}</option>`)
-            //     }
-
-            //     for (let item in listDesa) {
-            //         _optionDesa.push(`<optgroup label='${item}'>`)
-            //         for (let desa in listDesa[item]) {
-            //             _optionDesa.push(`<option value='${desa}'>${listDesa[item][desa]}</option>`)
-            //         }
-            //         _optionDesa.push(`</optgroup>`)
-            //         _optionKecamatan.push(`<option>${item}</option>`)
-            //     }
-
-            //     $('select[name=search_kabupaten]').append(_optionKabupaten.join(''))
-            //     $('select[name=search_kecamatan]').append(_optionKecamatan.join(''))
-            //     $('select[name=search_desa]').append(_optionDesa.join(''))
-            // }, 'json')
         });
-
-        // $('#btn-tabel').click(function() {
-        //     $(this).prop('disabled', true);
-        //     $('#btn-grafik').prop('disabled', false);
-        //     $('#btn-pie').prop('disabled', false);
-
-        //     $('#grafik').hide();
-        //     $('#pie').hide()
-        //     $('#statistik').show()
-        // })
 
         $('#btn-grafik').click(function() {
             $(this).prop('disabled', true);
@@ -716,7 +670,8 @@
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     if (textStatus === "timeout") {
-                        alert("Permintaan data kabupaten gagal karena waktu koneksi habis (timeout). Silakan coba lagi.");
+                        alert(
+                            "Permintaan data kabupaten gagal karena waktu koneksi habis (timeout). Silakan coba lagi.");
                     } else {
                         try {
                             var responseJSON = JSON.parse(jqXHR.responseText);

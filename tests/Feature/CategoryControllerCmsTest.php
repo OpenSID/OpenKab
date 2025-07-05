@@ -85,7 +85,6 @@ class CategoryControllerCmsTest extends BaseTestCase
 
         $response->assertRedirect('/cms/categories');
         $this->assertSoftDeleted('categories', ['id' => $category->id]);
-
     }
 
     public function test_delete_category_with_articles_should_fail()

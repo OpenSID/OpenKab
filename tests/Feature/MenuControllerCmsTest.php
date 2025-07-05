@@ -5,16 +5,13 @@ namespace Tests\Feature;
 use App\Models\CMS\Category;
 use App\Models\CMS\Page;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\BaseTestCase;
-use Tests\TestCase;
 
 class MenuControllerCmsTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-   /** @test 
+    /** @test
      * Menguji halaman index menu dapat ditampilkan tanpa error
      */
     public function test_index_menampilkan_halaman_daftar_menu()
@@ -33,7 +30,7 @@ class MenuControllerCmsTest extends BaseTestCase
         $response->assertViewHas('sourceItem');
     }
 
-    /** @test 
+    /** @test
      * Menguji penyimpanan data menu baru berhasil dan redirect sesuai jenis menu
      */
     public function test_store_menyimpan_menu_baru_dan_redirect_sesuai_jenis()
@@ -60,9 +57,7 @@ class MenuControllerCmsTest extends BaseTestCase
         $this->assertEquals('Menu berhasil disimpan.', session('success'));
     }
 
-
-
-    /** @test 
+    /** @test
      * Menguji redirect store jika tipe menu 2
      */
     public function test_store_redirect_ke_index_dengan_type_dua()
@@ -81,12 +76,11 @@ class MenuControllerCmsTest extends BaseTestCase
 
         $response = $this->post(route('menus.store'), $payload);
 
-        $response->assertRedirect(route('menus.index') . '?type=2');
+        $response->assertRedirect(route('menus.index').'?type=2');
         $this->assertDatabaseHas('menus', ['name' => 'Menu Statistik']);
     }
 
-
-    /** @test 
+    /** @test
      * Menguji jika parameter menu_type tidak dikirim maka default ke 1
      */
     public function test_store_menu_type_default_ke_satu_jika_null()

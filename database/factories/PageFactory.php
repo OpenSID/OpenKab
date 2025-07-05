@@ -3,10 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\CMS\Page;
+use App\Models\Enums\StatusEnum;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
-use App\Models\Enums\StatusEnum;
 
 class PageFactory extends Factory
 {

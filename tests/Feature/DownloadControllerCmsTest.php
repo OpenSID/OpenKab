@@ -4,12 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\CMS\Download;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\BaseTestCase;
-use Tests\TestCase;
 
 class DownloadControllerCmsTest extends BaseTestCase
 {
@@ -50,7 +47,6 @@ class DownloadControllerCmsTest extends BaseTestCase
         $response->assertRedirect(route('downloads.index'));
         $this->assertDatabaseHas('downloads', ['title' => 'File PDF']);
     }
-
 
     /** @test */
     public function form_edit_download_dapat_diakses()

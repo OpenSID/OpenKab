@@ -4,12 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\CMS\Slide;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\BaseTestCase;
-use Tests\TestCase;
 
 class SlideControllerCmsTest extends BaseTestCase
 {

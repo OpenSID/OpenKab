@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\CMS\Visit;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\BaseTestCase;
@@ -10,6 +11,8 @@ use Tests\TestCase;
 
 class StatistikPengunjungCmsControllerTest extends BaseTestCase
 {
+    use DatabaseTransactions;
+
     /** @test */
     public function halaman_statistik_pengunjung_dapat_diakses()
     {

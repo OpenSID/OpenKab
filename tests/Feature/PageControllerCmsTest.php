@@ -4,12 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\CMS\Page;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\BaseTestCase;
-use Tests\TestCase;
 
 class PageControllerCmsTest extends BaseTestCase
 {
@@ -53,7 +50,6 @@ class PageControllerCmsTest extends BaseTestCase
         $this->assertDatabaseHas('pages', ['title' => 'Judul Halaman']);
     }
 
-
     /** @test */
     public function halaman_dapat_diedit()
     {
@@ -86,7 +82,6 @@ class PageControllerCmsTest extends BaseTestCase
         $response->assertRedirect(route('pages.index'));
         $this->assertDatabaseHas('pages', ['title' => 'Baru']);
     }
-
 
     /** @test */
     public function halaman_dapat_dihapus()

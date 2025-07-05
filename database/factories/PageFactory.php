@@ -3,9 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\CMS\Page;
+use App\Models\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Models\Enums\StatusEnum;
 
 class PageFactory extends Factory
 {

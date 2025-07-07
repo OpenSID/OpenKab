@@ -75,11 +75,11 @@ class Controller extends BaseController
             'nama_prov' => $this->identitas->nama_provinsi,
             'nama_aplikasi' => $this->identitas->nama_aplikasi,
             'sebutan_kab' => $this->identitas->sebutan_kab,
-            'jumlah_desa' => str_replace('.','',$dataKirim['desa']['value']),
-            'jumlah_penduduk' => str_replace('.','',$dataKirim['penduduk']['value']),
-            'jumlah_keluarga' => str_replace('.','',$dataKirim['keluarga']['value']),
-            'jumlah_rtm' => str_replace('.','',$dataKirim['rtm']['value'] ?? 0),
-            'jumlah_bantuan' => str_replace('.','',$dataKirim['bantuan']['value']),
+            'jumlah_desa' => str_replace('.', '', $dataKirim['desa']['value']),
+            'jumlah_penduduk' => str_replace('.', '', $dataKirim['penduduk']['value']),
+            'jumlah_keluarga' => str_replace('.', '', $dataKirim['keluarga']['value']),
+            'jumlah_rtm' => str_replace('.', '', $dataKirim['rtm']['value'] ?? 0),
+            'jumlah_bantuan' => str_replace('.', '', $dataKirim['bantuan']['value']),
         ];
 
         try {

@@ -10,7 +10,6 @@ use App\Models\Enums\StatistikRtmEnum;
 use App\Services\ConfigApiService;
 use App\Services\SummaryWebsiteService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {

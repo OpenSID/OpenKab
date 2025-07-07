@@ -14,11 +14,7 @@
     <div class="container-fluid bg-primary mb-5 wow fadeIn p-3" data-wow-delay="0.1s">
         <div class="container">
             @include('web.partials.summary')
-            @include('web.partials.search', [
-                'listKabupaten' => $listKabupaten,
-                'listKecamatan' => $listKecamatan,
-                'listDesa' => $listDesa,
-            ])
+            @include('web.partials.search')
         </div>
     </div>
     <!-- Search End -->
@@ -58,41 +54,10 @@
                 headers: header,
                 success: function(result) {
                     let category = result.data.categoriesItems;
-                    let listDesa = result.data.listDesa;
-                    let listKecamatan = result.data.listKecamatan;
-                    let listKabupaten = result.data.listKabupaten;
 
                     for (let index in category) {
                         $(`.kategori-item .jumlah-${index}-elm`).text(category[index]['value']);
                     }
-
-                    let _optionKabupaten = [];
-                    let _optionKecamatan = [];
-                    let _optionDesa = [];
-
-                    for (let item in listKabupaten) {
-                        _optionKabupaten.push(`<option>${item}</option>`);
-                    }
-                    for (let item in listKecamatan) {
-                        for (let kecamatan in listKecamatan[item]) {
-                            _optionKecamatan.push(
-                                `<option value='${listKecamatan[item][kecamatan]}'>${listKecamatan[item][kecamatan]}</option>`
-                            );
-                        }
-                    }
-
-                    for (let item in listDesa) {
-                        _optionDesa.push(`<optgroup label='${item}'>`);
-                        for (let desa in listDesa[item]) {
-                            _optionDesa.push(
-                                `<option value='${desa}'>${listDesa[item][desa]}</option>`);
-                        }
-                        _optionDesa.push(`</optgroup>`);
-                    }
-
-                    $('select[name=search_kabupaten]').append(_optionKabupaten.join(''));
-                    $('select[name=search_kecamatan]').append(_optionKecamatan.join(''));
-                    $('select[name=search_desa]').append(_optionDesa.join(''));
                 }
             });
         });

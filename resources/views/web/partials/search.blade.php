@@ -2,13 +2,19 @@
     <div class="col-md-10">
         <div class="row g-2">
             <div class="col-md-4">
-                {!! Form::select('search_kabupaten', $listKabupaten, null, ['class' => 'form-select border-0 py-3']) !!}
+                {!! Form::select('search_kabupaten', [], null, [
+                    'class' => 'form-select border-0 py-3',
+                    'id' => 'filter_kabupaten',
+                ]) !!}
             </div>
             <div class="col-md-4">
-                {!! Form::select('search_kecamatan', $listKecamatan, null, ['class' => 'form-select border-0 py-3']) !!}
+                {!! Form::select('search_kecamatan', [], null, [
+                    'class' => 'form-select border-0 py-3',
+                    'id' => 'filter_kecamatan',
+                ]) !!}
             </div>
             <div class="col-md-4">
-                {!! Form::select('search_desa', $listDesa, null, ['class' => 'form-select border-0 py-3']) !!}
+                {!! Form::select('search_desa', [], null, ['class' => 'form-select border-0 py-3', 'id' => 'filter_desa']) !!}
             </div>
         </div>
     </div>
@@ -16,31 +22,12 @@
         <button class="btn btn-dark border-0 w-100 py-3" disabled id="search_button">Tampilkan</button>
     </div>
 </div>
-
+@include('components.wilayah_filter_js')
 @push('scripts')
     @include('statistik.chart')
     <script nonce="{{ csp_nonce() }}">
-        document.addEventListener("DOMContentLoaded", function (event) {
-            $('select[name=search_desa]').find('optgroup').hide()
-            $('select[name=search_kecamatan]').find('optgroup').hide()
-
-            $('select[name=search_kabupaten]').change(function () {
-                let _val = $(this).val()
-                $('select[name=search_kecamatan]').find('optgroup').hide()
-                $('select[name=search_kecamatan]').find('optgroup[label="' + _val + '"]').show()
-                $('select[name=search_kecamatan]').find('optgroup[label="' + _val + '"]').find('option:first').prop('selected', 1)
-                $('select[name=search_kecamatan]').trigger('change')
-            })
-
-            $('select[name=search_kecamatan]').change(function () {
-                let _val = $(this).val()
-                $('select[name=search_desa]').find('optgroup').hide()
-                $('select[name=search_desa]').find('optgroup[label="' + _val + '"]').show()
-                $('select[name=search_desa]').find('optgroup[label="' + _val + '"]').find('option:first').prop('selected', 1)
-                $('select[name=search_desa]').trigger('change')
-            })
-
-            $('select[name=search_desa]').change(function () {
+        document.addEventListener("DOMContentLoaded", function(event) {
+            $('select[name=search_desa]').change(function() {
                 let _val = $(this).val()
                 $('#search_button').prop('disabled', 1)
                 if (_val) {
@@ -48,7 +35,7 @@
                 }
             })
 
-            $('#search_button').click(function () {
+            $('#search_button').click(function() {
                 let configDesa = $('select[name=search_desa]').val()
                 $.ajax({
                     url: '{{ route('web.search') }}',
@@ -56,25 +43,26 @@
                     data: {
                         config_desa: configDesa
                     },
-                    beforeSend: function () {
-                        $('#statistik_result').html('Mohon ditunggu, sedang mengambil data dari server ......')
+                    beforeSend: function() {
+                        $('#statistik_result').html(
+                            'Mohon ditunggu, sedang mengambil data dari server ......')
                     },
-                    success: function (data) {
+                    success: function(data) {
                         $('#statistik_result').replaceWith(data.content)
                         $('#statistik_result li.list-group-item:first').addClass('active')
                         initializeDatatable($('#statistik_result li.list-group-item:first'))
                     },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
                         $('#statistik_result').html(XMLHttpRequest.responseJSON['message'])
                     }
                 })
             })
 
-            $('body').on('click', '#statistik_result .panel-heading', function () {
+            $('body').on('click', '#statistik_result .panel-heading', function() {
                 $(this).find('a > i').toggleClass('fa-angle-down fa-angle-up')
             })
 
-            $('body').on('click', '#statistik_result .panel-collapse ul>li', function () {
+            $('body').on('click', '#statistik_result .panel-collapse ul>li', function() {
                 initializeDatatable($(this))
                 $('#statistik_result .panel-collapse ul>li.active').removeClass('active')
                 $(this).addClass('active')
@@ -88,20 +76,21 @@
                 let bulan = new Date().getMonth() + 1
                 let exclude_chart = ['JUMLAH', 'BELUM MENGISI', 'TOTAL']
                 $.ajax({
-                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/statistik-web' }}/${kategori}?filter[id]=${default_id}&filter[tahun]=${tahun}&filter[bulan]=${bulan}&config_desa=${config_desa}`,
+                    url: `{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web' }}/${kategori}?filter[id]=${default_id}&filter[tahun]=${tahun}&filter[bulan]=${bulan}&config_desa=${config_desa}`,
                     type: 'get',
                     dataType: 'json',
                     data: {},
-                    beforeSend: function () {
-                        $('#tabel-data tbody').html('Mohon ditunggu, sedang mengambil data dari server ......')
+                    beforeSend: function() {
+                        $('#tabel-data tbody').html(
+                            'Mohon ditunggu, sedang mengambil data dari server ......')
                     },
-                    success: function (json) {
+                    success: function(json) {
                         if (json.data.length > 0) {
                             data_grafik = [];
                             generateIsiTable('#tabel-data', elm, json.data)
 
-                            json.data.forEach(function (item, index) {
-                                if(! exclude_chart.includes(item.attributes.nama)) {
+                            json.data.forEach(function(item, index) {
+                                if (!exclude_chart.includes(item.attributes.nama)) {
                                     data_grafik.push(item.attributes)
                                 }
 
@@ -117,7 +106,7 @@
                 })
             }
 
-            function generateIsiTable(tableSelector, elm, data){
+            function generateIsiTable(tableSelector, elm, data) {
                 let _table = $(tableSelector)
                 let _tbody = _table.find('tbody')
                 let _trs = []
@@ -146,13 +135,14 @@
 @endpush
 
 @push('styles')
-    <style nonce="{{ csp_nonce() }}" >
+    <style nonce="{{ csp_nonce() }}">
         #barChart {
             min-height: 250px;
             height: 250px;
             max-height: 250px;
             max-width: 100%;
         }
+
         #donutChart {
             min-height: 250px;
             height: 250px;

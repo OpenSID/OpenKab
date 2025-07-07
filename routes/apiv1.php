@@ -101,10 +101,3 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
     });    
 });
-
-// Data utama website
-Route::get('data-website', WebsiteController::class);
-Route::get('data-summary', SummaryController::class);
-
-// Desa teraktif
-Route::get('desa-aktif', [KategoriDesaController::class, 'index']);

@@ -4,12 +4,14 @@ namespace App\Models\CMS;
 
 use App\Models\Enums\StatusEnum;
 use Carbon\Carbon;
+use Database\Factories\PageFactory;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Page extends SluggableModel
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     public $table = 'pages';
 
@@ -40,6 +42,11 @@ class Page extends SluggableModel
         'content' => 'required|string|max:65535',
         'state' => 'required|boolean',
     ];
+
+    protected static function newFactory()
+    {
+        return PageFactory::new();
+    }
 
     /**
      * @return mixed

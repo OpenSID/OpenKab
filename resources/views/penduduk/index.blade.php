@@ -157,6 +157,7 @@
                             "filter[kode_kecamatan]": $('#filter_kecamatan').val(),
                             "filter[kode_desa]": $('#filter_desa').val(),
                             "filter[bantuan-penduduk]": $('#bantuan-penduduk').val(),
+                            "filter[program_id]": $('#program_id').val(),
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
                             "chart-view": chart?.view ?? null,
@@ -367,6 +368,7 @@
                 $('#filter_kecamatan').val('').change();
                 $('#filter_desa').val('').change();
                 $('.select2-filter').val('').change();
+                $('#collapse-filter input').val('');
                 kriteria_belum_mengisi = null;
                 kriteria_jumlah = null;
                 kriteria_total = null;

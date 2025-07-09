@@ -3,12 +3,14 @@
 namespace App\Models\CMS;
 
 use App\Models\OpenKabModel as Model;
+use Database\Factories\DownloadFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Download extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     public $table = 'downloads';
 
@@ -33,6 +35,11 @@ class Download extends Model
         'description' => 'required|string|max:65535',
         'state' => 'required|boolean',
     ];
+
+    protected static function newFactory()
+    {
+        return DownloadFactory::new();
+    }
 
     /**
      * Get the counter associated with the Download.

@@ -6,6 +6,7 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perbaikan BUG
 
+1. [#764](https://github.com/OpenSID/OpenKab/issues/764) Perbaikan statistik RTM tidak tampil.
 
 #### Perubahan Teknis
 

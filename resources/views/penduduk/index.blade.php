@@ -150,6 +150,8 @@
                             "filter[tag_id_card]": $("#tag_id_card").val(),
                             "filter[agama_id]": $('#agama_id').val(),
                             "filter[bpjs_ketenagakerjaan]": $('#bpjs_ketenagakerjaan').val(),
+                            "filter[akta_lahir]": $('#akta_lahir').val(),
+                            "filter[akta_perkawinan]": $('#akta_perkawinan').val(),
                             "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
                             "filter[clusterDesa.rw]": $('#rw').val(),
                             "filter[clusterDesa.rt]": $('#rt').val(),

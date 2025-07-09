@@ -85,9 +85,13 @@ class Controller extends BaseController
         try {
             $response = Http::withHeaders([
                 'token' => config('app.tokenPantau'),
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ])->post($host_pantau.'/index.php/api/track/openkab?token='.config('app.tokenPantau'), $data);
             cache()->put('track', date('Y m d'), 60 * 60 * 24);
-
+            if(!$response->successful()) {
+                Log::error('Gagal kirim track OpenKab ke Pantau: '.$host_pantau.' - Response: '.$response->body());
+            }
             return;
         } catch (Exception $e) {
             Log::notice($e);

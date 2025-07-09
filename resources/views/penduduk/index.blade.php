@@ -149,6 +149,7 @@
                             "filter[id_kk]": $('#id_kk').val(),
                             "filter[tag_id_card]": $("#tag_id_card").val(),
                             "filter[agama_id]": $('#agama_id').val(),
+                            "filter[bpjs_ketenagakerjaan]": $('#bpjs_ketenagakerjaan').val(),
                             "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
                             "filter[clusterDesa.rw]": $('#rw').val(),
                             "filter[clusterDesa.rt]": $('#rt').val(),

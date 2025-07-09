@@ -8,6 +8,7 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 1. [#764](https://github.com/OpenSID/OpenKab/issues/764) Perbaikan statistik RTM tidak tampil.
 2. [#726](https://github.com/OpenSID/OpenKab/issues/726) Perbaikan Request Time out - Modul data statistik penduduk.
+3. [#732](https://github.com/OpenSID/OpenKab/issues/732) Perbaikan jumlah statistik Penduduk - BPJS ketenagakerjaan.
 
 #### Perubahan Teknis
 

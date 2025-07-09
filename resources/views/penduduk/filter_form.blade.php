@@ -267,6 +267,16 @@
                 value="{{ $filters['program_id'] ?? '' }}">
         </div>
         <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Kepemilikan BPJS Ketenagakerjaan</label>
+                    <select id="bpjs_ketenagakerjaan" class="form-control select2-filter"
+                        data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}' placeholder="Pilih Kepemilikan BPJS Ketenagakerjaan">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <div class="input-group">

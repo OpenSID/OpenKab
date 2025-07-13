@@ -2,6 +2,7 @@
 
 namespace App\Models\CMS;
 
+use Database\Factories\CategoryFactory;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -38,6 +39,11 @@ class Category extends SluggableModel
                 'onUpdate' => true,
             ],
         ];
+    }
+
+    protected static function newFactory()
+    {
+        return CategoryFactory::new();
     }
 
     public function articles(): \Illuminate\Database\Eloquent\Relations\HasMany

@@ -41,7 +41,11 @@
 <script nonce="{{ csp_nonce() }}" type="text/javascript">
 document.addEventListener("DOMContentLoaded", function (event) {
     "use strict";
-    $.get('{{ url('index.php/api/v1/desa-aktif') }}', {}, function(result){
+
+    const urlDesaAktif = new URL(
+                    "{{ config('app.databaseGabunganUrl') . '/api/v1/desa-aktif' }}");
+
+    $.get(urlDesaAktif, {}, function(result){
         if (result.data.length > 0){
             let _elm
             result.data.forEach((item, index) => {
@@ -55,6 +59,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
             })
         }
     }, 'json')
+    // $.get('{{ url('index.php/api/v1/desa-aktif') }}', {}, function(result){
+    //     if (result.data.length > 0){
+    //         let _elm
+    //         result.data.forEach((item, index) => {
+    //             _elm = $('.replace-content-property .kelurahan-item').eq(index)
+    //             _elm.find('.nama-desa-elm').text(item.attributes.nama_desa)
+    //             _elm.find('.website-elm').attr('href', item.attributes.website ?? '#')
+    //             _elm.find('.penduduk-elm').html('<i class="fa fa-users text-primary me-2"></i>'+item.attributes.penduduk+ ' Penduduk')
+    //             _elm.find('.alamat-elm').html('<i class="fa fa-map-marker-alt text-primary me-2"></i>'+(item.attributes.alamat ?? 'alamat belum ditentukan'))
+    //             _elm.find('.keluarga-elm').html('<i class="fa fa-venus-mars text-primary me-2"></i>'+item.attributes.keluarga+ ' Keluarga')
+    //             _elm.find('.rtm-elm').html('<i class="fa fa-home text-primary me-2"></i>'+item.attributes.rtm+ ' RTM')
+    //         })
+    //     }
+    // }, 'json')
 });
 </script>
 @endpush

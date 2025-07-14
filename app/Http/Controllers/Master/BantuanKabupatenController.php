@@ -17,6 +17,10 @@ class BantuanKabupatenController extends Controller
     public function index()
     {
         $listPermission = $this->generateListPermission();
+        $clearCache = request('clear_cache', false);
+        if ($clearCache) {
+            (new \App\Services\BantuanService)->clearCache('bantuan', ['filter[id]' => $clearCache]);
+        }
 
         return view('master.bantuan.index')->with($listPermission);
     }

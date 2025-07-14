@@ -262,6 +262,36 @@
                 </div>
             </div>
         </div>
+        <div class="row fade">
+            <input id="program_id" class="form-control" placeholder="program id" type="hidden"
+                value="{{ $filters['program_id'] ?? '' }}">
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Kepemilikan BPJS Ketenagakerjaan</label>
+                    <select id="bpjs_ketenagakerjaan" class="form-control select2-filter"
+                        data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}' placeholder="Pilih Kepemilikan BPJS Ketenagakerjaan">
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Kepemilikan Akta Kelahiran</label>
+                    <select id="akta_lahir" class="form-control select2-filter"
+                        data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}' placeholder="Pilih Kepemilikan Akta Kelahiran">
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Kepemilikan Akta Perkawinan</label>
+                    <select id="akta_perkawinan" class="form-control select2-filter"
+                        data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}' placeholder="Pilih Kepemilikan Akta Perkawinan">
+                    </select>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">

@@ -15,20 +15,20 @@
 @section('content')
     @include('partials.breadcrumbs')
     @if (isset($chart['view']))
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <div>
-                        <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="chart" id="grafik">
+                                <canvas id="barChart"></canvas>
+                            </div>
+                            <hr class="hr-chart">
                         </div>
-                        <hr class="hr-chart">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     @endif
     <div class="row">
         <div class="col-lg-12">
@@ -36,8 +36,8 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-3">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="false" aria-controls="collapse-filter">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
+                                role="button" aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
                             <button id="cetak" type="button" class="btn btn-primary btn-sm">
@@ -96,7 +96,7 @@
 @section('js')
 
     @if (isset($chart['view']))
-    @include('penduduk.chart')
+        @include('penduduk.chart')
     @endif
 
     <script nonce="{{ csp_nonce() }}">
@@ -149,6 +149,9 @@
                             "filter[id_kk]": $('#id_kk').val(),
                             "filter[tag_id_card]": $("#tag_id_card").val(),
                             "filter[agama_id]": $('#agama_id').val(),
+                            "filter[bpjs_ketenagakerjaan]": $('#bpjs_ketenagakerjaan').val(),
+                            "filter[akta_lahir]": $('#akta_lahir').val(),
+                            "filter[akta_perkawinan]": $('#akta_perkawinan').val(),
                             "filter[clusterDesa.dusun]": $("#dusun option:selected").text(),
                             "filter[clusterDesa.rw]": $('#rw').val(),
                             "filter[clusterDesa.rt]": $('#rt').val(),
@@ -156,6 +159,7 @@
                             "filter[kode_kecamatan]": $('#filter_kecamatan').val(),
                             "filter[kode_desa]": $('#filter_desa').val(),
                             "filter[bantuan-penduduk]": $('#bantuan-penduduk').val(),
+                            "filter[program_id]": $('#program_id').val(),
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
                             "chart-view": chart?.view ?? null,
@@ -191,9 +195,9 @@
                         if (json.data.length > 0 && json.meta && json.meta.all_data) {
 
                             // jika chart di akses dari halaman statistik penduduk
-                            if(chart && chart.view){
+                            if (chart && chart.view) {
                                 getDataset(json.meta.all_data, chart)
-                                grafik()    
+                                grafik()
                             }
 
                         }
@@ -204,7 +208,7 @@
                         //     // jika chart di akses dari halaman statistik penduduk
                         //     if(chart && chart.view){
                         //         getDataset(json.data, chart)
-                        //         grafik()    
+                        //         grafik()
                         //     }
 
 
@@ -366,6 +370,7 @@
                 $('#filter_kecamatan').val('').change();
                 $('#filter_desa').val('').change();
                 $('.select2-filter').val('').change();
+                $('#collapse-filter input').val('');
                 kriteria_belum_mengisi = null;
                 kriteria_jumlah = null;
                 kriteria_total = null;
@@ -426,7 +431,9 @@
                 'suku': attr => attr.suku,
                 'bpjs-ketenagakerjaan': attr => attr.bpjs_ketenagakerjaan,
                 'status-kehamilan': attr => attr.statusHamil,
-                ...(isKategoriBantuan && { [kategori]: attr => namaQuery }),
+                ...(isKategoriBantuan && {
+                    [kategori]: attr => namaQuery
+                }),
             };
 
             const isMatch = {
@@ -458,7 +465,9 @@
                 'suku': (label) => label === judul,
                 'bpjs-ketenagakerjaan': (label) => label === judul,
                 'status-kehamilan': (label) => label === judul,
-                ...(isKategoriBantuan && { [kategori]: (label) => label === judul }),
+                ...(isKategoriBantuan && {
+                    [kategori]: (label) => label === judul
+                }),
             };
 
             data.forEach(item => {
@@ -467,7 +476,10 @@
                 const nama = attr.nama_kecamatan;
 
                 if (!grouped[kode]) {
-                    grouped[kode] = { nama: nama, total: 0 };
+                    grouped[kode] = {
+                        nama: nama,
+                        total: 0
+                    };
                 }
 
                 const label = getLabel[kategori]?.(attr);
@@ -567,6 +579,5 @@
         //         value: val.total
         //     }));
         // }
-
     </script>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Models\CMS;
 
 use Carbon\Carbon;
+use Database\Factories\ArticleFactory;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -55,6 +56,11 @@ class Article extends SluggableModel
         //     'max' => 'Judul minimal :max karakter',
         // ]
     ];
+
+    protected static function newFactory()
+    {
+        return ArticleFactory::new();
+    }
 
     /**
      * Carbon instance fields.

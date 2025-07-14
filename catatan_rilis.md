@@ -13,6 +13,7 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 5. [#749](https://github.com/OpenSID/OpenKab/issues/749) Perbaikan dropdown pada filter wilayah halaman website utama.
 6. [#748](https://github.com/OpenSID/OpenKab/issues/748) Perbaikan statistik website utama.
 7. [#772](https://github.com/OpenSID/OpenKab/issues/772) Perbaikan response json ketika kirim data ke pantau, untuk mempermudah pengecekan pesan error.
+8. [#766](https://github.com/OpenSID/OpenKab/issues/766) Perbaikan dropdown dashboard demografi.
 
 #### Perubahan Teknis
 

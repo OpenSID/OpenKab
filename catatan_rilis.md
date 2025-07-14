@@ -6,6 +6,11 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perbaikan BUG
 
+1. [#764](https://github.com/OpenSID/OpenKab/issues/764) Perbaikan statistik RTM tidak tampil.
+2. [#726](https://github.com/OpenSID/OpenKab/issues/726) Perbaikan Request Time out - Modul data statistik penduduk.
+3. [#732](https://github.com/OpenSID/OpenKab/issues/732) Perbaikan jumlah statistik Penduduk - BPJS ketenagakerjaan.
+4. [#734](https://github.com/OpenSID/OpenKab/issues/734) Perbaikan jumlah statistik Penduduk - Akte Kelahiran.
+5. [#749](https://github.com/OpenSID/OpenKab/issues/749) Perbaikan dropdown pada filter wilayah halaman website utama.
 
 #### Perubahan Teknis
 
@@ -15,3 +20,5 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 4. [#757](https://github.com/OpenSID/OpenKab/issues/757) Penambahan unit testing pada SlideController.
 5. [#756](https://github.com/OpenSID/OpenKab/issues/756) Penambahan unit testing pada PageController.
 6. [#751](https://github.com/OpenSID/OpenKab/issues/751) Penambahan unit testing DownloadController Daftar Unduhan.
+7. [#750](https://github.com/OpenSID/OpenKab/issues/750) Penyesuaian route dan hapus file yang tidak di butuhkan pada controller data-summary dan desa-aktif api.
+8. [#758](https://github.com/OpenSID/OpenKab/issues/758) Hapus ketergantungan terhadap database gabungan secara langsung.

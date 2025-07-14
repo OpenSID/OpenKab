@@ -5,13 +5,8 @@ namespace App\Http\Controllers\Web;
 use App\Enums\KategoriSasaranBantuanEnum;
 use App\Enums\SasaranStatistikKeluargaEnum;
 use App\Http\Controllers\Controller;
-use App\Models\Bantuan;
-use App\Models\Config;
 use App\Models\Enums\StatistikPendudukEnum;
 use App\Models\Enums\StatistikRtmEnum;
-use App\Models\Keluarga;
-use App\Models\Penduduk;
-use App\Models\Rtm;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -23,12 +18,15 @@ class SearchController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $desa = Config::find($request->get('config_desa'));
+        $totalDesa = 0;
+        $pendudukSummary = 0;
+        $configSummary = 0;
+        $bantuanSummary = 0;
         $categoriesItems = [
-            ['text' => 'penduduk', 'key' => 'penduduk', 'value' => angka_lokal(Penduduk::filterDesa()->count()), 'icon' => 'web/img/penduduk.jpg'],
-            ['text' => 'keluarga', 'key' => 'keluarga', 'value' => angka_lokal(Keluarga::filterDesa()->count()), 'icon' => 'web/img/keluarga.jpg'],
-            ['text' => 'RTM', 'key' => 'rtm', 'value' => angka_lokal(Rtm::filterDesa()->count()), 'icon' => 'web/img/kelurahan.jpg'],
-            ['text' => 'bantuan', 'key' => 'bantuan', 'value' => angka_lokal(Bantuan::filterDesa()->count()), 'icon' => 'web/img/bantuan.jpg'],
+            ['text' => 'penduduk', 'key' => 'penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
+            ['text' => 'keluarga', 'key' => 'keluarga', 'value' => 0, 'icon' => 'web/img/keluarga.jpg'],
+            ['text' => 'RTM', 'key' => 'rtm', 'value' => 0, 'icon' => 'web/img/kelurahan.jpg'],
+            ['text' => 'bantuan', 'key' => 'bantuan', 'value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
         $groupStatistik = [
             ['text' => 'Penduduk', 'key' => 'penduduk', 'items' => StatistikPendudukEnum::allKeyLabel(), 'icon' => 'fa-pie-chart'],

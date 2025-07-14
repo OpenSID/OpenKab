@@ -11,6 +11,7 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 3. [#732](https://github.com/OpenSID/OpenKab/issues/732) Perbaikan jumlah statistik Penduduk - BPJS ketenagakerjaan.
 4. [#734](https://github.com/OpenSID/OpenKab/issues/734) Perbaikan jumlah statistik Penduduk - Akte Kelahiran.
 5. [#749](https://github.com/OpenSID/OpenKab/issues/749) Perbaikan dropdown pada filter wilayah halaman website utama.
+6. [#748](https://github.com/OpenSID/OpenKab/issues/748) Perbaikan statistik website utama.
 
 #### Perubahan Teknis
 

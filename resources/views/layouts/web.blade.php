@@ -14,7 +14,8 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap"
+        rel="stylesheet">
 
     @vite('resources/sass/web.scss', 'build-web')
 
@@ -43,6 +44,7 @@
     <script defer src="{{ asset('assets/costume/js/admin.js') }}"></script>
     <script defer src="{{ asset('web/js/main.js') }}"></script>
     @stack('scripts')
+    @stack('js')
 </body>
 
 </html>

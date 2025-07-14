@@ -39,8 +39,10 @@
 
             $('#filter_kabupaten').on('change', function() {
                 let id = $(this).val();
-                $('#filter_kecamatan').empty().trigger("change");
-                if (id != undefined && id != null) {
+                $('#filter_kecamatan').empty();
+                $('#filter_kecamatan').trigger("change");
+                $('#filter_kecamatan').prop('disabled', true);
+                if (id) {
                     $.ajax({
                         url: urlKecamatan + '/' + id,
                         type: 'GET',
@@ -49,7 +51,6 @@
                             "filter[search]": id
                         },
                     }).done(function(data) {
-                        $('#filter_kecamatan').empty().trigger("change");
                         var optionEmpty = new Option("", "");
                         $("#filter_kecamatan").append(optionEmpty);
                         for (var i = 0; i < data.length; i++) {
@@ -57,14 +58,16 @@
                                 .kode_kecamatan, false, false);
                             $("#filter_kecamatan").append(newOption);
                         }
+                        $('#filter_kecamatan').prop('disabled', false);
                     })
                 }
             })
 
             $('#filter_kecamatan').on('change', function() {
                 let id = $(this).val();
-                $('#filter_desa').empty().trigger("change");
-                if (id != undefined && id != null) {
+                $('#filter_desa').empty();
+                $('#filter_desa').prop('disabled', true);
+                if (id) {
                     $.ajax({
                         url: urlDesa + '/' + id,
                         type: 'GET',
@@ -73,7 +76,6 @@
                             "filter[search]": id
                         },
                     }).done(function(data) {
-                        $('#filter_desa').empty().trigger("change");
                         var optionEmpty = new Option("", "");
                         $("#filter_desa").append(optionEmpty);
                         for (var i = 0; i < data.length; i++) {
@@ -81,6 +83,7 @@
                                 .kode_desa, false, false);
                             $("#filter_desa").append(newOption);
                         }
+                        $('#filter_desa').prop('disabled', false);
                     })
                 }
             })

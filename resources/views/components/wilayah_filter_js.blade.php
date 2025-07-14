@@ -22,6 +22,7 @@
             $('#filter_kabupaten').select2({
                 placeholder: "Pilih Kabupaten",
                 allowClear: true,
+                height: '100%',
                 width: '100%',
             })
 

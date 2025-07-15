@@ -186,8 +186,6 @@ class LaporanBulananController extends Controller
 
     public function detailPenduduk($rincian, $tipe)
     {
-        // $data = $this->penduduk->sumberData($rincian, $tipe, session('tahunku'), session('bulanku'));
-
         $data['rincian'] = $rincian;
         $data['tipe'] = $tipe;
         $data['tahun'] = session('tahunku');
@@ -197,7 +195,15 @@ class LaporanBulananController extends Controller
         $data['kode_kecamatan'] = session('kode_kecamatan');
         $data['page_title'] = 'Laporan Kependudukan Bulanan';
         $data['page_description'] = 'Rincian Kependudukan Bulanan';
-        $titlePeriode = strtoupper(bulan($data['bulan'])).' '.$data['tahun'];
+
+        $data['title'] = $this->generateTitle($rincian, $tipe);
+
+        return view('laporan-bulanan.detail.index', $data);
+    }
+
+    private function generateTitle($rincian, $tipe)
+    {
+        $titlePeriode = strtoupper(bulan(session('bulanku'))).' '.session('tahunku');
         $keluarga = ['kk', 'kk_l', 'kk_p'];
         switch (strtolower($rincian)) {
             case 'awal':
@@ -228,10 +234,12 @@ class LaporanBulananController extends Controller
             case 'akhir':
                 $title = 'PENDUDUK/KELUARGA AKHIR BULAN '.$titlePeriode;
                 break;
+            default:
+                $title = 'LAPORAN BULAN '.$titlePeriode;
+                break;
         }
-        $data['title'] = $title;
 
-        return view('laporan-bulanan.detail.index', $data);
+        return $title;
     }
 
     public function exportExcel()
@@ -255,11 +263,26 @@ class LaporanBulananController extends Controller
 
     public function exportExcelDetail($rincian, $tipe)
     {
-        $data['tahun'] = session('tahunku');
-        $data['bulan'] = session('bulanku');
-        $data = $this->penduduk->sumberData($rincian, $tipe, session('tahunku'), session('bulanku'));
-        $data['rincian'] = $rincian;
-        $data['tipe'] = $tipe;
+        $tahun = session('tahunku');
+        $bulan = session('bulanku');
+        $kode_kabupaten = session('kode_kabupaten');
+        $kode_kecamatan = session('kode_kecamatan');
+        $kode_desa = session('kode_desa');
+        $filters = [
+            'filter[rincian]' => $rincian,
+            'filter[tipe]' => $tipe,
+            'filter[tahun]' => $tahun,
+            'filter[bulan]' => $bulan,
+            'filter[kode_kabupaten]' => $kode_kabupaten,
+            'filter[kode_kecamatan]' => $kode_kecamatan,
+            'filter[kode_desa]' => $kode_desa,
+            'kode_kabupaten' => $kode_kabupaten,
+            'kode_kecamatan' => $kode_kecamatan,
+            'kode_desa' => $kode_desa,
+            'page[size]' => 10000000,
+        ];
+        $data = ['main' => $this->penduduk->sumberData($filters),
+            'title' => $this->generateTitle($rincian, $tipe)];
 
         $data['page_title'] = 'Laporan Kependudukan Bulanan';
         $data['page_description'] = 'Rincian Kependudukan Bulanan';

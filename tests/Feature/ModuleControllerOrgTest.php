@@ -52,13 +52,13 @@ class ModuleControllerOrgTest extends WebsiteTestCase
 
         // Assert: Struktur response yang benar
         $response->assertStatus(200);
-        
+
         // Memastikan view data tersedia
         $viewData = $response->getOriginalContent()->getData();
         $this->assertArrayHasKey('content', $viewData);
         $this->assertArrayHasKey('moduleName', $viewData);
         $this->assertEquals('org', $viewData['moduleName']);
-        
+
         // Content harus berupa collection atau array (bisa kosong)
         $this->assertTrue(is_iterable($viewData['content']));
     }
@@ -72,7 +72,7 @@ class ModuleControllerOrgTest extends WebsiteTestCase
         // Assert: Memastikan menggunakan partial org yang benar
         $response->assertStatus(200);
         $response->assertViewIs('web.module');
-        
+
         // Memastikan JavaScript orgchart dimuat
         $response->assertSee('orgchart');
         $response->assertSee('nodeTemplate');

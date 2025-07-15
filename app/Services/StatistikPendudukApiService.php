@@ -12,7 +12,7 @@ class StatistikPendudukApiService extends BaseApiService
         // $filters['kode_kabupaten'] = 5306;
         $kode_kabupaten = session('kode_kabupaten');
         $kode_kecamatan = session('kode_kecamatan');
-        $config_id = $this->getConfigId();
+        $kode_desa = session('kode_desa');
 
         // Panggil API dan ambil data
         $data = $this->apiRequest('/api/v1/statistik/laporan-bulanan', [
@@ -20,10 +20,10 @@ class StatistikPendudukApiService extends BaseApiService
             'filter[bulan]' => $bulan,
             'filter[kode_kabupaten]' => $kode_kabupaten,
             'filter[kode_kecamatan]' => $kode_kecamatan,
-            'filter[config_desa]' => $config_id,
+            'filter[kode_desa]' => $kode_desa,
             'kode_kabupaten' => $kode_kabupaten,
             'kode_kecamatan' => $kode_kecamatan,
-            'config_desa' => $config_id,
+            'kode_desa' => $kode_desa,
         ]);
         if (! $data) {
             return collect([]);
@@ -39,7 +39,7 @@ class StatistikPendudukApiService extends BaseApiService
     {
         $kode_kabupaten = session('kode_kabupaten');
         $kode_kecamatan = session('kode_kecamatan');
-        $config_id = $this->getConfigId();
+        $kode_desa = session('kode_desa');
 
         // Panggil API dan ambil data
         $data = $this->apiRequest('/api/v1/statistik/laporan-bulanan/sumber-data', [
@@ -49,10 +49,10 @@ class StatistikPendudukApiService extends BaseApiService
             'filter[bulan]' => $bulan,
             'filter[kode_kabupaten]' => $kode_kabupaten,
             'filter[kode_kecamatan]' => $kode_kecamatan,
-            'filter[config_desa]' => $config_id,
+            'filter[kode_desa]' => $kode_desa,
             'kode_kabupaten' => $kode_kabupaten,
             'kode_kecamatan' => $kode_kecamatan,
-            'config_desa' => $config_id,
+            'kode_desa' => $kode_desa,
         ]);
         if (! $data) {
             return collect([]);

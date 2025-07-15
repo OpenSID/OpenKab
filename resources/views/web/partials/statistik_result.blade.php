@@ -1,7 +1,8 @@
 <div class="container" id="statistik_result">
     <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s">
-        <h1 class="mb-3">Data Statistik {{ $desa->nama_desa }}</h1>
-        <p>Informasi ini menampilkan jumlah statistik yang ada pada portal kelurahan masing - masing bersifat realtime.</p>
+        <h1 class="mb-3">Data Statistik {{ $desa['nama_desa'] }}</h1>
+        <p>Informasi ini menampilkan jumlah statistik yang ada pada portal kelurahan masing - masing bersifat realtime.
+        </p>
     </div>
     <div class="row g-4">
         @foreach ($categoriesItems as $item)
@@ -12,23 +13,29 @@
     <div class="row">
         <div class="col-3">
             @foreach ($groupStatistik as $index => $stat)
-            <div class="panel-group" role="tablist">
-                <div class="panel panel-default">
-                  <div class="panel-heading" role="tab" id="collapseListGroupHeading1-{{$stat['text']}}">
-                        <a class="collapsed  d-flex justify-content-between fs-5" data-bs-toggle="collapse" href="#collapseListGroup1-{{$stat['text']}}" aria-expanded="false" aria-controls="collapseListGroup1">
-                            <span> <i class="fa {{ $stat['icon'] }}"></i> Statistik {{ $stat['text'] }} </span>
-                        <i class="fa {{ !$index ? 'fa-angle-up' : 'fa-angle-down' }}"></i>
-                      </a>
-                  </div>
-                  <div id="collapseListGroup1-{{$stat['text']}}" class="panel-collapse collapse {{ !$index ? 'show' : '' }}" role="tabpanel" aria-labelledby="collapseListGroupHeading1-{{$stat['text']}}">
-                    <ul class="list-group">
-                    @foreach ($stat['items'] as $key => $item)
-                        <li class="list-group-item" role="button" data-id="{{ $key }}" data-configdesa="{{ $desa->id }}" data-kategori="{{ $stat['key'] }}">{{ $item }}</li>
-                    @endforeach
-                    </ul>
-                  </div>
+                <div class="panel-group" role="tablist">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="collapseListGroupHeading1-{{ $stat['text'] }}">
+                            <a class="collapsed  d-flex justify-content-between fs-5" data-bs-toggle="collapse"
+                                href="#collapseListGroup1-{{ $stat['text'] }}" aria-expanded="false"
+                                aria-controls="collapseListGroup1">
+                                <span> <i class="fa {{ $stat['icon'] }}"></i> Statistik {{ $stat['text'] }} </span>
+                                <i class="fa {{ !$index ? 'fa-angle-up' : 'fa-angle-down' }}"></i>
+                            </a>
+                        </div>
+                        <div id="collapseListGroup1-{{ $stat['text'] }}"
+                            class="panel-collapse collapse {{ !$index ? 'show' : '' }}" role="tabpanel"
+                            aria-labelledby="collapseListGroupHeading1-{{ $stat['text'] }}">
+                            <ul class="list-group">
+                                @foreach ($stat['items'] as $key => $item)
+                                    <li class="list-group-item" role="button" data-id="{{ $key }}"
+                                        data-configdesa="{{ $desa['id'] }}" data-kategori="{{ $stat['key'] }}">
+                                        {{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-              </div>
             @endforeach
         </div>
         <div class="col-9">
@@ -36,15 +43,16 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-2">
-                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-bs-toggle="collapse"
-                                href="#grafik-statistik" role="button" aria-expanded="false"
+                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm"
+                                data-bs-toggle="collapse" href="#grafik-statistik" role="button" aria-expanded="false"
                                 aria-controls="grafik-statistik">
                                 <i class="fas fa-chart-bar"></i> Grafik
                             </button>
                         </div>
                         <div class="col-md-2">
-                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-bs-toggle="collapse"
-                                href="#pie-statistik" role="button" aria-expanded="false" aria-controls="pie-statistik">
+                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm"
+                                data-bs-toggle="collapse" href="#pie-statistik" role="button" aria-expanded="false"
+                                aria-controls="pie-statistik">
                                 <i class="fas fa-chart-pie"></i> Chart
                             </button>
                         </div>
@@ -88,4 +96,3 @@
         </div>
     </div>
 </div>
-

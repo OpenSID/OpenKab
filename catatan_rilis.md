@@ -3,6 +3,7 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 #### Penambahan Fitur
 
 1. [#770](https://github.com/OpenSID/OpenKab/issues/770) Penambahan datatable pada rincian kependudukan laporan bulanan.
+2. [#775](https://github.com/OpenSID/OpenKab/issues/775) Penambahan sorting pada datatable di halaman daftar desa.
 
 #### Perbaikan BUG
 

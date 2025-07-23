@@ -29,12 +29,12 @@
                     @foreach ($main as $key => $data)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $data['nama'] }}</td>
-                            <td style="mso-number-format:'\@';">{{ $data['nik'] }}</td>
-                            <td>{{ $data['tempatlahir'] }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data['tanggallahir'])->format('Y-m-d') }}</td>
-                            <td>{{ $data['nama_ayah'] }}</td>
-                            <td>{{ $data['nama_ibu'] }}</td>
+                            <td>{{ $data['attributes']['nama'] }}</td>
+                            <td style="mso-number-format:'\@';">{{ $data['attributes']['nik'] }}</td>
+                            <td>{{ $data['attributes']['tempatlahir'] }}</td>
+                            <td>{{ $data['attributes']['tanggallahir'] }}</td>
+                            <td>{{ $data['attributes']['nama_ayah'] }}</td>
+                            <td>{{ $data['attributes']['nama_ibu'] }}</td>
                         </tr>
                     @endforeach
                 </tbody>

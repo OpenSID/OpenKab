@@ -130,7 +130,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
                 searchPanes: {
                     viewTotal: false,
                     columns: [0]
@@ -146,6 +146,10 @@
                             "filter[kode_kabupaten]": $("#filter_kabupaten").val(),
                             "filter[kode_kecamatan]": $("#filter_kecamatan").val(),
                             "filter[kode_desa]": $("#filter_desa").val(),
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
+                                    .order[0]
+                                    ?.column]
+                                ?.name
                         };
                     },
                     dataSrc: function(json) {
@@ -178,15 +182,18 @@
                     },
                     {
                         data: "attributes.nama_desa",
-                        name: "nama_desa"
+                        name: "nama_desa",
+                        orderable: true,
                     },
                     {
                         data: "attributes.nama_kecamatan",
-                        name: "nama_kecamatan"
+                        name: "nama_kecamatan",
+                        orderable: true,
                     },
                     {
                         data: "attributes.penduduk_count",
                         name: "penduduk_count",
+                        orderable: true,
                         className: 'text-center'
                     },
                 ],

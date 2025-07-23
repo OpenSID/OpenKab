@@ -234,6 +234,13 @@
                         value="{{ $filters['suku'] ?? '' }}">
                 </div>
             </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Pekerja Migran</label>
+                    <input id="pekerja_migran" class="form-control" placeholder="Pekerja Migran" type="text"
+                        value="{{ $filters['pekerja_migran'] ?? '' }}">
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm">

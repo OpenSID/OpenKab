@@ -13,9 +13,18 @@ function GetSummary(kabupaten = null, kecamatan = null, desa = null) {
             kode_desa: desa || ''
         }
     };
-    $.get("{{ url('api/v1/data-summary') }}", indexSearch, function(result) {
+
+    const urlSummary = new URL(
+                    "{{ config('app.databaseGabunganUrl') . '/api/v1/data-summary' }}");
+
+    $.get(urlSummary, indexSearch, function(result) {
         for (let i in result.data) {
             $(`#summary-${i}`).text(result.data[i]);
         }
     }, 'json');
+    {{-- $.get("{{ url('api/v1/data-summary') }}", indexSearch, function(result) {
+        for (let i in result.data) {
+            $(`#summary-${i}`).text(result.data[i]);
+        }
+    }, 'json'); --}}
 }

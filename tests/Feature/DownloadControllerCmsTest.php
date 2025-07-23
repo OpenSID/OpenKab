@@ -34,13 +34,15 @@ class DownloadControllerCmsTest extends BaseTestCase
     public function file_download_baru_dapat_disimpan()
     {
         Storage::fake('public');
-
+        $file = UploadedFile::fake()->create('contoh.pdf', 100, 'application/pdf');
         $data = [
             'title' => 'File PDF',
             'state' => 1,
             'description' => 'Contoh file yang dapat diunduh.',
-            'download_file' => UploadedFile::fake()->create('contoh.pdf', 100, 'application/pdf'),
+            'download_file' => $file,
         ];
+
+        Storage::disk('public')->put('downloads', $file);
 
         $response = $this->post(route('downloads.store'), $data);
 

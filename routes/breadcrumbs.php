@@ -1,18 +1,18 @@
 <?php
 
-use App\Models\Bantuan;
 use App\Models\CMS\Article;
 use App\Models\CMS\Category;
 use App\Models\CMS\Download;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Identitas;
-use App\Models\Penduduk;
 use App\Models\Position;
 use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
+use App\Services\BantuanService;
 use App\Services\KategoriService;
+use App\Services\PendudukApiService;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +24,7 @@ Breadcrumbs::for('bantuan', function (BreadcrumbTrail $trail) {
     $trail->push('Bantuan', route('bantuan'));
 });
 Breadcrumbs::for('bantuan.detail', function (BreadcrumbTrail $trail, $id) {
-    $bantuan = Bantuan::find($id)?->nama ?? '-';
+    $bantuan = (new BantuanService)->bantuan(['filter[id]' => $id])[0]?->nama ?? '-';
     $trail->parent('bantuan');
     $trail->push($bantuan);
 });
@@ -37,7 +37,7 @@ Breadcrumbs::for('bantuan.create', function (BreadcrumbTrail $trail) {
     $trail->push('Baru');
 });
 Breadcrumbs::for('bantuan.edit', function (BreadcrumbTrail $trail, $id) {
-    $bantuan = Bantuan::find($id)?->nama ?? '-';
+    $bantuan = (new BantuanService)->bantuan(['filter[id]' => $id])[0]?->nama ?? '-';
     $trail->parent('bantuan.index');
     $trail->push($bantuan);
 });
@@ -103,7 +103,11 @@ Breadcrumbs::for('penduduk.create', function (BreadcrumbTrail $trail) {
     $trail->push('Baru');
 });
 Breadcrumbs::for('penduduk.edit', function (BreadcrumbTrail $trail, $id) {
-    $penduduk = Penduduk::find($id)?->nama ?? '-';
+    $result = (new PendudukApiService())->penduduk([
+        'filter[id]' => $id,
+    ]);
+
+    $penduduk = $result->first()?->nama ?? '-';
     $trail->parent('penduduk.index');
     $trail->push($penduduk);
 });

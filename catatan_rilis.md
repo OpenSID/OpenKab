@@ -14,6 +14,7 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 6. [#748](https://github.com/OpenSID/OpenKab/issues/748) Perbaikan statistik website utama.
 7. [#772](https://github.com/OpenSID/OpenKab/issues/772) Perbaikan response json ketika kirim data ke pantau, untuk mempermudah pengecekan pesan error.
 8. [#766](https://github.com/OpenSID/OpenKab/issues/766) Perbaikan dropdown dashboard demografi.
+9. [#769](https://github.com/OpenSID/OpenKab/issues/769) Perbaiki halaman bagan organisasi.
 
 #### Perubahan Teknis
 
@@ -25,3 +26,4 @@ Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta penggu
 6. [#751](https://github.com/OpenSID/OpenKab/issues/751) Penambahan unit testing DownloadController Daftar Unduhan.
 7. [#750](https://github.com/OpenSID/OpenKab/issues/750) Penyesuaian route dan hapus file yang tidak di butuhkan pada controller data-summary dan desa-aktif api.
 8. [#758](https://github.com/OpenSID/OpenKab/issues/758) Hapus ketergantungan terhadap database gabungan secara langsung.
+9. [#747](https://github.com/OpenSID/OpenKab/issues/747) Sesuaikan test pada github action.

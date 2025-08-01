@@ -3,14 +3,9 @@
 use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\IdentitasController;
-use App\Http\Controllers\Api\KategoriDesaController;
-use App\Http\Controllers\Api\LaporanPendudukController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
-use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\SettingController;
-use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\TeamController;
-use App\Http\Controllers\Api\WebsiteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -97,14 +92,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('', [OpendkSynchronizeController::class, 'index'])->name('synchronize.opendk.index');
         Route::middleware(['abilities:synchronize-opendk-create'])->group(function () {
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
-            Route::get('laporan-penduduk', [LaporanPendudukController::class, 'index']);
         });
-    });    
+    });
 });
-
-// Data utama website
-Route::get('data-website', WebsiteController::class);
-Route::get('data-summary', SummaryController::class);
-
-// Desa teraktif
-Route::get('desa-aktif', [KategoriDesaController::class, 'index']);

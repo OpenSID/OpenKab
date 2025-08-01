@@ -3,11 +3,13 @@
 namespace App\Models\CMS;
 
 use App\Models\OpenKabModel as Model;
+use Database\Factories\SlideFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Slide extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     public $table = 'slides';
 
@@ -34,4 +36,9 @@ class Slide extends Model
         'state' => 'required|numeric|digits_between:0,1',
         'foto' => 'nullable|image|max:1024|mimes:png,jpg',
     ];
+
+    protected static function newFactory()
+    {
+        return SlideFactory::new();
+    }
 }

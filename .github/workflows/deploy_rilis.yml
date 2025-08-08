@@ -1,9 +1,8 @@
 name: Deploy OpenKab Rilis with Ansible
 
 on:
-  pull_request:
-    branches:
-      - rilis-dev
+  release:
+    types: [published]
 
 jobs:
   deploy:

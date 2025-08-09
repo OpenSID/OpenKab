@@ -207,20 +207,6 @@
 
                         }
                         return json.data;
-
-                        // if (json.data.length) {
-
-                        //     // jika chart di akses dari halaman statistik penduduk
-                        //     if(chart && chart.view){
-                        //         getDataset(json.data, chart)
-                        //         grafik()
-                        //     }
-
-
-                        //     return json.data;
-                        // }
-
-                        // return false;
                     },
                 },
                 columnDefs: [{

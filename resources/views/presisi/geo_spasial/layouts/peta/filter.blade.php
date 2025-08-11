@@ -1,11 +1,11 @@
 $('#filter_kabupaten').select2({
-placeholder: "{{ config('app.sebutanKab') }}"
+placeholder: "Pilih {{ config('app.sebutanKab') }}"
 });
 $('#filter_kecamatan').select2({
 placeholder: "Pilih Kecamatan"
 });
 $('#filter_desa').select2({
-placeholder: "{{ config('app.sebutanDesa') }}"
+placeholder: "Pilih {{ config('app.sebutanDesa') }}"
 });
 
 GetListKabupaten();

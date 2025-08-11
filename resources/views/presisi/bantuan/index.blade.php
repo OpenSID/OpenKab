@@ -72,11 +72,11 @@
                                         </div>
                                     </div>
                                     <!-- <div class="row justify-content-end pt-1">
-                                                                                <div class="col-md-4 pull-right text-right">
-                                                                                    <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right">HAPUS FILTER</button>
-                                                                                    <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
-                                                                                </div>
-                                                                            </div> -->
+                                                                                        <div class="col-md-4 pull-right text-right">
+                                                                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right">HAPUS FILTER</button>
+                                                                                            <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
+                                                                                        </div>
+                                                                                    </div> -->
                                     <hr class="@if ($id) d-none @endif">
                                     <div class="row @if ($id) d-none @endif">
                                         <div class="col-md-2">
@@ -219,13 +219,13 @@
                 placeholder: "Tahun"
             });
             $('#filter_kabupaten').select2({
-                placeholder: "{{ config('app.sebutanKab') }}"
+                placeholder: "Pilih {{ config('app.sebutanKab') }}"
             });
             $('#filter_kecamatan').select2({
                 placeholder: "Pilih Kecamatan"
             });
             $('#filter_desa').select2({
-                placeholder: "{{ config('app.sebutanDesa') }}"
+                placeholder: "Pilih {{ config('app.sebutanDesa') }}"
             });
             $('#filter_program').select2({
                 placeholder: "Pilih Program"

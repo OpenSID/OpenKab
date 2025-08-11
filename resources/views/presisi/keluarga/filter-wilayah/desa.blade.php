@@ -1,5 +1,5 @@
 $('#filter_desa').select2({
-placeholder: "{{ config('app.sebutanDesa') }}"
+placeholder: "Pilih {{ config('app.sebutanDesa') }}"
 });
 GetListDesa();
 function GetListDesa($id) {

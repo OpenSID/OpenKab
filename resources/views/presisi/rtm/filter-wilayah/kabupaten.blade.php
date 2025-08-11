@@ -1,5 +1,5 @@
 $('#filter_kabupaten').select2({
-placeholder: "{{ config('app.sebutanKab') }}"
+placeholder: "Pilih {{ config('app.sebutanKab') }}"
 });
 GetListKabupaten();
 $('#filter_kabupaten').on("select2:select", function(e) {

@@ -20,7 +20,7 @@
             }, 'json')
 
             $('#filter_kabupaten').select2({
-                placeholder: "{{ config('app.sebutanKab') }}",
+                placeholder: "Pilih {{ config('app.sebutanKab') }}",
                 allowClear: true,
                 height: '100%',
                 width: '100%',
@@ -33,7 +33,7 @@
             })
 
             $('#filter_desa').select2({
-                placeholder: "{{ config('app.sebutanDesa') }}",
+                placeholder: "Pilih {{ config('app.sebutanDesa') }}",
                 allowClear: true,
                 width: '100%',
             })

@@ -15,7 +15,6 @@ class CheckPresisiStatus
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
         $website = Setting::where(['key' => 'website_enable'])->first()?->value ?? 0;
 
         if (! $website) {

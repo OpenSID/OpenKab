@@ -70,7 +70,7 @@
                                         <div class="form-group">
                                             <label>Kabupaten</label>
                                             <select name="Filter Kabupaten" id="filter_kabupaten" class="form-control-sm"
-                                                title="{{ config('app.sebutanKab') }}">
+                                                title="Pilih {{ config('app.sebutanKab') }}">
                                                 @if ($filters['kode_kabupaten'] ?? false)
                                                     <option value="{{ $filters['kode_kabupaten'] }}" selected>
                                                         {{ $filters['nama_kabupaten'] }}</option>
@@ -94,7 +94,7 @@
                                         <div class="form-group">
                                             <label>{{ config('app.sebutanDesa') }}</label>
                                             <select name="Filter Desa" id="filter_desa" class="form-control"
-                                                title="{{ config('app.sebutanDesa') }}">
+                                                title="Pilih {{ config('app.sebutanDesa') }}">
                                                 @if ($filters['kode_desa'] ?? false)
                                                     <option value="{{ $filters['kode_desa'] }}" selected>
                                                         {{ $filters['nama_desa'] }}</option>

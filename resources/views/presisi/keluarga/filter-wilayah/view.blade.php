@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control"
-                        title="{{ config('app.sebutanKab') }}">
+                        title="Pilih {{ config('app.sebutanKab') }}">
                         <option value="">All</option>
                     </select>
                 </div>
@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md-3">
                     <select name="Filter Desa" id="filter_desa" required class="form-control"
-                        title="{{ config('app.sebutanDesa') }}">
+                        title="Pilih {{ config('app.sebutanDesa') }}">
                         <option value="">All</option>
                     </select>
                 </div>

@@ -38,7 +38,7 @@
                                         <div class="form-group">
                                             <label>Kabupaten</label>
                                             <select name="Filter Kabupaten" id="filter_kabupaten" class="form-control-sm"
-                                                title="Pilih Kabupaten">
+                                                title="{{ config('app.sebutanKab') }}">
                                                 @if ($filters['kode_kabupaten'] ?? false)
                                                     <option value="{{ $filters['kode_kabupaten'] }}" selected>
                                                         {{ $filters['nama_kabupaten'] }}</option>

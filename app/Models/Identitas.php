@@ -13,7 +13,7 @@ class Identitas extends OpenKabModel
     protected $fillable = [
         'nama_aplikasi', 'deskripsi', 'favicon',
         'logo', 'nama_kabupaten', 'kode_kabupaten',
-        'nama_provinsi', 'kode_provinsi', 'sebutan_kab',
+        'nama_provinsi', 'kode_provinsi', 'sebutan_kab', 'sebutan_desa',
     ];
 
     public static function pengaturan()
@@ -22,6 +22,7 @@ class Identitas extends OpenKabModel
 
         $data['nama_aplikasi'] = $identitas->nama_aplikasi ?? config('app.namaAplikasi');
         $data['sebutanKab'] = $identitas->sebutan_kab ?? config('app.sebutanKab');
+        $data['sebutanDesa'] = $identitas->sebutan_desa ?? config('app.sebutanDesa');
         $nama_kabupaten = preg_replace('/KAB/', '', $identitas->nama_kabupaten) ?? config('app.namaKab');
         $data['nama_kabupaten'] = strtolower($data['sebutanKab']) == 'kota' ? $nama_kabupaten : $data['sebutanKab'].' '.$nama_kabupaten;
 

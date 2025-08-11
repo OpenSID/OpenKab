@@ -38,7 +38,7 @@
                                         <div class="form-group">
                                             <label>Kabupaten</label>
                                             <select name="Filter Kabupaten" id="filter_kabupaten" class="form-control-sm"
-                                                title="Pilih Kabupaten">
+                                                title="{{ config('app.sebutanKab') }}">
                                                 @if ($filters['kode_kabupaten'] ?? false)
                                                     <option value="{{ $filters['kode_kabupaten'] }}" selected>
                                                         {{ $filters['nama_kabupaten'] }}</option>
@@ -60,9 +60,9 @@
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
-                                            <label>Desa</label>
+                                            <label>{{ config('app.sebutanDesa') }}</label>
                                             <select name="Filter Desa" id="filter_desa" class="form-control"
-                                                title="Pilih Desa">
+                                                title="{{ config('app.sebutanDesa') }}">
                                                 @if ($filters['kode_desa'] ?? false)
                                                     <option value="{{ $filters['kode_desa'] }}" selected>
                                                         {{ $filters['nama_desa'] }}</option>
@@ -102,7 +102,7 @@
                             <thead>
                                 <tr>
                                     <th class="padat">No</th>
-                                    <th>Desa</th>
+                                    <th>{{ config('app.sebutanDesa') }}</th>
                                     <th>Kecamatan</th>
                                     <th class="padat">Jumlah Penduduk</th>
                                 </tr>

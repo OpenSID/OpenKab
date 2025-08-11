@@ -37,7 +37,8 @@
                         <div class="col">
                             <div class="mb-4">
                                 <label for="nama">Nama Program<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama">
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                    name="nama">
                                 @error('nama')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -62,7 +63,8 @@
                                     <option>Pusat</option>
                                     <option>Provinsi</option>
                                     <option>Kab/Kota</option>
-                                    <option>Dana Desa</option>
+                                    <option>Dana {{ config('app.sebutanDesa') }}
+                                    </option>
                                     <option>Lain-lain (Hibah)</option>
                                 </select>
                                 @error('asaldana')
@@ -75,7 +77,8 @@
                             <div class="col">
                                 <div class="mb-4">
                                     <label for="sdate">Tanggal Mulai<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control datepicker @error('sdate') is-invalid @enderror" name="sdate">
+                                    <input type="text"
+                                        class="form-control datepicker @error('sdate') is-invalid @enderror" name="sdate">
                                     @error('sdate')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -84,7 +87,8 @@
                             <div class="col">
                                 <div class="mb-4">
                                     <label for="edate">Tanggal Berakhir<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control datepicker @error('edate') is-invalid @enderror" name="edate">
+                                    <input type="text"
+                                        class="form-control datepicker @error('edate') is-invalid @enderror" name="edate">
                                     @error('edate')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -110,14 +114,21 @@
 @include('partials.asset_datepicker')
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
-    document.addEventListener("DOMContentLoaded", function(event) {
-        $(document).on('click', 'button#submit', function(e) {
+    <script nonce="{{ csp_nonce() }}">
+        document.addEventListener("DOMContentLoaded", function(event) {
+            $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();
-                let dateParam = $.param({ sdate: $('input[name=sdate]').data('daterangepicker').startDate.format('YYYY-MM-DD'), edate: $('input[name=edate]').data('daterangepicker').startDate.format('YYYY-MM-DD')})
-                let formData = $('#bantuan-form  input,textarea,select').not('.datepicker').serialize()+'&'+dateParam
+                let dateParam = $.param({
+                    sdate: $('input[name=sdate]').data('daterangepicker').startDate.format(
+                        'YYYY-MM-DD'),
+                    edate: $('input[name=edate]').data('daterangepicker').startDate.format(
+                        'YYYY-MM-DD')
+                })
+                let formData = $('#bantuan-form  input,textarea,select').not('.datepicker').serialize() +
+                    '&' + dateParam
 
-                var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan-kabupaten/tambah' }}");
+                var url = new URL(
+                    "{{ config('app.databaseGabunganUrl') . '/api/v1/bantuan-kabupaten/tambah' }}");
 
                 Swal.fire({
                     title: 'Tambah',
@@ -136,7 +147,8 @@
                         $.ajax({
                             type: "POST",
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content'),
                                 'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                             },
                             dataType: "json",

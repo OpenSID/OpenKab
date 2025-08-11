@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @push('css')
-    <style nonce="{{ csp_nonce() }}" >
+    <style nonce="{{ csp_nonce() }}">
         .select2-container .select2-selection--single {
             height: 34px;
         }
@@ -23,7 +23,8 @@
                     <img :src="dataIdentitas.logo ? '{{ asset('storage/img') }}/' + dataIdentitas.logo :
                         '{{ asset('assets/img/opensid_logo.png') }}'"
                         alt="Logo" width="150px">
-                    <h5 class="mt-3" x-text="'Logo ' + dataIdentitas.nama_aplikasi">Logo {{ config('app.namaAplikasi') }}</h5>
+                    <h5 class="mt-3" x-text="'Logo ' + dataIdentitas.nama_aplikasi">Logo {{ config('app.namaAplikasi') }}
+                    </h5>
                 </div>
                 <div class="card-footer">
                     <div class="row">
@@ -85,6 +86,20 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Sebutan Kabupaten/Kota</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="Sebutan Kabupaten/Kota"
+                                    x-model="dataIdentitas.sebutan_kab">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Sebutan Desa/Kelurahan</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" placeholder="Sebutan Desa"
+                                    x-model="dataIdentitas.sebutan_desa">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi Aplikasi</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" x-model="dataIdentitas.deskripsi"></textarea>
@@ -99,8 +114,9 @@
             </div>
         </div>
     </div>
-    <script nonce="{{ csp_nonce() }}"  >
+    <script nonce="{{ csp_nonce() }}">
         const header = @include('layouts.components.header_bearer_api_gabungan');
+
         function identitas() {
             return {
                 dataIdentitas: {},
@@ -109,8 +125,8 @@
                     var server_pantau = "{{ config('app.serverPantau') }}";
                     var token_pantau = "{{ config('app.tokenPantau') }}";
                     fetch('{{ url('api/v1/identitas') }}', {
-                        headers: header
-                    })
+                            headers: header
+                        })
                         .then(res => res.json())
                         .then(response => {
                             this.dataIdentitas = response.data.attributes;
@@ -152,7 +168,8 @@
                             },
                             cache: true
                         },
-                        placeholder: this.dataIdentitas.nama_provinsi ? this.dataIdentitas.nama_provinsi : '--  Cari Nama Provinsi --',
+                        placeholder: this.dataIdentitas.nama_provinsi ? this.dataIdentitas.nama_provinsi :
+                            '--  Cari Nama Provinsi --',
                         minimumInputLength: 2,
                         allowClear: true,
                         escapeMarkup: function(markup) {
@@ -324,7 +341,7 @@
                                             icon: 'success',
                                             showConfirmButton: true,
                                             timer: 1500,
-                                        }).then(function(){
+                                        }).then(function() {
                                             window.location.reload()
                                         })
 

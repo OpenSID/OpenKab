@@ -15,20 +15,20 @@
 @section('content')
     @include('partials.breadcrumbs')
     @if (isset($chart['view']))
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <div>
-                        <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="chart" id="grafik">
+                                <canvas id="barChart"></canvas>
+                            </div>
+                            <hr class="hr-chart">
                         </div>
-                        <hr class="hr-chart">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     @endif
     <div class="row">
         <div class="col-lg-12">
@@ -36,8 +36,8 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-3">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="false" aria-controls="collapse-filter">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
+                                role="button" aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
                             <button id="cetak" type="button" class="btn btn-primary btn-sm">
@@ -83,8 +83,8 @@
                                     <div class="col-sm">
                                         <div class="form-group">
                                             <label>Bantuan</label>
-                                            <select id="bantuan-keluarga" class="form-control select2-filter" data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}'
-                                                placeholder="Pilih Bantuan">
+                                            <select id="bantuan-keluarga" class="form-control select2-filter"
+                                                data-option='{!! json_encode(App\Models\Enums\StatusEnum::select2()) !!}' placeholder="Pilih Bantuan">
                                             </select>
                                         </div>
                                     </div>
@@ -94,7 +94,7 @@
                                         <div class="form-group">
                                             <label>Kabupaten</label>
                                             <select name="Filter Kabupaten" id="filter_kabupaten" class="form-control-sm"
-                                                title="Pilih Kabupaten">
+                                                title="{{ config('app.sebutanKab') }}">
                                                 @if ($filters['kode_kabupaten'] ?? false)
                                                     <option value="{{ $filters['kode_kabupaten'] }}" selected>
                                                         {{ $filters['nama_kabupaten'] }}</option>
@@ -116,9 +116,9 @@
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
-                                            <label>Desa</label>
+                                            <label>{{ config('app.sebutanDesa') }}</label>
                                             <select name="Filter Desa" id="filter_desa" class="form-control"
-                                                title="Pilih Desa">
+                                                title="{{ config('app.sebutanDesa') }}">
                                                 @if ($filters['kode_desa'] ?? false)
                                                     <option value="{{ $filters['kode_desa'] }}" selected>
                                                         {{ $filters['nama_desa'] }}</option>
@@ -266,7 +266,7 @@
                         if (json.data.length > 0) {
 
                             // jika chart di akses dari halaman statistik keluarga
-                            if(chart && chart.view){
+                            if (chart && chart.view) {
                                 getDataset(json.data, chart)
                                 grafik()
                             }
@@ -448,7 +448,10 @@
                 const nama = config.nama_kecamatan;
 
                 if (!grouped[kode]) {
-                    grouped[kode] = { nama: nama, total: 0 };
+                    grouped[kode] = {
+                        nama: nama,
+                        total: 0
+                    };
                 }
 
                 const label = getLabel[kategori]?.(attr);

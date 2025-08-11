@@ -32,7 +32,8 @@
                                 <div class="col-sm-7 col-md-5">
                                     <select name="kabupaten" class="form-control form-control-sm select2" id="kabupaten"
                                         onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
-                                        <option value="">Pilih Kabupaten</option>
+                                        <option value="">
+                                            {{ config('app.sebutanKab') }}</option>
                                         @foreach ($kabupatens as $item)
                                             <option value="{{ $item->kode_kabupaten }}"
                                                 @if ($item->kode_kabupaten == session('kode_kabupaten')) selected @endif>
@@ -62,7 +63,8 @@
                                 <div class="col-sm-7 col-md-5">
                                     <select name="desa" class="form-control form-control-sm select2" id="desa"
                                         onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
-                                        <option value="">Pilih Desa</option>
+                                        <option value="">
+                                            {{ config('app.sebutanDesa') }}</option>
                                         @foreach ($desas as $item)
                                             <option value="{{ $item->kode_desa }}"
                                                 @if ($item->kode_desa == session('kode_desa')) selected @endif>{{ $item->nama_desa }}
@@ -132,7 +134,9 @@
             $('#kabupaten').on('change', function() {
                 let kodeKabupaten = $(this).val();
                 $('#kecamatan').html('<option value="">Memuat...</option>');
-                $('#desa').html('<option value="">Pilih Desa</option>');
+                $('#desa').html(
+                    '<option value="">{{ config('app.sebutanDesa') }}</option>'
+                );
 
                 url.searchParams.set("kode_kabupaten", kodeKabupaten);
                 if (kodeKabupaten) {
@@ -157,7 +161,8 @@
 
                 if (kodeKecamatan) {
                     $.get('/api/desa/' + kodeKecamatan, function(data) {
-                        let options = '<option value="">Pilih Desa</option>';
+                        let options =
+                            '<option value="">{{ config('app.sebutanDesa') }}</option>';
                         data.forEach(function(item) {
                             options +=
                                 `<option value="${item.kode_desa}">${item.nama_desa}</option>`;
@@ -165,7 +170,9 @@
                         $('#desa').html(options);
                     });
                 } else {
-                    $('#desa').html('<option value="">Pilih Desa</option>');
+                    $('#desa').html(
+                        '<option value="">{{ config('app.sebutanDesa') }}</option>'
+                    );
                 }
             });
         });

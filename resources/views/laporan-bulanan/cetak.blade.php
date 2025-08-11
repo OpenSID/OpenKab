@@ -105,15 +105,22 @@
             <table>
                 <tr>
                     <td colspan="11" class='text-bold'>PEMERINTAH KABUPATEN/KOTA</td>
-                    <td colspan="2" class="text-bold"><span style="float: right; border: solid 1px black; font-size: 12pt; text-align: center; padding: 5px 20px;">LAMPIRAN A-9</span></td>
+                    <td colspan="2" class="text-bold"><span
+                            style="float: right; border: solid 1px black; font-size: 12pt; text-align: center; padding: 5px 20px;">LAMPIRAN
+                            A-9</span></td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text"><span style="border-bottom: 2px solid;">{{ strtoupper($identitasAplikasi['nama_kabupaten']) }}</span></td>
+                    <td colspan="2" class="text"><span
+                            style="border-bottom: 2px solid;">{{ strtoupper($identitasAplikasi['nama_kabupaten']) }}</span>
+                    </td>
                     <td colspan="11">&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td colspan="10" class="judul" style="padding-bottom: 10px;"><span style="border-bottom: 2px solid;">LAPORAN BULANAN DESA/KELURAHAN</span></td>
+                    <td colspan="10" class="judul" style="padding-bottom: 10px;"><span
+                            style="border-bottom: 2px solid;">LAPORAN BULANAN
+                            {{ strtoupper(config('app.sebutanDesa')) }}</span>
+                    </td>
                 <tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
@@ -160,7 +167,7 @@
                 </tr>
                 <tr>
                     <td class="no_urut">1</td>
-                    <td>Pindah keluar Desa/Kelurahan</td>
+                    <td>Pindah keluar {{ config('app.sebutanDesa') }}</td>
                     <td class="bilangan">{{ $rincian_pindah['DESA_L'] ?? '-' }}</td>
                     <td class="bilangan">{{ $rincian_pindah['DESA_P'] ?? '-' }}</td>
                     <td class="bilangan">{{ $rincian_pindah['DESA_L'] + $rincian_pindah['DESA_P'] ?? '-' }}</td>

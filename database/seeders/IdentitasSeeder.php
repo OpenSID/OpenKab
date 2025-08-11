@@ -21,6 +21,7 @@ class IdentitasSeeder extends Seeder
             'nama_provinsi' => 'Nusa Tenggara Barat',
             'kode_provinsi' => '52',
             'sebutan_kab' => 'Kota',
+            'sebutan_desa' => 'Kelurahan',
         ]);
     }
 }

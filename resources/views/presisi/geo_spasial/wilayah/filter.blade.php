@@ -3,20 +3,21 @@
         <div class="card card-primary card-outline rounded-0 elevation-0 border-0">
             <div class="card-header bg-primary rounded-0">
                 <div class="row">
-                    <div class="col-md-3" >
+                    <div class="col-md-3">
                         <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control"
-                            title="Pilih Kabupaten">
+                            title="{{ config('app.sebutanKab') }}">
                             <option value="">All</option>
                         </select>
                     </div>
-                    <div class="col-md-3" >
+                    <div class="col-md-3">
                         <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control"
                             title="Pilih Kecamatan">
                             <option value="">All</option>
                         </select>
                     </div>
-                    <div class="col-md-3" >
-                        <select name="Filter Desa" id="filter_desa" required class="form-control" title="Pilih Desa">
+                    <div class="col-md-3">
+                        <select name="Filter Desa" id="filter_desa" required class="form-control"
+                            title="{{ config('app.sebutanDesa') }}">
                             <option value="">All</option>
                         </select>
                     </div>
@@ -61,7 +62,7 @@
 
                                 <div class=" col-6">
                                     <div class="form-group">
-                                        <label>Desa</label>
+                                        <label>{{ config('app.sebutanDesa') }}</label>
                                         <select class="form-control " name="search_desa"> </select>
                                     </div>
 

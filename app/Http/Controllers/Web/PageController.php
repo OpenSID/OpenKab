@@ -21,14 +21,14 @@ class PageController extends Controller
         $bantuanSummary = 0;
         $categoriesItems = [
             ['key' => 'penduduk', 'text' => 'penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
-            ['key' => 'kabupaten', 'text' => 'kabupaten', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
+            ['key' => 'kabupaten', 'text' => config('app.sebutanKab'), 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
-            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'desa', 'text' => config('app.sebutanDesa'), 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'bantuan', 'text' => 'bantuan', 'value' => $bantuanSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
-        $listKabupaten = ['' => 'Pilih Kabupaten'];
+        $listKabupaten = ['' => 'Pilih '.config('app.sebutanKab')];
         $listKecamatan = ['' => 'Pilih Kecamatan'];
-        $listDesa = ['' => 'Pilih Desa'];
+        $listDesa = ['' => 'Pilih '.config('app.sebutanDesa')];
 
         return view('web.index', compact('categoriesItems', 'listKecamatan', 'listDesa', 'listKabupaten'));
     }

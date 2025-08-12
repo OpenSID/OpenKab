@@ -44,6 +44,10 @@
                                 <i class="fa fa-print"></i>
                                 Cetak
                             </button>
+                            <button id="download-excel" type="button" class="btn btn-success btn-sm">
+                                <i class="fa fa-file-excel"></i>
+                                Excel
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -91,6 +95,7 @@
 @include('components.wilayah_filter_js')
 @push('js')
     <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endpush
 
 @section('js')
@@ -202,20 +207,6 @@
 
                         }
                         return json.data;
-
-                        // if (json.data.length) {
-
-                        //     // jika chart di akses dari halaman statistik penduduk
-                        //     if(chart && chart.view){
-                        //         getDataset(json.data, chart)
-                        //         grafik()
-                        //     }
-
-
-                        //     return json.data;
-                        // }
-
-                        // return false;
                     },
                 },
                 columnDefs: [{
@@ -381,6 +372,10 @@
                 window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
             });
 
+            $('#download-excel').on('click', function() {
+                downloadExcel();
+            });
+
             $('select.select2-filter').each(function() {
                 $(this).select2({
                     width: '100%',
@@ -393,8 +388,6 @@
             for (let i in filterDefault) {
                 $(`#${i}`).val(filterDefault[i]).trigger('change');
             }
-
-
         });
 
         function getDataset(data, chart) {
@@ -495,89 +488,148 @@
             }));
         }
 
-        // function getDataset(data, chart) {
-        //     const kategori = chart.kategori;
-        //     data_grafik = [];
-        //     const grouped = {};
-        //     judul = chart.nama
+        // Function to download Excel
+        async function downloadExcel() {
+            try {
+                const header = @include('layouts.components.header_bearer_api_gabungan');
+                // Check if there's data to download
+                const tableData = $('#penduduk').DataTable();
+                const info = tableData.page.info();
+                const totalData = info.recordsTotal;
+                if (totalData === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Tidak Ada Data',
+                        text: 'Tidak ada data penduduk untuk diunduh. Silakan periksa filter Anda.',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
 
-        //     const getLabel = {
-        //         'rentang-umur': attr => parseInt(attr.umur),
-        //         'kategori-umur': attr => attr.kategori_umur?.nama,
-        //         'pendidikan-dalam-kk': attr => attr.pendidikan_k_k?.nama,
-        //         'pendidikan-sedang-ditempuh': attr => attr.pendidikan?.nama,
-        //         'agama': attr => attr.agama?.nama,
-        //         'jenis-kelamin': attr => attr.jenis_kelamin?.nama,
-        //         'pekerjaan': attr => attr.pekerjaan?.nama,
-        //         'status-perkawinan': attr => attr.status_kawin?.nama,
-        //         'hubungan-dalam-kk': attr => attr.penduduk_hubungan?.nama,
-        //         'warga-negara': attr => attr.warga_negara?.nama,
-        //         'status-penduduk': attr => attr.penduduk_status?.nama,
-        //         'golongan-darah': attr => attr.golongan_darah?.nama,
-        //         'penyandang-cacat': attr => attr.cacat?.nama,
-        //         'penyakit-menahun': attr => attr.namaSakitMenahun,
-        //         'akseptor-kb': attr => attr.kb?.nama,
-        //         'akta-kelahiran': attr => parseInt(attr.umur),
-        //         'ktp': attr => attr.status_rekam_ktp?.nama,
-        //         'asuransi-kesehatan': attr => attr.namaAsuransi,
-        //         'status-covid': attr => null,
-        //         'suku': attr => attr.suku,
-        //         'bpjs-ketenagakerjaan': attr => attr.bpjs_ketenagakerjaan,
-        //         'status-kehamilan': attr => attr.statusHamil,
-        //     };
+                // Show loading state
+                const $btnExcel = $('#download-excel');
+                $btnExcel.prop('disabled', true).html(
+                    '<i class="fa fa-spinner fa-spin"></i> Downloading...');
 
-        //     const isMatch = {
-        //         'rentang-umur': (label) => {
-        //             const [awal, akhir] = judul.match(/\d+/g).map(Number);
-        //             return label >= awal && label <= akhir;
-        //         },
-        //         'kategori-umur': (label) => label === judul,
-        //         'pendidikan-dalam-kk': (label) => label === judul,
-        //         'pendidikan-sedang-ditempuh': (label) => label === judul,
-        //         'agama': (label) => label === judul,
-        //         'jenis-kelamin': (label) => label === judul,
-        //         'pekerjaan': (label) => label === judul,
-        //         'status-perkawinan': (label) => label === judul,
-        //         'hubungan-dalam-kk': (label) => label === judul,
-        //         'warga-negara': (label) => label === judul,
-        //         'status-penduduk': (label) => label === judul,
-        //         'golongan-darah': (label) => label === judul,
-        //         'penyandang-cacat': (label) => label === judul,
-        //         'penyakit-menahun': (label) => label === judul,
-        //         'akseptor-kb': (label) => label === judul,
-        //         'akta-kelahiran': (label) => {
-        //             const [awal, akhir] = judul.match(/\d+/g).map(Number);
-        //             return label >= awal && label <= akhir;
-        //         },
-        //         'ktp': (label) => label === judul,
-        //         'asuransi-kesehatan': (label) => label === judul,
-        //         'status-covid': (label) => label === judul,
-        //         'suku': (label) => label === judul,
-        //         'bpjs-ketenagakerjaan': (label) => label === judul,
-        //         'status-kehamilan': (label) => label === judul,
-        //     };
+                // Prepare URL for download
+                const downloadUrl = new URL(
+                    `{{ config('app.databaseGabunganUrl') }}/api/v1/penduduk/download`);
 
-        //     data.forEach(item => {
-        //         const attr = item.attributes;
-        //         const config = attr.config || {};
-        //         const kode = config.kode_kecamatan;
-        //         const nama = config.nama_kecamatan;
+                // Gunakan fungsi data yang sama persis dengan DataTable untuk konsistensi
+                const filterParams = tableData.ajax.params();
 
-        //         if (!grouped[kode]) {
-        //             grouped[kode] = { nama: nama, total: 0 };
-        //         }
+                // Remove pagination parameters since we want all data
+                delete filterParams['page[size]'];
+                delete filterParams['page[number]'];
 
-        //         const label = getLabel[kategori]?.(attr);
+                // Handle umur filter - convert object to separate min/max parameters for backend
+                if (filterParams['filter[umur]'] && typeof filterParams['filter[umur]'] === 'object') {
+                    const umurObj = filterParams['filter[umur]'];
 
-        //         if (label !== undefined && isMatch[kategori]?.(label)) {
-        //             grouped[kode].total += 1;
-        //         }
-        //     });
+                    // Create separate parameters for min and max
+                    if (umurObj.min && umurObj.min !== '') {
+                        filterParams['filter[umur][min]'] = umurObj.min;
+                    }
+                    if (umurObj.max && umurObj.max !== '') {
+                        filterParams['filter[umur][max]'] = umurObj.max;
+                    }
+                    if (umurObj.satuan) {
+                        filterParams['filter[umur][satuan]'] = umurObj.satuan;
+                    }
 
-        //     data_grafik = Object.entries(grouped).map(([kode, val]) => ({
-        //         label: val.nama,
-        //         value: val.total
-        //     }));
-        // }
+                    // Remove the original object parameter
+                    delete filterParams['filter[umur]'];
+                }
+
+                // Convert filterParams to URLSearchParams for proper encoding
+                const urlParams = new URLSearchParams();
+                Object.keys(filterParams).forEach(key => {
+                    const value = filterParams[key];
+                    if (value !== null && value !== undefined && value !== '' && value !== 'null') {
+                        urlParams.append(key, value);
+                    }
+                });
+
+                urlParams.append('totalData', totalData);
+
+                // Make fetch request
+                const response = await fetch(downloadUrl, {
+                    method: 'POST',
+                    headers: {
+                        ...header,
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    },
+                    body: urlParams
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                // Check if response is actually a file
+                const contentType = response.headers.get('content-type');
+                if (!contentType || (!contentType.includes(
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') && !
+                        contentType.includes('application/vnd.ms-excel'))) {
+                    throw new Error('Response is not a valid Excel file');
+                }
+
+                // Get filename from response headers or generate one
+                const contentDisposition = response.headers.get('content-disposition');
+                let filename = 'data_penduduk.xlsx';
+                if (contentDisposition) {
+                    const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, '');
+                    }
+                } else {
+                    // Generate filename with timestamp
+                    const now = new Date();
+                    const timestamp = now.toISOString().slice(0, 19).replace(/[-:T]/g, '');
+                    filename = `data_penduduk_${timestamp}.xlsx`;
+                }
+
+                // Create blob and download
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: `File Excel "${filename}" berhasil diunduh`,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+
+            } catch (error) {
+                console.error('Download error:', error);
+
+                // Show error message with SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Download!',
+                    html: `
+                            <p>Terjadi kesalahan saat mengunduh file Excel:</p>
+                            <p><small>${error.message}</small></p>
+                            <p>Silakan coba lagi atau hubungi administrator.</p>
+                        `,
+                    confirmButtonText: 'OK'
+                });
+            } finally {
+                // Reset button state
+                const $btnExcel = $('#download-excel');
+                $btnExcel.prop('disabled', false).html('<i class="fa fa-file-excel"></i> Excel');
+            }
+        }
     </script>
 @endsection

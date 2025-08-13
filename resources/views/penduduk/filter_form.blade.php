@@ -37,7 +37,7 @@
                 <div class="form-group">
                     <label>Kabupaten</label>
                     <select name="Filter Kabupaten" id="filter_kabupaten" class="form-control-sm"
-                        placeholder="Pilih Kabupaten">
+                        placeholder="Pilih {{ config('app.sebutanKab') }}">
                         @if ($filters['kode_kabupaten'] ?? false)
                             <option value="{{ $filters['kode_kabupaten'] }}" selected>
                                 {{ $filters['nama_kabupaten'] }}</option>
@@ -59,8 +59,9 @@
             </div>
             <div class="col-sm">
                 <div class="form-group">
-                    <label>Desa</label>
-                    <select name="Filter Desa" id="filter_desa" class="form-control" placeholder="Pilih Desa">
+                    <label>{{ config('app.sebutanDesa') }}</label>
+                    <select name="Filter Desa" id="filter_desa" class="form-control"
+                        placeholder="Pilih {{ config('app.sebutanDesa') }}">
                         @if ($filters['kode_desa'] ?? false)
                             <option value="{{ $filters['kode_desa'] }}" selected>
                                 {{ $filters['nama_desa'] }}</option>
@@ -232,6 +233,13 @@
                     <label>Suku</label>
                     <input id="suku" class="form-control" placeholder="Suku" type="text"
                         value="{{ $filters['suku'] ?? '' }}">
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Pekerja Migran</label>
+                    <input id="pekerja_migran" class="form-control" placeholder="Pekerja Migran" type="text"
+                        value="{{ $filters['pekerja_migran'] ?? '' }}">
                 </div>
             </div>
         </div>

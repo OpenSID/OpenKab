@@ -31,6 +31,7 @@ class IdentitasRequest extends FormRequest
             'nama_provinsi' => 'required|string',
             'kode_provinsi' => 'required|string',
             'sebutan_kab' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
+            'sebutan_desa' => 'required|regex:/^[A-Za-z\.\']+(?:\s[A-Za-z\.\']+)*$/u|max:50',
         ];
     }
 }

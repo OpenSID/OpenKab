@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @push('css')
-    <style nonce="{{ csp_nonce() }}" >
+    <style nonce="{{ csp_nonce() }}">
         /* ubah semua ukuran text yang ada dalam card-body */
         .card-body {
             font-size: 14px;
@@ -45,9 +45,9 @@
                 <div class="card-body">
                     <div x-data="{
                         data: {},
-
+                    
                         async retrievePosts() {
-                            const response = await (await fetch('{{ config('app.databaseGabunganUrl').'/api/v1/keluarga/show?no_kk='.$no_kk }}', { headers : @include('layouts.components.header_bearer_api_gabungan') })).json();
+                            const response = await (await fetch('{{ config('app.databaseGabunganUrl') . '/api/v1/keluarga/show?no_kk=' . $no_kk }}', { headers: @include('layouts.components.header_bearer_api_gabungan') })).json();
                             this.data = response.data[0].attributes
                         }
                     }" x-init="retrievePosts">
@@ -76,7 +76,8 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <label class="col-sm-3 control-label">DESA / KELURAHAN</label>
+                                    <label
+                                        class="col-sm-3 control-label">{{ strtoupper(config('app.sebutanDesa')) }}</label>
                                     <div class="col-sm-9">
                                         <p class="text-muted">: <span x-text="data.desa"></p>
                                     </div>

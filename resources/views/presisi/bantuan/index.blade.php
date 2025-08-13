@@ -32,7 +32,7 @@
                                         <div class="col-md-3">
                                             <div class="row">
                                                 <select name="Filter Kabupaten" id="filter_kabupaten" required
-                                                    class="form-control" title="Pilih Kabupaten">
+                                                    class="form-control" title="Pilih {{ config('app.sebutanKab') }}">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
@@ -48,7 +48,7 @@
                                         <div class="col-md-2">
                                             <div class="row">
                                                 <select name="Filter Desa" id="filter_desa" required class="form-control"
-                                                    title="Pilih Desa">
+                                                    title="Pilih {{ config('app.sebutanDesa') }}">
                                                     <option value="">All</option>
                                                 </select>
                                             </div>
@@ -72,11 +72,11 @@
                                         </div>
                                     </div>
                                     <!-- <div class="row justify-content-end pt-1">
-                                                        <div class="col-md-4 pull-right text-right">
-                                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right">HAPUS FILTER</button>
-                                                            <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
-                                                        </div>
-                                                    </div> -->
+                                                                                        <div class="col-md-4 pull-right text-right">
+                                                                                            <button id="bt_clear_filter" class="btn btn-sm btn-danger pull-right">HAPUS FILTER</button>
+                                                                                            <button id="bt_filter" class="btn btn-sm btn-secondary pull-right">TAMPILKAN</button>
+                                                                                        </div>
+                                                                                    </div> -->
                                     <hr class="@if ($id) d-none @endif">
                                     <div class="row @if ($id) d-none @endif">
                                         <div class="col-md-2">
@@ -135,7 +135,7 @@
 
                                                     <div class=" col-4">
                                                         <div class="form-group">
-                                                            <label>Desa</label>
+                                                            <label>{{ config('app.sebutanDesa') }}</label>
                                                             <select class="form-control " name="search_desa"> </select>
                                                         </div>
 
@@ -219,13 +219,13 @@
                 placeholder: "Tahun"
             });
             $('#filter_kabupaten').select2({
-                placeholder: "Pilih Kabupaten"
+                placeholder: "Pilih {{ config('app.sebutanKab') }}"
             });
             $('#filter_kecamatan').select2({
                 placeholder: "Pilih Kecamatan"
             });
             $('#filter_desa').select2({
-                placeholder: "Pilih Desa"
+                placeholder: "Pilih {{ config('app.sebutanDesa') }}"
             });
             $('#filter_program').select2({
                 placeholder: "Pilih Program"
@@ -636,7 +636,7 @@
                     if (textStatus === "timeout") {
                         alert(
                             "Permintaan data kabupaten gagal karena waktu koneksi habis (timeout). Silakan coba lagi."
-                            );
+                        );
                     } else {
                         try {
                             var responseJSON = JSON.parse(jqXHR.responseText);

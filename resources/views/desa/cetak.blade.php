@@ -16,7 +16,7 @@
         <thead>
             <tr class="border thick">
                 <th>No</th>
-                <th>Desa</th>
+                <th>{{ config('app.sebutanDesa') }}</th>
                 <th>Kecamatan</th>
                 <th">Jumlah Penduduk</th>
             </tr>

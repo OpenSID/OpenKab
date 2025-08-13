@@ -14,7 +14,8 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ url('penduduk') }}" class="btn btn-sm btn-block btn-secondary"><i class="fas fa-arrow-left"></i>
+                            <a href="{{ url('penduduk') }}" class="btn btn-sm btn-block btn-secondary"><i
+                                    class="fas fa-arrow-left"></i>
                             </a>
                         </div>
                     </div>
@@ -25,16 +26,19 @@
                             <label for="inputPassword3" class="col-sm-2 col-form-label">Tujuan Pindah</label>
                             <div class="col-sm-10">
                                 <select name="kab" class="form-control" x-model="dataPindah.ref_pindah">
-                                    <option value="1">Pindah keluar Desa/Kelurahan</option>
+                                    <option value="1">Pindah keluar
+                                        {{ config('app.sebutanDesa') }}</option>
                                     <option value="2">Pindah keluar Kecamatan</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-2 col-form-label">Pilih Desa/Kelurahan</label>
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Pilih
+                                {{ config('app.sebutanDesa') }}</label>
                             <div class="col-sm-10">
-                                <select name="kab" class="form-control" x-model="dataPindah.kelurahan_tujuan" x-ref="selectDesa">
+                                <select name="kab" class="form-control" x-model="dataPindah.kelurahan_tujuan"
+                                    x-ref="selectDesa">
                                 </select>
                             </div>
                         </div>
@@ -49,7 +53,8 @@
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Tanggal Peristiwa</label>
                             <div class="col-sm-10">
                                 <div class="input-group date" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" x-ref="tgl_peristiwa" data-date-end-date="0d">
+                                    <input type="text" class="form-control datetimepicker-input" x-ref="tgl_peristiwa"
+                                        data-date-end-date="0d">
 
                                 </div>
                             </div>
@@ -59,7 +64,8 @@
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Tanggal Lapor</label>
                             <div class="col-sm-10">
                                 <div class="input-group date" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" x-ref="tgl_lapor" data-date-end-date="0d">
+                                    <input type="text" class="form-control datetimepicker-input" x-ref="tgl_lapor"
+                                        data-date-end-date="0d">
 
                                 </div>
                             </div>
@@ -75,7 +81,8 @@
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-info" x-on:click="simpan()" :disabled="loading">
-                        <span x-show="loading"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan</span>
+                        <span x-show="loading"><span class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true"></span> Menyimpan</span>
                         <span x-show="!loading">Simpan</span>
                     </button>
                 </div>
@@ -84,11 +91,10 @@
     </div>
     <script src="{{ asset('vendor/moment/moment.js') }}"></script>
     <script src="{{ asset('vendor/moment/id.js') }}"></script>
-    <script nonce="{{ csp_nonce() }}"  >
-
+    <script nonce="{{ csp_nonce() }}">
         const header = @include('layouts.components.header_bearer_api_gabungan');
 
-        var urlDesa = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/wilayah/desa' }}");
+        var urlDesa = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/wilayah/desa' }}");
 
         function pindah() {
             return {
@@ -112,7 +118,7 @@
 
                 retrivePenduduk() {
                     const header = @include('layouts.components.header_bearer_api_gabungan');
-                    fetch(`{{ config('app.databaseGabunganUrl').'/api/v1/penduduk?filter[id]=' . request()->route('id') }}`, {                            
+                    fetch(`{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk?filter[id]=' . request()->route('id') }}`, {
                             headers: header
                         })
                         .then(res => res.json())
@@ -126,7 +132,7 @@
                         });
                 },
 
-                selectDesa() {                    
+                selectDesa() {
                     var dataPenduduk = this.dataPenduduk;
                     var dataPindah = this.dataPindah;
                     this.select2 = $(this.$refs.selectDesa).select2({
@@ -142,7 +148,8 @@
                                     'page[number]': params.page || 1,
                                     'filter[search]': params.term || '',
                                     'filter[asal]': dataPenduduk.config_id,
-                                    'filter[kode_kecamatan]': (dataPindah.ref_pindah == 1) ? '' : dataPenduduk.config.kode_kecamatan,
+                                    'filter[kode_kecamatan]': (dataPindah.ref_pindah == 1) ? '' : dataPenduduk
+                                        .config.kode_kecamatan,
                                 };
                             },
                             processResults: function(data) {
@@ -151,7 +158,8 @@
                                     results: results.map(value => {
                                         return {
                                             'id': value.id,
-                                            'text': value.attributes.nama_kecamatan + ' - ' + value.attributes.nama_desa,
+                                            'text': value.attributes.nama_kecamatan + ' - ' + value
+                                                .attributes.nama_desa,
                                         }
                                     }),
                                     pagination: {
@@ -162,7 +170,7 @@
                             },
                             cache: true
                         },
-                        placeholder: '--  Cari Nama Desa --',
+                        placeholder: '--  Cari Nama {{ config('app.sebutanDesa') }} --',
                         minimumInputLength: 0,
                         allowClear: true,
                         escapeMarkup: function(markup) {
@@ -222,7 +230,7 @@
                     $.ajax({
                         type: "Post",
                         headers: header,
-                        url: `{{ config('app.databaseGabunganUrl').'/api/v1/penduduk/aksi/pindah' }}`,
+                        url: `{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk/aksi/pindah' }}`,
                         data: data,
                         dataType: "json",
                         success: function(response) {

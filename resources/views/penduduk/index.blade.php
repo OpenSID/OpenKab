@@ -145,6 +145,7 @@
                             "filter[id_asuransi]": $('#id_asuransi').val(),
                             "filter[hamil]": $('#hamil').val(),
                             "filter[suku]": $('#suku').val(),
+                            "filter[pekerja_migran]": $('#pekerja_migran').val(),
                             "filter[status_covid]": $('#status_covid').val(),
                             "filter[status_rekam]": $('#status_rekam').val(),
                             "filter[pendidikan_kk_id]": $('#pendidikan_kk_id').val(),

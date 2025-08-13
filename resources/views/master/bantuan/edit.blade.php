@@ -37,7 +37,7 @@
                     
                                 if (result.data.length > 0) {
                                     this.data = result.data[0].attributes;
-
+                    
                                     this.$nextTick(() => {
                                         $('#sdate').data('daterangepicker').setStartDate(moment(this.data.sdate, '{{ config('app.format.date_js') }}'));
                                         $('#edate').data('daterangepicker').setStartDate(moment(this.data.edate, '{{ config('app.format.date_js') }}'));
@@ -54,7 +54,8 @@
                             <div class="col">
                                 <div class="mb-4">
                                     <label for="sasaran">Sasaran Program<span class="text-danger">*</span></label>
-                                    <select class="form-control @error('sasaran') is-invalid @enderror" x-model="data.sasaran" name="sasaran">
+                                    <select class="form-control @error('sasaran') is-invalid @enderror"
+                                        x-model="data.sasaran" name="sasaran">
                                         <option selected disabled>Pilih Sasaran</option>
                                         <option value="1">Penduduk Perorangan</option>
                                         <option value="2">Keluarga / KK</option>
@@ -70,7 +71,8 @@
                             <div class="col">
                                 <div class="mb-4">
                                     <label for="nama">Nama Program<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" x-model="data.nama" name="nama">
+                                    <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                        x-model="data.nama" name="nama">
                                     @error('nama')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -90,12 +92,14 @@
                             <div class="col">
                                 <div class="mb-4">
                                     <label for="asaldana">Asal Dana<span class="text-danger">*</span></label>
-                                    <select class="form-control @error('asaldana') is-invalid @enderror" x-model="data.asaldana" name="asaldana">
+                                    <select class="form-control @error('asaldana') is-invalid @enderror"
+                                        x-model="data.asaldana" name="asaldana">
                                         <option selected disabled>Pilih Asal Dana</option>
                                         <option>Pusat</option>
                                         <option>Provinsi</option>
                                         <option>Kab/Kota</option>
-                                        <option>Dana Desa</option>
+                                        <option>Dana {{ config('app.sebutanDesa') }}
+                                        </option>
                                         <option>Lain-lain (Hibah)</option>
                                     </select>
                                     @error('asaldana')
@@ -108,7 +112,9 @@
                                 <div class="col">
                                     <div class="mb-4">
                                         <label for="sdate">Tanggal Mulai<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control datepicker @error('sdate') is-invalid @enderror" x-model="data.sdate" name="sdate" id="sdate">
+                                        <input type="text"
+                                            class="form-control datepicker @error('sdate') is-invalid @enderror"
+                                            x-model="data.sdate" name="sdate" id="sdate">
                                         @error('sdate')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -117,7 +123,9 @@
                                 <div class="col">
                                     <div class="mb-4">
                                         <label for="edate">Tanggal Berakhir<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control datepicker @error('edate') is-invalid @enderror" x-model="data.edate" name="edate" id="edate">
+                                        <input type="text"
+                                            class="form-control datepicker @error('edate') is-invalid @enderror"
+                                            x-model="data.edate" name="edate" id="edate">
                                         @error('edate')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -144,16 +152,23 @@
 @include('partials.asset_datepicker')
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
-    document.addEventListener("DOMContentLoaded", function(event) {
-        $(document).on('click', 'button#submit', function(e) {
+    <script nonce="{{ csp_nonce() }}">
+        document.addEventListener("DOMContentLoaded", function(event) {
+            $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();
-                let dateParam = $.param({ sdate: $('input[name=sdate]').data('daterangepicker').startDate.format('YYYY-MM-DD'), edate: $('input[name=edate]').data('daterangepicker').startDate.format('YYYY-MM-DD')})
-                let formData = $('#bantuan-form  input,textarea,select').not('.datepicker').serialize()+'&'+dateParam
+                let dateParam = $.param({
+                    sdate: $('input[name=sdate]').data('daterangepicker').startDate.format(
+                        'YYYY-MM-DD'),
+                    edate: $('input[name=edate]').data('daterangepicker').startDate.format(
+                        'YYYY-MM-DD')
+                })
+                let formData = $('#bantuan-form  input,textarea,select').not('.datepicker').serialize() +
+                    '&' + dateParam
                 var id = "{{ $id }}";
 
                 const header = @include('layouts.components.header_bearer_api_gabungan');
-                var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan-kabupaten/perbarui' }}");
+                var url = new URL(
+                    "{{ config('app.databaseGabunganUrl') . '/api/v1/bantuan-kabupaten/perbarui' }}");
 
                 Swal.fire({
                     title: 'Ubah',
@@ -172,7 +187,8 @@
                         $.ajax({
                             type: "PUT",
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content'),
                                 'Authorization': 'Bearer {{ $settingAplikasi->get('database_gabungan_api_key') }}'
                             },
                             dataType: "json",
@@ -187,7 +203,8 @@
                                         showConfirmButton: true,
                                         timer: 1500
                                     })
-                                    window.location = `{{ url('master/bantuan') }}`
+                                    window.location =
+                                        `{{ url('master/bantuan') }}?clear_cache=${id}`
                                 } else {
                                     Swal.fire(
                                         'Error!',
@@ -207,6 +224,6 @@
                     }
                 })
             });
-    })
+        })
     </script>
 @endsection

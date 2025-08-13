@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AccessTypeEnum;
-use App\Models\Lokasi;
-use App\Models\Point;
 use App\Services\PemetaanService;
 
 class PlanController extends Controller

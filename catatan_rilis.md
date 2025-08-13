@@ -1,17 +1,14 @@
-Di rilis ini, versi 2507.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2508.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
-
+1. [#784](https://github.com/OpenSID/OpenKab/issues/784) Penambahan fungsi export excel pada halaman data statistik pada OpenKab.
+2. [#789](https://github.com/OpenSID/OpenKab/issues/789) Penambahan fungsi export data ke excel.
+3. [#800](https://github.com/OpenSID/OpenKab/issues/800) Penambahan fungsi untuk penyebutan kelurahan / desa & Kabupaten / Kota.
 
 #### Perbaikan BUG
 
 
+
 #### Perubahan Teknis
 
-1. [#753](https://github.com/OpenSID/OpenKab/issues/753) Penambahan unit testing pada menu CMS CategoryController.
-2. [#754](https://github.com/OpenSID/OpenKab/issues/754) Penambahan unit testing pada menu CMS ArticleController.
-3. [#755](https://github.com/OpenSID/OpenKab/issues/755) Penambahan unti testing pada CMS MenusController dan StatistikPengunjungController.
-4. [#757](https://github.com/OpenSID/OpenKab/issues/757) Penambahan unit testing pada SlideController.
-5. [#756](https://github.com/OpenSID/OpenKab/issues/756) Penambahan unit testing pada PageController.
-6. [#751](https://github.com/OpenSID/OpenKab/issues/751) Penambahan unit testing DownloadController Daftar Unduhan.

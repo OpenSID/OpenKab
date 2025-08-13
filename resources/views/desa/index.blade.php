@@ -38,7 +38,7 @@
                                         <div class="form-group">
                                             <label>Kabupaten</label>
                                             <select name="Filter Kabupaten" id="filter_kabupaten" class="form-control-sm"
-                                                title="Pilih Kabupaten">
+                                                title="Pilih {{ config('app.sebutanKab') }}">
                                                 @if ($filters['kode_kabupaten'] ?? false)
                                                     <option value="{{ $filters['kode_kabupaten'] }}" selected>
                                                         {{ $filters['nama_kabupaten'] }}</option>
@@ -60,9 +60,9 @@
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
-                                            <label>Desa</label>
+                                            <label>{{ config('app.sebutanDesa') }}</label>
                                             <select name="Filter Desa" id="filter_desa" class="form-control"
-                                                title="Pilih Desa">
+                                                title="Pilih {{ config('app.sebutanDesa') }}">
                                                 @if ($filters['kode_desa'] ?? false)
                                                     <option value="{{ $filters['kode_desa'] }}" selected>
                                                         {{ $filters['nama_desa'] }}</option>
@@ -102,7 +102,7 @@
                             <thead>
                                 <tr>
                                     <th class="padat">No</th>
-                                    <th>Desa</th>
+                                    <th>{{ config('app.sebutanDesa') }}</th>
                                     <th>Kecamatan</th>
                                     <th class="padat">Jumlah Penduduk</th>
                                 </tr>
@@ -130,7 +130,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
                 searchPanes: {
                     viewTotal: false,
                     columns: [0]
@@ -146,6 +146,10 @@
                             "filter[kode_kabupaten]": $("#filter_kabupaten").val(),
                             "filter[kode_kecamatan]": $("#filter_kecamatan").val(),
                             "filter[kode_desa]": $("#filter_desa").val(),
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
+                                    .order[0]
+                                    ?.column]
+                                ?.name
                         };
                     },
                     dataSrc: function(json) {
@@ -178,15 +182,18 @@
                     },
                     {
                         data: "attributes.nama_desa",
-                        name: "nama_desa"
+                        name: "nama_desa",
+                        orderable: true,
                     },
                     {
                         data: "attributes.nama_kecamatan",
-                        name: "nama_kecamatan"
+                        name: "nama_kecamatan",
+                        orderable: true,
                     },
                     {
                         data: "attributes.penduduk_count",
                         name: "penduduk_count",
+                        orderable: true,
                         className: 'text-center'
                     },
                 ],

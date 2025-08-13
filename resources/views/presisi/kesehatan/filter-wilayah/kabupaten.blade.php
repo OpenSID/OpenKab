@@ -1,7 +1,7 @@
 <script nonce="{{ csp_nonce() }}">
     const defaultKabupaten = "{{ $defaultKabupaten == 'null' ? null : $defaultKabupaten }}";
     $('#filter_kabupaten').select2({
-        placeholder: "Pilih Kabupaten"
+        placeholder: "Pilih {{ config('app.sebutanKab') }}"
     });
     GetListKabupaten();
     $('#filter_kabupaten').on("change", function(e) {

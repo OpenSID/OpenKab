@@ -93,7 +93,7 @@ class MenuListener
                 'url' => 'sesi/hapus/desa',
                 'active' => ! session()->has('desa'),
                 'data' => [
-                    'desa' => 'Desa',
+                    'desa' => config('app.sebutanDesa', 'Desa'),
                 ],
             ]);
 

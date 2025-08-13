@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web;
 use App\Enums\AccessTypeEnum;
 use App\Enums\KeluargaKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
-use App\Models\Bantuan;
 use App\Models\Enums\StatistikPendudukEnum;
 use App\Models\Enums\StatistikRtmEnum;
 use App\Services\KesehatanApiService;
@@ -24,12 +23,12 @@ class PresisiController extends Controller
         $keluargaSummary = 0;
         $categoriesItems = [
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
-            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'desa', 'text' => config('app.sebutanDesa'), 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
         $listKecamatan = ['' => 'Pilih Kecamatan'];
-        $listDesa = ['' => 'Pilih Desa'];
+        $listDesa = ['' => 'Pilih '.config('app.sebutanDesa')];
 
         return view('presisi.index', compact('categoriesItems', 'listKecamatan', 'listDesa'));
     }
@@ -42,7 +41,7 @@ class PresisiController extends Controller
         $keluargaSummary = 0;
         $categoriesItems = [
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
-            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'desa', 'text' => config('app.sebutanDesa'), 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
@@ -65,7 +64,7 @@ class PresisiController extends Controller
         $keluargaSummary = 0;
         $categoriesItems = [
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
-            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'desa', 'text' => config('app.sebutanDesa'), 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
@@ -122,7 +121,7 @@ class PresisiController extends Controller
         $keluargaSummary = 0;
         $categoriesItems = [
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
-            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'desa', 'text' => config('app.sebutanDesa'), 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
@@ -142,7 +141,7 @@ class PresisiController extends Controller
         $keluargaSummary = 0;
         $categoriesItems = [
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
-            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'desa', 'text' => config('app.sebutanDesa'), 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
@@ -158,13 +157,12 @@ class PresisiController extends Controller
         $keluargaSummary = 0;
         $categoriesItems = [
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
-            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'desa', 'text' => config('app.sebutanDesa'), 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];
-        $statistik = Bantuan::get();
 
-        return view('presisi.bantuan.index', compact('id', 'categoriesItems', 'statistik'));
+        return view('presisi.bantuan.index', compact('id', 'categoriesItems'));
     }
 
     /**
@@ -178,7 +176,7 @@ class PresisiController extends Controller
         $keluargaSummary = 0;
         $categoriesItems = [
             ['key' => 'kecamatan', 'text' => 'kecamatan', 'value' => $configSummary, 'icon' => 'web/img/kecamatan.jpg'],
-            ['key' => 'desa', 'text' => 'desa/kelurahan', 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
+            ['key' => 'desa', 'text' => config('app.sebutanDesa'), 'value' => $totalDesa, 'icon' => 'web/img/kelurahan.jpg'],
             ['key' => 'penduduk', 'text' => 'jumlah penduduk', 'value' => $pendudukSummary, 'icon' => 'web/img/penduduk.jpg'],
             ['key' => 'keluarga', 'text' => 'jumlah keluarga', 'value' => $keluargaSummary, 'icon' => 'web/img/bantuan.jpg'],
         ];

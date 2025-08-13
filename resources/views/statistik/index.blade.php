@@ -50,6 +50,12 @@
                                 Cetak</button>
                         </div>
                         <div class="col-md-2">
+                            <button type="button" id="export-excel" class="btn btn-info btn-block btn-sm">
+                                <i class="fa fa-file-excel"></i>
+                                Excel
+                            </button>
+                        </div>
+                        <div class="col-md-2">
                             <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
                                 href="#grafik-statistik" role="button" aria-expanded="false"
                                 aria-controls="grafik-statistik">
@@ -149,7 +155,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th id="judul_kolom_nama" width="50%"></th>
+                                    <th id="judul_kolom_nama" width="50%">Jenis Kelompok</th>
                                     <th colspan="2" class="dt-head-center">Jumlah</th>
                                     <th colspan="2" class="dt-head-center">Laki - laki</th>
                                     <th colspan="2" class="dt-head-center">Perempuan</th>
@@ -165,6 +171,7 @@
 @endsection
 
 @section('js')
+    <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/js/excellentexport.js') }}"></script>
     @include('statistik.chart')
     <script nonce="{{ csp_nonce() }}">
         let data_grafik = [];
@@ -239,6 +246,190 @@
                 url.searchParams.append("filter[tahun]", $("#tahun").val() ?? '');
                 url.searchParams.append("filter[bulan]", $("#bulan").val() ?? '');
                 window.open(url, '_blank');
+            });
+
+            // Helper function to create Excel export caption
+            function createExportCaption(categoryName, options = {}) {
+                const {
+                    includeDate = true,
+                        includeLocation = true,
+                        includePeriod = true,
+                        customTitle = null,
+                } = options;
+
+                var caption = {
+                    title: customTitle || `Data Statistik ${categoryName}`,
+                    period: '',
+                    date: '',
+                    location: ''
+                };
+
+                // Add period information
+                if (includePeriod) {
+                    var tahun = $("#tahun").val();
+                    var bulan = $("#bulan").val();
+
+                    if (tahun || bulan) {
+                        var periodParts = [];
+                        if (bulan) {
+                            const bulanNames = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                            ];
+                            periodParts.push(`Bulan: ${bulanNames[parseInt(bulan)]}`);
+                        }
+                        if (tahun) {
+                            periodParts.push(`Tahun: ${tahun}`);
+                        }
+                        caption.period = periodParts.join(' | ');
+                    }
+                }
+
+                // Add export date
+                if (includeDate) {
+                    var now = new Date();
+                    caption.date =
+                        `Diekspor pada: ${now.toLocaleDateString('id-ID')} ${now.toLocaleTimeString('id-ID')}`;
+                }
+
+                // Add location info
+                if (includeLocation) {
+                    caption.location =
+                        `Kabupaten: {{ session('kabupaten.nama_kabupaten') ?? 'N/A' }} | Kecamatan: {{ session('kecamatan.nama_kecamatan') ?? 'N/A' }}`;
+                }
+
+                return caption;
+            }
+
+            // Function to generate dynamic Excel export
+            function exportToExcel() {
+                console.log('Starting Excel export...');
+
+                // Check if table has data
+                var tableRows = $('#tabel-data tbody tr').length;
+                console.log('Table rows count:', tableRows);
+
+                if (tableRows === 0) {
+                    alert('Tidak ada data untuk diekspor. Silakan pilih kategori terlebih dahulu.');
+                    return false;
+                }
+
+                // Get current active category
+                var activeCategory = $('#daftar-statistik .active');
+                var categoryName = activeCategory.data('nama') || 'Statistik';
+                var tahun = $("#tahun").val();
+                var bulan = $("#bulan").val();
+
+                console.log('Category:', categoryName, 'Year:', tahun, 'Month:', bulan);
+
+                // Generate dynamic filename
+                var filename = `Statistik_${categoryName}_${nama_desa}`;
+                if (tahun) {
+                    filename += `_${tahun}`;
+                }
+                if (bulan) {
+                    const bulanNames = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                    ];
+                    filename += `_${bulanNames[parseInt(bulan)]}`;
+                }
+
+                // Clean filename - remove special characters
+                filename = filename.replace(/[^a-zA-Z0-9_-]/g, '_');
+
+                // Generate sheet name (max 31 chars for Excel)
+                var sheetName = categoryName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 31) || 'Statistik';
+
+                // Create export caption using helper function
+                // Anda bisa mengkustomisasi caption dengan mengubah opsi di bawah ini:
+                var caption = createExportCaption(categoryName, {
+                    includeDate: true, // Tampilkan tanggal export
+                    includeLocation: false, // Tampilkan info kabupaten/kecamatan
+                    includePeriod: true, // Tampilkan info tahun/bulan
+                    customTitle: `Laporan Statistik {{ $judul }} Kategori ${categoryName}`, // Custom judul utama
+                });
+
+                // Create a clone of the table for export
+                var $originalTable = $('#tabel-data');
+                var $exportTable = $originalTable.clone();
+                $exportTable.attr('id', 'export-table');
+
+                // Add title rows before the header
+                var titleRows = '';
+                titleRows +=
+                    `<tr><td colspan="8" style="text-align: center; font-weight: bold; font-size: 18px; background-color: #2c3e50; color: white; padding: 10px;">${caption.title}</td></tr>`;
+
+                if (caption.period) {
+                    titleRows +=
+                        `<tr><td colspan="8" style="text-align: center; font-size: 12px; background-color: #ecf0f1; padding: 5px;">${caption.period}</td></tr>`;
+                }
+
+                if (caption.date) {
+                    titleRows +=
+                        `<tr><td colspan="8" style="text-align: center; font-size: 10px; background-color: #bdc3c7; padding: 3px;">${caption.date}</td></tr>`;
+                }
+
+                // Add empty row for spacing
+                titleRows += '<tr><td colspan="8" style="height: 15px; background-color: white;"></td></tr>';
+
+                // Insert title rows into the table
+                $exportTable.find('thead').prepend(titleRows);
+
+                // Add footer information
+                var footerRows = '';
+                footerRows += '<tr><td colspan="8" style="height: 15px; background-color: white;"></td></tr>';
+                footerRows +=
+                    `<tr><td colspan="8" style="text-align: left; font-size: 10px; background-color: #ecf0f1; padding: 5px;">Catatan: Data statistik ini dihasilkan dari sistem informasi desa</td></tr>`;
+
+                if (caption.location) {
+                    footerRows +=
+                        `<tr><td colspan="8" style="text-align: left; font-size: 10px; background-color: #ecf0f1; padding: 5px;">${caption.location}</td></tr>`;
+                }
+
+                // Add footer to table
+                $exportTable.find('tbody').append(footerRows);
+
+                // Temporarily add the export table to DOM (hidden)
+                $exportTable.css('display', 'none');
+                $('body').append($exportTable);
+
+                // Create temporary anchor with proper attributes
+                var tempAnchor = document.createElement('a');
+                tempAnchor.download = filename + '.xls';
+                tempAnchor.href = '#';
+                tempAnchor.setAttribute('download', filename + '.xls');
+
+                // Add to DOM temporarily
+                document.body.appendChild(tempAnchor);
+
+                try {
+                    // Call ExcellentExport directly using the export table
+                    console.log('Calling ExcellentExport.excel...');
+                    var result = ExcellentExport.excel(tempAnchor, 'export-table', sheetName);
+                    console.log('Export result:', result);
+
+                    if (result) {
+                        tempAnchor.click(); // Trigger download
+                        // Optional: Show success message
+                        console.log('File Excel berhasil diunduh: ' + filename + '.xls');
+                    } else {
+                        console.error('Excel export failed - no result returned');
+                        alert('Gagal mengunduh file Excel. Silakan coba lagi.');
+                    }
+                } catch (error) {
+                    console.error('Excel export error:', error);
+                    alert('Terjadi kesalahan saat mengunduh Excel: ' + error.message);
+                } finally {
+                    // Clean up
+                    document.body.removeChild(tempAnchor);
+                    $('#export-table').remove(); // Remove the temporary table
+                }
+
+                return result;
+            }
+
+            $('#export-excel').on('click', function() {
+                console.log('Export button clicked');
+                exportToExcel();
             });
 
             $('#btn-grafik').on('click', function() {
@@ -322,24 +513,26 @@
                 columns: [{
                     data: null,
                 }, {
-                     data: function(data) {
+                    data: function(data) {
 
                         const id = data.id?.toString() ?? '';
 
-                        if(data.attributes.nama !== 'JUMLAH' && data.attributes.nama !== 'BELUM MENGISI' && data.attributes.nama !== 'TOTAL'){
+                        if (data.attributes.nama !== 'JUMLAH' && data.attributes.nama !==
+                            'BELUM MENGISI' && data.attributes.nama !== 'TOTAL') {
 
                             let kriteria = new URLSearchParams(JSON.parse(data.attributes
                                 .kriteria));
-    
+
                             let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
                                 .attributes.nama;
                             let urlDetail = new URL(urlDetailLink);
                             urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());
                             urlDetail.searchParams.set('judul', judul);
                             urlDetail.searchParams.set('nama', data.attributes.nama);
-                            urlDetail.searchParams.set('tipe', $('.pilih-kategori > a.active').text().trim());
+                            urlDetail.searchParams.set('tipe', $('.pilih-kategori > a.active')
+                                .text().trim());
                             urlDetail.searchParams.set('chart-view', true);
-    
+
                             return `<a target="_blank" href=${urlDetail.href}>${data.attributes.nama}</a>`
                         }
 

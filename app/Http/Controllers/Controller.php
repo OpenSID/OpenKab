@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Modul;
-use App\Models\Bantuan;
-use App\Models\Config;
 use App\Models\Identitas;
-use App\Models\Keluarga;
-use App\Models\Penduduk;
-use App\Models\Rtm;
 use App\Models\Setting;
+use App\Services\SummaryWebsiteService;
 use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -61,6 +57,15 @@ class Controller extends BaseController
         }
 
         $host_pantau = config('app.serverPantau');
+        $summary = (new SummaryWebsiteService)->getSummaryData();
+        $dataKirim = $summary['categoriesItems'] ?? [
+            'desa' => ['value' => 0],
+            'penduduk' => ['value' => 0],
+            'keluarga' => ['value' => 0],
+            'rtm' => ['value' => 0],
+            'bantuan' => ['value' => 0],
+
+        ];
         $data = [
             'url' => url('/'),
             'versi' => openkab_versi(),
@@ -70,18 +75,23 @@ class Controller extends BaseController
             'nama_prov' => $this->identitas->nama_provinsi,
             'nama_aplikasi' => $this->identitas->nama_aplikasi,
             'sebutan_kab' => $this->identitas->sebutan_kab,
-            'jumlah_desa' => Config::count(),
-            'jumlah_penduduk' => Penduduk::status()->count(),
-            'jumlah_keluarga' => Keluarga::status()->count(),
-            'jumlah_rtm' => Rtm::status()->count(),
-            'jumlah_bantuan' => Bantuan::count(),
+            'jumlah_desa' => str_replace('.', '', $dataKirim['desa']['value']),
+            'jumlah_penduduk' => str_replace('.', '', $dataKirim['penduduk']['value']),
+            'jumlah_keluarga' => str_replace('.', '', $dataKirim['keluarga']['value']),
+            'jumlah_rtm' => str_replace('.', '', $dataKirim['rtm']['value'] ?? 0),
+            'jumlah_bantuan' => str_replace('.', '', $dataKirim['bantuan']['value']),
         ];
 
         try {
             $response = Http::withHeaders([
                 'token' => config('app.tokenPantau'),
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ])->post($host_pantau.'/index.php/api/track/openkab?token='.config('app.tokenPantau'), $data);
             cache()->put('track', date('Y m d'), 60 * 60 * 24);
+            if (! $response->successful()) {
+                Log::error('Gagal kirim track OpenKab ke Pantau: '.$host_pantau.' - Response: '.$response->body());
+            }
 
             return;
         } catch (Exception $e) {

@@ -39,6 +39,14 @@ class BaseApiService
         return $prefix.'_'.md5(json_encode($filters));
     }
 
+    public function clearCache(string $prefix, array $filters = [])
+    {
+        $cacheKey = $this->buildCacheKey($prefix, $filters);
+        if (cache()->has($cacheKey)) {
+            cache()->forget($cacheKey);
+        }
+    }
+
     /**
      * General API Call Method.
      */

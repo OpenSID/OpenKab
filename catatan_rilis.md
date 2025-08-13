@@ -13,3 +13,4 @@ Di rilis ini, versi 2508.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perubahan Teknis
 
+1. [#781](https://github.com/OpenSID/OpenKab/issues/781) Penambahan e2e testing untuk OpenKab.

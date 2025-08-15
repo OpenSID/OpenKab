@@ -11,9 +11,6 @@
                 const headers = @include('layouts.components.header_bearer_api_gabungan');
                 var create_url = new URL({{ json_encode(config('app.databaseGabunganUrl')) }} + '/api/v1/ketenagakerjaan');
     
-                create_url.searchParams.set('kode_kecamatan', {{ json_encode(session('kecamatan.kode_kecamatan') ?? '') }});
-                create_url.searchParams.set('config_desa', {{ json_encode(session('desa.id') ?? '') }});
-    
                 // Get current URL parameters and add them to create_url
                 const currentUrl = new URL(window.location.href);
                 const urlParams = currentUrl.searchParams;
@@ -36,7 +33,7 @@
                 this.data = result.data;
     
                 await $nextTick();
-                //window.print();
+                window.print();
             } catch (error) {
                 console.error('Terjadi kesalahan:', error);
                 alert('Terjadi kesalahan saat mengambil data.');

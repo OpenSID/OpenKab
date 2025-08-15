@@ -46,10 +46,12 @@
                     <th class="padat">No</th>
                     <th class="padat">Nama {{ config('app.sebutanDesa') }}</th>
                     <th class="padat">NIK</th>
-                    <th class="padat">Pekerjaan</th>
-                    <th class="padat">Jabatan</th>
-                    <th class="padat">Jumlah Penghasilan</th>
-                    <th class="padat">Pelatihan</th>
+                    <th class="padat">Pendidikan<br> dalam KK</th>
+                    <th class="padat">Pendidikan<br>Sedang Ditempuh</th>
+                    <th class="padat">Partisipasi Sekolah</th>
+                    <th class="padat">Jenjang<br> dan Jenis<br>Pendidikan Tertinggi</th>
+                    <th class="padat">Kelas Tertinggi</th>
+                    <th class="padat">Ijazah Tertinggi</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,10 +60,12 @@
                         <td class="padat" x-text="index+1"></td>
                         <td x-text="value.attributes.nama_desa"></td>
                         <td x-text="value.attributes.nik"></td>
-                        <td x-text="value.attributes.pekerjaan"></td>
-                        <td x-text="value.attributes.jabatan"></td>
-                        <td x-text="value.attributes.jumlah_penghasilan"></td>
-                        <td x-text="value.attributes.pelatihan"></td>
+                        <td x-text="value.attributes.pendidikan_kk_id"></td>
+                        <td x-text="value.attributes.pendidikan_sedang_id"></td>
+                        <td x-text="value.attributes.partisipasi_sekolah"></td>
+                        <td x-text="value.attributes.pendidikan_tertinggi"></td>
+                        <td x-text="value.attributes.kelas_tertinggi"></td>
+                        <td x-text="value.attributes.ijazah_tertinggi"></td>
                     </tr>
                 </template>
             </tbody>

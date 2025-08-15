@@ -63,6 +63,11 @@ class DataPokokController extends Controller
         return view('data_pokok.pendidikan.index');
     }
 
+    public function cetakPendidikan(Request $request)
+    {
+        return view('data_pokok.pendidikan.cetak', ['filter' => $request->getQueryString()]);
+    }
+
     public function ketenagakerjaan()
     {
         $title = 'Data Pekerjaan dan Pelatihan';

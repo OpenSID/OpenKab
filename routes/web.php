@@ -136,7 +136,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
-
     // rtm
     Route::middleware(['permission:penduduk-read'])->controller(RtmController::class)
         ->prefix('rtm')
@@ -161,6 +160,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         ->group(function () {
             Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
             Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan/cetak', 'cetakPendidikan')->name('pendidikan.cetak');
             Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial/detail', 'detailJaminanSosial')->name('jaminan-sosial-detail');
@@ -229,14 +229,12 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     });
 
     Route::prefix('data-presisi')->group(function () {
-
         Route::prefix('kesehatan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiKesehatanController::class, 'index'])->name('data-pokok.data-presisi.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiKesehatanController::class, 'detail'])->name('data-pokok.data-presisi.detail');
             Route::get('cetak', [App\Http\Controllers\DataPresisiKesehatanController::class, 'cetak'])->name('data-pokok.data-presisi.cetak');
         })
         ->middleware(['permission:datapresisi-kesehatan-read']);
-
 
         Route::prefix('seni-budaya')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'index'])->name('data-pokok.data-presisi-seni-budaya.index');
@@ -272,7 +270,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('cetak', [App\Http\Controllers\DataPresisiAdatController::class, 'cetak'])->name('data-pokok.data-presisi-adat.cetak');
         })
         ->middleware(['permission:datapresisi-adat-read']);
-
     });
 
     // Prodeskel

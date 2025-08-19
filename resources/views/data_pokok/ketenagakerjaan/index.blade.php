@@ -42,7 +42,14 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <div class="float-left">{{ $title }}</div>
+                    <div>{{ $title }}</div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <x-print-button :print-url="url('data-pokok/ketenagakerjaan/cetak')" table-id="ketenagakerjaan" :filter="[]" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/ketenagakerjaan/download'" table-id="ketenagakerjaan"
+                                filename="data_ketenagakerjaan" />
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -50,6 +57,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Nama {{ config('app.sebutanDesa') }}</th>
                                     <th>NIK</th>
                                     <th>Pekerjaan</th>
                                     <th>Jabatan</th>
@@ -68,96 +76,100 @@
 
 @section('js')
     @include('data_pokok.ketenagakerjaan.chart')
-    <script nonce="{{ csp_nonce() }}"  >
+    <script nonce="{{ csp_nonce() }}">
         let data_grafik = [];
-    document.addEventListener("DOMContentLoaded", function(event) {
+        document.addEventListener("DOMContentLoaded", function(event) {
 
-        const header = @include('layouts.components.header_bearer_api_gabungan');
-        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/ketenagakerjaan' }}");
-        url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
-        url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-        url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+            var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/ketenagakerjaan' }}");
+            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
 
-        var ketenagakerjaan = $('#ketenagakerjaan').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ordering: false,
-            searchPanes: {
-                viewTotal: false,
-                columns: [0]
-            },
-            ajax: {
-                url: url.href,
-                headers: header,
-                method: 'get',
-                data: function(row) {
-                    return {
-                        "page[size]": row.length,
-                        "page[number]": (row.start / row.length) + 1,
-                        "filter[search]": row.search.value,
-                        "filter[kode_desa]": $("#kode_desa").val(),
-                    };
+            var ketenagakerjaan = $('#ketenagakerjaan').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                ordering: false,
+                searchPanes: {
+                    viewTotal: false,
+                    columns: [0]
                 },
-                dataSrc: function(json) {
-                    
-                    if (json.data.length > 0) {
-                        json.recordsTotal = json.meta.pagination.total
-                        json.recordsFiltered = json.meta.pagination.total
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })
-                        grafikPie()
-                        return json.data;
-                    }
-                    return false;
+                ajax: {
+                    url: url.href,
+                    headers: header,
+                    method: 'get',
+                    data: function(row) {
+                        return {
+                            "page[size]": row.length,
+                            "page[number]": (row.start / row.length) + 1,
+                            "filter[search]": row.search.value,
+                            "filter[kode_desa]": $("#kode_desa").val(),
+                        };
+                    },
+                    dataSrc: function(json) {
+
+                        if (json.data.length > 0) {
+                            json.recordsTotal = json.meta.pagination.total
+                            json.recordsFiltered = json.meta.pagination.total
+                            data_grafik = [];
+                            json.data.forEach(function(item, index) {
+                                data_grafik.push(item.attributes)
+                            })
+                            grafikPie()
+                            return json.data;
+                        }
+                        return false;
+                    },
                 },
-            },
-            columnDefs: [{
-                        targets: '_all',
-                        className: 'text-nowrap',
+                columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                }, ],
+                columns: [{
+                        data: null,
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.nama_desa",
+                        name: "nama_desa",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.nik",
+                        name: "nik",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.pekerjaan",
+                        name: "pekerjaan",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.jabatan",
+                        name: "jabatan",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.jumlah_penghasilan",
+                        name: "jumlah_penghasilan",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.pelatihan",
+                        name: "pelatihan",
+                        orderable: false
                     },
                 ],
-            columns: [{
-                    data: null,
-                    orderable: false
-                },
-                {
-                    data: "attributes.nik",
-                    name: "nik",
-                    orderable: false
-                },
-                {
-                    data: "attributes.pekerjaan",
-                    name: "pekerjaan",
-                    orderable: false
-                },
-                {
-                    data: "attributes.jabatan",
-                    name: "jabatan",
-                    orderable: false
-                },
-                {
-                    data: "attributes.jumlah_penghasilan",
-                    name: "jumlah_penghasilan",
-                    orderable: false
-                },
-                {
-                    data: "attributes.pelatihan",
-                    name: "pelatihan",
-                    orderable: false
-                },
-            ],
-        })
-        ketenagakerjaan.on('draw.dt', function() {
-            var PageInfo = $('#ketenagakerjaan').DataTable().page.info();
-            ketenagakerjaan.column(0, {
-                page: 'current'
-            }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1 + PageInfo.start;
+            })
+            ketenagakerjaan.on('draw.dt', function() {
+                var PageInfo = $('#ketenagakerjaan').DataTable().page.info();
+                ketenagakerjaan.column(0, {
+                    page: 'current'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1 + PageInfo.start;
+                });
             });
-        });
-    })
+        })
     </script>
 @endsection

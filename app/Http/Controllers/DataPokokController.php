@@ -75,6 +75,11 @@ class DataPokokController extends Controller
         return view('data_pokok.ketenagakerjaan.index', ['title' => $title]);
     }
 
+    public function cetakKetenagakerjaan(Request $request)
+    {
+        return view('data_pokok.ketenagakerjaan.cetak', ['filter' => $request->getQueryString()]);
+    }
+
     public function infrastruktur()
     {
         $title = 'Data Prasarana dan Sarana';

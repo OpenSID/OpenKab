@@ -23,6 +23,7 @@
                             <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url=""><i
                                     class="fa fa-print"></i>
                                 Cetak</button>
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/bantuan/download'" table-id="bantuan" filename="data_bantuan" />
                         </div>
                     </div>
                 </div>
@@ -80,6 +81,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Aksi</th>
+                                    <th>Nama {{ config('app.sebutanDesa') }}</th>
                                     <th>Nama Program</th>
                                     <th>Asal Dana</th>
                                     <th>Jumlah Peseerta</th>
@@ -98,178 +100,187 @@
 @endsection
 
 @section('js')
-    <script nonce="{{ csp_nonce() }}"  >
-    document.addEventListener("DOMContentLoaded", function(event) {
+    <script nonce="{{ csp_nonce() }}">
+        document.addEventListener("DOMContentLoaded", function(event) {
 
-        const header = @include('layouts.components.header_bearer_api_gabungan');
-        var urlBantuan = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan' }}");
-        var urlSasaran = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/sasaran' }}");
-        var urlTahun = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/bantuan/tahun' }}");
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+            var urlBantuan = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/bantuan' }}");
+            var urlSasaran = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/bantuan/sasaran' }}");
+            var urlTahun = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/bantuan/tahun' }}");
 
-        var bantuan = $('#bantuan').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ordering: true,
-            searchPanes: {
-                viewTotal: false,
-                columns: [0]
-            },
-            ajax: {
-                url: urlBantuan,
-                headers: header,
-                method: 'get',
-                data: function(row) {
-                    return {
-                        "page[size]": row.length,
-                        "page[number]": (row.start / row.length) + 1,
-                        "filter[search]": row.search.value,
-                        "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]
-                            ?.name,
-                        "filter[sasaran]": $("#sasaran").val(),
-                        "filter[tahun]": $("#tahun").val(),
-                        "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                        "config_desa": "{{ session('desa.id') ?? '' }}",
-                    };
+            var bantuan = $('#bantuan').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                ordering: true,
+                searchPanes: {
+                    viewTotal: false,
+                    columns: [0]
                 },
-                dataSrc: function(json) {
-                    json.recordsTotal = json.meta.pagination.total
-                    json.recordsFiltered = json.meta.pagination.total
+                ajax: {
+                    url: urlBantuan,
+                    headers: header,
+                    method: 'get',
+                    data: function(row) {
+                        return {
+                            "page[size]": row.length,
+                            "page[number]": (row.start / row.length) + 1,
+                            "filter[search]": row.search.value,
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
+                                    ?.column]
+                                ?.name,
+                            "filter[sasaran]": $("#sasaran").val(),
+                            "filter[tahun]": $("#tahun").val(),
+                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
+                            "config_desa": "{{ session('desa.id') ?? '' }}",
+                        };
+                    },
+                    dataSrc: function(json) {
+                        json.recordsTotal = json.meta.pagination.total
+                        json.recordsFiltered = json.meta.pagination.total
 
-                    return json.data
+                        return json.data
+                    },
                 },
-            },
-            columnDefs: [{
-                    targets: '_all',
-                    className: 'text-nowrap',
-                },
-                {
-                    targets: [0, 1, 4, 5, 6, 7],
-                    orderable: false,
-                    searchable: false,
-                },
-            ],
-            columns: [{
-                    data: null,
-                },
-                {
-                    data: function(data) {
-                        return `<a href="{{ url('bantuan/detail') }}/${data.id}">
+                columnDefs: [{
+                        targets: '_all',
+                        className: 'text-nowrap',
+                    },
+                    {
+                        targets: [0, 1, 4, 5, 6, 7],
+                        orderable: false,
+                        searchable: false,
+                    },
+                ],
+                columns: [{
+                        data: null,
+                    },
+                    {
+                        data: function(data) {
+                            return `<a href="{{ url('bantuan/detail') }}/${data.id}">
                             <button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Detail</button>
                         </a>`;
 
 
+                        },
                     },
-                },
-                {
-                    data: "attributes.nama",
-                    name: "nama"
-                },
-                {
-                    data: "attributes.asaldana",
-                    name: "asaldana"
-                },
-                {
-                    data: "attributes.jumlah_peserta",
-                    name: "jumlah_peserta",
-                    className: 'text-center'
-                },
-                {
-                    data: function(data) {
-                        return data.attributes.sdate + ' - ' + data.attributes.edate
+                    {
+                        data: 'attributes.nama_desa',
+                        orderable: false,
+                        searchable: false,
+                        defaultContent: '',
+                        className: 'text-center',
                     },
-                },
-                {
-                    data: "attributes.nama_sasaran",
-                    name: "nama_sasaran",
-                },
-                {
-                    data: function(data) {
-                        return data.attributes.status == 1 ? 'Aktif' : 'Tidak Aktif'
+                    {
+                        data: "attributes.nama",
+                        name: "nama"
                     },
-                },
-            ],
-            order: [
-                [2, 'asc']
-            ]
-        })
+                    {
+                        data: "attributes.asaldana",
+                        name: "asaldana"
+                    },
+                    {
+                        data: "attributes.jumlah_peserta",
+                        name: "jumlah_peserta",
+                        className: 'text-center'
+                    },
+                    {
+                        data: function(data) {
+                            return data.attributes.sdate + ' - ' + data.attributes.edate
+                        },
+                    },
+                    {
+                        data: "attributes.nama_sasaran",
+                        name: "nama_sasaran",
+                    },
+                    {
+                        data: function(data) {
+                            return data.attributes.status == 1 ? 'Aktif' : 'Tidak Aktif'
+                        },
+                    },
+                ],
+                order: [
+                    [3, 'asc']
+                ]
+            })
 
-        bantuan.on('draw.dt', function() {
-            var PageInfo = $('#bantuan').DataTable().page.info();
-            bantuan.column(0, {
-                page: 'current'
-            }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1 + PageInfo.start;
+            bantuan.on('draw.dt', function() {
+                var PageInfo = $('#bantuan').DataTable().page.info();
+                bantuan.column(0, {
+                    page: 'current'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1 + PageInfo.start;
+                });
             });
-        });
 
-        $('#sasaran').select2({
-            theme: 'bootstrap4',
-            minimumResultsForSearch: -1,
-            ajax: {
-                url: urlSasaran,
-                headers: header,
-                dataType: 'json',
-                processResults: function(response) {
-                    return {
-                        results: response.data.map(function(item) {
-                            return {
-                                id: item.id,
-                                text: item.nama
-                            }
-                        })
-                    };
-                }
-            },
-        });
-
-        $('#tahun').select2({
-            minimumResultsForSearch: -1,
-            theme: 'bootstrap4',
-            ajax: {
-                url: urlTahun,
-                headers: header,
-                dataType: 'json',
-                processResults: function(data) {
-                    if (data.data.tahun_awal == null) {
-                        return null
-                    };
-                    const element = new Array();
-
-                    for (let index = data.data.tahun_awal; index <= data.data.tahun_akhir; index++) {
-                        element.push({
-                            id: index,
-                            text: index
-                        });
+            $('#sasaran').select2({
+                theme: 'bootstrap4',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    url: urlSasaran,
+                    headers: header,
+                    dataType: 'json',
+                    processResults: function(response) {
+                        return {
+                            results: response.data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.nama
+                                }
+                            })
+                        };
                     }
+                },
+            });
 
-                    return {
-                        results: element
-                    };
-                }
-            },
-        });
+            $('#tahun').select2({
+                minimumResultsForSearch: -1,
+                theme: 'bootstrap4',
+                ajax: {
+                    url: urlTahun,
+                    headers: header,
+                    dataType: 'json',
+                    processResults: function(data) {
+                        if (data.data.tahun_awal == null) {
+                            return null
+                        };
+                        const element = new Array();
+
+                        for (let index = data.data.tahun_awal; index <= data.data
+                            .tahun_akhir; index++) {
+                            element.push({
+                                id: index,
+                                text: index
+                            });
+                        }
+
+                        return {
+                            results: element
+                        };
+                    }
+                },
+            });
 
 
-        $('#filter').on('click', function(e) {
-            bantuan.draw();
-        });
+            $('#filter').on('click', function(e) {
+                bantuan.draw();
+            });
 
-        $(document).on('click', '#reset', function(e) {
-            e.preventDefault();
-            $('#sasaran').val('').change();
-            $('#tahun').val('').change();
+            $(document).on('click', '#reset', function(e) {
+                e.preventDefault();
+                $('#sasaran').val('').change();
+                $('#tahun').val('').change();
 
-            bantuan.ajax.reload();
-        });
+                bantuan.ajax.reload();
+            });
 
-        $('#cetak').on('click', function() {
-            let url = new URL("{{ url('bantuan/cetak') }}");
-            url.searchParams.append("sasaran", $("#sasaran").val() ?? '');
-            url.searchParams.append("tahun", $("#tahun").val() ?? '');
-            url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');
-            window.open(url.href, '_blank');
-        });
-    })
+            $('#cetak').on('click', function() {
+                let url = new URL("{{ url('bantuan/cetak') }}");
+                url.searchParams.append("sasaran", $("#sasaran").val() ?? '');
+                url.searchParams.append("tahun", $("#tahun").val() ?? '');
+                url.searchParams.append("search", $('input[aria-controls="bantuan"]').val() ?? '');
+                window.open(url.href, '_blank');
+            });
+        })
     </script>
 @endsection

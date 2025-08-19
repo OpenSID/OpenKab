@@ -32,6 +32,11 @@ class DataPokokController extends Controller
         return view('data_pokok.kesehatan.index', ['title' => $title]);
     }
 
+    public function cetakKesehatan(Request $request)
+    {
+        return view('data_pokok.kesehatan.cetak', ['filter' => $request->getQueryString()]);
+    }
+
     public function jaminanSosial()
     {
         $title = 'Data Kepesertaan Program dan Statistik';
@@ -73,6 +78,11 @@ class DataPokokController extends Controller
         $title = 'Data Pekerjaan dan Pelatihan';
 
         return view('data_pokok.ketenagakerjaan.index', ['title' => $title]);
+    }
+
+    public function cetakKetenagakerjaan(Request $request)
+    {
+        return view('data_pokok.ketenagakerjaan.cetak', ['filter' => $request->getQueryString()]);
     }
 
     public function infrastruktur()

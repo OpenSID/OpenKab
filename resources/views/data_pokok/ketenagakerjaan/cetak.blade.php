@@ -1,6 +1,6 @@
 @extends('layouts.cetak.index')
 
-@section('title', 'Data Bantuan')
+@section('title', 'Data Ketenagakerjaan')
 
 @section('content')
     @include('partials.breadcrumbs')
@@ -9,13 +9,18 @@
         async retrievePosts() {
             try {
                 const headers = @include('layouts.components.header_bearer_api_gabungan');
-                var create_url = new URL({{ json_encode(config('app.databaseGabunganUrl')) }} + '/api/v1/bantuan/cetak');
+                var create_url = new URL({{ json_encode(config('app.databaseGabunganUrl')) }} + '/api/v1/ketenagakerjaan');
     
-                create_url.searchParams.set('kode_kecamatan', {{ json_encode(session('kecamatan.kode_kecamatan') ?? '') }});
-                create_url.searchParams.set('config_desa', {{ json_encode(session('desa.id') ?? '') }});
+                // Get current URL parameters and add them to create_url
+                const currentUrl = new URL(window.location.href);
+                const urlParams = currentUrl.searchParams;
     
-                @foreach ($filter as $key => $value)
-                    create_url.searchParams.append('filter[{{ $key }}]', {{ json_encode($value) }}); @endforeach
+                // Add all search parameters from current URL
+                for (const [key, value] of urlParams.entries()) {
+                    if (value && value !== '' && value !== 'null') {
+                        create_url.searchParams.set(key, value);
+                    }
+                }
     
                 const response = await fetch(create_url.href, {
                     method: 'GET',
@@ -40,12 +45,11 @@
                 <tr class="border thick">
                     <th class="padat">No</th>
                     <th class="padat">Nama {{ config('app.sebutanDesa') }}</th>
-                    <th class="padat">Nama Program</th>
-                    <th class="padat">Asal Dana</th>
-                    <th class="padat">Jumlah Peserta</th>
-                    <th class="padat">Masa Berlaku</th>
-                    <th class="padat">Sasaran</th>
-                    <th class="padat">Status</th>
+                    <th class="padat">NIK</th>
+                    <th class="padat">Pekerjaan</th>
+                    <th class="padat">Jabatan</th>
+                    <th class="padat">Jumlah Penghasilan</th>
+                    <th class="padat">Pelatihan</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,12 +57,11 @@
                     <tr>
                         <td class="padat" x-text="index+1"></td>
                         <td x-text="value.attributes.nama_desa"></td>
-                        <td x-text="value.attributes.nama"></td>
-                        <td x-text="value.attributes.asaldana"></td>
-                        <td x-text="value.attributes.jumlah_peserta"></td>
-                        <td x-text="value.attributes.sdate + ' s.d. ' + value.attributes.edate"></td>
-                        <td x-text="value.attributes.nama_sasaran"></td>
-                        <td x-text="value.attributes.nama_status"></td>
+                        <td x-text="value.attributes.nik"></td>
+                        <td x-text="value.attributes.pekerjaan"></td>
+                        <td x-text="value.attributes.jabatan"></td>
+                        <td x-text="value.attributes.jumlah_penghasilan"></td>
+                        <td x-text="value.attributes.pelatihan"></td>
                     </tr>
                 </template>
             </tbody>

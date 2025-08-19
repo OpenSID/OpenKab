@@ -44,10 +44,7 @@
                                 <i class="fa fa-print"></i>
                                 Cetak
                             </button>
-                            <button id="download-excel" type="button" class="btn btn-success btn-sm">
-                                <i class="fa fa-file-excel"></i>
-                                Excel
-                            </button>
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/penduduk/download'" table-id="penduduk" filename="data_penduduk" />
                         </div>
                     </div>
                 </div>
@@ -373,10 +370,6 @@
                 window.open(`{{ url('penduduk/cetak') }}?${$.param(penduduk.ajax.params())}`, '_blank');
             });
 
-            $('#download-excel').on('click', function() {
-                downloadExcel();
-            });
-
             $('select.select2-filter').each(function() {
                 $(this).select2({
                     width: '100%',
@@ -487,150 +480,6 @@
                 label: val.nama,
                 value: val.total
             }));
-        }
-
-        // Function to download Excel
-        async function downloadExcel() {
-            try {
-                const header = @include('layouts.components.header_bearer_api_gabungan');
-                // Check if there's data to download
-                const tableData = $('#penduduk').DataTable();
-                const info = tableData.page.info();
-                const totalData = info.recordsTotal;
-                if (totalData === 0) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Tidak Ada Data',
-                        text: 'Tidak ada data penduduk untuk diunduh. Silakan periksa filter Anda.',
-                        confirmButtonText: 'OK'
-                    });
-                    return;
-                }
-
-                // Show loading state
-                const $btnExcel = $('#download-excel');
-                $btnExcel.prop('disabled', true).html(
-                    '<i class="fa fa-spinner fa-spin"></i> Downloading...');
-
-                // Prepare URL for download
-                const downloadUrl = new URL(
-                    `{{ config('app.databaseGabunganUrl') }}/api/v1/penduduk/download`);
-
-                // Gunakan fungsi data yang sama persis dengan DataTable untuk konsistensi
-                const filterParams = tableData.ajax.params();
-
-                // Remove pagination parameters since we want all data
-                delete filterParams['page[size]'];
-                delete filterParams['page[number]'];
-
-                // Handle umur filter - convert object to separate min/max parameters for backend
-                if (filterParams['filter[umur]'] && typeof filterParams['filter[umur]'] === 'object') {
-                    const umurObj = filterParams['filter[umur]'];
-
-                    // Create separate parameters for min and max
-                    if (umurObj.min && umurObj.min !== '') {
-                        filterParams['filter[umur][min]'] = umurObj.min;
-                    }
-                    if (umurObj.max && umurObj.max !== '') {
-                        filterParams['filter[umur][max]'] = umurObj.max;
-                    }
-                    if (umurObj.satuan) {
-                        filterParams['filter[umur][satuan]'] = umurObj.satuan;
-                    }
-
-                    // Remove the original object parameter
-                    delete filterParams['filter[umur]'];
-                }
-
-                // Convert filterParams to URLSearchParams for proper encoding
-                const urlParams = new URLSearchParams();
-                Object.keys(filterParams).forEach(key => {
-                    const value = filterParams[key];
-                    if (value !== null && value !== undefined && value !== '' && value !== 'null') {
-                        urlParams.append(key, value);
-                    }
-                });
-
-                urlParams.append('totalData', totalData);
-
-                // Make fetch request
-                const response = await fetch(downloadUrl, {
-                    method: 'POST',
-                    headers: {
-                        ...header,
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                    },
-                    body: urlParams
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${errorText}`);
-                }
-
-                // Check if response is actually a file
-                const contentType = response.headers.get('content-type');
-                if (!contentType || (!contentType.includes(
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') && !
-                        contentType.includes('application/vnd.ms-excel'))) {
-                    throw new Error('Response is not a valid Excel file');
-                }
-
-                // Get filename from response headers or generate one
-                const contentDisposition = response.headers.get('content-disposition');
-                let filename = 'data_penduduk.xlsx';
-                if (contentDisposition) {
-                    const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
-                    if (matches != null && matches[1]) {
-                        filename = matches[1].replace(/['"]/g, '');
-                    }
-                } else {
-                    // Generate filename with timestamp
-                    const now = new Date();
-                    const timestamp = now.toISOString().slice(0, 19).replace(/[-:T]/g, '');
-                    filename = `data_penduduk_${timestamp}.xlsx`;
-                }
-
-                // Create blob and download
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-
-                // Show success message
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: `File Excel "${filename}" berhasil diunduh`,
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-
-            } catch (error) {
-                console.error('Download error:', error);
-
-                // Show error message with SweetAlert
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal Download!',
-                    html: `
-                            <p>Terjadi kesalahan saat mengunduh file Excel:</p>
-                            <p><small>${error.message}</small></p>
-                            <p>Silakan coba lagi atau hubungi administrator.</p>
-                        `,
-                    confirmButtonText: 'OK'
-                });
-            } finally {
-                // Reset button state
-                const $btnExcel = $('#download-excel');
-                $btnExcel.prop('disabled', false).html('<i class="fa fa-file-excel"></i> Excel');
-            }
         }
     </script>
 @endsection

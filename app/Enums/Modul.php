@@ -54,6 +54,12 @@ final class Modul extends Enum
                     'url' => 'bantuan',
                     'permission' => 'bantuan',
                 ],
+                [
+                    'text' => 'Kelembagaan',
+                    'icon' => 'far fa-fw fa-circle',
+                    'url' => 'lembaga',
+                    'permission' => 'lembaga',
+                ],
             ],
         ],
         [

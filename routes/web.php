@@ -55,6 +55,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::get('catatan-rilis', CatatanRilis::class);
     Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
     Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->name('dasbor-demografi');
+
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
@@ -154,6 +155,12 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/detail/{id}', 'show')->name('bantuan.detail');
         });
 
+    // Lembaga routes
+    Route::middleware(['permission:lembaga-read'])->prefix('lembaga')->group(function () {
+        Route::get('/', [App\Http\Controllers\LembagaController::class, 'index'])->name('lembaga.index');
+        Route::get('/detail', [App\Http\Controllers\LembagaController::class, 'detail'])->name('lembaga.detail');
+        Route::get('/cetak', [App\Http\Controllers\LembagaController::class, 'cetak'])->name('lembaga.cetak');
+    });
     // Data Pokok
     Route::middleware(['permission:datapresisi-read'])->controller(DataPokokController::class)
         ->prefix('data-pokok')
@@ -173,6 +180,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama/detail', 'detail_agama')->name('detail_agama');
             Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama/cetak', 'cetak_agama')->name('cetak_agama');
             Route::middleware(['permission:datapokok-infrastruktur-read'])->get('/infrastruktur', 'infrastruktur')->name('infrastruktur');
+
             Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang', 'sandang')->name('datasandang');
             Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang/detail', 'detail_sandang')->name('detail_datasandang');
             Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang/cetak', 'cetak_sandang')->name('cetak_datasandang');

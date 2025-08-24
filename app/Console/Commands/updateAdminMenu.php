@@ -37,6 +37,7 @@ class updateAdminMenu extends Command
         setPermissionsTeamId($team->id);
         if ($team) {
             $team->menu = Modul::Menu;
+            $team->menu_order = null;
             $team->save();
 
             $role = Role::firstOrCreate(

@@ -10,6 +10,7 @@ Di rilis ini, versi 2508.0.0 berisi penambahan dan perbaikan yang diminta penggu
 6. [#799](https://github.com/OpenSID/OpenKab/issues/799) Penambahan kolom nama desa pada beberapa halaman kesehatan di OpenKab.
 7. [#797](https://github.com/OpenSID/OpenKab/issues/797) Penambahan kolom nama desa pada halaman ketenagakerjaan di OpenKab.
 8. [#798](https://github.com/OpenSID/OpenKab/issues/798) Penambahan kolom nama desa pada beberapa halaman pendidikan di OpenKab.
+9. [#798](https://github.com/OpenSID/OpenKab/issues/798) Penambahan kolom nama desa pada beberapa halaman pendidikan di OpenKab.
 
 
 #### Perbaikan BUG

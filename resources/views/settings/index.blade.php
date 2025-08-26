@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                @include('adminlte-templates::common.alerts')
+                @include('common.alerts')
 
                 @include('settings.opensid')
 

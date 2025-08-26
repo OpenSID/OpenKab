@@ -1,1 +1,0 @@
-<td>@{{ ${!! $modelVariable !!}->{!! $fieldName !!} }}</td>

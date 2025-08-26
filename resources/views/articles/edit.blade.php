@@ -15,7 +15,7 @@
                     <a href="{{ route('articles.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Artikel</a>
                 </div>
-                {!! Html::form('PUT', route('articles.update', $article->id))->attribute('enctype', 'multipart/form-data')->bind($article)->open() !!}
+                {!! Html::form('PUT', route('articles.update', $article->id))->attribute('enctype', 'multipart/form-data')->open() !!}
 
                 <div class="card-body">
                     <div>

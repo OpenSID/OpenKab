@@ -2,7 +2,7 @@
 <div class="form-group row">
     {!! Html::label('name', 'Nama Kategori')->class('col-3') !!}
     <div class="col-9">
-        {!! Html::text('name')->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
+        {!! Html::text('name', old('name', $category->name ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
     </div>
 </div>
 
@@ -12,10 +12,10 @@
     {!! Html::label('status', 'Tampilkan')->class('col-3') !!}
     <div class="col-9">
         <label class="form-check-inline">
-            {!! Html::radio('status', 1, $category?->status == 1 ? 1 : null)->class('form-check-input') !!} Ya
+            {!! Html::radio('status', 1)->class('form-check-input')->checked(old('status', $category->status ?? 1) == 1) !!} Ya
         </label>
         <label class="form-check-inline">
-            {!! Html::radio('status', 0, $category?->status == 0 ? 0 : null)->class('form-check-input') !!} Tidak
+            {!! Html::radio('status', 0)->class('form-check-input')->checked(old('status', $category->status ?? 1) == 0) !!} Tidak
         </label>
     </div>
 </div>

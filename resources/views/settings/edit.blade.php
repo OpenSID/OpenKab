@@ -15,7 +15,7 @@
                     <a href="{{ route('settings.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Setting</a>
                 </div>
-                {!! Html::form('PUT', route('settings.update', $setting->id))->bind($setting)->open() !!}
+                {!! Html::form('PUT', route('settings.update', $setting->id))->open() !!}
 
                 <div class="card-body">
                     <div>

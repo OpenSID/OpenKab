@@ -3,13 +3,13 @@
         <!-- Title Field -->
         <div class="form-group">
             {!! Html::label('title', 'Judul') !!}
-            {!! Html::text('title')->class('form-control')->attribute('required')->attribute('maxlength', 200) !!}
+            {!! Html::text('title', old('title', $page->title ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 200) !!}
         </div>
 
         <!-- Content Field -->
         <div class="form-group col-sm-12 col-lg-12">
             {!! Html::label('content', 'Isi') !!}
-            {!! Html::textarea('content')->class('form-control editor')->attribute('required')->attribute('maxlength', 65535) !!}
+            {!! Html::textarea('content', old('content', $page->content ?? ''))->class('form-control editor')->attribute('required')->attribute('maxlength', 65535) !!}
         </div>
     </div>
     <div class="col-3">

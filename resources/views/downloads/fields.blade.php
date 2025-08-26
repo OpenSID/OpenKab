@@ -2,7 +2,7 @@
 <div class="form-group row">
     {!! Html::label('title', 'Judul')->class('col-3') !!}
     <div class="col-9">
-        {!! Html::text('title')->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
+        {!! Html::text('title', old('title', $download->title ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
     </div>
 </div>
 
@@ -19,7 +19,7 @@
         </div>
         @if (isset($download))
             @if ($download->url)
-                {{ link_to(Storage::url($download->url), 'berkas unduhan', ['class' => 'text-primary', 'target' => '_blank']) }}
+                {!! Html::a(Storage::url($download->url), 'berkas unduhan')->class('text-primary')->target('_blank') !!}
             @endif
         @endif
     </div>
@@ -29,7 +29,7 @@
 <div class="form-group row">
     {!! Html::label('description', 'Keterangan')->class('col-3') !!}
     <div class="col-9">
-        {!! Html::textarea('description')->class('form-control')->attribute('rows', 3)->attribute('maxlength', 65535) !!}
+        {!! Html::textarea('description', old('description', $download->description ?? ''))->class('form-control')->attribute('rows', 3)->attribute('maxlength', 65535) !!}
     </div>
 </div>
 
@@ -37,7 +37,7 @@
 <div class="form-group row">
     {!! Html::label('state', 'Status')->class('col-3') !!}
     <div class="col-9">
-        {!! Html::select('state', $stateItem)->class('form-control select2')->attribute('required') !!}
+        {!! Html::select('state', $stateItem, old('state', $download->state ?? ''))->class('form-control select2')->attribute('required') !!}
     </div>
 </div>
 

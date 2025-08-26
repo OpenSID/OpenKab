@@ -10,7 +10,7 @@
                     <a href="{{ route('positions.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Position</a>
                 </div>
-                {!! Html::form('PUT', route('positions.update', $position->id))->bind($position)->open() !!}
+                {!! Html::form('PUT', route('positions.update', $position->id))->open() !!}
 
                 <div class="card-body">
                     <div>

@@ -10,7 +10,7 @@
                     <a href="{{ route('employees.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Employee</a>
                 </div>
-                {!! Html::form('PUT', route('employees.update', $employee->id))->attribute('enctype', 'multipart/form-data')->bind($employee)->open() !!}
+                {!! Html::form('PUT', route('employees.update', $employee->id))->attribute('enctype', 'multipart/form-data')->open() !!}
 
                 <div class="card-body">
                     <div class="row">

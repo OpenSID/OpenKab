@@ -10,7 +10,7 @@
         {!! Html::select(
             'icon',
             [
-                '' => 'Select Icon', // Pilihan kosong di awal
+                '' => 'Pilih Ikon', // Pilihan kosong di awal
                 'fas fa-list' => 'List',
                 'fas fa-home' => 'Home',
                 'fas fa-user' => 'User',
@@ -60,10 +60,10 @@
 <div class="form-group row">
     <div class="col-12">
         <label class="form-check-inline">
-            {!! Html::radio('source', 'link', 'link')->class('form-check-input') !!} Link
+            {!! Html::radio('source')->value('link')->class('form-check-input')->checked(old('source', $groupMenu->source ?? 'link') == 'link') !!} Link
         </label>
         <label class="form-check-inline">
-            {!! Html::radio('source', 'Modul', null)->class('form-check-input') !!} Modul
+            {!! Html::radio('source')->value('Modul')->class('form-check-input')->checked(old('source', $groupMenu->source ?? 'link') == 'Modul') !!} Modul
         </label>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <!-- Nama Field -->
 <div class="form-group col-sm-6">
     {!! Html::label('name', 'Nama:') !!}
-    {!! Html::text('name')->class('form-control')->attribute('required')->attribute('maxlength', 50) !!}
+    {!! Html::text('name', old('name', $position->name ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 50) !!}
 </div>
 
 @push('page_scripts')
@@ -13,7 +13,7 @@
 <!-- Description Field -->
 <div class="form-group col-sm-6">
     {!! Html::label('description', 'Deskripsi:') !!}
-    {!! Html::text('description')->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
+    {!! Html::text('description', old('description', $position->description ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
 </div>
 
 <!-- Parent Id Field -->

@@ -10,7 +10,7 @@
                     <a href="{{ route('departments.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Department</a>
                 </div>
-                {!! Html::form('PUT', route('departments.update', $department->id))->bind($department)->open() !!}
+                {!! Html::form('PUT', route('departments.update', $department->id))->open() !!}
 
                 <div class="card-body">
                     <div>

@@ -15,7 +15,7 @@
                     <a href="{{ route('categories.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Kategori</a>
                 </div>
-                {!! Html::form('PUT', route('categories.update', $category->id))->bind($category)->open() !!}
+                {!! Html::form('PUT', route('categories.update', $category->id))->open() !!}
 
                 <div class="card-body">
                     <div>

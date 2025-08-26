@@ -15,7 +15,7 @@
                     <a href="{{ route('downloads.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Unduhan</a>
                 </div>
-                {!! Html::form('PUT', route('downloads.update', $download->id))->attribute('enctype', 'multipart/form-data')->bind($download)->open() !!}
+                {!! Html::form('PUT', route('downloads.update', $download->id))->attribute('enctype', 'multipart/form-data')->open() !!}
 
                 <div class="card-body">
                     <div>

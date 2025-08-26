@@ -15,7 +15,7 @@
                     <a href="{{ route('slides.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Slide</a>
                 </div>
-                {!! Html::form('PUT', route('slides.update', $slide->id))->attribute('enctype', 'multipart/form-data')->bind($slide)->open() !!}
+                {!! Html::form('PUT', route('slides.update', $slide->id))->attribute('enctype', 'multipart/form-data')->open() !!}
 
                 <div class="card-body">
                     <div>

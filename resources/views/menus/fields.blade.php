@@ -8,7 +8,7 @@
         {!! Html::select(
             'icon',
             [
-                '' => 'Select Icon', // Pilihan kosong di awal
+                '' => 'Pilih Ikon', // Pilihan kosong di awal
                 'fas fa-list' => 'List',
                 'fas fa-home' => 'Home',
                 'fas fa-user' => 'User',
@@ -59,16 +59,16 @@
 <div class="form-group row">
     <div class="col-12">
         <label class="form-check-inline">
-            {!! Html::radio('source', 'link', 'link')->class('form-check-input') !!} Link
+            {!! Html::radio('source')->value('link')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'link') !!} Link
         </label>
         <label class="form-check-inline">
-            {!! Html::radio('source', 'Halaman', null)->class('form-check-input') !!} Halaman
+            {!! Html::radio('source')->value('Halaman')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Halaman') !!} Halaman
         </label>
         <label class="form-check-inline">
-            {!! Html::radio('source', 'Kategori', null)->class('form-check-input') !!} Kategori
+            {!! Html::radio('source')->value('Kategori')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Kategori') !!} Kategori
         </label>
         <label class="form-check-inline">
-            {!! Html::radio('source', 'Modul', null)->class('form-check-input') !!} Modul
+            {!! Html::radio('source')->value('Modul')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Modul') !!} Modul
         </label>
     </div>
 </div>

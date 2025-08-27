@@ -2,13 +2,13 @@
     <div class="col-9">
         <!-- Title Field -->
         <div class="form-group">
-            {!! Html::label('title', 'Judul') !!}
+            {!! Html::label('Judul', 'title') !!}
             {!! Html::text('title', old('title', $page->title ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 200) !!}
         </div>
 
         <!-- Content Field -->
         <div class="form-group col-sm-12 col-lg-12">
-            {!! Html::label('content', 'Isi') !!}
+            {!! Html::label('Isi', 'content') !!}
             {!! Html::textarea('content', old('content', $page->content ?? ''))->class('form-control editor')->attribute('required')->attribute('maxlength', 65535) !!}
         </div>
     </div>
@@ -20,13 +20,13 @@
 
         <!-- Published At Field -->
         <div class="form-group ">
-            {!! Html::label('published_at', 'Tanggal Posting') !!}
+            {!! Html::label('Tanggal Posting', 'published_at') !!}
             {!! Html::text('published_at', $page?->local_published_at ?? null)->class('form-control datepicker')->id('published_at')->attribute('required') !!}
         </div>
 
         <!-- State Field -->
         <div class="form-group">
-            {!! Html::label('state', 'Status') !!}
+            {!! Html::label('Status', 'state') !!}
             {!! Html::select('state', $stateItem)->class('form-control select2')->attribute('required') !!}
         </div>
 

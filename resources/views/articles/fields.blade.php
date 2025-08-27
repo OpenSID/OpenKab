@@ -3,13 +3,13 @@
 
         <!-- Title Field -->
         <div class="form-group">
-            {!! Html::label('title', 'Judul Artikel') !!}
+            {!! Html::label('Judul Artikel', 'title') !!}
             {!! Html::text('title')->class('form-control')->required()->maxlength(255)->value(old('title', $article->title ?? null)) !!}
         </div>
 
         <!-- Content Field -->
         <div class="form-group col-sm-12 col-lg-12">
-            {!! Html::label('content', 'Isi Artikel') !!}
+            {!! Html::label('Isi Artikel', 'content') !!}
             {!! Html::textarea('content')->class('form-control editor')->required()->maxlength(65535)->value(old('content', $article->content ?? null)) !!}
         </div>
 
@@ -21,19 +21,19 @@
         </div>
         <!-- Category Id Field -->
         <div class="form-group">
-            {!! Html::label('category_id', 'Kategori') !!}
+            {!! Html::label('Kategori', 'category_id') !!}
             {!! Html::select('category_id', $categories)->class('form-control select2')->required()->value(old('category_id', $article->category_id ?? null)) !!}
         </div>
 
         <!-- Category Id Field -->
         <div class="form-group">
-            {!! Html::label('state', 'Status') !!}
+            {!! Html::label('Status', 'state') !!}
             {!! Html::select('state', $stateItem)->class('form-control select2')->required()->value(old('state', $article->state ?? null)) !!}
         </div>
 
         <!-- Published At Field -->
         <div class="form-group ">
-            {!! Html::label('published_at', 'Tanggal Terbit') !!}
+            {!! Html::label('Tanggal Terbit', 'published_at') !!}
             {!! Html::text('published_at')->class('form-control datepicker')->id('published_at')->value(old('published_at', $article?->local_published_at)) !!}
         </div>
 

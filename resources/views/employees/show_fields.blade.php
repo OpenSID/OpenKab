@@ -1,53 +1,53 @@
 <!-- Name Field -->
 <div class="col-sm-12">
-    {!! Html::label('name', 'Name:') !!}
+    {!! Html::label('Nama:', 'name') !!}
     <p>{{ $employee->name }}</p>
 </div>
 
 <!-- Identity Number Field -->
 <div class="col-sm-12">
-    {!! Html::label('identity_number', 'Identity Number:') !!}
+    {!! Html::label('NIP:', 'identity_number') !!}
     <p>{{ $employee->identity_number }}</p>
 </div>
 
 <!-- Email Field -->
 <div class="col-sm-12">
-    {!! Html::label('email', 'Email:') !!}
+    {!! Html::label('Email:', 'email') !!}
     <p>{{ $employee->email }}</p>
 </div>
 
 <!-- Description Field -->
 <div class="col-sm-12">
-    {!! Html::label('description', 'Description:') !!}
+    {!! Html::label('Deskripsi:', 'description') !!}
     <p>{{ $employee->description }}</p>
 </div>
 
 <!-- Phone Field -->
 <div class="col-sm-12">
-    {!! Html::label('phone', 'Phone:') !!}
+    {!! Html::label('Telepon:', 'phone') !!}
     <p>{{ $employee->phone }}</p>
 </div>
 
 <!-- Foto Field -->
 <div class="col-sm-12">
-    {!! Html::label('foto', 'Foto:') !!}
+    {!! Html::label('Foto:', 'foto') !!}
     <p>{{ $employee->foto }}</p>
 </div>
 
 <!-- Position Id Field -->
 <div class="col-sm-12">
-    {!! Html::label('position_id', 'Position Id:') !!}
+    {!! Html::label('ID Jabatan:', 'position_id') !!}
     <p>{{ $employee->position_id }}</p>
 </div>
 
 <!-- Department Id Field -->
 <div class="col-sm-12">
-    {!! Html::label('department_id', 'Department Id:') !!}
+    {!! Html::label('ID Departemen:', 'department_id') !!}
     <p>{{ $employee->department_id }}</p>
 </div>
 
 <!-- User Id Field -->
 <div class="col-sm-12">
-    {!! Html::label('user_id', 'User Id:') !!}
+    {!! Html::label('ID Pengguna:', 'user_id') !!}
     <p>{{ $employee->user_id }}</p>
 </div>

@@ -1,6 +1,6 @@
 <!-- Title Field -->
 <div class="form-group row">
-    {!! Html::label('title', 'Judul')->class('col-3') !!}
+    {!! Html::label('Judul', 'title')->class('col-3') !!}
     <div class="col-9">
         {!! Html::text('title', old('title', $download->title ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
     </div>
@@ -9,7 +9,7 @@
 
 <!-- Url Field -->
 <div class="form-group row">
-    {!! Html::label('url', 'Berkas')->class('col-3') !!}
+    {!! Html::label('Berkas', 'url')->class('col-3') !!}
     <div class="col-9">
         <div class="custom-file">
             <input type="file" name="download_file" class="custom-file-input"
@@ -27,7 +27,7 @@
 
 <!-- Description Field -->
 <div class="form-group row">
-    {!! Html::label('description', 'Keterangan')->class('col-3') !!}
+    {!! Html::label('Keterangan', 'description')->class('col-3') !!}
     <div class="col-9">
         {!! Html::textarea('description', old('description', $download->description ?? ''))->class('form-control')->attribute('rows', 3)->attribute('maxlength', 65535) !!}
     </div>
@@ -35,7 +35,7 @@
 
 <!-- State Field -->
 <div class="form-group row">
-    {!! Html::label('state', 'Status')->class('col-3') !!}
+    {!! Html::label('Status', 'state')->class('col-3') !!}
     <div class="col-9">
         {!! Html::select('state', $stateItem, old('state', $download->state ?? ''))->class('form-control select2')->attribute('required') !!}
     </div>

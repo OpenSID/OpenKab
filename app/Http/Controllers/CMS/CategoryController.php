@@ -106,7 +106,7 @@ class CategoryController extends AppBaseController
 
         $category = $this->categoryRepository->update($request->all(), $id);
 
-        Session::flash('success', 'Kategori updated successfully.');
+        Session::flash('success', 'Kategori berhasil diperbarui.');
 
         return redirect(route('categories.index'));
     }

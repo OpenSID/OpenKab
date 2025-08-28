@@ -17,15 +17,12 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $unduhan->title }}</td>
                             <td>
-                                @if($unduhan->url)
-                                {!! Form::open(['route' => ['web.download.counter', $unduhan->id], 'method' => 'post', 'target' => '_blank']) !!}
-                                {!! Form::button('<i class="fa fa-file"></i> Unduh', [
-                                    'type' => 'submit',
-                                    'class' => 'btn btn-info btn-sm',
-                                ]) !!}
-                                {!! Form::close() !!}
+                                @if ($unduhan->url)
+                                    {!! Html::form('POST', route('web.download.counter', $unduhan->id))->attribute('target', '_blank')->open() !!}
+                                    {!! Html::submit('<i class="fa fa-file"></i> Unduh')->class('btn btn-info btn-sm') !!}
+                                    {!! Html::form()->close() !!}
                                 @else
-                                 -
+                                    -
                                 @endif
                             </td>
                             <td>{{ $unduhan->counter?->total ?? 0 }}</td>

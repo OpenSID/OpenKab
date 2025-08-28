@@ -47,10 +47,10 @@ module.exports = defineConfig({
     },
   ],
 
-//   webServer: {
-//     command: `${configLoader.get('app.phpVersion')} artisan serve`,
-//     url: configLoader.get('app.baseURL'),
-//     reuseExistingServer: !process.env.CI,
-//     timeout: 120 * 1000,
-//   },
+  webServer: {
+    command: 'php artisan serve',
+    url: configLoader.get('app.baseURL'),
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
 });

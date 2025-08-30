@@ -4,11 +4,11 @@
 @stop
 
 @section('content')
-@include('presisi.partials.head')
+    @include('presisi.partials.head')
 
     <div class="row">
         <div class="col-md-12">
-            
+
             <div class="card rounded-0 border-0 shadow-none">
                 @include('presisi.summary')
             </div>
@@ -20,18 +20,18 @@
             <div class="info-box shadow-none rounded-0">
                 <div class="info-box-content">
                     <div class="row">
-                        <div class="col-md-3 @if($id) d-none @endif" >
+                        <div class="col-md-3 @if ($id) d-none @endif">
                             <div class="card card-primary rounded-0 elevation-0 border">
                                 <!-- <div class="card-header rounded-0">
-                                    <h3 class="card-title">Statistik Penduduk</h3>
+                                            <h3 class="card-title">Statistik Penduduk</h3>
 
-                                </div> -->
+                                        </div> -->
                                 @include('presisi.kependudukan.kategori')
 
 
                             </div>
                         </div>
-                        <div class="@if($id) col-md-12 @else col-md-9 @endif">
+                        <div class="@if ($id) col-md-12 @else col-md-9 @endif">
                             <div class="card card-primary card-outline rounded-0 elevation-0 border">
                                 <div class="card-header">
                                     <div class="row">
@@ -76,7 +76,7 @@
 
                                                     <div class=" col-6">
                                                         <div class="form-group">
-                                                            <label>Desa</label>
+                                                            <label>{{ config('app.sebutanDesa') }}</label>
                                                             <select class="form-control " name="search_desa"> </select>
                                                         </div>
 
@@ -96,7 +96,8 @@
 
                                     </div>
 
-                                    <div class="chart" id="pie" style="height:100%; min-height: 500px; display: none">
+                                    <div class="chart" id="pie"
+                                        style="height:100%; min-height: 500px; display: none">
 
                                     </div>
 

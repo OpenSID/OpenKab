@@ -1,7 +1,7 @@
 <script nonce="{{ csp_nonce() }}">
     const defaultDesa = "{{ $defaultDesa == 'null' ? null : $defaultDesa }}";
     $('#filter_desa').select2({
-        placeholder: "Pilih Desa"
+        placeholder: "Pilih {{ config('app.sebutanDesa') }}"
     });
     GetListDesa();
 

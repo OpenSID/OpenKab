@@ -98,7 +98,8 @@
                                         <option>Pusat</option>
                                         <option>Provinsi</option>
                                         <option>Kab/Kota</option>
-                                        <option>Dana Desa</option>
+                                        <option>Dana {{ config('app.sebutanDesa') }}
+                                        </option>
                                         <option>Lain-lain (Hibah)</option>
                                     </select>
                                     @error('asaldana')

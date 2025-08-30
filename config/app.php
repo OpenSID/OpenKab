@@ -21,6 +21,7 @@ return [
     'namaKab' => env('APP_NAMA_KAB', 'Nama Kabupaten'),
     'namaProv' => env('APP_NAMA_PROV', 'Nama Provinsi'),
     'sebutanKab' => env('APP_SEBUTAN_KAB', 'Kota'),
+    'sebutanDesa' => env('APP_SEBUTAN_DESA', 'Desa'),
     'serverPantau' => env('APP_PANTAU', 'https://pantau.opensid.my.id/'),
     'tokenPantau' => env('TOKEN_PANTAU', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6bnVsbCwidGltZXN0YW1wIjoxNjAzNDY2MjM5fQ.HVCNnMLokF2tgHwjQhSIYo6-2GNXB4-Kf28FSIeXnZw'),
 
@@ -80,7 +81,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE','UTC'),
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -224,11 +225,11 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
     'format' => [
-        'date' => env('FORMAT_DATE','d/m/Y'),
-        'date_js' => env('FORMAT_DATE_JS','DD/MM/YYYY')
-    ]
+        'date' => env('FORMAT_DATE', 'd/m/Y'),
+        'date_js' => env('FORMAT_DATE_JS', 'DD/MM/YYYY'),
+    ],
 ];

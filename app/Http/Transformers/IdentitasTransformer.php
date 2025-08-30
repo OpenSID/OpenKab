@@ -30,6 +30,7 @@ class IdentitasTransformer extends TransformerAbstract
             'nama_provinsi' => $identitas->nama_provinsi,
             'kode_provinsi' => $identitas->kode_provinsi,
             'sebutan_kab' => $identitas->sebutan_kab,
+            'sebutan_desa' => $identitas->sebutan_desa,
         ];
     }
 }

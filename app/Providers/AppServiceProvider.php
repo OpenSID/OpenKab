@@ -59,7 +59,8 @@ class AppServiceProvider extends ServiceProvider
             // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
             View::share('identitasAplikasi', $identitasAplikasi);
             View::share('settingAplikasi', $settingAplikasi);
-
+            config()->set(['app.sebutanDesa' => $identitasAplikasi['sebutan_desa'] ?? 'Desa']);
+            config()->set(['app.sebutanKab' => $identitasAplikasi['sebutan_kab'] ?? 'Kabupaten']);
             $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
         }
     }

@@ -42,7 +42,13 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <div class="float-left">Data Pendidikan Penduduk dan DTKS</div>
+                    <div>Data Pendidikan Penduduk dan DTKS</div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <x-print-button :print-url="url('data-pokok/pendidikan/cetak')" table-id="pendidikan" :filter="[]" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/pendidikan/download'" table-id="pendidikan" filename="data_pendidikan" />
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -50,6 +56,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Nama {{ config('app.sebutanDesa') }}</th>
                                     <th>NIK</th>
                                     <th>Pendidikan dalam KK</th>
                                     <th>Pendidikan Sedang Ditempuh</th>
@@ -70,106 +77,110 @@
 
 @section('js')
     @include('data_pokok.pendidikan.chart')
-    <script nonce="{{ csp_nonce() }}"  >
+    <script nonce="{{ csp_nonce() }}">
         let data_grafik = [];
-    document.addEventListener("DOMContentLoaded", function(event) {
+        document.addEventListener("DOMContentLoaded", function(event) {
 
-        const header = @include('layouts.components.header_bearer_api_gabungan');
-        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/pendidikan' }}");
-        url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
-        url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-        url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
+            const header = @include('layouts.components.header_bearer_api_gabungan');
+            var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/pendidikan' }}");
+            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+            url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
 
-        var pendidikan = $('#pendidikan').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ordering: false,
-            searchPanes: {
-                viewTotal: false,
-                columns: [0]
-            },
-            ajax: {
-                url: url.href,
-                headers: header,
-                method: 'get',
-                data: function(row) {
-                    return {
-                        "page[size]": row.length,
-                        "page[number]": (row.start / row.length) + 1,
-                        "filter[search]": row.search.value,
-                        "filter[kode_desa]": $("#kode_desa").val(),
-                    };
+            var pendidikan = $('#pendidikan').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                ordering: false,
+                searchPanes: {
+                    viewTotal: false,
+                    columns: [0]
                 },
-                dataSrc: function(json) {
-                    
-                    if (json.data.length > 0) {
-                        json.recordsTotal = json.meta.pagination.total
-                        json.recordsFiltered = json.meta.pagination.total
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })
-                        grafikPie()
-                        return json.data;
-                    }
-                    return false;
-                },
-            },
-            columnDefs: [{
-                        targets: '_all',
-                        className: 'text-nowrap',
+                ajax: {
+                    url: url.href,
+                    headers: header,
+                    method: 'get',
+                    data: function(row) {
+                        return {
+                            "page[size]": row.length,
+                            "page[number]": (row.start / row.length) + 1,
+                            "filter[search]": row.search.value,
+                            "filter[kode_desa]": $("#kode_desa").val(),
+                        };
                     },
-                ],
-            columns: [{
-                    data: null,
-                    orderable: false
+                    dataSrc: function(json) {
+
+                        if (json.data.length > 0) {
+                            json.recordsTotal = json.meta.pagination.total
+                            json.recordsFiltered = json.meta.pagination.total
+                            data_grafik = [];
+                            json.data.forEach(function(item, index) {
+                                data_grafik.push(item.attributes)
+                            })
+                            grafikPie()
+                            return json.data;
+                        }
+                        return false;
+                    },
                 },
-                {
-                    data: "attributes.nik",
-                    name: "nik",
-                    orderable: false
-                },
-                {
-                    data: "attributes.pendidikan_kk_id",
-                    name: "pendidikan_kk_id",
-                    orderable: false
-                },
-                {
-                    data: "attributes.pendidikan_sedang_id",
-                    name: "pendidikan_sedang_id",
-                    orderable: false
-                },
-                {
-                    data: "attributes.partisipasi_sekolah",
-                    name: "partisipasi_sekolah",
-                    orderable: false
-                },
-                {
-                    data: "attributes.pendidikan_tertinggi",
-                    name: "pendidikan_tertinggi",
-                    orderable: false
-                },
-                {
-                    data: "attributes.kelas_tertinggi",
-                    name: "kelas_tertinggi",
-                    orderable: false
-                },
-                {
-                    data: "attributes.ijazah_tertinggi",
-                    name: "ijazah_tertinggi",
-                    orderable: false
-                },
-            ]
-        })
-        pendidikan.on('draw.dt', function() {
-            var PageInfo = $('#pendidikan').DataTable().page.info();
-            pendidikan.column(0, {
-                page: 'current'
-            }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1 + PageInfo.start;
+                columnDefs: [{
+                    targets: '_all',
+                    className: 'text-nowrap',
+                }, ],
+                columns: [{
+                        data: null,
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.nama_desa",
+                        name: "nama_desa",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.nik",
+                        name: "nik",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.pendidikan_kk_id",
+                        name: "pendidikan_kk_id",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.pendidikan_sedang_id",
+                        name: "pendidikan_sedang_id",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.partisipasi_sekolah",
+                        name: "partisipasi_sekolah",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.pendidikan_tertinggi",
+                        name: "pendidikan_tertinggi",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.kelas_tertinggi",
+                        name: "kelas_tertinggi",
+                        orderable: false
+                    },
+                    {
+                        data: "attributes.ijazah_tertinggi",
+                        name: "ijazah_tertinggi",
+                        orderable: false
+                    },
+                ]
+            })
+            pendidikan.on('draw.dt', function() {
+                var PageInfo = $('#pendidikan').DataTable().page.info();
+                pendidikan.column(0, {
+                    page: 'current'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1 + PageInfo.start;
+                });
             });
-        });
-    })
+        })
     </script>
 @endsection

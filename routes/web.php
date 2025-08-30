@@ -55,6 +55,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     Route::get('catatan-rilis', CatatanRilis::class);
     Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
     Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->name('dasbor-demografi');
+
     Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
     Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
@@ -136,7 +137,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/detail/{no_kk}', 'show')->name('keluarga.detail');
         });
 
-
     // rtm
     Route::middleware(['permission:penduduk-read'])->controller(RtmController::class)
         ->prefix('rtm')
@@ -155,21 +155,32 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('/detail/{id}', 'show')->name('bantuan.detail');
         });
 
+    // Lembaga routes
+    Route::middleware(['permission:lembaga-read'])->prefix('lembaga')->group(function () {
+        Route::get('/', [App\Http\Controllers\LembagaController::class, 'index'])->name('lembaga.index');
+        Route::get('/detail', [App\Http\Controllers\LembagaController::class, 'detail'])->name('lembaga.detail');
+        Route::get('/cetak', [App\Http\Controllers\LembagaController::class, 'cetak'])->name('lembaga.cetak');
+    });
     // Data Pokok
     Route::middleware(['permission:datapresisi-read'])->controller(DataPokokController::class)
         ->prefix('data-pokok')
         ->group(function () {
-            Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan', 'ketenagakerjaan')->name('ketenagakerjaan');
+            Route::middleware(['permission:datapokok-ketenagakerjaan-read'])->get('/ketenagakerjaan/cetak', 'cetakKetenagakerjaan');
+
             Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
+            Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan/cetak', 'cetakPendidikan')->name('pendidikan.cetak');
             Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial/detail', 'detailJaminanSosial')->name('jaminan-sosial-detail');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial/cetak', 'cetakJaminanSosial')->name('jaminan-sosial-cetak');
             Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan', 'kesehatan')->name('kesehatan');
+            Route::middleware(['permission:datapokok-kesehatan-read'])->get('/kesehatan/cetak', 'cetakKesehatan')->name('kesehatan.cetak');
             Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama', 'agama')->name('agama');
             Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama/detail', 'detail_agama')->name('detail_agama');
             Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama/cetak', 'cetak_agama')->name('cetak_agama');
             Route::middleware(['permission:datapokok-infrastruktur-read'])->get('/infrastruktur', 'infrastruktur')->name('infrastruktur');
+
             Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang', 'sandang')->name('datasandang');
             Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang/detail', 'detail_sandang')->name('detail_datasandang');
             Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang/cetak', 'cetak_sandang')->name('cetak_datasandang');
@@ -229,14 +240,12 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
     });
 
     Route::prefix('data-presisi')->group(function () {
-
         Route::prefix('kesehatan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiKesehatanController::class, 'index'])->name('data-pokok.data-presisi.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiKesehatanController::class, 'detail'])->name('data-pokok.data-presisi.detail');
             Route::get('cetak', [App\Http\Controllers\DataPresisiKesehatanController::class, 'cetak'])->name('data-pokok.data-presisi.cetak');
         })
         ->middleware(['permission:datapresisi-kesehatan-read']);
-
 
         Route::prefix('seni-budaya')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'index'])->name('data-pokok.data-presisi-seni-budaya.index');
@@ -272,7 +281,6 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
             Route::get('cetak', [App\Http\Controllers\DataPresisiAdatController::class, 'cetak'])->name('data-pokok.data-presisi-adat.cetak');
         })
         ->middleware(['permission:datapresisi-adat-read']);
-
     });
 
     // Prodeskel

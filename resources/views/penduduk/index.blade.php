@@ -44,6 +44,7 @@
                                 <i class="fa fa-print"></i>
                                 Cetak
                             </button>
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/penduduk/download'" table-id="penduduk" filename="data_penduduk" />
                         </div>
                     </div>
                 </div>
@@ -91,6 +92,7 @@
 @include('components.wilayah_filter_js')
 @push('js')
     <script src="{{ asset('assets/progressive-image/progressive-image.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endpush
 
 @section('js')
@@ -140,6 +142,7 @@
                             "filter[id_asuransi]": $('#id_asuransi').val(),
                             "filter[hamil]": $('#hamil').val(),
                             "filter[suku]": $('#suku').val(),
+                            "filter[pekerja_migran]": $('#pekerja_migran').val(),
                             "filter[status_covid]": $('#status_covid').val(),
                             "filter[status_rekam]": $('#status_rekam').val(),
                             "filter[pendidikan_kk_id]": $('#pendidikan_kk_id').val(),
@@ -202,20 +205,6 @@
 
                         }
                         return json.data;
-
-                        // if (json.data.length) {
-
-                        //     // jika chart di akses dari halaman statistik penduduk
-                        //     if(chart && chart.view){
-                        //         getDataset(json.data, chart)
-                        //         grafik()
-                        //     }
-
-
-                        //     return json.data;
-                        // }
-
-                        // return false;
                     },
                 },
                 columnDefs: [{
@@ -393,8 +382,6 @@
             for (let i in filterDefault) {
                 $(`#${i}`).val(filterDefault[i]).trigger('change');
             }
-
-
         });
 
         function getDataset(data, chart) {
@@ -494,90 +481,5 @@
                 value: val.total
             }));
         }
-
-        // function getDataset(data, chart) {
-        //     const kategori = chart.kategori;
-        //     data_grafik = [];
-        //     const grouped = {};
-        //     judul = chart.nama
-
-        //     const getLabel = {
-        //         'rentang-umur': attr => parseInt(attr.umur),
-        //         'kategori-umur': attr => attr.kategori_umur?.nama,
-        //         'pendidikan-dalam-kk': attr => attr.pendidikan_k_k?.nama,
-        //         'pendidikan-sedang-ditempuh': attr => attr.pendidikan?.nama,
-        //         'agama': attr => attr.agama?.nama,
-        //         'jenis-kelamin': attr => attr.jenis_kelamin?.nama,
-        //         'pekerjaan': attr => attr.pekerjaan?.nama,
-        //         'status-perkawinan': attr => attr.status_kawin?.nama,
-        //         'hubungan-dalam-kk': attr => attr.penduduk_hubungan?.nama,
-        //         'warga-negara': attr => attr.warga_negara?.nama,
-        //         'status-penduduk': attr => attr.penduduk_status?.nama,
-        //         'golongan-darah': attr => attr.golongan_darah?.nama,
-        //         'penyandang-cacat': attr => attr.cacat?.nama,
-        //         'penyakit-menahun': attr => attr.namaSakitMenahun,
-        //         'akseptor-kb': attr => attr.kb?.nama,
-        //         'akta-kelahiran': attr => parseInt(attr.umur),
-        //         'ktp': attr => attr.status_rekam_ktp?.nama,
-        //         'asuransi-kesehatan': attr => attr.namaAsuransi,
-        //         'status-covid': attr => null,
-        //         'suku': attr => attr.suku,
-        //         'bpjs-ketenagakerjaan': attr => attr.bpjs_ketenagakerjaan,
-        //         'status-kehamilan': attr => attr.statusHamil,
-        //     };
-
-        //     const isMatch = {
-        //         'rentang-umur': (label) => {
-        //             const [awal, akhir] = judul.match(/\d+/g).map(Number);
-        //             return label >= awal && label <= akhir;
-        //         },
-        //         'kategori-umur': (label) => label === judul,
-        //         'pendidikan-dalam-kk': (label) => label === judul,
-        //         'pendidikan-sedang-ditempuh': (label) => label === judul,
-        //         'agama': (label) => label === judul,
-        //         'jenis-kelamin': (label) => label === judul,
-        //         'pekerjaan': (label) => label === judul,
-        //         'status-perkawinan': (label) => label === judul,
-        //         'hubungan-dalam-kk': (label) => label === judul,
-        //         'warga-negara': (label) => label === judul,
-        //         'status-penduduk': (label) => label === judul,
-        //         'golongan-darah': (label) => label === judul,
-        //         'penyandang-cacat': (label) => label === judul,
-        //         'penyakit-menahun': (label) => label === judul,
-        //         'akseptor-kb': (label) => label === judul,
-        //         'akta-kelahiran': (label) => {
-        //             const [awal, akhir] = judul.match(/\d+/g).map(Number);
-        //             return label >= awal && label <= akhir;
-        //         },
-        //         'ktp': (label) => label === judul,
-        //         'asuransi-kesehatan': (label) => label === judul,
-        //         'status-covid': (label) => label === judul,
-        //         'suku': (label) => label === judul,
-        //         'bpjs-ketenagakerjaan': (label) => label === judul,
-        //         'status-kehamilan': (label) => label === judul,
-        //     };
-
-        //     data.forEach(item => {
-        //         const attr = item.attributes;
-        //         const config = attr.config || {};
-        //         const kode = config.kode_kecamatan;
-        //         const nama = config.nama_kecamatan;
-
-        //         if (!grouped[kode]) {
-        //             grouped[kode] = { nama: nama, total: 0 };
-        //         }
-
-        //         const label = getLabel[kategori]?.(attr);
-
-        //         if (label !== undefined && isMatch[kategori]?.(label)) {
-        //             grouped[kode].total += 1;
-        //         }
-        //     });
-
-        //     data_grafik = Object.entries(grouped).map(([kode, val]) => ({
-        //         label: val.nama,
-        //         value: val.total
-        //     }));
-        // }
     </script>
 @endsection

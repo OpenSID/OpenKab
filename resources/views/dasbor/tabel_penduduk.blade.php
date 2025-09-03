@@ -31,7 +31,7 @@
                             // sort by multiple column
                             "sort": (row.order.length > 0 && row.columns[row.order[0].column].name)
                                 ? (row.order[0].dir == 'asc' ? '' : '-')+ row.columns[row.order[0].column].name
-                                : '-penduduk_count,-surat_count,-artikel_count,-traffic_count',
+                                : '-surat_count,-artikel_count,-traffic_count',
                         };
                     },
                     dataSrc: function(json) {

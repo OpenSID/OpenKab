@@ -2,8 +2,6 @@
     @include('dasbor.data-desa')
 </div>
 
-
-
 @push('js')
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
@@ -14,7 +12,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                // ordering: false,
                 searchPanes: {
                     viewTotal: false,
                     columns: [0]
@@ -30,6 +28,10 @@
                             "filter[kode_kabupaten]": $("#filter_kabupaten").val(),
                             "filter[kode_kecamatan]": $("#filter_kecamatan").val(),
                             "filter[kode_desa]": $("#filter_desa").val(),
+                            // sort by multiple column
+                            "sort": (row.order.length > 0 && row.columns[row.order[0].column].name)
+                                ? (row.order[0].dir == 'asc' ? '' : '-')+ row.columns[row.order[0].column].name
+                                : '-penduduk_count,-surat_count,-artikel_count,-traffic_count',
                         };
                     },
                     dataSrc: function(json) {
@@ -52,7 +54,7 @@
                         }
                     },
                     {
-                        targets: [0, 1, 2, 3],
+                        targets: [0, 1, 2],
                         orderable: false,
                         searchable: false,
                     },
@@ -87,8 +89,38 @@
                             return `<a target="_blank" href=${urlDetail.href}>${data.attributes.penduduk_count}</a>`
                         },
                         name: "penduduk_count",
-                        className: 'text-center'
+                        className: 'text-center',
+                        searchable: false
                     },
+                    {
+                        data: "attributes.surat_count",
+                        name: "surat_count",
+                        className: 'text-center',
+                        searchable: false
+                    },
+                    {
+                        data: "attributes.artikel_count",
+                        name: "artikel_count",
+                        className: 'text-center',
+                        searchable: false
+                    },
+                    {
+                        data: "attributes.traffic_count",
+                        name: "traffic_count",
+                        className: 'text-center',
+                        searchable: false
+                    },
+                    {
+                        data: function(data) {
+                            return data.attributes.last_login ? (new Date(
+                                    data.attributes.last_login))
+                                .toLocaleString() : '-';
+                        },
+                        name: "last_login",
+                        className: 'text-center',
+                        searchable: false
+                    },
+
                 ],
             })
             $('#tabel_penduduk_block').change(function(event) {

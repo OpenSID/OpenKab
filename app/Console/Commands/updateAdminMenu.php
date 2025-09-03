@@ -38,7 +38,7 @@ class updateAdminMenu extends Command
         setPermissionsTeamId($team->id);
         if ($team) {
             $team->menu = Modul::Menu;
-            if(Schema::hasColumn('teams', 'menu_order')){
+            if (Schema::hasColumn('teams', 'menu_order')) {
                 $team->menu_order = null;
             }
 

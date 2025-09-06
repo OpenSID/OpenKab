@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="card rounded-0 elevation-0">
-        <div class="card-header bg-white">Data {{ config('app.sebutanDesa') }}
+        <div class="card-header bg-white">{{ config('app.sebutanDesa') }} Aktif
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -10,7 +10,11 @@
                             <th class="padat">No</th>
                             <th>{{ config('app.sebutanDesa') }}</th>
                             <th>Kecamatan</th>
-                            <th class="padat">Jumlah Penduduk</th>
+                            <th class="padat">Jumlah <br>Penduduk</th>
+                            <th class="padat">Jumlah <br>Surat Tercetak</th>
+                            <th class="padat">Jumlah <br>Artikel</th>
+                            <th class="padat">Jumlah <br>Pengunjung Website</th>
+                            <th class="padat">Terakhir <br>Akses Login</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

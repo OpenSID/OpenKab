@@ -21,11 +21,12 @@ class IdentitasSeeder extends Seeder
             'kode_kabupaten' => '52.72',
             'nama_provinsi' => 'Nusa Tenggara Barat',
             'kode_provinsi' => '52',
-            'sebutan_kab' => 'Kota'
+            'sebutan_kab' => 'Kota',
         ];
-        if(Schema::hasColumn('identitas', 'sebutan_desa')){
+        if (Schema::hasColumn('identitas', 'sebutan_desa')) {
             $defaultData['sebutan_desa'] = 'Kelurahan';
         }
+
         return Identitas::create($defaultData);
     }
 }

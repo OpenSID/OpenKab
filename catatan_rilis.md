@@ -2,6 +2,7 @@ Di rilis ini, versi 2509.0.1 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Penambahan Fitur
 
+1. [#809](https://github.com/OpenSID/OpenKab/issues/809) Penambahan dasbor pada OpenKab untuk menambahkan daftar desa aktif.
 
 #### Perbaikan BUG
 

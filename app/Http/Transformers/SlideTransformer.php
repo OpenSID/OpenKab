@@ -6,6 +6,7 @@ use App\Models\CMS\Slide;
 use App\Models\Enums\StatusEnum;
 use Illuminate\Support\Facades\Storage;
 use League\Fractal\TransformerAbstract;
+use Spatie\Html\Facades\Html;
 
 class SlideTransformer extends TransformerAbstract
 {
@@ -14,7 +15,7 @@ class SlideTransformer extends TransformerAbstract
         return [
             'id' => $slide->id,
             'title' => $slide->title,
-            'url' => $slide->url ? link_to($slide->url, 'tautan', ['class' => 'text-primary'])->toHtml() : '',
+            'url' => $slide->url ? Html::a($slide->url, 'tautan')->class('text-primary')->toHtml() : '',
             'thumbnail' => $slide->thumbnail ? Storage::url($slide->thumbnail) : '',
             'description' => $slide->description,
             'state' => $slide->state == StatusEnum::aktif ? 'Aktif' : 'Non Aktif',

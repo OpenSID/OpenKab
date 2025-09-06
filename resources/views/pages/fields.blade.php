@@ -2,14 +2,14 @@
     <div class="col-9">
         <!-- Title Field -->
         <div class="form-group">
-            {!! Form::label('title', 'Judul') !!}
-            {!! Form::text('title', null, ['class' => 'form-control', 'required', 'maxlength' => 200]) !!}
+            {!! Html::label('Judul', 'title') !!}
+            {!! Html::text('title', old('title', $page->title ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 200) !!}
         </div>
 
         <!-- Content Field -->
         <div class="form-group col-sm-12 col-lg-12">
-            {!! Form::label('content', 'Isi') !!}
-            {!! Form::textarea('content', null, ['class' => 'form-control editor', 'required', 'maxlength' => 65535]) !!}
+            {!! Html::label('Isi', 'content') !!}
+            {!! Html::textarea('content', old('content', $page->content ?? ''))->class('form-control editor')->attribute('required')->attribute('maxlength', 65535) !!}
         </div>
     </div>
     <div class="col-3">
@@ -20,19 +20,19 @@
 
         <!-- Published At Field -->
         <div class="form-group ">
-            {!! Form::label('published_at', 'Tanggal Posting') !!}
-            {!! Form::text('published_at', $page?->local_published_at ?? null, ['class' => 'form-control datepicker','id'=>'published_at', 'required']) !!}
+            {!! Html::label('Tanggal Posting', 'published_at') !!}
+            {!! Html::text('published_at', $page?->local_published_at ?? null)->class('form-control datepicker')->id('published_at')->attribute('required') !!}
         </div>
 
         <!-- State Field -->
         <div class="form-group">
-            {!! Form::label('state', 'Status') !!}
-            {!! Form::select('state', $stateItem, null, ['class' => 'form-control select2', 'required']) !!}
+            {!! Html::label('Status', 'state') !!}
+            {!! Html::select('state', $stateItem)->class('form-control select2')->attribute('required') !!}
         </div>
 
         <div>
-            {!! Form::button('<i class="fas fa-times"></i> Batal', ['type' => 'reset', 'class' => 'btn btn-danger btn-sm'] )  !!}
-            {!! Form::button('<i class="fas fa-save"></i> Simpan', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm'] )  !!}
+            {!! Html::button('<i class="fas fa-times"></i> Batal')->type('reset')->class('btn btn-danger btn-sm') !!}
+            {!! Html::button('<i class="fas fa-save"></i> Simpan')->type('submit')->class('btn btn-primary btn-sm') !!}
         </div>
     </div>
 </div>

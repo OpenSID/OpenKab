@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
@@ -50,13 +49,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-
-    // Artikel
-    Route::controller(ArtikelController::class)
-        ->prefix('artikel')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/tahun', 'tahun');
-        });
 
     // Identitas
     Route::controller(IdentitasController::class)

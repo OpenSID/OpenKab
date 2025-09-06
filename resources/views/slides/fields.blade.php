@@ -1,10 +1,10 @@
 <!-- Title Field -->
 <div class="form-group row">
     <div class="col-3">
-        {!! Form::label('title', 'Judul') !!}
+        {!! Html::label('Judul', 'title') !!}
     </div>
     <div class="col-9">
-        {!! Form::text('title', null, ['class' => 'form-control', 'required', 'maxlength' => 255]) !!}
+        {!! Html::text('title', old('title', $slide->title ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
     </div>
 </div>
 
@@ -12,41 +12,40 @@
 <!-- Url Field -->
 <div class="form-group row">
     <div class="col-3">
-        {!! Form::label('url', 'Url') !!}
+        {!! Html::label('Tautan', 'url') !!}
     </div>
     <div class="col-9">
-        {!! Form::text('url', null, ['class' => 'form-control', 'maxlength' => 255]) !!}
+        {!! Html::text('url', old('url', $slide->url ?? ''))->class('form-control')->attribute('maxlength', 255) !!}
     </div>
 </div>
 
 <!-- Description Field -->
 <div class="form-group row">
     <div class="col-3">
-        {!! Form::label('description', 'Keterangan') !!}
+        {!! Html::label('Keterangan', 'description') !!}
     </div>
     <div class="col-9">
-        {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 4, 'maxlength' => 65535])
-        !!}
+        {!! Html::textarea('description', old('description', $slide->description ?? ''))->class('form-control')->attribute('rows', 4)->attribute('maxlength', 65535) !!}
     </div>
 </div>
 
 
 <!-- Status Field -->
 <div class="form-group row">
-    {!! Form::label('state', 'Status', ['class' => 'col-3']) !!}
+    {!! Html::label('Status', 'state')->class('col-3') !!}
     <div class="col-9">
         <label class="form-check-inline">
-            {!! Form::radio('state', 1, $slide?->state == 1 ? 1 : null, ['class' => 'form-check-input']) !!} Aktif
+            {!! Html::radio('state')->value(1)->class('form-check-input')->checked(old('state', $slide->state ?? 0) == 1) !!} Aktif
         </label>
         <label class="form-check-inline">
-            {!! Form::radio('state', 0, $slide?->state == 0 ? 0 : null, ['class' => 'form-check-input']) !!} Non Aktif
+            {!! Html::radio('state')->value(0)->class('form-check-input')->checked(old('state', $slide->state ?? 0) == 0) !!} Non Aktif
         </label>
     </div>
 </div>
 
 <!-- Thumbnail Field -->
 <div class="form-group row">
-    {!! Form::label('foto', 'Gambar', ['class' => 'col-3']) !!}
+    {!! Html::label('Gambar', 'foto')->class('col-3') !!}
     <div class="col-9">
         <div class="col-6">
             @include('slides.foto')

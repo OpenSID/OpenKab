@@ -1,18 +1,14 @@
 <!-- Name Field -->
 <div class="form-group row">
     <div class="col-12">
-        {!! Form::select('menu_type', ['1' => 'Default', '2' => 'Presisi'], '1', ['class' => 'form-control']) !!}<br>
-        {!! Form::text('text', null, [
-            'class' => 'form-control item-menu',
-            'maxlength' => 255,
-            'placeholder' => 'Nama Menu',
-        ]) !!}<br>
+        {!! Html::select('menu_type', ['1' => 'Default', '2' => 'Presisi'], '1')->class('form-control') !!}<br>
+        {!! Html::text('text')->class('form-control item-menu')->attribute('maxlength', 255)->attribute('placeholder', 'Nama Menu') !!}<br>
 
         <!-- Icon Field as Dropdown -->
-        {!! Form::select(
+        {!! Html::select(
             'icon',
             [
-                '' => 'Select Icon', // Pilihan kosong di awal
+                '' => 'Pilih Ikon', // Pilihan kosong di awal
                 'fas fa-list' => 'List',
                 'fas fa-home' => 'Home',
                 'fas fa-user' => 'User',
@@ -55,8 +51,7 @@
                 'fas fa-shopping-cart' => 'Shopping Cart',
             ],
             '',
-            ['class' => 'form-control item-menu'],
-        ) !!}
+        )->class('form-control item-menu') !!}
     </div>
 </div>
 
@@ -64,16 +59,16 @@
 <div class="form-group row">
     <div class="col-12">
         <label class="form-check-inline">
-            {!! Form::radio('source', 'link', 'link', ['class' => 'form-check-input']) !!} Link
+            {!! Html::radio('source')->value('link')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'link') !!} Link
         </label>
         <label class="form-check-inline">
-            {!! Form::radio('source', 'Halaman', null, ['class' => 'form-check-input']) !!} Halaman
+            {!! Html::radio('source')->value('Halaman')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Halaman') !!} Halaman
         </label>
         <label class="form-check-inline">
-            {!! Form::radio('source', 'Kategori', null, ['class' => 'form-check-input']) !!} Kategori
+            {!! Html::radio('source')->value('Kategori')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Kategori') !!} Kategori
         </label>
         <label class="form-check-inline">
-            {!! Form::radio('source', 'Modul', null, ['class' => 'form-check-input']) !!} Modul
+            {!! Html::radio('source')->value('Modul')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Modul') !!} Modul
         </label>
     </div>
 </div>
@@ -81,34 +76,18 @@
 <!-- Url Field -->
 <div class="form-group row">
     <div class="col-12">
-        {!! Form::select('sourcelist', $sourceItem, null, ['class' => 'form-control']) !!}
-        {!! Form::text('href', null, [
-            'class' => 'form-control item-menu',
-            'maxlength' => 255,
-            'placeholder' => 'http://contoh.com',
-        ]) !!}
+        {!! Html::select('sourcelist', $sourceItem)->class('form-control') !!}
+        {!! Html::text('href')->class('form-control item-menu')->attribute('maxlength', 255)->attribute('placeholder', 'http://contoh.com') !!}
     </div>
 </div>
 
 <div class="form-group row">
     <div class="col-12">
-        {!! Form::select('penduduk', $sourceItem['penduduk'], null, [
-            'class' => 'form-control',
-            'style' => 'display:none;',
-        ]) !!}
-        {!! Form::select('keluarga', $sourceItem['keluarga'], null, [
-            'class' => 'form-control',
-            'style' => 'display:none;',
-        ]) !!}
-        {!! Form::select('bantuan', $sourceItem['bantuan'], null, [
-            'class' => 'form-control',
-            'style' => 'display:none;',
-        ]) !!}
-        {!! Form::select('rtm', $sourceItem['rtm'], null, ['class' => 'form-control', 'style' => 'display:none;']) !!}
-        {!! Form::select('kesehatan', $sourceItem['kesehatan'], null, [
-            'class' => 'form-control',
-            'style' => 'display:none;',
-        ]) !!}
+        {!! Html::select('penduduk', $sourceItem['penduduk'])->class('form-control')->style('display:none;') !!}
+        {!! Html::select('keluarga', $sourceItem['keluarga'])->class('form-control')->style('display:none;') !!}
+        {!! Html::select('bantuan', $sourceItem['bantuan'])->class('form-control')->style('display:none;') !!}
+        {!! Html::select('rtm', $sourceItem['rtm'])->class('form-control')->style('display:none;') !!}
+        {!! Html::select('kesehatan', $sourceItem['kesehatan'])->class('form-control')->style('display:none;') !!}
     </div>
 </div>
 

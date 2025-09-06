@@ -1,20 +1,16 @@
 <!-- Name Field -->
 <div class="form-group row">
     <div class="col-12">
-        {!! Form::text('text', null, [
-            'class' => 'form-control item-menu',
-            'maxlength' => 255,
-            'placeholder' => 'Nama Menu',
-        ]) !!}<br>
+        {!! Html::text('text')->class('form-control item-menu')->attribute('maxlength', 255)->attribute('placeholder', 'Nama Menu') !!}<br>
     </div>
 </div>
 <div class="form-group row">
     <div class="col-12">
         <!-- Icon Field as Dropdown -->
-        {!! Form::select(
+        {!! Html::select(
             'icon',
             [
-                '' => 'Select Icon', // Pilihan kosong di awal
+                '' => 'Pilih Ikon', // Pilihan kosong di awal
                 'fas fa-list' => 'List',
                 'fas fa-home' => 'Home',
                 'fas fa-user' => 'User',
@@ -57,18 +53,17 @@
                 'fas fa-shopping-cart' => 'Shopping Cart',
             ],
             '',
-            ['class' => 'form-control item-menu'],
-        ) !!}
+        )->class('form-control item-menu') !!}
     </div>
 </div>
 <!-- Asal url -->
 <div class="form-group row">
     <div class="col-12">
         <label class="form-check-inline">
-            {!! Form::radio('source', 'link', 'link', ['class' => 'form-check-input']) !!} Link
+            {!! Html::radio('source')->value('link')->class('form-check-input')->checked(old('source', $groupMenu->source ?? 'link') == 'link') !!} Link
         </label>
         <label class="form-check-inline">
-            {!! Form::radio('source', 'Modul', null, ['class' => 'form-check-input']) !!} Modul
+            {!! Html::radio('source')->value('Modul')->class('form-check-input')->checked(old('source', $groupMenu->source ?? 'link') == 'Modul') !!} Modul
         </label>
     </div>
 </div>
@@ -76,12 +71,8 @@
 <!-- Url Field -->
 <div class="form-group row">
     <div class="col-12">
-        {!! Form::select('sourcelist', [], null, ['class' => 'form-control']) !!}
-        {!! Form::text('href', null, [
-            'class' => 'form-control item-menu',
-            'maxlength' => 255,
-            'placeholder' => 'http://contoh.com',
-        ]) !!}
+        {!! Html::select('sourcelist', [])->class('form-control') !!}
+        {!! Html::text('href')->class('form-control item-menu')->attribute('maxlength', 255)->attribute('placeholder', 'http://contoh.com') !!}
     </div>
 </div>
 

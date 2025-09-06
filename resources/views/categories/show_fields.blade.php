@@ -1,18 +1,17 @@
 <!-- Slug Field -->
 <div class="col-sm-12">
-    {!! Form::label('slug', 'Slug:') !!}
+    {!! Html::label('Slug:', 'slug') !!}
     <p>{{ $category->slug }}</p>
 </div>
 
 <!-- Title Field -->
 <div class="col-sm-12">
-    {!! Form::label('title', 'Title:') !!}
+    {!! Html::label('Judul:', 'title') !!}
     <p>{{ $category->title }}</p>
 </div>
 
 <!-- Description Field -->
 <div class="col-sm-12">
-    {!! Form::label('description', 'Description:') !!}
+    {!! Html::label('Deskripsi:', 'description') !!}
     <p>{{ $category->description }}</p>
 </div>
-

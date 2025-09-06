@@ -2,19 +2,13 @@
     <div class="col-md-10">
         <div class="row g-2">
             <div class="col-md-4">
-                {!! Form::select('search_kabupaten', [], null, [
-                    'class' => 'form-select border-0 py-3',
-                    'id' => 'filter_kabupaten',
-                ]) !!}
+                {!! Html::select('search_kabupaten', [])->class('form-select border-0 py-3')->id('filter_kabupaten')->placeholder('-- Pilih Kabupaten --') !!}
             </div>
             <div class="col-md-4">
-                {!! Form::select('search_kecamatan', [], null, [
-                    'class' => 'form-select border-0 py-3',
-                    'id' => 'filter_kecamatan',
-                ]) !!}
+                {!! Html::select('search_kecamatan', [])->class('form-select border-0 py-3')->id('filter_kecamatan')->placeholder('-- Pilih Kecamatan --') !!}
             </div>
             <div class="col-md-4">
-                {!! Form::select('search_desa', [], null, ['class' => 'form-select border-0 py-3', 'id' => 'filter_desa']) !!}
+                {!! Html::select('search_desa', [])->class('form-select border-0 py-3')->id('filter_desa')->placeholder('-- Pilih Desa --') !!}
             </div>
         </div>
     </div>

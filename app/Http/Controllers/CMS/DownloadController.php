@@ -137,7 +137,7 @@ class DownloadController extends AppBaseController
 
         $this->downloadRepository->delete($id);
         if (request()->ajax()) {
-            return $this->sendSuccess('Role deleted successfully.');
+            return $this->sendSuccess('File download berhasil dihapus.');
         }
         Session::flash('success', 'File download berhasil dihapus.');
 

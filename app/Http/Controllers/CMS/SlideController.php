@@ -142,7 +142,7 @@ class SlideController extends AppBaseController
 
         $this->slideRepository->delete($id);
         if (request()->ajax()) {
-            return $this->sendSuccess('Role deleted successfully.');
+            return $this->sendSuccess('Slide berhasil dihapus.');
         }
         Session::flash('success', 'Slide berhasil dihapus.');
 

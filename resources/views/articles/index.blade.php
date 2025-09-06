@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            @include('adminlte-templates::common.alerts')
+            @include('common.alerts')
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     @if($canwrite)

@@ -1,17 +1,6 @@
-Di rilis ini, versi 2509.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2509.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
-
-1. [#784](https://github.com/OpenSID/OpenKab/issues/784) Penambahan fungsi export excel pada halaman data statistik pada OpenKab.
-2. [#789](https://github.com/OpenSID/OpenKab/issues/789) Penambahan fungsi export data ke excel.
-3. [#800](https://github.com/OpenSID/OpenKab/issues/800) Penambahan fungsi untuk penyebutan kelurahan / desa & Kabupaten / Kota.
-4. [#777](https://github.com/OpenSID/OpenKab/issues/777) Penambahan statistik pekerja migran penduduk.
-5. [#796](https://github.com/OpenSID/OpenKab/issues/796) Penambahan kolom nama desa pada halaman menu bantuan OpenKab.
-6. [#799](https://github.com/OpenSID/OpenKab/issues/799) Penambahan kolom nama desa pada beberapa halaman kesehatan di OpenKab.
-7. [#797](https://github.com/OpenSID/OpenKab/issues/797) Penambahan kolom nama desa pada halaman ketenagakerjaan di OpenKab.
-8. [#798](https://github.com/OpenSID/OpenKab/issues/798) Penambahan kolom nama desa pada beberapa halaman pendidikan di OpenKab.
-9. [#798](https://github.com/OpenSID/OpenKab/issues/798) Penambahan kolom nama desa pada beberapa halaman pendidikan di OpenKab.
-10. [#794](https://github.com/OpenSID/OpenKab/issues/794) Penambahan menu kelembagaan yang di ambil dari OpenSID.
 
 
 #### Perbaikan BUG
@@ -20,5 +9,4 @@ Di rilis ini, versi 2509.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perubahan Teknis
 
-1. [#781](https://github.com/OpenSID/OpenKab/issues/781) Penambahan e2e testing untuk OpenKab.
-2. [#790](https://github.com/OpenSID/OpenKab/issues/790) Upgrade versi laravel dari 9.52.16 menjadi 10.48.29.
+1. [#791](https://github.com/OpenSID/OpenKab/issues/791) Upgrade teknis berdasarkan composer audit pada OpenKab.

@@ -104,7 +104,7 @@ class PositionController extends AppBaseController
 
         $position = $this->positionRepository->update($request->all(), $id);
 
-        Session::flash('success', 'Jabatan updated successfully.');
+        Session::flash('success', 'Jabatan berhasil diperbarui.');
 
         return redirect(route('positions.index'));
     }
@@ -126,7 +126,7 @@ class PositionController extends AppBaseController
 
         $this->positionRepository->delete($id);
         if (request()->ajax()) {
-            return $this->sendSuccess('Role berhasil dihapus.');
+            return $this->sendSuccess('Jabatan berhasil dihapus.');
         }
         Session::flash('success', 'Jabatan berhasil dihapus.');
 

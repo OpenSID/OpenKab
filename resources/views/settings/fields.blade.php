@@ -1,32 +1,37 @@
 <!-- Key Field -->
 <div class="form-group">
-    {!! Form::label('key', 'Kode Kunci:') !!}
-    {!! Form::text('key', null, ['class' => 'form-control', 'required', 'maxlength' => 50, 'disabled' => 'disabled']) !!}
+    {!! Html::label('Kode Kunci:', 'key') !!}
+    {!! Html::text('key', old('key', $setting->key ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 50)->attribute('disabled') !!}
 </div>
 
 
 <!-- Name Field -->
 <div class="form-group">
-    {!! Form::label('name', 'Nama:') !!}
-    {!! Form::text('name', null, ['class' => 'form-control', 'required', 'maxlength' => 255]) !!}
+    {!! Html::label('Nama:', 'name') !!}
+    {!! Html::text('name', old('name', $setting->name ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
 </div>
 
 <!-- Name Field -->
 <div class="form-group">
     @switch($setting->type)
         @case('dropdown')
-            {!! Form::label('value', 'Status:') !!}
-            {!! Form::select('value', collect($setting->attribute)->pluck('text', 'value'), $setting->value, ['class' => 'form-control', 'required']) !!}
-            @break
+            {!! Html::label('Status:', 'value') !!}
+            {!! Html::select(
+                'value',
+                collect($setting->attribute)->pluck('text', 'value'),
+                old('value', $setting->value ?? ''),
+            )->class('form-control')->attribute('required') !!}
+        @break
+
         @default
-            {!! Form::label('value', 'Nilai:') !!}
-            {!! Form::text('value', null, ['class' => 'form-control', 'required', 'maxlength' => 255]) !!}
+            {!! Html::label('Nilai:', 'value') !!}
+            {!! Html::text('value', old('value', $setting->value ?? ''))->class('form-control')->attribute('required')->attribute('maxlength', 255) !!}
     @endswitch
 </div>
 
 
 <!-- Description Field -->
 <div class="form-group">
-    {!! Form::label('description', 'Deskripsi:') !!}
-    {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 3 , 'maxlength' => 255]) !!}
+    {!! Html::label('Deskripsi:', 'description') !!}
+    {!! Html::textarea('description')->class('form-control')->attribute('rows', 3)->attribute('maxlength', 255) !!}
 </div>

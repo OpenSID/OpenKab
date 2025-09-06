@@ -35,8 +35,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bootHttps();
         $this->addValidation();
-        // daftarkan manual karena gagal install infyomlabs/adminlte-templates terkendala depedency
-        View::addNamespace('adminlte-templates', resource_path('views/vendor/adminlte-templates'));
         $this->addLogQuery();
 
         if (App::runningInConsole()) {

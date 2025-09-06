@@ -81,7 +81,7 @@ class DepartmentController extends AppBaseController
         $department = $this->departmentRepository->find($id);
 
         if (empty($department)) {
-            Session::flash('error', 'Departemen not found');
+            Session::flash('error', 'Departemen tidak ditemukan');
 
             return redirect(route('departments.index'));
         }

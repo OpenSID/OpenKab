@@ -6,6 +6,7 @@ use App\Enums\Modul;
 use App\Models\Team;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -37,7 +38,10 @@ class updateAdminMenu extends Command
         setPermissionsTeamId($team->id);
         if ($team) {
             $team->menu = Modul::Menu;
-            $team->menu_order = null;
+            if(Schema::hasColumn('teams', 'menu_order')){
+                $team->menu_order = null;
+            }
+
             $team->save();
 
             $role = Role::firstOrCreate(

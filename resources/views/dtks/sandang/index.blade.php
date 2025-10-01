@@ -28,6 +28,17 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
+                        <div class="col-sm-2">
+                            <select id="filter-tahun" class="form-control form-control-sm">
+                                @php
+                                    $currentYear = date('Y');
+                                    $startYear = 2020;
+                                @endphp
+                                @for($year = $currentYear; $year >= $startYear; $year--)
+                                    <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
                         <div class="col-sm-3">
                             <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="">
                                 <i class="fa fa-print"></i> Cetak
@@ -92,6 +103,7 @@
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
+                            "filter[tahun]": $('#filter-tahun').val(),
                             // "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             // "config_desa": "{{ session('desa.id') ?? '' }}",
                         };
@@ -228,6 +240,12 @@
                     </table>
                 `;
             }
+
+            $('#filter-tahun').on('change', function() {
+                dtks.ajax.reload();
+                data_grafik = [];
+                grafikPie();
+            });
 
             $('#cetak').on('click', function() {
                 let baseUrl = "{{ route('cetak_datasandang') }}";

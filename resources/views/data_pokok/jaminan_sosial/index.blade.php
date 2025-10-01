@@ -56,6 +56,17 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
+                        <div class="col-sm-2">
+                            <select id="filter-tahun" class="form-control form-control-sm">
+                                @php
+                                    $currentYear = date('Y');
+                                    $startYear = 2020;
+                                @endphp
+                                @for($year = $currentYear; $year >= $startYear; $year--)
+                                    <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
                         <div class="col-sm-3">
                             <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="">
                                 <i class="fa fa-print"></i> Cetak
@@ -122,6 +133,7 @@
                             //         ?.column]
                             //     ?.name,
                             "filter[kode_desa]": $("#kode_desa").val(),
+                            "filter[tahun]": $("#filter-tahun").val(),
                         };
                     },
                     dataSrc: function(json) {
@@ -260,6 +272,12 @@
                     row.child(format(row.data())).show();
                     tr.addClass('shown');
                 }
+            });
+
+            $('#filter-tahun').on('change', function() {
+                jaminanSosial.ajax.reload();
+                data_grafik = [];
+                grafikPie();
             });
 
             function format(data) {

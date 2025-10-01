@@ -57,8 +57,8 @@ return new class extends Migration
         $team = Team::where('name', 'superadmin_daerah')->first();
         UserTeam::where('id_team', $team)->delete();
         $user = User::where('username', 'superadmin_daerah')->first();
-        $user->delete();
-        $team->role()->delete();
-        $team->delete();
+        $user?->delete();
+        $team?->role()->delete();
+        $team?->delete();
     }
 };

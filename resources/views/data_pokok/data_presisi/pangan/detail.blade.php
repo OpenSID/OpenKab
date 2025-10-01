@@ -82,6 +82,8 @@
                                     <th>FREKWENSI KONSUMSI SAYUR PERHARI</th>
                                     <th>FREKWENSI KONSUMSI BUAH PERHARI</th>
                                     <th>FREKWENSI KONSUMSI DAGING PERHARI</th>
+                                    <th>LONGITUDE</th>
+                                    <th>LATITUDE</th>
                                     <th>TANGGAL PENGISIAN</th>
                                     <th>STATUS PENGISIAN</th>
                                 </tr>
@@ -171,6 +173,8 @@
                 { data: 'attributes.frekwensi_konsumsi_sayur_perhari', orderable: false },
                 { data: 'attributes.frekwensi_konsumsi_buah_perhari', orderable: false },
                 { data: 'attributes.frekwensi_konsumsi_daging_perhari', orderable: false },
+                { data: 'attributes.longitude', orderable: false },
+                { data: 'attributes.latitude', orderable: false },
                 { data: 'attributes.tanggal_pengisian', orderable: false },
                 { data: 'attributes.status_pengisian', orderable: false },
             ],

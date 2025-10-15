@@ -64,6 +64,10 @@ class updateAdminMenu extends Command
         $permissions = [];
         foreach (Modul::Menu as $main_menu) {
             foreach (Modul::permision as $permission) {
+                $menuPermission = $main_menu['permission'] ?? null;
+                if(empty($menuPermission)){
+                    continue;
+                }
                 $permissionName = $main_menu['permission'].'-'.$permission;
                 Permission::findOrCreate($permissionName, 'web');
                 $permissions[] = $permissionName;
@@ -71,6 +75,10 @@ class updateAdminMenu extends Command
             if (isset($main_menu['submenu'])) {
                 foreach ($main_menu['submenu'] as $sub_menu) {
                     foreach (Modul::permision as $permission) {
+                        $subMenuPermission = $sub_menu['permission'] ?? null;
+                        if(empty($subMenuPermission)){
+                            continue;
+                        }
                         $permissionName = $sub_menu['permission'].'-'.$permission;
                         Permission::findOrCreate($permissionName, 'web');
                         $permissions[] = $permissionName;

@@ -83,7 +83,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak'])->group(function
         
         // OTP Routes
         Route::prefix('otp')->group(function () {
-            Route::get('/activate', [App\Http\Controllers\OtpController::class, 'index'])->name('otp.activate');
+            Route::get('/', [App\Http\Controllers\OtpController::class, 'index'])->name('otp.activate');
             Route::post('/setup', [App\Http\Controllers\OtpController::class, 'setup'])->name('otp.setup');
             Route::post('/verify-activation', [App\Http\Controllers\OtpController::class, 'verifyActivation'])->name('otp.verify-activation');
             Route::post('/resend', [App\Http\Controllers\OtpController::class, 'resend'])->name('otp.resend');

@@ -106,6 +106,18 @@ final class Modul extends Enum
             'permission' => 'datapresisi',
             'submenu' => [
                 [
+                    'text' => 'Statistik',
+                    'icon' => 'fa fa-chart-pie',
+                    'submenu' => [
+                        [
+                            'icon' => 'far fa-fw fa-circle',
+                            'text' => 'Kesehatan',
+                            'url' => 'data-presisi/statistik/kesehatan',
+                            'permission' => 'statistik-datapresisi-kesehatan',
+                        ],
+                    ]
+                ],
+                [
                     'icon' => 'far fa-fw fa-circle',
                     'text' => 'Data Presisi Pangan',
                     'url' => 'data-presisi/pangan',

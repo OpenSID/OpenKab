@@ -319,6 +319,10 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
             Route::get('cetak', [App\Http\Controllers\DataPresisiAdatController::class, 'cetak'])->name('data-pokok.data-presisi-adat.cetak');
         })
         ->middleware(['permission:datapresisi-adat-read']);
+
+        Route::prefix('statistik')->group(function () {
+            Route::get('pendidikan', [App\Http\Controllers\StatistikPendidikanController::class, 'index']); 
+        });
     });
 
     // Prodeskel

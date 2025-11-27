@@ -322,6 +322,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
 
         Route::prefix('statistik')->group(function () {
             Route::get('pendidikan', [App\Http\Controllers\StatistikPendidikanController::class, 'index']); 
+            Route::get('sandang', [App\Http\Controllers\StatistikSandangController::class, 'index']); 
             Route::get('pangan', [App\Http\Controllers\StatistikPanganController::class, 'index']); 
         });
     });

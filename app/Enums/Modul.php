@@ -14,7 +14,10 @@ use BenSampo\Enum\Enum;
 final class Modul extends Enum
 {
     const permision = [
-        'read', 'write', 'edit', 'delete',
+        'read',
+        'write',
+        'edit',
+        'delete',
     ];
 
     const Menu = [
@@ -106,6 +109,24 @@ final class Modul extends Enum
             'permission' => 'datapresisi',
             'submenu' => [
                 [
+                    'text' => 'Statistik',
+                    'icon' => 'fa fa-chart-pie',
+                    'submenu' => [
+                        [
+                            'icon' => 'far fa-fw fa-circle',
+                            'text' => 'Pangan',
+                            'url' => 'data-presisi/statistik/pangan',
+                            'permission' => 'statistik-datapresisi-pangan',
+                        ],
+                        [
+                            'icon' => 'far fa-fw fa-circle',
+                            'text' => 'Sandang',
+                            'url' => 'data-presisi/statistik/sandang',
+                            'permission' => 'statistik-datapresisi-sandang',
+                        ]
+                    ]
+                ],
+                [
                     'icon' => 'far fa-fw fa-circle',
                     'text' => 'Data Presisi Pangan',
                     'url' => 'data-presisi/pangan',
@@ -176,18 +197,6 @@ final class Modul extends Enum
                     'text' => 'Data Adat',
                     'url' => 'data-presisi/adat',
                     'permission' => 'datapresisi-adat',
-                ],
-                [
-                    'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Laporan Pengisian',
-                    'url' => 'data-presisi/laporan',
-                    'permission' => 'datapresisi-laporan',
-                ],
-                [
-                    'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Laporan Pengisian Perdesa',
-                    'url' => 'data-presisi/laporan/perdesa',
-                    'permission' => 'datapresisi-laporan',
                 ],
             ],
         ],
@@ -361,8 +370,8 @@ final class Modul extends Enum
                 [
                     'text' => 'Aktivasi OTP dan 2FA',
                     'icon' => 'far fa-fw fa-circle',
-                    'url' => 'pengaturan/otp',                    
-                ]                
+                    'url' => 'pengaturan/otp',
+                ]
             ],
         ],
     ];

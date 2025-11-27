@@ -552,3 +552,15 @@ tr.shown td.details-control {
 .pl-50 {
     padding-left: 50px
 }
+
+/* Add padding left for nested submenu levels */
+.nav-treeview .nav-treeview {
+    padding-left: 5px !important;
+}
+.nav-treeview .nav-item {
+    padding-left: 5px !important;
+}
+
+.has-treeview .has-treeview {
+    padding-left: 5px !important;
+}

@@ -770,7 +770,7 @@ if (! function_exists('convertMenu')) {
             'text' => $menu['text'] ?? 'text',
             'href' => $menu['url'] ?? null,
             'icon' => $menu['icon'],
-            'permission' => $menu['permission'],
+            'permission' => $menu['permission'] ?? null,
         ];
 
         if (isset($menu['submenu']) && is_array($menu['submenu'])) {

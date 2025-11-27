@@ -37,7 +37,7 @@ return new class extends Migration
             }
 
             $item['submenu'] = array_filter($item['submenu'], function ($submenuItem) {
-                return $submenuItem['url'] !== 'pengaturan/groups';
+                return ($submenuItem['url'] ?? '') !== 'pengaturan/groups';
             });
 
             return $item;

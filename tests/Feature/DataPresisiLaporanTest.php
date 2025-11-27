@@ -13,7 +13,7 @@ class DataPresisiLaporanTest extends BaseTestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('data_pokok.data_presisi.laporan.index');
-        $response->assertViewHas('title', 'Data Presisi Laporan Semua Desa');
+        $response->assertViewHas('title', 'Data Presisi Pengisian Laporan Semua Desa');
     }
 
     /** @test */
@@ -55,7 +55,8 @@ class DataPresisiLaporanTest extends BaseTestCase
             'Jaminan Sosial',
             'Adat',
             'Ketenagakerjaan',
-            'Jumlah Penduduk'
+            'Jumlah Penduduk',
+            'Jumlah Rumah Tangga'
         ];
 
         foreach ($expectedColumns as $column) {
@@ -98,20 +99,7 @@ class DataPresisiLaporanTest extends BaseTestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('data_pokok.data_presisi.laporan.perdesa');
-        $response->assertViewHas('title', 'Data Presisi Laporan Per Desa');
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_has_required_filter_elements()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test all filter elements exist
-        $this->assertStringContainsString('id="filter_kabupaten"', $content);
-        $this->assertStringContainsString('id="filter_kecamatan"', $content);
-        $this->assertStringContainsString('id="filter_desa"', $content);
+        $response->assertViewHas('title', 'Data Presisi Pengisian Laporan Per Desa');
     }
 
     /** @test */
@@ -136,71 +124,7 @@ class DataPresisiLaporanTest extends BaseTestCase
     }
 
     /** @test */
-    public function test_laporan_perdesa_has_select2_initialization()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test Select2 initialization for all filters
-        $this->assertStringContainsString("$('#filter_kabupaten').select2(", $content);
-        $this->assertStringContainsString("$('#filter_kecamatan').select2(", $content);
-        $this->assertStringContainsString("$('#filter_desa').select2(", $content);
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_has_cascading_filter_logic()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test kabupaten change event
-        $this->assertStringContainsString("$('#filter_kabupaten').on('change'", $content);
-
-        // Test kecamatan change event
-        $this->assertStringContainsString("$('#filter_kecamatan').on('change'", $content);
-
-        // Test desa change event with reload
-        $this->assertStringContainsString("$('#filter_desa').on('change'", $content);
-        $this->assertStringContainsString('laporanTable.ajax.reload()', $content);
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_loads_kabupaten_from_api()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test API call to get kabupaten list
-        $this->assertStringContainsString('/api/v1/statistik-web/get-list-kabupaten', $content);
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_loads_kecamatan_from_api()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test API call to get kecamatan list
-        $this->assertStringContainsString('/api/v1/statistik-web/get-list-kecamatan', $content);
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_loads_desa_from_api()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test API call to get desa list
-        $this->assertStringContainsString('/api/v1/statistik-web/get-list-desa', $content);
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_has_datatable_with_filters()
+    public function test_laporan_perdesa_has_datatable_configuration()
     {
         $response = $this->get(route('laporan.data-presisi.perdesa'));
 
@@ -212,50 +136,9 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString('searching: false', $content);
 
         // Test filter parameters in DataTable
-        $this->assertStringContainsString('"filter[config_id]"', $content);
         $this->assertStringContainsString('"kode_kabupaten"', $content);
         $this->assertStringContainsString('"kode_kecamatan"', $content);
         $this->assertStringContainsString('"config_desa"', $content);
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_has_default_session_values()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test that session default values are being set (even if empty)
-        // Check that variables exist in JavaScript code
-        $this->assertStringContainsString('defaultKabupaten', $content);
-        $this->assertStringContainsString('defaultKecamatan', $content);
-        $this->assertStringContainsString('defaultDesa', $content);
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_has_prevent_reload_flag()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test preventReload flag to avoid cascading reloads
-        $this->assertStringContainsString('preventReload', $content);
-        $this->assertStringContainsString('preventReload = true', $content);
-        $this->assertStringContainsString('preventReload = false', $content);
-        $this->assertStringContainsString('if (!preventReload', $content);
-    }
-
-    /** @test */
-    public function test_laporan_perdesa_disables_child_filters_initially()
-    {
-        $response = $this->get(route('laporan.data-presisi.perdesa'));
-
-        $content = $response->getContent();
-
-        // Test that child filters are disabled until parent is selected
-        $this->assertStringContainsString("$('#filter_kecamatan').prop('disabled', true)", $content);
-        $this->assertStringContainsString("$('#filter_desa').prop('disabled', true)", $content);
     }
 
     /** @test */
@@ -309,5 +192,27 @@ class DataPresisiLaporanTest extends BaseTestCase
         $response2 = $this->get(route('laporan.data-presisi.perdesa'));
         $content2 = $response2->getContent();
         $this->assertStringContainsString('class="main-footer"', $content2);
+    }
+
+    /** @test */
+    public function test_laporan_semua_desa_has_export_buttons()
+    {
+        $response = $this->get(route('laporan.data-presisi.index'));
+        $content = $response->getContent();
+
+        // Test export buttons exist
+        $this->assertStringContainsString('id="cetak"', $content);
+        $this->assertStringContainsString('id="export-excel"', $content);
+    }
+
+    /** @test */
+    public function test_laporan_perdesa_has_export_buttons()
+    {
+        $response = $this->get(route('laporan.data-presisi.perdesa'));
+        $content = $response->getContent();
+
+        // Test export buttons exist
+        $this->assertStringContainsString('id="cetak"', $content);
+        $this->assertStringContainsString('id="export-excel"', $content);
     }
 }

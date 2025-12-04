@@ -1,4 +1,4 @@
-Di rilis ini, versi 2512.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2512.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 

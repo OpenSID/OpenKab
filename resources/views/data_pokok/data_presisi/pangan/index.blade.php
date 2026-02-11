@@ -28,7 +28,7 @@
         <div class="card card-outline card-primary">
             <div class="card-header">
                 <div class="row">
-                    <x-filter-tahun />
+                    <x-filter-tahun :selectedYear="request('tahun')"/>
                     <div class="col-auto">
                         <x-print-button :print-url="url('data-presisi/pangan/cetak')" table-id="table-pangan" :filter="[]" />
                     </div>

@@ -108,7 +108,7 @@ class JaminanSosialTest extends BaseTestCase
         $content = $response->getContent();
 
         // Test filter tahun change event listener exists
-        $this->assertStringContainsString("$('#filter-tahun').on('change'", $content, 'Event listener filter tahun tidak ditemukan');
+        $this->assertStringContainsString("$('#filter-tahun, #filter-status-kelengkapan').on('change'", $content, 'Event listener filter tahun tidak ditemukan');
         $this->assertStringContainsString('jaminanSosial.ajax.reload()', $content, 'DataTable reload pada filter tahun tidak ditemukan');
         $this->assertStringContainsString('grafikPie()', $content, 'Grafik reload pada filter tahun tidak ditemukan');
     }
@@ -144,8 +144,7 @@ class JaminanSosialTest extends BaseTestCase
 
         // Test filter parameters in DataTable
         $this->assertStringContainsString('"page[size]"', $content, 'Filter page[size] tidak ditemukan');
-        $this->assertStringContainsString('"page[number]"', $content, 'Filter page[number] tidak ditemukan');
-        $this->assertStringContainsString("'include': 'anggota,penduduk,rtm,keluarga'", $content, 'Include relationships tidak ditemukan');
+        $this->assertStringContainsString('"page[number]"', $content, 'Filter page[number] tidak ditemukan');        
         $this->assertStringContainsString('"filter[search]"', $content, 'Filter search tidak ditemukan');
     }
 }

@@ -5,7 +5,7 @@
 @section('title', 'Data Statistik')
 
 @section('content_header')
-    <h1>Data Statistik {{ $judul }}</h1>
+<h1>Data Statistik {{ $judul }}</h1>
 @stop
 
 @section('content')
@@ -35,8 +35,8 @@
                     </div>
                     <div class="row">
                         <div class="col-auto">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
-                                role="button" aria-expanded="true" aria-controls="collapse-filter">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                                aria-expanded="true" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
                         </div>
@@ -107,7 +107,7 @@
         let nama_desa = `{{ session('desa.nama_desa') }}`;
         let kategori = `{{ strtolower($judul) }}`;
         let default_id = null;
-        document.addEventListener("DOMContentLoaded", function(event) {
+        document.addEventListener("DOMContentLoaded", function (event) {
 
             const header = @include('layouts.components.header_bearer_api_gabungan');
 
@@ -119,21 +119,21 @@
                 url: urlKategoriStatistik.href,
                 headers: header,
                 method: 'get',
-                success: function(response) {
+                success: function (response) {
                     var daftarKategoriStatistik = response.data[0]['attributes']
                     var html = ''
 
-                    Object.keys(daftarKategoriStatistik).forEach(function(index) {
+                    Object.keys(daftarKategoriStatistik).forEach(function (index) {
                         var id = index;
                         var nama = daftarKategoriStatistik[index];
 
                         html += `
-                        <li class="nav-item pilih-kategori">
-                            <a data-id="${id}" data-nama="${nama}" class="nav-link ${id == default_id ? 'active' : ''}" href="#">
-                                <i class="fas fa-angle-right"></i> ${nama}
-                            </a>
-                        </li>
-                    `
+                            <li class="nav-item pilih-kategori">
+                                <a data-id="${id}" data-nama="${nama}" class="nav-link ${id == default_id ? 'active' : ''}" href="#">
+                                    <i class="fas fa-angle-right"></i> ${nama}
+                                </a>
+                            </li>
+                        `
                     });
 
                     $('#daftar-statistik').html(html)
@@ -141,7 +141,7 @@
                 }
             });
 
-            $('#daftar-statistik').on('mouseenter', '.pilih-kategori > a', function() {
+            $('#daftar-statistik').on('mouseenter', '.pilih-kategori > a', function () {
                 $(this).css('cursor', 'pointer')
             });
 
@@ -149,8 +149,8 @@
             function createExportCaption(categoryName, options = {}) {
                 const {
                     includeDate = true,
-                        includeLocation = true,
-                        customTitle = null,
+                    includeLocation = true,
+                    customTitle = null,
                 } = options;
 
                 var caption = {
@@ -293,20 +293,20 @@
                 return result;
             }
 
-            $('#export-excel').on('click', function() {
+            $('#export-excel').on('click', function () {
                 console.log('Export button clicked');
                 exportToExcel();
             });
 
-            $('#btn-grafik').on('click', function() {
+            $('#btn-grafik').on('click', function () {
                 $("#pie-statistik").collapse('hide');
             });
 
-            $('#btn-pie').on('click', function() {
+            $('#btn-pie').on('click', function () {
                 $("#grafik-statistik").collapse('hide')
             });
 
-            $('#daftar-statistik').on('click', '.pilih-kategori > a', function() {
+            $('#daftar-statistik').on('click', '.pilih-kategori > a', function () {
                 var id = $(this).data('id')
 
                 $('.pilih-kategori > a').removeClass('active')
@@ -331,7 +331,10 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
+                order: [
+                    [2, 'desc']
+                ],
                 searching: false,
                 deferLoading: 0,
                 paging: false,
@@ -340,15 +343,18 @@
                     url: urlStatistik.href,
                     headers: header,
                     method: 'get',
-                    data: function(row) {
+                    data: function (row) {
                         return {
-
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
+                                .order[0]
+                                ?.column]
+                                ?.name
                         };
                     },
-                    dataSrc: function(json) {
+                    dataSrc: function (json) {
                         if (json.data && json.data.length > 0) {
                             data_grafik = [];
-                            json.data.forEach(function(item, index) {
+                            json.data.forEach(function (item, index) {
                                 data_grafik.push({
                                     nama: item.attributes.nilai,
                                     jumlah: item.attributes.jumlah
@@ -364,21 +370,22 @@
                     },
                 },
                 columnDefs: [{
-                        targets: '_all',
-                        className: 'text-nowrap',
-                    },
-                    {
-                        targets: [2],
-                        className: 'dt-body-right',
-                    },
+                    targets: '_all',
+                    className: 'text-nowrap',
+                },
+                {
+                    targets: [2],
+                    className: 'dt-body-right',
+                },
                 ],
                 columns: [{
                     data: null,
-                    render: function(data, type, row, meta) {
+                    orderable: false,
+                    render: function (data, type, row, meta) {
                         return meta.row + 1;
                     }
                 }, {
-                    data: function(data) {
+                    data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
 
                         if (nilai !== 'JUMLAH' && nilai !== 'BELUM MENGISI' && nilai !==
@@ -397,8 +404,9 @@
 
                         return nilai;
                     },
+                    orderable: false,
                 }, {
-                    data: function(data) {
+                    data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
                         const jumlah = data.attributes?.jumlah || 0;
 
@@ -413,26 +421,28 @@
 
                         return jumlah;
                     },
+                    orderable: true,
+                    name: 'jumlah',
                 }]
             });
 
-            statistik.on('draw.dt', function() {
+            statistik.on('draw.dt', function () {
                 var dataTable = $('#tabel-data').DataTable();
                 var pageInfo = dataTable.page.info();
                 var recordsTotal = dataTable.data().count();
 
                 statistik.column(0, {
                     page: 'current'
-                }).nodes().each(function(cell, i) {
+                }).nodes().each(function (cell, i) {
                     cell.innerHTML = i + 1 + pageInfo.start;
                 });
             });
 
-            $('#filter').on('click', function(e) {
+            $('#filter').on('click', function (e) {
                 statistik.draw();
             });
 
-            $(document).on('click', '#reset', function(e) {
+            $(document).on('click', '#reset', function (e) {
                 e.preventDefault();
                 statistik.ajax.reload();
             });

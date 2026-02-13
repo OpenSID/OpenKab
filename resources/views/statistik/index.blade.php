@@ -464,7 +464,10 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
+                order: [
+                    [2, 'desc']
+                ],
                 searching: false,
                 paging: false,
                 info: false,
@@ -476,6 +479,10 @@
                         return {
                             "filter[bulan]": $("#bulan").val(),
                             "filter[tahun]": $("#tahun").val(),
+                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
+                                    .order[0]
+                                    ?.column]
+                                ?.name
                         };
                     },
                     dataSrc: function(json) {
@@ -504,6 +511,7 @@
                 ],
                 columns: [{
                     data: null,
+                    orderable: false,
                 }, {
                     data: function(data) {
 
@@ -531,6 +539,7 @@
                         return data.attributes.nama;
 
                     },
+                    orderable: false,
                 }, {
                     data: function(data) {
                         let kriteria = new URLSearchParams(JSON.parse(data.attributes
@@ -542,10 +551,13 @@
                         urlDetail.searchParams.set('judul', judul);
                         return `<a target="_blank" href=${urlDetail.href}>${data.attributes.jumlah}</a>`
                     },
+                    orderable: true,
+                    name: 'jumlah',
                 }, {
                     data: function(data) {
                         return data.attributes.persentase_jumlah;
                     },
+                    orderable: false,
                 }, {
                     data: function(data) {
                         let kriteria = new URLSearchParams(JSON.parse(data.attributes
@@ -559,10 +571,12 @@
                         urlDetail.searchParams.set('judul', judul);
                         return `<a target="_blank" href=${urlDetail.href}>${data.attributes.laki_laki}</a>`
                     },
+                    orderable: false,
                 }, {
                     data: function(data) {
                         return data.attributes.persentase_laki_laki;
                     },
+                    orderable: false,
                 }, {
                     data: function(data) {
                         let kriteria = new URLSearchParams(JSON.parse(data.attributes
@@ -576,10 +590,12 @@
                         urlDetail.searchParams.set('judul', judul);
                         return `<a target="_blank" href=${urlDetail.href}>${data.attributes.perempuan}</a>`
                     },
+                    orderable: false,
                 }, {
                     data: function(data) {
                         return data.attributes.persentase_perempuan;
                     },
+                    orderable: false,
                 }]
             });
 

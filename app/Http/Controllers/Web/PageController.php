@@ -42,7 +42,7 @@ class PageController extends Controller
     {
         return view('web.articles', [
             'title' => $category->name,
-            'articles' => Article::where('category_id', $category->id)->paginate(4),
+            'articles' => Article::with('category')->where('category_id', $category->id)->paginate(4),
         ]);
     }
 

@@ -34,9 +34,9 @@ class DataPresisiFilterTahunJavaScriptTest extends BaseTestCase
                 $content = $response->getContent();
 
                 // Test JavaScript event listener untuk filter tahun
-                $hasEventListener = strpos($content, "filter-tahun').on('change'") !== false ||
-                    strpos($content, "#filter-tahun').on('change'") !== false ||
-                    strpos($content, "$('#filter-tahun').on('change'") !== false;
+                $hasEventListener = strpos($content, "filter-tahun, #filter-status-kelengkapan').on('change'") !== false ||
+                    strpos($content, "#filter-tahun, #filter-status-kelengkapan').on('change'") !== false ||
+                    strpos($content, "$('#filter-tahun, #filter-status-kelengkapan').on('change'") !== false;
 
                 if ($hasEventListener) {
                     $successCount++;

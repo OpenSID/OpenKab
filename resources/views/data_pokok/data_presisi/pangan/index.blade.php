@@ -29,6 +29,7 @@
             <div class="card-header">
                 <div class="row">
                     <x-filter-tahun :selectedYear="request('tahun')"/>
+                    <x-filter-status-presisi />                    
                     <div class="col-auto">
                         <x-print-button :print-url="url('data-presisi/pangan/cetak')" table-id="table-pangan" :filter="[]" />
                     </div>
@@ -87,6 +88,7 @@
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
                         "filter[tahun]": $('#filter-tahun').val(),
+                        "filter[status_kelengkapan]": $('#filter-status-kelengkapan').val(),
                     };
                 },
                 dataSrc: function(json) {
@@ -251,7 +253,7 @@
                 `;
         }
         // Event listener for year filter change
-        $('#filter-tahun').on('change', function() {
+        $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
             dtks.ajax.reload();
             data_grafik = [];
             grafikPie();

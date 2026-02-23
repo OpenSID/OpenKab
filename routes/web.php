@@ -316,6 +316,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
         Route::prefix('pangan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiPanganController::class, 'index'])->name('data-pokok.data-presisi-pangan.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiPanganController::class, 'detail'])->name('data-pokok.data-presisi-pangan.detail');
+            Route::get('detail_data', [App\Http\Controllers\DataPresisiPanganController::class, 'detailData'])->name('data-pokok.data-presisi-pangan.detail_data');
             Route::get('cetak', [App\Http\Controllers\DataPresisiPanganController::class, 'cetak'])->name('data-pokok.data-presisi-pangan.cetak');
         })
             ->middleware(['permission:datapresisi-pangan-read']);

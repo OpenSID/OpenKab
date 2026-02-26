@@ -396,7 +396,7 @@
                             urlDetail.searchParams.set('nama', nilai);
                             urlDetail.searchParams.set('tipe', $('.pilih-kategori > a.active').text().trim());
                             urlDetail.searchParams.set('chart-view', true);
-
+                            
                             return `<a target="_blank" href="${urlDetail.href}">${nilai}</a>`
                         }
 

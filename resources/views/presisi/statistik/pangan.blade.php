@@ -34,13 +34,7 @@
                         <h3 id="title-block"></h3>
                     </div>
                     <div class="row">
-                        <div class="col-auto">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="true" aria-controls="collapse-filter">
-                                <i class="fas fa-filter"></i>
-                            </a>
-                        </div>
-
+                        <x-filter-tahun />
                         <div class="col-md-2">
                             <button type="button" id="export-excel" class="btn btn-info btn-block btn-sm">
                                 <i class="fa fa-file-excel"></i>
@@ -128,12 +122,12 @@
                         var nama = daftarKategoriStatistik[index];
 
                         html += `
-                            <li class="nav-item pilih-kategori">
-                                <a data-id="${id}" data-nama="${nama}" class="nav-link ${id == default_id ? 'active' : ''}" href="#">
-                                    <i class="fas fa-angle-right"></i> ${nama}
-                                </a>
-                            </li>
-                        `
+                                <li class="nav-item pilih-kategori">
+                                    <a data-id="${id}" data-nama="${nama}" class="nav-link ${id == default_id ? 'active' : ''}" href="#">
+                                        <i class="fas fa-angle-right"></i> ${nama}
+                                    </a>
+                                </li>
+                            `
                     });
 
                     $('#daftar-statistik').html(html)
@@ -193,7 +187,7 @@
                 // Get current active category
                 var activeCategory = $('#daftar-statistik .active');
                 var categoryName = activeCategory.data('nama') || 'Statistik';
-                var tahun = $("#tahun").val();
+                var tahun = $("#filter-tahun").val();
                 var bulan = $("#bulan").val();
 
                 // Generate dynamic filename
@@ -331,10 +325,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: true,
-                order: [
-                    [2, 'desc']
-                ],
+                ordering: false,
                 searching: false,
                 deferLoading: 0,
                 paging: false,
@@ -345,6 +336,7 @@
                     method: 'get',
                     data: function (row) {
                         return {
+                            "tahun": $('#filter-tahun').val(),
                             "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
                                 .order[0]
                                 ?.column]
@@ -380,7 +372,6 @@
                 ],
                 columns: [{
                     data: null,
-                    orderable: false,
                     render: function (data, type, row, meta) {
                         return meta.row + 1;
                     }
@@ -390,13 +381,13 @@
 
                         if (nilai !== 'JUMLAH' && nilai !== 'BELUM MENGISI' && nilai !==
                             'TOTAL') {
-                            let judul = $('.pilih-kategori > a.active').text() + ' : ' + nilai;
+                            let judul = $('.pilih-kategori > a.active').text().trim() + ' : ' + nilai;
                             let urlDetail = new URL(urlDetailLink);
-                            urlDetail.searchParams.set('filter[nilai]', nilai);
+                            urlDetail.searchParams.set('filter[nilai]', data.id);
+                            urlDetail.searchParams.set('filter[tipe]', $('.pilih-kategori > a.active')
+                                .data('id'));
                             urlDetail.searchParams.set('judul', judul);
-                            urlDetail.searchParams.set('nama', nilai);
-                            urlDetail.searchParams.set('tipe', $('.pilih-kategori > a.active')
-                                .text().trim());
+                            urlDetail.searchParams.set('tahun', $('#filter-tahun').val());
                             urlDetail.searchParams.set('chart-view', true);
 
                             return `<a target="_blank" href="${urlDetail.href}">${nilai}</a>`
@@ -404,7 +395,6 @@
 
                         return nilai;
                     },
-                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
@@ -421,8 +411,6 @@
 
                         return jumlah;
                     },
-                    orderable: true,
-                    name: 'jumlah',
                 }]
             });
 
@@ -442,6 +430,10 @@
                 statistik.draw();
             });
 
+            // Event listener for year filter change
+            $('#filter-tahun').on('change', function () {
+                statistik.ajax.reload();
+            });
             $(document).on('click', '#reset', function (e) {
                 e.preventDefault();
                 statistik.ajax.reload();

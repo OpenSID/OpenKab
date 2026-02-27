@@ -3,7 +3,7 @@ Di rilis ini, versi 2602.0.0 berisi penambahan dan perbaikan yang diminta penggu
 #### Penambahan Fitur
 
 1. [#933](https://github.com/OpenSID/OpenKab/issues/933) Penambahan fungsi filter data Belum Lengkap pada data presisi.
-
+2. [#934](https://github.com/OpenSID/OpenKab/issues/934) Implementasi Pengurutan (Sorting) di Halaman Statistik Data Presisi.
 
 #### Perbaikan BUG
 

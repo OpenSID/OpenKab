@@ -3,10 +3,11 @@
         @php
         $currentYear = date('Y');
         $startYear = $currentYear - 5;
+        $selectedYear = $selectedYear ?? $currentYear;
         @endphp
         <option value="">Pilih tahun</option>
         @for($year = $currentYear; $year >= $startYear; $year--)
-        <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+        <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>{{ $year }}</option>
         @endfor
     </select>
 </div>

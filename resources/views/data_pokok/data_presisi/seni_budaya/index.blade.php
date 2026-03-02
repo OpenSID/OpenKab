@@ -29,6 +29,7 @@
                 <div class="card-header">
                     <div class="row">
                         <x-filter-tahun />
+                        <x-filter-status-presisi />
                         <div class="col-auto">
                             <x-print-button :print-url="url('data-presisi/seni-budaya/cetak')" table-id="table-seni-budaya" :filter="[]" />
                         </div>
@@ -91,12 +92,14 @@
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[tahun]": $('#filter-tahun').val(),
+                            "filter[status_kelengkapan]": $('#filter-status-kelengkapan').val(),
                         };
                     },
                     dataSrc: function(json) {
-                        if (json.data && json.data.length > 0) {
-                            json.recordsTotal = json.meta.pagination.total;
-                            json.recordsFiltered = json.meta.pagination.total;
+                        // Set default values untuk recordsTotal dan recordsFiltered
+                        json.recordsTotal = json.meta?.pagination?.total || 0;
+                        json.recordsFiltered = json.meta?.pagination?.total || 0;
+                        if (json.data && json.data.length > 0) {                            
                             data_grafik = [];
                             json.data.forEach(function(item, index) {
                                 data_grafik.push(item.attributes);
@@ -210,7 +213,7 @@
                 `;
             }
             // Event listener for year filter change
-            $('#filter-tahun').on('change', function() {
+            $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
                 dtks.ajax.reload();
                 data_grafik = [];
                 grafikPie();

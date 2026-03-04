@@ -769,7 +769,7 @@ if (! function_exists('convertMenu')) {
             'parent_id' => $parentId,
             'text' => $menu['text'] ?? 'text',
             'href' => $menu['url'] ?? null,
-            'icon' => $menu['icon'],
+            'icon' => $menu['icon'] ?? null,
             'permission' => $menu['permission'] ?? null,
         ];
 

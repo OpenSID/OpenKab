@@ -135,9 +135,11 @@ class TwoFactorControllerTest extends BaseTestCase
     /** @test */
     public function it_enforces_rate_limiting_on_2fa_enable()
     {
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = '2fa-setup:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 3; $i++) {
-            RateLimiter::hit('2fa-setup:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('2fa.enable'), [
@@ -239,9 +241,11 @@ class TwoFactorControllerTest extends BaseTestCase
             'identifier' => 'test@example.com'
         ]]);
 
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = '2fa-verify:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 5; $i++) {
-            RateLimiter::hit('2fa-verify:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('2fa.verify'), [
@@ -320,9 +324,11 @@ class TwoFactorControllerTest extends BaseTestCase
             'identifier' => $this->user->email
         ]]);
 
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = '2fa-resend:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 2; $i++) {
-            RateLimiter::hit('2fa-resend:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('2fa.resend'));
@@ -452,9 +458,11 @@ class TwoFactorControllerTest extends BaseTestCase
             '2fa_identifier' => 'test@example.com'
         ]);
 
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = '2fa-challenge:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 5; $i++) {
-            RateLimiter::hit('2fa-challenge:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('2fa.challenge.verify'), [

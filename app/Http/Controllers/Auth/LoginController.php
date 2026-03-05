@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\GlobalRateLimiter;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Services\OtpService;
 use App\Services\TwoFactorService;
@@ -14,35 +16,15 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    protected $decayMinutes = 3;
+    use AuthenticatesUsers;
 
+    protected $decayMinutes = 3;
     protected $maxAttempts = 5;
-    
+
     protected $otpService;
     protected $twoFactorService;
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct(OtpService $otpService, TwoFactorService $twoFactorService)
-    {
-        $this->middleware('guest')->except('logout');
-        $this->otpService = $otpService;
-        $this->twoFactorService = $twoFactorService;
-        $this->username = $this->findUsername();
-    }
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
+    protected $globalRateLimiter;
+    protected $username;
 
     /**
      * Where to redirect users after login.
@@ -52,12 +34,19 @@ class LoginController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
-     * Login username to be used by the controller.
-     *
-     * @var string
+     * Create a new controller instance.
      */
-    protected $username;
-
+    public function __construct(
+        OtpService $otpService,
+        TwoFactorService $twoFactorService,
+        GlobalRateLimiter $globalRateLimiter
+    ) {
+        $this->middleware('guest')->except('logout');
+        $this->otpService = $otpService;
+        $this->twoFactorService = $twoFactorService;
+        $this->globalRateLimiter = $globalRateLimiter;
+        $this->username = $this->findUsername();
+    }
 
     /**
      * Get the login username to be used by the controller.
@@ -67,11 +56,8 @@ class LoginController extends Controller
     public function findUsername()
     {
         $login = request()->input('login');
-
         $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-
         request()->merge([$fieldType => $login]);
-
         return $fieldType;
     }
 
@@ -86,12 +72,69 @@ class LoginController extends Controller
     }
 
     /**
-     * Attempt to log the user into the application.
+     * Check if user account is locked before attempting login.
      *
-     * @return bool
+     * @param  \Illuminate\Http\Request  $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function checkAccountLockout(Request $request)
+    {
+        $login = $request->input('login');
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        
+        $user = User::where($fieldType, $login)->first();
+
+        if ($user && $user->isLocked()) {
+            $remainingSeconds = $user->getLockoutRemainingSeconds();
+            $minutes = ceil($remainingSeconds / 60);
+
+            throw ValidationException::withMessages([
+                $this->username() => "AKUN TERKUNCI. Terlalu banyak gagal login. Coba lagi dalam {$minutes} menit.",
+            ]);
+        }
+
+        return $user;
+    }
+
+    /**
+     * Record failed login attempt with account lockout.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    protected function recordFailedLoginAttempt(Request $request)
+    {
+        $login = $request->input('login');
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        
+        $user = User::where($fieldType, $login)->first();
+
+        if ($user) {
+            $result = $user->recordFailedLogin();
+
+            if ($result['locked']) {
+                $minutes = ceil($result['lockout_expires_in'] / 60);
+                $message = "AKUN TERKUNCI. Terlalu banyak gagal login ({$result['attempts']} kali). Coba lagi dalam {$minutes} menit.";
+            } elseif ($result['remaining'] === 0) {
+                $message = "PERINGATAN: Akun akan terkunci setelah {$result['attempts']} kali gagal login.";
+            } else {
+                $message = "Kredensial tidak valid. Percobaan gagal ke-{$result['attempts']}. Delay: {$result['delay']} detik.";
+            }
+
+            throw ValidationException::withMessages([
+                $this->username() => $message,
+            ]);
+        }
+
+        $this->incrementLoginAttempts($request);
+    }
+
+    /**
+     * Override to add account lockout check and password validation.
      */
     protected function attemptLogin(Request $request)
     {
+        $this->checkAccountLockout($request);
+
         $successLogin = $this->guard()->attempt(
             $this->credentials($request), $request->boolean('remember')
         );
@@ -104,19 +147,19 @@ class LoginController extends Controller
                     ->numbers()
                     ->symbols()
                     ->uncompromised(),
-                ],
-                ]);
+                ]]);
                 session(['weak_password' => false]);
-            } catch (ValidationException  $th) {
+            } catch (ValidationException $th) {
                 session(['weak_password' => true]);
-
                 return redirect(route('password.change'))->with('success-login', 'Ganti password dengan yang lebih kuat');
-            }            
+            }
+        } else {
+            $this->recordFailedLoginAttempt($request);
         }
 
         return $successLogin;
     }
-    
+
     /**
      * Send the response after the user was authenticated.
      *
@@ -126,18 +169,18 @@ class LoginController extends Controller
     protected function sendLoginResponse(Request $request)
     {
         $request->session()->regenerate();
-        
         $this->clearLoginAttempts($request);
-        
-        // Check if user has 2FA enabled
+
         $user = $this->guard()->user();
+        if ($user) {
+            $user->resetFailedLogins();
+        }
+
         if ($this->twoFactorService->hasTwoFactorEnabled($user)) {
             session()->forget('2fa_verified');
-            // If 2FA is enabled, redirect to 2FA challenge
             return redirect()->route('2fa.challenge');
         }
-        
-        // If weak password, redirect to password change
+
         if (session('weak_password')) {
             return redirect(route('password.change'))->with('success-login', 'Ganti password dengan yang lebih kuat');
         }

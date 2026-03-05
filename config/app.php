@@ -260,8 +260,24 @@ return [
 
     'otp_setup_max_attempts' => env('OTP_SETUP_MAX_ATTEMPTS', 3),
     'otp_setup_decay_seconds' => env('OTP_SETUP_DECAY_SECONDS', 300),
-    'otp_verify_max_attempts' => env('OTP_VERIFY_MAX_ATTEMPTS', 5), 
+    'otp_verify_max_attempts' => env('OTP_VERIFY_MAX_ATTEMPTS', 5),
     'otp_verify_decay_seconds' => env('OTP_VERIFY_DECAY_SECONDS', 300),
     'otp_resend_max_attempts' => env('OTP_RESEND_MAX_ATTEMPTS', 2),
     'otp_resend_decay_seconds' => env('OTP_RESEND_DECAY_SECONDS', 30),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Account Lockout & Progressive Delay Configuration
+    |--------------------------------------------------------------------------
+    |
+    | These configuration values control the account lockout mechanism and
+    | progressive delay for failed authentication attempts.
+    | You may configure these values in your .env file.
+    |
+    */
+
+    'account_lockout_max_attempts' => env('ACCOUNT_LOCKOUT_MAX_ATTEMPTS', 5),
+    'account_lockout_decay_minutes' => env('ACCOUNT_LOCKOUT_DECAY_MINUTES', 15),
+    'progressive_delay_base_seconds' => env('PROGRESSIVE_DELAY_BASE_SECONDS', 2),
+    'progressive_delay_multiplier' => env('PROGRESSIVE_DELAY_MULTIPLIER', 2),
 ];

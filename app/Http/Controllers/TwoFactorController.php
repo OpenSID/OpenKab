@@ -6,6 +6,7 @@ use App\Http\Requests\TwoFactorEnableRequest;
 use App\Http\Requests\TwoFactorVerifyRequest;
 use App\Services\TwoFactorService;
 use App\Services\OtpService;
+use App\Http\Middleware\GlobalRateLimiter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -14,11 +15,16 @@ class TwoFactorController extends Controller
 {
     protected $twoFactorService;
     protected $otpService;
+    protected $globalRateLimiter;
 
-    public function __construct(TwoFactorService $twoFactorService, OtpService $otpService)
-    {
+    public function __construct(
+        TwoFactorService $twoFactorService,
+        OtpService $otpService,
+        GlobalRateLimiter $globalRateLimiter
+    ) {
         $this->twoFactorService = $twoFactorService;
         $this->otpService = $otpService;
+        $this->globalRateLimiter = $globalRateLimiter;
     }    
 
      public function activate()
@@ -38,11 +44,13 @@ class TwoFactorController extends Controller
      */
     public function enable(TwoFactorEnableRequest $request)
     {
-        // Rate limiting untuk setup
-        $key = '2fa-setup:' . Auth::id();
+        $userId = Auth::id();
+
+        // Rate limiting untuk setup dengan enhanced key (IP + User-Agent + User ID)
+        $key = $this->get2faSetupRateLimitKey($request, $userId);
         $maxAttempts = config('app.2fa_setup_max_attempts', 3);
         $decaySeconds = config('app.2fa_setup_decay_seconds', 300);
-        
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             return response()->json([
                 'success' => false,
@@ -68,7 +76,7 @@ class TwoFactorController extends Controller
         if ($result['success']) {
             return response()->json([
                 'success' => true,
-                'message' => 'Kode verifikasi telah dikirim untuk aktivasi 2FA'                
+                'message' => 'Kode verifikasi telah dikirim untuk aktivasi 2FA'
             ]);
         }
 
@@ -76,17 +84,19 @@ class TwoFactorController extends Controller
             'success' => false,
             'message' => $result['message']
         ], 400);
-    }    
+    }
     /**
      * Verifikasi dan konfirmasi aktivasi 2FA
      */
     public function verifyEnable(TwoFactorVerifyRequest $request)
     {
-        // Rate limiting untuk verifikasi
-        $key = '2fa-verify:' . Auth::id();
+        $userId = Auth::id();
+
+        // Rate limiting untuk verifikasi dengan enhanced key
+        $key = $this->get2faVerifyRateLimitKey($request, $userId);
         $maxAttempts = config('app.2fa_verify_max_attempts', 5);
         $decaySeconds = config('app.2fa_verify_decay_seconds', 300);
-        
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             return response()->json([
                 'success' => false,
@@ -97,7 +107,7 @@ class TwoFactorController extends Controller
         RateLimiter::hit($key, $decaySeconds);
 
         $tempConfig = $request->session()->get('temp_2fa_config');
-        
+
         if (!$tempConfig) {
             return response()->json([
                 'success' => false,
@@ -147,7 +157,7 @@ class TwoFactorController extends Controller
     public function resend(Request $request)
     {
         $tempConfig = $request->session()->get('temp_2fa_config');
-        
+
         if (!$tempConfig) {
             return response()->json([
                 'success' => false,
@@ -155,11 +165,13 @@ class TwoFactorController extends Controller
             ], 400);
         }
 
-        // Rate limiting untuk resend
-        $key = '2fa-resend:' . Auth::id();
+        $userId = Auth::id();
+
+        // Rate limiting untuk resend dengan enhanced key
+        $key = $this->get2faResendRateLimitKey($request, $userId);
         $maxAttempts = config('app.2fa_resend_max_attempts', 2);
         $decaySeconds = config('app.2fa_resend_decay_seconds', 30);
-        
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             return response()->json([
                 'success' => false,
@@ -204,11 +216,13 @@ class TwoFactorController extends Controller
      */
     public function verifyChallenge(TwoFactorVerifyRequest $request)
     {
-        // Rate limiting untuk verifikasi challenge
-        $key = '2fa-challenge:' . Auth::id();
+        $userId = Auth::id();
+
+        // Rate limiting untuk verifikasi challenge dengan enhanced key
+        $key = $this->get2faChallengeRateLimitKey($request, $userId);
         $maxAttempts = config('app.2fa_challenge_max_attempts', 5);
         $decaySeconds = config('app.2fa_challenge_decay_seconds', 300);
-        
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             return response()->json([
                 'success' => false,
@@ -236,5 +250,53 @@ class TwoFactorController extends Controller
             'success' => false,
             'message' => $result['message']
         ], 400);
+    }
+
+    /**
+     * Generate rate limit key for 2FA setup.
+     * Combines IP, User-Agent, and user ID.
+     */
+    protected function get2faSetupRateLimitKey(Request $request, int $userId): string
+    {
+        $ip = $request->ip();
+        $userAgent = hash('xxh64', $request->userAgent() ?? 'unknown');
+        
+        return "2fa-setup:{$userId}:{$ip}:{$userAgent}";
+    }
+
+    /**
+     * Generate rate limit key for 2FA verification.
+     * Combines IP, User-Agent, and user ID.
+     */
+    protected function get2faVerifyRateLimitKey(Request $request, int $userId): string
+    {
+        $ip = $request->ip();
+        $userAgent = hash('xxh64', $request->userAgent() ?? 'unknown');
+        
+        return "2fa-verify:{$userId}:{$ip}:{$userAgent}";
+    }
+
+    /**
+     * Generate rate limit key for 2FA resend.
+     * Combines IP, User-Agent, and user ID.
+     */
+    protected function get2faResendRateLimitKey(Request $request, int $userId): string
+    {
+        $ip = $request->ip();
+        $userAgent = hash('xxh64', $request->userAgent() ?? 'unknown');
+        
+        return "2fa-resend:{$userId}:{$ip}:{$userAgent}";
+    }
+
+    /**
+     * Generate rate limit key for 2FA challenge.
+     * Combines IP, User-Agent, and user ID.
+     */
+    protected function get2faChallengeRateLimitKey(Request $request, int $userId): string
+    {
+        $ip = $request->ip();
+        $userAgent = hash('xxh64', $request->userAgent() ?? 'unknown');
+        
+        return "2fa-challenge:{$userId}:{$ip}:{$userAgent}";
     }
 }

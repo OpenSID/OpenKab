@@ -4,8 +4,8 @@ a:hover {
     color: inherit;
 }
 
-.unlink  a,
-.unlink  a:hover {
+.unlink a,
+.unlink a:hover {
     text-decoration: none;
     color: inherit;
 }
@@ -36,33 +36,33 @@ tr.shown td.details-control {
     transition: .5s;
 }
 
-.img-cover{
+.img-cover {
     height: 100px;
     object-fit: cover;
 }
 
 .w-40 {
-    width: 40%!important;
+    width: 40% !important;
 }
 
 .w-42 {
-    width: 42%!important;
+    width: 42% !important;
 }
 
 .w-80 {
-    width: 80%!important;
+    width: 80% !important;
 }
 
 .w-56px {
-    width: 56px!important;
+    width: 56px !important;
 }
 
 .w-70px {
-    width: 70px!important;
+    width: 70px !important;
 }
 
 .w-100px {
-    width: 100px!important;
+    width: 100px !important;
 }
 
 .select2-container .select2-selection--single {
@@ -557,10 +557,51 @@ tr.shown td.details-control {
 .nav-treeview .nav-treeview {
     padding-left: 5px !important;
 }
+
 .nav-treeview .nav-item {
     padding-left: 5px !important;
 }
 
 .has-treeview .has-treeview {
     padding-left: 5px !important;
+}
+
+/* When sidebar is collapsed - only apply margin on larger screens */
+@media (min-width: 992px) {
+
+    .sidebar-collapse .content-wrapper,
+    .sidebar-collapse .main-footer,
+    .sidebar-collapse .main-header {
+        margin-left: 4.6rem !important;
+    }
+}
+
+/* Reset margin for mobile when sidebar is collapsed */
+@media (max-width: 991.98px) {
+
+    .sidebar-collapse .content-wrapper,
+    .sidebar-collapse .main-footer,
+    .sidebar-collapse .main-header {
+        margin-left: 0 !important;
+    }
+}
+
+/* Adjust arrow icon position */
+.nav-sidebar .nav-link>.right,
+.nav-sidebar .nav-link>p>.right {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+}
+
+/* When menu is open, rotate the arrow */
+.nav-sidebar .menu-open>.nav-link>.right,
+.nav-sidebar .menu-open>.nav-link>p>.right {
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+a .nav-link {
+    margin-left: -5px;
 }

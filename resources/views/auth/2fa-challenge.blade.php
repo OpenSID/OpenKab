@@ -111,7 +111,7 @@
 @stop
 
 @section('adminlte_css')
-    <style>
+   <style nonce="{{ csp_nonce() }}" >
         .auth-body {
             padding: 20px;
         }

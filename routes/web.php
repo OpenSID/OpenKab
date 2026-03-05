@@ -13,6 +13,8 @@ use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\LaporanBulananController;
+use App\Http\Controllers\Master\ArtikelKabupatenController;
+use App\Http\Controllers\Master\ArtikelUploadController;
 use App\Http\Controllers\Master\BantuanKabupatenController;
 use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\PlanController;
@@ -80,7 +82,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show'])->middleware('easyauthorize:pengaturan-activities');
         Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create', 'delete'])->middleware('easyauthorize:pengaturan-settings');
-        
+
         // OTP & 2FA Routes - combined into one page
         Route::prefix('otp')->group(function () {
             Route::get('/', [App\Http\Controllers\OtpController::class, 'index'])->name('otp.index');
@@ -88,21 +90,21 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
             Route::post('/setup', [App\Http\Controllers\OtpController::class, 'setup'])->name('otp.setup');
             Route::post('/verify-activation', [App\Http\Controllers\OtpController::class, 'verifyActivation'])->name('otp.verify-activation');
             Route::post('/resend', [App\Http\Controllers\OtpController::class, 'resend'])->name('otp.resend');
-            Route::post('/disable', [App\Http\Controllers\OtpController::class, 'disable'])->name('otp.disable');            
+            Route::post('/disable', [App\Http\Controllers\OtpController::class, 'disable'])->name('otp.disable');
         });
-        
+
         // 2FA Routes - for API calls from the combined page
         Route::prefix('2fa')->group(function () {
-            Route::get('/', function() {
+            Route::get('/', function () {
                 return redirect()->route('otp.index');
             })->name('2fa.index');
             Route::get('/activate', [App\Http\Controllers\TwoFactorController::class, 'activate'])->name('2fa.activate');
-            Route::post('/enable', [App\Http\Controllers\TwoFactorController::class, 'enable'])->name('2fa.enable');            
+            Route::post('/enable', [App\Http\Controllers\TwoFactorController::class, 'enable'])->name('2fa.enable');
             Route::post('/verify', [App\Http\Controllers\TwoFactorController::class, 'verifyEnable'])->name('2fa.verify');
             Route::post('/disable', [App\Http\Controllers\TwoFactorController::class, 'disable'])->name('2fa.disable');
             Route::post('/resend', [App\Http\Controllers\TwoFactorController::class, 'resend'])->name('2fa.resend');
         });
-    });    
+    });
 
     Route::prefix('cms')->group(function () {
         Route::resource('categories', App\Http\Controllers\CMS\CategoryController::class)->except(['show'])->middleware('easyauthorize:website-categories');
@@ -182,6 +184,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
         ->group(function () {
             Route::get('/', 'index')->name('bantuan');
             Route::get('/cetak', 'cetak');
+            Route::get('/detail/{id}/cetak', 'cetakPeserta')->name('bantuan.detail.cetak');
             Route::get('/detail/{id}', 'show')->name('bantuan.detail');
         });
 
@@ -201,6 +204,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
             Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan', 'pendidikan')->name('pendidikan');
             Route::middleware(['permission:datapokok-pendidikan-read'])->get('/pendidikan/cetak', 'cetakPendidikan')->name('pendidikan.cetak');
             Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata', 'pariwisata')->name('pariwisata');
+            Route::middleware(['permission:datapokok-pariwisata-read'])->get('/pariwisata/cetak', 'cetakPariwisata')->name('pariwisata.cetak');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial', 'jaminanSosial')->name('jaminan-sosial');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial/detail', 'detailJaminanSosial')->name('jaminan-sosial-detail');
             Route::middleware(['permission:datapokok-jaminan-sosial-read'])->get('/jaminan-sosial/cetak', 'cetakJaminanSosial')->name('jaminan-sosial-cetak');
@@ -210,6 +214,7 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
             Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama/detail', 'detail_agama')->name('detail_agama');
             Route::middleware(['permission:datapokok-agama-adat-read'])->get('/agama/cetak', 'cetak_agama')->name('cetak_agama');
             Route::middleware(['permission:datapokok-infrastruktur-read'])->get('/infrastruktur', 'infrastruktur')->name('infrastruktur');
+            Route::middleware(['permission:datapokok-infrastruktur-read'])->get('/infrastruktur/cetak', 'cetakInfrastruktur')->name('infrastruktur.cetak');
 
             Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang', 'sandang')->name('datasandang');
             Route::middleware(['permission:datapokok-sandang-read'])->get('/sandang/detail', 'detail_sandang')->name('detail_datasandang');
@@ -233,9 +238,9 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
 
             // Data > Kependudukan > Laporan Bulanan
             Route::controller(LaporanBulananController::class)
-            ->middleware(['permission:statistik-laporan-bulanan-read'])
-            ->prefix('laporan-bulanan')
-            ->group(function () {
+                ->middleware(['permission:statistik-laporan-bulanan-read'])
+                ->prefix('laporan-bulanan')
+                ->group(function () {
                 Route::get('/', 'index')->name('laporan-bulanan.index');
                 Route::post('/filter', 'filter')->name('laporan-bulanan.filter');
                 Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
@@ -253,6 +258,8 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
     Route::prefix('master')
         ->group(function () {
             Route::middleware(['easyauthorize:master-data-bantuan'])->resource('bantuan', BantuanKabupatenController::class)->only(['index', 'create', 'edit']);
+            Route::middleware(['easyauthorize:master-data-artikel'])->resource('artikel', ArtikelKabupatenController::class)->names('master-data-artikel')->only(['index', 'create', 'edit']);
+            Route::post('artikel/upload-gambar', [ArtikelUploadController::class, 'uploadGambar'])->name('artikel.upload_gambar');
             Route::controller(AdminWebController::class)->group(function () {
                 Route::middleware(['permission:master-data-artikel-read'])->get('/kategori/{parrent}', 'kategori_index')->name('master-data-artikel.kategori');
                 Route::middleware(['permission:master-data-artikel-edit'])->get('/kategori/edit/{id}/{parrent}', 'kategori_edit')->name('master-data-artikel.kategori-edit');
@@ -273,64 +280,65 @@ Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(f
         Route::prefix('laporan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiLaporanController::class, 'index'])->name('laporan.data-presisi.index');
             Route::get('cetak', [App\Http\Controllers\DataPresisiLaporanController::class, 'cetak'])->name('laporan.data-presisi.cetak');
-                Route::get('/perdesa', [App\Http\Controllers\DataPresisiLaporanController::class, 'perdesa'])->name('laporan.data-presisi.perdesa');
-                Route::get('/cetak-perdesa', [App\Http\Controllers\DataPresisiLaporanController::class, 'cetakPerdesa'])->name('laporan.data-presisi.cetak-perdesa');
+            Route::get('/perdesa', [App\Http\Controllers\DataPresisiLaporanController::class, 'perdesa'])->name('laporan.data-presisi.perdesa');
+            Route::get('/cetak-perdesa', [App\Http\Controllers\DataPresisiLaporanController::class, 'cetakPerdesa'])->name('laporan.data-presisi.cetak-perdesa');
         })
-        ->middleware(['permission:datapresisi-laporan-read']);
+            ->middleware(['permission:datapresisi-laporan-read']);
 
         Route::prefix('kesehatan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiKesehatanController::class, 'index'])->name('data-pokok.data-presisi.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiKesehatanController::class, 'detail'])->name('data-pokok.data-presisi.detail');
             Route::get('cetak', [App\Http\Controllers\DataPresisiKesehatanController::class, 'cetak'])->name('data-pokok.data-presisi.cetak');
         })
-        ->middleware(['permission:datapresisi-kesehatan-read']);
+            ->middleware(['permission:datapresisi-kesehatan-read']);
 
         Route::prefix('seni-budaya')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'index'])->name('data-pokok.data-presisi-seni-budaya.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'detail'])->name('data-pokok.data-presisi-seni-budaya.detail');
             Route::get('cetak', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'cetak'])->name('data-pokok.data-presisi-seni-budaya.cetak');
         })
-        ->middleware(['permission:datapresisi-seni-budaya-read']);
+            ->middleware(['permission:datapresisi-seni-budaya-read']);
 
         Route::prefix('ketenagakerjaan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiKetenagakerjaanController::class, 'index'])->name('data-pokok.data-presisi-ketenagakerjaan.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiKetenagakerjaanController::class, 'detail'])->name('data-pokok.data-presisi-ketenagakerjaan.detail');
             Route::get('cetak', [App\Http\Controllers\DataPresisiKetenagakerjaanController::class, 'cetak'])->name('data-pokok.data-presisi-ketenagakerjaan.cetak');
         })
-        ->middleware(['permission:datapresisi-ketenagakerjaan-read']);
+            ->middleware(['permission:datapresisi-ketenagakerjaan-read']);
 
         Route::prefix('pendidikan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiPendidikanController::class, 'index'])->name('data-pokok.data-presisi-pendidikan.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiPendidikanController::class, 'detail'])->name('data-pokok.data-presisi-pendidikan.detail');
             Route::get('cetak', [App\Http\Controllers\DataPresisiPendidikanController::class, 'cetak'])->name('data-pokok.data-presisi-pendidikan.cetak');
         })
-        ->middleware(['permission:datapresisi-pendidikan-read']);
+            ->middleware(['permission:datapresisi-pendidikan-read']);
 
         Route::prefix('pangan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiPanganController::class, 'index'])->name('data-pokok.data-presisi-pangan.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiPanganController::class, 'detail'])->name('data-pokok.data-presisi-pangan.detail');
+            Route::get('detail_data', [App\Http\Controllers\DataPresisiPanganController::class, 'detailData'])->name('data-pokok.data-presisi-pangan.detail_data');
             Route::get('cetak', [App\Http\Controllers\DataPresisiPanganController::class, 'cetak'])->name('data-pokok.data-presisi-pangan.cetak');
         })
-        ->middleware(['permission:datapresisi-pangan-read']);
+            ->middleware(['permission:datapresisi-pangan-read']);
 
         Route::prefix('adat')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiAdatController::class, 'index'])->name('data-pokok.data-presisi-adat.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiAdatController::class, 'detail'])->name('data-pokok.data-presisi-adat.detail');
             Route::get('cetak', [App\Http\Controllers\DataPresisiAdatController::class, 'cetak'])->name('data-pokok.data-presisi-adat.cetak');
         })
-        ->middleware(['permission:datapresisi-adat-read']);
+            ->middleware(['permission:datapresisi-adat-read']);
 
-        Route::prefix('statistik')->group(function () {            
+        Route::prefix('statistik')->group(function () {
             Route::get('adat', [App\Http\Controllers\StatistikAdatController::class, 'index']);
             Route::get('kesehatan', [App\Http\Controllers\StatistikKesehatanController::class, 'index']);
             Route::get('jaminan-sosial', [App\Http\Controllers\StatistikJaminanSosialController::class, 'index']);
             Route::get('aktivitas-keagamaan', [App\Http\Controllers\StatistikAktivitasKeagamaanController::class, 'index']);
             Route::get('ketenagakerjaan', [App\Http\Controllers\StatistikKetenagakerjaanController::class, 'index']);
-            Route::get('pendidikan', [App\Http\Controllers\StatistikPendidikanController::class, 'index']); 
-            Route::get('sandang', [App\Http\Controllers\StatistikSandangController::class, 'index']); 
-            Route::get('papan', [App\Http\Controllers\StatistikPapanController::class, 'index']); 
-            Route::get('senibudaya', [App\Http\Controllers\StatistikSenibudayaController::class, 'index']); 
-            Route::get('pangan', [App\Http\Controllers\StatistikPanganController::class, 'index']); 
+            Route::get('pendidikan', [App\Http\Controllers\StatistikPendidikanController::class, 'index']);
+            Route::get('sandang', [App\Http\Controllers\StatistikSandangController::class, 'index']);
+            Route::get('papan', [App\Http\Controllers\StatistikPapanController::class, 'index']);
+            Route::get('senibudaya', [App\Http\Controllers\StatistikSenibudayaController::class, 'index']);
+            Route::get('pangan', [App\Http\Controllers\StatistikPanganController::class, 'index']);
         });
     });
 

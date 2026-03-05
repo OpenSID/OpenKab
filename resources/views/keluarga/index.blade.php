@@ -44,6 +44,7 @@
                                 <i class="fa fa-print"></i>
                                 Cetak
                             </button>
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/keluarga/download'" table-id="keluarga" filename="data_keluarga" />
                         </div>
                     </div>
                 </div>

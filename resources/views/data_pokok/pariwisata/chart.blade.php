@@ -1,4 +1,18 @@
 <script nonce="{{ csp_nonce() }}"  >
+    function randColorRGB() {
+        const r = Math.floor(Math.random() * 200) + 55;
+        const g = Math.floor(Math.random() * 200) + 55;
+        const b = Math.floor(Math.random() * 200) + 55;
+        return `rgba(${r}, ${g}, ${b}, 0.7)`;
+    }
+
+    function randColorHex() {
+        const r = Math.floor(Math.random() * 200) + 55;
+        const g = Math.floor(Math.random() * 200) + 55;
+        const b = Math.floor(Math.random() * 200) + 55;
+        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+
     function grafikPie() {
         data = [];
         $('#barChart').remove();
@@ -18,21 +32,20 @@
 
     function tampilGrafik(areaChartData) {
         var barChartCanvas = $('#barChart').get(0).getContext('2d')
-        var barChartData = $.extend(true, {}, areaChartData)
-        var temp0 = areaChartData.datasets[0]
-        var temp1 = areaChartData.datasets[1]
-        barChartData.datasets[0] = temp1
-        barChartData.datasets[1] = temp0
-
+        
         var barChartOptions = {
             responsive: true,
             maintainAspectRatio: false,
-            datasetFill: false
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
 
         new Chart(barChartCanvas, {
             type: 'bar',
-            data: barChartData,
+            data: areaChartData,
             options: barChartOptions
         })
     }
@@ -55,23 +68,21 @@
         var labelsPie = [];
         var dataPie = [];
         var backgroundColorPie = [];
+        var labels = [];
 
         data.forEach(function(item, index) {
             let color = randColorRGB();
             let colorPoint = randColorHex();
 
-            let jumlah = typeof item.jumlah_penginapan == 'string' ? item.jumlah_penginapan : 0
+            let jumlah = typeof item.jumlah_penginapan == 'string' ? parseInt(item.jumlah_penginapan) : 0
 
+            labels.push(item.jenis_hiburan)
             dataBaruGrafik.push({
                 label: item.jenis_hiburan,
                 backgroundColor: color,
                 borderColor: color,
-                pointRadius: false,
-                pointColor: color,
-                pointStrokeColor: colorPoint,
-                pointHighlightFill: colorPoint,
-                pointHighlightStroke: color,
-                data: [jumlah, 1]
+                borderWidth: 1,
+                data: [jumlah]
             })
 
             labelsPie.push(item.jenis_hiburan)
@@ -80,7 +91,7 @@
         })
 
         return [{
-                labels: ['Jumlah Penginapan'],
+                labels: labels,
                 datasets: dataBaruGrafik
             },
             {

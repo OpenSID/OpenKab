@@ -26,6 +26,7 @@
                                 <i class="fa fa-print"></i>
                                 Cetak
                             </button>
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/wilayah/penduduk-kecamatan/download'" table-id="summary-penduduk" filename="data_kecamatan" />
                         </div>
                     </div>
                 </div>

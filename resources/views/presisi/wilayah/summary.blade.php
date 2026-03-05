@@ -11,7 +11,7 @@
                 let url = "{{ config('app.databaseGabunganUrl') . '/api/v1/data-website' }}";
                 if (kabupaten || kecamatan || desa) {
                     url +=
-                        `?filter[kode_kabupaten]=${kabupaten || ''}&filter[kode_kecamatan]=${kecamatan || ''}&filter[kode_desa]=${desa || ''}`;
+                        `?filter[kode_kabupaten]=${kabupaten || ''}&filter[kode_kecamatan]=${kecamatan || ''}&filter[kode_desa]=${desa || ''}&kode_kabupaten=${kabupaten || ''}&kode_kecamatan=${kecamatan || ''}&kode_desa=${desa || ''}`;
                 }
                 $.get(url, {}, function(result) {
                     let category = result.data.categoriesItems;

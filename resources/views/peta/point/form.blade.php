@@ -8,7 +8,7 @@
     <h1>{{ $action }} Data Tipe Lokasi</h1>
 @stop
 @push('css')
-    <style>
+   <style nonce="{{ csp_nonce() }}" >
         .hidden {
             /* display: none; */
         }

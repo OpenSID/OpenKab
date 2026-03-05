@@ -7,7 +7,7 @@
 @stop
 
 @push('css')
-    <style>
+   <style nonce="{{ csp_nonce() }}" >
         .details {
             margin-left: 20px;
         }
@@ -28,22 +28,12 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-sm-2">
-                            <select id="filter-tahun" class="form-control form-control-sm">
-                                @php
-                                    $currentYear = date('Y');
-                                    $startYear = 2020;
-                                @endphp
-                                @for($year = $currentYear; $year >= $startYear; $year--)
-                                    <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
-                                @endfor
-                            </select>
+                        <x-filter-tahun />
+                        <x-filter-status-presisi />
+                        <div class="col-auto">
+                            <x-print-button :print-url="url('data-presisi/pendidikan/cetak')" table-id="table-pendidikan" :filter="[]" />
                         </div>
-                        <div class="col-sm-3">
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="">
-                                <i class="fa fa-print"></i> Cetak
-                            </button>
-                        </div>
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/pendidikan/rtm/download'" table-id="table-pendidikan" filename="data_presisi_pendidikan" />
                     </div>
                 </div>
                 <div class="card-body">
@@ -100,12 +90,14 @@
                             "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
                             "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[tahun]": $('#filter-tahun').val(),
+                            "filter[status_kelengkapan]": $('#filter-status-kelengkapan').val(),
                         };
                     },
                     dataSrc: function(json) {
-                        if (json.data.length > 0) {
-                        json.recordsTotal = json.meta.pagination.total
-                        json.recordsFiltered = json.meta.pagination.total
+                        // Set default values untuk recordsTotal dan recordsFiltered
+                        json.recordsTotal = json.meta?.pagination?.total || 0;
+                        json.recordsFiltered = json.meta?.pagination?.total || 0;
+                        if (json.data.length > 0) {                        
                         data_grafik = [];
                         json.data.forEach(function(item, index) {
                             data_grafik.push(item.attributes)
@@ -222,18 +214,12 @@
                 `;
             }
             // Event listener for year filter change
-            $('#filter-tahun').on('change', function() {
+            $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
                 dtks.ajax.reload();
                 data_grafik = [];
                 grafikPie();
             });
             
-            $('#cetak').on('click', function() {
-                let baseUrl = "{{ route('data-pokok.data-presisi-pendidikan.cetak') }}";
-                let params = dtks.ajax.params(); // Get DataTables params
-                let queryString = new URLSearchParams(params).toString(); // Convert params to query string
-                window.open(`${baseUrl}?${queryString}`, '_blank'); // Open the URL with appended query
-            });
-        })
+        });
     </script>
 @endsection

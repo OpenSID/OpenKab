@@ -69,9 +69,17 @@
 
                         // Prepare download URL
                         const url = new URL(downloadUrl);
-
+                        url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
+                        url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
+                        url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");                
                         let urlParams = new URLSearchParams();
 
+                        // Add additional params
+                        @if ($additionalParams)
+                            @foreach ($additionalParams as $param)
+                                urlParams.append('{{ $param['key'] }}', '{{ $param['value'] }}');
+                            @endforeach
+                        @endif
                         if (tableId) {
                             // Get filter parameters from DataTable
                             const table = $('#' + tableId).DataTable();
@@ -110,7 +118,7 @@
                             const info = table.page.info();
                             urlParams.append('totalData', info.recordsTotal);
                         }
-
+        
                         // Make fetch request
                         const response = await fetch(url, {
                             method: 'POST',

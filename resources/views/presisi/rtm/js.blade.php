@@ -3,12 +3,12 @@
         $(function() {
             var statistik = [];
             var data_grafik = [];
-            let exclude_chart = []
-
-            @include('presisi.rtm.filter-wilayah.kabupaten')
-            @include('presisi.rtm.filter-wilayah.kecamatan')
-            @include('presisi.rtm.filter-wilayah.desa')
-            @include('presisi.rtm.filter-wilayah.button')
+            let exclude_chart = []    
+            
+            $('#bt_filter').click(function() {
+                $('#summary_block').trigger('change');
+                $('#statistik_block').trigger('change');                
+            });
 
             $('#nav-statistik li a:first').addClass('active');
             $('#nav-statistik li').click(function(e) {
@@ -18,17 +18,7 @@
 
                 $('#statistik thead').find('.judul').html($(this).find('a').data('name'))
                 table.ajax.reload()
-            });
-
-            // $('#btn-tabel').click(function() {
-            //     $(this).prop('disabled', true);
-            //     $('#btn-grafik').prop('disabled', false);
-            //     $('#btn-pie').prop('disabled', false);
-
-            //     $('#grafik').hide();
-            //     $('#pie').hide()
-            //     $('#statistik').show()
-            // })
+            });            
 
             $('#btn-grafik').click(function() {
                 $(this).prop('disabled', true);
@@ -71,9 +61,9 @@
                         var nav = $('#nav-statistik').find('li a.active')
                         d['filter[id]'] = nav.data('key');
                         d['filter[tahun]'] = '';
-                        d['filter[kabupaten]'] = $("#filter_kabupaten").val();
-                        d['filter[kecamatan]'] = $("#filter_kecamatan").val();
-                        d['filter[desa]'] = $("#filter_desa").val();
+                        d['kode_kabupaten'] = $("#filter_kabupaten").val();
+                        d['kode_kecamatan'] = $("#filter_kecamatan").val();
+                        d['kode_desa'] = $("#filter_desa").val();          
                         // d.config_desa = $('#position').val();
                     },
                     dataSrc: function(json) {
@@ -145,10 +135,6 @@
                 ],
             });
 
-
-
-
-
             function grafikPie() {
                 $('#barChart').remove();
                 $('#donutChart').remove();
@@ -158,6 +144,7 @@
                 $('#pie').append('<canvas id="donutChart"></canvas>');
                 tampilGrafik(data[0]);
                 tampilPie(data[1]);
+                $('#btn-grafik').click();
             }
 
             function tampilGrafik(areaChartData) {
@@ -234,6 +221,10 @@
                     }
                 ]
             }
+
+            $('#statistik_block').change(function(){
+                table.draw()
+            })
         });
     </script>
 

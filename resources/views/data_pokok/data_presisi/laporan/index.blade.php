@@ -7,7 +7,7 @@
 @stop
 
 @push('css')
-    <style>
+   <style nonce="{{ csp_nonce() }}" >
         .details {
             margin-left: 20px;
         }

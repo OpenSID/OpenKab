@@ -13,6 +13,17 @@ class DataPresisiPanganController extends Controller
         return view('data_pokok.data_presisi.pangan.index', compact('title'));
     }
 
+    public function detailData()
+    {
+        $colomn = '';
+        $title = 'Data Presisi Pangan '.request('judul');
+        $filter = request('filter');
+        if($filter['tipe'] && $filter['nilai']){
+            $colomn = $filter['tipe'].':'.$filter['nilai'];
+        }
+        return view('data_pokok.data_presisi.pangan.detail_data', compact('title', 'colomn'));
+    }
+
     public function detail(Request $request)
     {
         $data = json_decode($request->data);

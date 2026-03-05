@@ -13,10 +13,18 @@
                 @include('dasbor.filter')
                 @include('dasbor.summary')
             </div>
-        </div>        
+        </div>
         {{-- @include('dasbor.statistik_penduduk') --}}
-        @include('dasbor.peta')
-        @include('dasbor.tabel_penduduk')
+        <div class="card rounded-0 border-0 shadow-none col-12">
+            <div class="card-body">
+                @include('dasbor.peta')
+            </div>
+        </div>
+        <div class="card rounded-0 border-0 shadow-none col-12">
+            <div class="card-body">
+                @include('dasbor.tabel_penduduk')
+            </div>
+        </div>
     </div>
 
 @endsection

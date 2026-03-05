@@ -20,8 +20,9 @@ class FilterTahunTest extends BaseTestCase
         // Test ada elemen filter tahun
         $response->assertSee('filter-tahun');
 
-        // Test ada tahun minimal 2020
-        $response->assertSee('2020');
+        // Test ada tahun minimal (tahun sekarang - 5)
+        $minYear = date('Y') - 5;
+        $response->assertSee((string)$minYear);
 
         // Test ada tahun sekarang
         $response->assertSee(date('Y'));
@@ -52,20 +53,21 @@ class FilterTahunTest extends BaseTestCase
     }
 
     /**
-     * Test year range is correct (2020 to current year)
+     * Test year range is correct (current year to 5 years back)
      */
     public function test_year_range_functionality()
     {
         $currentYear = date('Y');
+        $startYear = $currentYear - 5;
         $response = $this->get('/data-presisi/adat');
 
         $response->assertStatus(200);
 
-        // Test range tahun dari 2020 sampai tahun sekarang
-        $response->assertSee('2020');
+        // Test range tahun dari tahun sekarang - 5 sampai tahun sekarang
+        $response->assertSee((string)$startYear);
         $response->assertSee($currentYear);
 
-        $this->assertTrue(true, 'Range tahun filter sesuai (2020-' . $currentYear . ')');
+        $this->assertTrue(true, 'Range tahun filter sesuai (' . $startYear . '-' . $currentYear . ')');
     }
 
     /**

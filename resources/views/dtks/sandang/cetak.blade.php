@@ -41,7 +41,7 @@
 
             const header = @include('layouts.components.header_bearer_api_gabungan');
             $.ajax({
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/sandang' }}?${filter}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/sandang/rtm' }}?${filter}`,
                 headers: header,
                 method: 'get',
                 success: function(json) {
@@ -52,8 +52,8 @@
                             <tr>
                                 <td class="padat">${no}</td>
                                 <td>${item.attributes.nik || 'N/A'}</td>
-                                <td>${item.attributes.no_kk || 'N/A'}</td>
-                                <td>${item.attributes.nama || 'N/A'}</td>
+                                <td>${item.attributes.kepala_keluarga || 'N/A'}</td>
+                                <td>${item.attributes.jumlah_anggota || 'N/A'}</td>
                                 <td>${item.attributes.jml_pakaian_yg_dimiliki || 'N/A'}</td>
                                 <td>${item.attributes.frekwensi_beli_pakaian_pertahun || 'N/A'}</td>
                                 <td>${item.attributes.jenis_pakaian || 'N/A'}</td>
@@ -61,9 +61,7 @@
                                 <td>${item.attributes.tmpt_cuci_pakaian || 'N/A'}</td>
                                 <td>${item.attributes.jml_pakaian_seragam || 'N/A'}</td>
                                 <td>${item.attributes.jml_pakaian_sembahyang || 'N/A'}</td>
-                                <td>${item.attributes.jml_pakaian_kerja || 'N/A'}</td>
-                                <td>${item.attributes.tanggal_pengisian || 'N/A'}</td>
-                                <td>${item.attributes.status_pengisian || 'N/A'}</td>
+                                <td>${item.attributes.jml_pakaian_kerja || 'N/A'}</td>                                
                             </tr>
                             `
 

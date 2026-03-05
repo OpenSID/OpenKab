@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kode Token OpenKab</title>
-    <style>
+   <style nonce="{{ csp_nonce() }}" >
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;

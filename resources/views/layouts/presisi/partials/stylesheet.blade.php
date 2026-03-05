@@ -14,7 +14,6 @@
 <link rel="stylesheet" href="{{ asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/plugins/chart.js/Chart.min.css') }}">
 
 <link href="{{ asset('web/css/presisi.css') }}?v={{ openkab_versi() }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/highcharts.css') }}">

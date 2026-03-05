@@ -1,21 +1,21 @@
 {
-  "_admin-lte-aa538f92.js": {
-    "file": "assets/admin-lte-aa538f92.js",
+  "_admin-lte-a7317676.js": {
+    "file": "assets/admin-lte-a7317676.js",
     "imports": [
-      "_vendor-29cc0b91.js",
-      "_datatables-1b6da916.js"
+      "_vendor-29b55365.js",
+      "_datatables-73759265.js"
     ]
   },
-  "_datatables-1b6da916.js": {
-    "file": "assets/datatables-1b6da916.js",
+  "_datatables-73759265.js": {
+    "file": "assets/datatables-73759265.js",
     "imports": [
-      "_vendor-29cc0b91.js"
+      "_vendor-29b55365.js"
     ]
   },
-  "_vendor-29cc0b91.js": {
-    "file": "assets/vendor-29cc0b91.js",
+  "_vendor-29b55365.js": {
+    "file": "assets/vendor-29b55365.js",
     "imports": [
-      "_admin-lte-aa538f92.js"
+      "_admin-lte-a7317676.js"
     ]
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
@@ -51,17 +51,17 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/js/app.js": {
-    "file": "assets/app-6cc4f6af.js",
+    "file": "assets/app-497f3add.js",
     "imports": [
-      "_admin-lte-aa538f92.js",
-      "_vendor-29cc0b91.js",
-      "_datatables-1b6da916.js"
+      "_admin-lte-a7317676.js",
+      "_vendor-29b55365.js",
+      "_datatables-73759265.js"
     ],
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/js/tinymce.js": {
-    "file": "assets/tinymce-bf966b15.js",
+    "file": "assets/tinymce-c9a62ee6.js",
     "imports": [
       "resources/sass/tinymce.scss"
     ],
@@ -69,15 +69,15 @@
     "src": "resources/js/tinymce.js"
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-f3c2b198.css",
+    "file": "assets/app-6e0a124f.css",
     "isEntry": true,
     "src": "resources/sass/app.scss"
   },
   "resources/sass/tinymce.scss": {
     "css": [
-      "assets/tinymce-146839e8.css"
+      "assets/tinymce-ede989c3.css"
     ],
-    "file": "assets/tinymce-3934328d.js",
+    "file": "assets/tinymce-7862aad6.js",
     "isEntry": true,
     "src": "resources/sass/tinymce.scss"
   }

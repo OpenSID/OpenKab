@@ -22,4 +22,11 @@ class BantuanController extends Controller
 
         return view('bantuan.cetak', compact('filter'));
     }
+
+    public function cetakPeserta(Request $request, $id)
+    {
+        $filter = array_filter($request->all());
+
+        return view('bantuan.cetak-peserta', compact('id', 'filter'));
+    }
 }

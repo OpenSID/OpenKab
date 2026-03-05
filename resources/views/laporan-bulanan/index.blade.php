@@ -16,10 +16,10 @@
                         <div class="card-header">
                             <div class="float-left">{{ $page_description }}</div>
                             <div class="float-right">
-                                <a href="{{ route('laporan-bulanan.export-excel') }}" class="btn btn-primary btn-sm"
+                                <a href="{{ route('laporan-bulanan.export-excel') }}" class="btn btn-success btn-sm"
                                     target="_blank">
-                                    <i class="fa fa-print"></i>
-                                    Cetak
+                                    <i class="fa fa-file-excel"></i>
+                                    Excel
                                 </a>
                             </div>
                         </div>

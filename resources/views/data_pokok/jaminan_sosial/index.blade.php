@@ -56,22 +56,16 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-sm-2">
-                            <select id="filter-tahun" class="form-control form-control-sm">
-                                @php
-                                    $currentYear = date('Y');
-                                    $startYear = 2020;
-                                @endphp
-                                @for($year = $currentYear; $year >= $startYear; $year--)
-                                    <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
-                                @endfor
-                            </select>
+                        <x-filter-tahun />
+                        <x-filter-status-presisi />
+                        <div class="col-auto">
+                            <x-print-button :print-url="route('jaminan-sosial-cetak')" table-id="jaminanSosial" :filter="[]" />
                         </div>
-                        <div class="col-sm-3">
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="">
-                                <i class="fa fa-print"></i> Cetak
-                            </button>
-                        </div>
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/jaminan-sosial/rtm/download'" table-id="jaminanSosial" filename="data_presisi_jaminan-sosial" :additional-params="[
+                                ['key' => 'kode_kabupaten', 'value' => session('kabupaten.kode_kabupaten') ?? ''],
+                                ['key' => 'kode_kecamatan', 'value' => session('kecamatan.kode_kecamatan') ?? ''],
+                                ['key' => 'config_desa', 'value' => session('desa.id') ?? ''],
+                            ]"/>
                     </div>
                 </div>
                 <div class="card-body">
@@ -105,7 +99,7 @@
         let transformedIncluded = {};
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
-            var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/jaminan-sosial' }}");
+            var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/jaminan-sosial/rtm' }}");
             url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
             url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
@@ -125,66 +119,25 @@
                     data: function(row) {
                         return {
                             "page[size]": row.length,
-                            "page[number]": (row.start / row.length) + 1,
-                            'include': 'anggota,penduduk,rtm,keluarga',
-                            "filter[search]": row.search.value,
-                            "filter[kepala_rtm]": true,
-                            // "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]
-                            //         ?.column]
-                            //     ?.name,
-                            "filter[kode_desa]": $("#kode_desa").val(),
-                            "filter[tahun]": $("#filter-tahun").val(),
+                            "page[number]": (row.start / row.length) + 1,                            
+                            "sort": "id",
+                            "filter[search]": row.search.value,                            
+                            "filter[tahun]": $('#filter-tahun').val(),
+                            "filter[status_kelengkapan]": $('#filter-status-kelengkapan').val(),
                         };
                     },
                     dataSrc: function(json) {
-
-                        if (json.data.length > 0) {
-                            json.recordsTotal = json.meta.pagination.total
-                            json.recordsFiltered = json.meta.pagination.total
+                        json.recordsTotal = json.meta?.pagination?.total || 0
+                        json.recordsFiltered = json.meta?.pagination?.total || 0
+                        if (json.data.length > 0) {                        
                             data_grafik = [];
-                            // Transform the included array into an object
-                            transformedIncluded = json.included.reduce((acc, item) => {
-                                if (!acc[item.type]) {
-                                    acc[item.type] = {};
-                                }
-                                acc[item.type][item.id] = item.attributes;
-                                return acc;
-                            }, {});
-
                             json.data.forEach(function(item, index) {
                                 data_grafik.push(item.attributes)
-                                item.attributes.nik = transformedIncluded.penduduk[item
-                                    .relationships.penduduk.data.id].nik;
-                                item.attributes.nama = transformedIncluded.penduduk[item
-                                    .relationships.penduduk.data.id].nama;
-                                if (!item.attributes.jns_bantuan) {
-                                    item.attributes.jns_bantuan = 'TIDAK TAHU'
-                                }
-                                if (!item.attributes.jns_gangguan_mental) {
-                                    item.attributes.jns_gangguan_mental = 'TIDAK TAHU'
-                                }
-                                if (!item.attributes.terapi_gangguan_mental) {
-                                    item.attributes.terapi_gangguan_mental = 'TIDAK TAHU'
-                                }
-                                item.attributes.dtks = transformedIncluded.rtm[item
-                                        .relationships.rtm.data.id].dtks ? 'Terdaftar' :
-                                    'Tidak Terdaftar';
-                                item.attributes.tgl_daftar = transformedIncluded.rtm[item
-                                    .relationships.rtm.data.id].tgl_daftar;
-                                item.attributes.jumlah_kk = transformedIncluded.rtm[item
-                                    .relationships.rtm.data.id].jumlah_kk;
-                                item.attributes.alamat = transformedIncluded.keluarga[item
-                                    .relationships.keluarga.data.id].alamat;
-                                item.attributes.dusun = transformedIncluded.keluarga[item
-                                    .relationships.keluarga.data.id].wilayah?.dusun;
-                                item.attributes.rt = transformedIncluded.keluarga[item
-                                    .relationships.keluarga.data.id].wilayah?.rt;
-                                item.attributes.rw = transformedIncluded.keluarga[item
-                                    .relationships.keluarga.data.id].wilayah?.rw;
-                            })
+                            })                        
                             grafikPie()
                             return json.data;
                         }
+                        
                         return false;
                     },
                 },
@@ -196,15 +149,12 @@
                         data: function(data) {
                             let d = data.attributes
                             let obj = {
-                                'rtm_id': data.relationships.rtm.data.id,
-                                'no_kartu_rumah': transformedIncluded.rtm[data.relationships.rtm
-                                    .data.id].no_kk,
-                                'nama_kepala_keluarga': d.nama,
-                                'alamat': transformedIncluded.keluarga[data.relationships
-                                    .keluarga.data.id].alamat,
-                                'jumlah_anggota': d.anggota_count,
-                                'jumlah_kk': transformedIncluded.rtm[data.relationships.rtm
-                                    .data.id].jumlah_kk,
+                                 'rtm_id': data.id,
+                                'no_kartu_rumah': d.no_kk,
+                                'nama_kepala_keluarga': d.kepala_keluarga,
+                                'alamat': d.alamat,
+                                'jumlah_anggota': d.jumlah_anggota,
+                                'jumlah_kk': d.jumlah_kk,
                             }
                             let jsonData = encodeURIComponent(JSON.stringify(obj));
                             const _url =
@@ -225,18 +175,15 @@
                     },
                     {
                         data: "attributes.nik",
-                        name: "penduduk.nik",
-                    },
-                    {
-                        data: "attributes.nama",
-                        name: "penduduk.nama",
-                        orderable: false
-                    },
-                    {
-                        data: "attributes.anggota_count",
-                        name: null,
                         orderable: false,
-                        searchable: false
+                    },
+                    {
+                        data: "attributes.kepala_keluarga",
+                        orderable: false,
+                    },
+                    {
+                        data: "attributes.jumlah_anggota",
+                        orderable: false,
                     },
                     {
                         data: "attributes.jns_bantuan",
@@ -274,7 +221,7 @@
                 }
             });
 
-            $('#filter-tahun').on('change', function() {
+            $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
                 jaminanSosial.ajax.reload();
                 data_grafik = [];
                 grafikPie();
@@ -314,12 +261,6 @@
                     </table>
                 `;
             }
-            $('#cetak').on('click', function() {
-                let baseUrl = "{{ route('jaminan-sosial-cetak') }}";
-                let params = jaminanSosial.ajax.params(); // Get DataTables params
-                let queryString = new URLSearchParams(params).toString(); // Convert params to query string
-                window.open(`${baseUrl}?${queryString}`, '_blank'); // Open the URL with appended query
-            });
         })
     </script>
 @endsection

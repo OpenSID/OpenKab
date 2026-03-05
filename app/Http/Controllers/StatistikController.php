@@ -44,6 +44,7 @@ class StatistikController extends Controller
             'detailLink' => url('penduduk'),
             'judul' => 'Bantuan',
             'default_kategori' => 'penduduk',
+            'filter_tahun' => true
         ]);
     }
 

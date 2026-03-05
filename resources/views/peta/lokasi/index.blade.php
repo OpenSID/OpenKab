@@ -32,7 +32,7 @@
 
 @endsection
 @push('css')
-    <style>
+   <style nonce="{{ csp_nonce() }}" >
         .select2-results__option[aria-disabled=true] {
             display: none;
         }

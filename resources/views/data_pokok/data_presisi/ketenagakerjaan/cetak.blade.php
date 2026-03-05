@@ -17,8 +17,8 @@
             <tr class="border thick">
                 <th>NO</th>
                 <th>NIK</th>
-                <th>NOMOR KK</th>
-                <th>NAMA</th>
+                <th>NAMA KEPALA KELUARGA</th>
+                <th>JUMLAH ANGGOTA</th>
                 <th>JENIS PEKERJAAN</th>
                 <th>TEMPAT KERJA</th>
                 <th>FREKWENSI MENGIKUTI PELATIHAN SETAHUN</th>
@@ -38,7 +38,7 @@
             var filter = str.replace(/&amp;/g, '&')
             const header = @include('layouts.components.header_bearer_api_gabungan');
             $.ajax({
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/ketenagakerjaan' }}?${filter}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/ketenagakerjaan/rtm' }}?${filter}`,
                 headers: header,
                 method: 'get',
                 success: function(json) {
@@ -48,8 +48,8 @@
                             <tr>
                                 <td class="padat">${no}</td>
                                 <td>${item.attributes.nik || 'N/A'}</td>
-                                <td>${item.attributes.no_kk || 'N/A'}</td>
-                                <td>${item.attributes.nama || 'N/A'}</td>
+                                <td>${item.attributes.kepala_keluarga || 'N/A'}</td>
+                                <td>${item.attributes.jumlah_anggota || 'N/A'}</td>
                                 <td>${item.attributes.jenis_pekerjaan || 'N/A'}</td>
                                 <td>${item.attributes.tempat_kerja || 'N/A'}</td>
                                 <td>${item.attributes.frekwensi_mengikuti_pelatihan_setahun || 'N/A'}</td>

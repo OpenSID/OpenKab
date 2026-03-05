@@ -10,6 +10,7 @@ use App\Models\Position;
 use App\Models\Setting;
 use App\Models\Team;
 use App\Models\User;
+use App\Services\ArtikelService;
 use App\Services\BantuanService;
 use App\Services\KategoriService;
 use App\Services\PendudukApiService;
@@ -55,6 +56,18 @@ Breadcrumbs::for('master-data-artikel.kategori-edit', function (BreadcrumbTrail 
     $name = $service ? $service['attributes']['kategori'] : 'Artikel';
     $trail->parent('master-data-artikel.kategori', $parent);
     $trail->push($name);
+});
+
+Breadcrumbs::for('master-data-artikel.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Master Artikel', route('master-data-artikel.index'));
+});
+Breadcrumbs::for('master-data-artikel.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('master-data-artikel.index');
+    $trail->push('Baru');
+});
+Breadcrumbs::for('master-data-artikel.edit', function (BreadcrumbTrail $trail, $id) {
+    $trail->parent('master-data-artikel.index');
+    $trail->push('Edit Artikel');
 });
 
 Breadcrumbs::for('users.index', function (BreadcrumbTrail $trail) {

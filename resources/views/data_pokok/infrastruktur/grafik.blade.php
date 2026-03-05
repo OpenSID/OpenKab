@@ -1,65 +1,87 @@
-<script>
-    const headers = @include('layouts.components.header_bearer_api_gabungan');
-    var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/infrastruktur' }}");
-    // Ambil data dari API
-    fetch(url, {
-        method: 'GET',
-        headers: headers
-    }) // Ganti dengan rute API Anda
-        .then(response => response.json())
-        .then(data => {
-            // Ambil data kondisi baik dan buruk
-            const jalanBaik = data.find(item => item.jenis_sarana === 'Jalan Raya Aspal')?.kondisi_baik || 0;
-            const jalanBuruk = data.find(item => item.jenis_sarana === 'Jalan Raya Aspal')?.kondisi_rusak || 0;
+<script nonce="{{ csp_nonce() }}">
+    function grafik(chartData) {
 
-            const jembatanBaik = data.find(item => item.jenis_sarana === 'Jembatan Besi Beton')?.kondisi_baik || 0;
-            const jembatanBuruk = data.find(item => item.jenis_sarana === 'Jembatan Besi Beton')?.kondisi_rusak || 0;
+        // Data untuk bar chart
+        tampilKondisiChart(chartData);
+        tampilkanSanitasiChart(chartData);
+        console.log(chartData)
+    }
 
-
-            // Konfigurasi Chart.js
-            const ctx = document.getElementById('kondisiChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jalan Raya Aspal', 'Jembatan Besi Beton'],
-                    datasets: [
-                        {
-                            label: 'Kondisi Baik',
-                            data: [jalanBaik, jembatanBaik],
-                            backgroundColor: '#4CAF50', // Hijau untuk kondisi baik
-                            borderColor: '#388E3C',
-                        },
-                        {
-                            label: 'Kondisi Buruk',
-                            data: [jalanBuruk, jembatanBuruk],
-                            backgroundColor: '#F44336', // Merah untuk kondisi buruk
-                            borderColor: '#D32F2F',
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false,
-                                drawBorder: true
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                drawOnChartArea: true
-                            }
+    function tampilKondisiChart(chartData, chartOptions = {}) {
+        // Konfigurasi Chart.js
+        const ctx = document.getElementById('kondisiChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jalan Raya Aspal', 'Jembatan Besi Beton'],
+                datasets: [{
+                        label: 'Kondisi Baik',
+                        data: [chartData.jalanBaik, chartData.jembatanBaik],
+                        backgroundColor: '#4CAF50', // Hijau untuk kondisi baik
+                        borderColor: '#388E3C',
+                    },
+                    {
+                        label: 'Kondisi Buruk',
+                        data: [chartData.jalanBuruk, chartData.jembatanBuruk],
+                        backgroundColor: '#F44336', // Merah untuk kondisi buruk
+                        borderColor: '#D32F2F',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: true
                         }
                     },
-                    plugins: {
-                        legend: {
-                            position: 'top'
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: true
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    }
+
+    function tampilkanSanitasiChart(chartData, chartOptions = {}) {
+        const ctx = document.getElementById('sanitasiChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Sumur Resapan', 'MCK Umum'],
+                datasets: [{
+                    data: [chartData.sumurResapan, chartData.mckUmum],
+                    backgroundColor: ['#4caf50', '#ffc107'], // Warna untuk pie chart
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.raw || 0;
+                                return `${label}: ${value} Unit`;
+                            }
                         }
                     }
                 }
-            });
-        })
-        .catch(error => console.error('Error fetching data:', error));
+            }
+        });
+    }
 </script>

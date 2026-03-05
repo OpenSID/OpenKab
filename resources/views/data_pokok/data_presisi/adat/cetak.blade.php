@@ -35,31 +35,20 @@
 
             const header = @include('layouts.components.header_bearer_api_gabungan');
             $.ajax({
-                url: `{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat' }}?${filter}`,
+                url: `{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat/rtm' }}?${filter}`,
                 headers: header,
                 method: 'get',
                 success: function(json) {
-                    var no = 1;
-                    // Transform the included array into an object
-                    const transformedIncluded = json.included.reduce((acc, item) => {
-                        if (!acc[item.type]) {
-                            acc[item.type] = {};
-                        }
-                        acc[item.type][item.id] = item.attributes;
-                        return acc;
-                    }, {});
+                    var no = 1;                    
                     json.data.forEach(function(item) {
                         var row = `
                             <tr>
                                 <td class="padat">${no}</td>
-                                <td>${transformedIncluded.penduduk[item
-                                    .relationships.penduduk.data.id].nik || 'N/A'}</td>
-                                <td>${transformedIncluded.penduduk[item
-                                    .relationships.penduduk.data.id].keluarga?.no_kk || 'N/A'}</td>
-                                <td>${transformedIncluded.penduduk[item
-                                    .relationships.penduduk.data.id].nama || 'N/A'}</td>
-                                <td>${item.attributes.agama || 'N/A'}</td>
-                                <td>${item.attributes.frekwensi || 'N/A'}</td>
+                                <td>${item.attributes.nik || 'N/A'}</td>
+                                <td>${item.attributes.kepala_keluarga || 'N/A'}</td>    
+                                <td>${item.attributes.jumlah_anggota || 'N/A'}</td>
+                                <td>${item.attributes.status_keanggotaan || 'N/A'}</td>
+                                <td>${item.attributes.frekwensi_mengikuti_kegiatan_setahun || 'N/A'}</td>
                             </tr>
                             `
                         $('#tabel-adat tbody').append(row)

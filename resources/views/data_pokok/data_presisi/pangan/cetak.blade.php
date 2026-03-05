@@ -12,13 +12,13 @@
 
 @section('content')
     @include('partials.breadcrumbs')
-    <table class="border thick" id="tabel-sandang">
+    <table class="border thick" id="tabel-pangan">
         <thead>
             <tr class="border thick">
                 <th>NO</th>
                 <th>NIK</th>
-                <th>NOMOR KK</th>
-                <th>NAMA</th>
+                <th>NAMA KEPALA KELUARGA</th>
+                <th>JUMLAH ANGGOTA RTM</th>
                 <th>JENIS LAHAN</th>
                 <th>LUAS LAHAN</th>
                 <th>LUAS TANAM</th>
@@ -35,7 +35,7 @@
                 <th>FREKWENSI KONSUMSI BUAH PERHARI</th>
                 <th>FREKWENSI KONSUMSI DAGING PERHARI</th>
                 <th>TANGGAL PENGISIAN</th>
-                <th>STATUS PENGISIAN</th>
+                <th>STATUS PENGISIAN</th>                
             </tr>
         </thead>
         <tbody></tbody>
@@ -46,10 +46,11 @@
     <script nonce="{{ csp_nonce() }}"  >
         document.addEventListener("DOMContentLoaded", function(event) {
             var str = `{{ $filter }}`
-            var filter = str.replace(/&amp;/g, '&')
+            var filter = str.replace(/&amp;/g, '&').replace(/undefined/g, '')
+            
             const header = @include('layouts.components.header_bearer_api_gabungan');
             $.ajax({
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pangan' }}?${filter}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pangan/rtm' }}?${filter}`,
                 headers: header,
                 method: 'get',
                 success: function(json) {
@@ -59,10 +60,10 @@
                             <tr>
                                 <td class="padat">${no}</td>
                                 <td>${item.attributes.nik || 'N/A'}</td>
-                                <td>${item.attributes.no_kk || 'N/A'}</td>
-                                <td>${item.attributes.nama || 'N/A'}</td>
+                                <td>${item.attributes.kepala_keluarga || 'N/A'}</td>
+                                <td>${item.attributes.jumlah_anggota || 'N/A'}</td>
                                 <td>${item.attributes.jenis_lahan || 'N/A'}</td>
-                                <td>${item.attributes.luas_lahan || 'N/A'}</td>
+                                <td>${item.attributes.luas_lahan || 'N/A'}</td> 
                                 <td>${item.attributes.luas_tanam || 'N/A'}</td>
                                 <td>${item.attributes.status_lahan || 'N/A'}</td>
                                 <td>${item.attributes.komoditi_utama_tanaman_pangan || 'N/A'}</td>
@@ -77,11 +78,10 @@
                                 <td>${item.attributes.frekwensi_konsumsi_buah_perhari || 'N/A'}</td>
                                 <td>${item.attributes.frekwensi_konsumsi_daging_perhari || 'N/A'}</td>
                                 <td>${item.attributes.tanggal_pengisian || 'N/A'}</td>
-                                <td>${item.attributes.status_pengisian || 'N/A'}</td>
-
+                                <td>${item.attributes.status_pengisian || 'N/A'}</td>                               
                             </tr>
                             `
-                        $('#tabel-sandang tbody').append(row)
+                        $('#tabel-pangan tbody').append(row)
                         no++;
                     })
                 }

@@ -10,11 +10,12 @@
         <div class="col-md-12">
 
             <div class="card rounded-0 border-0 shadow-none">
-                @include('presisi.summary')
+                @include('presisi.wilayah.summary')
             </div>
         </div>
 
-        @include('presisi.kependudukan.filter-wilayah.view')
+        @include('presisi.wilayah.filter')
+        
 
         <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
             <div class="info-box shadow-none rounded-0">
@@ -100,8 +101,8 @@
                                         style="height:100%; min-height: 500px; display: none">
 
                                     </div>
-
-                                    <div class="table-responsive mailbox-messages">
+                                    
+                                    <div class="table-responsive mailbox-messages" id="statistik_block">
                                         <table class="table table-hover table-striped" id="statistik">
                                             <thead>
                                                 <tr>

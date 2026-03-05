@@ -313,7 +313,7 @@ return [
         ],
         [
             'icon' => 'fas fa-info-circle fa-lg nav-link',
-            'id'  => 'catatan-rilis',
+            'id' => 'catatan-rilis',
             'text' => '',
             'url' => '#',
             'topnav_right' => true,
@@ -347,12 +347,12 @@ return [
         ],
         [
             'text' => 'Dasbor',
-            'icon' => 'fas fa-home',
+            'icon' => 'nav-icon fas fa-home',
             'url' => '/dasbor',
         ],
         [
             'text' => 'Dasbor Demografi',
-            'icon' => 'fas fa-home',
+            'icon' => 'nav-icon fas fa-home',
             'url' => '/dasbor-demografi',
         ],
 

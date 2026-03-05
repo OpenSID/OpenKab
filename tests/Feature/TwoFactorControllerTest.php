@@ -137,8 +137,9 @@ class TwoFactorControllerTest extends BaseTestCase
     {
         // Hit rate limit with new key format (includes IP and User-Agent)
         $key = '2fa-setup:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
-        
-        for ($i = 0; $i < 3; $i++) {
+
+        $maxAttempts = config('app.2fa_setup_max_attempts', 3);
+        for ($i = 0; $i < $maxAttempts; $i++) {
             RateLimiter::hit($key);
         }
 
@@ -146,9 +147,11 @@ class TwoFactorControllerTest extends BaseTestCase
             'channel' => 'email'
         ]);
 
-        $response->assertStatus(429);
+        // After max attempts, account is locked (403)
+        $response->assertStatus(403);
         $response->assertJson([
-            'success' => false
+            'success' => false,
+            'locked' => true
         ]);
     }
 
@@ -229,8 +232,9 @@ class TwoFactorControllerTest extends BaseTestCase
         $response->assertStatus(400);
         $response->assertJson([
             'success' => false,
-            'message' => 'Invalid OTP'
         ]);
+        $response->assertJsonPath('message', 'Kode tidak valid. Percobaan gagal ke-1. Delay: 2 detik.');
+        $response->assertJsonPath('progressive_delay', 2);
     }
 
     /** @test */
@@ -243,8 +247,9 @@ class TwoFactorControllerTest extends BaseTestCase
 
         // Hit rate limit with new key format (includes IP and User-Agent)
         $key = '2fa-verify:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
-        
-        for ($i = 0; $i < 5; $i++) {
+
+        $maxAttempts = config('app.2fa_verify_max_attempts', 5);
+        for ($i = 0; $i < $maxAttempts; $i++) {
             RateLimiter::hit($key);
         }
 
@@ -252,9 +257,11 @@ class TwoFactorControllerTest extends BaseTestCase
             'code' => '123456'
         ]);
 
-        $response->assertStatus(429);
+        // After max attempts, account is locked (403)
+        $response->assertStatus(403);
         $response->assertJson([
-            'success' => false
+            'success' => false,
+            'locked' => true
         ]);
     }
 
@@ -445,8 +452,9 @@ class TwoFactorControllerTest extends BaseTestCase
         $response->assertStatus(400);
         $response->assertJson([
             'success' => false,
-            'message' => 'Invalid OTP'
         ]);
+        $response->assertJsonPath('message', 'Kode tidak valid. Percobaan gagal ke-1. Delay: 2 detik.');
+        $response->assertJsonPath('progressive_delay', 2);
     }
 
     /** @test */
@@ -460,8 +468,9 @@ class TwoFactorControllerTest extends BaseTestCase
 
         // Hit rate limit with new key format (includes IP and User-Agent)
         $key = '2fa-challenge:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
-        
-        for ($i = 0; $i < 5; $i++) {
+
+        $maxAttempts = config('app.2fa_challenge_max_attempts', 5);
+        for ($i = 0; $i < $maxAttempts; $i++) {
             RateLimiter::hit($key);
         }
 
@@ -469,9 +478,11 @@ class TwoFactorControllerTest extends BaseTestCase
             'code' => '123456'
         ]);
 
-        $response->assertStatus(429);
+        // After max attempts, account is locked (403)
+        $response->assertStatus(403);
         $response->assertJson([
-            'success' => false
+            'success' => false,
+            'locked' => true
         ]);
     }
 

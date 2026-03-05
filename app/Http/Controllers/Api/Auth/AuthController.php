@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Http\Middleware\GlobalRateLimiter;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -29,19 +28,6 @@ class AuthController extends Controller
      * @var int
      */
     public const DECAY_SECOND = 600;
-
-    /**
-     * @var \App\Http\Middleware\GlobalRateLimiter
-     */
-    protected $globalRateLimiter;
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct(GlobalRateLimiter $globalRateLimiter)
-    {
-        $this->globalRateLimiter = $globalRateLimiter;
-    }
 
     /**
      * Attempt to authenticate the request's credentials.

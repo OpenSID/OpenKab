@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\GlobalRateLimiter;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Services\OtpService;
@@ -23,7 +22,6 @@ class LoginController extends Controller
 
     protected $otpService;
     protected $twoFactorService;
-    protected $globalRateLimiter;
     protected $username;
 
     /**
@@ -38,13 +36,11 @@ class LoginController extends Controller
      */
     public function __construct(
         OtpService $otpService,
-        TwoFactorService $twoFactorService,
-        GlobalRateLimiter $globalRateLimiter
+        TwoFactorService $twoFactorService
     ) {
         $this->middleware('guest')->except('logout');
         $this->otpService = $otpService;
         $this->twoFactorService = $twoFactorService;
-        $this->globalRateLimiter = $globalRateLimiter;
         $this->username = $this->findUsername();
     }
 

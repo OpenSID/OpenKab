@@ -6,7 +6,6 @@ use App\Http\Requests\OtpSetupRequest;
 use App\Http\Requests\OtpVerifyRequest;
 use App\Services\OtpService;
 use App\Services\TwoFactorService;
-use App\Http\Middleware\GlobalRateLimiter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -15,16 +14,13 @@ class OtpController extends Controller
 {
     protected $otpService;
     protected $twoFactorService;
-    protected $globalRateLimiter;
 
     public function __construct(
         OtpService $otpService,
-        TwoFactorService $twoFactorService,
-        GlobalRateLimiter $globalRateLimiter
+        TwoFactorService $twoFactorService
     ) {
         $this->otpService = $otpService;
         $this->twoFactorService = $twoFactorService;
-        $this->globalRateLimiter = $globalRateLimiter;
     }
 
     /**

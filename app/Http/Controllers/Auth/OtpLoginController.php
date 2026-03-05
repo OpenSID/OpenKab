@@ -8,7 +8,6 @@ use App\Http\Requests\OtpVerifyRequest;
 use App\Models\User;
 use App\Services\OtpService;
 use App\Services\TwoFactorService;
-use App\Http\Middleware\GlobalRateLimiter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -17,17 +16,14 @@ class OtpLoginController extends Controller
 {
     protected $otpService;
     protected $twoFactorService;
-    protected $globalRateLimiter;
 
     public function __construct(
         OtpService $otpService,
-        TwoFactorService $twoFactorService,
-        GlobalRateLimiter $globalRateLimiter
+        TwoFactorService $twoFactorService
     ) {
         $this->middleware('guest')->except('logout');
         $this->otpService = $otpService;
         $this->twoFactorService = $twoFactorService;
-        $this->globalRateLimiter = $globalRateLimiter;
     }
 
     /**

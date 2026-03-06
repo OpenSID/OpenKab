@@ -3,6 +3,7 @@ Di rilis ini, versi 2603.0.0 berisi penambahan dan perbaikan yang diminta penggu
 #### Penambahan Fitur
 
 1. [#946](https://github.com/OpenSID/OpenKab/issues/946) Penambahan filter tahun pada statistik papan & sandang data presisi.
+2. [#948](https://github.com/OpenSID/OpenKab/issues/948) Penambahan filter tahun pada statistik seni budaya & pendidikan data presisi.
 
 
 #### Perbaikan BUG

@@ -44,7 +44,7 @@ Route::middleware('auth:sanctum')->get('validate-token', function (Request $requ
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/token', [AuthController::class, 'token']);
+    Route::middleware(['role:administrator'])->get('/token', [AuthController::class, 'token']);
     Route::post('/logout', [AuthController::class, 'logOut']);
     Route::get('/user', function (Request $request) {
         return $request->user();

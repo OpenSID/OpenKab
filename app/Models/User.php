@@ -265,6 +265,8 @@ class User extends Authenticatable
 
         if ($isLocked) {
             $this->update([
+                // setelah di lock, reset failed_login_attempts menjadi 0, tidak direset karena sebagai hukuman
+                // 'failed_login_attempts' => 0,
                 'locked_at' => now(),
                 'lockout_expires_at' => now()->addMinutes($decayMinutes),
             ]);

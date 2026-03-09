@@ -209,6 +209,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\MacroServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\RecaptchaV3ServiceProvider::class,
 
     ],
 
@@ -227,6 +228,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Html' => Spatie\Html\Facades\Html::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
     ])->toArray(),
 
     'format' => [

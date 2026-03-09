@@ -312,9 +312,10 @@ class OtpLoginController extends LoginController
      */
     protected function shouldShowCaptchaAfterFailedAttempts(Request $request): bool
     {
+        $config = $this->getCaptchaConfig();
         $key = $this->getUsernameAttemptKey($request);
         $attempts = RateLimiter::attempts($key);
-        return $attempts >= 2; // Show captcha after 2 failed attempts
+        return $attempts >= ($config['threshold'] ?? 2); // Show captcha after 2 failed attempts
     }
 
     /**

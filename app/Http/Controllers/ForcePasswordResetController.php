@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ForcePasswordResetRequest;
 use App\Models\PasswordHistory;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,7 @@ class ForcePasswordResetController extends Controller
 
         // Only show if user actually needs to reset
         if (!$user->requiresPasswordReset()) {
-            return redirect()->route('home');
+            return redirect()->route('dasbor');
         }
 
         return view('auth.force-password-reset');
@@ -33,7 +34,7 @@ class ForcePasswordResetController extends Controller
 
         // Only allow if user actually needs to reset
         if (!$user->requiresPasswordReset()) {
-            return redirect()->route('home');
+            return redirect()->route('dasbor');
         }
 
         $expiryDays = config('password.expiry_days');
@@ -58,7 +59,7 @@ class ForcePasswordResetController extends Controller
         $user->save();
 
         // Redirect to intended URL or home
-        $intendedUrl = session('intended_url', route('home'));
+        $intendedUrl = session('intended_url', url(RouteServiceProvider::HOME));
         session()->forget('intended_url');
 
         return redirect($intendedUrl)

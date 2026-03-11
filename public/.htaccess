@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Block access to dotfiles (including .env)
+    RewriteCond %{REQUEST_URI} ^/\.env [NC]
+    RewriteRule ^ - [R=404,L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -29,3 +33,17 @@
     Order Allow,Deny
     Allow from all
 </Files>
+
+# Block direct access to .env and other dotfiles
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>
+
+# Fallback for Apache 2.2
+<IfModule !mod_authz_core.c>
+    <FilesMatch "^\.env">
+        order allow,deny
+        deny from all
+        Satisfy All
+    </FilesMatch>
+</IfModule>

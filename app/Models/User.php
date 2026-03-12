@@ -131,6 +131,10 @@ class User extends Authenticatable
 
     public function getTeamId()
     {
+        if ($this->relationLoaded('team') && $this->team !== null) {
+            return $this->team->first()?->id;
+        }
+
         return $this->team()->first()?->id;
     }
 
@@ -141,7 +145,11 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return $this->team()->first()->name;
+        if ($this->relationLoaded('team') && $this->team !== null) {
+            return $this->team->first()?->name ?? '-';
+        }
+
+        return $this->team()->first()?->name ?? '-';
     }
 
     public function isSuperAdmin()

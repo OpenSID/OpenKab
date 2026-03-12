@@ -62,13 +62,6 @@ Route::middleware(['auth:sanctum', 'token.anomaly'])->group(function () {
         Route::post('/revoke-all-including-current', [TokenController::class, 'revokeAllIncludingCurrent']);
     });
 
-    // Refresh Token Management (no auth:sanctum needed - uses refresh token)
-    Route::prefix('refresh-token')->group(function () {
-        Route::post('/refresh', [RefreshTokenController::class, 'refresh']);
-        Route::post('/revoke', [RefreshTokenController::class, 'revoke']);
-        Route::post('/revoke-all', [RefreshTokenController::class, 'revokeAll'])->middleware('auth:sanctum');
-    });
-
     // Identitas - bisa diakses via session auth (admin dashboard) atau Sanctum token (API)
     Route::controller(IdentitasController::class)
         ->prefix('identitas')->group(function () {
@@ -105,4 +98,11 @@ Route::middleware(['auth:sanctum', 'token.anomaly'])->group(function () {
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
         });
     });
+});
+
+// Refresh Token Management (no auth:sanctum needed - uses refresh token)
+Route::prefix('refresh-token')->group(function () {
+    Route::post('/refresh', [RefreshTokenController::class, 'refresh']);
+    Route::post('/revoke', [RefreshTokenController::class, 'revoke']);
+    Route::post('/revoke-all', [RefreshTokenController::class, 'revokeAll'])->middleware('auth:sanctum');
 });

@@ -8,6 +8,7 @@ Di rilis ini, versi 2603.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perbaikan BUG
 
+1. [#954](https://github.com/OpenSID/OpenKab/issues/954) Perbaikan list menu tidak tampil.
 
 #### Perubahan Teknis
 

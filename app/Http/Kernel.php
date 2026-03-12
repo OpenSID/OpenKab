@@ -77,5 +77,6 @@ class Kernel extends HttpKernel
         'easyauthorize' => Middleware\EasyAuthorize::class,
         'check.presisi' => Middleware\CheckPresisiStatus::class,
         '2fa' => Middleware\TwoFactorMiddleware::class,
+        'token.anomaly' => Middleware\DetectTokenAnomaly::class,        
     ];
 }

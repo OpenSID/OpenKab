@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\RefreshToken;
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -58,16 +60,44 @@ class AuthController extends Controller
 
         $user = User::where('email', $request['email'])->firstOrFail();
 
-        // hapus token yang masih tersimpan
-        Auth::user()->tokens->each(function ($token, $key) {
-            $token->delete();
-        });
+        // Revoke all existing tokens for this user
+        $user->tokens()->delete();
+        $user->refreshTokens()->delete();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Create new access token with metadata
+        $newToken = $user->createToken('auth_token');
+        
+        // Update token with metadata (IP, user agent, expiration)
+        $tokenModel = PersonalAccessToken::find($newToken->accessToken->id);
+        $tokenModel->forceFill([
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'expires_at' => now()->addMinutes(config('sanctum.expiration')),
+        ]);
+        $tokenModel->save();
+
+        // Create refresh token
+        $refreshToken = RefreshToken::create([
+            'user_id' => $user->id,
+            'refresh_token' => Str::random(100),
+            'access_token_id' => $tokenModel->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'expires_at' => now()->addDays(config('auth.refresh_token_lifetime_days', 30)),
+        ]);
+
+        $token = $newToken->plainTextToken;
         RateLimiter::clear($this->throttleKey());
 
         return response()
-            ->json(['message' => 'Login Success ', 'access_token' => $token, 'token_type' => 'Bearer']);
+            ->json([
+                'message' => 'Login Success',
+                'access_token' => $token,
+                'refresh_token' => $refreshToken->refresh_token,
+                'token_type' => 'Bearer',
+                'expires_in' => config('sanctum.expiration') * 60, // in seconds
+                'refresh_expires_in' => config('auth.refresh_token_lifetime', 2592000), // 30 days in seconds
+            ]);
     }
 
     /**
@@ -95,8 +125,22 @@ class AuthController extends Controller
     public function token()
     {
         $user = User::whereUsername('synchronize')->first();
-        $token = $user->createToken('auth_token', ['synchronize-opendk-create'])->plainTextToken;
+        $newToken = $user->createToken('auth_token', ['synchronize-opendk-create']);
+        
+        // Update token with metadata using forceFill
+        $tokenModel = PersonalAccessToken::find($newToken->accessToken->id);
+        $tokenModel->forceFill([
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'expires_at' => now()->addMinutes(config('sanctum.expiration')),
+        ]);
+        $tokenModel->save();
 
-        return response()->json(['message' => 'Token Synchronize', 'access_token' => $token, 'token_type' => 'Bearer']);
+        return response()->json([
+            'message' => 'Token Synchronize',
+            'access_token' => $newToken->plainTextToken,
+            'token_type' => 'Bearer',
+            'expires_in' => config('sanctum.expiration') * 60,
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\RefreshToken;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -209,6 +210,14 @@ class User extends Authenticatable
     public function otpTokens()
     {
         return $this->hasMany(OtpToken::class);
+    }
+
+    /**
+     * Relasi ke Refresh Tokens
+     */
+    public function refreshTokens()
+    {
+        return $this->hasMany(RefreshToken::class);
     }
 
     /**

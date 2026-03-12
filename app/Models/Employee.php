@@ -37,7 +37,7 @@ class Employee extends OpenKabModel
         'email' => 'nullable|string|max:255',
         'description' => 'nullable|string|max:255',
         'phone' => 'nullable|string|max:20',
-        'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:1024|valid_file',
+        'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
         'position_id' => 'nullable',
         'department_id' => 'nullable',
     ];

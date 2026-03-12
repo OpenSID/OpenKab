@@ -7,6 +7,7 @@ use App\Http\Requests\IdentitasRequest;
 use App\Http\Requests\UploadImageRequest;
 use App\Http\Transformers\IdentitasTransformer;
 use App\Models\Identitas;
+use App\Services\SecureImageUploadService;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,33 +61,40 @@ class IdentitasController extends Controller
     public function upload(UploadImageRequest $request, $id)
     {
         try {
+            $file = $request->file('file');
+            
+            // Use secure image upload service
+            $secureService = new SecureImageUploadService(2048);
+            $result = $secureService->processSecureUpload($file, 'png', 'img');
+            
+            // Resize for logo
             $path = storage_path('app/public/img');
             if (! file_exists($path)) {
                 mkdir($path, 755, true);
             }
-            $filename = uniqid('img_');
-            $file = $request->file('file');
-
-            Image::make($file->path())->resize(150, 150,
-                function ($constraint) {
+            
+            // Resize the processed image
+            Image::make(storage_path('app/public/' . $result['path']))
+                ->resize(150, 150, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save($path.'/'.$filename.'.png'); //create logo
+                })
+                ->save(storage_path('app/public/img/' . $result['filename']));
 
             Identitas::where('id', $id)->update([
-                'logo' => $filename.'.png',
+                'logo' => $result['filename'],
             ]);
 
             return response()->json([
                 'success' => true,
-                'data' => asset('/storage/img/'.$filename.'.png'),
+                'data' => asset('/storage/img/' . $result['filename']),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             report($e);
 
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                'message' => 'Upload ditolak: ' . $e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -98,8 +106,14 @@ class IdentitasController extends Controller
                 mkdir($path, 755, true);
             }
             $file = $request->file('file');
-
-            $this->generateFaviconsFromImagePath($file->path(), $path);
+            
+            // Use secure image upload service first
+            $secureService = new SecureImageUploadService(2048);
+            $result = $secureService->processSecureUpload($file, 'png', 'temp');
+            
+            // Generate favicons from the processed (safe) image
+            $this->generateFaviconsFromImagePath(storage_path('app/public/' . $result['path']), $path);
+            
             Identitas::where('id', $id)->update([
                 'favicon' => 'favicon-96x96.png',
             ]);
@@ -113,8 +127,8 @@ class IdentitasController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                'message' => 'Upload ditolak: ' . $e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 

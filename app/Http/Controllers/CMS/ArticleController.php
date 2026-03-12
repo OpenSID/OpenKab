@@ -55,14 +55,27 @@ class ArticleController extends AppBaseController
     public function store(CreateArticleRequest $request)
     {
         $input = $request->all();
-        if ($request->file('foto')) {
-            $input['thumbnail'] = $this->uploadFile($request, 'foto');
+        
+        try {
+            if ($request->file('foto')) {
+                $input['thumbnail'] = $this->uploadFile($request, 'foto');
+            }
+            
+            $this->articleRepository->create($input);
+
+            Session::flash('success', 'Artikel berhasil disimpan.');
+
+            return redirect(route('articles.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['foto' => 'Gagal mengunggah gambar: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat menyimpan artikel. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-        $this->articleRepository->create($input);
-
-        Session::flash('success', 'Artikel berhasil disimpan.');
-
-        return redirect(route('articles.index'));
     }
 
     /**
@@ -108,20 +121,34 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+        
         $input = $request->all();
         $removeThumbnail = $request->get('remove_thumbnail');
-        if ($request->file('foto')) {
-            $input['thumbnail'] = $this->uploadFile($request, 'foto');
-        } else {
-            if ($removeThumbnail) {
-                $input['thumbnail'] = null;
+        
+        try {
+            if ($request->file('foto')) {
+                $input['thumbnail'] = $this->uploadFile($request, 'foto');
+            } else {
+                if ($removeThumbnail) {
+                    $input['thumbnail'] = null;
+                }
             }
+            
+            $article = $this->articleRepository->update($input, $id);
+
+            Session::flash('success', 'Artikel berhasil diupdate.');
+
+            return redirect(route('articles.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['foto' => 'Gagal mengunggah gambar: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat mengupdate artikel. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-        $article = $this->articleRepository->update($input, $id);
-
-        Session::flash('success', 'Artikel berhasil diupdate.');
-
-        return redirect(route('articles.index'));
     }
 
     /**

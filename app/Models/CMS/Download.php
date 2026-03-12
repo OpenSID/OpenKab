@@ -31,7 +31,7 @@ class Download extends Model
     public static array $rules = [
         'title' => 'required|string|max:255',
         'url' => 'nullable|string|max:255',
-        'download_file' => 'mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx,zip|max:5120|valid_file',
+        'download_file' => 'nullable|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx,zip,txt|max:5120',
         'description' => 'required|string|max:65535',
         'state' => 'required|boolean',
     ];

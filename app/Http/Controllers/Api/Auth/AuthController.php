@@ -59,9 +59,7 @@ class AuthController extends Controller
         $user = User::where('email', $request['email'])->firstOrFail();
 
         // hapus token yang masih tersimpan
-        Auth::user()->tokens->each(function ($token, $key) {
-            $token->delete();
-        });
+        Auth::user()->tokens()->delete();
 
         $token = $user->createToken('auth_token')->plainTextToken;
         RateLimiter::clear($this->throttleKey());
@@ -92,11 +90,34 @@ class AuthController extends Controller
         return Str::lower(request('credential')).'|'.request()->ip();
     }
 
-    public function token()
+    public function token(Request $request)
     {
         $user = User::whereUsername('synchronize')->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Synchronize user not found'
+            ], 404);
+        }
+
+        $user->tokens()->delete();
+
         $token = $user->createToken('auth_token', ['synchronize-opendk-create'])->plainTextToken;
 
-        return response()->json(['message' => 'Token Synchronize', 'access_token' => $token, 'token_type' => 'Bearer']);
+        activity()
+            ->performedOn($user)
+            ->causedBy(auth()->user())
+            ->withProperties([
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'token_abilities' => ['synchronize-opendk-create']
+            ])
+            ->log('token.generated');
+
+        return response()->json([
+            'message' => 'Token Synchronize',
+            'access_token' => $token,
+            'token_type' => 'Bearer'
+        ]);
     }
 }

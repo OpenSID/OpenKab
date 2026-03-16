@@ -23,6 +23,7 @@
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
         "league/flysystem-ftp": "^3.10",
+        "mews/purifier": "^3.4",
         "openspout/openspout": "^4.24",
         "proengsoft/laravel-jsvalidation": "^4.8",
         "shetabit/visitor": "^4.1",

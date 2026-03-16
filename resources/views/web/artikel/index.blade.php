@@ -57,7 +57,7 @@
                                     <span class="badge bg-primary">{{ $article->kategori_nama ?? 'Kategori' }}</span>
                                 </div>
                                 <div class="card-text flex-grow-1">
-                                    {!! Str::words(strip_tags($article->isi ?? ''), 20, '...') !!}
+                                    {{ Str::words(strip_tags($article->isi ?? ''), 20, '...') }}
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>

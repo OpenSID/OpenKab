@@ -78,7 +78,7 @@ class CaptchaService
         }
         return [
             'enabled' => filter_var($settings['captcha_enabled'] ?? true, FILTER_VALIDATE_BOOLEAN),
-            'type' => $settings['captcha_type'] ?? 'builtin',
+'type' => $type,
             'threshold' => (int) ($settings['captcha_threshold'] ?? 2),
             'google_site_key' => $settings['google_recaptcha_site_key'] ?? '',
             'google_secret_key' => $settings['google_recaptcha_secret_key'] ?? '',

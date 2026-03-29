@@ -14,12 +14,26 @@ class ArtikelService extends BaseApiService
 
         // Ambil dari cache dulu
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($filters) {
-            $data = $this->apiRequest('/api/v1/artikel', $filters);
-            if (! $data) {
+            $data = $this->apiRequest('/api/v1/artikel/list', $filters);
+            if (!$data) {
                 return collect([]);
             }
+            return collect($data)->map(function ($item) {
+                // Return 'attributes' but with 'id' populated 
+                $attributes = $item['attributes'] ?? [];
+                $attributes['id'] = $item['id'] ?? null;
 
-            return collect($data)->map(fn ($item) => (object) $item['attributes']);
+                // Fetch detail to enrich with gambar and isi if missing
+                if (isset($attributes['id']) && (!isset($attributes['gambar']) || !isset($attributes['isi']))) {
+                    $detail = $this->artikelById($attributes['id']);
+                    if ($detail) {
+                        $attributes['gambar'] = $detail->gambar ?? null;
+                        $attributes['isi'] = $detail->isi ?? null;
+                    }
+                }
+
+                return (object) $attributes;
+            });
         });
     }
 
@@ -32,8 +46,8 @@ class ArtikelService extends BaseApiService
                 'id' => $id,
             ]);
 
-            if (is_array($data) && isset($data['data'])) {
-                return (object) $data['data'];
+            if (is_array($data) && count($data) > 0) {
+                return (object) $data;
             }
 
             return null;

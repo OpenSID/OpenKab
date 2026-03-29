@@ -54,6 +54,10 @@ class CustomCSPPolicy extends Basic
         ])->addDirective(Directive::CONNECT, [
             config('app.serverPantau'),
             config('app.databaseGabunganUrl'),
+        ])->addDirective(Directive::OBJECT, [
+            Keyword::NONE,
+        ])->addDirective(Directive::BASE, [
+            Keyword::SELF,
         ]);
     }
 
@@ -65,11 +69,8 @@ class CustomCSPPolicy extends Basic
             config(['csp.enabled' => false]);
         }
 
-        // jika mode debug aktif maka disable CSP
-        if (env('APP_DEBUG')) {
-            config(['csp.enabled' => false]);
-        }
-
+        // CSP tetap aktif di semua environment termasuk debug untuk menjaga keamanan
+        
         return config('csp.enabled');
     }
 }

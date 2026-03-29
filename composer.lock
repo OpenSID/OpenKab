@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6dcbd39df69d7b30dd08e12d487b0780",
+    "content-hash": "e6c80fb59e61ffc48245d30a50a22485",
     "packages": [
         {
             "name": "akaunting/laravel-apexcharts",
@@ -3817,41 +3817,43 @@
             "time": "2024-11-14T23:14:52+00:00"
         },
         {
-            "name": "mews/captcha",
-            "version": "3.3.3",
+            "name": "mews/purifier",
+            "version": "3.4.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mewebstudio/captcha.git",
-                "reference": "e996a9a5638296de3e9dac41782dbdcf3d14ce11"
+                "url": "https://github.com/mewebstudio/Purifier.git",
+                "reference": "acc71bc512dcf9b87144546d0e3055fc76d244ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mewebstudio/captcha/zipball/e996a9a5638296de3e9dac41782dbdcf3d14ce11",
-                "reference": "e996a9a5638296de3e9dac41782dbdcf3d14ce11",
+                "url": "https://api.github.com/repos/mewebstudio/Purifier/zipball/acc71bc512dcf9b87144546d0e3055fc76d244ff",
+                "reference": "acc71bc512dcf9b87144546d0e3055fc76d244ff",
                 "shasum": ""
             },
             "require": {
-                "ext-gd": "*",
-                "illuminate/config": "~5|^6|^7|^8|^9|^10|^11",
-                "illuminate/filesystem": "~5|^6|^7|^8|^9|^10|^11",
-                "illuminate/hashing": "~5|^6|^7|^8|^9|^10|^11",
-                "illuminate/session": "~5|^6|^7|^8|^9|^10|^11",
-                "illuminate/support": "~5|^6|^7|^8|^9|^10|^11",
-                "intervention/image": "~2.5",
-                "php": "^7.2|^8.1|^8.2|^8.3"
+                "ezyang/htmlpurifier": "^4.16.0",
+                "illuminate/config": "^5.8|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/filesystem": "^5.8|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/support": "^5.8|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": "^7.2|^8.0"
             },
             "require-dev": {
-                "mockery/mockery": "^1.0",
-                "phpunit/phpunit": "^8.5|^9.5.10|^10.5"
+                "graham-campbell/testbench": "^3.2|^5.5.1|^6.1",
+                "mockery/mockery": "^1.3.3",
+                "phpunit/phpunit": "^8.0|^9.0|^10.0"
+            },
+            "suggest": {
+                "laravel/framework": "To test the Laravel bindings",
+                "laravel/lumen-framework": "To test the Lumen bindings"
             },
             "type": "package",
             "extra": {
                 "laravel": {
                     "aliases": {
-                        "Captcha": "Mews\\Captcha\\Facades\\Captcha"
+                        "Purifier": "Mews\\Purifier\\Facades\\Purifier"
                     },
                     "providers": [
-                        "Mews\\Captcha\\CaptchaServiceProvider"
+                        "Mews\\Purifier\\PurifierServiceProvider"
                     ]
                 }
             },
@@ -3860,7 +3862,7 @@
                     "src/helpers.php"
                 ],
                 "psr-4": {
-                    "Mews\\Captcha\\": "src/"
+                    "Mews\\Purifier\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3875,19 +3877,22 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Laravel 5/6/7/8/9/10/11 Captcha Package",
-            "homepage": "https://github.com/mewebstudio/captcha",
+            "description": "Laravel 5/6/7/8/9/10 HtmlPurifier Package",
+            "homepage": "https://github.com/mewebstudio/purifier",
             "keywords": [
-                "captcha",
-                "laravel5 Security",
-                "laravel6 Captcha",
-                "laravel6 Security"
+                "Laravel Purifier",
+                "Laravel Security",
+                "Purifier",
+                "htmlpurifier",
+                "laravel HtmlPurifier",
+                "security",
+                "xss"
             ],
             "support": {
-                "issues": "https://github.com/mewebstudio/captcha/issues",
-                "source": "https://github.com/mewebstudio/captcha/tree/3.3.3"
+                "issues": "https://github.com/mewebstudio/Purifier/issues",
+                "source": "https://github.com/mewebstudio/Purifier/tree/3.4.3"
             },
-            "time": "2024-03-20T16:15:48+00:00"
+            "time": "2025-02-24T16:00:29+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",

@@ -57,7 +57,8 @@
                 </span>
             @enderror
         </div>
-
+        {{-- CAPTCHA Component --}}
+        @includeIf($captchaView)
         {{-- Login field --}}
         <div class="row">
             <div class="col-7">

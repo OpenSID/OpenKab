@@ -20,7 +20,7 @@
         <!-- Konten Halaman -->
         <div class="container-fluid">
             <div class="col-lg-12 wow fadeIn" data-wow-delay="0.5s">
-                {!! $object->content !!}
+                {!! clean($object->content) !!}
             </div>
         </div>
         <!-- Konten Halaman -->

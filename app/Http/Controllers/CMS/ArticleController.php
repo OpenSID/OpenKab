@@ -55,12 +55,15 @@ class ArticleController extends AppBaseController
     public function store(CreateArticleRequest $request)
     {
         $input = $request->all();
-        
+
         try {
             if ($request->file('foto')) {
                 $input['thumbnail'] = $this->uploadFile($request, 'foto');
             }
-            
+            if (isset($input['content'])) {
+                $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+            }
+
             $this->articleRepository->create($input);
 
             Session::flash('success', 'Artikel berhasil disimpan.');
@@ -121,10 +124,13 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
-        
+
         $input = $request->all();
+        if (isset($input['content'])) {
+            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+        }
         $removeThumbnail = $request->get('remove_thumbnail');
-        
+
         try {
             if ($request->file('foto')) {
                 $input['thumbnail'] = $this->uploadFile($request, 'foto');
@@ -133,7 +139,7 @@ class ArticleController extends AppBaseController
                     $input['thumbnail'] = null;
                 }
             }
-            
+
             $article = $this->articleRepository->update($input, $id);
 
             Session::flash('success', 'Artikel berhasil diupdate.');

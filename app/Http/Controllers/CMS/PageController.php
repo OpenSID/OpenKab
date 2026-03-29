@@ -55,13 +55,16 @@ class PageController extends AppBaseController
     public function store(CreatePageRequest $request)
     {
         $input = $request->all();
-        
+
         try {
             if ($request->file('foto')) {
                 $this->pathFolder .= '/profile';
                 $input['thumbnail'] = $this->uploadFile($request, 'foto');
             }
-            
+            if (isset($input['content'])) {
+                $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+            }
+
             $this->pageRepository->create($input);
 
             Session::flash('success', 'Halaman berhasil disimpan.');
@@ -123,10 +126,13 @@ class PageController extends AppBaseController
 
             return redirect(route('pages.index'));
         }
-        
+
         $input = $request->all();
+        if (isset($input['content'])) {
+            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+        }
         $removeThumbnail = $request->get('remove_thumbnail');
-        
+
         try {
             if ($request->file('foto')) {
                 $input['thumbnail'] = $this->uploadFile($request, 'foto');
@@ -135,7 +141,7 @@ class PageController extends AppBaseController
                     $input['thumbnail'] = null;
                 }
             }
-            
+
             $page = $this->pageRepository->update($input, $id);
 
             Session::flash('success', 'Halaman berhasil diupdate.');

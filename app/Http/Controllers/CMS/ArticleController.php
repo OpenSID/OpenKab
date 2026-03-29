@@ -55,6 +55,9 @@ class ArticleController extends AppBaseController
     public function store(CreateArticleRequest $request)
     {
         $input = $request->all();
+        if (isset($input['content'])) {
+            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+        }
         if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
@@ -119,6 +122,9 @@ class ArticleController extends AppBaseController
         $this->authorize('update', $article);
 
         $input = $request->all();
+        if (isset($input['content'])) {
+            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+        }
         $removeThumbnail = $request->get('remove_thumbnail');
         if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');

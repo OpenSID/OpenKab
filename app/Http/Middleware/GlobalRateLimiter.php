@@ -56,7 +56,7 @@ class GlobalRateLimiter
         $maxAttempts = config('rate-limiter.max_attempts', 60);
         $decayMinutes = config('rate-limiter.decay_minutes', 1);
 
-        // Generate unique key for this request based on IP
+        // Generate unique key for this request based on IP + User-Agent fingerprint + User ID (if authenticated)
         $key = $this->resolveRequestSignature($request);
 
         // Check if the request limit has been exceeded
@@ -78,17 +78,52 @@ class GlobalRateLimiter
     }
 
     /**
-     * Resolve request signature.
+     * Resolve request signature using multiple factors.
+     * 
+     * Combines:
+     * - IP address
+     * - User-Agent browser fingerprint
+     * - User ID (if authenticated)
+     * 
+     * This prevents bypass via VPN/IP rotation alone.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return string
      */
     protected function resolveRequestSignature(Request $request): string
     {
-        // Use IP address as the signature for global rate limiting
-        return sha1(
-            'global-rate-limit:' . $request->ip()
-        );
+        $components = [];
+        
+        // IP address component
+        $components[] = $request->ip() ?? 'unknown-ip';
+        
+        // User-Agent fingerprint component (hash to avoid special chars)
+        $userAgent = $request->userAgent() ?? 'unknown-ua';
+        $components[] = $this->fingerprintUserAgent($userAgent);
+        
+        // User ID component (if authenticated)
+        if ($request->user()) {
+            $components[] = 'user:' . $request->user()->getAuthIdentifier();
+        }
+        
+        // Combine all components and hash
+        $signature = implode('|', $components);
+        
+        return sha1('global-rate-limit:' . $signature);
+    }
+
+    /**
+     * Create a browser fingerprint from User-Agent string.
+     * 
+     * Extracts key browser/platform information to create a consistent fingerprint.
+     *
+     * @param  string  $userAgent
+     * @return string
+     */
+    protected function fingerprintUserAgent(string $userAgent): string
+    {
+        // Hash the full user agent for consistency and to avoid special characters
+        return hash('xxh64', $userAgent);
     }
 
     /**
@@ -165,7 +200,87 @@ class GlobalRateLimiter
         // Convert wildcard pattern to regex
         $pattern = preg_quote($pattern, '#');
         $pattern = str_replace('\*', '.*', $pattern);
-        
+
         return preg_match("#^{$pattern}$#", $path);
+    }
+
+    /**
+     * Calculate progressive delay based on attempt count.
+     * 
+     * After each failed attempt, the delay increases exponentially.
+     * Formula: base_delay * (multiplier ^ (attempts - 1))
+     * 
+     * Example with base=2s, multiplier=2:
+     * - Attempt 1: 2s
+     * - Attempt 2: 4s
+     * - Attempt 3: 8s
+     * - Attempt 4: 16s
+     * - Attempt 5: 32s
+     *
+     * @param  int  $attempts
+     * @return int Delay in seconds
+     */
+    public function calculateProgressiveDelay(int $attempts = 1): int
+    {
+        $baseSeconds = config('app.progressive_delay_base_seconds', 2);
+        $multiplier = config('app.progressive_delay_multiplier', 2);
+        
+        // Calculate exponential delay: base * (multiplier ^ (attempts - 1))
+        $delay = $baseSeconds * pow($multiplier, $attempts - 1);
+        
+        // Cap at 5 minutes (300 seconds) to prevent excessive delays
+        return min($delay, 300);
+    }
+
+    /**
+     * Record a failed authentication attempt for account lockout.
+     *
+     * @param  string  $key
+     * @param  int  $maxAttempts
+     * @param  int  $decayMinutes
+     * @return array ['locked' => bool, 'delay' => int, 'attempts' => int]
+     */
+    public function recordFailedAttempt(string $key, int $maxAttempts = 5, int $decayMinutes = 15): array
+    {
+        $this->limiter->hit($key, $decayMinutes * 60);
+        
+        $attempts = $this->limiter->attempts($key);
+        $isLocked = $attempts >= $maxAttempts;
+        $delay = $this->calculateProgressiveDelay($attempts);
+        
+        return [
+            'locked' => $isLocked,
+            'delay' => $delay,
+            'attempts' => $attempts,
+            'remaining' => max(0, $maxAttempts - $attempts),
+        ];
+    }
+
+    /**
+     * Check if account is temporarily locked due to failed attempts.
+     *
+     * @param  string  $key
+     * @param  int  $maxAttempts
+     * @return array ['locked' => bool, 'availableIn' => int]
+     */
+    public function isLocked(string $key, int $maxAttempts = 5): array
+    {
+        $isLocked = $this->limiter->tooManyAttempts($key, $maxAttempts);
+        $availableIn = $isLocked ? $this->limiter->availableIn($key) : 0;
+        
+        return [
+            'locked' => $isLocked,
+            'availableIn' => $availableIn,
+        ];
+    }
+
+    /**
+     * Clear failed attempts for account lockout.
+     *
+     * @param  string  $key
+     */
+    public function clearFailedAttempts(string $key): void
+    {
+        $this->limiter->clear($key);
     }
 }

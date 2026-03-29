@@ -34,13 +34,7 @@
                         <h3 id="title-block"></h3>
                     </div>
                     <div class="row">
-                        <div class="col-auto">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="true" aria-controls="collapse-filter">
-                                <i class="fas fa-filter"></i>
-                            </a>
-                        </div>
-
+                        <x-filter-tahun />
                         <div class="col-md-2">
                             <button type="button" id="export-excel" class="btn btn-info btn-block btn-sm">
                                 <i class="fa fa-file-excel"></i>
@@ -193,8 +187,7 @@
                 // Get current active category
                 var activeCategory = $('#daftar-statistik .active');
                 var categoryName = activeCategory.data('nama') || 'Statistik';
-                var tahun = $("#tahun").val();
-                var bulan = $("#bulan").val();
+                var tahun = $("#filter-tahun").val();
 
                 // Generate dynamic filename
                 var filename = `Statistik_${categoryName}_${nama_desa}`;
@@ -345,6 +338,7 @@
                     method: 'get',
                     data: function (row) {
                         return {
+                            "tahun": $('#filter-tahun').val(),
                             "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
                                 .order[0]
                                 ?.column]
@@ -361,7 +355,9 @@
                                 })
                             })
 
-                            grafikPie()
+                            if(data_grafik.length > 2){
+                                grafikPie()
+                            }
 
                             return json.data;
                         }
@@ -397,6 +393,7 @@
                             urlDetail.searchParams.set('nama', nilai);
                             urlDetail.searchParams.set('tipe', $('.pilih-kategori > a.active')
                                 .text().trim());
+                            urlDetail.searchParams.set('tahun', $('#filter-tahun').val());
                             urlDetail.searchParams.set('chart-view', true);
 
                             return `<a target="_blank" href="${urlDetail.href}">${nilai}</a>`
@@ -438,10 +435,10 @@
                 });
             });
 
-            $('#filter').on('click', function (e) {
-                statistik.draw();
+            // Event listener for year filter change
+            $('#filter-tahun').on('change', function () {
+                statistik.ajax.reload();
             });
-
             $(document).on('click', '#reset', function (e) {
                 e.preventDefault();
                 statistik.ajax.reload();

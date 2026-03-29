@@ -159,9 +159,11 @@ class OtpControllerTest extends BaseTestCase
     /** @test */
     public function it_enforces_rate_limiting_on_otp_setup()
     {
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = 'otp-setup:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 3; $i++) {
-            RateLimiter::hit('otp-setup:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('otp.setup'), [
@@ -259,9 +261,11 @@ class OtpControllerTest extends BaseTestCase
             'identifier' => 'test@example.com'
         ]]);
 
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = 'otp-verify:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 5; $i++) {
-            RateLimiter::hit('otp-verify:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('otp.verify-activation'), [
@@ -345,9 +349,11 @@ class OtpControllerTest extends BaseTestCase
             'identifier' => $this->user->email
         ]]);
 
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = 'otp-resend:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 2; $i++) {
-            RateLimiter::hit('otp-resend:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('otp.resend'));

@@ -48,6 +48,9 @@ class User extends Authenticatable
         '2fa_identifier',
         'password_expires_at',
         'force_password_reset',
+        'failed_login_attempts',
+        'locked_at',
+        'lockout_expires_at',
     ];
 
     /**
@@ -69,6 +72,8 @@ class User extends Authenticatable
         'otp_enabled' => 'boolean',
         'password_expires_at' => 'datetime',
         'force_password_reset' => 'boolean',
+        'locked_at' => 'datetime',
+        'lockout_expires_at' => 'datetime',
     ];
 
     public function teams()
@@ -294,10 +299,108 @@ class User extends Authenticatable
         $this->force_password_reset = true;
         $this->save();
 
-        // Catat di history
+         // Catat di history
         $this->passwordHistory()->create([
             'password' => $this->password,
             'reason' => $reason,
+        ]);
+    }
+    /*
+     * Check if account is currently locked due to failed login attempts.
+     */
+    public function isLocked(): bool
+    {
+        if (!$this->locked_at || !$this->lockout_expires_at) {
+            return false;
+        }
+
+        return $this->lockout_expires_at->isFuture();
+    }
+
+    /**
+     * Get remaining lockout time in seconds.
+     */
+    public function getLockoutRemainingSeconds(): int
+    {
+        if (!$this->isLocked()) {
+            return 0;
+        }
+
+        return max(0, $this->lockout_expires_at->diffInSeconds(now()));
+    }
+
+    /**
+     * Record a failed login attempt and potentially lock the account.
+     *
+     * @return array ['locked' => bool, 'delay' => int, 'attempts' => int, 'remaining' => int]
+     */
+    public function recordFailedLogin(): array
+    {
+        $maxAttempts = config('app.account_lockout_max_attempts', 5);
+        $decayMinutes = config('app.account_lockout_decay_minutes', 15);
+
+        $this->increment('failed_login_attempts');
+
+        $attempts = $this->failed_login_attempts;
+        $isLocked = $attempts >= $maxAttempts;
+
+        if ($isLocked) {
+            $this->update([
+                // setelah di lock, reset failed_login_attempts menjadi 0, tidak direset karena sebagai hukuman
+                // 'failed_login_attempts' => 0,
+                'locked_at' => now(),
+                'lockout_expires_at' => now()->addMinutes($decayMinutes),
+            ]);
+        }
+
+        // Calculate progressive delay
+        $baseSeconds = config('app.progressive_delay_base_seconds', 2);
+        $multiplier = config('app.progressive_delay_multiplier', 2);
+        $delay = min($baseSeconds * pow($multiplier, $attempts - 1), 300);
+
+        return [
+            'locked' => $isLocked,
+            'delay' => $delay,
+            'attempts' => $attempts,
+            'remaining' => max(0, $maxAttempts - $attempts),
+            'lockout_expires_in' => $isLocked ? $this->getLockoutRemainingSeconds() : 0,
+        ];
+    }
+
+    /**
+     * Reset failed login attempts and clear lockout.
+     * Called on successful login.
+     */
+    public function resetFailedLogins(): void
+    {
+        $this->update([
+            'failed_login_attempts' => 0,
+            'locked_at' => null,
+            'lockout_expires_at' => null,
+        ]);
+    }
+
+    /**
+     * Manually lock the account.
+     */
+    public function lockAccount(int $minutes = 15): void
+    {
+        $this->update([
+            'locked_at' => now(),
+            'lockout_expires_at' => now()->addMinutes($minutes),
+            'failed_login_attempts' => config('app.account_lockout_max_attempts', 5),
+        ]);
+    }
+
+    /**
+     * Manually unlock the account.
+     */
+    public function unlockAccount(): void
+    {
+        $this->update([
+            'locked_at' => null,
+            'lockout_expires_at' => null,
+            'failed_login_attempts' => 0,
         ]);
     }
 }

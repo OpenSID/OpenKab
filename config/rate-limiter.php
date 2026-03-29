@@ -20,7 +20,7 @@ return [
     | When set to false, the rate limiter will be bypassed for all requests.
     |
     */
-    'enabled' => env('RATE_LIMITER_ENABLED', false),
+    'enabled' => env('RATE_LIMITER_ENABLED', true),
 
     /*
     |--------------------------------------------------------------------------

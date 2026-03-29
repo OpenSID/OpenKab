@@ -15,8 +15,10 @@ class OtpController extends Controller
     protected $otpService;
     protected $twoFactorService;
 
-    public function __construct(OtpService $otpService, TwoFactorService $twoFactorService)
-    {
+    public function __construct(
+        OtpService $otpService,
+        TwoFactorService $twoFactorService
+    ) {
         $this->otpService = $otpService;
         $this->twoFactorService = $twoFactorService;
     }
@@ -50,12 +52,13 @@ class OtpController extends Controller
      */
     public function setup(OtpSetupRequest $request)
     {
+        $userId = Auth::id();
 
-        // Rate limiting untuk setup
-        $key = 'otp-setup:' . Auth::id();
+        // Rate limiting untuk setup dengan enhanced key (IP + User-Agent + User ID)
+        $key = $this->getOtpSetupRateLimitKey($request, $userId);
         $maxAttempts = config('app.otp_setup_max_attempts', 3);
         $decaySeconds = config('app.otp_setup_decay_seconds', 300);
-        
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             return response()->json([
                 'success' => false,
@@ -99,12 +102,13 @@ class OtpController extends Controller
      */
     public function verifyActivation(OtpVerifyRequest $request)
     {
+        $userId = Auth::id();
 
-        // Rate limiting untuk verifikasi
-        $key = 'otp-verify:' . Auth::id();
+        // Rate limiting untuk verifikasi dengan enhanced key
+        $key = $this->getOtpVerifyRateLimitKey($request, $userId);
         $maxAttempts = config('app.otp_verify_max_attempts', 5);
         $decaySeconds = config('app.otp_verify_decay_seconds', 300);
-        
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             return response()->json([
                 'success' => false,
@@ -118,7 +122,7 @@ class OtpController extends Controller
         if ($request->hasSession()) {
             $tempConfig = $request->session()->get('temp_otp_config');
         }
-        
+
         // Untuk testing, jika tidak ada session, gunakan data dari request jika ada
         if (!$tempConfig && app()->environment('testing') && $request->has(['channel', 'identifier'])) {
             $tempConfig = [
@@ -126,7 +130,7 @@ class OtpController extends Controller
                 'identifier' => $request->input('identifier')
             ];
         }
-        
+
         if (!$tempConfig) {
             return response()->json([
                 'success' => false,
@@ -194,7 +198,7 @@ class OtpController extends Controller
         if ($request->hasSession()) {
             $tempConfig = $request->session()->get('temp_otp_config');
         }
-        
+
         // Untuk testing, jika tidak ada session, gunakan data dari request jika ada
         if (!$tempConfig && app()->environment('testing') && $request->has(['channel', 'identifier'])) {
             $tempConfig = [
@@ -202,7 +206,7 @@ class OtpController extends Controller
                 'identifier' => $request->input('identifier')
             ];
         }
-        
+
         if (!$tempConfig) {
             return response()->json([
                 'success' => false,
@@ -210,11 +214,13 @@ class OtpController extends Controller
             ], 400);
         }
 
-        // Rate limiting untuk resend
-        $key = 'otp-resend:' . Auth::id();
+        $userId = Auth::id();
+
+        // Rate limiting untuk resend dengan enhanced key
+        $key = $this->getOtpResendRateLimitKey($request, $userId);
         $maxAttempts = config('app.otp_resend_max_attempts', 2);
         $decaySeconds = config('app.otp_resend_decay_seconds', 30);
-        
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             return response()->json([
                 'success' => false,
@@ -232,7 +238,7 @@ class OtpController extends Controller
 
         return response()->json($result, $result['success'] ? 200 : 400);
     }
-    
+
     /**
      * Nonaktifkan 2FA dari controller ini untuk konsistensi
      */
@@ -244,5 +250,41 @@ class OtpController extends Controller
             'success' => $result,
             'message' => $result ? '2FA berhasil dinonaktifkan' : 'Gagal menonaktifkan 2FA'
         ]);
+    }
+
+    /**
+     * Generate rate limit key for OTP setup.
+     * Combines IP, User-Agent, and user ID.
+     */
+    protected function getOtpSetupRateLimitKey(Request $request, int $userId): string
+    {
+        $ip = $request->ip();
+        $userAgent = hash('xxh64', $request->userAgent() ?? 'unknown');
+        
+        return "otp-setup:{$userId}:{$ip}:{$userAgent}";
+    }
+
+    /**
+     * Generate rate limit key for OTP verification.
+     * Combines IP, User-Agent, and user ID.
+     */
+    protected function getOtpVerifyRateLimitKey(Request $request, int $userId): string
+    {
+        $ip = $request->ip();
+        $userAgent = hash('xxh64', $request->userAgent() ?? 'unknown');
+        
+        return "otp-verify:{$userId}:{$ip}:{$userAgent}";
+    }
+
+    /**
+     * Generate rate limit key for OTP resend.
+     * Combines IP, User-Agent, and user ID.
+     */
+    protected function getOtpResendRateLimitKey(Request $request, int $userId): string
+    {
+        $ip = $request->ip();
+        $userAgent = hash('xxh64', $request->userAgent() ?? 'unknown');
+        
+        return "otp-resend:{$userId}:{$ip}:{$userAgent}";
     }
 }

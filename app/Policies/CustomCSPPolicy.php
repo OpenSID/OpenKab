@@ -54,7 +54,11 @@ class CustomCSPPolicy extends Basic
         ])->addDirective(Directive::CONNECT, [
             config('app.serverPantau'),
             config('app.databaseGabunganUrl'),
-        ]);        
+        ])->addDirective(Directive::OBJECT, [
+            Keyword::NONE,
+        ])->addDirective(Directive::BASE, [
+            Keyword::SELF,
+        ]);
     }
 
     public function shouldBeApplied(Request $request, Response $response): bool

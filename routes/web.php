@@ -399,8 +399,12 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
 });
 
+use App\Http\Controllers\Web\ArtikelController;
+
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
+    Route::get('artikel-opensid', [ArtikelController::class, 'index'])->name('web.artikel.index');
+    Route::get('artikel-opensid/{id}', [ArtikelController::class, 'show'])->name('web.artikel.show');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');
     Route::get('c/{cSlug}', [PageController::class, 'getCategory'])->name('category');

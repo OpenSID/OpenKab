@@ -352,8 +352,10 @@
                                     jumlah: item.attributes.jumlah
                                 })
                             })
-
-                            grafikPie()
+                            
+                            if (data_grafik.length > 2) {
+                                grafikPie()
+                            }                                   
 
                             return json.data;
                         }

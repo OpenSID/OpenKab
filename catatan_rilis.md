@@ -15,4 +15,6 @@ Di rilis ini, versi 2603.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 1. [#943](https://github.com/OpenSID/OpenKab/issues/943) N+1 Query problem pada manajemen user.
 2. [#969](https://github.com/OpenSID/OpenKab/issues/969) Terapkan CAPTCHA pada Login & Endpoint Auth untuk Batasi Bot/Bruteforce.
-3. [#962](https://github.com/OpenSID/OpenKab/issues/962) Pencegahan Kerentanan XSS (Cross-Site Scripting). 
+3. [#962](https://github.com/OpenSID/OpenKab/issues/962) Pencegahan Kerentanan XSS (Cross-Site Scripting).
+4. [#966](https://github.com/OpenSID/OpenKab/issues/966) Prevent IDOR (Insecure Direct Object Reference) pada Endpoint Berbasis ID.
+5. [#968](https://github.com/OpenSID/OpenKab/issues/968) Jadikan Content Security Policy (CSP) Selalu Aktif, Tidak Boleh Auto-Disable Walau di Debug/Dev.

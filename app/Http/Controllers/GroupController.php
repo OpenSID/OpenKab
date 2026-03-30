@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team;
+use Illuminate\Support\Facades\Session;
 
 class GroupController extends Controller
 {
@@ -33,8 +34,18 @@ class GroupController extends Controller
 
     public function edit($id)
     {
-        $listPermission = $this->generateListPermission();
+        // IDOR Prevention: Authorization check
         $team = Team::find($id);
+        
+        if (! $team) {
+            Session::flash('error', 'Grup tidak ditemukan');
+
+            return redirect(route('groups.index'));
+        }
+
+        $this->authorize('update', $team);
+
+        $listPermission = $this->generateListPermission();
         $isAdmin = $team->name == 'administrator' ? true : false;
 
         return view('group.form', ['id' => $id])->with($listPermission)->with('isAdmin', $isAdmin);

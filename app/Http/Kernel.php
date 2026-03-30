@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'teams_permission' => Middleware\TeamsPermission::class,
         'password.weak' => Middleware\WeakPassword::class,
+        'password.expiry' => Middleware\CheckPasswordExpiry::class,
         'website.enable' => Middleware\WebsiteEnable::class,
         'log.visitor' => \Shetabit\Visitor\Middlewares\LogVisits::class,
         'easyauthorize' => Middleware\EasyAuthorize::class,

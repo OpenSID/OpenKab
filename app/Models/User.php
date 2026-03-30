@@ -47,6 +47,8 @@ class User extends Authenticatable
         '2fa_enabled',
         '2fa_channel',
         '2fa_identifier',
+        'password_expires_at',
+        'force_password_reset',
         'failed_login_attempts',
         'locked_at',
         'lockout_expires_at',
@@ -69,6 +71,8 @@ class User extends Authenticatable
         'tempat_dilahirkan' => Enums\StatusEnum::class,
         '2fa_enabled' => 'boolean',
         'otp_enabled' => 'boolean',
+        'password_expires_at' => 'datetime',
+        'force_password_reset' => 'boolean',
         'locked_at' => 'datetime',
         'lockout_expires_at' => 'datetime',
     ];
@@ -224,6 +228,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(RefreshToken::class);
     }
+    /**
+     * Relasi ke Password History
+     */
+    public function passwordHistory()
+    {
+        return $this->hasMany(PasswordHistory::class);
+    }
 
     /**
      * Cek apakah user memiliki OTP aktif
@@ -242,6 +253,67 @@ class User extends Authenticatable
     }
 
     /**
+     * Cek apakah password sudah expired
+     */
+    public function isPasswordExpired(): bool
+    {
+        if (!$this->password_expires_at) {
+            return false;
+        }
+
+        return $this->password_expires_at->isPast();
+    }
+
+    /**
+     * Cek apakah user harus reset password
+     */
+    public function requiresPasswordReset(): bool
+    {
+        return $this->force_password_reset || $this->isPasswordExpired();
+    }
+
+    /**
+     * Set password dengan expiry dan history
+     */
+    public function setPasswordWithHistory(string $password, string $reason = 'password_change', ?int $expiryDays = null): void
+    {
+        // Simpan password lama ke history
+        if ($this->exists && $this->password) {
+            $this->passwordHistory()->create([
+                'password' => $this->password,
+                'reason' => $reason,
+            ]);
+        }
+
+        // Set password baru
+        $this->password = $password;
+
+        // Set expiry jika ditentukan
+        if ($expiryDays !== null) {
+            $this->password_expires_at = now()->addDays($expiryDays);
+        }
+
+        // Reset flag force_password_reset
+        $this->force_password_reset = false;
+
+        $this->save();
+    }
+
+    /**
+     * Force user untuk reset password
+     */
+    public function forcePasswordReset(string $reason = 'security_audit'): void
+    {
+        $this->force_password_reset = true;
+        $this->save();
+
+         // Catat di history
+        $this->passwordHistory()->create([
+            'password' => $this->password,
+            'reason' => $reason,
+        ]);
+    }
+    /*
      * Check if account is currently locked due to failed login attempts.
      */
     public function isLocked(): bool

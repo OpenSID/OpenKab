@@ -18,3 +18,4 @@ Di rilis ini, versi 2603.0.0 berisi penambahan dan perbaikan yang diminta penggu
 3. [#962](https://github.com/OpenSID/OpenKab/issues/962) Pencegahan Kerentanan XSS (Cross-Site Scripting).
 4. [#966](https://github.com/OpenSID/OpenKab/issues/966) Prevent IDOR (Insecure Direct Object Reference) pada Endpoint Berbasis ID.
 5. [#968](https://github.com/OpenSID/OpenKab/issues/968) Jadikan Content Security Policy (CSP) Selalu Aktif, Tidak Boleh Auto-Disable Walau di Debug/Dev.
+6. [#963](https://github.com/OpenSID/OpenKab/issues/963) Enforce Strong Password Policy di Seluruh Fitur (Change/Reset/Registration).

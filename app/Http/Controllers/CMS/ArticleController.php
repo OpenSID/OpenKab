@@ -94,6 +94,9 @@ class ArticleController extends AppBaseController
             return redirect(route('articles.index'));
         }
 
+        // IDOR Prevention: Authorization check
+        $this->authorize('view', $article);
+
         return view('articles.show')->with('article', $article);
     }
 
@@ -108,6 +111,9 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $article);
 
         return view('articles.edit', $this->getOptionItems($id))->with('article', $article);
     }
@@ -124,6 +130,9 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $article);
 
         $input = $request->all();
         if (isset($input['content'])) {
@@ -171,6 +180,9 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('delete', $article);
 
         $this->articleRepository->delete($id);
         if (request()->ajax()) {

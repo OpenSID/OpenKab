@@ -39,18 +39,17 @@ class UserController extends Controller
         if ($request->ajax()) {
             $permission = $this->generateListPermission();
 
-            return DataTables::of(User::with('team')->visibleForAuthenticatedUser()->get())
+            $allKabupaten = (new ConfigApiService)->kabupaten();
+            $kabupatenMap = collect($allKabupaten)->keyBy('kode_kabupaten');
+
+            return DataTables::of(User::with(['team'])->visibleForAuthenticatedUser()->get())
                 ->addIndexColumn()
-                ->addColumn('nama_kabupaten', function ($row) {
+                ->addColumn('nama_kabupaten', function ($row) use ($kabupatenMap) {
                     if (empty($row->kode_kabupaten)) {
                         return '-';
                     }
 
-                    $kabupaten = (new ConfigApiService)->kabupaten([
-                        'filter[kode_kabupaten]' => $row->kode_kabupaten,
-                    ]);
-
-                    return optional($kabupaten->first())->nama_kabupaten ?? '-';
+                    return $kabupatenMap->get($row->kode_kabupaten)?->nama_kabupaten ?? '-';
                 })
                 ->addColumn('aksi', function ($row) use ($permission) {
                     $data = [];
@@ -127,7 +126,7 @@ class UserController extends Controller
                 'email' => $data['email'],
                 'company' => $data['company'],
                 'phone' => $data['phone'],
-                'password' => $data['password'],                
+                'password' => $data['password'],
                 'active' => 1,
                 'telegram_chat_id' => $data['telegram_chat_id'],
                 'kode_kabupaten' => $currentUser->getEffectiveKodeKabupaten($request->input('kode_kabupaten')),
@@ -186,6 +185,10 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::with('team')->where('id', $id)->first();
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $user);
+
         $groups = Team::withoutAdminUsers()->get();
         $team = $user->team->first()->id ?? false;
 
@@ -207,6 +210,9 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
+        // IDOR Prevention: Authorization check
+        $this->authorize('view', $user);
+
         return view('user.profile', compact('user'));
     }
 
@@ -220,6 +226,9 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $user);
+
         try {
             $currentUser = auth()->user();
 
@@ -316,6 +325,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        // IDOR Prevention: Authorization check
+        $this->authorize('delete', $user);
+
         try {
             $user->delete();
         } catch (\Exception $e) {
@@ -336,6 +348,9 @@ class UserController extends Controller
      */
     public function status($id, $status, User $user)
     {
+        // IDOR Prevention: Authorization check
+        $this->authorize('status', $user);
+
         try {
             $user->where('id', '!=', $user->superAdmin())->findOrFail($id)->update(['active' => $status]);
         } catch (\Exception $e) {

@@ -8,6 +8,7 @@ use App\Http\Controllers\DasborController;
 use App\Http\Controllers\DasborDemografiController;
 use App\Http\Controllers\DataPokokController;
 use App\Http\Controllers\DesaController;
+use App\Http\Controllers\ForcePasswordResetController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KecamatanController;
@@ -32,6 +33,7 @@ use App\Http\Controllers\Web\SearchController;
 use App\Http\Middleware\KabupatenMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
+use App\Http\Middleware\CheckPasswordExpiry;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -61,13 +63,17 @@ Route::prefix('login')->group(function () {
 
 Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
-Route::middleware(['auth', 'teams_permission', 'password.weak', '2fa'])->group(function () {
+Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak', '2fa'])->group(function () {
     Route::get('catatan-rilis', CatatanRilis::class);
     Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
     Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->name('dasbor-demografi');
 
-    Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change');
-    Route::post('password.change', [ChangePasswordController::class, 'reset'])->name('password.change');
+    // Force Password Reset Routes
+    Route::get('password-reset/force', [ForcePasswordResetController::class, 'showForm'])->name('password.reset.form');
+    Route::post('password-reset/force', [ForcePasswordResetController::class, 'reset'])->name('password.reset.force');
+
+    Route::get('password.change', [ChangePasswordController::class, 'showResetForm'])->name('password.change.form');
+    Route::post('password.change', [ChangePasswordController::class, 'change'])->name('password.change');
     Route::get('users/list', [UserController::class, 'getUsers'])->name('users.list');
     Route::get('users/status/{id}/{status}', [UserController::class, 'status'])->name('users.status');
     Route::get('users/{user}', [UserController::class, 'profile'])->name('profile.edit');
@@ -399,8 +405,12 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
 });
 
+use App\Http\Controllers\Web\ArtikelController;
+
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
+    Route::get('artikel-opensid', [ArtikelController::class, 'index'])->name('web.artikel.index');
+    Route::get('artikel-opensid/{id}', [ArtikelController::class, 'show'])->name('web.artikel.show');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
     Route::get('p/{pSlug}', [PageController::class, 'getPage'])->name('page');
     Route::get('c/{cSlug}', [PageController::class, 'getCategory'])->name('category');

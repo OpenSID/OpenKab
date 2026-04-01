@@ -32,7 +32,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2603.0.0';
+        return 'v2604.0.0';
     }
 }
 
@@ -769,7 +769,7 @@ if (! function_exists('convertMenu')) {
             'parent_id' => $parentId,
             'text' => $menu['text'] ?? 'text',
             'href' => $menu['url'] ?? null,
-            'icon' => $menu['icon'],
+            'icon' => $menu['icon'] ?? null,
             'permission' => $menu['permission'] ?? null,
         ];
 

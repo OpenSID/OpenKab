@@ -18,6 +18,7 @@ class DataPresisiPanganController extends Controller
         $colomn = '';
         $title = 'Data Presisi Pangan ' . request('judul');
         $filter = request('filter');
+        
         if (isset($filter['tipe']) && isset($filter['nilai'])) {
             if ($filter['tipe'] && $filter['nilai']) {
                 $colomn = $filter['tipe'] . ':' . $filter['nilai'];

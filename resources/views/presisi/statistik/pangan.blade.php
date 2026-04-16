@@ -313,6 +313,8 @@
                 }).load();
             });
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
+            const judulUtama = $('.pilih-kategori > a.active').text().trim();
+            
             var urlStatistik = new URL(`${baseUrl}/data-presisi/pangan/statistik`);
             urlStatistik.searchParams.set('kategori', default_id);
             urlStatistik.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
@@ -380,14 +382,13 @@
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
-
+                        const tipe = $('.pilih-kategori > a.active').data('id');
                         if (nilai !== 'JUMLAH' && nilai !== 'BELUM MENGISI' && nilai !==
                             'TOTAL') {
-                            let judul = $('.pilih-kategori > a.active').text().trim() + ' : ' + nilai;
+                            let judul = judulUtama + ' : ' + nilai;
                             let urlDetail = new URL(urlDetailLink);
                             urlDetail.searchParams.set('filter[nilai]', data.id);
-                            urlDetail.searchParams.set('filter[tipe]', $('.pilih-kategori > a.active')
-                                .data('id'));
+                            urlDetail.searchParams.set('filter[tipe]', tipe);
                             urlDetail.searchParams.set('judul', judul);
                             urlDetail.searchParams.set('tahun', $('#filter-tahun').val());
                             urlDetail.searchParams.set('chart-view', true);
@@ -401,12 +402,13 @@
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
                         const jumlah = data.attributes?.jumlah || 0;
-
+                        const tipe = $('.pilih-kategori > a.active').data('id');
                         if (nilai !== 'JUMLAH' && nilai !== 'BELUM MENGISI' && nilai !==
                             'TOTAL') {
-                            let judul = $('.pilih-kategori > a.active').text() + ' : ' + nilai;
+                            let judul = judulUtama + ' : ' + nilai;
                             let urlDetail = new URL(urlDetailLink);
-                            urlDetail.searchParams.set('filter[nilai]', nilai);
+                            urlDetail.searchParams.set('filter[nilai]', nilai);                            
+                            urlDetail.searchParams.set('filter[tipe]', tipe);
                             urlDetail.searchParams.set('judul', judul);
                             return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`
                         }

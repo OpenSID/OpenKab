@@ -95,7 +95,7 @@
                             let canEdit = `{{ $canedit }}`
                             let canDelete = `{{ $candelete }}`
                             var id = row.id;
-                            let titleDelete = `Apakah anda yakin menghapus artikel dengan judul <strong>${row.attributes.judul}</strong> kategori <strong>${row.attributes.kategori_nama}</strong> ?`
+                            let titleDelete = `Apakah anda yakin menghapus artikel dengan judul ${row.attributes.judul} - kategori ${row.attributes.kategori_nama} ?`
                             let buttonEdit = canEdit ? `<a href="{{ route('master-data-artikel.index') }}/${id}/edit" class="btn btn-warning btn-sm" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>` : ``;
@@ -150,7 +150,7 @@
                 var that = $(this);
                 Swal.fire({
                     title: 'Hapus',
-                    html: titleDelete,
+                    text: titleDelete,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Hapus'

@@ -175,7 +175,10 @@
                                         showConfirmButton: true,
                                         timer: 1500
                                     })
-                                    table.ajax.reload(null, false);
+                                    setTimeout(() => {
+                                        window.location.href =
+                                            '{{ route('master-data-artikel.index') }}?clear_all_cache=1';
+                                    }, 1500);                                    
                                 } else {
                                     Swal.fire({
                                         title: 'Error!',

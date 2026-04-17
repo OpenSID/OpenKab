@@ -20,8 +20,16 @@ class ArtikelService extends BaseApiService
     private function registerCacheKey(string $key): void
     {
         $keys = Cache::get($this->cacheRegistryKey, []);
+
+        // Pastikan selalu array meskipun cache corrupt
+        if (! is_array($keys)) {
+            $keys = [];
+        }
+
         $keys[$key] = time();
-        Cache::forever($this->cacheRegistryKey, $keys);
+
+        // Gunakan TTL 7 hari, tidak forever untuk mencegah memory bloat
+        Cache::put($this->cacheRegistryKey, $keys, now()->addDays(7));
     }
 
     /**
@@ -85,7 +93,7 @@ class ArtikelService extends BaseApiService
             return null;
         });
     }
-    
+
     /**
      * Menghapus cache artikel tunggal berdasarkan ID
      */
@@ -104,9 +112,29 @@ class ArtikelService extends BaseApiService
         // Ambil semua key yang pernah terdaftar
         $keys = Cache::get($this->cacheRegistryKey, []);
 
-        // Hapus SATU PERSATU SEMUA CACHE YANG PERNAH ADA!
-        foreach (array_keys($keys) as $key) {
-            Cache::forget($key);
+        // Validasi tipe data, hindari fatal error jika cache corrupt
+        if (! is_array($keys)) {
+            Cache::forget($this->cacheRegistryKey);
+
+            return;
+        }
+
+        $cacheKeys = array_keys($keys);
+
+        if (empty($cacheKeys)) {
+            Cache::forget($this->cacheRegistryKey);
+
+            return;
+        }
+
+        // Laravel 10+ mendukung deleteMultiple untuk batch operation
+        try {
+            Cache::deleteMultiple($cacheKeys);
+        } catch (\BadMethodCallException $e) {
+            // Fallback untuk driver yang tidak mendukung deleteMultiple
+            foreach ($cacheKeys as $key) {
+                Cache::forget($key);
+            }
         }
 
         // Reset registry

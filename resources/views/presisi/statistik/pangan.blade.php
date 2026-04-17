@@ -403,17 +403,13 @@
                         const nilai = data.attributes?.nilai || data.id || '';
                         const jumlah = data.attributes?.jumlah || 0;
                         
-                        if (nilai !== 'JUMLAH' && nilai !== 'BELUM MENGISI' && nilai !==
-                            'TOTAL') {
+                        
                             let judul = judulUtama + ' : ' + nilai;
                             let urlDetail = new URL(urlDetailLink);
                             urlDetail.searchParams.set('filter[nilai]', nilai);                            
                             urlDetail.searchParams.set('filter[tipe]', tipeValue);
                             urlDetail.searchParams.set('judul', judul);
-                            return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`
-                        }
-
-                        return jumlah;
+                            return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`                        
                     },
                 }]
             });

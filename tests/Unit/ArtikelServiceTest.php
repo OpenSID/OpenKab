@@ -4,6 +4,8 @@ namespace Tests\Unit;
 
 use App\Services\ArtikelService;
 use Illuminate\Support\Facades\Cache;
+use Mockery;
+use ReflectionClass;
 use Tests\TestCase;
 
 class ArtikelServiceTest extends TestCase
@@ -30,7 +32,7 @@ class ArtikelServiceTest extends TestCase
         $method->setAccessible(true);
 
         $cacheKey = $method->invokeArgs($this->service, ['artikel', ['id' => 1]]);
-        
+
         $this->assertIsString($cacheKey);
         $this->assertStringContainsString('artikel', $cacheKey);
     }
@@ -40,11 +42,11 @@ class ArtikelServiceTest extends TestCase
     {
         $cacheKey = 'test_artikel_cache';
         Cache::put($cacheKey, 'test_data', 3600);
-        
+
         $this->assertTrue(Cache::has($cacheKey));
-        
+
         Cache::forget($cacheKey);
-        
+
         $this->assertFalse(Cache::has($cacheKey));
     }
 
@@ -54,9 +56,9 @@ class ArtikelServiceTest extends TestCase
         $reflection = new \ReflectionClass($this->service);
         $property = $reflection->getProperty('cacheTtl');
         $property->setAccessible(true);
-        
+
         $ttl = $property->getValue($this->service);
-        
+
         $this->assertEquals(3600, $ttl);
         $this->assertIsInt($ttl);
     }
@@ -87,4 +89,48 @@ class ArtikelServiceTest extends TestCase
     {
         $this->assertInstanceOf(\App\Services\BaseApiService::class, $this->service);
     }
+
+    // tests/Unit/Services/ArtikelServiceTest.php
+    public function test_clear_all_cache_removes_all_registered_keys(): void
+    {
+        $registeredKeys = [
+            'artikel_cache_key_1' => time(),
+            'artikel_cache_key_2' => time(),
+        ];
+
+        Cache::shouldReceive('get')
+            ->once()
+            ->with('artikel_cache_registry', [])
+            ->andReturn($registeredKeys);
+
+        Cache::shouldReceive('forget')
+            ->once()
+            ->with('artikel_cache_key_1');
+
+        Cache::shouldReceive('forget')
+            ->once()
+            ->with('artikel_cache_key_2');
+
+        Cache::shouldReceive('forget')
+            ->once()
+            ->with('artikel_cache_registry');
+
+        $service = new ArtikelService();
+        $service->clearAllCache();
+    }
+
+    public function test_clear_all_cache_handles_empty_registry(): void
+    {
+        Cache::shouldReceive('get')
+            ->once()
+            ->with('artikel_cache_registry', [])
+            ->andReturn([]);
+
+        Cache::shouldReceive('forget')
+            ->once()
+            ->with('artikel_cache_registry');
+
+        $service = new ArtikelService();
+        $service->clearAllCache();
+    }    
 }

@@ -6,6 +6,8 @@ Di rilis ini, versi 2604.0.0 berisi penambahan dan perbaikan yang diminta penggu
 2. [#948](https://github.com/OpenSID/OpenKab/issues/948) Penambahan filter tahun pada statistik seni budaya & pendidikan data presisi.
 3. [#952](https://github.com/OpenSID/OpenKab/issues/952) Penambahan filter tahun pada statistik Aktivitas Keagamaan, ketenagakerjaan dan adat data presisi.
 4. [#942](https://github.com/OpenSID/OpenKab/issues/942) Penambahan fitur menampilkan artikel OpenSID di halaman publik.
+5. [#372](https://github.com/OpenSID/API-Database-Gabungan/issues/372) Penambahan judul dan kategori ketika hapus artikel.
+
 
 #### Perbaikan BUG
 

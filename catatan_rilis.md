@@ -10,6 +10,7 @@ Di rilis ini, versi 2604.0.0 berisi penambahan dan perbaikan yang diminta penggu
 #### Perbaikan BUG
 
 1. [#954](https://github.com/OpenSID/OpenKab/issues/954) Perbaikan list menu tidak tampil.
+2. [#369](https://github.com/OpenSID/API-Database-Gabungan/issues/369)   Perbaikan cache artikel tidak dihapus setelah operasi hapus.
 
 #### Perubahan Teknis
 

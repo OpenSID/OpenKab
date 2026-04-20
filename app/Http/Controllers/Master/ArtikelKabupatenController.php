@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Services\ArtikelService;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ArtikelKabupatenController extends Controller
@@ -11,15 +13,15 @@ class ArtikelKabupatenController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request): View
     {
-        $listPermission = $this->generateListPermission();
-        $clearCache = request('clear_cache', false);
-        if ($clearCache) {
-            (new \App\Services\ArtikelService)->clearCache('artikel', ['filter[id]' => $clearCache]);
+        $listPermission = $this->generateListPermission();        
+        $clearAllCache = $request->query('clear_all_cache', 0);
+        
+        if ($clearAllCache > 0) {       
+            // setiap ada perubahan di clear cache semua, termasuk ketika edit karena bisa jadi edit judul saja     
+            (new ArtikelService)->clearAllCache();
         }
 
         return view('master.artikel.index')->with($listPermission);
@@ -27,8 +29,6 @@ class ArtikelKabupatenController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create(): View
     {
@@ -37,12 +37,8 @@ class ArtikelKabupatenController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id): View
+    public function edit(int $id): View
     {
         return view('master.artikel.edit', compact('id'));
     }

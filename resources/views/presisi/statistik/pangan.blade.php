@@ -103,7 +103,7 @@
         let default_id = null;
         document.addEventListener("DOMContentLoaded", function (event) {
 
-            const header = @include('layouts.components.header_bearer_api_gabungan');
+            
 
             var baseUrl = {!! json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
 
@@ -111,7 +111,7 @@
 
             $.ajax({
                 url: urlKategoriStatistik.href,
-                headers: header,
+                
                 method: 'get',
                 success: function (response) {
                     var daftarKategoriStatistik = response.data[0]['attributes']
@@ -309,7 +309,7 @@
                 urlStatistik.searchParams.set('kategori', id);
 
                 statistik.ajax.url(urlStatistik.href, {
-                    headers: header,
+                    
                 }).load();
             });
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
@@ -332,7 +332,7 @@
                 info: false,
                 ajax: {
                     url: urlStatistik.href,
-                    headers: header,
+                    
                     method: 'get',
                     data: function (row) {
                         return {

@@ -21,7 +21,7 @@
             }).addTo(map)
 
             $('#map').change(function() {
-                const header = @include('layouts.components.header_bearer_api_gabungan');
+                
                 const kabupaten = $("#filter_kabupaten").val()
                 const kecamatan = $("#filter_kecamatan").val()
                 const desa = $("#filter_desa").val()
@@ -35,7 +35,7 @@
                 $.ajax({
                     type: 'GET',
                     url: coordUrl,
-                    headers: header,
+                    
                     dataType: 'json',
                     success: function(data) {
                         map.eachLayer((layer) => {

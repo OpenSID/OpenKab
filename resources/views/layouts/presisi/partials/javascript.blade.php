@@ -27,6 +27,17 @@
 <script nonce="{{ csp_nonce() }}">
     var selectedMenuObj = null;
 
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            const identitasOpenkab = $('meta[name="identitas-openkab"]').attr('content');
+            if (settings.url.indexOf('?') === -1) {
+                settings.url += '?kode_kabupaten=' + identitasOpenkab + '&filter[kode_kabupaten]=' + identitasOpenkab;
+            } else {
+                settings.url += '&kode_kabupaten=' + identitasOpenkab + '&filter[kode_kabupaten]=' + identitasOpenkab;
+            }
+        }
+    });
+
     $('.item-menu').each(function(i, obj) {
         if ($(obj).attr('href') === window.location.pathname) {
             selectedMenuObj = obj;

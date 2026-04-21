@@ -54,7 +54,7 @@
 
             settings.url += settings.url.indexOf('?') === -1 ? `?${params}` : `&${params}`;
         }
-    });
+    });    
 
     $('.item-menu').each(function(i, obj) {
         if ($(obj).attr('href') === window.location.pathname) {

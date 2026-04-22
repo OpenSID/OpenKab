@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-
+<meta name="identitas-openkab" content="{{ str_replace('.','',$identitasAplikasi['kode_kabupaten'] ?? '') }}">
 @section('footer')
     <strong>Hak cipta © <?= date('Y') ?> <a href="https://opendesa.id">OpenDesa</a>.</strong>
     Seluruh hak cipta dilindungi.

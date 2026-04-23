@@ -55,9 +55,7 @@
                 params['filter[kode_kabupaten]'] = "{{ session('kabupaten.kode_kabupaten') ?? $identitasAplikasi['kode_kabupaten_api'] }}";
                 params['filter[kode_kecamatan]'] = "{{ session('kecamatan.kode_kecamatan') ?? '' }}";
 
-                apiProxyGet('desa-aktif', params, function(response) {
-                    console.log('Request params:', params);
-                    console.log('API Response:', response);
+                apiProxyGet('desa-aktif', params, function(response) {                    
                     var total = 0;
                     if (response.meta && response.meta.pagination) {
                         total = response.meta.pagination.total;

@@ -7,8 +7,6 @@
             };
             const identitasOpenkab = $(`meta[name="${AJAX_PARAMS_CONFIG.metaTagName}"]`).attr('content') || '';
 
-            console.log(identitasOpenkab);
-
             let urlKabupaten =
                 "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/get-list-kabupaten' }}?" +
                 AJAX_PARAMS_CONFIG.paramNames.map(param => `${param}=${identitasOpenkab}`).join('&');

@@ -33,7 +33,6 @@ use App\Http\Controllers\Web\SearchController;
 use App\Http\Middleware\KabupatenMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
-use App\Http\Middleware\CheckPasswordExpiry;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -247,12 +246,12 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
                 ->middleware(['permission:statistik-laporan-bulanan-read'])
                 ->prefix('laporan-bulanan')
                 ->group(function () {
-                Route::get('/', 'index')->name('laporan-bulanan.index');
-                Route::post('/filter', 'filter')->name('laporan-bulanan.filter');
-                Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
-                Route::get('/export-excel', 'exportExcel')->name('laporan-bulanan.export-excel');
-                Route::get('/export-excel-detail/{rincian}/{tipe}', 'exportExcelDetail')->name('laporan-bulanan.export-excel-detail');
-            });
+                    Route::get('/', 'index')->name('laporan-bulanan.index');
+                    Route::post('/filter', 'filter')->name('laporan-bulanan.filter');
+                    Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
+                    Route::get('/export-excel', 'exportExcel')->name('laporan-bulanan.export-excel');
+                    Route::get('/export-excel-detail/{rincian}/{tipe}', 'exportExcelDetail')->name('laporan-bulanan.export-excel-detail');
+                });
         });
 
     // Master Data
@@ -326,6 +325,11 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             Route::get('cetak', [App\Http\Controllers\DataPresisiPanganController::class, 'cetak'])->name('data-pokok.data-presisi-pangan.cetak');
         })
             ->middleware(['permission:datapresisi-pangan-read']);
+
+        Route::prefix('sandang')->group(function () {                        
+            Route::get('detail_data', [App\Http\Controllers\DataPresisiSandangController::class, 'detailData'])->name('data-pokok.data-presisi-sandang.detail_data');            
+        })
+            ->middleware(['permission:datapresisi-sandang-read']);
 
         Route::prefix('adat')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiAdatController::class, 'index'])->name('data-pokok.data-presisi-adat.index');

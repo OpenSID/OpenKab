@@ -2,33 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Setting;
+use App\Services\ApiProxyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class ApiProxyController extends Controller
 {
-    protected array $headers = [];
+    protected ApiProxyService $apiProxyService;
 
-    protected int $timeout;
-
-    protected int $cacheTtl;
-
-    public function __construct()
+    public function __construct(ApiProxyService $apiProxyService)
     {
-        $apiKey = Setting::where('key', 'database_gabungan_api_key')->first()?->value ?? '';
-
-        $this->headers = [
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.$apiKey,
-        ];
-
-        $this->timeout = config('api_proxy.default_timeout', 30);
-        $this->cacheTtl = config('api_proxy.cache_ttl', 3600);
+        $this->apiProxyService = $apiProxyService;
     }
 
     public function get(Request $request): JsonResponse
@@ -36,31 +20,24 @@ class ApiProxyController extends Controller
         $endpoint = $this->resolveEndpoint($request->get('endpoint'));
         $params = $request->query->all();
 
-        unset($params['endpoint'], $params['cache']);
+        unset($params['endpoint'], $params['cache'], $params['timeout']);
 
         if (! $endpoint) {
             return response()->json(['error' => 'Endpoint tidak boleh kosong'], 400);
         }
 
         $useCache = filter_var($request->get('cache', false), FILTER_VALIDATE_BOOLEAN);
+        $timeout = $request->get('timeout', $this->apiProxyService->getTimeout());
 
+        // Add cache parameter to params for the service
         if ($useCache) {
-            $cacheKey = $this->buildCacheKey($endpoint, $params);
-            $cached = Cache::get($cacheKey);
-
-            if ($cached !== null) {
-                return response()->json($cached);
-            }
+            $params['cache'] = true;
         }
 
-        $response = $this->callApi('GET', $endpoint, $params);
+        $response = $this->apiProxyService->get($endpoint, $params, $timeout);
 
         if ($response === null) {
             return response()->json(['error' => 'Gagal mengambil data dari API'], 500);
-        }
-
-        if ($useCache) {
-            Cache::put($cacheKey, $response, $this->cacheTtl);
         }
 
         return response()->json($response);
@@ -71,13 +48,26 @@ class ApiProxyController extends Controller
         $endpoint = $this->resolveEndpoint($request->get('endpoint'));
         $body = $request->except('endpoint');
 
-        unset($body['endpoint']);
+        // Extract proxy parameters before removing them
+        $cacheParam = $body['cache'] ?? false;
+        $timeoutParam = $body['timeout'] ?? null;
+
+        // Remove proxy parameters from body so they are not sent to the API
+        unset($body['endpoint'], $body['cache'], $body['timeout']);
 
         if (! $endpoint) {
             return response()->json(['error' => 'Endpoint tidak boleh kosong'], 400);
         }
 
-        $response = $this->callApi('POST', $endpoint, [], $body);
+        $useCache = filter_var($cacheParam, FILTER_VALIDATE_BOOLEAN);
+        $timeout = $timeoutParam ?? $this->apiProxyService->getTimeout();
+
+        // Add cache parameter to body for the service
+        if ($useCache) {
+            $body['cache'] = true;
+        }
+
+        $response = $this->apiProxyService->post($endpoint, $body, $timeout);
 
         if ($response === null) {
             return response()->json(['error' => 'Gagal mengirim data ke API'], 500);
@@ -97,48 +87,14 @@ class ApiProxyController extends Controller
         return $endpoints[$key] ?? $key;
     }
 
-    protected function callApi(string $method, string $endpoint, array $params = [], ?array $body = null): ?array
-    {
-        $baseUrl = config('app.databaseGabunganUrl');
-        $url = rtrim($baseUrl, '/').'/api/v1/'.ltrim($endpoint, '/');
-
-        try {
-            $http = Http::withHeaders($this->headers)
-                ->timeout($this->timeout);
-
-            if ($method === 'GET') {
-                $response = $http->get($url, $params)->throw();
-            } else {
-                $response = $http->post($url, $body ?? [])->throw();
-            }
-
-            if ($response->successful()) {
-                return $response->json();
-            }                    
-        } catch (\Exception $e) {
-            Log::error('API Proxy: Exception', [
-                'endpoint' => $endpoint,
-                'error' => $e->getMessage(),
-            ]);
-
-            return null;
-        }
-    }
-
-    protected function buildCacheKey(string $endpoint, array $params = []): string
-    {
-        return 'api_proxy_'.md5($endpoint.json_encode($params));
-    }
-
     public function clearCache(Request $request): JsonResponse
     {
         $endpoint = $request->get('endpoint');
 
         if ($endpoint) {
-            $cacheKey = $this->buildCacheKey($this->resolveEndpoint($endpoint));
-            Cache::forget($cacheKey);
+            $this->apiProxyService->clearCache($this->resolveEndpoint($endpoint), []);
         } else {
-            Cache::flush();
+            $this->apiProxyService->clearAllCache();
         }
 
         return response()->json(['message' => 'Cache cleared']);

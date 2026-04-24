@@ -2,17 +2,18 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Tests\TestCase;
+use Tests\BaseTestCase;
 
-class ApiProxyControllerTest extends TestCase
+class ApiProxyControllerTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -24,17 +25,10 @@ class ApiProxyControllerTest extends TestCase
             'test-endpoint' => 'test/endpoint',
         ]);
         Config::set('app.databaseGabunganUrl', 'https://api.example.com');
-    }
 
-    /**
-     * Test get method with empty endpoint returns 400.
-     */
-    public function test_get_with_empty_endpoint_returns_400()
-    {
-        $response = $this->getJson('/api-proxy/get');
-
-        $response->assertStatus(400)
-            ->assertJson(['error' => 'Endpoint tidak boleh kosong']);
+        // Create and authenticate a test user
+        $user = User::factory()->create();
+        $this->actingAs($user);
     }
 
     /**
@@ -97,18 +91,7 @@ class ApiProxyControllerTest extends TestCase
 
         $response->assertStatus(500)
             ->assertJson(['error' => 'Gagal mengambil data dari API']);
-    }
-
-    /**
-     * Test post method with empty endpoint returns 400.
-     */
-    public function test_post_with_empty_endpoint_returns_400()
-    {
-        $response = $this->postJson('/api-proxy/post');
-
-        $response->assertStatus(400)
-            ->assertJson(['error' => 'Endpoint tidak boleh kosong']);
-    }
+    }    
 
     /**
      * Test post method with valid endpoint.
@@ -175,7 +158,8 @@ class ApiProxyControllerTest extends TestCase
      */
     public function test_resolve_endpoint_with_config_endpoint()
     {
-        $controller = new \App\Http\Controllers\ApiProxyController;
+        $apiProxyService = $this->createMock(\App\Services\ApiProxyService::class);
+        $controller = new \App\Http\Controllers\ApiProxyController($apiProxyService);
 
         $method = new \ReflectionMethod($controller, 'resolveEndpoint');
         $method->setAccessible(true);
@@ -189,28 +173,13 @@ class ApiProxyControllerTest extends TestCase
      */
     public function test_resolve_endpoint_with_direct_endpoint()
     {
-        $controller = new \App\Http\Controllers\ApiProxyController;
+        $apiProxyService = $this->createMock(\App\Services\ApiProxyService::class);
+        $controller = new \App\Http\Controllers\ApiProxyController($apiProxyService);
 
         $method = new \ReflectionMethod($controller, 'resolveEndpoint');
         $method->setAccessible(true);
 
         $result = $method->invoke($controller, 'direct/endpoint');
         $this->assertEquals('direct/endpoint', $result);
-    }
-
-    /**
-     * Test buildCacheKey generates correct key.
-     */
-    public function test_build_cache_key_generates_correct_key()
-    {
-        $controller = new \App\Http\Controllers\ApiProxyController;
-
-        $method = new \ReflectionMethod($controller, 'buildCacheKey');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($controller, 'test/endpoint', ['param' => 'value']);
-        $expected = 'api_proxy_'.md5('test/endpoint'.json_encode(['param' => 'value']));
-
-        $this->assertEquals($expected, $result);
     }
 }

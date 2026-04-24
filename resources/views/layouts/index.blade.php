@@ -19,33 +19,35 @@ Seluruh hak cipta dilindungi.
                 url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
             }
         }
-        
+
         $.ajax({
             url: url,
-            type: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
+            type: 'GET',            
             success: function(response) {
                 if (callback) callback(response);
             },
-            error: function() {
+            error: function(response) {
                 if (callback) callback({
-                    data: [],
+                    data: [],                    
                     meta: {
                         pagination: {
                             total: 0
                         }
                     }
                 });
+                
+                Swal.fire(
+                    'Error!',
+                    response.responseJSON.error || 'Gagal mengambil data dari API',
+                    'error'
+                );
             }
         });
     }
-    document.addEventListener("DOMContentLoaded", function(event) {
-        var base_url = '{{ url('/') }}';
+    document.addEventListener("DOMContentLoaded", function(event) {        
         $.ajax({
             type: "get",
-            url: base_url + "/api/v1/identitas",
+            url: "/api/v1/identitas",
             success: function(response) {
                 var data = response.data.attributes;
                 $('.brand-link').children('img').attr('alt', data.nama_aplikasi);

@@ -286,11 +286,8 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::prefix('laporan')->group(function () {
         Route::prefix('desa-aktif')->group(function () {
             Route::get('', [App\Http\Controllers\LaporanDesaAktifController::class, 'index'])->name('laporan.desa-aktif.index');
-            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');
-            Route::get('data', [App\Http\Controllers\LaporanDesaAktifController::class, 'data'])->name('laporan.desa-aktif.data');
-            Route::get('kecamatan', [App\Http\Controllers\LaporanDesaAktifController::class, 'kecamatan'])->name('laporan.desa-aktif.kecamatan');
-            Route::get('desa', [App\Http\Controllers\LaporanDesaAktifController::class, 'desa'])->name('laporan.desa-aktif.desa');
-        });        
+            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');            
+        });
     });
     Route::prefix('data-presisi')->group(function () {
         Route::prefix('laporan')->group(function () {
@@ -390,6 +387,12 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::get('desa/cetak', [DesaController::class, 'cetak']);
     Route::resource('kecamatan', KecamatanController::class)->only(['index']);
     Route::get('kecamatan/cetak', [KecamatanController::class, 'cetak']);
+
+    Route::prefix('api-proxy')->group(function () {
+        Route::get('get', [ApiProxyController::class, 'get'])->name('api-proxy.get');
+        Route::post('post', [ApiProxyController::class, 'post'])->name('api-proxy.post');
+        Route::get('clear-cache', [ApiProxyController::class, 'clearCache'])->name('api-proxy.clear-cache');
+    });
 });
 
 // 2FA Challenge Routes (tanpa middleware 2fa untuk menghindari loop)
@@ -436,9 +439,3 @@ Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->nam
 Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
-
-Route::prefix('api-proxy')->group(function () {
-    Route::get('get', [ApiProxyController::class, 'get'])->name('api-proxy.get');
-    Route::post('post', [ApiProxyController::class, 'post'])->name('api-proxy.post');
-    Route::get('clear-cache', [ApiProxyController::class, 'clearCache'])->name('api-proxy.clear-cache');
-});

@@ -19,7 +19,7 @@ class DataPresisiSandangControllerTest extends BaseTestCase
 
     public function test_detail_data_without_filter_returns_correct_view(): void
     {
-        $response = $this->controller->detailData();
+        $response = $this->controller->detailData(new Request());
 
         $this->assertInstanceOf(View::class, $response);
         $this->assertEquals('data_pokok.data_presisi.sandang.detail_data', $response->name());
@@ -32,16 +32,14 @@ class DataPresisiSandangControllerTest extends BaseTestCase
     }
 
     public function test_detail_data_with_filter_returns_correct_view(): void
-    {
-        request()->merge([
+    {        
+        $response = $this->controller->detailData(new Request([
             'judul' => 'Test Judul',
             'filter' => [
                 'tipe' => 'kategori',
                 'nilai' => 'pakaian',
             ],
-        ]);
-
-        $response = $this->controller->detailData();
+        ]));
 
         $this->assertInstanceOf(View::class, $response);
 
@@ -59,7 +57,7 @@ class DataPresisiSandangControllerTest extends BaseTestCase
             ],
         ]);
 
-        $response = $this->controller->detailData();
+        $response = $this->controller->detailData(new Request());
 
         $data = $response->getData();
         $this->assertEquals('', $data['colomn']);

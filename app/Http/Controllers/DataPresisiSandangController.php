@@ -7,11 +7,12 @@ use Illuminate\View\View;
 
 class DataPresisiSandangController extends Controller
 {    
-    public function detailData(): View
+    public function detailData(Request $request): View
     {
         $colomn = '';
-        $title = 'Data Presisi Sandang '.request('judul');
-        $filter = request('filter');
+        $title = 'Data Presisi Sandang '.$request->input('judul');
+        $title = htmlspecialchars(strip_tags($title), ENT_QUOTES, 'UTF-8');
+        $filter = $request->input('filter');
 
         if (isset($filter['tipe'], $filter['nilai']) && $filter['tipe'] && $filter['nilai']) {
             $colomn = $filter['tipe'].':'.$filter['nilai'];

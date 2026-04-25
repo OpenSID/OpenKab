@@ -22,3 +22,4 @@ Di rilis ini, versi 2604.0.0 berisi penambahan dan perbaikan yang diminta penggu
 4. [#966](https://github.com/OpenSID/OpenKab/issues/966) Prevent IDOR (Insecure Direct Object Reference) pada Endpoint Berbasis ID.
 5. [#968](https://github.com/OpenSID/OpenKab/issues/968) Jadikan Content Security Policy (CSP) Selalu Aktif, Tidak Boleh Auto-Disable Walau di Debug/Dev.
 6. [#963](https://github.com/OpenSID/OpenKab/issues/963) Enforce Strong Password Policy di Seluruh Fitur (Change/Reset/Registration).
+7. [#996](https://github.com/OpenSID/OpenKab/issues/996) Perbaikan  parameter identitas OpenKab agar API hanya mengembalikan data sesuai dengan Kabupaten yang bersangkutan

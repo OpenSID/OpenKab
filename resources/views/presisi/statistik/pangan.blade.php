@@ -309,7 +309,7 @@
                 urlStatistik.searchParams.set('kategori', id);
 
                 statistik.ajax.url(urlStatistik.href, {
-                    headers: header,
+                    
                 }).load();
             });
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;

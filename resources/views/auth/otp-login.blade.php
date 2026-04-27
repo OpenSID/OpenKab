@@ -30,8 +30,8 @@
         <form id="identifierForm">
             @csrf
             <div class="input-group mb-3">
-                <input type="text" class="form-control @error('identifier') is-invalid @enderror" 
-                    name="identifier" id="identifier" placeholder="Email atau Telegram Chat ID" 
+                <input type="text" class="form-control @error('identifier') is-invalid @enderror"
+                    name="identifier" id="identifier" placeholder="Email atau Telegram Chat ID"
                     value="{{ old('identifier') }}" required autofocus>
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -44,6 +44,18 @@
                     </span>
                 @enderror
             </div>
+
+            {{-- CAPTCHA Component --}}
+            @if($shouldShowCaptcha && $captchaView)
+                <div class="mb-3">
+                    @include($captchaView)
+                    @error('captcha')
+                        <span class="invalid-feedback d-block" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+            @endif
 
             <div class="row">
                 <div class="col-12">
@@ -142,7 +154,7 @@
                     </span>
                 </div>
             </div>
-        </div>
+        </div>        
     </div>
 @stop
 
@@ -234,11 +246,27 @@ document.addEventListener("DOMContentLoaded", function (event) {
             },
             error: function(xhr) {
                 const response = xhr.responseJSON;
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: response.message || 'Gagal mengirim kode OTP'
-                });
+                
+                // Check if we need to refresh page to show captcha
+                if (response.refresh_page && response.show_captcha) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Verifikasi Diperlukan',
+                        text: 'Silakan verifikasi captcha untuk melanjutkan',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Refresh the page to show captcha
+                            window.location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: response.message || 'Gagal mengirim kode OTP'
+                    });
+                }
             },
             complete: function() {
                 btn.prop('disabled', false).html(originalText);
@@ -391,4 +419,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     $('#identifier').focus();
 });
 </script>
+@if($shouldShowCaptcha && $captchaView)
+<script nonce="{{ csp_nonce() }}">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        $(".btn-refresh").click(function() {
+            $(".captcha span img").attr('src','/captcha/mini?'+ Date.now());            
+        });
+        $(".btn-refresh").click()
+    })
+</script>
+@endif
 @stop

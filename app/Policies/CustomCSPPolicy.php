@@ -19,7 +19,7 @@ class CustomCSPPolicy extends Basic
     public function configure()
     {
         parent::configure();
-        $currentRoute = Route::getCurrentRoute()->getName();
+        $currentRoute = Route::getCurrentRoute()?->getName() ?? '';
         if (in_array($currentRoute, $this->hasTinyMCE)) {
             $this->addDirective(Directive::IMG, ['blob:'])
                 ->addDirective(Directive::STYLE, ['unsafe-inline']);
@@ -54,6 +54,10 @@ class CustomCSPPolicy extends Basic
         ])->addDirective(Directive::CONNECT, [
             config('app.serverPantau'),
             config('app.databaseGabunganUrl'),
+        ])->addDirective(Directive::OBJECT, [
+            Keyword::NONE,
+        ])->addDirective(Directive::BASE, [
+            Keyword::SELF,
         ]);
     }
 
@@ -65,11 +69,8 @@ class CustomCSPPolicy extends Basic
             config(['csp.enabled' => false]);
         }
 
-        // jika mode debug aktif maka disable CSP
-        if (env('APP_DEBUG')) {
-            config(['csp.enabled' => false]);
-        }
-
+        // CSP tetap aktif di semua mode, termasuk debug
+        // Hanya dimatikan untuk route yang di-exclude secara eksplisit
         return config('csp.enabled');
     }
 }

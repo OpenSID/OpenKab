@@ -55,6 +55,9 @@ class ArticleController extends AppBaseController
     public function store(CreateArticleRequest $request)
     {
         $input = $request->all();
+        if (isset($input['content'])) {
+            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+        }
         if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
@@ -78,6 +81,9 @@ class ArticleController extends AppBaseController
             return redirect(route('articles.index'));
         }
 
+        // IDOR Prevention: Authorization check
+        $this->authorize('view', $article);
+
         return view('articles.show')->with('article', $article);
     }
 
@@ -92,6 +98,9 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $article);
 
         return view('articles.edit', $this->getOptionItems($id))->with('article', $article);
     }
@@ -108,7 +117,14 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $article);
+
         $input = $request->all();
+        if (isset($input['content'])) {
+            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+        }
         $removeThumbnail = $request->get('remove_thumbnail');
         if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
@@ -138,6 +154,9 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('delete', $article);
 
         $this->articleRepository->delete($id);
         if (request()->ajax()) {

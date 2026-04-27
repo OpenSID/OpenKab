@@ -41,7 +41,7 @@
 
                         <div class="card-body p-4 p-md-5">
                             <div class="artikel-content">
-                                {!! $object->isi ?? '' !!}
+                                {!! clean($object->isi ?? '') !!}
                             </div>
                         </div>
 

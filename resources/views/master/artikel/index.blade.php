@@ -95,10 +95,11 @@
                             let canEdit = `{{ $canedit }}`
                             let canDelete = `{{ $candelete }}`
                             var id = row.id;
+                            let titleDelete = `Apakah anda yakin menghapus artikel dengan judul ${row.attributes.judul} - kategori ${row.attributes.kategori_nama} ?`
                             let buttonEdit = canEdit ? `<a href="{{ route('master-data-artikel.index') }}/${id}/edit" class="btn btn-warning btn-sm" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>` : ``;
-                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Hapus">
+                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" data-title-delete="${titleDelete}" title="Hapus">
                                     <i class="fas fa-trash"></i>
                                 </button>` : ``;
                             return `${buttonEdit} ${buttonDelete}`;
@@ -145,10 +146,11 @@
 
             $(document).on('click', 'button.hapus', function() {
                 var id = $(this).data('id')
+                let titleDelete = $(this).data('title-delete')
                 var that = $(this);
                 Swal.fire({
                     title: 'Hapus',
-                    text: "Apakah anda yakin menghapus artikel ini?",
+                    text: titleDelete,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Hapus'
@@ -175,7 +177,10 @@
                                         showConfirmButton: true,
                                         timer: 1500
                                     })
-                                    table.ajax.reload(null, false);
+                                    setTimeout(() => {
+                                        window.location.href =
+                                            '{{ route('master-data-artikel.index') }}?clear_all_cache=1';
+                                    }, 1500);                                    
                                 } else {
                                     Swal.fire({
                                         title: 'Error!',

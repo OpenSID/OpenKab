@@ -11,7 +11,7 @@ class DetailDataPresisiPendidikanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check();
+        return true;
     }
 
     /**
@@ -21,11 +21,11 @@ class DetailDataPresisiPendidikanRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [        
-            'judul' => 'required|string|max:255',
-            'filter' => 'array',
+        return [
+            'judul' => 'nullable|string|max:255',
+            'filter' => 'nullable|array',
             'filter.tipe' => 'required_with:filter|string',
-            'filter.nilai' => 'required_with:filter|string',        
+            'filter.nilai' => 'required_with:filter|string',
         ];
     }
 }

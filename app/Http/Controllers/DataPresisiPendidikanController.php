@@ -36,18 +36,17 @@ class DataPresisiPendidikanController extends Controller
     /**
      * Display detail data presisi pendidikan with optional filter.
      *
-     * @param Request $request HTTP request instance
+     * @param DetailDataPresisiPendidikanRequest $request HTTP request instance
      * @return View
      */
     public function detailData(DetailDataPresisiPendidikanRequest $request): View
     {
         $colomn = '';
-        $validated = $request->validated();
-        $title = 'Data Presisi Pendidikan - ' . $validated['judul'];
+        $title = 'Data Presisi Pendidikan - ' . $request->input('judul', '');
         $title = htmlspecialchars(strip_tags($title), ENT_QUOTES, 'UTF-8');
-        $filter = $validated['filter'] ?? null;
+        $filter = $request->input('filter');
 
-        if (isset($filter['tipe'], $filter['nilai'])) {
+        if (isset($filter['tipe'], $filter['nilai']) && $filter['tipe'] && $filter['nilai']) {
             $colomn = $filter['tipe'] . ':' . $filter['nilai'];
         }
 

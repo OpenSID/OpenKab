@@ -350,6 +350,10 @@
                 penduduk.draw();
             });
 
+            $('#filter_kabupaten, #filter_kecamatan, #filter_desa').on('change', function() {
+                penduduk.draw();
+            });
+
             $(document).on('click', '#reset', function(e) {
                 e.preventDefault();
                 $('#sex').val('').change();
@@ -382,6 +386,8 @@
             for (let i in filterDefault) {
                 $(`#${i}`).val(filterDefault[i]).trigger('change');
             }
+
+            penduduk.draw();
         });
 
         function getDataset(data, chart) {

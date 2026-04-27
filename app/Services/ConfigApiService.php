@@ -14,11 +14,11 @@ class ConfigApiService extends BaseApiService
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($filters) {
             $data = $this->apiRequest('/api/v1/config/desa', $filters);
-            if (! $data) {
+            if (!$data) {
                 return collect([]);
             }
 
-            return collect($data)->map(fn ($item) => (object) $item['attributes']);
+            return collect($data)->map(fn($item) => (object) $item['attributes']);
         });
     }
 
@@ -26,7 +26,7 @@ class ConfigApiService extends BaseApiService
     {
         // Panggil API dan ambil data
         $data = $this->apiRequest('/api/v1/config/desa', $filters);
-        if (! $data) {
+        if (!$data) {
             return collect([]);
         }
 
@@ -44,25 +44,30 @@ class ConfigApiService extends BaseApiService
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($filters) {
             $data = $this->apiRequest('/api/v1/config/kecamatan', $filters);
-            if (! $data) {
+            if (!$data) {
                 return collect([]);
             }
 
-            return collect($data)->map(fn ($item) => (object) $item['attributes']);
+            return collect($data)->map(fn($item) => (object) $item['attributes']);
         });
     }
 
     public function kabupaten(array $filters = [])
     {
-        $cacheKey = $this->buildCacheKey('config_kabupaten', $filters);
+        if (empty($filters)) {
+            $identitas = \App\Models\Identitas::first();
+            $kode_kabupaten = str_replace('.', '', $identitas->kode_kabupaten);
+            $filters['filter[kode_kabupaten]'] = $kode_kabupaten;
+        }
 
+        $cacheKey = $this->buildCacheKey('config_kabupaten', $filters);
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($filters) {
             $data = $this->apiRequest('/api/v1/config/kabupaten', $filters);
-            if (! $data) {
+            if (!$data) {
                 return collect([]);
             }
 
-            return collect($data)->map(fn ($item) => (object) $item['attributes']);
+            return collect($data)->map(fn($item) => (object) $item['attributes']);
         });
     }
 

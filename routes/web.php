@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\Web\ArtikelController;
+use App\Http\Controllers\ApiProxyController;
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\CatatanRilis;
@@ -247,12 +249,12 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
                 ->middleware(['permission:statistik-laporan-bulanan-read'])
                 ->prefix('laporan-bulanan')
                 ->group(function () {
-                Route::get('/', 'index')->name('laporan-bulanan.index');
-                Route::post('/filter', 'filter')->name('laporan-bulanan.filter');
-                Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
-                Route::get('/export-excel', 'exportExcel')->name('laporan-bulanan.export-excel');
-                Route::get('/export-excel-detail/{rincian}/{tipe}', 'exportExcelDetail')->name('laporan-bulanan.export-excel-detail');
-            });
+                    Route::get('/', 'index')->name('laporan-bulanan.index');
+                    Route::post('/filter', 'filter')->name('laporan-bulanan.filter');
+                    Route::get('/detail-penduduk/{rincian}/{tipe}', 'detailPenduduk')->name('laporan-bulanan.detail-penduduk');
+                    Route::get('/export-excel', 'exportExcel')->name('laporan-bulanan.export-excel');
+                    Route::get('/export-excel-detail/{rincian}/{tipe}', 'exportExcelDetail')->name('laporan-bulanan.export-excel-detail');
+                });
         });
 
     // Master Data
@@ -281,15 +283,19 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             Route::get('cetak', [App\Http\Controllers\DTKSController::class, 'cetak'])->name('satu-data.dtks.cetak');
         });
     });
-
+    Route::prefix('laporan')->group(function () {
+        Route::prefix('desa-aktif')->group(function () {
+            Route::get('', [App\Http\Controllers\LaporanDesaAktifController::class, 'index'])->name('laporan.desa-aktif.index');
+            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');            
+        });
+    });
     Route::prefix('data-presisi')->group(function () {
         Route::prefix('laporan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiLaporanController::class, 'index'])->name('laporan.data-presisi.index');
             Route::get('cetak', [App\Http\Controllers\DataPresisiLaporanController::class, 'cetak'])->name('laporan.data-presisi.cetak');
             Route::get('/perdesa', [App\Http\Controllers\DataPresisiLaporanController::class, 'perdesa'])->name('laporan.data-presisi.perdesa');
             Route::get('/cetak-perdesa', [App\Http\Controllers\DataPresisiLaporanController::class, 'cetakPerdesa'])->name('laporan.data-presisi.cetak-perdesa');
-        })
-            ->middleware(['permission:datapresisi-laporan-read']);
+        })->middleware(['permission:datapresisi-laporan-read']);
 
         Route::prefix('kesehatan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiKesehatanController::class, 'index'])->name('data-pokok.data-presisi.index');
@@ -381,6 +387,12 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::get('desa/cetak', [DesaController::class, 'cetak']);
     Route::resource('kecamatan', KecamatanController::class)->only(['index']);
     Route::get('kecamatan/cetak', [KecamatanController::class, 'cetak']);
+
+    Route::prefix('api-proxy')->group(function () {
+        Route::get('get', [ApiProxyController::class, 'get'])->name('api-proxy.get');
+        Route::post('post', [ApiProxyController::class, 'post'])->name('api-proxy.post');
+        Route::get('clear-cache', [ApiProxyController::class, 'clearCache'])->name('api-proxy.clear-cache');
+    });
 });
 
 // 2FA Challenge Routes (tanpa middleware 2fa untuk menghindari loop)
@@ -404,8 +416,6 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
     Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
 });
-
-use App\Http\Controllers\Web\ArtikelController;
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');

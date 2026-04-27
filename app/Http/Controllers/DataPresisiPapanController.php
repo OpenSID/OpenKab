@@ -10,7 +10,7 @@ class DataPresisiPapanController extends Controller
     public function detailData(Request $request): View
     {
         $colomn = '';
-        $title = 'Data Presisi Papan '.$request->input('judul');
+        $title = 'Data Presisi Papan - '.$request->input('judul');
         $title = htmlspecialchars(strip_tags($title), ENT_QUOTES, 'UTF-8');
         $filter = $request->input('filter');
 

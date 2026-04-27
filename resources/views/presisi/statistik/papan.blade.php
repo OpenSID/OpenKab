@@ -102,15 +102,15 @@
     let kategori = `{{ strtolower($judul) }}`;
     let default_id = null;
     document.addEventListener("DOMContentLoaded", function(event) {
-        const headers = @include('layouts.components.header_bearer_api_gabungan');        
-        let tipeValue;
+        const header = @include('layouts.components.header_bearer_api_gabungan');        
+        let tipeValue, judulUtama;
         var baseUrl = {!!json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
 
         var urlKategoriStatistik = new URL(`${baseUrl}/data-presisi/papan/kategori-statistik`);
 
         $.ajax({
             url: urlKategoriStatistik.href,
-            headers: headers,
+            headers: header,
             method: 'get',            
             success: function(response) {
                 var daftarKategoriStatistik = response.data[0]['attributes']
@@ -302,17 +302,17 @@
         $('#daftar-statistik').on('click', '.pilih-kategori > a', function() {
             var id = $(this).data('id')
             tipeValue = id
+            judulUtama = $(this).text().trim()
             $('.pilih-kategori > a').removeClass('active')
             $(this).addClass('active')
-            $('#title-block').html($(this).text())
+            $('#title-block').html($(this).text())            
             urlStatistik.searchParams.set('kategori', id);
 
             statistik.ajax.url(urlStatistik.href, {
 
             }).load();
         });
-        const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
-        const judulUtama = $('.pilih-kategori > a.active').text().trim();
+        const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;        
         var urlStatistik = new URL(`${baseUrl}/data-presisi/papan/statistik`);
         urlStatistik.searchParams.set('kategori', default_id);
         urlStatistik.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
@@ -335,7 +335,7 @@
             info: false,
             ajax: {
                 url: urlStatistik.href,
-                headers: headers,
+                headers: header,
                 method: 'get',
                 data: function(row) {
                     return {
@@ -384,12 +384,12 @@
             }, {
                 data: function(data) {
                     const nilai = data.attributes?.nilai || data.id || '';
-
+                    const nilaiDb = data.attributes?.nilai_db || '';
                     if (nilai !== 'JUMLAH' && nilai !== 'BELUM MENGISI' && nilai !== 'TOTAL') {
                         let judul = judulUtama + ' : ' + nilai;
                         let urlDetail = new URL(urlDetailLink);
                         urlDetail.searchParams.set('judul', judul);
-                        urlDetail.searchParams.set('filter[nilai]', data.id);
+                        urlDetail.searchParams.set('filter[nilai]', nilaiDb);
                         urlDetail.searchParams.set('filter[tipe]', tipeValue);
                         urlDetail.searchParams.set('tahun', $('#filter-tahun').val());
                         urlDetail.searchParams.set('chart-view', true);
@@ -403,12 +403,13 @@
             }, {
                 data: function(data) {
                     const nilai = data.attributes?.nilai || data.id || '';
+                    const nilaiDb = data.attributes?.nilai_db || '';
                     const jumlah = data.attributes?.jumlah || 0;
 
                     let judul = judulUtama + ' : ' + nilai;
                     let urlDetail = new URL(urlDetailLink);                    
                     urlDetail.searchParams.set('judul', judul);
-                    urlDetail.searchParams.set('filter[nilai]', nilai);                            
+                    urlDetail.searchParams.set('filter[nilai]', nilaiDb);                            
                     urlDetail.searchParams.set('filter[tipe]', tipeValue);
                     return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`
 

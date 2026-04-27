@@ -101,7 +101,7 @@
     let nama_desa = `{{ session('desa.nama_desa') }}`;
     let kategori = `{{ strtolower($judul) }}`;
     let default_id = null;
-    let tipeValue;
+    let tipeValue, judulUtama;
     document.addEventListener("DOMContentLoaded", function(event) {
 
         const header = @include('layouts.components.header_bearer_api_gabungan');
@@ -304,7 +304,7 @@
         $('#daftar-statistik').on('click', '.pilih-kategori > a', function() {
             var id = $(this).data('id')
             tipeValue = id
-
+            judulUtama = $(this).text().trim();
             $('.pilih-kategori > a').removeClass('active')
             $(this).addClass('active')
             $('#title-block').html($(this).text())
@@ -315,7 +315,7 @@
             }).load();
         });
         const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
-        const judulUtama = $('.pilih-kategori > a.active').text().trim();
+        
         var urlStatistik = new URL(`${baseUrl}/data-presisi/sandang/statistik`);
         urlStatistik.searchParams.set('kategori', default_id);
         urlStatistik.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");

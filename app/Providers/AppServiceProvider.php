@@ -59,6 +59,7 @@ class AppServiceProvider extends ServiceProvider
             View::share('settingAplikasi', $settingAplikasi);
             config()->set(['app.sebutanDesa' => $identitasAplikasi['sebutan_desa'] ?? 'Desa']);
             config()->set(['app.sebutanKab' => $identitasAplikasi['sebutan_kab'] ?? 'Kabupaten']);
+            config()->set(['app.kodeKabupatenApi' => $identitasAplikasi['kode_kabupaten_api'] ?? '']);
             $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
         }
     }

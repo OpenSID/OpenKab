@@ -8,6 +8,7 @@ Di rilis ini, versi 2604.0.0 berisi penambahan dan perbaikan yang diminta penggu
 4. [#942](https://github.com/OpenSID/OpenKab/issues/942) Penambahan fitur menampilkan artikel OpenSID di halaman publik.
 5. [#372](https://github.com/OpenSID/API-Database-Gabungan/issues/372) Penambahan judul dan kategori ketika hapus artikel.
 6. [#988](https://github.com/OpenSID/OpenKab/issues/988) Sesuaikan sort di datapresisi pangan.
+7. [#995](https://github.com/OpenSID/OpenKab/issues/995) Penambahan fitur untuk laporan keaktifan desa melalui beberapa acuan.
 
 
 #### Perbaikan BUG

@@ -1,28 +1,59 @@
 @extends('adminlte::page')
 
 @section('footer')
-    <strong>Hak cipta © <?= date('Y') ?> <a href="https://opendesa.id">OpenDesa</a>.</strong>
-    Seluruh hak cipta dilindungi.
-    <div class="float-right d-none d-sm-inline-block">
-        <b>Versi</b> {{ openkab_versi() }}
-    </div>
+<strong>Hak cipta © <?= date('Y') ?> <a href="https://opendesa.id">OpenDesa</a>.</strong>
+Seluruh hak cipta dilindungi.
+<div class="float-right d-none d-sm-inline-block">
+    <b>Versi</b> {{ openkab_versi() }}
+</div>
 @endsection
 
 @push('js')
-    <script nonce="{{ csp_nonce() }}" type="application/javascript">
-    document.addEventListener("DOMContentLoaded", function(event) {
-        const header = @include('layouts.components.header_bearer_api_gabungan');
-        var base_url = '{{ url('/') }}';
-        $.ajax({
-        type: "get",
-        url: base_url + "/api/v1/identitas",
-        headers: header,
-        success: function (response) {
-            var data = response.data.attributes;
-            $('.brand-link').children('img').attr('alt', data.nama_aplikasi);
-            $('.brand-link').children('span').text(data.nama_aplikasi);
+<script nonce="{{ csp_nonce() }}" type="application/javascript">
+    const API_PROXY_BASE = '/api-proxy/get';
+
+    function apiProxyGet(endpoint, params, callback) {
+        let url = API_PROXY_BASE + '?endpoint=' + endpoint;
+        for (let key in params) {
+            if (params[key] !== null && params[key] !== '') {
+                url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+            }
         }
-    });
+
+        $.ajax({
+            url: url,
+            type: 'GET',            
+            success: function(response) {
+                if (callback) callback(response);
+            },
+            error: function(response) {
+                if (callback) callback({
+                    data: [],                    
+                    meta: {
+                        pagination: {
+                            total: 0
+                        }
+                    }
+                });
+                
+                Swal.fire(
+                    'Error!',
+                    response.responseJSON.error || 'Gagal mengambil data dari API',
+                    'error'
+                );
+            }
+        });
+    }
+    document.addEventListener("DOMContentLoaded", function(event) {        
+        $.ajax({
+            type: "get",
+            url: "/api/v1/identitas",
+            success: function(response) {
+                var data = response.data.attributes;
+                $('.brand-link').children('img').attr('alt', data.nama_aplikasi);
+                $('.brand-link').children('span').text(data.nama_aplikasi);
+            }
+        });
         // ganti text navbar kabupaten, kecamatan dan desa
         var nama_kabupaten = $('#kabupaten').children().find('a.active').data('kabupaten');
         $('#kabupaten').children('a.active').text(nama_kabupaten);
@@ -34,7 +65,9 @@
         $('#desa').children('a.active').text(nama_desa);
 
         $.extend($.fn.dataTable.defaults, {
-            language: {url: "{{ asset('vendor/datatable/id.json') }}"}
+            language: {
+                url: "{{ asset('vendor/datatable/id.json') }}"
+            }
         });
 
 
@@ -45,20 +78,20 @@
         }, 5000);
 
 
-        function filter_open () {
+        function filter_open() {
             if ($('a[href="#collapse-filter"]').attr('aria-expanded') == 'false') {
                 $('a[href="#collapse-filter"]').trigger('click')
             }
         }
 
-        $('li#catatan-rilis').click(function(){
+        $('li#catatan-rilis').click(function() {
             Swal.fire({
                 title: 'Menyimpan',
                 didOpen: () => {
                     Swal.showLoading()
                 },
             })
-            $.get('/catatan-rilis', {}, function (data) {
+            $.get('/catatan-rilis', {}, function(data) {
                 Swal.fire({
                     title: 'Catatan Rilis',
                     width: '90%',
@@ -76,15 +109,14 @@
             })
         })
 
-        $('.datepicker').daterangepicker(
-            {
-                autoApply: true,
-                singleDatePicker: true,
-                locale: {
-                    format: "DD/MM/YYYY",
-                    firstDay: 1
-                }
-            });
+        $('.datepicker').daterangepicker({
+            autoApply: true,
+            singleDatePicker: true,
+            locale: {
+                format: "DD/MM/YYYY",
+                firstDay: 1
+            }
+        });
     })
-    </script>
+</script>
 @endpush

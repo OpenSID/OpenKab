@@ -13,6 +13,7 @@ Di rilis ini, versi 2604.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 1. [#954](https://github.com/OpenSID/OpenKab/issues/954) Perbaikan list menu tidak tampil.
 2. [#369](https://github.com/OpenSID/API-Database-Gabungan/issues/369)   Perbaikan cache artikel tidak dihapus setelah operasi hapus.
+3. [#1015](https://github.com/OpenSID/OpenKab/issues/1015) Batasi opsi kabupaten berdasarkan pengaturan yang ada di API satu data.
 
 #### Perubahan Teknis
 

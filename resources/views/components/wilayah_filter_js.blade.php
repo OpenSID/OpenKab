@@ -37,7 +37,6 @@
 
             $('#filter_kabupaten').select2({
                 placeholder: "Pilih {{ config('app.sebutanKab') }}",
-                allowClear: true,
                 height: '100%',
                 width: '100%',
             })

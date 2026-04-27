@@ -1,5 +1,5 @@
 function GetListKabupaten() {
-    const header = @include('layouts.components.header_bearer_api_gabungan');
+    
 
     $('#filter_kabupaten').empty().trigger("change");
 

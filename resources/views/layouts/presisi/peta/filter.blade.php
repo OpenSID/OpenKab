@@ -44,7 +44,7 @@ reloadDataTablesIfAjaxRunning();
 function updateWebsiteData(kabupaten = null, kecamatan = null, desa = null) {
 {{-- let url = "{{ url('api/v1/data-website') }}"; --}}
 
-const header = @include('layouts.components.header_bearer_api_gabungan');
+
 var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-website' }}");
 
 if (kabupaten || kecamatan || desa) {
@@ -55,7 +55,7 @@ $.ajax({
 url: url.href,
 method: 'GET',
 dataType: 'json',
-headers: header,
+
 success: function(result) {
 let category = result.data.categoriesItems;
 let listDesa = result.data.listDesa;

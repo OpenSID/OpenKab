@@ -26,3 +26,4 @@ package-lock.json
 /playwright-report/
 .env.e2e
 /template_ai/
+AGENTS.md

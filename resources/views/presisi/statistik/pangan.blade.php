@@ -325,7 +325,10 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
+                order: [
+                    [2, 'desc']
+                ],
                 searching: false,
                 deferLoading: 0,
                 paging: false,
@@ -376,7 +379,8 @@
                     data: null,
                     render: function (data, type, row, meta) {
                         return meta.row + 1;
-                    }
+                    },
+                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
@@ -397,6 +401,7 @@
 
                         return nilai;
                     },
+                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
@@ -413,6 +418,8 @@
 
                         return jumlah;
                     },
+                    orderable: true,
+                    name: 'jumlah',
                 }]
             });
 

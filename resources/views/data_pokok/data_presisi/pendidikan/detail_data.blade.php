@@ -48,7 +48,10 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         const headers = @include('layouts.components.header_bearer_api_gabungan');
         var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pendidikan' }}");
-        var pendidikan = $('#detail-pendidikan').DataTable({
+        // Cache selector di luar DataTables initialization
+        const $filterTahun = $('#filter-tahun');
+        const $detailPendidikan = $('#detail-pendidikan');
+        var pendidikan = $detailPendidikan.DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -66,7 +69,7 @@
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
-                        "filter[tahun]": $('#filter-tahun').val(),
+                        "filter[tahun]": $filterTahun.val(),
                         "filter[colomn]": '{{ $colomn }}',
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name,
                     };
@@ -78,6 +81,10 @@
                     json.recordsFiltered = json.meta.pagination.total;
                     return json.data;
                 },
+                error: function(xhr, error, code) {
+                    console.error('DataTables AJAX error:', {xhr, error, code});
+                    alert('Gagal memuat data. Silakan refresh halaman atau hubungi administrator.');
+                }
             },
             columnDefs: [{
                 targets: '_all',
@@ -133,7 +140,7 @@
             ],            
         });
         pendidikan.on('draw.dt', function() {
-            var PageInfo = $('#detail-pendidikan').DataTable().page.info();
+            var PageInfo = $detailPendidikan.DataTable().page.info();
             pendidikan.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
@@ -142,7 +149,7 @@
         });
 
         // Event listener for year filter change
-        $('#filter-tahun').on('change', function() {
+        $filterTahun.on('change', function() {
             pendidikan.ajax.reload();
         });
     });

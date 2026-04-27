@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DetailDataPresisiPendidikanRequest;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -38,15 +39,16 @@ class DataPresisiPendidikanController extends Controller
      * @param Request $request HTTP request instance
      * @return View
      */
-    public function detailData(Request $request): View
+    public function detailData(DetailDataPresisiPendidikanRequest $request): View
     {
         $colomn = '';
-        $title = 'Data Presisi Pendidikan - '.$request->input('judul');
+        $validated = $request->validated();
+        $title = 'Data Presisi Pendidikan - ' . $validated['judul'];
         $title = htmlspecialchars(strip_tags($title), ENT_QUOTES, 'UTF-8');
-        $filter = $request->input('filter');
+        $filter = $validated['filter'] ?? null;
 
-        if (isset($filter['tipe'], $filter['nilai']) && $filter['tipe'] && $filter['nilai']) {
-            $colomn = $filter['tipe'].':'.$filter['nilai'];
+        if (isset($filter['tipe'], $filter['nilai'])) {
+            $colomn = $filter['tipe'] . ':' . $filter['nilai'];
         }
 
         return view('data_pokok.data_presisi.pendidikan.detail_data', compact('title', 'colomn'));

@@ -27,7 +27,7 @@ class DataPresisiSandangControllerTest extends BaseTestCase
         $data = $response->getData();
         $this->assertArrayHasKey('title', $data);
         $this->assertArrayHasKey('colomn', $data);
-        $this->assertEquals('Data Presisi Sandang ', $data['title']);
+        $this->assertEquals('Data Presisi Sandang - ', $data['title']);
         $this->assertEquals('', $data['colomn']);
     }
 
@@ -44,7 +44,7 @@ class DataPresisiSandangControllerTest extends BaseTestCase
         $this->assertInstanceOf(View::class, $response);
 
         $data = $response->getData();
-        $this->assertEquals('Data Presisi Sandang Test Judul', $data['title']);
+        $this->assertEquals('Data Presisi Sandang - Test Judul', $data['title']);
         $this->assertEquals('kategori:pakaian', $data['colomn']);
     }
 

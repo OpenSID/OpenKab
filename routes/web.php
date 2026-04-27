@@ -330,7 +330,7 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::prefix('papan')->group(function () {            
             Route::get('detail_data', [App\Http\Controllers\DataPresisiPapanController::class, 'detailData'])->name('data-pokok.data-presisi-papan.detail_data');            
         })
-            ->middleware(['permission:datapresisi-pangan-read']);
+            ->middleware(['permission:datapresisi-papan-read']);
 
         Route::prefix('adat')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiAdatController::class, 'index'])->name('data-pokok.data-presisi-adat.index');

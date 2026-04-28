@@ -7,7 +7,7 @@ class StatistikKetenagakerjaanController extends Controller
     public function index()
     {
         return view('presisi.statistik.ketenagakerjaan', [
-            'detailLink' => url(''),
+            'detailLink' => url('data-presisi/ketenagakerjaan/detail_data'),
             'judul' => 'Ketenagakerjaan'            
         ]);
     }    

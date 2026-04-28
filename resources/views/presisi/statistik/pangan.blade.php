@@ -102,6 +102,7 @@
         let kategori = `{{ strtolower($judul) }}`;
         let default_id = null;
         document.addEventListener("DOMContentLoaded", function (event) {
+            const header = @include('layouts.components.header_bearer_api_gabungan');
 
             const header = @include('layouts.components.header_bearer_api_gabungan');
             let tipeValue;
@@ -110,8 +111,8 @@
             var urlKategoriStatistik = new URL(`${baseUrl}/data-presisi/pangan/kategori-statistik`);
 
             $.ajax({
-                url: urlKategoriStatistik.href,
-                
+                url: urlKategoriStatistik.href,                
+                headers: header,
                 method: 'get',
                 success: function (response) {
                     var daftarKategoriStatistik = response.data[0]['attributes']
@@ -337,7 +338,7 @@
                 info: false,
                 ajax: {
                     url: urlStatistik.href,
-                    
+                    headers: header,
                     method: 'get',
                     data: function (row) {
                         return {

@@ -53,8 +53,8 @@ class BaseApiService
     protected function apiRequest(string $endpoint, array $params = [])
     {
         try {
-            // Buat permintaan API dengan Header dan Parameter
-            $response = Http::withHeaders($this->header)->get($this->baseUrl.$endpoint, $params);
+            // Buat permintaan API dengan Header dan Parameter, tambahkan throw agar error code 403 dkk masuk exception
+            $response = Http::withHeaders($this->header)->get($this->baseUrl.$endpoint, $params)->throw();
             session()->forget('error_api');
 
             // Return JSON hasil

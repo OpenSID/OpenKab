@@ -27,6 +27,7 @@ class IdentitasTransformer extends TransformerAbstract
             'favicon' => $identitas->favicon,
             'nama_kabupaten' => $identitas->nama_kabupaten,
             'kode_kabupaten' => $identitas->kode_kabupaten,
+            'kode_kabupaten_api' => str_replace('.','',$identitas->kode_kabupaten),
             'nama_provinsi' => $identitas->nama_provinsi,
             'kode_provinsi' => $identitas->kode_provinsi,
             'sebutan_kab' => $identitas->sebutan_kab,

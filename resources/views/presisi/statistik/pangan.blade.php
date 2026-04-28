@@ -102,6 +102,7 @@
         let kategori = `{{ strtolower($judul) }}`;
         let default_id = null;
         document.addEventListener("DOMContentLoaded", function (event) {
+            const header = @include('layouts.components.header_bearer_api_gabungan');
 
             const header = @include('layouts.components.header_bearer_api_gabungan');
             let tipeValue;
@@ -110,7 +111,7 @@
             var urlKategoriStatistik = new URL(`${baseUrl}/data-presisi/pangan/kategori-statistik`);
 
             $.ajax({
-                url: urlKategoriStatistik.href,
+                url: urlKategoriStatistik.href,                
                 headers: header,
                 method: 'get',
                 success: function (response) {
@@ -327,7 +328,10 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
+                order: [
+                    [2, 'desc']
+                ],
                 searching: false,
                 deferLoading: 0,
                 paging: false,
@@ -378,7 +382,8 @@
                     data: null,
                     render: function (data, type, row, meta) {
                         return meta.row + 1;
-                    }
+                    },
+                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
@@ -398,6 +403,7 @@
 
                         return nilai;
                     },
+                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
@@ -411,6 +417,8 @@
                             urlDetail.searchParams.set('judul', judul);
                             return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`                        
                     },
+                    orderable: true,
+                    name: 'jumlah',
                 }]
             });
 

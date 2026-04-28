@@ -16,7 +16,7 @@ class DataPresisiPanganController extends Controller
     public function detailData()
     {
         $colomn = '';
-        $title = 'Data Presisi Pangan ' . request('judul');
+        $title = 'Data Presisi Pangan - ' . request('judul');
         $filter = request('filter');
         
         if (isset($filter['tipe']) && isset($filter['nilai'])) {

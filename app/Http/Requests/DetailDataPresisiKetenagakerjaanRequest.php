@@ -24,8 +24,8 @@ class DetailDataPresisiKetenagakerjaanRequest extends FormRequest
         return [
             'judul' => 'nullable|string|max:255',
             'filter' => 'nullable|array',
-            'filter.tipe' => 'required_with:filter|string',
-            'filter.nilai' => 'required_with:filter|string',
+            'filter.tipe' => 'nullable|string',
+            'filter.nilai' => 'nullable|string',
         ];
     }
 }

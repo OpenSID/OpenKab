@@ -25,11 +25,11 @@
                                 <th>NO</th>
                                 <th>NIK</th>
                                 <th>NOMOR KK</th>
-                                <th>NAMA</th>
-                                <th>TINGKAT PENDIDIKAN YANG DI TAMATKAN</th>
-                                <th>JENJANG PENDIDIKAN YANG SEDANG DITEMPUH</th>
-                                <th>KEIKUTSERTAAN KIP</th>
-                                <th>JENIS PENDIDIKAN KESETARAAN YANG DIIKUT</th>
+                                <th>NAMA</th>                                
+                                <th>PEKERJAAN</th>
+                                <th>TEMPAT KERJA</th>
+                                <th>FREKWENSI MENGIKUTI PELATIHAN SETAHUN</th>
+                                <th>JENIS PELATIHAN YANG DIIKUTI SETAHUN</th>
                                 <th>TANGGAL PENGISIAN</th>
                                 <th>STATUS PENGISIAN</th>
                             </tr>
@@ -104,29 +104,31 @@
                 {
                     data: 'attributes.nik',
                     orderable: false,
+                    defaultContent: 'xxxxxxxxxxxx',
                 },
                 {
                     data: 'attributes.no_kk',
                     orderable: false,
+                    defaultContent: 'xxxxxxxxxxxx',
                 },
                 {
                     data: 'attributes.nama',
                     orderable: false,
-                },
+                },                
                 {
-                    data: 'attributes.ketenagakerjaan_dalam_kk',
+                    data: 'attributes.jenis_pekerjaan',
                     orderable: false
                 },
                 {
-                    data: 'attributes.ketenagakerjaan_sedang_ditempuh',
+                    data: 'attributes.tempat_kerja',
                     orderable: false
                 },
                 {
-                    data: 'attributes.keikutsertaan_kip',
+                    data: 'attributes.frekwensi_mengikuti_pelatihan_setahun',
                     orderable: false
                 },
                 {
-                    data: 'attributes.jenis_ketenagakerjaan_kesetaraan_yg_diikuti',
+                    data: 'attributes.jenis_pelatihan_diikuti_setahun',
                     orderable: false
                 },
                 {

@@ -102,15 +102,16 @@
         let kategori = `{{ strtolower($judul) }}`;
         let default_id = null;
         document.addEventListener("DOMContentLoaded", function (event) {
-
             const header = @include('layouts.components.header_bearer_api_gabungan');
+
+            
 
             var baseUrl = {!! json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
 
             var urlKategoriStatistik = new URL(`${baseUrl}/data-presisi/ketenagakerjaan/kategori-statistik`);
 
             $.ajax({
-                url: urlKategoriStatistik.href,
+                url: urlKategoriStatistik.href,                
                 headers: header,
                 method: 'get',
                 success: function (response) {
@@ -308,7 +309,7 @@
                 urlStatistik.searchParams.set('kategori', id);
 
                 statistik.ajax.url(urlStatistik.href, {
-                    headers: header,
+                    
                 }).load();
             });
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;

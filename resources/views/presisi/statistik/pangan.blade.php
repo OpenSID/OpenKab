@@ -102,15 +102,16 @@
         let kategori = `{{ strtolower($judul) }}`;
         let default_id = null;
         document.addEventListener("DOMContentLoaded", function (event) {
-
             const header = @include('layouts.components.header_bearer_api_gabungan');
+
+            
 
             var baseUrl = {!! json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
 
             var urlKategoriStatistik = new URL(`${baseUrl}/data-presisi/pangan/kategori-statistik`);
 
             $.ajax({
-                url: urlKategoriStatistik.href,
+                url: urlKategoriStatistik.href,                
                 headers: header,
                 method: 'get',
                 success: function (response) {
@@ -309,7 +310,7 @@
                 urlStatistik.searchParams.set('kategori', id);
 
                 statistik.ajax.url(urlStatistik.href, {
-                    headers: header,
+                    
                 }).load();
             });
             const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
@@ -325,7 +326,10 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
+                order: [
+                    [2, 'desc']
+                ],
                 searching: false,
                 deferLoading: 0,
                 paging: false,
@@ -376,7 +380,8 @@
                     data: null,
                     render: function (data, type, row, meta) {
                         return meta.row + 1;
-                    }
+                    },
+                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
@@ -397,6 +402,7 @@
 
                         return nilai;
                     },
+                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
@@ -413,6 +419,8 @@
 
                         return jumlah;
                     },
+                    orderable: true,
+                    name: 'jumlah',
                 }]
             });
 

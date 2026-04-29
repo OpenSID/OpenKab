@@ -27,3 +27,4 @@ package-lock.json
 .env.e2e
 
 QWEN.md
+/template_ai/

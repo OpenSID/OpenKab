@@ -107,7 +107,7 @@
         var baseUrl = {!!json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
 
         var urlKategoriStatistik = new URL(`${baseUrl}/data-presisi/papan/kategori-statistik`);
-
+        const filterTahun = $('#filter-tahun');
         $.ajax({
             url: urlKategoriStatistik.href,
             headers: header,
@@ -339,7 +339,7 @@
                 method: 'get',
                 data: function(row) {
                     return {
-                        "tahun": $('#filter-tahun').val(),
+                        "tahun": filterTahun.val(),
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
                                 .order[0]
                                 ?.column]
@@ -391,7 +391,7 @@
                         urlDetail.searchParams.set('judul', judul);
                         urlDetail.searchParams.set('filter[nilai]', nilaiDb);
                         urlDetail.searchParams.set('filter[tipe]', tipeValue);
-                        urlDetail.searchParams.set('tahun', $('#filter-tahun').val());
+                        urlDetail.searchParams.set('tahun', filterTahun.val());
                         urlDetail.searchParams.set('chart-view', true);
 
                         return `<a target="_blank" href="${urlDetail.href}">${nilai}</a>`
@@ -411,6 +411,7 @@
                     urlDetail.searchParams.set('judul', judul);
                     urlDetail.searchParams.set('filter[nilai]', nilaiDb);                            
                     urlDetail.searchParams.set('filter[tipe]', tipeValue);
+                    urlDetail.searchParams.set('tahun', filterTahun.val());
                     return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`
 
                 },
@@ -436,7 +437,7 @@
         });
 
         // Event listener for year filter change
-        $('#filter-tahun').on('change', function() {
+        filterTahun.on('change', function() {
             statistik.ajax.reload();
         });
 

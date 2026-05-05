@@ -106,8 +106,8 @@
 
         var baseUrl = {!!json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
         var urlKategoriStatistik = new URL(`${baseUrl}/data-presisi/ketenagakerjaan/kategori-statistik`);
-        const $filterTahun = $('#filter-tahun');
-        const $tabelData = $('#tabel-data');
+        const filterTahun = $('#filter-tahun');
+        const tabelData = $('#tabel-data');
         let tipeValue, judulUtama;
         $.ajax({
             url: urlKategoriStatistik.href,
@@ -208,7 +208,7 @@
             });
 
             // Create a clone of the table for export
-            var $originalTable = $tabelData;
+            var $originalTable = tabelData;
             var $exportTable = $originalTable.clone();
             $exportTable.attr('id', 'export-table');
 
@@ -321,7 +321,7 @@
         const desaId = parseInt("{{ session('desa.id') ?? '0' }}", 10);
         urlStatistik.searchParams.set("config_desa", isNaN(desaId) ? 0 : desaId);
 
-        var statistik = $tabelData.DataTable({
+        var statistik = tabelData.DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -339,7 +339,7 @@
                 method: 'get',
                 data: function(row) {
                     return {
-                        "tahun": $filterTahun.val(),
+                        "tahun": filterTahun.val(),
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
                                 .order[0]
                                 ?.column]
@@ -392,7 +392,7 @@
                         urlDetail.searchParams.set('filter[nilai]', nilai);
                         urlDetail.searchParams.set('filter[tipe]', tipeValue);
                         urlDetail.searchParams.set('judul', judul);
-                        urlDetail.searchParams.set('tahun', $filterTahun.val());
+                        urlDetail.searchParams.set('tahun', filterTahun.val());
                         urlDetail.searchParams.set('chart-view', true);
 
                         return `<a target="_blank" href="${urlDetail.href}">${nilai}</a>`
@@ -411,6 +411,7 @@
                     let urlDetail = new URL(urlDetailLink);
                     urlDetail.searchParams.set('filter[nilai]', nilai);
                     urlDetail.searchParams.set('filter[tipe]', tipeValue);
+                    urlDetail.searchParams.set('tahun', filterTahun.val());
                     urlDetail.searchParams.set('judul', judul);
                     return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`
                 },
@@ -420,7 +421,7 @@
         });
 
         statistik.on('draw.dt', function() {
-            var dataTable = $tabelData.DataTable();
+            var dataTable = tabelData.DataTable();
             var pageInfo = dataTable.page.info();
             var recordsTotal = dataTable.data().count();
 
@@ -432,7 +433,7 @@
         });
 
         // Event listener for year filter change
-        $filterTahun.on('change', function() {
+        filterTahun.on('change', function() {
             statistik.ajax.reload();
         });
         $(document).on('click', '#reset', function(e) {

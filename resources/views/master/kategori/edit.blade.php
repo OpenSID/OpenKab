@@ -12,23 +12,25 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" x-on:submit.prevent="simpan()">
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Nama Kategori</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" placeholder="Nama Aplikasi" x-model="dataKategori.kategori">
+                                <input type="text" class="form-control" placeholder="Nama Aplikasi"
+                                    x-model="dataKategori.kategori">
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-info" x-on:click="simpan()">Simpan</button>
+                    <button type="submit" class="btn btn-info">Simpan</button>
                 </div>
             </div>
         </div>
     </div>
-    <script nonce="{{ csp_nonce() }}"  >
+    <script nonce="{{ csp_nonce() }}">
         const header = @include('layouts.components.header_bearer_api_gabungan');
+
         function kategori() {
             return {
                 dataKategori: {
@@ -38,7 +40,9 @@
                 },
 
                 retriveData() {
-                    fetch(`{{ config('app.databaseGabunganUrl').'/api/v1/kategori/tampil' }}?id=${this.dataKategori.id}`, { headers: header })
+                    fetch(`{{ config('app.databaseGabunganUrl') . '/api/v1/kategori/tampil' }}?id=${this.dataKategori.id}`, {
+                            headers: header
+                        })
                         .then(res => res.json())
                         .then(response => {
                             this.dataKategori = response.data;
@@ -64,18 +68,19 @@
                         type: "PUT",
                         headers: header,
                         dataType: "json",
-                        url: `{{ config('app.databaseGabunganUrl').'/api/v1/kategori/perbarui' }}/${this.dataKategori.id}`,
+                        url: `{{ config('app.databaseGabunganUrl') . '/api/v1/kategori/perbarui' }}/${this.dataKategori.id}`,
                         data: JSON.stringify(this.dataKategori),
                         success: function(response) {
                             if (response.success == true) {
                                 Swal.fire({
                                     title: 'Simpan!',
-                                    text: 'Data berhasil ditambahkan',
+                                    text: 'Data berhasil diperbarui',
                                     icon: 'success',
                                     showConfirmButton: false,
                                     timer: 1500,
                                 })
-                                window.location.href = '{{ url('master/kategori') . '/' . (int) request()->route('parrent') }}';
+                                window.location.href =
+                                    '{{ url('master/kategori') . '/' . (int) request()->route('parrent') }}';
 
                             } else {
                                 Swal.fire({

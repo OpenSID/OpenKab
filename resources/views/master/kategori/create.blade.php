@@ -14,40 +14,45 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ url('master/kategori/').'/'.request()->route('parrent') }}" class="btn btn-sm btn-block btn-secondary"><i
-                                    class="fas fa-arrow-left"></i>
+                            <a href="{{ url('master/kategori/') . '/' . request()->route('parrent') }}"
+                                class="btn btn-sm btn-block btn-secondary"><i class="fas fa-arrow-left"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" x-on:submit.prevent="simpan()">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" id="kategori" x-text="dataKategori.label_kategori"></label>
+                            <label class="col-sm-2 col-form-label" id="kategori"
+                                x-text="dataKategori.label_kategori"></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" x-bind:placeholder="dataKategori.label_kategori" x-model="dataKategori.kategori">
+                                <input type="text" class="form-control" x-bind:placeholder="dataKategori.label_kategori"
+                                    x-model="dataKategori.kategori" required>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-info" x-on:click="simpan()">Simpan</button>
+                    <button type="submit" class="btn btn-info">Simpan</button>
                 </div>
             </div>
         </div>
     </div>
-    <script nonce="{{ csp_nonce() }}"  >
+    <script nonce="{{ csp_nonce() }}">
         const header = @include('layouts.components.header_bearer_api_gabungan');
+
         function kategori() {
             return {
                 dataKategori: {
                     'kategori': null,
                     'parrent': {{ (int) request()->route('parrent') }},
-                    'label_kategori' : ''
+                    'label_kategori': ''
                 },
 
                 retriveData() {
-                    fetch(`{{ config('app.databaseGabunganUrl').'/api/v1/kategori/tampil' }}?id=${this.dataKategori.parrent}`, { headers: header })
+                    fetch(`{{ config('app.databaseGabunganUrl') . '/api/v1/kategori/tampil' }}?id=${this.dataKategori.parrent}`, {
+                            headers: header
+                        })
                         .then(res => res.json())
                         .then(response => {
 
@@ -55,7 +60,7 @@
                             if (response.data != null) {
                                 this.dataKategori.label_kategori = 'Nama Sub Kategori'
                                 $('#judul_kategori').text(`Sub Kategori ${response.data.kategori}`)
-                            }else{
+                            } else {
                                 this.dataKategori.label_kategori = 'Nama Kategori'
                             }
                             // console.log*
@@ -78,12 +83,12 @@
                         },
                         allowOutsideClick: false
                     })
-                                        
+
                     $.ajax({
                         type: "POST",
                         headers: header,
                         dataType: "json",
-                        url: `{{ config('app.databaseGabunganUrl').'/api/v1/kategori/buat' }}`,
+                        url: `{{ config('app.databaseGabunganUrl') . '/api/v1/kategori/buat' }}`,
                         data: JSON.stringify(this.dataKategori),
                         success: function(response) {
                             if (response.success == true) {
@@ -94,7 +99,8 @@
                                     showConfirmButton: false,
                                     timer: 1500,
                                 })
-                                window.location.href = '{{ url('master/kategori').'/'. (int) request()->route('parrent') }}';
+                                window.location.href =
+                                    '{{ url('master/kategori') . '/' . (int) request()->route('parrent') }}';
 
                             } else {
                                 Swal.fire({

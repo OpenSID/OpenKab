@@ -320,6 +320,7 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::prefix('pendidikan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiPendidikanController::class, 'index'])->name('data-pokok.data-presisi-pendidikan.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiPendidikanController::class, 'detail'])->name('data-pokok.data-presisi-pendidikan.detail');
+            Route::get('detail_data', [App\Http\Controllers\DataPresisiPendidikanController::class, 'detailData'])->name('data-pokok.data-presisi-pendidikan.detail_data');
             Route::get('cetak', [App\Http\Controllers\DataPresisiPendidikanController::class, 'cetak'])->name('data-pokok.data-presisi-pendidikan.cetak');
         })
             ->middleware(['permission:datapresisi-pendidikan-read']);

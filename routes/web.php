@@ -299,6 +299,7 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::prefix('kesehatan')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiKesehatanController::class, 'index'])->name('data-pokok.data-presisi.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiKesehatanController::class, 'detail'])->name('data-pokok.data-presisi.detail');
+            Route::get('/detail_data', [App\Http\Controllers\DataPresisiKesehatanController::class, 'detailData'])->name('data-pokok.data-presisi.detail_data');
             Route::get('cetak', [App\Http\Controllers\DataPresisiKesehatanController::class, 'cetak'])->name('data-pokok.data-presisi.cetak');
         })
             ->middleware(['permission:datapresisi-kesehatan-read']);

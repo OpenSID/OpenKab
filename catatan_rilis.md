@@ -13,7 +13,7 @@ Di rilis ini, versi 2604.0.1 berisi penambahan dan perbaikan yang diminta penggu
 
 
 #### Perbaikan BUG
-
+1. [#1023](https://github.com/OpenSID/OpenKab/issues/1023) Percobaan login gagal terkadang error 500
 
 #### Perubahan Teknis
 

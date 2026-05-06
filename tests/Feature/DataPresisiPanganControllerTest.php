@@ -23,7 +23,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('data_pokok.data_presisi.pangan.detail_data');
-        $response->assertViewHas('title', 'Data Presisi Pangan Test Judul');
+        $response->assertViewHas('title', 'Data Presisi Pangan - Test Judul');
         $response->assertViewHas('colomn', 'kategori_pangan:beras');
     }
 
@@ -78,7 +78,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?filter[tipe]=kategori_pangan&filter[nilai]=beras');
 
         $response->assertStatus(200);
-        $response->assertViewHas('title', 'Data Presisi Pangan ');
+        $response->assertViewHas('title', 'Data Presisi Pangan - ');
         $response->assertViewHas('colomn', 'kategori_pangan:beras');
     }
 

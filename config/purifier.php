@@ -28,7 +28,7 @@ return [
             'HTML.Allowed'             => 'div,b,strong,i,em,u,a[href|title],ul,ol,li,p[style],br,span[style],img[width|height|alt|src],video[src|type|width|height|poster|preload|controls],source[src|type]',
             'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align',
             'AutoFormat.AutoParagraph' => true,
-            'AutoFormat.RemoveEmpty'   => true,
+            'AutoFormat.RemoveEmpty'   => false,
         ],
         'test'    => [
             'Attr.EnableID' => 'true',
@@ -68,7 +68,7 @@ return [
 					'preload' => 'Enum#auto,metadata,none',
 					'controls' => 'Bool',
                 ]],
-                ['source', 'Block', 'Flow', 'Common', [
+                ['source', 'Block', 'Empty', 'Common', [
 					'src' => 'URI',
 					'type' => 'Text',
                 ]],

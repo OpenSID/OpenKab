@@ -52,6 +52,10 @@ class Controller extends BaseController
             return;
         }
 
+        if(app()->environment('testing')){
+            return;
+        }
+
         if (cache()->get('track') != null && cache()->get('track') == date('Y m d')) {
             return;
         }

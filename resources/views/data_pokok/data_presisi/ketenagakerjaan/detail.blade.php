@@ -5,7 +5,7 @@
 @section('title', 'DATA')
 
 @section('content_header')
-    <h1>Data {{ $data->nama_kepala_keluarga }} ({{$data->no_kartu_rumah}})</h1>
+    <h1>Data {{ $data->nama_kepala_keluarga ?? '-' }} ({{ $data->no_kartu_rumah ?? '-' }})</h1>
 @stop
 
 @section('content')

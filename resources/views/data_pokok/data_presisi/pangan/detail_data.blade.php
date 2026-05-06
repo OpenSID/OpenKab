@@ -59,7 +59,7 @@
 @section('js')
 <script nonce="{{ csp_nonce() }}">
     document.addEventListener("DOMContentLoaded", function(event) {
-        const headers = @include('layouts.components.header_bearer_api_gabungan');
+        const headers = @include('layouts.components.header_bearer_api_gabungan');        
         var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pangan' }}");
         var pangan = $('#detail-pangan').DataTable({
             processing: true,

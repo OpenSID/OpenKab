@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\DetailDataJaminanSosialRequest;
 use Illuminate\View\View;
 
 class DataPresisiJaminanSosialController extends Controller
 {    
-    public function detailData(Request $request): View
+    public function detailData(DetailDataJaminanSosialRequest $request): View
     {
         $title = $request->filled('judul') ? htmlspecialchars(strip_tags($request->input('judul'))) : '';
         $colomn = '';

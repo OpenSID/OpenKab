@@ -3,11 +3,18 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\View;
+use Tests\BaseTestCase;
 use Tests\TestCase;
 
-class DataPresisiJaminanSosialControllerTest extends TestCase
+class DataPresisiJaminanSosialControllerTest extends BaseTestCase
 {
     use WithoutMiddleware;
+
+    public function setUp(): void
+    {
+        parent::setUp();        
+    }
 
     public function testDetailDataWithoutParameters()
     {

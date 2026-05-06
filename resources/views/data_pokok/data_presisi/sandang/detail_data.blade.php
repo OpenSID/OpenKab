@@ -3,7 +3,7 @@
 @section('title', $title)
 
 @section('content_header')
-<h1>{{ $title }}</h1>
+<h1>{{ html_entity_decode($title) }}</h1>
 @stop
 
 @section('content')
@@ -19,30 +19,21 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="detail-pangan">
+                    <table class="table table-striped" id="detail-sandang">
                         <thead>
                             <tr>
                                 <th>NO</th>
                                 <th>NIK</th>
                                 <th>NOMOR KK</th>
-                                <th>NAMA</th>
-                                <th>JENIS LAHAN</th>
-                                <th>LUAS LAHAN</th>
-                                <th>LUAS TANAM</th>
-                                <th>STATUS LAHAN</th>
-                                <th>KOMODITI UTAMA TANAMAN PANGAN</th>
-                                <th>KOMODITI TANAMAN PANGAN LAINNYA</th>
-                                <th>JUMLAH BERDASARKAN JENIS KOMODITI</th>
-                                <th>USIA KOMODITI</th>
-                                <th>JENIS PETERNAKAN</th>
-                                <th>JUMLAH POPULASI</th>
-                                <th>JENIS PERIKANAN</th>
-                                <th>FREKWENSI MAKANAN PERHARI</th>
-                                <th>FREKWENSI KONSUMSI SAYUR PERHARI</th>
-                                <th>FREKWENSI KONSUMSI BUAH PERHARI</th>
-                                <th>FREKWENSI KONSUMSI DAGING PERHARI</th>
-                                <th>LONGITUDE</th>
-                                <th>LATITUDE</th>
+                                <th>NAMA</th>                                
+                                <th>JUMLAH PAKAIAN DIMILIKI</th>
+                                <th>FREKWENSI BELI PAKAIAN</th>
+                                <th>JENIS PAKAIAN</th>
+                                <th>FREKWENSI GANTI PAKAIAN</th>
+                                <th>TEMPAT CUCI PAKAIAN</th>
+                                <th>JUMLAH PAKAIAN SERAGAM</th>
+                                <th>JUMLAH PAKAIAN SEMBAHYANG</th>
+                                <th>JUMLAH PAKAIAN KERJA</th>
                                 <th>TANGGAL PENGISIAN</th>
                                 <th>STATUS PENGISIAN</th>
                             </tr>
@@ -60,8 +51,8 @@
 <script nonce="{{ csp_nonce() }}">
     document.addEventListener("DOMContentLoaded", function(event) {
         const headers = @include('layouts.components.header_bearer_api_gabungan');        
-        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pangan' }}");
-        var pangan = $('#detail-pangan').DataTable({
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/sandang/detail' }}");
+        var sandang = $('#detail-sandang').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -96,7 +87,7 @@
                 targets: '_all',
                 className: 'text-nowrap',
             }, {
-                targets: [0, 1, 2, 3, 4, 5],
+                targets: [0, 1, 2, 3, 4],
                 orderable: false,
                 searchable: false,
             }],
@@ -120,71 +111,35 @@
                     orderable: false,
                 },
                 {
-                    data: 'attributes.jenis_lahan',
+                    data: 'attributes.jml_pakaian_yg_dimiliki',
                     orderable: false
                 },
                 {
-                    data: 'attributes.luas_lahan',
+                    data: 'attributes.frekwensi_beli_pakaian_pertahun',
                     orderable: false
                 },
                 {
-                    data: 'attributes.luas_tanam',
+                    data: 'attributes.jenis_pakaian',
                     orderable: false
                 },
                 {
-                    data: 'attributes.status_lahan',
+                    data: 'attributes.frekwensi_ganti_pakaian',
                     orderable: false
                 },
                 {
-                    data: 'attributes.komoditi_utama_tanaman_pangan',
+                    data: 'attributes.tmpt_cuci_pakaian',
                     orderable: false
                 },
                 {
-                    data: 'attributes.komoditi_tanaman_pangan_lainnya',
+                    data: 'attributes.jml_pakaian_seragam',
                     orderable: false
                 },
                 {
-                    data: 'attributes.jumlah_berdasarkan_jenis_komoditi',
+                    data: 'attributes.jml_pakaian_sembahyang',
                     orderable: false
                 },
                 {
-                    data: 'attributes.usia_komoditi',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.jenis_peternakan',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.jumlah_populasi',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.jenis_perikanan',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.frekwensi_makanan_perhari',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.frekwensi_konsumsi_sayur_perhari',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.frekwensi_konsumsi_buah_perhari',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.frekwensi_konsumsi_daging_perhari',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.longitude',
-                    orderable: false
-                },
-                {
-                    data: 'attributes.latitude',
+                    data: 'attributes.jml_pakaian_kerja',
                     orderable: false
                 },
                 {
@@ -197,12 +152,12 @@
                 },
             ],
             order: [
-                [10, 'asc']
+                [5, 'asc']
             ]
         });
-        pangan.on('draw.dt', function() {
-            var PageInfo = $('#detail-pangan').DataTable().page.info();
-            pangan.column(0, {
+        sandang.on('draw.dt', function() {
+            var PageInfo = $('#detail-sandang').DataTable().page.info();
+            sandang.column(0, {
                 page: 'current'
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
@@ -211,7 +166,7 @@
 
         // Event listener for year filter change
         $('#filter-tahun').on('change', function() {
-            pangan.ajax.reload();            
+            sandang.ajax.reload();            
         });
     });
 </script>

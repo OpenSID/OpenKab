@@ -130,6 +130,6 @@ class ImageProxyControllerTest extends BaseTestCase
 
         $response = $this->get('/image-proxy?url=' . urlencode($url));
 
-        $response->assertStatus(500);
+        $response->assertStatus(404);
     }
 }

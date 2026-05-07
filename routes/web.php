@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminWebController;
+use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\Web\ArtikelController;
 use App\Http\Controllers\ApiProxyController;
 use App\Http\Controllers\Auth\ChangePasswordController;
@@ -455,3 +456,6 @@ Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->nam
 Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+
+// Image proxy route
+Route::get('/image-proxy', [ImageProxyController::class, 'proxy'])->name('image.proxy');

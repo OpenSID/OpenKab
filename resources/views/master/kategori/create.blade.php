@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class="form-horizontal" x-on:submit.prevent="simpan()">
+                    <form class="form-horizontal" id="form-create" x-on:submit.prevent="simpan()">
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label" id="kategori"
                                 x-text="dataKategori.label_kategori"></label>
@@ -33,7 +33,7 @@
                     </form>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-info">Simpan</button>
+                    <button type="submit" form="form-create" class="btn btn-info">Simpan</button>
                 </div>
             </div>
         </div>

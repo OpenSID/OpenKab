@@ -12,18 +12,18 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    <form class="form-horizontal" x-on:submit.prevent="simpan()">
+                    <form class="form-horizontal" id="form-edit" x-on:submit.prevent="simpan()">
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Nama Kategori</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" placeholder="Nama Aplikasi"
+                                <input type="text" class="form-control" placeholder="Nama Kategori"
                                     x-model="dataKategori.kategori">
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-info">Simpan</button>
+                    <button type="submit" form="form-edit" class="btn btn-info">Simpan</button>
                 </div>
             </div>
         </div>

@@ -10,6 +10,7 @@
             tinymce.baseURL = '{{ asset('vendor/tinymce') }}';
             tinymce.init({
                 selector: '.editor',
+                license_key: 'gpl',
                 setup: (editor) => {
                     editor.on('blur', () => {
                         tinymce.triggerSave()
@@ -47,7 +48,7 @@
                     })
                 },
                 content_css: false,
-                skin: 'tinymce-5',
+                skin: false,
                 relative_urls: false,
                 remove_script_host: false
             });

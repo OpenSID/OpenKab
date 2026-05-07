@@ -25,10 +25,12 @@ return [
     'settings'      => [
         'default' => [
             'HTML.Doctype'             => 'HTML 4.01 Transitional',
-            'HTML.Allowed'             => 'div,b,strong,i,em,u,a[href|title],ul,ol,li,p[style],br,span[style],img[width|height|alt|src],video[src|type|width|height|poster|preload|controls],source[src|type]',
+            'HTML.Allowed'             => 'div,b,strong,i,em,u,a[href|title],ul,ol,li,p[style],br,span[style],img[width|height|alt|src],video[src|type|width|height|poster|preload|controls],source[src|type],iframe[src|width|height|frameborder|allowfullscreen]',
             'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align',
             'AutoFormat.AutoParagraph' => true,
             'AutoFormat.RemoveEmpty'   => false,
+            'HTML.SafeIframe'          => 'true',
+            'URI.SafeIframeRegexp'     => '%^(http://|https://|//)(www.youtube.com/embed/|www.youtube.com/watch|vimeo.com/|player.vimeo.com/video/|youtu.be/|www.facebook.com/plugins/video/|www.instagram.com/p/|platform.twitter.com/embed/)%',
         ],
         'test'    => [
             'Attr.EnableID' => 'true',

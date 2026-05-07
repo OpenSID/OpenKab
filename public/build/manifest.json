@@ -61,7 +61,7 @@
     "src": "resources/js/app.js"
   },
   "resources/js/tinymce.js": {
-    "file": "assets/tinymce-c9a62ee6.js",
+    "file": "assets/tinymce-580bfc24.js",
     "imports": [
       "resources/sass/tinymce.scss"
     ],
@@ -75,9 +75,9 @@
   },
   "resources/sass/tinymce.scss": {
     "css": [
-      "assets/tinymce-ede989c3.css"
+      "assets/tinymce-049ecb70.css"
     ],
-    "file": "assets/tinymce-7862aad6.js",
+    "file": "assets/tinymce-4bed85b8.js",
     "isEntry": true,
     "src": "resources/sass/tinymce.scss"
   }

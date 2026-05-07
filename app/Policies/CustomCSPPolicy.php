@@ -58,6 +58,10 @@ class CustomCSPPolicy extends Basic
             Keyword::NONE,
         ])->addDirective(Directive::BASE, [
             Keyword::SELF,
+        ])->addDirective(Directive::FRAME, [
+            'self',
+            'https://www.youtube.com',
+            'http://www.youtube.com'
         ]);
     }
 

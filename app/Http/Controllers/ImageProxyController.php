@@ -10,12 +10,8 @@ use Illuminate\Support\Facades\Log;
 
 class ImageProxyController extends Controller
 {
-    /**
-     * Proxy an image from an external URL with caching and validation.
-     *
-     * @param Request $request
-     * @return Response
-     */
+    private const MAX_CACHE_BYTES = 1048576; // 1MB default, configurable
+
     public function proxy(Request $request): Response
     {
         $url = $request->get('url');
@@ -25,18 +21,32 @@ class ImageProxyController extends Controller
             abort(400, 'Invalid URL');
         }
 
-        // Cache key berdasarkan URL
+        $parsed = parse_url($url);
+        $host = $parsed['host'] ?? null;
+
+        if (!$host) {
+            Log::warning('ImageProxyController: Invalid host', ['url' => $url]);
+            abort(400, 'Invalid host');
+        }        
+
         $cacheKey = 'image_proxy_' . md5($url);
 
-        // Cek cache
         $cachedImage = Cache::get($cacheKey);
         if ($cachedImage) {
             Log::info('ImageProxyController: Serving cached image', ['url' => $url]);
             return response($cachedImage['content'])->header('Content-Type', $cachedImage['content_type']);
         }
 
-        Log::info('ImageProxyController: Fetching image from external URL', ['url' => $url]);
-        $response = Http::timeout(10)->get($url);
+        $timeout = config('image_proxy.default_timeout', 10);
+        try {
+            $response = Http::timeout($timeout)->get($url);
+        } catch (\Exception $e) {
+            Log::warning('ImageProxyController: External image request failed', [
+                'url' => $url,
+                'error' => $e->getMessage()
+            ]);
+            abort(404, 'Image not found');
+        }
 
         if (!$response->successful()) {
             Log::warning('ImageProxyController: External image request failed', [
@@ -49,7 +59,6 @@ class ImageProxyController extends Controller
         $content = $response->body();
         $contentType = $response->header('Content-Type') ?? '';
 
-        // Pastikan ini gambar
         if (!str_starts_with($contentType, 'image/')) {
             Log::warning('ImageProxyController: URL does not point to an image', [
                 'url' => $url,
@@ -58,9 +67,15 @@ class ImageProxyController extends Controller
             abort(400, 'URL does not point to an image');
         }
 
-        // Cache selama 1 jam
-        Cache::put($cacheKey, ['content' => $content, 'content_type' => $contentType], 3600);
-        Log::info('ImageProxyController: Image cached and served', ['url' => $url, 'content_type' => $contentType]);
+        $maxCacheBytes = config('image_proxy.max_cache_bytes', self::MAX_CACHE_BYTES);
+        $bytes = strlen($content);
+
+        if ($bytes <= $maxCacheBytes) {
+            Cache::put($cacheKey, ['content' => $content, 'content_type' => $contentType], config('image_proxy.cache_ttl', 3600));
+            Log::info('ImageProxyController: Image cached and served', ['url' => $url, 'content_type' => $contentType, 'bytes' => $bytes]);
+        } else {
+            Log::warning('ImageProxyController: Skipping cache, payload too large', ['url' => $url, 'bytes' => $bytes, 'max' => $maxCacheBytes]);
+        }
 
         return response($content)->header('Content-Type', $contentType);
     }

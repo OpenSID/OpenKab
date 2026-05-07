@@ -457,5 +457,5 @@ Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name(
 Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
 
-// Image proxy route
-Route::get('/image-proxy', [ImageProxyController::class, 'proxy'])->name('image.proxy');
+// Image proxy route with rate limiting
+Route::middleware('throttle:30,1')->get('/image-proxy', [ImageProxyController::class, 'proxy'])->name('image.proxy');

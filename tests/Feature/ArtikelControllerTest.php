@@ -22,10 +22,22 @@ class ArtikelControllerTest extends BaseTestCase
         $response = $this->get(route('master-data-artikel.create'));
         $response->assertStatus(200);
         $response->assertViewIs('master.artikel.create');
+        $response->assertViewHas(['canwrite', 'canedit', 'candelete']);
         $response->assertSee('Tambah Artikel');
         $response->assertSee('Judul Artikel');
         $response->assertSee('Isi Artikel');
         $response->assertSee('Kategori');
+    }
+
+    /** @test */
+    public function artikel_create_has_empty_kategori_popup_guard()
+    {
+        $response = $this->get(route('master-data-artikel.create'));
+        $response->assertStatus(200);
+
+        $response->assertSee('hasShownKategoriKosongPopup: false', false);
+        $response->assertSee('if (this.hasShownKategoriKosongPopup)', false);
+        $response->assertSee('this.hasShownKategoriKosongPopup = true', false);
     }
 
     /** @test */

@@ -30,3 +30,29 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    @if(count($categories) == 0)
+    <script nonce="{{ csp_nonce() }}">
+        console.log('Category check: empty');
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof Swal === 'undefined') {
+                console.error('Swal is not defined');
+                return;
+            }
+            Swal.fire({
+                icon: 'info',
+                title: 'Kategori Belum Tersedia',
+                text: 'Kategori artikel wajib diisi. Buat kategori artikel terlebih dahulu sebelum menambahkan artikel.',
+                showCancelButton: true,
+                confirmButtonText: 'Buat Kategori',
+                cancelButtonText: 'Nanti Saja'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('categories.create') }}";
+                }
+            });
+        });
+    </script>
+    @endif
+@endpush

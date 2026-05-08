@@ -1,4 +1,4 @@
-Di rilis ini, versi 2604.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2605.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
@@ -8,12 +8,17 @@ Di rilis ini, versi 2604.0.1 berisi penambahan dan perbaikan yang diminta penggu
 4. [#1002](https://github.com/OpenSID/OpenKab/issues/1002) Buat Halaman Detail Pendidikan di Statistik Presisi
 5. [#1001](https://github.com/OpenSID/OpenKab/issues/1001) Buat Halaman Detail Ketenagakerjaan di Statistik Presisi
 6. [#1000](https://github.com/OpenSID/OpenKab/issues/1000) Buat Halaman Detail Keagamaan di Statistik Presisi
-7. [#1021](https://github.com/OpenSID/OpenKab/issues/1021) Ubah field isi artikel menjadi rich editor
+7. [#1000](https://github.com/OpenSID/OpenKab/issues/1000) Buat Halaman Detail Jaminan Sosial di Statistik Presisi
+8. [#1021](https://github.com/OpenSID/OpenKab/issues/1021) Ubah field isi artikel menjadi rich editor
+9. [#1025](https://github.com/OpenSID/OpenKab/issues/1025) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel opensid
+10. [#1031](https://github.com/OpenSID/OpenKab/issues/1031) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel di pengaturan web -> artikel
 
 
 
 #### Perbaikan BUG
 1. [#1023](https://github.com/OpenSID/OpenKab/issues/1023) Percobaan login gagal terkadang error 500
+2. [#1026](https://github.com/OpenSID/OpenKab/issues/1026) Perbaikan fungsi insert media dan gambar pada tinymce artikel 
+3. [#1032](https://github.com/OpenSID/OpenKab/issues/1032) Perbaikan Tombol enter refresh halaman di kategori artikel opensid
 
 #### Perubahan Teknis
 

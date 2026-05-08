@@ -318,6 +318,10 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         })
             ->middleware(['permission:datapresisi-ketenagakerjaan-read']);
 
+        Route::prefix('jaminan-sosial')->group(function () {            
+            Route::get('/detail_data', [App\Http\Controllers\DataPresisiJaminanSosialController::class, 'detailData'])->name('data-pokok.data-presisi-jaminan-sosial.detail_data');            
+        })
+            ->middleware(['permission:datapresisi-jaminan-sosial-read']);        
         Route::prefix('aktivitas-keagamaan')->group(function () {
             Route::get('detail_data', [App\Http\Controllers\DataPresisiAktivitasKeagamaanController::class, 'detailData'])->name('data-pokok.data-presisi-aktivitas-keagamaan.detail_data');
         })

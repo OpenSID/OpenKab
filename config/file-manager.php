@@ -83,14 +83,14 @@ return [
      *
      * null - no restrictions
      */
-    'maxUploadFileSize' => 1024,
+    'maxUploadFileSize' => 5120, // 5 MB
 
     /**
      * File upload - Allow these file types
      *
      * [] - no restrictions
      */
-    'allowFileTypes'    => ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'],
+    'allowFileTypes'    => ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp','mp4','mkv','mov'],
 
     /**
      * Show / Hide system files and folders

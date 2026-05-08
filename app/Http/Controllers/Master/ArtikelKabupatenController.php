@@ -32,7 +32,9 @@ class ArtikelKabupatenController extends Controller
      */
     public function create(): View
     {
-        return view('master.artikel.create');
+        $listPermission = $this->generateListPermission();
+
+        return view('master.artikel.create')->with($listPermission);
     }
 
     /**

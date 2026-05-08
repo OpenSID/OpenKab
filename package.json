@@ -35,6 +35,6 @@
         "select2": "^4.1.0-rc.0",
         "select2-bootstrap4-theme": "^1.0.0",
         "sweetalert2": "^11.7.27",
-        "tinymce": "^6.7.0"
+        "tinymce": "^8.5.0"
     }
 }

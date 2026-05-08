@@ -307,6 +307,7 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::prefix('seni-budaya')->group(function () {
             Route::get('/', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'index'])->name('data-pokok.data-presisi-seni-budaya.index');
             Route::get('/detail', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'detail'])->name('data-pokok.data-presisi-seni-budaya.detail');
+            Route::get('/detail_data', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'detailData'])->name('data-pokok.data-presisi-seni-budaya.detail_data');
             Route::get('cetak', [App\Http\Controllers\DataPresisiSeniBudayaController::class, 'cetak'])->name('data-pokok.data-presisi-seni-budaya.cetak');
         })
             ->middleware(['permission:datapresisi-seni-budaya-read']);

@@ -10,9 +10,10 @@ Di rilis ini, versi 2605.0.1 berisi penambahan dan perbaikan yang diminta penggu
 6. [#1000](https://github.com/OpenSID/OpenKab/issues/1000) Buat Halaman Detail Keagamaan di Statistik Presisi
 7. [#999](https://github.com/OpenSID/OpenKab/issues/999) Buat Halaman Detail Jaminan Sosial di Statistik Presisi
 8. [#998](https://github.com/OpenSID/OpenKab/issues/998) Buat Halaman Detail Kesehatan di Statistik Presisi
-9. [#1021](https://github.com/OpenSID/OpenKab/issues/1021) Ubah field isi artikel menjadi rich editor
-10. [#1025](https://github.com/OpenSID/OpenKab/issues/1025) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel opensid
-11. [#1031](https://github.com/OpenSID/OpenKab/issues/1031) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel di pengaturan web -> artikel
+9. [#1005](https://github.com/OpenSID/OpenKab/issues/1005) Buat Halaman Detail Seni di Statistik Presisi
+10. [#1021](https://github.com/OpenSID/OpenKab/issues/1021) Ubah field isi artikel menjadi rich editor
+11. [#1025](https://github.com/OpenSID/OpenKab/issues/1025) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel opensid
+12. [#1031](https://github.com/OpenSID/OpenKab/issues/1031) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel di pengaturan web -> artikel
 
 
 

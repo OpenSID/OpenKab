@@ -390,6 +390,7 @@
                         urlDetail.searchParams.set('filter[nilai]', nilaiDb);
                         urlDetail.searchParams.set('filter[tipe]', tipeValue);
                         urlDetail.searchParams.set('tahun', filterTahun.val());
+                        urlDetail.searchParams.set('judul', judul);
                         urlDetail.searchParams.set('nama', nilai);
                         urlDetail.searchParams.set('tipe', $('.pilih-kategori > a.active').text().trim());
                         urlDetail.searchParams.set('chart-view', true);

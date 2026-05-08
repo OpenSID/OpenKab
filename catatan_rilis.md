@@ -15,7 +15,8 @@ Di rilis ini, versi 2605.0.1 berisi penambahan dan perbaikan yang diminta penggu
 #### Perbaikan BUG
 1. [#1023](https://github.com/OpenSID/OpenKab/issues/1023) Percobaan login gagal terkadang error 500
 2. [#1025](https://github.com/OpenSID/OpenKab/issues/1025) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel opensid
-3. [#1026](https://github.com/OpenSID/OpenKab/issues/1026) Perbaiki fungsi insert media dan gambar pada tinymce artikel 
+3. [#1026](https://github.com/OpenSID/OpenKab/issues/1026) Perbaikan fungsi insert media dan gambar pada tinymce artikel 
+4. [#1032](https://github.com/OpenSID/OpenKab/issues/1032) Perbaikan Tombol enter refresh halaman di kategori artikel opensid
 
 #### Perubahan Teknis
 

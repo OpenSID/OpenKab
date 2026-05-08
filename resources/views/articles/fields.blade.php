@@ -1,4 +1,5 @@
 <div class="row">
+    <!-- Debug: Count Categories = {{ count($categories) }} -->
     <div class="col-9">
 
         <!-- Title Field -->
@@ -22,7 +23,14 @@
         <!-- Category Id Field -->
         <div class="form-group">
             {!! Html::label('Kategori', 'category_id') !!}
-            {!! Html::select('category_id', $categories)->class('form-control select2')->required()->value(old('category_id', $article->category_id ?? null)) !!}
+            @if(count($categories) == 0)
+                {!! Html::select('category_id', $categories)->class('form-control select2')->required()->value(old('category_id', $article->category_id ?? null))->attribute('disabled', 'disabled') !!}
+                <small class="form-text text-danger">
+                    Kategori artikel belum tersedia. <a href="{{ route('categories.create') }}">Buat kategori artikel sekarang</a>.
+                </small>
+            @else
+                {!! Html::select('category_id', $categories)->class('form-control select2')->required()->value(old('category_id', $article->category_id ?? null)) !!}
+            @endif
         </div>
 
         <!-- Category Id Field -->

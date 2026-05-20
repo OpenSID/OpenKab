@@ -1,4 +1,4 @@
-Di rilis ini, versi 2605.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2606.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
@@ -21,6 +21,7 @@ Di rilis ini, versi 2605.0.1 berisi penambahan dan perbaikan yang diminta penggu
 1. [#1023](https://github.com/OpenSID/OpenKab/issues/1023) Percobaan login gagal terkadang error 500
 2. [#1026](https://github.com/OpenSID/OpenKab/issues/1026) Perbaikan fungsi insert media dan gambar pada tinymce artikel 
 3. [#1032](https://github.com/OpenSID/OpenKab/issues/1032) Perbaikan Tombol enter refresh halaman di kategori artikel opensid
+4. [#1037](https://github.com/OpenSID/OpenKab/issues/1037) Perbaikan Gambar desa aktif pada halaman website openkab masih statis
 
 #### Perubahan Teknis
 

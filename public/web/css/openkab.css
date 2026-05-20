@@ -196,7 +196,23 @@ a {
 }
 
 @media (max-width: 768px) {
-    .header-carousel .owl-nav {
+.header-carousel {
+    min-height: 350px;
+}
+
+.header-carousel .owl-carousel-item {
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-carousel .owl-carousel-item img {
+    max-height: 350px;
+    object-fit: contain;
+}
+
+.header-carousel .owl-nav {
         left: 25px;
     }
 }

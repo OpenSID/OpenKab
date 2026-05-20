@@ -22,6 +22,7 @@ Di rilis ini, versi 2606.0.0 berisi penambahan dan perbaikan yang diminta penggu
 2. [#1026](https://github.com/OpenSID/OpenKab/issues/1026) Perbaikan fungsi insert media dan gambar pada tinymce artikel 
 3. [#1032](https://github.com/OpenSID/OpenKab/issues/1032) Perbaikan Tombol enter refresh halaman di kategori artikel opensid
 4. [#1037](https://github.com/OpenSID/OpenKab/issues/1037) Perbaikan Gambar desa aktif pada halaman website openkab masih statis
+5. [#1039](https://github.com/OpenSID/OpenKab/issues/1039) Perbaikan Tampilan halaman web ketika belum ditambahkan gambar slider tidak tampil dengan baik
 
 #### Perubahan Teknis
 

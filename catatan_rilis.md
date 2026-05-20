@@ -14,6 +14,7 @@ Di rilis ini, versi 2606.0.0 berisi penambahan dan perbaikan yang diminta penggu
 10. [#1021](https://github.com/OpenSID/OpenKab/issues/1021) Ubah field isi artikel menjadi rich editor
 11. [#1025](https://github.com/OpenSID/OpenKab/issues/1025) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel opensid
 12. [#1031](https://github.com/OpenSID/OpenKab/issues/1031) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel di pengaturan web -> artikel
+13. [#1041](https://github.com/OpenSID/OpenKab/issues/1041) Tambahkan fungsi global untuk debounce search datatable
 
 
 

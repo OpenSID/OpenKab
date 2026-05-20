@@ -16,7 +16,7 @@
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="kelurahan-item rounded overflow-hidden">
                             <div class="position-relative overflow-hidden">
-                                <a href=""><img class="img-fluid" src="{{ asset('web/img/keluarahan-1.jpg') }}"
+                                <a href=""><img class="img-fluid logo-desa-elm" src="{{ asset('web/img/keluarahan-1.jpg') }}"
                                         alt=""></a>
                             </div>
                             <div class="p-4 pb-0">
@@ -57,6 +57,9 @@
                     result.data.forEach((item, index) => {
                         _elm = $('.replace-content-property .kelurahan-item').eq(index)
                         _elm.find('.nama-desa-elm').text(item.attributes.nama_desa)
+                        if(item.attributes.logo){
+                            _elm.find('.logo-desa-elm').attr('src','/image-proxy?url=' + encodeURIComponent(item.attributes.logo))
+                        }                        
                         _elm.find('.website-elm').attr('href', item.attributes.website ?? '#')
                         _elm.find('.penduduk-elm').html(
                             '<i class="fa fa-users text-primary me-2"></i>' + item.attributes
@@ -67,10 +70,15 @@
                         _elm.find('.keluarga-elm').html(
                             '<i class="fa fa-venus-mars text-primary me-2"></i>' + item
                             .attributes.keluarga + ' Keluarga')
-                        _elm.find('.rtm-elm').html('<i class="fa fa-home text-primary me-2"></i>' +
-                            item.attributes.rtm + ' RTM')
-                    })
-                }
+                         _elm.find('.rtm-elm').html('<i class="fa fa-home text-primary me-2"></i>' +
+                             item.attributes.rtm + ' RTM')
+                     })
+
+                     // Error handler untuk gambar logo yang gagal load
+                     $('.logo-desa-elm').off('error').on('error', function() {
+                         $(this).attr('src', '{{ asset('web/img/keluarahan-1.jpg') }}');
+                     });
+             }
             }, 'json')           
         });
     </script>

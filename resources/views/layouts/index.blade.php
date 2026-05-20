@@ -24,20 +24,20 @@ Seluruh hak cipta dilindungi.
 
         $.ajax({
             url: url,
-            type: 'GET',            
+            type: 'GET',
             success: function(response) {
                 if (callback) callback(response);
             },
             error: function(response) {
                 if (callback) callback({
-                    data: [],                    
+                    data: [],
                     meta: {
                         pagination: {
                             total: 0
                         }
                     }
                 });
-                
+
                 Swal.fire(
                     'Error!',
                     response.responseJSON.error || 'Gagal mengambil data dari API',
@@ -46,7 +46,7 @@ Seluruh hak cipta dilindungi.
             }
         });
     }
-    document.addEventListener("DOMContentLoaded", function(event) {        
+    document.addEventListener("DOMContentLoaded", function(event) {
         $.ajax({
             type: "get",
             url: "/api/v1/identitas",
@@ -77,7 +77,7 @@ Seluruh hak cipta dilindungi.
             if (e.namespace !== 'dt') return;
 
             var table = new $.fn.dataTable.Api(settings);
-            var searchDelay = table.init().searchDelay || 1500;
+            var searchDelay = table.init().searchDelay || 500;
             var searchInput = $('div.dataTables_filter input', table.table().container());
             var debounceTimer = null;
             var previousSearch = null;

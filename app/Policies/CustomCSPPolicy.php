@@ -24,7 +24,7 @@ class CustomCSPPolicy extends Basic
             $this->addDirective(Directive::IMG, ['blob:'])
                 ->addDirective(Directive::STYLE, ['unsafe-inline']);
         }
-        $this->addDirective(Directive::IMG, ['data:', 'https://tile.openstreetmap.org/'])
+        $this->addDirective(Directive::IMG, [Keyword::SELF, 'data:', 'https://tile.openstreetmap.org/'])
         ->addDirective(Directive::STYLE, [
             // 'unsafe-inline',
             'https://fonts.googleapis.com/',

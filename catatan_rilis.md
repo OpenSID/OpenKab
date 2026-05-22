@@ -1,33 +1,32 @@
-Di rilis ini, versi 2604.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2605.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
-1. [#946](https://github.com/OpenSID/OpenKab/issues/946) Penambahan filter tahun pada statistik papan & sandang data presisi.
-2. [#948](https://github.com/OpenSID/OpenKab/issues/948) Penambahan filter tahun pada statistik seni budaya & pendidikan data presisi.
-3. [#952](https://github.com/OpenSID/OpenKab/issues/952) Penambahan filter tahun pada statistik Aktivitas Keagamaan, ketenagakerjaan dan adat data presisi.
-4. [#942](https://github.com/OpenSID/OpenKab/issues/942) Penambahan fitur menampilkan artikel OpenSID di halaman publik.
-5. [#372](https://github.com/OpenSID/API-Database-Gabungan/issues/372) Penambahan judul dan kategori ketika hapus artikel.
-6. [#988](https://github.com/OpenSID/OpenKab/issues/988) Sesuaikan sort di datapresisi pangan.
-7. [#995](https://github.com/OpenSID/OpenKab/issues/995) Penambahan fitur untuk laporan keaktifan desa melalui beberapa acuan.
-1. [#372](https://github.com/OpenSID/API-Database-Gabungan/issues/372) Penambahan judul dan kategori ketika hapus artikel.
+1. [#997](https://github.com/OpenSID/OpenKab/issues/997) Buat Halaman Detail Pangan di Statistik Presisi
+2. [#1003](https://github.com/OpenSID/OpenKab/issues/1003) Buat Halaman Detail Sandang di Statistik Presisi
+3. [#1004](https://github.com/OpenSID/OpenKab/issues/1004) Buat Halaman Detail Papan di Statistik Presisi
+4. [#1002](https://github.com/OpenSID/OpenKab/issues/1002) Buat Halaman Detail Pendidikan di Statistik Presisi
+5. [#1001](https://github.com/OpenSID/OpenKab/issues/1001) Buat Halaman Detail Ketenagakerjaan di Statistik Presisi
+6. [#1000](https://github.com/OpenSID/OpenKab/issues/1000) Buat Halaman Detail Keagamaan di Statistik Presisi
+7. [#999](https://github.com/OpenSID/OpenKab/issues/999) Buat Halaman Detail Jaminan Sosial di Statistik Presisi
+8. [#998](https://github.com/OpenSID/OpenKab/issues/998) Buat Halaman Detail Kesehatan di Statistik Presisi
+9. [#1005](https://github.com/OpenSID/OpenKab/issues/1005) Buat Halaman Detail Seni di Statistik Presisi
+10. [#1021](https://github.com/OpenSID/OpenKab/issues/1021) Ubah field isi artikel menjadi rich editor
+11. [#1025](https://github.com/OpenSID/OpenKab/issues/1025) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel opensid
+12. [#1031](https://github.com/OpenSID/OpenKab/issues/1031) Arahkan/Infokan pembuatan kategori artikel ketika kategori kosong saat membuat artikel di pengaturan web -> artikel
+13. [#1041](https://github.com/OpenSID/OpenKab/issues/1041) Tambahkan fungsi global untuk debounce search datatable
+
 
 
 #### Perbaikan BUG
-
-1. [#954](https://github.com/OpenSID/OpenKab/issues/954) Perbaikan list menu tidak tampil.
-2. [#369](https://github.com/OpenSID/API-Database-Gabungan/issues/369)   Perbaikan cache artikel tidak dihapus setelah operasi hapus.
-3. [#1015](https://github.com/OpenSID/OpenKab/issues/1015) Batasi opsi kabupaten berdasarkan pengaturan yang ada di API satu data.
+1. [#1023](https://github.com/OpenSID/OpenKab/issues/1023) Percobaan login gagal terkadang error 500
+2. [#1026](https://github.com/OpenSID/OpenKab/issues/1026) Perbaikan fungsi insert media dan gambar pada tinymce artikel 
+3. [#1032](https://github.com/OpenSID/OpenKab/issues/1032) Perbaikan Tombol enter refresh halaman di kategori artikel opensid
+4. [#1037](https://github.com/OpenSID/OpenKab/issues/1037) Perbaikan Gambar desa aktif pada halaman website openkab masih statis
+5. [#1039](https://github.com/OpenSID/OpenKab/issues/1039) Perbaikan Tampilan halaman web ketika belum ditambahkan gambar slider tidak tampil dengan baik
 
 #### Perubahan Teknis
 
-1. [#943](https://github.com/OpenSID/OpenKab/issues/943) N+1 Query problem pada manajemen user.
-2. [#969](https://github.com/OpenSID/OpenKab/issues/969) Terapkan CAPTCHA pada Login & Endpoint Auth untuk Batasi Bot/Bruteforce.
-3. [#962](https://github.com/OpenSID/OpenKab/issues/962) Pencegahan Kerentanan XSS (Cross-Site Scripting).
-4. [#966](https://github.com/OpenSID/OpenKab/issues/966) Prevent IDOR (Insecure Direct Object Reference) pada Endpoint Berbasis ID.
-5. [#968](https://github.com/OpenSID/OpenKab/issues/968) Jadikan Content Security Policy (CSP) Selalu Aktif, Tidak Boleh Auto-Disable Walau di Debug/Dev.
-6. [#963](https://github.com/OpenSID/OpenKab/issues/963) Enforce Strong Password Policy di Seluruh Fitur (Change/Reset/Registration).
-7. [#996](https://github.com/OpenSID/OpenKab/issues/996) Perbaikan  parameter identitas OpenKab agar API hanya mengembalikan data sesuai dengan Kabupaten yang bersangkutan
-1. [#369](https://github.com/OpenSID/API-Database-Gabungan/issues/369)   Perbaikan cache artikel tidak dihapus setelah operasi hapus.
 
 #### Perubahan Teknis
 

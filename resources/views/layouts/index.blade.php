@@ -1,5 +1,7 @@
 @extends('adminlte::page')
+@section('meta_tags')
 <meta name="identitas-openkab" content="{{ str_replace('.','',$identitasAplikasi['kode_kabupaten'] ?? '') }}">
+@endsection
 @section('footer')
 <strong>Hak cipta © <?= date('Y') ?> <a href="https://opendesa.id">OpenDesa</a>.</strong>
 Seluruh hak cipta dilindungi.
@@ -22,20 +24,20 @@ Seluruh hak cipta dilindungi.
 
         $.ajax({
             url: url,
-            type: 'GET',            
+            type: 'GET',
             success: function(response) {
                 if (callback) callback(response);
             },
             error: function(response) {
                 if (callback) callback({
-                    data: [],                    
+                    data: [],
                     meta: {
                         pagination: {
                             total: 0
                         }
                     }
                 });
-                
+
                 Swal.fire(
                     'Error!',
                     response.responseJSON.error || 'Gagal mengambil data dari API',
@@ -44,7 +46,7 @@ Seluruh hak cipta dilindungi.
             }
         });
     }
-    document.addEventListener("DOMContentLoaded", function(event) {        
+    document.addEventListener("DOMContentLoaded", function(event) {
         $.ajax({
             type: "get",
             url: "/api/v1/identitas",
@@ -67,7 +69,36 @@ Seluruh hak cipta dilindungi.
         $.extend($.fn.dataTable.defaults, {
             language: {
                 url: "{{ asset('vendor/datatable/id.json') }}"
-            }
+            },
+            searchDelay: 500,
+        });
+
+        $(document).on('init.dt', function(e, settings) {
+            if (e.namespace !== 'dt') return;
+
+            var table = new $.fn.dataTable.Api(settings);
+            var searchDelay = table.init().searchDelay || 500;
+            var searchInput = $('div.dataTables_filter input', table.table().container());
+            var debounceTimer = null;
+            var previousSearch = null;
+
+            searchInput.off('keyup.DT input.DT search.DT keydown.DT');
+
+            searchInput.on('keyup input', function() {
+                var currentValue = this.value;
+
+                if (previousSearch === currentValue) return;
+
+                previousSearch = currentValue;
+
+                clearTimeout(debounceTimer);
+
+                debounceTimer = setTimeout(function() {
+                    if (table.search() !== currentValue) {
+                        table.search(currentValue).draw();
+                    }
+                }, searchDelay);
+            });
         });
 
 

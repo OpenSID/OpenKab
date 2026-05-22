@@ -1,6 +1,7 @@
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import inject from "@rollup/plugin-inject"
+import path from 'path';
 
 export default defineConfig({
     plugins: [
@@ -20,6 +21,11 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    resolve: {
+        alias: {
+            '@tinymce': path.resolve(__dirname, 'node_modules/tinymce'),
+        },
+    },
     build: {
         rollupOptions: {
           output: {

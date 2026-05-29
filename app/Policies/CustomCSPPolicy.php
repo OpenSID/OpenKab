@@ -54,6 +54,7 @@ class CustomCSPPolicy extends Basic
         ])->addDirective(Directive::CONNECT, [
             config('app.serverPantau'),
             config('app.databaseGabunganUrl'),
+            'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js.map',
         ])->addDirective(Directive::OBJECT, [
             Keyword::NONE,
         ])->addDirective(Directive::BASE, [

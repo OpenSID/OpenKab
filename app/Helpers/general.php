@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Laravel\Facades\Image;
 
 define('SASARAN', serialize([
     '1' => 'Penduduk',
@@ -187,7 +187,7 @@ if (! function_exists('default_favicon')) {
             $pathFavicon = public_path('favicons/'.$favicon);
             if (! file_exists($pathFavicon)) {
                 $filePath = public_path('assets/img/opensid_logo.png');
-                Image::make($filePath)->resize(96, 96)->save($pathFavicon, '100', 'png');
+                Image::read($filePath)->resize(width: 96, height: 96)->save($pathFavicon, quality: 100);
             }
         }
     }

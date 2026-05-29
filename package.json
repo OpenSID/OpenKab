@@ -15,13 +15,18 @@
         "admin-lte": "3.2.0",
         "axios": "^1.1.2",
         "jquery": "^3.6",
-        "laravel-vite-plugin": "^0.7.2",
+        "laravel-vite-plugin": "^2.0.0",
         "lodash": "^4.17.19",
         "popper.js": "^1.16.1",
         "postcss": "^8.1.14",
         "sass": "^1.56.1",
         "sass-loader": "^8.0.0",
-        "vite": "^4.0.0"
+        "vite": "^7.0.0"
+    },
+    "overrides": {
+        "admin-lte": {
+            "summernote": "0.9.1"
+        }
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.4.2",

@@ -32,7 +32,7 @@ if (! function_exists('openkab_versi')) {
      */
     function openkab_versi()
     {
-        return 'v2604.0.2';
+        return 'v2605.0.1';
     }
 }
 

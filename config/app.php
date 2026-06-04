@@ -246,9 +246,9 @@ return [
     |
     */
 
-    'otp_token_expires_minutes' => env('OTP_TOKEN_EXPIRES_MINUTES', 5),
-    'otp_max_verification_attempts' => env('OTP_MAX_VERIFICATION_ATTEMPTS', 3),
-    'otp_length' => env('OTP_LENGTH', 6),
+    'otp_token_expires_minutes' => (int) env('OTP_TOKEN_EXPIRES_MINUTES', 5),
+    'otp_max_verification_attempts' => (int) env('OTP_MAX_VERIFICATION_ATTEMPTS', 3),
+    'otp_length' => (int) env('OTP_LENGTH', 6),
 
     /*
     |--------------------------------------------------------------------------
@@ -260,12 +260,12 @@ return [
     |
     */
 
-    'otp_setup_max_attempts' => env('OTP_SETUP_MAX_ATTEMPTS', 3),
-    'otp_setup_decay_seconds' => env('OTP_SETUP_DECAY_SECONDS', 300),
-    'otp_verify_max_attempts' => env('OTP_VERIFY_MAX_ATTEMPTS', 5),
-    'otp_verify_decay_seconds' => env('OTP_VERIFY_DECAY_SECONDS', 300),
-    'otp_resend_max_attempts' => env('OTP_RESEND_MAX_ATTEMPTS', 2),
-    'otp_resend_decay_seconds' => env('OTP_RESEND_DECAY_SECONDS', 30),
+    'otp_setup_max_attempts' => (int) env('OTP_SETUP_MAX_ATTEMPTS', 3),
+    'otp_setup_decay_seconds' => (int) env('OTP_SETUP_DECAY_SECONDS', 300),
+    'otp_verify_max_attempts' => (int) env('OTP_VERIFY_MAX_ATTEMPTS', 5),
+    'otp_verify_decay_seconds' => (int) env('OTP_VERIFY_DECAY_SECONDS', 300),
+    'otp_resend_max_attempts' => (int) env('OTP_RESEND_MAX_ATTEMPTS', 2),
+    'otp_resend_decay_seconds' => (int) env('OTP_RESEND_DECAY_SECONDS', 30),
 
     /*
     |--------------------------------------------------------------------------
@@ -278,8 +278,8 @@ return [
     |
     */
 
-    'account_lockout_max_attempts' => env('ACCOUNT_LOCKOUT_MAX_ATTEMPTS', 5),
-    'account_lockout_decay_minutes' => env('ACCOUNT_LOCKOUT_DECAY_MINUTES', 15),
-    'progressive_delay_base_seconds' => env('PROGRESSIVE_DELAY_BASE_SECONDS', 2),
-    'progressive_delay_multiplier' => env('PROGRESSIVE_DELAY_MULTIPLIER', 2),
+    'account_lockout_max_attempts' => (int) env('ACCOUNT_LOCKOUT_MAX_ATTEMPTS', 5),
+    'account_lockout_decay_minutes' => (int) env('ACCOUNT_LOCKOUT_DECAY_MINUTES', 15),
+    'progressive_delay_base_seconds' => (int) env('PROGRESSIVE_DELAY_BASE_SECONDS', 2),
+    'progressive_delay_multiplier' => (int) env('PROGRESSIVE_DELAY_MULTIPLIER', 2),
 ];

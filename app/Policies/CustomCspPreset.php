@@ -16,6 +16,7 @@ class CustomCspPreset implements Preset
             ->add(Directive::OBJECT, Keyword::NONE)
             ->add(Directive::IMG, [Keyword::SELF, 'data:', 'https://tile.openstreetmap.org/', 'blob:'])
             ->add(Directive::STYLE, [
+                Keyword::SELF,
                 'https://fonts.googleapis.com/',
                 'https://fonts.bunny.net/',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
@@ -29,12 +30,15 @@ class CustomCspPreset implements Preset
                 'sha256-hIQQk/yoM15mwdqWhaRQ/qiDh22AXD54o7w5fUsss+w=',
                 'sha256-wXDqcLlNCfwz7CniAXnDuBVLmG9xeJRAiHkMrCetfeQ=',
             ])
+            ->addNonce(Directive::STYLE)
             ->add(Directive::SCRIPT, [
+                Keyword::SELF,
                 'unsafe-eval',
                 'https://cdn.datatables.net/2.0.7/js/dataTables.min.js',
                 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
             ])
+            ->addNonce(Directive::SCRIPT)
             ->add(Directive::FONT, [
                 Keyword::SELF,
                 'data:',
@@ -43,11 +47,12 @@ class CustomCspPreset implements Preset
                 'https://code.ionicframework.com/ionicons/2.0.1/fonts/',
             ])
             ->add(Directive::CONNECT, [
+                Keyword::SELF,
                 config('app.serverPantau'),
                 config('app.databaseGabunganUrl'),
             ])
             ->add(Directive::FRAME, [
-                'self',
+                Keyword::SELF,
                 'https://www.youtube.com',
                 'http://www.youtube.com',
             ]);

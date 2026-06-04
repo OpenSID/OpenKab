@@ -64,7 +64,7 @@ abstract class BaseRepository
     /**
      * Build a query for retrieving all records.
      */
-    public function allQuery(array $search = [], int $skip = null, int $limit = null): Builder
+    public function allQuery(array $search = [], ?int $skip = null, ?int $limit = null): Builder
     {
         $query = $this->model->newQuery();
 
@@ -90,7 +90,7 @@ abstract class BaseRepository
     /**
      * Retrieve all records with given filter criteria.
      */
-    public function all(array $search = [], int $skip = null, int $limit = null, array $columns = ['*']): Collection
+    public function all(array $search = [], ?int $skip = null, ?int $limit = null, array $columns = ['*']): Collection
     {
         $query = $this->allQuery($search, $skip, $limit);
 
@@ -156,7 +156,7 @@ abstract class BaseRepository
     /**
      * Retrieve all records with given filter criteria.
      */
-    public function pluck(array $columns = ['name', 'id'], array $search = [], int $skip = null, int $limit = null): SupportCollection
+    public function pluck(array $columns = ['name', 'id'], array $search = [], ?int $skip = null, ?int $limit = null): SupportCollection
     {
         $query = $this->allQuery($search, $skip, $limit);
 

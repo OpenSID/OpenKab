@@ -193,7 +193,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
+        Intervention\Image\Laravel\ServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Spatie\Csp\CspServiceProvider::class,
         /*
@@ -226,7 +226,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'Image' => Intervention\Image\Facades\Image::class,
+        'Image' => Intervention\Image\Laravel\Facades\Image::class,
         'Html' => Spatie\Html\Facades\Html::class,
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
     ])->toArray(),

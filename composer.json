@@ -8,7 +8,7 @@
         "laravel"
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "akaunting/laravel-apexcharts": "^4.0",
         "alexusmai/laravel-file-manager": "^3.0",
         "bensampo/laravel-enum": "^6.3",

@@ -25,8 +25,13 @@ class RecaptchaV3ServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Override reCAPTCHA v3 configuration with database values
-        $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
+        try {
+            // Override reCAPTCHA v3 configuration with database values
+            $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
+        } catch (\Exception $e) {
+            // Settings table may not exist yet during initial installation
+            return;
+        }
         
         // Only override if captcha is enabled and type is not builtin
         $captchaEnabled = filter_var($settings['captcha_enabled'] ?? true, FILTER_VALIDATE_BOOLEAN);

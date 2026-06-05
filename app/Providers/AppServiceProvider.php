@@ -6,9 +6,12 @@ use App\Http\Transformers\IdentitasTransformer;
 use App\Http\Transformers\SettingTransformer;
 use App\Models\Identitas;
 use App\Models\Setting;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
@@ -33,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->configureRateLimiting();
         $this->bootHttps();
         $this->addValidation();
         $this->addLogQuery();
@@ -62,6 +66,13 @@ class AppServiceProvider extends ServiceProvider
             config()->set(['app.kodeKabupatenApi' => $identitasAplikasi['kode_kabupaten_api'] ?? '']);
             $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
         }
+    }
+
+    protected function configureRateLimiting()
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
     }
 
     public function bootHttps()

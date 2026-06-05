@@ -10,7 +10,7 @@ class DasborDemografiControllerTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    #[Test]
     public function it_can_access_demografi_index()
     {
         $response = $this->get(route('dasbor-demografi'));
@@ -21,7 +21,7 @@ class DasborDemografiControllerTest extends BaseTestCase
         $response->assertViewHas('statistikUrl');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_statistik_url()
     {
         $response = $this->get(route('dasbor-demografi'));
@@ -29,7 +29,7 @@ class DasborDemografiControllerTest extends BaseTestCase
         $response->assertViewHas('statistikUrl', 'api/v1/statistik/penduduk');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_chart_items_structure()
     {
         $response = $this->get(route('dasbor-demografi'));
@@ -43,7 +43,7 @@ class DasborDemografiControllerTest extends BaseTestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function it_has_correct_chart_item_keys()
     {
         $response = $this->get(route('dasbor-demografi'));
@@ -67,7 +67,7 @@ class DasborDemografiControllerTest extends BaseTestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function it_has_correct_chart_item_labels()
     {
         $response = $this->get(route('dasbor-demografi'));
@@ -91,7 +91,7 @@ class DasborDemografiControllerTest extends BaseTestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function it_has_correct_detail_urls_in_chart_items()
     {
         $response = $this->get(route('dasbor-demografi'));

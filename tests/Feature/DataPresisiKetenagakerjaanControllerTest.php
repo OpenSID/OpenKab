@@ -10,7 +10,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
     // Index Tests
     // ==========================================
 
-    /** @test */
+    #[Test]
     public function test_can_access_ketenagakerjaan_index_page(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.index'));
@@ -19,7 +19,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $response->assertViewIs('data_pokok.data_presisi.ketenagakerjaan.index');
     }
 
-    /** @test */
+    #[Test]
     public function test_index_page_has_correct_title(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.index'));
@@ -27,7 +27,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $response->assertViewHas('title', 'Data Presisi Ketenagakerjaan');
     }
 
-    /** @test */
+    #[Test]
     public function test_index_page_contains_required_elements(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.index'));
@@ -44,7 +44,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('filter-tahun', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_index_page_has_table_headers(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.index'));
@@ -65,7 +65,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_index_page_has_excel_download_button(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.index'));
@@ -78,7 +78,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('data_presisi_ketenagakerjaan', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_index_page_has_print_button(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.index'));
@@ -92,7 +92,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
     // Detail Tests
     // ==========================================
 
-    /** @test */
+    #[Test]
     public function test_can_access_ketenagakerjaan_detail_page(): void
     {
         $data = json_encode([
@@ -110,7 +110,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $response->assertViewIs('data_pokok.data_presisi.ketenagakerjaan.detail');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_page_has_decoded_json_data(): void
     {
         $data = json_encode([
@@ -135,7 +135,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals(1, $viewData->jumlah_kk);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_page_displays_kepala_keluarga_name(): void
     {
         $data = json_encode([
@@ -155,7 +155,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('1234567890', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_page_has_detail_table(): void
     {
         $data = json_encode([
@@ -174,7 +174,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('id="detail-ketenagakerjaan"', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_page_has_back_link_to_index(): void
     {
         $data = json_encode([
@@ -197,7 +197,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
     // Cetak Tests
     // ==========================================
 
-    /** @test */
+    #[Test]
     public function test_can_access_ketenagakerjaan_cetak_page(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.cetak'));
@@ -206,7 +206,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $response->assertViewIs('data_pokok.data_presisi.ketenagakerjaan.cetak');
     }
 
-    /** @test */
+    #[Test]
     public function test_cetak_page_has_filter_view_variable(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.cetak'));
@@ -214,7 +214,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $response->assertViewHas('filter');
     }
 
-    /** @test */
+    #[Test]
     public function test_cetak_page_passes_query_string_as_filter(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.cetak') . '?tahun=2024&status=active');
@@ -226,7 +226,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('status=active', $filter);
     }
 
-    /** @test */
+    #[Test]
     public function test_cetak_page_has_table_with_correct_id(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.cetak'));
@@ -236,7 +236,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('id="tabel-ketenagakerjaan"', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_cetak_page_has_correct_table_headers(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.cetak'));
@@ -261,7 +261,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_cetak_page_uses_cetak_layout(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.cetak'));
@@ -276,7 +276,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
     // DetailData Tests
     // ==========================================
 
-    /** @test */
+    #[Test]
     public function test_can_access_ketenagakerjaan_detail_data_page(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data'));
@@ -285,7 +285,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $response->assertViewIs('data_pokok.data_presisi.ketenagakerjaan.detail_data');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_page_has_title_and_colomn(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data'));
@@ -294,7 +294,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $response->assertViewHas('colomn');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_default_title_without_judul(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data'));
@@ -304,7 +304,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('Data Presisi Ketenagakerjaan - ', $title);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_title_includes_judul(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', ['judul' => 'Test Judul']));
@@ -314,7 +314,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('Test Judul', $title);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_title_sanitizes_xss(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', ['judul' => '<script>alert("xss")</script>']));
@@ -325,7 +325,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringNotContainsString('</script>', $title);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_colomn_empty_without_filter(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data'));
@@ -335,7 +335,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('', $colomn);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_colomn_with_valid_filter(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', [
@@ -350,7 +350,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('jenis_pekerjaan:petani', $colomn);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_colomn_empty_when_tipe_missing(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', [
@@ -364,7 +364,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('', $colomn);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_colomn_empty_when_nilai_missing(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', [
@@ -378,7 +378,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('', $colomn);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_colomn_empty_when_tipe_empty_string(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', [
@@ -393,7 +393,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('', $colomn);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_colomn_empty_when_nilai_empty_string(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', [
@@ -408,7 +408,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('', $colomn);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_page_has_detail_table(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data'));
@@ -418,7 +418,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('id="detail-ketenagakerjaan"', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_page_has_filter_tahun_component(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data'));
@@ -428,7 +428,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('filter-tahun', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_page_has_correct_table_headers(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data'));
@@ -453,7 +453,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_validation_requires_filter_tipe_when_filter_nilai_present(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', [
@@ -468,7 +468,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('', $colomn);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_validation_requires_filter_nilai_when_filter_tipe_present(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', [
@@ -483,7 +483,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('', $colomn);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_title_strips_html_tags(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', ['judul' => '<b>Bold</b> <i>Italic</i>']));
@@ -496,7 +496,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertStringContainsString('Italic', $title);
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_title_encodes_special_characters(): void
     {
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail_data', ['judul' => 'Test "Quotes" & <Tags>']));

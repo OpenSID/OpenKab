@@ -43,7 +43,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $this->app->instance(OtpService::class, $this->otpService);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_2fa_activation_page()
     {
         $response = $this->get(route('2fa.activate'));
@@ -53,7 +53,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $response->assertViewHas('user', $this->user);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_enable_2fa_with_email()
     {
         $this->otpService
@@ -81,7 +81,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $this->assertEquals($this->user->email, session('temp_2fa_config.identifier'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_enable_2fa_with_telegram()
     {
         $this->otpService
@@ -109,7 +109,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $this->assertEquals($this->user->telegram_chat_id, session('temp_2fa_config.identifier'));
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_2fa_enable_failure()
     {
         $this->otpService
@@ -132,7 +132,7 @@ class TwoFactorControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_on_2fa_enable()
     {
         // Hit rate limit with new key format (includes IP and User-Agent)
@@ -155,7 +155,7 @@ class TwoFactorControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_verify_and_enable_2fa()
     {
         session(['temp_2fa_config' => [
@@ -194,7 +194,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $this->assertArrayNotHasKey('temp_2fa_config', session()->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_rejects_2fa_verification_without_temp_config()
     {
         $response = $this->postJson(route('2fa.verify'), [
@@ -208,7 +208,7 @@ class TwoFactorControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_2fa_verification_failure()
     {
         session(['temp_2fa_config' => [
@@ -237,7 +237,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $response->assertJsonPath('progressive_delay', 2);
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_on_2fa_verification()
     {
         session(['temp_2fa_config' => [
@@ -265,7 +265,7 @@ class TwoFactorControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_disable_2fa()
     {
         $this->twoFactorService
@@ -283,7 +283,7 @@ class TwoFactorControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_resend_2fa_verification_code()
     {
         session(['temp_2fa_config' => [
@@ -311,7 +311,7 @@ class TwoFactorControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_rejects_resend_without_temp_config()
     {
         $response = $this->postJson(route('2fa.resend'));
@@ -323,7 +323,7 @@ class TwoFactorControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_on_2fa_resend()
     {
         session(['temp_2fa_config' => [
@@ -346,7 +346,7 @@ class TwoFactorControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_2fa_challenge_page()
     {
         $this->user->update([
@@ -382,7 +382,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $response->assertViewIs('auth.2fa-challenge');
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_dashboard_if_2fa_not_enabled()
     {
         $this->user->update(['2fa_enabled' => false]);
@@ -393,7 +393,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $response->assertRedirect(route('dasbor'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_verify_2fa_challenge()
     {
         $this->user->update([
@@ -427,7 +427,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $this->assertTrue(session('2fa_verified'));
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_2fa_challenge_verification_failure()
     {
         $this->user->update([
@@ -457,7 +457,7 @@ class TwoFactorControllerTest extends BaseTestCase
         $response->assertJsonPath('progressive_delay', 2);
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_on_2fa_challenge()
     {
         $this->user->update([

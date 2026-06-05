@@ -12,7 +12,7 @@ class PageControllerCmsTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    #[Test]
     public function halaman_index_dapat_diakses()
     {
         $response = $this->get(route('pages.index'));
@@ -21,7 +21,7 @@ class PageControllerCmsTest extends BaseTestCase
         $response->assertViewIs('pages.index');
     }
 
-    /** @test */
+    #[Test]
     public function halaman_form_tambah_dapat_dibuka()
     {
         $response = $this->get(route('pages.create'));
@@ -30,7 +30,7 @@ class PageControllerCmsTest extends BaseTestCase
         $response->assertViewIs('pages.create');
     }
 
-    /** @test */
+    #[Test]
     public function halaman_baru_dapat_disimpan()
     {
         Storage::fake('public');
@@ -50,7 +50,7 @@ class PageControllerCmsTest extends BaseTestCase
         $this->assertDatabaseHas('pages', ['title' => 'Judul Halaman']);
     }
 
-    /** @test */
+    #[Test]
     public function halaman_dapat_diedit()
     {
         $page = Page::factory()->create();
@@ -62,7 +62,7 @@ class PageControllerCmsTest extends BaseTestCase
         $response->assertViewHas('page');
     }
 
-    /** @test */
+    #[Test]
     public function halaman_dapat_diperbarui()
     {
         $page = Page::factory()->create([
@@ -83,7 +83,7 @@ class PageControllerCmsTest extends BaseTestCase
         $this->assertDatabaseHas('pages', ['title' => 'Baru']);
     }
 
-    /** @test */
+    #[Test]
     public function halaman_dapat_dihapus()
     {
         $page = Page::factory()->create();

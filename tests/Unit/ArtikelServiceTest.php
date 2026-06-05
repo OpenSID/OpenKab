@@ -18,13 +18,13 @@ class ArtikelServiceTest extends TestCase
         $this->service = new ArtikelService();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_instantiate_artikel_service()
     {
         $this->assertInstanceOf(ArtikelService::class, $this->service);
     }
 
-    /** @test */
+    #[Test]
     public function it_builds_cache_key_correctly()
     {
         $reflection = new \ReflectionClass($this->service);
@@ -37,7 +37,7 @@ class ArtikelServiceTest extends TestCase
         $this->assertStringContainsString('artikel', $cacheKey);
     }
 
-    /** @test */
+    #[Test]
     public function clear_cache_removes_cached_data()
     {
         $cacheKey = 'test_artikel_cache';
@@ -50,7 +50,7 @@ class ArtikelServiceTest extends TestCase
         $this->assertFalse(Cache::has($cacheKey));
     }
 
-    /** @test */
+    #[Test]
     public function it_has_cache_ttl_property()
     {
         $reflection = new \ReflectionClass($this->service);
@@ -63,7 +63,7 @@ class ArtikelServiceTest extends TestCase
         $this->assertIsInt($ttl);
     }
 
-    /** @test */
+    #[Test]
     public function artikel_method_returns_collection()
     {
         // Mock API response untuk testing
@@ -72,19 +72,19 @@ class ArtikelServiceTest extends TestCase
         $this->assertTrue(method_exists($this->service, 'artikel'));
     }
 
-    /** @test */
+    #[Test]
     public function artikel_by_id_method_exists()
     {
         $this->assertTrue(method_exists($this->service, 'artikelById'));
     }
 
-    /** @test */
+    #[Test]
     public function clear_cache_method_exists()
     {
         $this->assertTrue(method_exists($this->service, 'clearCache'));
     }
 
-    /** @test */
+    #[Test]
     public function service_extends_base_api_service()
     {
         $this->assertInstanceOf(\App\Services\BaseApiService::class, $this->service);

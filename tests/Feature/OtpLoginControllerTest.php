@@ -55,7 +55,7 @@ class OtpLoginControllerTest extends TestCase
         RateLimiter::clear('otp:resend:' . $this->user->id . ':127.0.0.1:' . hash('xxh64', $userAgent));
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_otp_login_form()
     {
         $response = $this->get('/login/otp');
@@ -66,7 +66,7 @@ class OtpLoginControllerTest extends TestCase
         $response->assertViewHas('captchaView');
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_otp_login_form_with_captcha_when_threshold_reached()
     {
         // Simulate failed attempts to trigger captcha
@@ -84,7 +84,7 @@ class OtpLoginControllerTest extends TestCase
         $response->assertViewHas('captchaView', 'auth.captcha');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_send_otp_with_email_identifier()
     {
         $this->otpService
@@ -112,7 +112,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertEquals('email', session('otp_login_channel'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_send_otp_with_username_identifier()
     {
         // Clear rate limiter untuk test ini
@@ -144,7 +144,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertEquals('email', session('otp_login_channel'));
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_to_send_otp_for_nonexistent_user()
     {
         $response = $this->postJson('/login/otp/send', [
@@ -158,7 +158,7 @@ class OtpLoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_to_send_otp_for_user_without_otp_enabled()
     {
         $userWithoutOtp = User::factory()->create([
@@ -180,7 +180,7 @@ class OtpLoginControllerTest extends TestCase
         ]);
     }   
 
-    /** @test */
+    #[Test]
     public function it_shows_captcha_after_two_failed_username_attempts()
     {
         // First failed attempt
@@ -212,7 +212,7 @@ class OtpLoginControllerTest extends TestCase
         $response->assertViewHas('shouldShowCaptcha', true);
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_locked_account_when_sending_otp()
     {
         $this->user->lockAccount();
@@ -226,7 +226,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertStringContainsString('AKUN TERKUNCI', $response->json('message'));
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_when_sending_otp()
     {
         $key = 'otp:login:test@example.com:127.0.0.1:' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
@@ -246,7 +246,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertStringContainsString('Terlalu banyak percobaan', $response->json('message'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_verify_otp_and_login()
     {
         // Test ini memerlukan setup khusus karena controller memanggil method protected
@@ -285,7 +285,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertNull(session('otp_login_channel'));
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_2fa_after_otp_verification_when_2fa_enabled()
     {
         // Test ini memerlukan setup khusus karena controller memanggil method protected
@@ -323,7 +323,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertNull(session('2fa_verified'));
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_to_verify_otp_without_session()
     {
         $response = $this->postJson('/login/otp/verify', [
@@ -339,7 +339,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_to_verify_otp_with_invalid_code()
     {
         session([
@@ -369,7 +369,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_locked_account_when_verifying_otp()
     {
         session([
@@ -390,7 +390,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_when_verifying_otp()
     {
         session([
@@ -417,7 +417,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_resend_otp()
     {
         session([
@@ -445,7 +445,7 @@ class OtpLoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_to_resend_otp_without_session()
     {
         $response = $this->postJson('/login/otp/resend');
@@ -457,7 +457,7 @@ class OtpLoginControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_locked_account_when_resending_otp()
     {
         session([
@@ -474,7 +474,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertStringContainsString('AKUN TERKUNCI', $response->json('message'));
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_when_resending_otp()
     {
         session([
@@ -498,7 +498,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertStringContainsString('detik sebelum mengirim ulang', $response->json('message'));
     }
 
-    /** @test */
+    #[Test]
     public function it_resets_failed_attempts_on_successful_otp_verification()
     {
         // Test ini memerlukan setup khusus karena bergantung pada state user
@@ -543,7 +543,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertFalse($this->user->isLocked());
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_telegram_otp_channel()
     {
         $telegramUser = User::factory()->create([
@@ -582,7 +582,7 @@ class OtpLoginControllerTest extends TestCase
         $this->assertEquals('telegram', session('otp_login_channel'));
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_multiple_otp_channels()
     {
         $multiChannelUser = User::factory()->create([

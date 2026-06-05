@@ -10,7 +10,7 @@ class StatistikPengunjungCmsControllerTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    #[Test]
     public function halaman_statistik_pengunjung_dapat_diakses()
     {
         // Arrange: siapkan data kunjungan palsu

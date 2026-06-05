@@ -6,7 +6,7 @@ use Tests\BaseTestCase;
 
 class DataPresisiPanganControllerTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function test_can_access_pangan_index_page()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.index'));
@@ -16,7 +16,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('title', 'Data Presisi Pangan');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_with_valid_filter_parameters()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?judul=Test%20Judul&filter[tipe]=kategori_pangan&filter[nilai]=beras');
@@ -27,7 +27,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('colomn', 'kategori_pangan:beras');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_with_missing_filter_tipe()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?judul=Test%20Judul&filter[nilai]=beras');
@@ -36,7 +36,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('colomn', '');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_with_missing_filter_nilai()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?judul=Test%20Judul&filter[tipe]=kategori_pangan');
@@ -45,7 +45,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('colomn', '');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_with_empty_filter_tipe()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?judul=Test%20Judul&filter[tipe]=&filter[nilai]=beras');
@@ -54,7 +54,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('colomn', '');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_with_empty_filter_nilai()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?judul=Test%20Judul&filter[tipe]=kategori_pangan&filter[nilai]=');
@@ -63,7 +63,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('colomn', '');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_without_filter_parameter()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?judul=Test%20Judul');
@@ -72,7 +72,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('colomn', '');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_without_judul_parameter()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?filter[tipe]=kategori_pangan&filter[nilai]=beras');
@@ -82,7 +82,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('colomn', 'kategori_pangan:beras');
     }
 
-    /** @test */
+    #[Test]
     public function test_cetak_with_filter_parameters()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.cetak') . '?filter[tipe]=kategori_pangan&filter[nilai]=beras&tahun=2024');
@@ -92,7 +92,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('filter');
     }
 
-    /** @test */
+    #[Test]
     public function test_cetak_without_parameters()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.cetak'));
@@ -101,7 +101,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewIs('data_pokok.data_presisi.pangan.cetak');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_column_format_with_special_characters()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?judul=Test%20Judul&filter[tipe]=kategori_pangan&filter[nilai]=beras-organik');
@@ -110,7 +110,7 @@ class DataPresisiPanganControllerTest extends BaseTestCase
         $response->assertViewHas('colomn', 'kategori_pangan:beras-organik');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_data_column_format_with_spaces()
     {
         $response = $this->get(route('data-pokok.data-presisi-pangan.detail_data') . '?judul=Test%20Judul&filter[tipe]=kategori%20pangan&filter[nilai]=beras%20merah');

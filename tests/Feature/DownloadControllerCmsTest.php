@@ -12,7 +12,7 @@ class DownloadControllerCmsTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    #[Test]
     public function halaman_index_download_dapat_diakses()
     {
         $response = $this->get(route('downloads.index'));
@@ -21,7 +21,7 @@ class DownloadControllerCmsTest extends BaseTestCase
         $response->assertViewIs('downloads.index');
     }
 
-    /** @test */
+    #[Test]
     public function form_tambah_download_dapat_diakses()
     {
         $response = $this->get(route('downloads.create'));
@@ -30,7 +30,7 @@ class DownloadControllerCmsTest extends BaseTestCase
         $response->assertViewIs('downloads.create');
     }
 
-    /** @test */
+    #[Test]
     public function file_download_baru_dapat_disimpan()
     {
         Storage::fake('public');
@@ -76,7 +76,7 @@ startxref
         $this->assertDatabaseHas('downloads', ['title' => 'File PDF']);
     }
 
-    /** @test */
+    #[Test]
     public function form_edit_download_dapat_diakses()
     {
         $download = Download::factory()->create();
@@ -87,7 +87,7 @@ startxref
         $response->assertViewIs('downloads.edit');
     }
 
-    /** @test */
+    #[Test]
     public function file_download_dapat_diperbarui()
     {
         $download = Download::factory()->create([
@@ -106,7 +106,7 @@ startxref
         $this->assertDatabaseHas('downloads', ['title' => 'Baru']);
     }
 
-    /** @test */
+    #[Test]
     public function file_download_dapat_dihapus()
     {
         $download = Download::factory()->create();

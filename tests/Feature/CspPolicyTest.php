@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Policies\CustomCspPreset;
 use Spatie\Csp\Policy;
 use Spatie\Csp\Preset;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class CspPolicyTest extends TestCase

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Team;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class GroupMenuDisplayTest extends BaseTestCase

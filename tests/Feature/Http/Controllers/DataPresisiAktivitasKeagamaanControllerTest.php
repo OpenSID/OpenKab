@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiAktivitasKeagamaanControllerTest extends BaseTestCase

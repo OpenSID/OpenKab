@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Enums\StatistikPendudukEnum;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DasborDemografiControllerTest extends BaseTestCase

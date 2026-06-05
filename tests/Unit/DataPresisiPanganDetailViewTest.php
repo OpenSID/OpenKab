@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\View as ViewFacade;

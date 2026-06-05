@@ -9,6 +9,7 @@ use App\Services\TwoFactorService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\RateLimiter;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class OtpLoginControllerTest extends TestCase

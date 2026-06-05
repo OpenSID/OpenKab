@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Services\ArtikelService;
 use Illuminate\Support\Facades\Cache;
 use Mockery;
-use ReflectionClass;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ArtikelServiceTest extends TestCase

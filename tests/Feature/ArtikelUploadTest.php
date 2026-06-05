@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class ArtikelUploadTest extends BaseTestCase

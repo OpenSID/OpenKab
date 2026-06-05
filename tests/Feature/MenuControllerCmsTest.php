@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\CMS\Category;
 use App\Models\CMS\Page;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class MenuControllerCmsTest extends BaseTestCase

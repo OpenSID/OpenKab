@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiFilterTahunJavaScriptTest extends BaseTestCase

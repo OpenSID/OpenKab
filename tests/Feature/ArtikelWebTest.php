@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Services\ArtikelService;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class ArtikelWebTest extends BaseTestCase

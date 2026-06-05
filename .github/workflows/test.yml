@@ -59,4 +59,4 @@ jobs:
         DB_USERNAME: root
         DB_PASSWORD: secret
 
-      run: php artisan migrate && php artisan test --verbose
+      run: php artisan migrate && php artisan test

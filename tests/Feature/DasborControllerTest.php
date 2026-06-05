@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DasborControllerTest extends BaseTestCase

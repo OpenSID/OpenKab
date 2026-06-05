@@ -7,6 +7,7 @@ use App\Services\TwoFactorService;
 use App\Services\OtpService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\RateLimiter;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 use Mockery;
 

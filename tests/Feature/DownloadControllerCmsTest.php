@@ -6,6 +6,7 @@ use App\Models\CMS\Download;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DownloadControllerCmsTest extends BaseTestCase

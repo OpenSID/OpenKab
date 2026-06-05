@@ -7,6 +7,7 @@ use App\Models\CMS\Category;
 use App\Models\CMS\Page;
 use App\Services\SitemapService;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\WebsiteTestCase;
 
 class PageControllerWebsiteTest extends WebsiteTestCase

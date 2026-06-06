@@ -19,6 +19,8 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public const HOME = '/dasbor';
+
     /**
      * Register any application services.
      *

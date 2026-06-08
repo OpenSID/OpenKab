@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Observers\VisitorObserver;
+use Shetabit\Visitor\Models\Visit;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,21 +25,18 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
+        $this->configureObservers();
         $this->configureRateLimiting();
         $this->bootHttps();
         $this->addValidation();
@@ -70,7 +69,12 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 
-    protected function configureRateLimiting()
+    protected function configureObservers(): void
+    {
+        Visit::observe(VisitorObserver::class);
+    }
+
+    protected function configureRateLimiting(): void
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());

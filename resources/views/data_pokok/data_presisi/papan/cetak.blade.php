@@ -15,14 +15,18 @@
     <table class="border thick" id="tabel-papan">
         <thead>
             <tr class="border thick">
-                <th>No</th>
+                <th>NO</th>
                 <th>NIK</th>
-                <th>Status Kepemilikan</th>
-                <th>Luas Lantai (m²)</th>
-                <th>Jenis Lantai</th>
-                <th>Jenis Dinding</th>
-                <th>Sumber Air Minum</th>
-                <th>Sumber Penerangan</th>
+                <th>NAMA KEPALA KELUARGA</th>
+                <th>JUMLAH ANGGOTA RTM</th>
+                <th>STATUS KEPEMILIKAN</th>
+                <th>LUAS LANTAI (M²)</th>
+                <th>JENIS LANTAI</th>
+                <th>JENIS DINDING</th>
+                <th>SUMBER AIR MINUM</th>
+                <th>SUMBER PENERANGAN</th>
+                <th>BAHAN BAKAR UNTUK MEMASAK</th>
+                <th>TEMPAT PEMBUANGAN AKHIR TINJA</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -36,7 +40,7 @@
             var filter = str.replace(/&amp;/g, '&')
             const header = @include('layouts.components.header_bearer_api_gabungan');
             $.ajax({
-                url: `{{ config('app.databaseGabunganUrl').'/api/v1/presisi/papan' }}?${filter}`,
+                url: `{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/papan/rtm' }}?${filter}`,
                 headers: header,
                 method: 'get',
                 success: function(json) {
@@ -46,13 +50,17 @@
                         var row = `
                             <tr>
                                 <td class="padat">${no}</td>
-                                <td>${item.attributes.nik_kepala_rtm || 'N/A'}</td>
+                                <td>${item.attributes.nik || 'N/A'}</td>
+                                <td>${item.attributes.kepala_keluarga || 'N/A'}</td>
+                                <td>${item.attributes.jumlah_anggota || 'N/A'}</td>
                                 <td>${item.attributes.kd_stat_bangunan_tinggal || 'N/A'}</td>
                                 <td>${item.attributes.luas_lantai || 'N/A'}</td>
                                 <td>${item.attributes.kd_jenis_lantai_terluas || 'N/A'}</td>
                                 <td>${item.attributes.kd_jenis_dinding || 'N/A'}</td>
                                 <td>${item.attributes.kd_sumber_air_minum || 'N/A'}</td>
                                 <td>${item.attributes.kd_sumber_penerangan_utama || 'N/A'}</td>
+                                <td>${item.attributes.kd_bahan_bakar_memasak || 'N/A'}</td>
+                                <td>${item.attributes.kd_pembuangan_akhir_tinja || 'N/A'}</td>
                             </tr>
                             `
 

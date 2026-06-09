@@ -348,6 +348,8 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         
         Route::prefix('papan')->group(function () {            
             Route::get('detail_data', [App\Http\Controllers\DataPresisiPapanController::class, 'detailData'])->name('data-pokok.data-presisi-papan.detail_data');            
+            Route::get('detail', [App\Http\Controllers\DataPresisiPapanController::class, 'detail'])->name('data-pokok.data-presisi-papan.detail_datasandang');
+            Route::get('cetak', [App\Http\Controllers\DataPresisiPapanController::class, 'cetak'])->name('data-pokok.data-presisi-papan.cetak');
         })
             ->middleware(['permission:datapresisi-papan-read']);
 

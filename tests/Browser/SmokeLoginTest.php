@@ -1,14 +1,17 @@
 <?php
 
 use App\Models\User;
+use Tests\Browser\ScreenshotHelper;
 use Tests\Browser\SessionState;
 
 it('displays login page correctly', function () {
-    visit('/login')
+    $page = visit('/login')
         ->assertSee('Masuk')
-        ->assertVisible('input[name="login"]')
-        ->assertVisible('input[name="password"]')
-        ->assertVisible('button[type="submit"]');
+        ->assertVisible('@login-email')
+        ->assertVisible('@login-password')
+        ->assertVisible('@login-submit');
+
+    ScreenshotHelper::saveIfEnabled($page, 'login-page');
 });
 
 it('can login with valid credentials', function () {
@@ -17,37 +20,43 @@ it('can login with valid credentials', function () {
         'email' => $email,
         'password' => 'password123',
     ]);
+    SessionState::assignAdminRole($user);
 
-    visit('/login')
-        ->fill('input[name="login"]', $email)
-        ->fill('input[name="password"]', 'password123')
+    $page = visit('/login')
+        ->fill('@login-email', $email)
+        ->fill('@login-password', 'password123')
         ->press('Masuk')
         ->assertPathIsNot('/login');
 
     SessionState::saveForUser($user);
+    ScreenshotHelper::saveIfEnabled($page, 'login-success');
 });
 
 it('shows error for invalid credentials', function () {
-    visit('/login')
-        ->fill('input[name="login"]', 'wrong@email.com')
-        ->fill('input[name="password"]', 'wrongpassword')
-        ->submit()
+    $page = visit('/login')
+        ->fill('@login-email', 'wrong@email.com')
+        ->fill('@login-password', 'wrongpassword')
+        ->press('@login-submit')
         ->assertSee('Masuk');
+
+    ScreenshotHelper::saveIfEnabled($page, 'login-error');
 });
 
 it('can restore session from saved state', function () {
     SessionState::clear();
 
     $user = SessionState::getOrCreateUser('pest-restore');
+    SessionState::assignAdminRole($user);
     SessionState::saveForUser($user);
 
     $state = SessionState::load();
     expect($state)->not->toBeNull();
     expect($state['user_id'])->toBe($user->id);
 
-    visit("/_pest/login/{$user->id}")
+    $page = visit("/_pest/login/{$user->id}")
         ->navigate('/dasbor')
         ->assertPathIs('/dasbor');
 
     SessionState::clear();
+    ScreenshotHelper::saveIfEnabled($page, 'session-restore');
 });

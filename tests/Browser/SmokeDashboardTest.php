@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use Tests\Browser\ScreenshotHelper;
+use Tests\Browser\SessionState;
 
 it('can access dashboard after quick login', function () {
     $user = User::firstOrCreate(
@@ -11,8 +13,11 @@ it('can access dashboard after quick login', function () {
             'username' => 'pesttest',
         ]
     );
+    SessionState::assignAdminRole($user);
 
-    visit("/_pest/login/{$user->id}")
+    $page = visit("/_pest/login/{$user->id}")
         ->navigate('/dasbor')
         ->assertPathIs('/dasbor');
+
+    ScreenshotHelper::saveIfEnabled($page, 'dashboard');
 });

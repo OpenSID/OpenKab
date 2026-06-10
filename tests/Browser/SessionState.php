@@ -59,7 +59,16 @@ final class SessionState
         ]);
     }
 
-    public static function loginAs(User $user, ?\Pest\Browser\Api\AwaitableWebpage $page = null): \Pest\Browser\Api\AwaitableWebpage
+    /**
+     * Assign administrator role to user.
+     */
+    public static function assignAdminRole(User $user): void
+    {
+        setPermissionsTeamId(1);
+        $user->assignRole('administrator');
+    }
+
+    public static function loginAs(User $user): \Pest\Browser\Api\AwaitableWebpage
     {
         $result = visit("/_pest/login/{$user->id}");
         self::saveForUser($user);

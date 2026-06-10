@@ -133,6 +133,73 @@ pest()->browser()->headless(false);
 
 ## Penulisan Test
 
+### Menggunakan data-testid (Recommended)
+
+Playwright merekomendasikan menggunakan `data-testid` untuk selector yang paling stabil dan resilient terhadap perubahan UI.
+
+**Keuntungan:**
+- Tidak berubah saat text/label berubah
+- Tidak berubah saat DOM structure berubah
+- Explicit contract antara developer dan tester
+- Tidak bergantung pada styling atau layout
+
+#### 1. Tambahkan data-testid di Blade Template
+
+```html
+<form action="{{ $login_url }}" method="post" data-testid="login-form">
+    @csrf
+
+    <input type="text" name="login" data-testid="login-email" ...>
+    <input type="password" name="password" data-testid="login-password" ...>
+    <button type="submit" data-testid="login-submit">Masuk</button>
+</form>
+```
+
+#### 2. Gunakan `@` Shorthand di Test
+
+Pest browser plugin mendukung shorthand `@` untuk `data-testid`:
+
+```php
+// ✅ Recommended - gunakan @ shorthand
+visit('/login')
+    ->fill('@login-email', $email)
+    ->fill('@login-password', 'password123')
+    ->press('@login-submit')
+    ->assertPathIsNot('/login');
+
+// ✅ Alternatif - CSS selector eksplisit
+visit('/login')
+    ->fill('[data-testid="login-email"]', $email)
+    ->fill('[data-testid="login-password"]', 'password123')
+    ->press('[data-testid="login-submit"]')
+    ->assertPathIsNot('/login');
+```
+
+#### 3. Naming Convention
+
+Gunakan format `feature-element` untuk data-testid:
+
+| Element | data-testid | Keterangan |
+|---------|-------------|------------|
+| Login form | `login-form` | Form container |
+| Email input | `login-email` | Input email/username |
+| Password input | `login-password` | Input password |
+| Submit button | `login-submit` | Tombol submit |
+| Remember checkbox | `login-remember` | Checkbox remember me |
+| Error message | `login-error` | Error validation |
+| Flash success | `flash-success` | Success notification |
+| Flash error | `flash-error` | Error notification |
+
+#### 4. Selector Hierarchy
+
+```
+@           → data-testid shorthand (recommended)
+[data-testid="..."] → CSS selector eksplisit
+#id         → ID selector (hindari jika bisa berubah)
+[name="..."] → Name selector (untuk form elements)
+"text"      → Text selector (untuk links/buttons)
+```
+
 ### Struktur File
 
 ```
@@ -154,9 +221,9 @@ tests/
 it('displays login page correctly', function () {
     visit('/login')
         ->assertSee('Masuk')
-        ->assertVisible('input[name="login"]')
-        ->assertVisible('input[name="password"]')
-        ->assertVisible('button[type="submit"]');
+        ->assertVisible('@login-email')
+        ->assertVisible('@login-password')
+        ->assertVisible('@login-submit');
 });
 ```
 
@@ -171,9 +238,9 @@ it('can login with valid credentials', function () {
     ]);
 
     visit('/login')
-        ->fill('input[name="login"]', $email)
-        ->fill('input[name="password"]', 'password123')
-        ->press('Masuk')
+        ->fill('@login-email', $email)
+        ->fill('@login-password', 'password123')
+        ->press('@login-submit')
         ->assertPathIsNot('/login');
 });
 ```
@@ -183,9 +250,9 @@ it('can login with valid credentials', function () {
 ```php
 it('shows error for invalid credentials', function () {
     visit('/login')
-        ->fill('input[name="login"]', 'wrong@email.com')
-        ->fill('input[name="password"]', 'wrongpassword')
-        ->submit()
+        ->fill('@login-email', 'wrong@email.com')
+        ->fill('@login-password', 'wrongpassword')
+        ->press('@login-submit')
         ->assertSee('Masuk');
 });
 ```
@@ -404,6 +471,139 @@ pest()->browser()->timeout(60000); // 60 detik
 npm install playwright @playwright/test
 npx playwright install chromium
 ```
+
+---
+
+## Best Practices
+
+### 1. Gunakan data-testid untuk Selector
+
+```php
+// ❌ Hindari - CSS selector yang fragile
+->fill('input[name="login"]', $email)
+->fill('input[type="password"]', $password)
+
+// ✅ Recommended - testid selector yang stable
+->fill('@login-email', $email)
+->fill('@login-password', $password)
+```
+
+### 2. Gunakan `@` Shorthand
+
+```php
+// ✅ Lebih pendek dan readable
+->fill('@login-email', $email)
+
+// ✅ Alternatif - CSS selector eksplisit (jika perlu)
+->fill('[data-testid="login-email"]', $email)
+```
+
+### 3. Naming Convention
+
+```
+data-testid="{feature}-{element}"
+
+Contoh:
+- login-email
+- login-password
+- login-submit
+- dashboard-sidebar
+- user-profile-avatar
+```
+
+### 4. Jangan Test Internal Implementation
+
+```php
+// ❌ Hindari - test implementation detail
+->fill('input[name="_token"]', $token)
+
+// ✅ Test user behavior
+->fill('@login-email', $email)
+->press('@login-submit')
+->assertPathIs('/dasbor')
+```
+
+### 5. Gunakan Assertion yang Reliable
+
+```php
+// ❌ Hindari - text bisa berubah
+->assertSee('Selamat datang di Dashboard')
+
+// ✅ Gunakan path assertion
+->assertPathIs('/dasbor')
+
+// ✅ Atau gunakan testid untuk element yang spesifik
+->assertVisible('@dashboard-welcome')
+```
+
+---
+
+## Screenshot Management
+
+### Konfigurasi
+
+Screenshot diatur via environment variable:
+
+```env
+# Aktifkan screenshot saat test pass
+SCREENSHOT_ON_SUCCESS=true
+
+# Nonaktifkan (default)
+SCREENSHOT_ON_SUCCESS=false
+```
+
+### Penggunaan
+
+```php
+use Tests\Browser\ScreenshotHelper;
+
+it('can login with valid credentials', function () {
+    $page = visit('/login')
+        ->fill('@login-email', $email)
+        ->fill('@login-password', 'password123')
+        ->press('@login-submit')
+        ->assertPathIsNot('/login');
+
+    // Screenshot hanya disimpan jika SCREENSHOT_ON_SUCCESS=true
+    ScreenshotHelper::saveIfEnabled($page, 'login-success');
+});
+```
+
+### Output
+
+Screenshot tersimpan di `tests/Browser/Screenshots/` dengan format:
+```
+{nama-test}_{timestamp}.png
+```
+
+Contoh:
+```
+login-page_2026-06-10_07-50-09.png
+login-success_2026-06-10_07-50-11.png
+login-error_2026-06-10_07-50-14.png
+```
+
+### Performa
+
+| Kondisi | Waktu (4 tests) | Tambahan |
+|---------|-----------------|----------|
+| Tanpa screenshot | ~7.5s | baseline |
+| Dengan screenshot | ~10s | **+30%** |
+
+**Rekomendasi:**
+- **CI/CD cepat**: Nonaktifkan screenshot (`SCREENSHOT_ON_SUCCESS=false`)
+- **Debugging/Reporting**: Aktifkan screenshot (`SCREENSHOT_ON_SUCCESS=true`)
+- **Test gagal**: Pest browser otomatis screenshot saat assertion gagal (tidak perlu konfigurasi)
+
+### Screenshot saat Gagal
+
+Pest browser otomatis menyimpan screenshot saat test gagal:
+
+```
+A screenshot of the page has been saved to [Tests/Browser/Screenshots/test_name.png]
+```
+
+Fitur ini **selalu aktif** tanpa perlu konfigurasi.
 
 ---
 

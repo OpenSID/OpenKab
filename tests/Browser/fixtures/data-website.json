@@ -1,0 +1,20 @@
+{
+    "data": {
+        "categoriesItems": {
+            "kecamatan": {
+                "value": 2
+            },
+            "desa": {
+                "value": 4
+            },
+            "penduduk": {
+                "value": 25000
+            },
+            "keluarga": {
+                "value": 6500
+            }
+        },
+        "listDesa": [],
+        "listKecamatan": []
+    }
+}

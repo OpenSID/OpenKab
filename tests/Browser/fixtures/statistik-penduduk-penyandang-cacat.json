@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "Fisik",
+                "jumlah": 150
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Mental",
+                "jumlah": 50
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Sensorik",
+                "jumlah": 100
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Ganda",
+                "jumlah": 30
+            }
+        }
+    ]
+}

@@ -9,6 +9,8 @@ use App\Models\User;
 final class SessionState
 {
     private const STORAGE_PATH = __DIR__ . '/.session_state.json';
+    private const MOCK_SERVER_PID_PATH = __DIR__ . '/.mock_server.pid';
+    private const MOCK_SERVER_PORT = 8001;
 
     public static function saveForUser(User $user): void
     {
@@ -68,7 +70,7 @@ final class SessionState
         $user->assignRole('administrator');
     }
 
-    public static function loginAs(User $user): \Pest\Browser\Api\AwaitableWebpage
+    public static function loginAs(User $user)
     {
         $result = visit("/_pest/login/{$user->id}");
         self::saveForUser($user);
@@ -76,7 +78,7 @@ final class SessionState
         return $result;
     }
 
-    public static function restoreSession(): ?\Pest\Browser\Api\AwaitableWebpage
+    public static function restoreSession()
     {
         $state = self::load();
 
@@ -93,5 +95,84 @@ final class SessionState
         }
 
         return visit("/_pest/login/{$user->id}");
+    }
+
+    /**
+     * Start the mock API server in the background.
+     */
+    public static function startMockServer(): void
+    {
+        if (self::isMockServerRunning()) {
+            return;
+        }
+
+        $mockServerScript = __DIR__ . '/mock-server.php';
+        $logPath = __DIR__ . '/.mock_server.log';
+
+        // Use PHP built-in server with router script
+        $cmd = sprintf(
+            'php -S %s:%d %s > %s 2>&1 & echo $!',
+            '127.0.0.1',
+            self::MOCK_SERVER_PORT,
+            escapeshellarg($mockServerScript),
+            escapeshellarg($logPath)
+        );
+
+        $pid = trim(shell_exec($cmd));
+
+        if ($pid && is_numeric($pid)) {
+            file_put_contents(self::MOCK_SERVER_PID_PATH, $pid);
+            self::waitForServer(self::MOCK_SERVER_PORT, 10);
+        }
+    }
+
+    /**
+     * Stop the mock API server.
+     */
+    public static function stopMockServer(): void
+    {
+        if (!file_exists(self::MOCK_SERVER_PID_PATH)) {
+            return;
+        }
+
+        $pid = (int) file_get_contents(self::MOCK_SERVER_PID_PATH);
+
+        if ($pid > 0) {
+            posix_kill($pid, SIGTERM);
+            usleep(200000); // Wait 200ms for graceful shutdown
+        }
+
+        @unlink(self::MOCK_SERVER_PID_PATH);
+    }
+
+    /**
+     * Check if mock server is running.
+     */
+    public static function isMockServerRunning(): bool
+    {
+        if (!file_exists(self::MOCK_SERVER_PID_PATH)) {
+            return false;
+        }
+
+        $pid = (int) file_get_contents(self::MOCK_SERVER_PID_PATH);
+
+        return $pid > 0 && posix_kill($pid, 0); // Signal 0 = check existence
+    }
+
+    /**
+     * Wait for a server to become available on the given port.
+     */
+    private static function waitForServer(int $port, int $timeoutSeconds): void
+    {
+        $start = time();
+
+        while ((time() - $start) < $timeoutSeconds) {
+            $fp = @fsockopen('127.0.0.1', $port, $errno, $errstr, 1);
+            if ($fp) {
+                fclose($fp);
+                return;
+            }
+            usleep(100000); // 100ms
+        }
     }
 }

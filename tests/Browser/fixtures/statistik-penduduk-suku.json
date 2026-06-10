@@ -1,0 +1,34 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "Sasak",
+                "jumlah": 18000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Jawa",
+                "jumlah": 3000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Bali",
+                "jumlah": 2000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Sumbawa",
+                "jumlah": 1500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Lainnya",
+                "jumlah": 500
+            }
+        }
+    ]
+}

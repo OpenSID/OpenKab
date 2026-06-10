@@ -1,0 +1,16 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "Laki-Laki",
+                "jumlah": 12500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Perempuan",
+                "jumlah": 12500
+            }
+        }
+    ]
+}

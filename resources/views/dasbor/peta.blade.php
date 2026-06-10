@@ -1,7 +1,7 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
-            <div id="map"></div>
+            <div id="map" data-testid="peta"></div>
         </div>
     </div>
 </div>

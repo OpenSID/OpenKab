@@ -1,0 +1,52 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "Tidak Sekolah",
+                "jumlah": 1500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Tidak Tamat SD",
+                "jumlah": 2000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Tamat SD",
+                "jumlah": 5000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "SLTP",
+                "jumlah": 4500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "SLTA",
+                "jumlah": 6000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Diploma",
+                "jumlah": 2000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Sarjana",
+                "jumlah": 3000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Pasca Sarjana",
+                "jumlah": 1000
+            }
+        }
+    ]
+}

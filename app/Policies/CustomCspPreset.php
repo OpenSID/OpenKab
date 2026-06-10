@@ -17,6 +17,8 @@ class CustomCspPreset implements Preset
             ->add(Directive::IMG, [Keyword::SELF, 'data:', 'https://tile.openstreetmap.org/', 'blob:'])
             ->add(Directive::STYLE, [
                 Keyword::SELF,
+                Keyword::UNSAFE_INLINE,
+                'sha256-4Hp34kejS2ebnG2znG00qXJODVa0mXDBGtDnbB1o+dk=',
                 'https://fonts.googleapis.com/',
                 'https://fonts.bunny.net/',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
@@ -37,6 +39,7 @@ class CustomCspPreset implements Preset
                 'https://cdn.datatables.net/2.0.7/js/dataTables.min.js',
                 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
+                'https://cdn.jsdelivr.net/npm/sweetalert2@11',
             ])
             ->addNonce(Directive::SCRIPT)
             ->add(Directive::FONT, [

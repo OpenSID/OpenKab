@@ -117,7 +117,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->config['adminlte.title'] = $identitasAplikasi['nama_aplikasi'];
         $this->app->config['adminlte.title_postfix'] = "| {$identitasAplikasi['sebutan_kab']}";
         $this->app->config['adminlte.logo'] = $identitasAplikasi['nama_aplikasi'];
-        if ($settingAplikasi->get('layout_menu') !== 'Vertikal') {
+        if (strtolower($settingAplikasi->get('layout_menu')) !== 'vertikal') {
             $this->app->config['adminlte.layout_topnav'] = true;
             $this->app->config['adminlte.classes_content'] = 'col-12 p-3';
             $this->app->config['adminlte.classes_sidebar'] = 'sidebar-dark-primary elevation-4';

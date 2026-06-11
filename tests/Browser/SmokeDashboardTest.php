@@ -1,5 +1,6 @@
 <?php
 
+use Tests\Browser\FixtureReader;
 use Tests\Browser\ScreenshotHelper;
 use Tests\Browser\SessionState;
 
@@ -10,6 +11,10 @@ beforeEach(function () {
 afterEach(function () {
     SessionState::clear();
 });
+
+$kabupatenNames = FixtureReader::kabupatenNames();
+$categoriesValues = FixtureReader::categoriesValues();
+$firstKabupatenKode = FixtureReader::firstKabupatenKode();
 
 it('displays all dashboard elements', function () {
     SessionState::loginAndNavigate($this->user, '/dasbor')
@@ -28,13 +33,37 @@ it('displays all dashboard elements', function () {
         ->assertVisible('@summary-penduduk');
 });
 
-it('applies filter and elements remain visible', function () {
+it('loads kabupaten dropdown options from ajax', function () use ($kabupatenNames) {
+    $page = SessionState::loginAndNavigate($this->user, '/dasbor')
+        ->assertPathIs('/dasbor');
+
+    $page->assertScript("document.querySelectorAll('#filter_kabupaten option').length > 1", true);
+
+    foreach ($kabupatenNames as $name) {
+        $page->assertSourceInHas('#filter_kabupaten', $name);
+    }
+});
+
+it('displays correct card values from fixture', function () use ($categoriesValues) {
+    $page = SessionState::loginAndNavigate($this->user, '/dasbor')
+        ->assertPathIs('/dasbor');
+
+    foreach ($categoriesValues as $key => $value) {
+        $page->assertVisible("@summary-value-{$key}");
+    }
+
+    foreach ($categoriesValues as $key => $value) {
+        $page->assertSeeIn("@summary-value-{$key}", $value);
+    }
+});
+
+it('applies filter and elements remain visible', function () use ($firstKabupatenKode) {
     $page = SessionState::loginAndNavigate($this->user, '/dasbor')
         ->assertPathIs('/dasbor')
         ->assertVisible('@filter-kabupaten')
         ->assertVisible('@bt-filter');
 
-    $page->script("$('#filter_kabupaten').val('50.01').trigger('change')");
+    $page->script("$('#filter_kabupaten').val('{$firstKabupatenKode}').trigger('change')");
     $page->click('@bt-filter');
 
     $page->assertVisible('@peta')

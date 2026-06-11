@@ -125,6 +125,10 @@ final class SessionState
             'password_expires_at' => null,
         ]);
         self::assignAdminRole($user);
+
+        // Assign to team with menu data (team ID 1 = administrator)
+        $user->teams()->attach(1);
+
         self::saveForUser($user);
 
         return $user;

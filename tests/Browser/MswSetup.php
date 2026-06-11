@@ -122,20 +122,26 @@ final class MswSetup
         return origFetch.apply(this, arguments);
     };
 
-    // --- XHR Interception (fallback while SW activates) ---
     var OrigXHR = window.XMLHttpRequest;
     function MockXHR() {
         var r = new OrigXHR(), self = this;
         self._r = r; self._f = null; self._blocked = false;
-        self.readyState = 0; self.status = 0; self.statusText = '';
+        self._rs = 0; self.status = 0; self.statusText = '';
         self.responseText = ''; self.response = ''; self.responseType = '';
         self.onreadystatechange = null; self.onload = null; self.onerror = null;
+        self.ontimeout = null; self.onabort = null;
+        self.withCredentials = false;
+        self.timeout = 0;
         Object.defineProperty(self, 'readyState', {get:function(){return self._rs||0;},set:function(v){self._rs=v;}});
+        var mockUpload = {addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return true;},onload:null,onerror:null,onabort:null,onprogress:null,ontimeout:null};
+        Object.defineProperty(self, 'upload', {get:function(){return self._f||self._blocked?mockUpload:r.upload;}});
         r.onreadystatechange = function(){self._rs=r.readyState;self.status=r.status;self.statusText=r.statusText;self.responseText=r.responseText;self.response=r.response;if(self.onreadystatechange)self.onreadystatechange();};
         r.onload = function(){self._rs=4;self.status=r.status;self.responseText=r.responseText;self.response=r.response;if(self.onload)self.onload();};
         r.onerror = function(){if(self.onerror)self.onerror();};
+        r.ontimeout = function(){if(self.ontimeout)self.ontimeout();};
+        r.onabort = function(){if(self.onabort)self.onabort();};
     }
-    MockXHR.prototype.open = function(m, u) {
+    MockXHR.prototype.open = function(m, u, a, user, pass) {
         this._m = m; this._u = u;
         try {
             var h = new URL(u, location.origin).hostname;
@@ -146,14 +152,45 @@ final class MswSetup
         else { this._r.open.apply(this._r, arguments); }
     };
     MockXHR.prototype.setRequestHeader = function(){if(!this._f && !this._blocked) this._r.setRequestHeader.apply(this._r, arguments);};
+    MockXHR.prototype.overrideMimeType = function(){if(!this._f && !this._blocked) this._r.overrideMimeType.apply(this._r, arguments);};
     MockXHR.prototype.send = function(b) {
         if (this._blocked) { var s=this; s._rs=4; s.status=204; setTimeout(function(){if(s.onreadystatechange)s.onreadystatechange();if(s.onload)s.onload();},0); return; }
-        if (this._f) { var s=this; s._rs=2;if(s.onreadystatechange)s.onreadystatechange();s._rs=3;if(s.onreadystatechange)s.onreadystatechange();s.status=200;s.statusText='OK';s.responseText=JSON.stringify(this._f);s.response=this._f;s._rs=4;setTimeout(function(){if(s.onreadystatechange)s.onreadystatechange();if(s.onload)s.onload();},0); }
+        if (this._f) {
+            var s=this;
+            setTimeout(function(){
+                s._rs=2;if(s.onreadystatechange)s.onreadystatechange();
+                s._rs=3;if(s.onreadystatechange)s.onreadystatechange();
+                s.status=200;s.statusText='OK';
+                s.responseText=JSON.stringify(s._f);
+                s.response=s.responseText;
+                s._rs=4;
+                if(s.onreadystatechange)s.onreadystatechange();
+                if(s.onload)s.onload();
+            },0);
+        }
         else { this._r.send.apply(this._r, arguments); }
     };
-    MockXHR.prototype.abort = function(){if(!this._f && !this._blocked) this._r.abort();};
+    MockXHR.prototype.abort = function(){
+        this._aborted=true;
+        if(!this._f && !this._blocked) this._r.abort();
+        else { this._rs=0; this.status=0; if(this.onabort)this.onabort(); }
+    };
     MockXHR.prototype.getResponseHeader = function(n){if(this._f)return n.toLowerCase()==='content-type'?'application/json':null;if(this._blocked)return null;return this._r.getResponseHeader(n);};
     MockXHR.prototype.getAllResponseHeaders = function(){if(this._f)return 'content-type: application/json';if(this._blocked)return '';return this._r.getAllResponseHeaders();};
+    MockXHR.prototype.addEventListener = function(type, fn) {
+        var prop = 'on' + type;
+        if (typeof this[prop] === 'function' && this[prop] !== null) {
+            var prev = this[prop];
+            this[prop] = function() { prev.apply(this, arguments); fn.apply(this, arguments); };
+        } else {
+            this[prop] = fn;
+        }
+    };
+    MockXHR.prototype.removeEventListener = function(type, fn) {
+        var prop = 'on' + type;
+        if (this[prop] === fn) this[prop] = null;
+    };
+    MockXHR.prototype.dispatchEvent = function(){return true;};
     window.XMLHttpRequest = MockXHR;
 })();
 JS;

@@ -4,19 +4,19 @@
             <div class="card-header bg-primary rounded-0">
                 <div class="row">
                     <div class="col-md-3">
-                        <select name="Filter Kabupaten" id="filter_kabupaten" required class="form-control"
+                        <select name="Filter Kabupaten" id="filter_kabupaten" data-testid="filter-kabupaten" required class="form-control"
                             title="Pilih {{ config('app.sebutanKab') }}">
                             <option value="">All</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <select name="Filter Kecamatan" id="filter_kecamatan" required class="form-control"
+                        <select name="Filter Kecamatan" id="filter_kecamatan" data-testid="filter-kecamatan" required class="form-control"
                             title="Pilih Kecamatan">
                             <option value="">All</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <select name="Filter Desa" id="filter_desa" required class="form-control"
+                        <select name="Filter Desa" id="filter_desa" data-testid="filter-desa" required class="form-control"
                             title="Pilih {{ config('app.sebutanDesa') }}">
                             <option value="">All</option>
                         </select>
@@ -26,11 +26,11 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <button id="bt_clear_filter"
+                                        <button id="bt_clear_filter" data-testid="bt-clear-filter"
                                             class="btn btn-sm btn-danger pull-right wh-full">HAPUS FILTER</button>
                                     </td>
                                     <td>
-                                        <button id="bt_filter"
+                                        <button id="bt_filter" data-testid="bt-filter"
                                             class="btn btn-sm btn-primary btn-dark-primary wh-full">TAMPILKAN</button>
                                     </td>
                                 </tr>

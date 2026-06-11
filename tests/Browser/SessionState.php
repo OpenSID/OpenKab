@@ -9,8 +9,6 @@ use App\Models\User;
 final class SessionState
 {
     private const STORAGE_PATH = __DIR__ . '/.session_state.json';
-    private const MOCK_SERVER_PID_PATH = __DIR__ . '/.mock_server.pid';
-    private const MOCK_SERVER_PORT = 8001;
 
     public static function saveForUser(User $user): void
     {
@@ -106,6 +104,13 @@ final class SessionState
         $existing = User::where('email', $email)->first();
 
         if ($existing) {
+            // Ensure no forced password reset blocks navigation
+            if ($existing->requiresPasswordReset()) {
+                $existing->update([
+                    'force_password_reset' => false,
+                    'password_expires_at' => null,
+                ]);
+            }
             self::saveForUser($existing);
 
             return $existing;
@@ -116,6 +121,8 @@ final class SessionState
             'name' => 'Pest Smoke User',
             'password' => 'password',
             'username' => 'pestsmoke',
+            'force_password_reset' => false,
+            'password_expires_at' => null,
         ]);
         self::assignAdminRole($user);
         self::saveForUser($user);
@@ -126,12 +133,17 @@ final class SessionState
     /**
      * Login as user and navigate to path.
      */
-    public static function loginAndNavigate(User $user, string $path)
+    public static function loginAndNavigate(User $user, string $path, array $options = [])
     {
         $page = visit("/_pest/login/{$user->id}");
         self::saveForUser($user);
 
-        return $page->navigate($path);
+        // If login already redirected to target path, no need to navigate again
+        if ($page->url() === url($path)) {
+            return $page;
+        }
+
+        return $page->navigate($path, $options);
     }
 
     /**
@@ -156,159 +168,5 @@ final class SessionState
             $("#bt_filter").click();
         ');
         $page->wait(1000);
-    }
-
-    /**
-     * Start the mock API server in the background.
-     *
-     * @throws \RuntimeException if the server fails to start
-     */
-    public static function startMockServer(): void
-    {
-        if (self::isMockServerRunning()) {
-            return;
-        }
-
-        self::killStaleProcess();
-
-        $mockServerScript = __DIR__ . '/mock-server.php';
-        $logPath = __DIR__ . '/.mock_server.log';
-
-        $cmd = sprintf(
-            'php -S %s:%d %s > %s 2>&1 & echo $!',
-            '127.0.0.1',
-            self::MOCK_SERVER_PORT,
-            escapeshellarg($mockServerScript),
-            escapeshellarg($logPath)
-        );
-
-        $pid = trim(shell_exec($cmd));
-
-        if (! $pid || ! is_numeric($pid)) {
-            throw new \RuntimeException(
-                "Failed to start mock server. Command: {$cmd}"
-            );
-        }
-
-        file_put_contents(self::MOCK_SERVER_PID_PATH, $pid);
-
-        if (! self::waitForServer(self::MOCK_SERVER_PORT, 15)) {
-            $logContent = file_exists($logPath) ? file_get_contents($logPath) : '(no log)';
-            throw new \RuntimeException(
-                "Mock server started (PID: {$pid}) but not responding on port "
-                . self::MOCK_SERVER_PORT . ". Log: {$logContent}"
-            );
-        }
-    }
-
-    /**
-     * Stop the mock API server.
-     */
-    public static function stopMockServer(): void
-    {
-        if (file_exists(self::MOCK_SERVER_PID_PATH)) {
-            $pid = (int) file_get_contents(self::MOCK_SERVER_PID_PATH);
-
-            if ($pid > 0 && posix_kill($pid, 0)) {
-                posix_kill($pid, SIGTERM);
-                usleep(200000);
-            }
-
-            @unlink(self::MOCK_SERVER_PID_PATH);
-        }
-
-        self::killStaleProcess();
-    }
-
-    /**
-     * Check if mock server is running and responsive.
-     */
-    public static function isMockServerRunning(): bool
-    {
-        if (! file_exists(self::MOCK_SERVER_PID_PATH)) {
-            return false;
-        }
-
-        $pid = (int) file_get_contents(self::MOCK_SERVER_PID_PATH);
-
-        if ($pid <= 0) {
-            return false;
-        }
-
-        $processAlive = posix_kill($pid, 0);
-        $fp = @fsockopen('127.0.0.1', self::MOCK_SERVER_PORT, $errno, $errstr, 1);
-        $portActive = $fp !== false;
-        if ($fp) {
-            fclose($fp);
-        }
-
-        if ($processAlive !== $portActive) {
-            self::cleanupMockServer();
-
-            return false;
-        }
-
-        return $processAlive;
-    }
-
-    /**
-     * Ensure mock server is running, restart if needed.
-     *
-     * @throws \RuntimeException if the server fails to start
-     */
-    public static function ensureMockServerRunning(): void
-    {
-        if (! self::isMockServerRunning()) {
-            self::cleanupMockServer();
-            self::startMockServer();
-        }
-    }
-
-    /**
-     * Kill any process occupying the mock server port.
-     */
-    private static function killStaleProcess(): void
-    {
-        $output = [];
-        exec("lsof -i :" . self::MOCK_SERVER_PORT . " -t 2>/dev/null", $output);
-
-        foreach ($output as $pid) {
-            $pid = (int) trim($pid);
-            if ($pid > 0) {
-                posix_kill($pid, SIGTERM);
-            }
-        }
-
-        if (! empty($output)) {
-            usleep(300000);
-        }
-    }
-
-    /**
-     * Cleanup mock server state files without killing the process.
-     */
-    private static function cleanupMockServer(): void
-    {
-        @unlink(self::MOCK_SERVER_PID_PATH);
-    }
-
-    /**
-     * Wait for a server to become available on the given port.
-     */
-    private static function waitForServer(int $port, int $timeoutSeconds): bool
-    {
-        $start = time();
-
-        while ((time() - $start) < $timeoutSeconds) {
-            $fp = @fsockopen('127.0.0.1', $port, $errno, $errstr, 1);
-            if ($fp) {
-                fclose($fp);
-
-                return true;
-            }
-            usleep(100000);
-        }
-
-        return false;
     }
 }

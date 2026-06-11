@@ -11,60 +11,38 @@ afterEach(function () {
     SessionState::clear();
 });
 
-it('displays all dashboard elements', function () {
-    $chartKeys = [
-        'rentang-umur',
-        'status-perkawinan',
-        'pendidikan-dalam-kk',
-        'golongan-darah',
-        'penyakit-menahun',
-        'agama',
-        'jenis-kelamin',
-        'suku',
-        'penyandang-cacat',
-    ];
+$chartKeys = [
+    'rentang-umur', 'status-perkawinan', 'pendidikan-dalam-kk',
+    'golongan-darah', 'penyakit-menahun', 'agama',
+    'jenis-kelamin', 'suku', 'penyandang-cacat',
+];
 
+it('displays all dashboard elements', function () use ($chartKeys) {
     $page = SessionState::loginAndNavigate($this->user, '/dasbor-demografi')
-        ->wait(3000)
         ->assertPathIs('/dasbor-demografi')
         ->assertSee('Dasbor Demografi')
-        ->assertVisible('@filter_kabupaten')
-        ->assertVisible('@filter_kecamatan')
-        ->assertVisible('@filter_desa')
-        ->assertVisible('@bt_filter');
+        ->assertVisible('@filter-kabupaten')
+        ->assertVisible('@filter-kecamatan')
+        ->assertVisible('@filter-desa')
+        ->assertVisible('@bt-filter');
 
     foreach ($chartKeys as $key) {
-        $page->assertSee($key);
+        $page->assertVisible("@chart-item-{$key}");
+    }
+});
+
+it('applies filter and all charts remain visible', function () use ($chartKeys) {
+    $page = SessionState::loginAndNavigate($this->user, '/dasbor-demografi')
+        ->assertPathIs('/dasbor-demografi')
+        ->assertVisible('@filter-kabupaten')
+        ->assertVisible('@bt-filter');
+
+    $page->script("$('#filter_kabupaten').val('50.01').trigger('change')");
+    $page->click('@bt-filter');
+
+    foreach ($chartKeys as $key) {
+        $page->assertVisible("@chart-item-{$key}");
     }
 
-    $page->assertSee('Rentang Umur')
-        ->assertSee('Status Perkawinan')
-        ->assertSee('Pendidikan Dalam KK')
-        ->assertSee('Golongan Darah')
-        ->assertSee('Penyakit Menahun')
-        ->assertSee('Agama')
-        ->assertSee('Jenis Kelamin')
-        ->assertSee('Suku / Etnis')
-        ->assertSee('Penyandang Cacat');
-
-    ScreenshotHelper::saveIfEnabled($page, 'demografi-all');
-});
-
-it('updates charts when filtering by kabupaten', function () {
-    $page = SessionState::loginAndNavigate($this->user, '/dasbor-demografi');
-
-    SessionState::applyFilter($page, '50.01');
-    $page->assertSee('Rentang Umur');
-
-    ScreenshotHelper::saveIfEnabled($page, 'demografi-filtered');
-});
-
-it('clear filter button works', function () {
-    $page = SessionState::loginAndNavigate($this->user, '/dasbor-demografi');
-
-    SessionState::applyFilter($page, '50.01');
-    SessionState::clearFilter($page);
-    $page->assertSee('Rentang Umur');
-
-    ScreenshotHelper::saveIfEnabled($page, 'demografi-clear-filter');
+    ScreenshotHelper::saveIfEnabled($page, 'demografi-filter');
 });

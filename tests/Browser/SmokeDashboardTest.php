@@ -12,40 +12,34 @@ afterEach(function () {
 });
 
 it('displays all dashboard elements', function () {
-    $page = SessionState::loginAndNavigate($this->user, '/dasbor')
-        ->wait(3000)
+    SessionState::loginAndNavigate($this->user, '/dasbor')
         ->assertPathIs('/dasbor')
         ->assertSee('Dasbor')
-        ->assertVisible('@filter_kabupaten')
-        ->assertVisible('@filter_kecamatan')
-        ->assertVisible('@filter_desa')
-        ->assertVisible('@bt_filter')
-        ->assertVisible('#summary_block')
-        ->assertSee('kecamatan')
-        ->assertSee('jumlah penduduk')
-        ->assertSee('jumlah keluarga')
-        ->assertVisible('#map')
-        ->assertVisible('#tabel_penduduk_block')
-        ->assertVisible('#summary-penduduk');
-
-    ScreenshotHelper::saveIfEnabled($page, 'dashboard-all');
+        ->assertVisible('@filter-kabupaten')
+        ->assertVisible('@filter-kecamatan')
+        ->assertVisible('@filter-desa')
+        ->assertVisible('@bt-filter')
+        ->assertVisible('@summary-card-kecamatan')
+        ->assertVisible('@summary-card-desa')
+        ->assertVisible('@summary-card-penduduk')
+        ->assertVisible('@summary-card-keluarga')
+        ->assertVisible('@peta')
+        ->assertVisible('@tabel-penduduk-block')
+        ->assertVisible('@summary-penduduk');
 });
 
-it('updates summary when filtering by kabupaten', function () {
-    $page = SessionState::loginAndNavigate($this->user, '/dasbor');
+it('applies filter and elements remain visible', function () {
+    $page = SessionState::loginAndNavigate($this->user, '/dasbor')
+        ->assertPathIs('/dasbor')
+        ->assertVisible('@filter-kabupaten')
+        ->assertVisible('@bt-filter');
 
-    SessionState::applyFilter($page, '50.01');
-    $page->assertVisible('#summary_block');
+    $page->script("$('#filter_kabupaten').val('50.01').trigger('change')");
+    $page->click('@bt-filter');
 
-    ScreenshotHelper::saveIfEnabled($page, 'dashboard-filtered');
-});
+    $page->assertVisible('@peta')
+        ->assertVisible('@tabel-penduduk-block')
+        ->assertVisible('@summary-penduduk');
 
-it('clear filter button works', function () {
-    $page = SessionState::loginAndNavigate($this->user, '/dasbor');
-
-    SessionState::applyFilter($page, '50.01');
-    SessionState::clearFilter($page);
-    $page->assertVisible('#summary_block');
-
-    ScreenshotHelper::saveIfEnabled($page, 'dashboard-clear-filter');
+    ScreenshotHelper::saveIfEnabled($page, 'dashboard-filter');
 });

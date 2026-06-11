@@ -8,6 +8,7 @@ Panduan lengkap pembuatan smoke test menggunakan **Pest v4** + **pest-plugin-bro
 - [Prasyarat](#prasyarat)
 - [Instalasi](#instalasi)
 - [Konfigurasi](#konfigurasi)
+- [MSW Setup](#msw-setup)
 - [Penulisan Test](#penulisan-test)
 - [Session State Management](#session-state-management)
 - [Custom Login Route](#custom-login-route)
@@ -28,8 +29,8 @@ pest-plugin-browser
 Playwright Server (WebSocket)
     │
     ▼
-Chromium Browser
-    │
+Chromium Browser + MSW Service Worker
+    │  (intercepts fetch/XHR requests)
     ▼
 Laravel HTTP Server (amphp)
     │
@@ -37,7 +38,23 @@ Laravel HTTP Server (amphp)
 Aplikasi Laravel
 ```
 
-Pest browser plugin menjalankan **Laravel HTTP server lokal** (amphp) dan mengontrol **Chromium browser** via Playwright WebSocket. Test ditulis 100% dalam syntax PHP Pest.
+Pest browser plugin menjalankan **Laravel HTTP server lokal** (amphp) dan mengontrol **Chromium browser** via Playwright WebSocket. **MSW (Mock Service Worker)** berjalan di browser untuk mengintersep request API dan mengembalikan data fixture.
+
+### Request Flow
+
+```
+Browser Page (JS)
+    │
+    ├─ fetch('/api/v1/data-website')
+    │       │
+    │       ▼
+    │   MSW Interceptor (init script)
+    │       │
+    │       ├─ Route match → return fixture JSON
+    │       └─ No match → forward to real server
+    │
+    └─ Page renders with mock data
+```
 
 ---
 
@@ -47,7 +64,7 @@ Pest browser plugin menjalankan **Laravel HTTP server lokal** (amphp) dan mengon
 |----------|-------|------------|
 | PHP | 8.4+ | |
 | Laravel | 13+ | |
-| Node.js | 18+ | Untuk Playwright |
+| Node.js | 18+ | Untuk MSW |
 | Composer | 2+ | |
 
 ---
@@ -61,11 +78,11 @@ composer require pestphp/pest:^4.0 --dev -W
 composer require pestphp/pest-plugin-browser:^4.0 --dev -W
 ```
 
-### 2. Install Playwright (npm)
+### 2. Install MSW (npm)
 
 ```bash
-npm install playwright @playwright/test --save-dev
-npx playwright install chromium
+npm install msw --save-dev
+npx msw init public/ --save
 ```
 
 ### 3. Publish Pest Configuration
@@ -81,6 +98,11 @@ uses(TestCase::class)->in('Feature', 'Browser');
 
 // Timeout untuk browser tests (dalam milidetik)
 pest()->browser()->timeout(30000);
+
+// Disable Google Fonts di test environment
+beforeEach(function () {
+    config(['adminlte.google_fonts.allowed' => false]);
+});
 ```
 
 ### 4. Update phpunit.xml
@@ -99,7 +121,23 @@ Pastikan `APP_ENV` di-set ke `testing`:
 # Pest Browser Testing
 tests/Browser/Screenshots/
 tests/Browser/.session_state.json
+public/mockServiceWorker.js
 ```
+
+### 6. Vendor Patching
+
+Jalankan `apply-patch.sh` untuk menginjek MSW init script ke vendor:
+
+```bash
+# Otomatis dijalankan oleh composer hook
+composer install
+composer update
+
+# Atau manual
+bash tests/Browser/apply-patch.sh
+```
+
+Script ini menambahkan MSW init script ke `vendor/pestphp/pest-plugin-browser/src/Playwright/InitScript.php`.
 
 ---
 
@@ -127,6 +165,180 @@ pest()->browser()->timeout(30000);
 
 // Headed mode (untuk debugging)
 pest()->browser()->headless(false);
+```
+
+---
+
+## MSW Setup
+
+### Cara Kerja
+
+MSW (Mock Service Worker) berjalan di browser sebagai service worker yang mengintersep request fetch/XHR. Setiap kali halaman dibuka:
+
+1. Playwright inject init script ke browser
+2. Init script mendaftarkan MSW service worker
+3. Service worker mengintersep request API
+4. Request yang cocok dengan route dikembalikan dari fixture JSON
+5. Request yang tidak cocok diteruskan ke server asli
+
+### Menambahkan Route Baru
+
+#### Langkah 1: Buat Fixture JSON
+
+Simpan file JSON di `tests/Browser/fixtures/`:
+
+```
+tests/Browser/fixtures/
+├── kabupaten.json
+├── kecamatan-50.01.json
+├── kecamatan-50.02.json
+├── desa-50.01.01.json
+├── data-website.json
+├── statistik-penduduk-rentang-umur.json
+└── ...
+```
+
+#### Langkah 2: Tambah Route di MswSetup.php
+
+Edit `tests/Browser/MswSetup.php` — tambahkan route ke constant `ROUTES` atau `REGEX_ROUTES`:
+
+```php
+// Exact match (URL statis)
+private const ROUTES = [
+    '/api/v1/statistik-web/get-list-kabupaten' => 'kabupaten.json',
+    '/api/v1/data-website' => 'data-website.json',
+    '/api/v1/endpoint-baru' => 'endpoint-baru.json',  // ← tambah di sini
+];
+
+// Regex match (URL dengan parameter dinamik)
+private const REGEX_ROUTES = [
+    '#/api/v1/statistik-web/get-list-kecamatan/([\d.]+)$#' => 'kecamatan-*.json',
+    '#/api/v1/statistik/penduduk\?.*filter\[id\]=([^&]+)#' => 'statistik-penduduk-*.json',
+    '#/api/v1/baru/([\w-]+)$#' => 'baru-*.json',  // ← tambah di sini
+];
+```
+
+#### Langkah 3: Jalankan Test
+
+```bash
+php vendor/bin/pest --filter="TestBaru"
+```
+
+**Tidak perlu edit vendor** — `InitScript.php` sudah ter-patch dan otomatis memanggil `MswSetup::getInitScriptJs()`.
+
+#### Workflow Lengkap
+
+```
+1. Buat fixture JSON
+   tests/Browser/fixtures/baru.json
+
+2. Tambah route di MswSetup.php
+   - Exact: tambah ke ROUTES
+   - Regex: tambah ke REGEX_ROUTES
+
+3. Jalankan test
+   php vendor/bin/pest --filter="TestBaru"
+```
+
+### Route Matching
+
+MSW menggunakan dua jenis matching:
+
+| Type | Kapan Digunakan | Contoh |
+|------|-----------------|--------|
+| Exact | URL statis, tidak ada parameter | `/api/v1/data-website` |
+| Regex | URL dengan parameter dinamik | `/api/v1/statistik/penduduk?filter[id]=rentang-umur` |
+
+#### Exact Route
+
+```php
+private const ROUTES = [
+    '/api/v1/data-website' => 'data-website.json',
+    // Request ke /api/v1/data-website → return data-website.json
+];
+```
+
+#### Regex Route
+
+```php
+private const REGEX_ROUTES = [
+    '#/api/v1/statistik/penduduk\?.*filter\[id\]=([^&]+)#' => 'statistik-penduduk-*.json',
+    // Request ke /api/v1/statistik/penduduk?filter[id]=rentang-umur
+    // → return statistik-penduduk-rentang-umur.json
+];
+```
+
+Regex route menggunakan glob pattern (`*.json`) untuk resolve file fixture secara otomatis berdasarkan parameter URL.
+
+### Vendor Patching: Mengapa Edit InitScript.php?
+
+#### Masalah
+
+Pest browser plugin meng-inject init script ke browser via `InitScript::get()`:
+
+```php
+// vendor/pestphp/pest-plugin-browser/src/Playwright/Page.php
+$context->addInitScript(InitScript::get());  // hardcoded
+```
+
+`InitScript::get()` hanya mengembalikan script Pest default (axe.js). **Tidak ada hook/callback untuk menambahkan script lain.**
+
+#### Solusi
+
+Edit `InitScript.php` via composer hook (`apply-patch.sh`) untuk memanggil `MswSetup::getInitScriptJs()`:
+
+```php
+// vendor/.../InitScript.php (patched)
+public static function get(): string
+{
+    $initScriptJs = <<<JS
+        // ... Pest default (axe.js, console capture) ...
+    JS;
+
+    // TAMBAHAN: MSW init script
+    $mswSetupJs = \Tests\Browser\MswSetup::getInitScriptJs();
+
+    return $initScriptJs . "\n" . $mswSetupJs;
+}
+```
+
+#### Kenapa Tidak Edit Vendor Langsung?
+
+Karena `composer update` akan menimpa vendor. Solusi:
+
+1. **Composer hook** — `apply-patch.sh` otomatis jalan setelah `composer install/update`
+2. **Cek sebelum patch** — script mengecek apakah patch sudah ada sebelum apply
+3. **Backup** — file original disimpan sebagai `InitScript.php.bak`
+
+#### Alternatif Jangka Panjang
+
+Contribute PR ke `pest-plugin-browser` untuk menambahkan:
+
+```php
+// Fitur yang diharapkan
+pest()->browser()->initScript(fn() => MswSetup::getInitScriptJs());
+```
+
+### External CDN Blocking
+
+MSW otomatis memblokir request ke external CDN (Google Fonts, dll) untuk mempercepat test:
+
+```javascript
+// Di MswSetup.php
+if (url.includes('fonts.googleapis.com') ||
+    url.includes('fonts.gstatic.com') ||
+    url.includes('cdn.jsdelivr.net')) {
+    return new Response('', {status: 204});
+}
+```
+
+Untuk CSS `<link>` tags (Google Fonts), MSW tidak bisa memblokir. Gunakan config Laravel:
+
+```php
+// tests/Pest.php
+beforeEach(function () {
+    config(['adminlte.google_fonts.allowed' => false]);
+});
 ```
 
 ---
@@ -185,10 +397,14 @@ Gunakan format `feature-element` untuk data-testid:
 | Email input | `login-email` | Input email/username |
 | Password input | `login-password` | Input password |
 | Submit button | `login-submit` | Tombol submit |
-| Remember checkbox | `login-remember` | Checkbox remember me |
-| Error message | `login-error` | Error validation |
-| Flash success | `flash-success` | Success notification |
-| Flash error | `flash-error` | Error notification |
+| Filter Kabupaten | `filter-kabupaten` | Select filter kabupaten |
+| Filter Kecamatan | `filter-kecamatan` | Select filter kecamatan |
+| Filter Desa | `filter-desa` | Select filter desa |
+| Tombol Filter | `bt-filter` | Tombol Tampilkan |
+| Summary Block | `summary-block` | Container kartu summary |
+| Peta | `peta` | Container peta |
+| Tabel Penduduk | `tabel-penduduk-block` | Container tabel |
+| Chart Item | `chart-item-{key}` | Container chart demografi |
 
 #### 4. Selector Hierarchy
 
@@ -205,12 +421,22 @@ Gunakan format `feature-element` untuk data-testid:
 ```
 tests/
 ├── Browser/
-│   ├── SmokeLoginTest.php      # Test login
-│   ├── SmokeDashboardTest.php  # Test dashboard
-│   └── SessionState.php        # Helper session management
+│   ├── SmokeLoginTest.php              # Test login
+│   ├── SmokeDashboardTest.php          # Test dashboard
+│   ├── SmokeDashboardDemografiTest.php # Test demografi
+│   ├── SessionState.php                # Helper session management
+│   ├── ScreenshotHelper.php            # Screenshot management
+│   ├── MswSetup.php                    # MSW route & init script generator
+│   ├── apply-patch.sh                  # Vendor patch script (composer hook)
+│   └── fixtures/                       # JSON fixture files
+│       ├── kabupaten.json
+│       ├── kecamatan-*.json
+│       ├── desa-*.json
+│       ├── data-website.json
+│       └── statistik-penduduk-*.json
 ├── Feature/
 ├── Unit/
-└── Pest.php                    # Pest configuration
+└── Pest.php                            # Pest configuration
 ```
 
 ### Test Dasar
@@ -257,6 +483,25 @@ it('shows error for invalid credentials', function () {
 });
 ```
 
+#### Test dengan Filter Interaksi
+
+```php
+it('applies filter and elements remain visible', function () {
+    $page = SessionState::loginAndNavigate($this->user, '/dasbor')
+        ->assertPathIs('/dasbor')
+        ->assertVisible('@filter-kabupaten')
+        ->assertVisible('@bt-filter');
+
+    // Set filter value via JavaScript (karena Select2)
+    $page->script("$('#filter_kabupaten').val('50.01').trigger('change')");
+    $page->click('@bt-filter');
+
+    // Assert elemen masih terlihat setelah filter
+    $page->assertVisible('@peta')
+        ->assertVisible('@tabel-penduduk-block');
+});
+```
+
 ### API Reference
 
 | Method | Keterangan |
@@ -268,6 +513,7 @@ it('shows error for invalid credentials', function () {
 | `typeSlowly($selector, $value, $delay)` | Ketik perlahan |
 | `press($text)` | Klik tombol/link |
 | `click($selector)` | Klik element |
+| `select($field, $option)` | Pilih option di select |
 | `submit()` | Submit form pertama |
 | `value($selector)` | Ambil nilai input |
 | `script($js)` | Jalankan JavaScript |
@@ -275,9 +521,8 @@ it('shows error for invalid credentials', function () {
 | `assertVisible($selector)` | Assert element terlihat |
 | `assertPathIs($path)` | Assert URL path |
 | `assertPathIsNot($path)` | Assert URL path bukan |
-| `wait($seconds)` | Tunggu beberapa detik |
+| `assertNoJavaScriptErrors()` | Assert tidak ada JS error |
 | `screenshot($name)` | Ambil screenshot |
-| `dd()` | Dump & die |
 
 ---
 
@@ -289,7 +534,7 @@ Setiap Pest browser test membuat **browser context baru**, sehingga session/cook
 
 ### Solusi
 
-Gunakan `SessionState` helper untuk save/restore user ID ke file, lalu bypass form login via route `/_pest/login/{id}`.
+Gunakan `SessionState` helper untuk bypass form login via route `/_pest/login/{id}`.
 
 ### SessionState Helper
 
@@ -304,36 +549,31 @@ final class SessionState
 {
     private const STORAGE_PATH = __DIR__ . '/.session_state.json';
 
-    // Simpan state user ke file
-    public static function saveForUser(User $user): void
+    // Login user dan bypass force password reset
+    public static function loginAdminUser(): User
     {
-        $state = [
-            'user_id' => $user->id,
-            'email' => $user->email,
-            'created_at' => now()->toIso8601String(),
+        $user = User::where('email', 'admin@admin.com')->firstOrFail();
+        $user->update([
+            'force_password_reset' => false,
+            'password_expires_at' => null,
+        ]);
+        return $user;
+    }
+
+    // Login via route dan navigate ke URL
+    public static function loginAndNavigate(
+        User $user,
+        string $url,
+        array $options = []
+    ): \Pest\Browser\Api\Webpage {
+        $options['headers'] = [
+            'Cookie' => self::getSessionCookie($user),
         ];
-        file_put_contents(self::STORAGE_PATH, json_encode($state, JSON_PRETTY_PRINT));
+        return visit($url, $options);
     }
 
-    // Load state dari file
-    public static function load(): ?array { /* ... */ }
-
-    // Hapus state file
+    // Cleanup
     public static function clear(): void { /* ... */ }
-
-    // Buat atau ambil user exist
-    public static function getOrCreateUser(string $emailPrefix = 'pest-session'): User { /* ... */ }
-
-    // Login langsung via route
-    public static function loginAs(User $user): \Pest\Browser\Api\AwaitableWebpage
-    {
-        $result = visit("/_pest/login/{$user->id}");
-        self::saveForUser($user);
-        return $result;
-    }
-
-    // Restore session dari file
-    public static function restoreSession(): ?\Pest\Browser\Api\AwaitableWebpage { /* ... */ }
 }
 ```
 
@@ -342,25 +582,19 @@ final class SessionState
 ```php
 use Tests\Browser\SessionState;
 
-it('can restore session from saved state', function () {
-    // Buat user
-    $user = SessionState::getOrCreateUser('pest-restore');
+beforeEach(function () {
+    $this->user = SessionState::loginAdminUser();
+});
 
-    // Simpan state
-    SessionState::saveForUser($user);
-
-    // Load state
-    $state = SessionState::load();
-    expect($state)->not->toBeNull();
-    expect($state['user_id'])->toBe($user->id);
-
-    // Login via quick route
-    visit("/_pest/login/{$user->id}")
-        ->navigate('/dasbor')
-        ->assertPathIs('/dasbor');
-
-    // Cleanup
+afterEach(function () {
     SessionState::clear();
+});
+
+it('displays dashboard elements', function () {
+    SessionState::loginAndNavigate($this->user, '/dasbor')
+        ->assertPathIs('/dasbor')
+        ->assertVisible('@summary-block')
+        ->assertVisible('@peta');
 });
 ```
 
@@ -370,7 +604,6 @@ it('can restore session from saved state', function () {
 |---------|-------|
 | Login via form | ~1.5s |
 | Login via `/_pest/login/{id}` | ~1.4s |
-| **Session restore** | **~0.55s** (3x lebih cepat) |
 
 ---
 
@@ -435,20 +668,34 @@ User::factory()->create([
 ]);
 ```
 
-### Variable Undefined di View
+### Force Password Reset Redirect
 
-**Gejala:** `Undefined variable $settingAplikasi` di view.
+**Gejala:** Test redirect ke `/password-reset/force` setelah login.
 
-**Kemungkinan:** View partial yang di-include sebelum AppServiceProvider boot selesai.
+**Root Cause:** User memiliki `force_password_reset=true` atau password expired.
 
-**Solusi:** Gunakan `assertPathIs()` alih-alih `assertSee()`:
+**Solusi:** Bersihkan flag sebelum test:
 
 ```php
-// ❌ Bisa gagal
-->assertSee('Dasbor');
+$user->update([
+    'force_password_reset' => false,
+    'password_expires_at' => null,
+]);
+```
 
-// ✅ Lebih reliable
-->assertPathIs('/dasbor');
+### Google Fonts Blocking
+
+**Gejala:** Test hang atau timeout karena menunggu Google Fonts load.
+
+**Root Cause:** `<link>` tag untuk Google Fonts memblokir page load.
+
+**Solusi:** Disable Google Fonts di test environment:
+
+```php
+// tests/Pest.php
+beforeEach(function () {
+    config(['adminlte.google_fonts.allowed' => false]);
+});
 ```
 
 ### Test Timeout
@@ -471,6 +718,15 @@ pest()->browser()->timeout(60000); // 60 detik
 npm install playwright @playwright/test
 npx playwright install chromium
 ```
+
+### MSW Routes Not Matching
+
+**Gejala:** Request API tidak di-intercept, mengembalikan 404 atau data asli.
+
+**Solusi:**
+1. Pastikan route di `MswSetup.php` benar
+2. Pastikan file fixture ada di `tests/Browser/fixtures/`
+3. Pastikan regex escape benar (`\\/` untuk `/`)
 
 ---
 
@@ -507,8 +763,14 @@ Contoh:
 - login-email
 - login-password
 - login-submit
-- dashboard-sidebar
-- user-profile-avatar
+- filter-kabupaten
+- filter-kecamatan
+- filter-desa
+- bt-filter
+- summary-block
+- peta
+- tabel-penduduk-block
+- chart-item-rentang-umur
 ```
 
 ### 4. Jangan Test Internal Implementation
@@ -534,6 +796,16 @@ Contoh:
 
 // ✅ Atau gunakan testid untuk element yang spesifik
 ->assertVisible('@dashboard-welcome')
+```
+
+### 6. Hindari `wait()` Method
+
+```php
+// ❌ Hindari - memblokir event loop
+$page->wait(3);
+
+// ✅ Gunakan assertVisible yang polling
+$page->assertVisible('@element');
 ```
 
 ---
@@ -612,4 +884,5 @@ Fitur ini **selalu aktif** tanpa perlu konfigurasi.
 - [Pest v4 Documentation](https://pestphp.com/docs/browser)
 - [pest-plugin-browser](https://github.com/pestphp/pest-browser)
 - [Playwright for PHP](https://playwright.dev/php/)
+- [MSW Documentation](https://mswjs.io/docs/)
 - [Laravel HTTP Testing](https://laravel.com/docs/http-tests)

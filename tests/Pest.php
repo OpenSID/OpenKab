@@ -7,10 +7,6 @@ uses(TestCase::class)->in('Feature', 'Browser');
 
 pest()->browser()->timeout(30000);
 
-beforeAll(function () {
-    SessionState::startMockServer();
-});
-
-afterAll(function () {
-    SessionState::stopMockServer();
+beforeEach(function () {
+    config(['adminlte.google_fonts.allowed' => false]);
 });

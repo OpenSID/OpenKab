@@ -18,13 +18,13 @@ it('can login with valid credentials', function () {
     $email = 'pest-' . time() . '@login.test';
     $user = User::factory()->create([
         'email' => $email,
-        'password' => 'password123',
+        'password' => 'paSsword@123Quat',
     ]);
     SessionState::assignAdminRole($user);
 
     $page = visit('/login')
         ->fill('@login-email', $email)
-        ->fill('@login-password', 'password123')
+        ->fill('@login-password', 'paSsword@123Quat')
         ->press('Masuk')
         ->assertPathIsNot('/login');
 

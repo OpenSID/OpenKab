@@ -50,6 +50,7 @@
         "pestphp/pest": "^4.0",
         "pestphp/pest-plugin-browser": "^4.0",
         "phpunit/phpunit": "^12.0",
+        "react/http": "^0.4.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "minimum-stability": "stable",
@@ -92,8 +93,13 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "@php artisan package:discover --ansi",
+            "bash tests/Browser/apply-patch.sh"
+        ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "bash tests/Browser/apply-patch.sh"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

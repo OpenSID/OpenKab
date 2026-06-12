@@ -1,0 +1,44 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Ampenan Tua",
+                "nik": "5271010101900001",
+                "pekerjaan": "PNS",
+                "jabatan": "Staf",
+                "jumlah_penghasilan": 5000000,
+                "pelatihan": "Pelatihan Administrasi"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama_desa": "Desa Taman Sari",
+                "nik": "5271010102900002",
+                "pekerjaan": "Swasta",
+                "jabatan": "Supervisor",
+                "jumlah_penghasilan": 3500000,
+                "pelatihan": "Pelatihan Manajemen"
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama_desa": "Desa Cakranegara",
+                "nik": "5271010103900003",
+                "pekerjaan": "Belum/Tidak Bekerja",
+                "jabatan": null,
+                "jumlah_penghasilan": 0,
+                "pelatihan": null
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 3,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

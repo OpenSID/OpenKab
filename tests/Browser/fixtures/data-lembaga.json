@@ -1,0 +1,44 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Ampenan Tua",
+                "kode": "LPM",
+                "nama": "Lembaga Pemberdayaan Masyarakat",
+                "nama_ketua": "H. Mahfud",
+                "kategori": "Lembaga Kemasyarakatan",
+                "anggota_count": 15
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama_desa": "Desa Taman Sari",
+                "kode": "PKK",
+                "nama": "Pembinaan Kesejahteraan Keluarga",
+                "nama_ketua": "Ny. Sari",
+                "kategori": "Lembaga Kemasyarakatan",
+                "anggota_count": 25
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama_desa": "Desa Cakranegara",
+                "kode": "KARANG",
+                "nama": "Karang Taruna",
+                "nama_ketua": "Rudi Hartono",
+                "kategori": "Lembaga Kepemudaan",
+                "anggota_count": 30
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 3,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

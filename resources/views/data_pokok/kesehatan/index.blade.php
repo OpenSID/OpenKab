@@ -13,11 +13,11 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header">Statistik Golongan Darah</div>
+                <div class="card-header" data-testid="statistik-golongan-darah">Statistik Golongan Darah</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                            <canvas id="donutChart" data-testid="chart-golongan-darah"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -26,11 +26,11 @@
         </div>
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">Statistik Status Gizi Balita</div>
+                <div class="card-header" data-testid="statistik-status-gizi">Statistik Status Gizi Balita</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                            <canvas id="barChart" data-testid="chart-status-gizi"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="kesehatan">
+                        <table class="table table-striped" id="kesehatan" data-testid="table-kesehatan">
                             <thead>
                                 <tr>
                                     <th>No</th>

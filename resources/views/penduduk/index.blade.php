@@ -37,10 +37,10 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
-                                role="button" aria-expanded="false" aria-controls="collapse-filter">
+                                role="button" aria-expanded="false" aria-controls="collapse-filter" data-testid="btn-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm">
+                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-testid="btn-cetak">
                                 <i class="fa fa-print"></i>
                                 Cetak
                             </button>
@@ -56,7 +56,7 @@
                         @if ($judul)
                             <h4 class="text-center">{{ $judul }}</h4>
                         @endif
-                        <table class="table table-striped" id="penduduk">
+                        <table class="table table-striped" id="penduduk" data-testid="table-penduduk">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -233,7 +233,7 @@
                                     <a href="{{ url('penduduk/pindah') }}/${data.id}" class="btn btn-social btn-flat btn-block btn-sm ${pindah} "><i class="fas fa-exchange-alt"></i> Pindah Penduduk</a>
                                 </li>`;
                             return `<div class="btn-group open">
-                            <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
+                            <button type="button" class="btn btn-social btn-flat btn-info btn-sm" data-toggle="dropdown" aria-expanded="true" data-testid="dropdown-pilih-aksi"><i class="fa fa-arrow-circle-down"></i> Pilih Aksi</button>
                             <ul class="dropdown-menu" role="menu">
                                 ${pindahMenu}
                             </ul>

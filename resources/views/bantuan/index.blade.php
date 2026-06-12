@@ -17,10 +17,10 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="false" aria-controls="collapse-filter">
+                                aria-expanded="false" aria-controls="collapse-filter" data-testid="btn-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url=""><i
+                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="" data-testid="btn-cetak"><i
                                     class="fa fa-print"></i>
                                 Cetak</button>
                             <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/bantuan/download'" table-id="bantuan" filename="data_bantuan" />
@@ -64,7 +64,7 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                    <button type="button" id="filter" class="btn btn-primary" data-testid="btn-filter-submit"><span
                                                             class="fas fa-search"></span></button>
                                                 </div>
                                             </div>
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped" id="bantuan">
+                        <table class="table table-striped" id="bantuan" data-testid="table-bantuan">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -158,7 +158,7 @@
                     {
                         data: function(data) {
                             return `<a href="{{ url('bantuan/detail') }}/${data.id}">
-                            <button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                            <button class="btn btn-info btn-sm" data-testid="btn-detail"><i class="fas fa-eye"></i> Detail</button>
                         </a>`;
 
 

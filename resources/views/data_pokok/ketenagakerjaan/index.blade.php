@@ -13,11 +13,11 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">Statistik Jumlah Penghasilan</div>
+                <div class="card-header" data-testid="statistik-jumlah-penghasilan">Statistik Jumlah Penghasilan</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                            <canvas id="barChart" data-testid="chart-jumlah-penghasilan"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -26,11 +26,11 @@
         </div>
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header">Statistik Pelatihan</div>
+                <div class="card-header" data-testid="statistik-pelatihan">Statistik Pelatihan</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                            <canvas id="donutChart" data-testid="chart-pelatihan"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="ketenagakerjaan">
+                        <table class="table table-striped" id="ketenagakerjaan" data-testid="table-ketenagakerjaan">
                             <thead>
                                 <tr>
                                     <th>No</th>

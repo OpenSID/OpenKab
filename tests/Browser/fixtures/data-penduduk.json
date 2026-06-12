@@ -1,0 +1,122 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nik": "5271010101900001",
+                "nama": "Ahmad Rizal",
+                "tag_id_card": "TAG001",
+                "nama_ayah": "Suparman",
+                "nama_ibu": "Siti Aminah",
+                "umur": 35,
+                "created_at": "2024-01-15T08:00:00.000000Z",
+                "status_dasar": 1,
+                "keluarga": {
+                    "no_kk": "5271010101900001",
+                    "alamat": "Jl. Merdeka No. 10"
+                },
+                "cluster_desa": {
+                    "dusun": "Dusun Satu",
+                    "rw": "001",
+                    "rt": "001"
+                },
+                "pendidikan_k_k": {
+                    "nama": "SLTA"
+                },
+                "pekerjaan": {
+                    "nama": "PNS"
+                },
+                "status_kawin": {
+                    "nama": "Kawin"
+                },
+                "log_penduduk": {
+                    "tgl_peristiwa": "2024-01-15"
+                },
+                "rtm": {
+                    "no_kk": "RTM001"
+                }
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nik": "5271010102900002",
+                "nama": "Siti Nurhaliza",
+                "tag_id_card": "TAG002",
+                "nama_ayah": "Mulyadi",
+                "nama_ibu": "Fatimah",
+                "umur": 28,
+                "created_at": "2024-02-20T10:30:00.000000Z",
+                "status_dasar": 1,
+                "keluarga": {
+                    "no_kk": "5271010102900002",
+                    "alamat": "Jl. Pahlawan No. 25"
+                },
+                "cluster_desa": {
+                    "dusun": "Dusun Dua",
+                    "rw": "001",
+                    "rt": "002"
+                },
+                "pendidikan_k_k": {
+                    "nama": "S1"
+                },
+                "pekerjaan": {
+                    "nama": "Swasta"
+                },
+                "status_kawin": {
+                    "nama": "Kawin"
+                },
+                "log_penduduk": {
+                    "tgl_peristiwa": "2024-02-20"
+                },
+                "rtm": {
+                    "no_kk": "RTM002"
+                }
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nik": "5271010103900003",
+                "nama": "Budi Santoso",
+                "tag_id_card": "TAG003",
+                "nama_ayah": "Hasan",
+                "nama_ibu": "Rohana",
+                "umur": 22,
+                "created_at": "2024-03-10T14:00:00.000000Z",
+                "status_dasar": 1,
+                "keluarga": {
+                    "no_kk": "5271010103900003",
+                    "alamat": "Jl. Sudirman No. 5"
+                },
+                "cluster_desa": {
+                    "dusun": "Dusun Satu",
+                    "rw": "002",
+                    "rt": "001"
+                },
+                "pendidikan_k_k": {
+                    "nama": "D3"
+                },
+                "pekerjaan": {
+                    "nama": "Belum/Tidak Bekerja"
+                },
+                "status_kawin": {
+                    "nama": "Belum Kawin"
+                },
+                "log_penduduk": {
+                    "tgl_peristiwa": "2024-03-10"
+                },
+                "rtm": {
+                    "no_kk": "RTM003"
+                }
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 3,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Ampenan Tua",
+                "nik": "5271010101900001",
+                "pendidikan_kk_id": 3,
+                "pendidikan_sedang_id": 5,
+                "partisipasi_sekolah": "Tidak Bersekolah",
+                "pendidikan_tertinggi": "SLTA",
+                "kelas_tertinggi": 3,
+                "ijazah_tertinggi": "SLTA"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama_desa": "Desa Taman Sari",
+                "nik": "5271010102900002",
+                "pendidikan_kk_id": 5,
+                "pendidikan_sedang_id": null,
+                "partisipasi_sekolah": "Tidak Bersekolah",
+                "pendidikan_tertinggi": "S1",
+                "kelas_tertinggi": 4,
+                "ijazah_tertinggi": "S1"
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama_desa": "Desa Cakranegara",
+                "nik": "5271010103900003",
+                "pendidikan_kk_id": 4,
+                "pendidikan_sedang_id": 6,
+                "partisipasi_sekolah": "Bersekolah",
+                "pendidikan_tertinggi": "D3",
+                "kelas_tertinggi": 6,
+                "ijazah_tertinggi": "D3"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 3,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

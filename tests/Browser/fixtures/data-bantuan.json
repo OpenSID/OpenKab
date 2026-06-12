@@ -1,0 +1,50 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Ampenan Tua",
+                "nama": "BLT Dana Desa",
+                "asaldana": "APBN",
+                "jumlah_peserta": 150,
+                "sdate": "2024-01-01",
+                "edate": "2024-12-31",
+                "nama_sasaran": "Kepala Keluarga",
+                "status": 1
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama_desa": "Desa Taman Sari",
+                "nama": "PKH",
+                "asaldana": "APBN",
+                "jumlah_peserta": 85,
+                "sdate": "2024-01-01",
+                "edate": "2024-12-31",
+                "nama_sasaran": "Ibu Hamil",
+                "status": 1
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama_desa": "Desa Cakranegara",
+                "nama": "Bantuan Pangan",
+                "asaldana": "APBD",
+                "jumlah_peserta": 200,
+                "sdate": "2024-03-01",
+                "edate": "2024-09-30",
+                "nama_sasaran": "Keluarga Miskin",
+                "status": 0
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 3,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

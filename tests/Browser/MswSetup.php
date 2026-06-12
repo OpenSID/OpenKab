@@ -29,6 +29,12 @@ final class MswSetup
         '/api/v1/statistik-web/get-list-coordinate' => 'coordinates.json',
         '/api/v1/wilayah/penduduk' => 'penduduk.json',
         '/api/v1/dasbor' => 'dasbor.json',
+        '/api/v1/penduduk' => 'data-penduduk.json',
+        '/api/v1/data/kesehatan' => 'data-kesehatan.json',
+        '/api/v1/pendidikan' => 'data-pendidikan.json',
+        '/api/v1/ketenagakerjaan' => 'data-ketenagakerjaan.json',
+        '/api/v1/bantuan' => 'data-bantuan.json',
+        '/api/v1/lembaga' => 'data-lembaga.json',
     ];
 
     /**

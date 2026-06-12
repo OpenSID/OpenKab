@@ -16,7 +16,7 @@
 
 <button type="button" class="btn {{ $variant }} {{ $size }}" id="{{ $buttonId }}"
     data-print-url="{{ $printUrl }}" data-table-id="{{ $tableId }}" data-filters="{{ json_encode($filters) }}"
-    data-additional-params="{{ json_encode($additionalParams) }}">
+    data-additional-params="{{ json_encode($additionalParams) }}" data-testid="btn-cetak">
     <i class="{{ $icon }}"></i>
     {{ $label }}
 </button>

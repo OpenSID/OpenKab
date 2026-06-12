@@ -1,0 +1,53 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Ampenan Tua",
+                "nik": "5271010101900001",
+                "golongan_darah": "O",
+                "cacat": "Tidak Cacat",
+                "sakit_menahun": "Tidak Ada",
+                "kb": "IUD",
+                "hamil": "Tidak",
+                "asuransi": "BPJS Kesehatan",
+                "status_gizi": "Baik"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama_desa": "Desa Taman Sari",
+                "nik": "5271010102900002",
+                "golongan_darah": "A",
+                "cacat": "Tidak Cacat",
+                "sakit_menahun": "Diabetes",
+                "kb": "Suntik",
+                "hamil": "Tidak",
+                "asuransi": "PBI",
+                "status_gizi": "Cukup"
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama_desa": "Desa Cakranegara",
+                "nik": "5271010103900003",
+                "golongan_darah": "B",
+                "cacat": "Tidak Cacat",
+                "sakit_menahun": "Tidak Ada",
+                "kb": "Tidak",
+                "hamil": "Tidak",
+                "asuransi": "Tidak Ada",
+                "status_gizi": "Baik"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 3,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

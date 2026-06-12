@@ -16,7 +16,7 @@
 
 <button id="{{ $id }}" type="button" class="btn {{ $variant }} {{ $size }} {{ $class }}"
     @if ($disabled) disabled @endif data-download-url="{{ $downloadUrl }}"
-    data-table-id="{{ $tableId }}" data-filename="{{ $filename }}">
+    data-table-id="{{ $tableId }}" data-filename="{{ $filename }}" data-testid="btn-excel">
     <i class="{{ $icon }}"></i>
     {{ $label }}
 </button>

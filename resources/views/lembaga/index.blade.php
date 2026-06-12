@@ -23,7 +23,7 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="false" aria-controls="collapse-filter">
+                                aria-expanded="false" aria-controls="collapse-filter" data-testid="btn-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
                             <x-print-button :print-url="route('lembaga.cetak')" table-id="table-lembaga" label="Cetak" />
@@ -61,7 +61,7 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <div class="btn-group btn-group-sm btn-block">
-                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                    <button type="button" id="filter" class="btn btn-primary" data-testid="btn-filter-submit"><span
                                                             class="fas fa-search"></span></button>
                                                 </div>
                                             </div>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-lembaga">
+                        <table class="table table-striped" id="table-lembaga" data-testid="table-lembaga">
                             <thead>
                                 <tr>
                                     <th>No</th>

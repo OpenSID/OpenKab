@@ -315,7 +315,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="btn-group btn-group-sm btn-block">
-                            <button type="button" id="filter" class="btn btn-primary"><span
+                            <button type="button" id="filter" class="btn btn-primary" data-testid="btn-filter-submit"><span
                                     class="fas fa-search"></span></button>
                         </div>
                     </div>

@@ -42,10 +42,7 @@ jobs:
       run: npm install
 
     - name: Install Playwright Browsers
-      run: npm install playwright && npx playwright install
-
-    - name: Install Playwright System Dependencies
-      run: npx playwright install-deps
+      run: npm install playwright && npx playwright install    
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache

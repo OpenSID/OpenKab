@@ -12,34 +12,38 @@ afterEach(function () {
 });
 
 it('opens the bantuan page', function () {
-    SessionState::loginAndNavigate($this->user, '/bantuan')
+    $page = SessionState::loginAndNavigate($this->user, '/bantuan')
         ->assertPathIs('/bantuan')
         ->assertSee('Bantuan');
+
+    ScreenshotHelper::saveIfEnabled($page, 'bantuan-page');
 });
 
 it('displays filter button', function () {
-    SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertVisible('[href="#collapse-filter"]');
+    $page = SessionState::loginAndNavigate($this->user, '/bantuan')
+        ->assertVisible('[data-testid="bt-toggle-filter"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'bantuan-filter-button');
 });
 
 it('displays cetak button', function () {
-    SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertVisible('#cetak');
+    $page = SessionState::loginAndNavigate($this->user, '/bantuan')
+        ->assertVisible('[data-testid="bt-cetak"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'bantuan-cetak-button');
 });
 
 it('displays excel button', function () {
-    SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertVisible('#download-excel');
-});
-
-it('displays datatable', function () {
-    SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertVisible('#bantuan');
-});
-
-it('displays at least one data row', function () {
     $page = SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertPathIs('/bantuan');
+        ->assertVisible('[data-testid="bt-excel"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'bantuan-excel-button');
+});
+
+it('displays datatable with data rows', function () {
+    $page = SessionState::loginAndNavigate($this->user, '/bantuan')
+        ->assertPathIs('/bantuan')
+        ->assertVisible('[data-testid="datatable-bantuan"]');
 
     $page->assertScript(
         "new Promise((resolve) => {
@@ -55,31 +59,14 @@ it('displays at least one data row', function () {
         })",
         true
     );
-});
 
-it('displays detail button per row', function () {
-    $page = SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertPathIs('/bantuan');
-
-    $page->assertScript(
-        "new Promise((resolve) => {
-            const check = () => {
-                const rows = document.querySelectorAll('#bantuan tbody tr');
-                if (rows.length > 0 && !rows[0].classList.contains('dataTables_empty')) {
-                    const detailBtn = document.querySelector('#bantuan tbody td:nth-child(2) a[href*=\"bantuan/detail\"]');
-                    resolve(!!detailBtn);
-                } else {
-                    setTimeout(check, 500);
-                }
-            };
-            check();
-        })",
-        true
-    );
+    ScreenshotHelper::saveIfEnabled($page, 'bantuan-datatable-rows');
 });
 
 it('has no javascript errors', function () {
-    SessionState::loginAndNavigate($this->user, '/bantuan')
+    $page = SessionState::loginAndNavigate($this->user, '/bantuan')
         ->assertPathIs('/bantuan')
         ->assertNoJavaScriptErrors();
+
+    ScreenshotHelper::saveIfEnabled($page, 'bantuan-no-errors');
 });

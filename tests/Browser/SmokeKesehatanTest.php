@@ -12,20 +12,26 @@ afterEach(function () {
 });
 
 it('opens the kesehatan page', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
         ->assertPathIs('/data-pokok/kesehatan');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kesehatan-page');
 });
 
 it('displays statistik golongan darah', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
         ->assertSee('Statistik Golongan Darah')
         ->assertVisible('#donutChart');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kesehatan-donut-chart');
 });
 
 it('displays statistik status gizi balita', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
         ->assertSee('Statistik Status Gizi Balita')
         ->assertVisible('#barChart');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kesehatan-bar-chart');
 });
 
 it('renders all charts successfully', function () {
@@ -49,21 +55,28 @@ it('renders all charts successfully', function () {
         })",
         true
     );
+
+    ScreenshotHelper::saveIfEnabled($page, 'kesehatan-charts');
 });
 
 it('displays cetak button', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
-        ->assertVisible('#print-btn-kesehatan');
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
+        ->assertVisible('[data-testid="bt-cetak"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kesehatan-cetak-button');
 });
 
 it('displays excel button', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
-        ->assertVisible('#download-excel');
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
+        ->assertVisible('[data-testid="bt-excel"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kesehatan-excel-button');
 });
 
-it('displays datatable with data', function () {
+it('displays datatable with data rows', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
-        ->assertPathIs('/data-pokok/kesehatan');
+        ->assertPathIs('/data-pokok/kesehatan')
+        ->assertVisible('[data-testid="datatable-kesehatan"]');
 
     $page->assertScript(
         "new Promise((resolve) => {
@@ -79,10 +92,14 @@ it('displays datatable with data', function () {
         })",
         true
     );
+
+    ScreenshotHelper::saveIfEnabled($page, 'kesehatan-datatable-rows');
 });
 
 it('has no javascript errors', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
         ->assertPathIs('/data-pokok/kesehatan')
         ->assertNoJavaScriptErrors();
+
+    ScreenshotHelper::saveIfEnabled($page, 'kesehatan-no-errors');
 });

@@ -45,14 +45,14 @@
                     <div>Data Pendidikan Penduduk dan DTKS</div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <x-print-button :print-url="url('data-pokok/pendidikan/cetak')" table-id="pendidikan" :filter="[]" />
-                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/pendidikan/download'" table-id="pendidikan" filename="data_pendidikan" />
+                            <x-print-button :print-url="url('data-pokok/pendidikan/cetak')" table-id="pendidikan" :filter="[]" testId="bt-cetak" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/pendidikan/download'" table-id="pendidikan" filename="data_pendidikan" testId="bt-excel" />
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="pendidikan">
+                        <table class="table table-striped" id="pendidikan" data-testid="datatable-pendidikan">
                             <thead>
                                 <tr>
                                     <th>No</th>

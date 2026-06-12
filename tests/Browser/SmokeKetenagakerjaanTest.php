@@ -12,22 +12,28 @@ afterEach(function () {
 });
 
 it('opens the ketenagakerjaan page', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
         ->assertPathIs('/data-pokok/ketenagakerjaan')
         ->assertSee('Statistik Jumlah Penghasilan')
         ->assertSee('Statistik Pelatihan');
+
+    ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-page');
 });
 
 it('displays statistik jumlah penghasilan', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
         ->assertSee('Statistik Jumlah Penghasilan')
         ->assertVisible('#barChart');
+
+    ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-bar-chart');
 });
 
 it('displays statistik pelatihan', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
         ->assertSee('Statistik Pelatihan')
         ->assertVisible('#donutChart');
+
+    ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-donut-chart');
 });
 
 it('renders all charts successfully', function () {
@@ -51,37 +57,28 @@ it('renders all charts successfully', function () {
         })",
         true
     );
+
+    ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-charts');
 });
 
 it('displays cetak button', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
-        ->assertVisible('#print-btn-ketenagakerjaan');
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
+        ->assertVisible('[data-testid="bt-cetak"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-cetak-button');
 });
 
 it('displays excel button', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
-        ->assertVisible('#download-excel');
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
+        ->assertVisible('[data-testid="bt-excel"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-excel-button');
 });
 
-it('displays datatable', function () {
+it('displays datatable with data rows', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
-        ->assertPathIs('/data-pokok/ketenagakerjaan');
-
-    $page->assertScript(
-        "new Promise((resolve) => {
-            const check = () => {
-                const table = document.querySelector('#ketenagakerjaan');
-                resolve(!!table);
-            };
-            check();
-        })",
-        true
-    );
-});
-
-it('displays at least one data row', function () {
-    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
-        ->assertPathIs('/data-pokok/ketenagakerjaan');
+        ->assertPathIs('/data-pokok/ketenagakerjaan')
+        ->assertVisible('[data-testid="datatable-ketenagakerjaan"]');
 
     $page->assertScript(
         "new Promise((resolve) => {
@@ -97,10 +94,14 @@ it('displays at least one data row', function () {
         })",
         true
     );
+
+    ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-datatable-rows');
 });
 
 it('has no javascript errors', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
         ->assertPathIs('/data-pokok/ketenagakerjaan')
         ->assertNoJavaScriptErrors();
+
+    ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-no-errors');
 });

@@ -12,20 +12,26 @@ afterEach(function () {
 });
 
 it('opens the pendidikan page', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
         ->assertPathIs('/data-pokok/pendidikan');
+
+    ScreenshotHelper::saveIfEnabled($page, 'pendidikan-page');
 });
 
 it('displays statistik partisipasi sekolah', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
         ->assertSee('Statistik Partisipasi Sekolah')
         ->assertVisible('#donutChart');
+
+    ScreenshotHelper::saveIfEnabled($page, 'pendidikan-donut-chart');
 });
 
 it('displays statistik ijazah tertinggi', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
         ->assertSee('Statistik Ijazah Tertinggi')
         ->assertVisible('#barChart');
+
+    ScreenshotHelper::saveIfEnabled($page, 'pendidikan-bar-chart');
 });
 
 it('renders all charts successfully', function () {
@@ -49,26 +55,28 @@ it('renders all charts successfully', function () {
         })",
         true
     );
+
+    ScreenshotHelper::saveIfEnabled($page, 'pendidikan-charts');
 });
 
 it('displays cetak button', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
-        ->assertVisible('#print-btn-pendidikan');
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
+        ->assertVisible('[data-testid="bt-cetak"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'pendidikan-cetak-button');
 });
 
 it('displays excel button', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
-        ->assertVisible('#download-excel');
-});
-
-it('displays datatable', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
-        ->assertVisible('#pendidikan');
-});
-
-it('displays at least one data row', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
-        ->assertPathIs('/data-pokok/pendidikan');
+        ->assertVisible('[data-testid="bt-excel"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'pendidikan-excel-button');
+});
+
+it('displays datatable with data rows', function () {
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
+        ->assertPathIs('/data-pokok/pendidikan')
+        ->assertVisible('[data-testid="datatable-pendidikan"]');
 
     $page->assertScript(
         "new Promise((resolve) => {
@@ -84,10 +92,14 @@ it('displays at least one data row', function () {
         })",
         true
     );
+
+    ScreenshotHelper::saveIfEnabled($page, 'pendidikan-datatable-rows');
 });
 
 it('has no javascript errors', function () {
-    SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
+    $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
         ->assertPathIs('/data-pokok/pendidikan')
         ->assertNoJavaScriptErrors();
+
+    ScreenshotHelper::saveIfEnabled($page, 'pendidikan-no-errors');
 });

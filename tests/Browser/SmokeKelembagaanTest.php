@@ -12,34 +12,38 @@ afterEach(function () {
 });
 
 it('opens the lembaga page', function () {
-    SessionState::loginAndNavigate($this->user, '/lembaga')
+    $page = SessionState::loginAndNavigate($this->user, '/lembaga')
         ->assertPathIs('/lembaga')
         ->assertSee('Lembaga');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-page');
 });
 
 it('displays filter button', function () {
-    SessionState::loginAndNavigate($this->user, '/lembaga')
-        ->assertVisible('[href="#collapse-filter"]');
+    $page = SessionState::loginAndNavigate($this->user, '/lembaga')
+        ->assertVisible('[data-testid="bt-toggle-filter"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-filter-button');
 });
 
 it('displays cetak button', function () {
-    SessionState::loginAndNavigate($this->user, '/lembaga')
-        ->assertVisible('#print-btn-table-lembaga');
+    $page = SessionState::loginAndNavigate($this->user, '/lembaga')
+        ->assertVisible('[data-testid="bt-cetak"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-cetak-button');
 });
 
 it('displays excel button', function () {
-    SessionState::loginAndNavigate($this->user, '/lembaga')
-        ->assertVisible('#download-excel');
-});
-
-it('displays datatable', function () {
-    SessionState::loginAndNavigate($this->user, '/lembaga')
-        ->assertVisible('#table-lembaga');
-});
-
-it('displays at least one data row', function () {
     $page = SessionState::loginAndNavigate($this->user, '/lembaga')
-        ->assertPathIs('/lembaga');
+        ->assertVisible('[data-testid="bt-excel"]');
+
+    ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-excel-button');
+});
+
+it('displays datatable with data rows', function () {
+    $page = SessionState::loginAndNavigate($this->user, '/lembaga')
+        ->assertPathIs('/lembaga')
+        ->assertVisible('[data-testid="datatable-lembaga"]');
 
     $page->assertScript(
         "new Promise((resolve) => {
@@ -55,10 +59,14 @@ it('displays at least one data row', function () {
         })",
         true
     );
+
+    ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-datatable-rows');
 });
 
 it('has no javascript errors', function () {
-    SessionState::loginAndNavigate($this->user, '/lembaga')
+    $page = SessionState::loginAndNavigate($this->user, '/lembaga')
         ->assertPathIs('/lembaga')
         ->assertNoJavaScriptErrors();
+
+    ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-no-errors');
 });

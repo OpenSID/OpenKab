@@ -167,6 +167,38 @@ pest()->browser()->timeout(30000);
 pest()->browser()->headless(false);
 ```
 
+### Menjalankan Test
+
+#### Mode Headless (Default)
+
+```bash
+# Jalankan semua smoke test
+php artisan pest --group=smoke
+
+# Jalankan test spesifik
+php artisan pest --filter="SmokeLoginTest"
+
+# Jalankan satu test case
+php artisan pest --filter="can login with valid credentials"
+```
+
+#### Mode Headed (Visible Browser)
+
+Gunakan flag `--headed` untuk menjalankan test dengan browser yang terlihat (tidak headless). Berguna untuk debugging dan melihat proses test secara visual.
+
+```bash
+# Jalankan semua smoke test dengan browser visible
+php artisan pest --group=smoke --headed
+
+# Jalankan test spesifik dengan browser visible
+php artisan pest --filter="SmokeLoginTest" --headed
+
+# Jalankan satu test case dengan browser visible
+php artisan pest --filter="can login with valid credentials" --headed
+```
+
+> **Catatan:** Mode headed membutuhkan environment dengan GUI (desktop). Untuk remote server, gunakan X11 forwarding (`ssh -X`) atau VNC.
+
 ---
 
 ## MSW Setup

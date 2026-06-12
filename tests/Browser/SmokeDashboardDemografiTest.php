@@ -35,10 +35,23 @@ it('loads kabupaten dropdown options from ajax', function () use ($kabupatenName
     $page = SessionState::loginAndNavigate($this->user, '/dasbor-demografi')
         ->assertPathIs('/dasbor-demografi');
 
-    $page->assertScript("document.querySelectorAll('#filter_kabupaten option').length > 1", true);
+    $page->assertScript(
+        "new Promise((resolve) => {
+            const check = () => {
+                const count = document.querySelectorAll('#filter_kabupaten option').length;
+                if (count > 1) { resolve(true); } else { setTimeout(check, 200); }
+            };
+            check();
+        })",
+        true
+    );
 
     foreach ($kabupatenNames as $name) {
-        $page->assertSourceInHas('#filter_kabupaten', $name);
+        $escaped = addslashes($name);
+        $page->assertScript(
+            "Array.from(document.querySelectorAll('#filter_kabupaten option')).some(o => o.textContent.trim() === '{$escaped}')",
+            true
+        );
     }
 });
 
@@ -54,6 +67,33 @@ it('displays correct chart titles from fixture', function () use ($chartLabels) 
 it('renders chart content from fixture data', function () use ($chartKeys) {
     $page = SessionState::loginAndNavigate($this->user, '/dasbor-demografi')
         ->assertPathIs('/dasbor-demografi');
+
+    $keysJson = json_encode($chartKeys);
+    $page->assertScript(
+        "new Promise((resolve) => {
+            const keys = {$keysJson};
+            const elFor = key => document.querySelector('[data-testid=\"chart-content-' + key + '\"]');
+            const hasCanvas = key => { const e = elFor(key); return e && e.querySelector('canvas'); };
+            const hasLoading = key => { const e = elFor(key); return e && e.textContent.includes('Sedang memuat'); };
+
+            const phase1 = () => {
+                if (keys.some(hasLoading)) { setTimeout(phase2, 100); }
+                else if (keys.every(hasCanvas)) {
+                    setTimeout(() => {
+                        if (keys.every(k => hasCanvas(k) && !hasLoading(k))) { resolve(true); }
+                        else { setTimeout(phase2, 200); }
+                    }, 2000);
+                }
+                else { setTimeout(phase1, 50); }
+            };
+            const phase2 = () => {
+                if (keys.every(k => hasCanvas(k) && !hasLoading(k))) { resolve(true); }
+                else { setTimeout(phase2, 200); }
+            };
+            phase1();
+        })",
+        true
+    );
 
     foreach ($chartKeys as $key) {
         $page->assertSourceInHas("@chart-content-{$key}", "donutChart-{$key}");

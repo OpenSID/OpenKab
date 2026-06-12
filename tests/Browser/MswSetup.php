@@ -38,7 +38,7 @@ final class MswSetup
     private const REGEX_ROUTES = [
         '#/api/v1/statistik-web/get-list-kecamatan/([\d.]+)$#' => 'kecamatan-*.json',
         '#/api/v1/statistik-web/get-list-desa/([\d.]+)$#' => 'desa-*.json',
-        '#/api/v1/statistik/penduduk\?.*filter\[id\]=([^&]+)#' => 'statistik-penduduk-*.json',
+        '#/api/v1/statistik/penduduk\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'statistik-penduduk-*.json',
     ];
 
     /**
@@ -73,8 +73,8 @@ final class MswSetup
         var fullUrl = path + (search || '');
 
         for (var pattern in FIXTURES) {
-            if (pattern.charAt(0) === '#') {
-                var regex = new RegExp(pattern);
+            if (pattern.charAt(0) === '~') {
+                var regex = new RegExp(pattern.substring(1));
                 var m = fullUrl.match(regex);
                 if (m && m[1]) {
                     var resolved = FIXTURES[pattern];
@@ -229,7 +229,10 @@ JS;
                 }
             }
             if (! empty($resolved)) {
-                $fixtures[$pattern] = $resolved;
+                // Strip PHP regex delimiters (#...#) and prefix with ~ for JS detection
+                $stripped = substr($pattern, 1, -1);
+                $jsPattern = '~' . $stripped;
+                $fixtures[$jsPattern] = $resolved;
             }
         }
 

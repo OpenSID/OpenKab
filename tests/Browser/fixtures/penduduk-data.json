@@ -1,0 +1,33 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "nik": "5271010101010001",
+                "nama": "Budi Santoso",
+                "no_kk": "52710101010100001",
+                "nama_ayah": "Agus Santoso",
+                "nama_ibu": "Siti Rahayu",
+                "no_rumah_tangga": "001",
+                "alamat": "Jl. Test No. 1",
+                "dusun": "Dusun Test",
+                "rw": "001",
+                "rt": "001",
+                "pendidikan_kk_id": "SMA",
+                "umur": "30",
+                "pekerjaan": "Petani",
+                "status_kawin": "Kawin",
+                "tgl_peristiwa": "2020-01-01",
+                "tgl_terdaftar": "2020-01-01"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

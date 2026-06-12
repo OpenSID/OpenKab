@@ -1,8 +1,16 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Tests\Browser\ScreenshotHelper;
 use Tests\Browser\SessionState;
+
+beforeEach(function(){
+    \App\Models\Setting::updateOrCreate(
+        ['key' => 'captcha_enabled'],
+        ['value' => 'false']
+    );
+});
 
 it('displays login page correctly', function () {
     $page = visit('/login')
@@ -15,29 +23,38 @@ it('displays login page correctly', function () {
 });
 
 it('can login with valid credentials', function () {
-    $email = 'pest-' . time() . '@login.test';
-    $user = User::factory()->create([
-        'email' => $email,
-        'password' => 'paSsword@123Quat',
-    ]);
-    SessionState::assignAdminRole($user);
+    $email = 'pest-login@test.com';
+    $password = 'Oytrettt@123Quat';
+    $user = User::where('email', $email)->first()
+        ?? User::factory()->create([
+            'email' => $email,
+            'password' => Hash::make($password),
+        ]);
+    $user->password = $password;
+    $user->save();
+    $page = visit('/login');
 
-    $page = visit('/login')
-        ->fill('@login-email', $email)
-        ->fill('@login-password', 'paSsword@123Quat')
-        ->press('Masuk')
-        ->assertPathIsNot('/login');
-
-    SessionState::saveForUser($user);
+    $page->script("
+        document.querySelector('[data-testid=login-email]').value = '".addslashes($email)."';
+        document.querySelector('[data-testid=login-password]').value = '".$password."';
+        document.querySelector('[data-testid=login-submit]').click();
+    ");
+    
+    $page->assertPathIsNot('/login');
+    
     ScreenshotHelper::saveIfEnabled($page, 'login-success');
 });
 
 it('shows error for invalid credentials', function () {
-    $page = visit('/login')
-        ->fill('@login-email', 'wrong@email.com')
-        ->fill('@login-password', 'wrongpassword')
-        ->press('@login-submit')
-        ->assertSee('Masuk');
+    $page = visit('/login');
+
+    $page->script("
+        document.querySelector('[data-testid=login-email]').value = 'wrong@email.com';
+        document.querySelector('[data-testid=login-password]').value = 'wrongpassword';
+        document.querySelector('[data-testid=login-submit]').click();
+    ");
+    
+    $page->assertSee('Masuk');
 
     ScreenshotHelper::saveIfEnabled($page, 'login-error');
 });

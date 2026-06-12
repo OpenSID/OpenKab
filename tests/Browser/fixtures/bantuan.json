@@ -1,0 +1,24 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "nama": "Program Bantuan Sembako",
+                "asaldana": "APBD",
+                "jumlah_peserta": 100,
+                "sdate": "2024-01-01",
+                "edate": "2024-12-31",
+                "nama_sasaran": "Keluarga Miskin",
+                "status": "Aktif"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

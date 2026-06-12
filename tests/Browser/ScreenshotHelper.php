@@ -16,7 +16,7 @@ final class ScreenshotHelper
         );
     }
 
-    public static function saveIfEnabled(\Pest\Browser\Api\AwaitableWebpage $page, string $name): void
+    public static function saveIfEnabled(\Pest\Browser\Api\PendingAwaitablePage|\Pest\Browser\Api\AwaitableWebpage $page, string $name): void
     {
         if (! self::enabled()) {
             return;

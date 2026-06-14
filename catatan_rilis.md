@@ -9,5 +9,8 @@ Di rilis ini, versi 2606.0.1 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perubahan Teknis
 
+1. [#1049](https://github.com/OpenSID/OpenKab/issues/1049) Upgrade versi laravel ke versi 13
+
+
 
 

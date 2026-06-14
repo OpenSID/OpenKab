@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiExcelDownloadTest extends BaseTestCase
@@ -22,7 +23,7 @@ class DataPresisiExcelDownloadTest extends BaseTestCase
         ],
     ];
 
-    /** @test */
+    #[Test]
     public function test_excel_download_button_exists_in_pangan_page()
     {
         $response = $this->get('/data-presisi/pangan');
@@ -40,7 +41,7 @@ class DataPresisiExcelDownloadTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_excel_download_button_exists_in_pendidikan_page()
     {
         $response = $this->get('/data-presisi/pendidikan');
@@ -58,7 +59,7 @@ class DataPresisiExcelDownloadTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_excel_download_button_component_renders_correctly()
     {
         $successCount = 0;
@@ -87,7 +88,7 @@ class DataPresisiExcelDownloadTest extends BaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function test_pangan_and_pendidikan_have_matching_excel_button_structure()
     {
         $panganResponse = $this->get('/data-presisi/pangan');

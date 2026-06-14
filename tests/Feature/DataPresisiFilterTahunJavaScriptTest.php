@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiFilterTahunJavaScriptTest extends BaseTestCase
@@ -21,7 +22,7 @@ class DataPresisiFilterTahunJavaScriptTest extends BaseTestCase
         '/dtks/sandang'
     ];
 
-    /** @test */
+    #[Test]
     public function test_filter_tahun_javascript_event_listener_exists_in_all_modules()
     {
         $successCount = 0;
@@ -60,7 +61,7 @@ class DataPresisiFilterTahunJavaScriptTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_filter_tahun_ajax_parameter_exists_in_all_modules()
     {
         $successCount = 0;
@@ -97,7 +98,7 @@ class DataPresisiFilterTahunJavaScriptTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_datatable_reload_functionality_exists()
     {
         $successCount = 0;
@@ -134,7 +135,7 @@ class DataPresisiFilterTahunJavaScriptTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_chart_reload_functionality_exists()
     {
         $successCount = 0;

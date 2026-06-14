@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Http\Controllers\DataPresisiSandangController;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiSandangControllerTest extends BaseTestCase

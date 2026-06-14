@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\WebsiteTestCase;
 
 class ModuleControllerOrgTest extends WebsiteTestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_access_org_module_page()
     {
         // Act: Akses halaman bagan organisasi
@@ -19,7 +20,7 @@ class ModuleControllerOrgTest extends WebsiteTestCase
         $response->assertViewHas('content');
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_org_chart_elements_in_view()
     {
         // Act: Akses halaman
@@ -31,7 +32,7 @@ class ModuleControllerOrgTest extends WebsiteTestCase
         $response->assertSee('chart-container');
     }
 
-    /** @test */
+    #[Test]
     public function it_loads_required_assets_for_org_chart()
     {
         // Act: Akses halaman
@@ -44,7 +45,7 @@ class ModuleControllerOrgTest extends WebsiteTestCase
         $response->assertSee('vendor/orgchart/html2canvas.min.js');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_org_module_with_correct_data_structure()
     {
         // Act: Akses halaman
@@ -63,7 +64,7 @@ class ModuleControllerOrgTest extends WebsiteTestCase
         $this->assertTrue(is_iterable($viewData['content']));
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_org_partial_view()
     {
         // Act: Akses halaman

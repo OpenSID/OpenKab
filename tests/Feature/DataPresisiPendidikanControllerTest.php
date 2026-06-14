@@ -6,6 +6,7 @@ use App\Http\Controllers\DataPresisiPendidikanController;
 use App\Http\Requests\DetailDataPresisiPendidikanRequest;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiPendidikanControllerTest extends BaseTestCase

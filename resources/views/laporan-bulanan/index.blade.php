@@ -17,7 +17,7 @@
                             <div class="float-left">{{ $page_description }}</div>
                             <div class="float-right">
                                 <a href="{{ route('laporan-bulanan.export-excel') }}" class="btn btn-success btn-sm"
-                                    target="_blank">
+                                    target="_blank" data-testid="bt-excel">
                                     <i class="fa fa-file-excel"></i>
                                     Excel
                                 </a>
@@ -31,7 +31,7 @@
                                 <label for="kabupaten" class="col-sm-2 col-form-label">Kabupaten</label>
                                 <div class="col-sm-7 col-md-5">
                                     <select name="kabupaten" class="form-control form-control-sm select2" id="kabupaten"
-                                        onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
+                                        onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')" data-testid="filter-kabupaten">
                                         <option value="">
                                             {{ config('app.sebutanKab') }}</option>
                                         @foreach ($kabupatens as $item)
@@ -47,7 +47,7 @@
                                 <label for="kecamatan" class="col-sm-2 col-form-label">Kecamatan</label>
                                 <div class="col-sm-7 col-md-5">
                                     <select name="kecamatan" class="form-control form-control-sm select2" id="kecamatan"
-                                        onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
+                                        onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')" data-testid="filter-kecamatan">
                                         <option value="">Pilih Kecamatan</option>
                                         @foreach ($kecamatans as $item)
                                             <option value="{{ $item->kode_kecamatan }}"
@@ -62,7 +62,7 @@
                                 <label for="desa" class="col-sm-2 col-form-label">Desa</label>
                                 <div class="col-sm-7 col-md-5">
                                     <select name="desa" class="form-control form-control-sm select2" id="desa"
-                                        onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
+                                        onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')" data-testid="filter-desa">
                                         <option value="">
                                             {{ config('app.sebutanDesa') }}</option>
                                         @foreach ($desas as $item)
@@ -79,7 +79,7 @@
                                 <div class="col-sm-2">
                                     <select class="form-control form-control-sm select2"
                                         onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')"
-                                        name="tahun">
+                                        name="tahun" data-testid="filter-tahun">
                                         <option value="">Pilih tahun</option>
                                         @for ($t = date('Y'); $t >= $tahun_lengkap; $t--)
                                             <option value="{{ $t }}" @selected($tahun == $t)>
@@ -91,7 +91,7 @@
                                 <label for="bulan" class="col-sm-1 col-form-label text-right">Bulan</label>
                                 <div class="col-sm-2">
                                     <select class="form-control form-control-sm select2" name="bulan"
-                                        onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')">
+                                        onchange="formAction('mainform','{{ route('laporan-bulanan.filter') }}')" data-testid="filter-bulan">
                                         <option value="">Pilih bulan</option>
                                         @foreach (getAllBulan() as $no_bulan => $nama_bulan)
                                             <option value="{{ $no_bulan }}" @selected($bulan == $no_bulan)>

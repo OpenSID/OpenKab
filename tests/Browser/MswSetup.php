@@ -47,6 +47,10 @@ final class MswSetup
         '#/api/v1/statistik-web/get-list-kecamatan/([\d.]+)$#' => 'kecamatan-*.json',
         '#/api/v1/statistik-web/get-list-desa/([\d.]+)$#' => 'desa-*.json',
         '#/api/v1/statistik/penduduk\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'statistik-penduduk-*.json',
+        '#/api/v1/statistik/kategori-statistik\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'kategori-statistik-*.json',
+        '#/api/v1/statistik/keluarga\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'statistik-keluarga-*.json',
+        '#/api/v1/statistik/rtm\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'statistik-rtm-*.json',
+        '#/api/v1/statistik/bantuan\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'statistik-bantuan-*.json',
     ];
 
     /**

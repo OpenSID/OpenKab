@@ -1,0 +1,72 @@
+{
+    "draw": 1,
+    "recordsTotal": 5,
+    "recordsFiltered": 5,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Miskin",
+                "jumlah": 1500,
+                "persentase_jumlah": "15.00%",
+                "laki_laki": 700,
+                "persentase_laki_laki": "46.67%",
+                "perempuan": 800,
+                "persentase_perempuan": "53.33%",
+                "kriteria": "{\"kelas_sosial\":\"miskin\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Rentan Miskin",
+                "jumlah": 2000,
+                "persentase_jumlah": "20.00%",
+                "laki_laki": 950,
+                "persentase_laki_laki": "47.50%",
+                "perempuan": 1050,
+                "persentase_perempuan": "52.50%",
+                "kriteria": "{\"kelas_sosial\":\"rentan-miskin\"}"
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama": "Menengah",
+                "jumlah": 4500,
+                "persentase_jumlah": "45.00%",
+                "laki_laki": 2200,
+                "persentase_laki_laki": "48.89%",
+                "perempuan": 2300,
+                "persentase_perempuan": "51.11%",
+                "kriteria": "{\"kelas_sosial\":\"menengah\"}"
+            }
+        },
+        {
+            "id": "4",
+            "attributes": {
+                "nama": "Mampu",
+                "jumlah": 2000,
+                "persentase_jumlah": "20.00%",
+                "laki_laki": 1000,
+                "persentase_laki_laki": "50.00%",
+                "perempuan": 1000,
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"kelas_sosial\":\"mampu\"}"
+            }
+        },
+        {
+            "id": "5",
+            "attributes": {
+                "nama": "JUMLAH",
+                "jumlah": 10000,
+                "persentase_jumlah": "100.00%",
+                "laki_laki": 4850,
+                "persentase_laki_laki": "48.50%",
+                "perempuan": 5150,
+                "persentase_perempuan": "51.50%",
+                "kriteria": "{}"
+            }
+        }
+    ]
+}

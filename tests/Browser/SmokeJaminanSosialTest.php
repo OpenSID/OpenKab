@@ -46,9 +46,9 @@ it('renders all charts successfully', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const pie1 = document.querySelector(\'[data-testid="chart-pie-bantuan"]\');
-                const pie2 = document.querySelector(\'[data-testid="chart-pie-mental"]\');
-                const pie4 = document.querySelector(\'[data-testid="chart-pie-penanganan"]\');
+                const pie1 = document.querySelector(\'[data-testid=\"chart-pie-bantuan\"]\');
+                const pie2 = document.querySelector(\'[data-testid=\"chart-pie-mental\"]\');
+                const pie4 = document.querySelector(\'[data-testid=\"chart-pie-penanganan\"]\');
                 const ready1 = pie1 && pie1.offsetWidth > 0;
                 const ready2 = pie2 && pie2.offsetWidth > 0;
                 const ready4 = pie4 && pie4.offsetWidth > 0;
@@ -68,64 +68,36 @@ it('renders all charts successfully', function () {
 
 it('displays filter tahun', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
-        ->assertVisible('#filter-tahun');
+        ->assertVisible('@filter-tahun');
 
     ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-filter-tahun');
 });
 
 it('displays filter status', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
-        ->assertVisible('#filter-status-kelengkapan');
+        ->assertVisible('@filter-status-kelengkapan');
 
     ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-filter-status');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
-        ->assertScript(
-            "new Promise((resolve) => {
-                const check = () => {
-                    const btn = document.querySelector('[data-testid=\"bt-cetak\"]') || document.querySelector('#cetak') || document.querySelector('button[data-print-url]');
-                    resolve(!!btn);
-                };
-                check();
-            })",
-            true
-        );
+        ->assertVisible('@btn-cetak');
 
     ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
-        ->assertScript(
-            "new Promise((resolve) => {
-                const check = () => {
-                    const btn = document.querySelector('[data-testid=\"bt-excel\"]') || document.querySelector('#export-excel') || document.querySelector('#download-excel') || document.querySelector('button[data-download-url]');
-                    resolve(!!btn);
-                };
-                check();
-            })",
-            true
-        );
+        ->assertVisible('@btn-export-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-excel-button');
 });
 
 it('displays datatable', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
-        ->assertPathIs('/data-pokok/jaminan-sosial');
-
-    $page->assertScript(
-        'new Promise((resolve) => {
-            const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-jaminan-sosial"]\');
-                if (table) { resolve(true); } else { setTimeout(check, 500); }
-            };
-            check();
-        })',
-        true
-    );
+        ->assertPathIs('/data-pokok/jaminan-sosial')
+        ->assertVisible('@datatable-jaminan-sosial');
 
     ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-datatable');
 });
@@ -137,7 +109,7 @@ it('has at least 1 data row', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-jaminan-sosial"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-jaminan-sosial\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {
@@ -164,7 +136,7 @@ it('has detail button in data', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-jaminan-sosial"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-jaminan-sosial\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {

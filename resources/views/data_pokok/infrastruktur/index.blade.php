@@ -43,9 +43,9 @@
                 <div class="row mb-2">
                     <x-filter-tahun />
                     <div class="col-auto">
-                        <x-print-button :print-url="url('data-pokok/infrastruktur/cetak')" table-id="infrastruktur" :filter="[]" />
+                        <x-print-button :print-url="url('data-pokok/infrastruktur/cetak')" table-id="infrastruktur" :filter="[]" testId="btn-cetak" />
                     </div>
-                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/infrastruktur/download'" table-id="infrastruktur" filename="data_infrastruktur" />
+                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/infrastruktur/download'" table-id="infrastruktur" filename="data_infrastruktur" testId="btn-export-excel" />
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped" id="infrastruktur" data-testid="datatable-infrastruktur">

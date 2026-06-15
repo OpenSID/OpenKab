@@ -20,39 +20,29 @@ it('opens the laporan pengisian page', function () {
 
 it('displays filter kategori', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan')
-        ->assertVisible('[data-testid="filter-status"]');
+        ->assertVisible('@filter-status');
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-filter-kategori');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan')
-        ->assertVisible('[data-testid="btn-cetak"]');
+        ->assertVisible('@btn-cetak');
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan')
-        ->assertVisible('[data-testid="btn-export-excel"]');
+        ->assertVisible('@btn-export-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-excel-button');
 });
 
 it('displays datatable', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan')
-        ->assertPathIs('/data-presisi/laporan');
-
-    $page->assertScript(
-        'new Promise((resolve) => {
-            const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-laporan"]\');
-                if (table) { resolve(true); } else { setTimeout(check, 500); }
-            };
-            check();
-        })',
-        true
-    );
+        ->assertPathIs('/data-presisi/laporan')
+        ->assertVisible('@datatable-laporan');
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-datatable');
 });

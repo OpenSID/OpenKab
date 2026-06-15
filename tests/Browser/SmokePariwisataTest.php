@@ -39,8 +39,8 @@ it('renders all charts successfully', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const bar = document.querySelector(\'[data-testid="chart-bar-penginapan"]\');
-                const donut = document.querySelector(\'[data-testid="chart-donut-pemanfaatan"]\');
+                const bar = document.querySelector(\'[data-testid=\"chart-bar-penginapan\"]\');
+                const donut = document.querySelector(\'[data-testid=\"chart-donut-pemanfaatan\"]\');
                 const barReady = bar && bar.getContext && bar.width > 0;
                 const donutReady = donut && donut.getContext && donut.width > 0;
                 if (barReady && donutReady) {
@@ -59,64 +59,36 @@ it('renders all charts successfully', function () {
 
 it('displays filter tahun', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
-        ->assertVisible('#filter-tahun');
+        ->assertVisible('@filter-tahun');
 
     ScreenshotHelper::saveIfEnabled($page, 'pariwisata-filter-tahun');
 });
 
 it('displays filter kategori', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
-        ->assertVisible('#filter-kategori-wisata');
+        ->assertVisible('@filter-kategori-wisata');
 
     ScreenshotHelper::saveIfEnabled($page, 'pariwisata-filter-kategori');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
-        ->assertScript(
-            "new Promise((resolve) => {
-                const check = () => {
-                    const btn = document.querySelector('[data-testid=\"bt-cetak\"]') || document.querySelector('#cetak') || document.querySelector('button[data-print-url]');
-                    resolve(!!btn);
-                };
-                check();
-            })",
-            true
-        );
+        ->assertVisible('@btn-cetak');
 
     ScreenshotHelper::saveIfEnabled($page, 'pariwisata-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
-        ->assertScript(
-            "new Promise((resolve) => {
-                const check = () => {
-                    const btn = document.querySelector('[data-testid=\"bt-excel\"]') || document.querySelector('#export-excel') || document.querySelector('#download-excel') || document.querySelector('button[data-download-url]');
-                    resolve(!!btn);
-                };
-                check();
-            })",
-            true
-        );
+        ->assertVisible('@btn-export-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'pariwisata-excel-button');
 });
 
 it('displays datatable', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
-        ->assertPathIs('/data-pokok/pariwisata');
-
-    $page->assertScript(
-        'new Promise((resolve) => {
-            const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-pariwisata"]\');
-                if (table) { resolve(true); } else { setTimeout(check, 500); }
-            };
-            check();
-        })',
-        true
-    );
+        ->assertPathIs('/data-pokok/pariwisata')
+        ->assertVisible('@datatable-pariwisata');
 
     ScreenshotHelper::saveIfEnabled($page, 'pariwisata-datatable');
 });
@@ -128,7 +100,7 @@ it('has at least 1 data row', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-pariwisata"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-pariwisata\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {

@@ -39,8 +39,8 @@ it('renders all charts successfully', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const kondisi = document.querySelector(\'[data-testid="chart-transportasi"]\');
-                const sanitasi = document.querySelector(\'[data-testid="chart-sanitasi"]\');
+                const kondisi = document.querySelector(\'[data-testid=\"chart-transportasi\"]\');
+                const sanitasi = document.querySelector(\'[data-testid=\"chart-sanitasi\"]\');
                 const kondisiReady = kondisi && kondisi.getContext && kondisi.width > 0;
                 const sanitasiReady = sanitasi && sanitasi.getContext && sanitasi.width > 0;
                 if (kondisiReady && sanitasiReady) {
@@ -59,7 +59,7 @@ it('renders all charts successfully', function () {
 
 it('displays filter tahun', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/infrastruktur')
-        ->assertVisible('#filter-tahun');
+        ->assertVisible('@filter-tahun');
 
     ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-filter-tahun');
 });
@@ -69,7 +69,7 @@ it('displays cetak button', function () {
         ->assertScript(
             "new Promise((resolve) => {
                 const check = () => {
-                    const btn = document.querySelector('[data-testid=\"bt-cetak\"]') || document.querySelector('#cetak') || document.querySelector('button[data-print-url]');
+                    const btn = document.querySelector('[data-testid=\"btn-cetak\"]') || document.querySelector('button[data-print-url]');
                     resolve(!!btn);
                 };
                 check();
@@ -85,7 +85,7 @@ it('displays excel button', function () {
         ->assertScript(
             "new Promise((resolve) => {
                 const check = () => {
-                    const btn = document.querySelector('[data-testid=\"bt-excel\"]') || document.querySelector('#export-excel') || document.querySelector('#download-excel') || document.querySelector('button[data-download-url]');
+                    const btn = document.querySelector('[data-testid=\"btn-export-excel\"]') || document.querySelector('button[data-download-url]');
                     resolve(!!btn);
                 };
                 check();
@@ -98,18 +98,8 @@ it('displays excel button', function () {
 
 it('displays datatable', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/infrastruktur')
-        ->assertPathIs('/data-pokok/infrastruktur');
-
-    $page->assertScript(
-        'new Promise((resolve) => {
-            const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-infrastruktur"]\');
-                if (table) { resolve(true); } else { setTimeout(check, 500); }
-            };
-            check();
-        })',
-        true
-    );
+        ->assertPathIs('/data-pokok/infrastruktur')
+        ->assertVisible('@datatable-infrastruktur');
 
     ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-datatable');
 });
@@ -121,7 +111,7 @@ it('has at least 1 data row', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-infrastruktur"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-infrastruktur\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {

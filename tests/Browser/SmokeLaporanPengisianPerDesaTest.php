@@ -20,32 +20,22 @@ it('opens the laporan pengisian per desa page', function () {
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan/perdesa')
-        ->assertVisible('[data-testid="btn-cetak"]');
+        ->assertVisible('@btn-cetak');
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan/perdesa')
-        ->assertVisible('[data-testid="btn-export-excel"]');
+        ->assertVisible('@btn-export-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-excel-button');
 });
 
 it('displays datatable', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan/perdesa')
-        ->assertPathIs('/data-presisi/laporan/perdesa');
-
-    $page->assertScript(
-        'new Promise((resolve) => {
-            const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-laporan-perdesa"]\');
-                if (table) { resolve(true); } else { setTimeout(check, 500); }
-            };
-            check();
-        })',
-        true
-    );
+        ->assertPathIs('/data-presisi/laporan/perdesa')
+        ->assertVisible('@datatable-laporan-perdesa');
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-datatable');
 });

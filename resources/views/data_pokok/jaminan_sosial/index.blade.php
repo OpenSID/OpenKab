@@ -59,13 +59,13 @@
                         <x-filter-tahun />
                         <x-filter-status-presisi />
                         <div class="col-auto">
-                            <x-print-button :print-url="route('jaminan-sosial-cetak')" table-id="jaminanSosial" :filter="[]" />
+                            <x-print-button :print-url="route('jaminan-sosial-cetak')" table-id="jaminanSosial" :filter="[]" testId="btn-cetak" />
                         </div>
                         <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/jaminan-sosial/rtm/download'" table-id="jaminanSosial" filename="data_presisi_jaminan-sosial" :additional-params="[
                                 ['key' => 'kode_kabupaten', 'value' => session('kabupaten.kode_kabupaten') ?? ''],
                                 ['key' => 'kode_kecamatan', 'value' => session('kecamatan.kode_kecamatan') ?? ''],
                                 ['key' => 'config_desa', 'value' => session('desa.id') ?? ''],
-                            ]"/>
+                            ]" testId="btn-export-excel" />
                     </div>
                 </div>
                 <div class="card-body">

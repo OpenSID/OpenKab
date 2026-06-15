@@ -21,7 +21,7 @@ it('opens the kesehatan page', function () {
 it('displays statistik golongan darah', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
         ->assertSee('Statistik Golongan Darah')
-        ->assertVisible('#donutChart');
+        ->assertVisible('@chart-donut');
 
     ScreenshotHelper::saveIfEnabled($page, 'kesehatan-donut-chart');
 });
@@ -29,7 +29,7 @@ it('displays statistik golongan darah', function () {
 it('displays statistik status gizi balita', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
         ->assertSee('Statistik Status Gizi Balita')
-        ->assertVisible('#barChart');
+        ->assertVisible('@chart-bar');
 
     ScreenshotHelper::saveIfEnabled($page, 'kesehatan-bar-chart');
 });
@@ -41,8 +41,8 @@ it('renders all charts successfully', function () {
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const donut = document.querySelector('#donutChart');
-                const bar = document.querySelector('#barChart');
+                const donut = document.querySelector('[data-testid=\"chart-donut\"]');
+                const bar = document.querySelector('[data-testid=\"chart-bar\"]');
                 const donutReady = donut && donut.getContext && donut.width > 0;
                 const barReady = bar && bar.getContext && bar.width > 0;
                 if (donutReady && barReady) {
@@ -61,14 +61,14 @@ it('renders all charts successfully', function () {
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
-        ->assertVisible('[data-testid="bt-cetak"]');
+        ->assertVisible('@btn-cetak');
 
     ScreenshotHelper::saveIfEnabled($page, 'kesehatan-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
-        ->assertVisible('[data-testid="bt-excel"]');
+        ->assertVisible('@btn-export-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'kesehatan-excel-button');
 });
@@ -76,12 +76,12 @@ it('displays excel button', function () {
 it('displays datatable with data rows', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/kesehatan')
         ->assertPathIs('/data-pokok/kesehatan')
-        ->assertVisible('[data-testid="datatable-kesehatan"]');
+        ->assertVisible('@datatable-kesehatan');
 
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const rows = document.querySelectorAll('#kesehatan tbody tr');
+                const rows = document.querySelectorAll('[data-testid=\"datatable-kesehatan\"] tbody tr');
                 if (rows.length > 0 && !rows[0].classList.contains('dataTables_empty')) {
                     resolve(true);
                 } else {

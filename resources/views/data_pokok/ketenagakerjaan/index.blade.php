@@ -45,9 +45,9 @@
                     <div>{{ $title }}</div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <x-print-button :print-url="url('data-pokok/ketenagakerjaan/cetak')" table-id="ketenagakerjaan" :filter="[]" testId="bt-cetak" />
+                            <x-print-button :print-url="url('data-pokok/ketenagakerjaan/cetak')" table-id="ketenagakerjaan" :filter="[]" testId="btn-cetak" />
                             <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/ketenagakerjaan/download'" table-id="ketenagakerjaan"
-                                filename="data_ketenagakerjaan" testId="bt-excel" />
+                                filename="data_ketenagakerjaan" testId="btn-export-excel" />
                         </div>
                     </div>
                 </div>

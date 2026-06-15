@@ -30,7 +30,7 @@ it('displays kategori statistik list', function () use ($kategoriPenduduk) {
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const items = document.querySelectorAll('#daftar-statistik .pilih-kategori');
+                const items = document.querySelectorAll('[data-testid=\"daftar-statistik\"] .pilih-kategori');
                 if (items.length > 0) { resolve(true); } else { setTimeout(check, 500); }
             };
             check();
@@ -41,7 +41,7 @@ it('displays kategori statistik list', function () use ($kategoriPenduduk) {
     foreach ($kategoriPenduduk as $nama) {
         $escaped = addslashes($nama);
         $page->assertScript(
-            "Array.from(document.querySelectorAll('#daftar-statistik .pilih-kategori a')).some(a => a.textContent.trim().includes('{$escaped}'))",
+            "Array.from(document.querySelectorAll('[data-testid=\"daftar-statistik\"] .pilih-kategori a')).some(a => a.textContent.trim().includes('{$escaped}'))",
             true
         );
     }
@@ -51,28 +51,28 @@ it('displays kategori statistik list', function () use ($kategoriPenduduk) {
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/statistik/penduduk')
-        ->assertVisible('@bt-cetak');
+        ->assertVisible('@btn-cetak');
 
     ScreenshotHelper::saveIfEnabled($page, 'statistik-penduduk-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/statistik/penduduk')
-        ->assertVisible('@bt-excel');
+        ->assertVisible('@btn-export-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'statistik-penduduk-excel-button');
 });
 
 it('displays grafik button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/statistik/penduduk')
-        ->assertVisible('@bt-grafik');
+        ->assertVisible('@btn-toggle-grafik');
 
     ScreenshotHelper::saveIfEnabled($page, 'statistik-penduduk-grafik-button');
 });
 
 it('displays chart button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/statistik/penduduk')
-        ->assertVisible('@bt-chart');
+        ->assertVisible('@btn-toggle-pie');
 
     ScreenshotHelper::saveIfEnabled($page, 'statistik-penduduk-chart-button');
 });
@@ -84,7 +84,7 @@ it('displays datatable', function () {
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const rows = document.querySelectorAll('#tabel-data tbody tr');
+                const rows = document.querySelectorAll('[data-testid=\"datatable-statistik\"] tbody tr');
                 if (rows.length > 0 && !rows[0].classList.contains('dataTables_empty')) {
                     resolve(true);
                 } else {
@@ -106,7 +106,7 @@ it('accesses a kategori statistik and loads data', function () use ($defaultId) 
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const items = document.querySelectorAll('#daftar-statistik .pilih-kategori');
+                const items = document.querySelectorAll('[data-testid=\"daftar-statistik\"] .pilih-kategori');
                 if (items.length > 0) { resolve(true); } else { setTimeout(check, 500); }
             };
             check();
@@ -117,7 +117,7 @@ it('accesses a kategori statistik and loads data', function () use ($defaultId) 
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const rows = document.querySelectorAll('#tabel-data tbody tr');
+                const rows = document.querySelectorAll('[data-testid=\"datatable-statistik\"] tbody tr');
                 if (rows.length > 0 && !rows[0].classList.contains('dataTables_empty')) {
                     resolve(true);
                 } else {
@@ -134,16 +134,15 @@ it('accesses a kategori statistik and loads data', function () use ($defaultId) 
 
 it('accesses grafik and renders successfully', function () {
     $page = SessionState::loginAndNavigate($this->user, '/statistik/penduduk')
-        ->assertVisible('@bt-grafik');
+        ->assertVisible('@btn-toggle-grafik');
 
-    $page->click('@bt-grafik');
+    $page->click('@btn-toggle-grafik');
 
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const container = document.querySelector('#grafik-statistik');
-                const canvas = document.querySelector('#barChart');
-                if (container && canvas && canvas.getContext && canvas.width > 0) {
+                const canvas = document.querySelector('[data-testid=\"chart-bar\"]');
+                if (canvas && canvas.getContext && canvas.width > 0) {
                     resolve(true);
                 } else {
                     setTimeout(check, 500);
@@ -159,16 +158,15 @@ it('accesses grafik and renders successfully', function () {
 
 it('accesses chart and renders successfully', function () {
     $page = SessionState::loginAndNavigate($this->user, '/statistik/penduduk')
-        ->assertVisible('@bt-chart');
+        ->assertVisible('@btn-toggle-pie');
 
-    $page->click('@bt-chart');
+    $page->click('@btn-toggle-pie');
 
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const container = document.querySelector('#pie-statistik');
-                const canvas = document.querySelector('#donutChart');
-                if (container && canvas && canvas.getContext && canvas.width > 0) {
+                const canvas = document.querySelector('[data-testid=\"chart-donut\"]');
+                if (canvas && canvas.getContext && canvas.width > 0) {
                     resolve(true);
                 } else {
                     setTimeout(check, 500);

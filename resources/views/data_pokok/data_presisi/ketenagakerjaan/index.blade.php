@@ -31,9 +31,9 @@
                     <x-filter-tahun />
                     <x-filter-status-presisi />
                     <div class="col-auto">
-                        <x-print-button :print-url="url('data-presisi/ketenagakerjaan/cetak')" table-id="table-ketenagakerjaan" :filter="[]" />
+                        <x-print-button :print-url="url('data-presisi/ketenagakerjaan/cetak')" table-id="table-ketenagakerjaan" :filter="[]" testId="btn-cetak" />
                     </div>
-                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/ketenagakerjaan/rtm/download'" table-id="table-ketenagakerjaan" filename="data_presisi_ketenagakerjaan" />
+                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/ketenagakerjaan/rtm/download'" table-id="table-ketenagakerjaan" filename="data_presisi_ketenagakerjaan" testId="btn-export-excel" />
                 </div>
             </div>
             <div class="card-body">

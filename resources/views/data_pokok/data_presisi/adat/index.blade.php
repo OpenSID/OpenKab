@@ -33,9 +33,9 @@
                     <x-filter-tahun />
                     <x-filter-status-presisi />
                     <div class="col-auto">
-                        <x-print-button :print-url="url('data-pokok/data-presisi-adat/cetak')" table-id="adat" :filter="[]" />
+                        <x-print-button :print-url="url('data-pokok/data-presisi-adat/cetak')" table-id="adat" :filter="[]" testId="btn-cetak" />
                     </div>
-                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat/rtm/download'" table-id="adat" filename="data_adat" />
+                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat/rtm/download'" table-id="adat" filename="data_adat" testId="btn-export-excel" />
                 </div>
             </div>
             <div class="card-body">

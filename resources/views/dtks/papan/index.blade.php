@@ -30,9 +30,9 @@
                     <div class="row">
                         <x-filter-tahun />
                         <div class="col-auto">
-                            <x-print-button :print-url="url('data-presisi/papan/cetak')" table-id="table-dtks" :filter="[]" />
+                            <x-print-button :print-url="url('data-presisi/papan/cetak')" table-id="table-dtks" :filter="[]" testId="btn-cetak" />
                         </div>
-                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/papan/rtm/download'" table-id="table-dtks" filename="data_presisi_papan" />
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/papan/rtm/download'" table-id="table-dtks" filename="data_presisi_papan" testId="btn-export-excel" />
                     </div>
                 </div>
                 <div class="card-body">

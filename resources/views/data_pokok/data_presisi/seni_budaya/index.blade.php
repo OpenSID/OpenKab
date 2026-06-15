@@ -31,9 +31,9 @@
                         <x-filter-tahun />
                         <x-filter-status-presisi />
                         <div class="col-auto">
-                            <x-print-button :print-url="url('data-presisi/seni-budaya/cetak')" table-id="table-seni-budaya" :filter="[]" />
+                            <x-print-button :print-url="url('data-presisi/seni-budaya/cetak')" table-id="table-seni-budaya" :filter="[]" testId="btn-cetak" />
                         </div>
-                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/seni-budaya/rtm/download'" table-id="table-seni-budaya" filename="data_presisi_seni-budaya" />
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/seni-budaya/rtm/download'" table-id="table-seni-budaya" filename="data_presisi_seni-budaya" testId="btn-export-excel" />
 
                     </div>
                 </div>

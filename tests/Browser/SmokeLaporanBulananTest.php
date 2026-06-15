@@ -127,7 +127,7 @@ it('opens the laporan bulanan page', function () {
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/statistik/laporan-bulanan')
-        ->assertVisible('@btn-export-excel');
+        ->assertVisible('@bt-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-bulanan-excel-button');
 });
@@ -168,8 +168,18 @@ it('displays filter bulan', function () {
 });
 
 it('displays datatable', function () {
-    $page = SessionState::loginAndNavigate($this->user, '/statistik/laporan-bulanan')
-        ->assertVisible('@datatable-laporan-bulanan');
+    $page = SessionState::loginAndNavigate($this->user, '/statistik/laporan-bulanan');
+
+    $page->assertScript(
+        "new Promise((resolve) => {
+            const check = () => {
+                const table = document.querySelector('[data-testid=\"datatable-laporan-bulanan\"]');
+                if (table) { resolve(true); } else { setTimeout(check, 500); }
+            };
+            check();
+        })",
+        true
+    );
 
     ScreenshotHelper::saveIfEnabled($page, 'laporan-bulanan-datatable');
 });

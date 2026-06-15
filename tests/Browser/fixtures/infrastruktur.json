@@ -1,0 +1,21 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "jenis_transportasi": "Jalan Raya",
+                "kondisi_transportasi": "Baik",
+                "jumlah": 10,
+                "tahun": "2024"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

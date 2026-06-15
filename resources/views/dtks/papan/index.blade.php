@@ -21,7 +21,7 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="chart" id="grafik">
-                        <canvas id="barChart"></canvas>
+                        <canvas id="barChart" data-testid="chart-bar"></canvas>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-dtks">
+                        <table class="table table-striped" id="table-dtks" data-testid="datatable-papan">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>

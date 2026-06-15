@@ -1,0 +1,23 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "nama_tempat_wisata": "Pantai Test",
+                "kategori_wisata": "Pantai",
+                "sarana_wisata": "Hotel",
+                "komoditas_wisata": "Kuliner",
+                "jumlah_pengunjung": 500,
+                "tahun": "2024"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

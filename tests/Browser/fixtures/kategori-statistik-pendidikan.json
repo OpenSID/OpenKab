@@ -1,0 +1,7 @@
+{
+    "success": true,
+    "data": [
+        {"id": "partisipasi-sekolah", "nama": "Partisipasi Sekolah", "judul_halaman": "Pendidikan", "judul_kolom_nama": "Jenis Pendidikan"},
+        {"id": "ijazah-tertinggi", "nama": "Ijazah Tertinggi", "judul_halaman": "Pendidikan", "judul_kolom_nama": "Jenis Pendidikan"}
+    ]
+}

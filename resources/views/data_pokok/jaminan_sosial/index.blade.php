@@ -18,7 +18,7 @@
                     Jenis Bantuan
                 </div>
                 <div class="card-body">
-                    <div class="chart" id="pie1">
+                    <div class="chart" id="pie1" data-testid="chart-pie-bantuan">
 
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                     Jenis Gangguan Mental
                 </div>
                 <div class="card-body">
-                    <div class="chart" id="pie2">
+                    <div class="chart" id="pie2" data-testid="chart-pie-mental">
 
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                     Jenis Gangguan Mental
                 </div>
                 <div class="card-body">
-                    <div class="chart" id="pie4">
+                    <div class="chart" id="pie4" data-testid="chart-pie-penanganan">
 
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="jaminanSosial">
+                        <table class="table table-striped" id="jaminanSosial" data-testid="datatable-jaminan-sosial">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>

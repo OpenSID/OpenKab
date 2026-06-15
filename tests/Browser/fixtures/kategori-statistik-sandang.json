@@ -1,0 +1,7 @@
+{
+    "success": true,
+    "data": [
+        {"id": "sandang-pakaian", "nama": "Sandang Pakaian", "judul_halaman": "Sandang", "judul_kolom_nama": "Jenis Sandang"},
+        {"id": "sandang-rukun", "nama": "Sandang Rukun", "judul_halaman": "Sandang", "judul_kolom_nama": "Jenis Sandang"}
+    ]
+}

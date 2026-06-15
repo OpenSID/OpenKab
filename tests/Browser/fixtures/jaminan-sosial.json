@@ -1,0 +1,23 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "nik": "5271010101010001",
+                "nama": "Test User",
+                "program_bantuan": "BPJS Kesehatan",
+                "status_kepesertaan": "Aktif",
+                "tahun": "2024",
+                "status_kelengkapan": "Lengkap"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

@@ -16,7 +16,7 @@
             <div class="card-header">Statistik Adat</div>
             <div class="card-body">
                 <div>
-                    <div class="chart" id="pie1">
+                    <div class="chart" id="pie1" data-testid="chart-pie-adat">
 
                     </div>
                     <hr class="hr-chart">
@@ -40,7 +40,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="adat">
+                    <table class="table table-striped" id="adat" data-testid="datatable-adat">
                         <thead>
                             <tr>
                                 <th>Aksi</th>

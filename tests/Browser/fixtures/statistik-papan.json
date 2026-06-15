@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Rumah Sendiri",
+                "jumlah": 180,
+                "laki_laki": 95,
+                "perempuan": 85,
+                "persentase_jumlah": "60.00%",
+                "persentase_laki_laki": "52.78%",
+                "persentase_perempuan": "47.22%",
+                "kriteria": "{\"filter[id]\":\"papan\",\"filter[kriteria]\":\"Rumah Sendiri\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Rumah Kontrakan",
+                "jumlah": 120,
+                "laki_laki": 65,
+                "perempuan": 55,
+                "persentase_jumlah": "40.00%",
+                "persentase_laki_laki": "54.17%",
+                "persentase_perempuan": "45.83%",
+                "kriteria": "{\"filter[id]\":\"papan\",\"filter[kriteria]\":\"Rumah Kontrakan\"}"
+            }
+        }
+    ]
+}

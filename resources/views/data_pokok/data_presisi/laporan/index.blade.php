@@ -22,7 +22,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-2">
-                            <select id="filter-status" class="form-control form-control-sm">
+                            <select id="filter-status" class="form-control form-control-sm" data-testid="filter-status">
                                 @php
                                     $statusOptions = [
                                         0 => 'Tidak Lengkap',
@@ -37,10 +37,10 @@
                             </select>
                         </div>
                         <div class="col-sm-3">
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="">
+                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="" data-testid="btn-cetak">
                                 <i class="fa fa-print"></i> Cetak
                             </button>
-                            <button type="button" id="export-excel" class="btn btn-info btn-sm">
+                            <button type="button" id="export-excel" class="btn btn-info btn-sm" data-testid="btn-export-excel">
                                 <i class="fa fa-file-excel"></i> Excel
                             </button>
                         </div>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="laporanTable">
+                        <table class="table table-striped" id="laporanTable" data-testid="datatable-laporan">
                             <thead>
                                 <tr>
                                     <th>No</th>

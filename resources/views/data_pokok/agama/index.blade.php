@@ -16,7 +16,7 @@
                 <div class="card-header">Statistik Agama</div>
                 <div class="card-body">
                     <div>
-                        <div class="chart" id="pie1">
+                        <div class="chart" id="pie1" data-testid="chart-pie-agama">
 
                         </div>
                         <hr class="hr-chart">
@@ -45,7 +45,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="agama">
+                        <table class="table table-striped" id="agama" data-testid="datatable-agama">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>

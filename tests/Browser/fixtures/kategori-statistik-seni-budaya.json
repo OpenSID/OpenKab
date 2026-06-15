@@ -1,0 +1,7 @@
+{
+    "success": true,
+    "data": [
+        {"id": "seni-tradisional", "nama": "Seni Tradisional", "judul_halaman": "Seni Budaya", "judul_kolom_nama": "Jenis Seni Budaya"},
+        {"id": "seni-modern", "nama": "Seni Modern", "judul_halaman": "Seni Budaya", "judul_kolom_nama": "Jenis Seni Budaya"}
+    ]
+}

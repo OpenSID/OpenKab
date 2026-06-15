@@ -1,0 +1,7 @@
+{
+    "success": true,
+    "data": [
+        {"id": "papan-rumah", "nama": "Kondisi Rumah", "judul_halaman": "Papan", "judul_kolom_nama": "Jenis Papan"},
+        {"id": "papan-dinding", "nama": "Jenis Dinding", "judul_halaman": "Papan", "judul_kolom_nama": "Jenis Papan"}
+    ]
+}

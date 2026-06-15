@@ -1,0 +1,7 @@
+{
+    "success": true,
+    "data": [
+        {"id": "adat-tradisi", "nama": "Tradisi Adat", "judul_halaman": "Adat", "judul_kolom_nama": "Jenis Adat"},
+        {"id": "adat-upacara", "nama": "Upacara Adat", "judul_halaman": "Adat", "judul_kolom_nama": "Jenis Adat"}
+    ]
+}

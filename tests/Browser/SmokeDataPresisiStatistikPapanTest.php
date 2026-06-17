@@ -11,14 +11,14 @@ afterEach(function () {
     SessionState::clear();
 });
 
-$path = '/data-presisi/statistik/adat';
+$path = '/data-presisi/statistik/papan';
 
-it('opens the statistik adat page', function () use ($path) {
+it('opens the statistik papan page', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertPathIs($path)
-        ->assertSee('Adat');
+        ->assertSee('Papan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-page');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-page');
 });
 
 it('displays kategori statistik list', function () use ($path) {
@@ -40,42 +40,42 @@ it('displays kategori statistik list', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-kategori-list');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-kategori-list');
 });
 
 it('displays filter tahun', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@filter-tahun');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-filter-tahun');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-filter-tahun');
 });
 
 it('displays excel button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-excel-button');
 });
 
 it('displays grafik button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-toggle-grafik');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-grafik-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-grafik-button');
 });
 
 it('displays chart button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-toggle-pie');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-chart-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-chart-button');
 });
 
 it('displays datatable', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@datatable-statistik');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-datatable');
 });
 
 it('datatable displays data', function () use ($path) {
@@ -102,7 +102,7 @@ it('datatable displays data', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-datatable-data');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-datatable-data');
 });
 
 it('clicks a kategori statistik', function () use ($path) {
@@ -125,9 +125,7 @@ it('clicks a kategori statistik', function () use ($path) {
         true
     );
 
-    $page->wait(2000);
-
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-kategori-clicked');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-kategori-clicked');
 });
 
 it('renders bar chart', function () use ($path) {
@@ -150,7 +148,7 @@ it('renders bar chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-bar-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-bar-chart');
 });
 
 it('renders pie chart', function () use ($path) {
@@ -173,7 +171,7 @@ it('renders pie chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-pie-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-pie-chart');
 });
 
 it('has no javascript errors', function () use ($path) {
@@ -181,5 +179,5 @@ it('has no javascript errors', function () use ($path) {
         ->assertPathIs($path)
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-papan-no-errors');
 });

@@ -15,7 +15,7 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    Jenis Bantuan
+                    Statistik Jenis Bantuan
                 </div>
                 <div class="card-body">
                     <div class="chart" id="pie1" data-testid="chart-pie-bantuan">
@@ -27,7 +27,7 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    Jenis Gangguan Mental
+                    Statistik Jenis Gangguan Mental
                 </div>
                 <div class="card-body">
                     <div class="chart" id="pie2" data-testid="chart-pie-mental">
@@ -39,7 +39,7 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    Jenis Gangguan Mental
+                    Statistik Jenis Penanganan
                 </div>
                 <div class="card-body">
                     <div class="chart" id="pie4" data-testid="chart-pie-penanganan">
@@ -70,7 +70,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="jaminanSosial" data-testid="datatable-jaminan-sosial">
+                        <table class="table table-striped" id="jaminanSosial" data-testid="datatable-data-pokok-jaminan-sosial">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>

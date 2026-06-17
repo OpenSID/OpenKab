@@ -23,7 +23,7 @@ it('opens the ketenagakerjaan page', function () {
 it('displays statistik jumlah penghasilan', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
         ->assertSee('Statistik Jumlah Penghasilan')
-        ->assertVisible('canvas');
+        ->assertVisible('@chart-bar');
 
     ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-bar-chart');
 });
@@ -31,7 +31,7 @@ it('displays statistik jumlah penghasilan', function () {
 it('displays statistik pelatihan', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/ketenagakerjaan')
         ->assertSee('Statistik Pelatihan')
-        ->assertVisible('canvas');
+        ->assertVisible('@chart-donut');
 
     ScreenshotHelper::saveIfEnabled($page, 'ketenagakerjaan-donut-chart');
 });
@@ -43,11 +43,11 @@ it('renders all charts successfully', function () {
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const donut = document.querySelector('canvas');
-                const bar = document.querySelectorAll('canvas')[1];
-                const donutReady = donut && donut.getContext && donut.width > 0;
+                const bar = document.querySelector('[data-testid=\"chart-bar\"]');
+                const donut = document.querySelector('[data-testid=\"chart-donut\"]');
                 const barReady = bar && bar.getContext && bar.width > 0;
-                if (donutReady && barReady) {
+                const donutReady = donut && donut.getContext && donut.width > 0;
+                if (barReady && donutReady) {
                     resolve(true);
                 } else {
                     setTimeout(check, 500);

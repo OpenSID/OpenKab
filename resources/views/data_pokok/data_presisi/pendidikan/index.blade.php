@@ -21,7 +21,10 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="chart" id="grafik">
-                        <canvas id="barChart"></canvas>
+                        <canvas id="barChart" data-testid="chart-bar"></canvas>
+                    </div>
+                    <div class="chart" id="pie">
+                        <canvas id="donutChart" data-testid="chart-donut"></canvas>
                     </div>
                 </div>
             </div>
@@ -31,14 +34,14 @@
                         <x-filter-tahun />
                         <x-filter-status-presisi />
                         <div class="col-auto">
-                            <x-print-button :print-url="url('data-presisi/pendidikan/cetak')" table-id="table-pendidikan" :filter="[]" testId="btn-cetak" />
+                            <x-print-button :print-url="url('data-presisi/pendidikan/cetak')" table-id="table-pendidikan" :filter="[]" testId="bt-cetak" />
                         </div>
-                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/pendidikan/rtm/download'" table-id="table-pendidikan" filename="data_presisi_pendidikan" testId="btn-export-excel" />
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/pendidikan/rtm/download'" table-id="table-pendidikan" filename="data_presisi_pendidikan" testId="bt-excel" />
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-pendidikan">
+                        <table class="table table-striped" id="table-pendidikan" data-testid="datatable-pendidikan">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>

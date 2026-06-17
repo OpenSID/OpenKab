@@ -11,13 +11,13 @@ afterEach(function () {
     SessionState::clear();
 });
 
-$path = '/data-presisi/adat';
+$path = '/data-presisi/pangan';
 
-it('opens the adat page', function () use ($path) {
+it('opens the pangan page', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertPathIs($path);
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-page');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-page');
 });
 
 it('renders chart', function () use ($path) {
@@ -27,8 +27,8 @@ it('renders chart', function () use ($path) {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const chart = document.querySelector(\'[data-testid=\"chart-pie-adat\"]\');
-                const ready = chart && chart.offsetWidth > 0;
+                const chart = document.querySelector(\'canvas\');
+                const ready = chart && chart.getContext && chart.width > 0;
                 if (ready) { resolve(true); } else { setTimeout(check, 500); }
             };
             check();
@@ -36,43 +36,43 @@ it('renders chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-chart');
 });
 
 it('displays filter tahun', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@filter-tahun');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-filter-tahun');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-filter-tahun');
 });
 
 it('displays filter status', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@filter-status-kelengkapan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-filter-status');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-filter-status');
 });
 
 it('displays cetak button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-cetak');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-cetak-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-cetak-button');
 });
 
 it('displays excel button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-excel-button');
 });
 
 it('displays datatable', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertPathIs($path)
-        ->assertVisible('@datatable-adat');
+        ->assertVisible('@datatable-pangan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-datatable');
 });
 
 it('datatable displays data', function () use ($path) {
@@ -82,7 +82,7 @@ it('datatable displays data', function () use ($path) {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid=\"datatable-adat\"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-pangan\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {
@@ -99,7 +99,7 @@ it('datatable displays data', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-datatable-data');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-datatable-data');
 });
 
 it('has detail button in data', function () use ($path) {
@@ -109,7 +109,7 @@ it('has detail button in data', function () use ($path) {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid=\"datatable-adat\"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-pangan\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {
@@ -127,7 +127,7 @@ it('has detail button in data', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-detail-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-detail-button');
 });
 
 it('has no javascript errors', function () use ($path) {
@@ -135,5 +135,5 @@ it('has no javascript errors', function () use ($path) {
         ->assertPathIs($path)
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-adat-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-pangan-no-errors');
 });

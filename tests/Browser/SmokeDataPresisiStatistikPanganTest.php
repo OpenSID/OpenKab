@@ -11,14 +11,14 @@ afterEach(function () {
     SessionState::clear();
 });
 
-$path = '/data-presisi/statistik/ketenagakerjaan';
+$path = '/data-presisi/statistik/pangan';
 
-it('opens the statistik ketenagakerjaan page', function () use ($path) {
+it('opens the statistik pangan page', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertPathIs($path)
-        ->assertSee('Ketenagakerjaan');
+        ->assertSee('Pangan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-page');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-page');
 });
 
 it('displays kategori statistik list', function () use ($path) {
@@ -40,42 +40,42 @@ it('displays kategori statistik list', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-kategori-list');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-kategori-list');
 });
 
 it('displays filter tahun', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@filter-tahun');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-filter-tahun');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-filter-tahun');
 });
 
 it('displays excel button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-excel-button');
 });
 
 it('displays grafik button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-toggle-grafik');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-grafik-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-grafik-button');
 });
 
 it('displays chart button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-toggle-pie');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-chart-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-chart-button');
 });
 
 it('displays datatable', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@datatable-statistik');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-datatable');
 });
 
 it('datatable displays data', function () use ($path) {
@@ -102,7 +102,7 @@ it('datatable displays data', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-datatable-data');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-datatable-data');
 });
 
 it('clicks a kategori statistik', function () use ($path) {
@@ -123,11 +123,9 @@ it('clicks a kategori statistik', function () use ($path) {
             check();
         })',
         true
-    );
+    );    
 
-    $page->wait(2000);
-
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-kategori-clicked');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-kategori-clicked');
 });
 
 it('renders bar chart', function () use ($path) {
@@ -150,7 +148,7 @@ it('renders bar chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-bar-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-bar-chart');
 });
 
 it('renders pie chart', function () use ($path) {
@@ -173,7 +171,7 @@ it('renders pie chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-pie-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-pie-chart');
 });
 
 it('has no javascript errors', function () use ($path) {
@@ -181,5 +179,5 @@ it('has no javascript errors', function () use ($path) {
         ->assertPathIs($path)
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-ketenagakerjaan-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-pangan-no-errors');
 });

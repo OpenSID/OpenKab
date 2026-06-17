@@ -21,7 +21,7 @@ it('opens the pendidikan page', function () {
 it('displays statistik partisipasi sekolah', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
         ->assertSee('Statistik Partisipasi Sekolah')
-        ->assertVisible('canvas');
+        ->assertVisible('@chart-donut');
 
     ScreenshotHelper::saveIfEnabled($page, 'pendidikan-donut-chart');
 });
@@ -29,7 +29,7 @@ it('displays statistik partisipasi sekolah', function () {
 it('displays statistik ijazah tertinggi', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pendidikan')
         ->assertSee('Statistik Ijazah Tertinggi')
-        ->assertVisible('canvas');
+        ->assertVisible('@chart-bar');
 
     ScreenshotHelper::saveIfEnabled($page, 'pendidikan-bar-chart');
 });
@@ -41,8 +41,8 @@ it('renders all charts successfully', function () {
     $page->assertScript(
         "new Promise((resolve) => {
             const check = () => {
-                const donut = document.querySelector('canvas');
-                const bar = document.querySelectorAll('canvas')[1];
+                const donut = document.querySelector('[data-testid=\"chart-donut\"]');
+                const bar = document.querySelector('[data-testid=\"chart-bar\"]');
                 const donutReady = donut && donut.getContext && donut.width > 0;
                 const barReady = bar && bar.getContext && bar.width > 0;
                 if (donutReady && barReady) {

@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                            <canvas id="barChart" data-testid="chart-bar"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                            <canvas id="donutChart" data-testid="chart-donut"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>

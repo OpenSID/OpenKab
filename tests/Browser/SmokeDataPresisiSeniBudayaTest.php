@@ -17,7 +17,7 @@ it('opens the seni budaya page', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertPathIs($path);
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-page');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-page');
 });
 
 it('renders chart', function () use ($path) {
@@ -36,35 +36,35 @@ it('renders chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-chart');
 });
 
 it('displays filter tahun', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@filter-tahun');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-filter-tahun');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-filter-tahun');
 });
 
 it('displays filter status', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@filter-status-kelengkapan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-filter-status');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-filter-status');
 });
 
 it('displays cetak button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-cetak');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-cetak-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-cetak-button');
 });
 
 it('displays excel button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-excel-button');
 });
 
 it('displays datatable', function () use ($path) {
@@ -72,7 +72,7 @@ it('displays datatable', function () use ($path) {
         ->assertPathIs($path)
         ->assertVisible('@datatable-seni-budaya');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-datatable');
 });
 
 it('datatable displays data', function () use ($path) {
@@ -99,7 +99,7 @@ it('datatable displays data', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-datatable-data');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-datatable-data');
 });
 
 it('has detail button in data', function () use ($path) {
@@ -127,7 +127,7 @@ it('has detail button in data', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-detail-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-detail-button');
 });
 
 it('has no javascript errors', function () use ($path) {
@@ -135,5 +135,5 @@ it('has no javascript errors', function () use ($path) {
         ->assertPathIs($path)
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-seni-budaya-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-seni-budaya-no-errors');
 });

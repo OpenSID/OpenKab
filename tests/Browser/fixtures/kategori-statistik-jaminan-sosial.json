@@ -1,8 +1,11 @@
 {
     "success": true,
     "data": [
-        {"id": "jenis-bantuan", "nama": "Jenis Bantuan", "judul_halaman": "Jaminan Sosial", "judul_kolom_nama": "Jenis Jaminan Sosial"},
-        {"id": "jenis-gangguan-mental", "nama": "Jenis Gangguan Mental", "judul_halaman": "Jaminan Sosial", "judul_kolom_nama": "Jenis Jaminan Sosial"},
-        {"id": "jenis-penanganan", "nama": "Jenis Penanganan", "judul_halaman": "Jaminan Sosial", "judul_kolom_nama": "Jenis Jaminan Sosial"}
+        {
+            "attributes": {
+                "bansos": "Bantuan Sosial",
+                "jaminan": "Jaminan"
+            }
+        }
     ]
 }

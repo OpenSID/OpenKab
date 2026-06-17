@@ -15,28 +15,28 @@ it('opens the laporan pengisian page', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan')
         ->assertPathIs('/data-presisi/laporan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-page');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-page');
 });
 
 it('displays filter kategori', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan')
         ->assertVisible('@filter-status');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-filter-kategori');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-filter-kategori');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan')
         ->assertVisible('@btn-cetak');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-cetak-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan')
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-excel-button');
 });
 
 it('displays datatable', function () {
@@ -44,7 +44,7 @@ it('displays datatable', function () {
         ->assertPathIs('/data-presisi/laporan')
         ->assertVisible('@datatable-laporan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-datatable');
 });
 
 it('has at least 1 data row', function () {
@@ -71,7 +71,7 @@ it('has at least 1 data row', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-data-rows');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-data-rows');
 });
 
 it('has no javascript errors', function () {
@@ -79,5 +79,5 @@ it('has no javascript errors', function () {
         ->assertPathIs('/data-presisi/laporan')
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-no-errors');
 });

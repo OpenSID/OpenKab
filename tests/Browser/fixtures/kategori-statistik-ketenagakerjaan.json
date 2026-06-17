@@ -1,7 +1,11 @@
 {
     "success": true,
     "data": [
-        {"id": "pekerjaan", "nama": "Pekerjaan", "judul_halaman": "Ketenagakerjaan", "judul_kolom_nama": "Jenis Ketenagakerjaan"},
-        {"id": "pelatihan", "nama": "Pelatihan", "judul_halaman": "Ketenagakerjaan", "judul_kolom_nama": "Jenis Ketenagakerjaan"}
+        {
+            "attributes": {
+                "pekerjaan": "Pekerjaan",
+                "pengangguran": "Pengangguran"
+            }
+        }
     ]
 }

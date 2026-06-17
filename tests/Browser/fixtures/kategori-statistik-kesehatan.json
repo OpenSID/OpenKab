@@ -1,7 +1,11 @@
 {
     "success": true,
     "data": [
-        {"id": "golongan-darah", "nama": "Golongan Darah", "judul_halaman": "Kesehatan", "judul_kolom_nama": "Jenis Kesehatan"},
-        {"id": "status-gizi", "nama": "Status Gizi", "judul_halaman": "Kesehatan", "judul_kolom_nama": "Jenis Kesehatan"}
+        {
+            "attributes": {
+                "faskes": "Fasilitas Kesehatan",
+                "tenaga-medis": "Tenaga Medis"
+            }
+        }
     ]
 }

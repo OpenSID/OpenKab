@@ -11,13 +11,13 @@ afterEach(function () {
     SessionState::clear();
 });
 
-$path = '/data-pokok/ketenagakerjaan';
+$path = '/data-presisi/kesehatan';
 
-it('opens the ketenagakerjaan page', function () use ($path) {
+it('opens the kesehatan page', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertPathIs($path);
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-ketenagakerjaan-page');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-kesehatan-page');
 });
 
 it('renders chart', function () use ($path) {
@@ -27,9 +27,9 @@ it('renders chart', function () use ($path) {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const chart1 = document.querySelector(\'[data-testid="chart-bar"]\');
+                const chart1 = document.querySelector(\'canvas\');
                 const ready1 = chart1 && chart1.getContext && chart1.width > 0;
-                const chart2 = document.querySelector(\'[data-testid="chart-donut"]\');
+                const chart2 = document.querySelectorAll(\'canvas\')[1];
                 const ready2 = chart2 && chart2.getContext && chart2.width > 0;
                 if (ready1 && ready2) { resolve(true); } else { setTimeout(check, 500); }
             };
@@ -38,29 +38,29 @@ it('renders chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-ketenagakerjaan-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-kesehatan-chart');
 });
 
 it('displays cetak button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
-        ->assertVisible('@bt-cetak');
+        ->assertVisible('@btn-cetak');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-ketenagakerjaan-cetak-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-kesehatan-cetak-button');
 });
 
 it('displays excel button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
-        ->assertVisible('@bt-excel');
+        ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-ketenagakerjaan-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-kesehatan-excel-button');
 });
 
 it('displays datatable', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertPathIs($path)
-        ->assertVisible('@datatable-ketenagakerjaan');
+        ->assertVisible('@datatable-kesehatan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-ketenagakerjaan-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-kesehatan-datatable');
 });
 
 it('datatable displays data', function () use ($path) {
@@ -70,7 +70,7 @@ it('datatable displays data', function () use ($path) {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid="datatable-ketenagakerjaan"]\');
+                const table = document.querySelector(\'[data-testid="datatable-kesehatan"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {
@@ -87,7 +87,7 @@ it('datatable displays data', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-ketenagakerjaan-datatable-data');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-kesehatan-datatable-data');
 });
 
 it('has no javascript errors', function () use ($path) {
@@ -95,5 +95,5 @@ it('has no javascript errors', function () use ($path) {
         ->assertPathIs($path)
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-ketenagakerjaan-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-kesehatan-no-errors');
 });

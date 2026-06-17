@@ -4,10 +4,10 @@
         $('#barChart').remove();
         $('#donutChart').remove();
         $('#grafik').append(
-            '<canvas id="barChart"></canvas>'
+            '<canvas id="barChart" data-testid="chart-bar"></canvas>'
         );
         $('#pie').append(
-            '<canvas id="donutChart"></canvas>'
+            '<canvas id="donutChart" data-testid="chart-donut"></canvas>'
         );
         // Data untuk bar chart
         tampilChart('bar', 'barChart', generateChartData(data_grafik, 'tempat_kerja'));

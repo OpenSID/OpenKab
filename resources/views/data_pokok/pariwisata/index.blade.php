@@ -60,7 +60,7 @@
                     <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/pariwisata/download'" table-id="pariwisata" filename="data_pariwisata" testId="btn-export-excel" />
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped" id="pariwisata" data-testid="datatable-pariwisata">
+                    <table class="table table-striped" id="pariwisata" data-testid="datatable-data-pokok-pariwisata">
                         <thead>
                             <tr>
                                 <th>ID</th>

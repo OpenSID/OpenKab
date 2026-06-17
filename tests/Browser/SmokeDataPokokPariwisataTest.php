@@ -11,25 +11,25 @@ afterEach(function () {
     SessionState::clear();
 });
 
-it('opens the pariwisata page', function () {
+it('opens the data-pokok-pariwisata page', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
         ->assertPathIs('/data-pokok/pariwisata');
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-page');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-page');
 });
 
 it('displays statistik jumlah penginapan', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
         ->assertSee('Statistik Jumlah Penginapan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-jumlah-penginapan');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-jumlah-penginapan');
 });
 
 it('displays statistik tingkat pemanfaatan', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
         ->assertSee('Statistik Tingkat Pemanfaatan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-tingkat-pemanfaatan');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-tingkat-pemanfaatan');
 });
 
 it('renders all charts successfully', function () {
@@ -54,43 +54,43 @@ it('renders all charts successfully', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-charts');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-charts');
 });
 
 it('displays filter tahun', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
         ->assertVisible('@filter-tahun');
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-filter-tahun');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-filter-tahun');
 });
 
 it('displays filter kategori', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
         ->assertVisible('@filter-kategori-wisata');
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-filter-kategori');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-filter-kategori');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
         ->assertVisible('@btn-cetak');
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-cetak-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-excel-button');
 });
 
 it('displays datatable', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/pariwisata')
         ->assertPathIs('/data-pokok/pariwisata')
-        ->assertVisible('@datatable-pariwisata');
+        ->assertVisible('@datatable-data-pokok-pariwisata');
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-datatable');
 });
 
 it('has at least 1 data row', function () {
@@ -100,7 +100,7 @@ it('has at least 1 data row', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid=\"datatable-pariwisata\"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-data-pokok-pariwisata\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {
@@ -117,7 +117,7 @@ it('has at least 1 data row', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-data-rows');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-data-rows');
 });
 
 it('has no javascript errors', function () {
@@ -125,5 +125,5 @@ it('has no javascript errors', function () {
         ->assertPathIs('/data-pokok/pariwisata')
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'pariwisata-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-pariwisata-no-errors');
 });

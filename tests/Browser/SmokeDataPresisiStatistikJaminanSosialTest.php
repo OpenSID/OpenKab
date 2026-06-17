@@ -125,8 +125,6 @@ it('clicks a kategori statistik', function () use ($path) {
         true
     );
 
-    $page->wait(2000);
-
     ScreenshotHelper::saveIfEnabled($page, 'statistik-jaminan-sosial-kategori-clicked');
 });
 

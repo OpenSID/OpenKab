@@ -1,15 +1,17 @@
 {
     "data": [
         {
+            "type": "pariwisata",
             "id": "1",
             "attributes": {
                 "nama_desa": "Desa Test",
-                "nama_tempat_wisata": "Pantai Test",
-                "kategori_wisata": "Pantai",
-                "sarana_wisata": "Hotel",
-                "komoditas_wisata": "Kuliner",
-                "jumlah_pengunjung": 500,
-                "tahun": "2024"
+                "kode_desa": "5102102009",
+                "jenis_hiburan": "Prasarana Hiburan dan Wisata Lainnya",
+                "jumlah_penginapan": "1",
+                "lokasi_tempat_area_wisata": "TIDAK TAHU",
+                "keberadaan": "TIDAK TAHU",
+                "luas": "TIDAK TAHU",
+                "tingkat_pemanfaatan": "TIDAK TAHU"
             }
         }
     ],

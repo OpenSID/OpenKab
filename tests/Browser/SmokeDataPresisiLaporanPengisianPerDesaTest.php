@@ -15,21 +15,21 @@ it('opens the laporan pengisian per desa page', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan/perdesa')
         ->assertPathIs('/data-presisi/laporan/perdesa');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-page');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-perdesa-page');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan/perdesa')
         ->assertVisible('@btn-cetak');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-cetak-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-perdesa-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-presisi/laporan/perdesa')
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-perdesa-excel-button');
 });
 
 it('displays datatable', function () {
@@ -37,7 +37,7 @@ it('displays datatable', function () {
         ->assertPathIs('/data-presisi/laporan/perdesa')
         ->assertVisible('@datatable-laporan-perdesa');
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-perdesa-datatable');
 });
 
 it('has at least 1 data row', function () {
@@ -64,7 +64,7 @@ it('has at least 1 data row', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-data-rows');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-perdesa-data-rows');
 });
 
 it('has no javascript errors', function () {
@@ -72,5 +72,5 @@ it('has no javascript errors', function () {
         ->assertPathIs('/data-presisi/laporan/perdesa')
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'laporan-pengisian-perdesa-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'data-presisi-laporan-pengisian-perdesa-no-errors');
 });

@@ -1,7 +1,11 @@
 {
     "success": true,
     "data": [
-        {"id": "sandang-pakaian", "nama": "Sandang Pakaian", "judul_halaman": "Pangan", "judul_kolom_nama": "Jenis Sandang"},
-        {"id": "sandang-rukun", "nama": "Sandang Rukun", "judul_halaman": "Pangan", "judul_kolom_nama": "Jenis Sandang"}
+        {
+            "attributes": {
+                "sandang-pakaian": "Sandang Pakaian",
+                "sandang-rukun": "Sandang Rukun"
+            }
+        }
     ]
 }

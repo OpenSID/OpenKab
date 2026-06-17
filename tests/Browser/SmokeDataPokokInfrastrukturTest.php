@@ -11,25 +11,25 @@ afterEach(function () {
     SessionState::clear();
 });
 
-it('opens the infrastruktur page', function () {
+it('opens the data-pokok-infrastruktur page', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/infrastruktur')
         ->assertPathIs('/data-pokok/infrastruktur');
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-page');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-page');
 });
 
 it('displays statistik kondisi transportasi', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/infrastruktur')
         ->assertSee('Statistik Kondisi Transportasi');
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-kondisi-transportasi');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-kondisi-transportasi');
 });
 
 it('displays statistik sanitasi', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/infrastruktur')
         ->assertSee('Statistik Sanitasi');
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-sanitasi');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-sanitasi');
 });
 
 it('renders all charts successfully', function () {
@@ -54,14 +54,14 @@ it('renders all charts successfully', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-charts');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-charts');
 });
 
 it('displays filter tahun', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/infrastruktur')
         ->assertVisible('@filter-tahun');
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-filter-tahun');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-filter-tahun');
 });
 
 it('displays cetak button', function () {
@@ -77,7 +77,7 @@ it('displays cetak button', function () {
             true
         );
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-cetak-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-cetak-button');
 });
 
 it('displays excel button', function () {
@@ -93,15 +93,15 @@ it('displays excel button', function () {
             true
         );
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-excel-button');
 });
 
 it('displays datatable', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/infrastruktur')
         ->assertPathIs('/data-pokok/infrastruktur')
-        ->assertVisible('@datatable-infrastruktur');
+        ->assertVisible('@datatable-data-pokok-infrastruktur');
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-datatable');
 });
 
 it('has at least 1 data row', function () {
@@ -111,7 +111,7 @@ it('has at least 1 data row', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid=\"datatable-infrastruktur\"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-data-pokok-infrastruktur\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {
@@ -128,7 +128,7 @@ it('has at least 1 data row', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-data-rows');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-data-rows');
 });
 
 it('has no javascript errors', function () {
@@ -136,5 +136,5 @@ it('has no javascript errors', function () {
         ->assertPathIs('/data-pokok/infrastruktur')
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'infrastruktur-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-infrastruktur-no-errors');
 });

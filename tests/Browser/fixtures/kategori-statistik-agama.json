@@ -1,7 +1,11 @@
 {
     "success": true,
     "data": [
-        {"id": "agama-islam", "nama": "Islam", "judul_halaman": "Aktivitas Keagamaan", "judul_kolom_nama": "Jenis Agama"},
-        {"id": "agama-kristen", "nama": "Kristen", "judul_halaman": "Aktivitas Keagamaan", "judul_kolom_nama": "Jenis Agama"}
+        {
+            "attributes": {
+                "masjid": "Masjid",
+                "musholla": "Musholla"
+            }
+        }
     ]
 }

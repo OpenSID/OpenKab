@@ -23,6 +23,9 @@
                 <div class="chart" id="grafik">
                     <canvas id="barChart"></canvas>
                 </div>
+                <div class="chart" id="pie">
+                    <canvas id="donutChart"></canvas>
+                </div>
             </div>
         </div>
         <div class="card card-outline card-primary">
@@ -38,7 +41,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="table-kesehatan">
+                    <table class="table table-striped" id="table-kesehatan" data-testid="datatable-kesehatan">
                         <thead>
                             <tr>
                                 <th>Aksi</th>

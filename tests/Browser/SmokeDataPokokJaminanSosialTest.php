@@ -15,28 +15,28 @@ it('opens the jaminan sosial page', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertPathIs('/data-pokok/jaminan-sosial');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-page');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-page');
 });
 
 it('displays statistik jenis bantuan', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertSee('Statistik Jenis Bantuan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-jenis-bantuan');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-jenis-bantuan');
 });
 
 it('displays statistik jenis gangguan mental', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertSee('Statistik Jenis Gangguan Mental');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-gangguan-mental');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-gangguan-mental');
 });
 
 it('displays statistik jenis penanganan', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertSee('Statistik Jenis Penanganan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-jenis-penanganan');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-jenis-penanganan');
 });
 
 it('renders all charts successfully', function () {
@@ -63,43 +63,43 @@ it('renders all charts successfully', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-charts');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-charts');
 });
 
 it('displays filter tahun', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertVisible('@filter-tahun');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-filter-tahun');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-filter-tahun');
 });
 
 it('displays filter status', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertVisible('@filter-status-kelengkapan');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-filter-status');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-filter-status');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertVisible('@btn-cetak');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-cetak-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-excel-button');
 });
 
 it('displays datatable', function () {
     $page = SessionState::loginAndNavigate($this->user, '/data-pokok/jaminan-sosial')
         ->assertPathIs('/data-pokok/jaminan-sosial')
-        ->assertVisible('@datatable-jaminan-sosial');
+        ->assertVisible('@datatable-data-pokok-jaminan-sosial');
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-datatable');
 });
 
 it('has at least 1 data row', function () {
@@ -109,7 +109,7 @@ it('has at least 1 data row', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid=\"datatable-jaminan-sosial\"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-data-pokok-jaminan-sosial\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {
@@ -126,7 +126,7 @@ it('has at least 1 data row', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-data-rows');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-data-rows');
 });
 
 it('has detail button in data', function () {
@@ -136,7 +136,7 @@ it('has detail button in data', function () {
     $page->assertScript(
         'new Promise((resolve) => {
             const check = () => {
-                const table = document.querySelector(\'[data-testid=\"datatable-jaminan-sosial\"]\');
+                const table = document.querySelector(\'[data-testid=\"datatable-data-pokok-jaminan-sosial\"]\');
                 if (table) {
                     const rows = table.querySelectorAll(\'tbody tr\');
                     if (rows.length > 0 && !rows[0].classList.contains(\'dataTables_empty\')) {
@@ -154,7 +154,7 @@ it('has detail button in data', function () {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-detail-button');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-detail-button');
 });
 
 it('has no javascript errors', function () {
@@ -162,5 +162,5 @@ it('has no javascript errors', function () {
         ->assertPathIs('/data-pokok/jaminan-sosial')
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'jaminan-sosial-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'data-pokok-jaminan-sosial-no-errors');
 });

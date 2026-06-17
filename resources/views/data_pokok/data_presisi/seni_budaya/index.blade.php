@@ -23,6 +23,9 @@
                     <div class="chart" id="grafik">
                         <canvas id="barChart" data-testid="chart-bar-seni-budaya"></canvas>
                     </div>
+                    <div class="chart" id="pie">
+                        <canvas id="donutChart" data-testid="chart-donut-seni-budaya"></canvas>
+                    </div>
                 </div>
             </div>
             <div class="card card-outline card-primary">

@@ -48,7 +48,7 @@
                     <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/infrastruktur/download'" table-id="infrastruktur" filename="data_infrastruktur" testId="btn-export-excel" />
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped" id="infrastruktur" data-testid="datatable-infrastruktur">
+                    <table class="table table-striped" id="infrastruktur" data-testid="datatable-data-pokok-infrastruktur">
                         <thead>
                             <tr>
                                 <th>Kategori</th>

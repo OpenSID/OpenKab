@@ -11,14 +11,14 @@ afterEach(function () {
     SessionState::clear();
 });
 
-$path = '/data-presisi/statistik/kesehatan';
+$path = '/data-presisi/statistik/adat';
 
-it('opens the statistik kesehatan page', function () use ($path) {
+it('opens the statistik adat page', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertPathIs($path)
-        ->assertSee('Kesehatan');
+        ->assertSee('Adat');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-page');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-page');
 });
 
 it('displays kategori statistik list', function () use ($path) {
@@ -40,42 +40,42 @@ it('displays kategori statistik list', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-kategori-list');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-kategori-list');
 });
 
 it('displays filter tahun', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@filter-tahun');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-filter-tahun');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-filter-tahun');
 });
 
 it('displays excel button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-export-excel');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-excel-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-excel-button');
 });
 
 it('displays grafik button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-toggle-grafik');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-grafik-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-grafik-button');
 });
 
 it('displays chart button', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@btn-toggle-pie');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-chart-button');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-chart-button');
 });
 
 it('displays datatable', function () use ($path) {
     $page = SessionState::loginAndNavigate($this->user, $path)
         ->assertVisible('@datatable-statistik');
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-datatable');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-datatable');
 });
 
 it('datatable displays data', function () use ($path) {
@@ -102,7 +102,7 @@ it('datatable displays data', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-datatable-data');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-datatable-data');
 });
 
 it('clicks a kategori statistik', function () use ($path) {
@@ -125,9 +125,7 @@ it('clicks a kategori statistik', function () use ($path) {
         true
     );
 
-    $page->wait(2000);
-
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-kategori-clicked');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-kategori-clicked');
 });
 
 it('renders bar chart', function () use ($path) {
@@ -150,7 +148,7 @@ it('renders bar chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-bar-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-bar-chart');
 });
 
 it('renders pie chart', function () use ($path) {
@@ -173,7 +171,7 @@ it('renders pie chart', function () use ($path) {
         true
     );
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-pie-chart');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-pie-chart');
 });
 
 it('has no javascript errors', function () use ($path) {
@@ -181,5 +179,5 @@ it('has no javascript errors', function () use ($path) {
         ->assertPathIs($path)
         ->assertNoJavaScriptErrors();
 
-    ScreenshotHelper::saveIfEnabled($page, 'statistik-kesehatan-no-errors');
+    ScreenshotHelper::saveIfEnabled($page, 'statistik-adat-no-errors');
 });

@@ -45,6 +45,7 @@ class CustomCspPreset implements Preset
             ])
             ->add(Directive::CONNECT, [
                 Keyword::SELF,
+                'https://unpkg.com/',
                 config('app.serverPantau'),
                 config('app.databaseGabunganUrl'),
             ])

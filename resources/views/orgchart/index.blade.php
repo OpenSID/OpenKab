@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <div id="chart-container" class="col-12"></div>
+            <div id="chart-container" class="col-12" data-testid="chart-container"></div>
         </div>
     </div>
 @endsection

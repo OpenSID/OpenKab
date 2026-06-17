@@ -102,6 +102,11 @@
                 'nodeTemplate': nodeTemplate,
                 'nodeID': 'id'
             });
+
+            var exportBtn = document.querySelector('.oc-export-button');
+            if (exportBtn) {
+                exportBtn.setAttribute('data-testid', 'bt-cetak');
+            }
         });
 
     </script>

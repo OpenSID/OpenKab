@@ -26,4 +26,16 @@ class DataPresisiPapanController extends Controller
 
         return view('data_pokok.data_presisi.papan.detail_data', compact('title', 'colomn'));
     }
+
+    public function cetak(Request $request): View
+    {
+        return view('data_pokok.data_presisi.papan.cetak', ['filter' => $request->getQueryString()]);
+    }
+
+     public function detail(Request $request): View
+    {
+        $data = json_decode($request->data);
+
+        return view('data_pokok.data_presisi.papan.detail', ['data' => $data]);
+    }
 }

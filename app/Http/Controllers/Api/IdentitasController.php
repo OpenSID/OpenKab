@@ -117,13 +117,16 @@ class IdentitasController extends Controller
 
     private function generateFaviconsFromImagePath($filePath, $distPath)
     {
-        Image::read($filePath)->resize(width: 192, height: 192)->save($distPath.'/android-chrome-192x192.png', quality: 100);
-        Image::read($filePath)->resize(width: 512, height: 512)->save($distPath.'/android-chrome-512x512.png', quality: 100);
-        Image::read($filePath)->resize(width: 180, height: 180)->save($distPath.'/apple-touch-icon.png', quality: 100);
-        Image::read($filePath)->resize(width: 16, height: 16)->save($distPath.'/favicon-16x16.png', quality: 100);
-        Image::read($filePath)->resize(width: 32, height: 32)->save($distPath.'/favicon-32x32.png', quality: 100);
-        Image::read($filePath)->resize(width: 96, height: 96)->save($distPath.'/favicon-96x96.png', quality: 100);
-        Image::read($filePath)->resize(width: 150, height: 150)->save($distPath.'/mstile-150x150.png', quality: 100);
+        // create an image manager instance with imagick driver
+        // Image::configure(['driver' => 'imagick']);
+
+        Image::read($filePath)->resize(192, 192)->save($distPath.'/android-chrome-192x192.png', quality: 100);
+        Image::read($filePath)->resize(512, 512)->save($distPath.'/android-chrome-512x512.png', quality: 100);
+        Image::read($filePath)->resize(180, 180)->save($distPath.'/apple-touch-icon.png', quality: 100);
+        Image::read($filePath)->resize(16, 16)->save($distPath.'/favicon-16x16.png', quality: 100);
+        Image::read($filePath)->resize(32, 32)->save($distPath.'/favicon-32x32.png', quality: 100);
+        Image::read($filePath)->resize(96, 96)->save($distPath.'/favicon-96x96.png', quality: 100);
+        Image::read($filePath)->resize(150, 150)->save($distPath.'/mstile-150x150.png', quality: 100);
         copy($distPath.'/favicon-16x16.png', $distPath.'/favicon.ico');
 
         $dataManifest = [

@@ -26,13 +26,20 @@ define('ATTRIBUTES', serialize([
     'select-manual' => 'Pilihan (Kustom)',
 ]));
 
+if (! function_exists('csp_nonce')) {
+    function csp_nonce()
+    {
+        return app('csp-nonce');
+    }
+}
+
 if (! function_exists('openkab_versi')) {
     /**
      * OpenKab database gabungan versi.
      */
     function openkab_versi()
     {
-        return 'v2604.0.2';
+        return 'v2605.0.1';
     }
 }
 
@@ -187,7 +194,7 @@ if (! function_exists('default_favicon')) {
             $pathFavicon = public_path('favicons/'.$favicon);
             if (! file_exists($pathFavicon)) {
                 $filePath = public_path('assets/img/opensid_logo.png');
-                Image::read($filePath)->resize(width: 96, height: 96)->save($pathFavicon, quality: 100);
+                Image::read($filePath)->resize(96, 96)->save($pathFavicon, quality: 100);
             }
         }
     }

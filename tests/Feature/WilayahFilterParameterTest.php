@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class WilayahFilterParameterTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function test_meta_tag_identitas_openkab_exists()
     {
         $response = $this->get(route('dasbor'));
@@ -15,7 +16,7 @@ class WilayahFilterParameterTest extends BaseTestCase
         $response->assertSee('name="identitas-openkab"', false);
     }
 
-    /** @test */
+    #[Test]
     public function test_wilayah_filter_js_contains_kode_kabupaten_param()
     {
         $response = $this->get(route('dasbor'));
@@ -24,7 +25,7 @@ class WilayahFilterParameterTest extends BaseTestCase
         $response->assertSee('kode_kabupaten', false);
     }
 
-    /** @test */
+    #[Test]
     public function test_wilayah_filter_js_contains_filter_kode_kabupaten_param()
     {
         $response = $this->get(route('dasbor'));
@@ -33,7 +34,7 @@ class WilayahFilterParameterTest extends BaseTestCase
         $response->assertSee('filter[kode_kabupaten]', false);
     }
 
-    /** @test */
+    #[Test]
     public function test_summary_api_url_contains_kode_kabupaten_param()
     {
         $response = $this->get(route('dasbor') . '?page=summary');
@@ -41,7 +42,7 @@ class WilayahFilterParameterTest extends BaseTestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
+    #[Test]
     public function test_peta_api_url_contains_kode_kabupaten_param()
     {
         $response = $this->get(route('dasbor') . '?page=peta');

@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class LoginControllerTest extends TestCase
@@ -59,7 +60,7 @@ class LoginControllerTest extends TestCase
         RateLimiter::clear("captcha:{$ip}:" . hash('xxh64', $userAgent));
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_login_form()
     {
         $response = $this->get('/login');
@@ -70,7 +71,7 @@ class LoginControllerTest extends TestCase
         $response->assertViewHas('captchaView');
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_login_form_with_captcha_when_threshold_reached()
     {
         // Simulate failed attempts to trigger captcha
@@ -88,7 +89,7 @@ class LoginControllerTest extends TestCase
         $response->assertViewHas('captchaView', 'auth.captcha');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_login_with_email()
     {
         // Clear any existing rate limiter to ensure clean state
@@ -108,7 +109,7 @@ class LoginControllerTest extends TestCase
         $this->assertAuthenticatedAs($this->user);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_login_with_username()
     {
         // Clear any existing rate limiter to ensure clean state
@@ -128,7 +129,7 @@ class LoginControllerTest extends TestCase
         $this->assertAuthenticatedAs($this->user);
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_2fa_challenge_when_2fa_enabled()
     {
         $this->twoFactorService
@@ -144,7 +145,7 @@ class LoginControllerTest extends TestCase
         $this->assertNull(session('2fa_verified'));
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_password_change_when_password_is_weak()
     {
         // Delete existing weak user first
@@ -170,7 +171,7 @@ class LoginControllerTest extends TestCase
         $this->assertTrue(session('weak_password'));
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_login_with_invalid_credentials()
     {
         $response = $this->post('/login', [
@@ -182,7 +183,7 @@ class LoginControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_locked_account()
     {
         $this->user->lockAccount();
@@ -197,7 +198,7 @@ class LoginControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function it_records_failed_login_attempts()
     {
         $response = $this->post('/login', [
@@ -212,7 +213,7 @@ class LoginControllerTest extends TestCase
         $this->assertTrue($this->user->failed_login_attempts > 0);
     }
 
-    /** @test */
+    #[Test]
     public function it_locks_account_after_max_failed_attempts()
     {
         // Test ini memerlukan setup rate limiter yang kompleks
@@ -248,7 +249,7 @@ class LoginControllerTest extends TestCase
         $this->assertTrue($this->user->isLocked());
     }
 
-    /** @test */
+    #[Test]
     public function it_resets_failed_attempts_on_successful_login()
     {
         // Clear rate limiter
@@ -277,7 +278,7 @@ class LoginControllerTest extends TestCase
         $this->assertFalse($this->user->isLocked());
     }
 
-    /** @test */
+    #[Test]
     public function it_finds_username_correctly_for_email()
     {
         $controller = new \App\Http\Controllers\Auth\LoginController(
@@ -295,7 +296,7 @@ class LoginControllerTest extends TestCase
         $this->assertEquals('test@example.com', $request->input('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_finds_username_correctly_for_username()
     {
         $controller = new \App\Http\Controllers\Auth\LoginController(
@@ -313,7 +314,7 @@ class LoginControllerTest extends TestCase
         $this->assertEquals('testuser', $request->input('username'));
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_nonexistent_user_in_failed_login()
     {
         $response = $this->post('/login', [
@@ -325,7 +326,7 @@ class LoginControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_inactive_user()
     {
         // Clear rate limiter
@@ -352,7 +353,7 @@ class LoginControllerTest extends TestCase
         $this->user->update(['active' => 1]);
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_remember_me_functionality()
     {
         // Clear rate limiter

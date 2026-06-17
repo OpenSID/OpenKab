@@ -46,7 +46,7 @@
 
             const urlArtikel = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/artikel-public/list' }}");
             
-            const routeDetailBase = "{{ route('web.artikel.show', '') }}";
+            const routeDetailBase = "{{ url('artikel-opensid') }}";
 
             $.ajax({
                 url: urlArtikel.href,

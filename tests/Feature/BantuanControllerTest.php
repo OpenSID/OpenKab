@@ -3,13 +3,14 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class BantuanControllerTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    #[Test]
     public function it_can_access_bantuan_index()
     {
         $response = $this->get(route('bantuan'));
@@ -18,7 +19,7 @@ class BantuanControllerTest extends BaseTestCase
         $response->assertViewIs('bantuan.index');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_bantuan_detail()
     {
         $response = $this->get(route('bantuan.detail', ['id' => 1]));
@@ -28,7 +29,7 @@ class BantuanControllerTest extends BaseTestCase
         $response->assertViewHas('id', '1');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_bantuan_cetak()
     {
         $response = $this->get('/bantuan/cetak');
@@ -38,7 +39,7 @@ class BantuanControllerTest extends BaseTestCase
         $response->assertViewHas('filter');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_bantuan_detail_cetak_peserta()
     {
         $response = $this->get(route('bantuan.detail.cetak', ['id' => 1]));
@@ -49,7 +50,7 @@ class BantuanControllerTest extends BaseTestCase
         $response->assertViewHas('filter');
     }
 
-    /** @test */
+    #[Test]
     public function it_passes_filter_params_to_cetak_peserta()
     {
         $response = $this->get(route('bantuan.detail.cetak', ['id' => 1]) . '?search=test');

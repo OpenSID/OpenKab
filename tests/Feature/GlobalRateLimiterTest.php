@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class GlobalRateLimiterTest extends TestCase
@@ -19,7 +20,7 @@ class GlobalRateLimiterTest extends TestCase
         Cache::flush();
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_requests_when_rate_limiter_is_disabled()
     {
         // Disable rate limiter
@@ -33,7 +34,7 @@ class GlobalRateLimiterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_requests_within_limit_when_rate_limiter_is_enabled()
     {
         // Enable rate limiter with low limits for testing
@@ -52,7 +53,7 @@ class GlobalRateLimiterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_blocks_requests_when_limit_is_exceeded()
     {
         // Enable rate limiter with low limits for testing
@@ -72,7 +73,7 @@ class GlobalRateLimiterTest extends TestCase
         $this->assertEquals(429, $response3->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_json_response_for_api_requests()
     {
         // Enable rate limiter with low limits for testing
@@ -95,7 +96,7 @@ class GlobalRateLimiterTest extends TestCase
         $response->assertJsonStructure(['retry_after']);
     }
 
-    /** @test */
+    #[Test]
     public function it_excludes_configured_paths_from_rate_limiting()
     {
         // Enable rate limiter with low limits
@@ -114,7 +115,7 @@ class GlobalRateLimiterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_excludes_configured_ip_addresses_from_rate_limiting()
     {
         // Enable rate limiter with low limits
@@ -133,7 +134,7 @@ class GlobalRateLimiterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_respects_wildcard_patterns_in_excluded_paths()
     {
         // Enable rate limiter with low limits
@@ -155,7 +156,7 @@ class GlobalRateLimiterTest extends TestCase
         $this->assertNotEquals(429, $response3->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function it_respects_different_rate_limits_for_different_ips()
     {
         // Enable rate limiter with low limits
@@ -176,7 +177,7 @@ class GlobalRateLimiterTest extends TestCase
         $this->assertNotEquals(429, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function it_works_with_simple_paths()
     {
         // Enable rate limiter with low limits

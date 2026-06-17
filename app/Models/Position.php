@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kalnoy\Nestedset\NodeTrait;
 
 class Position extends OpenKabModel
 {
+    use HasFactory;
     use SoftDeletes;
     use NodeTrait;
 

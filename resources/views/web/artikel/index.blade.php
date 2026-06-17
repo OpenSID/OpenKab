@@ -61,8 +61,10 @@
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>
-                                        <a href="{{ route('web.artikel.show', $article->id ?? '') }}"
+                                        @if (isset($article->id))
+                                        <a href="{{ route('web.artikel.show', $article->id) }}"
                                             class="text-decoration-none btn btn-sm btn-outline-primary">Selengkapnya</a>
+                                        @endif
                                     </div>
                                     <small class="text-muted">
                                         {{ isset($article->tgl_upload) ? \Carbon\Carbon::parse($article->tgl_upload)->translatedFormat('d F Y') : '' }}

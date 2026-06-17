@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ForcePasswordResetRequest;
 use App\Models\PasswordHistory;
-use App\Providers\RouteServiceProvider;
+use App\Providers\AppServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -59,7 +59,7 @@ class ForcePasswordResetController extends Controller
         $user->save();
 
         // Redirect to intended URL or home
-        $intendedUrl = session('intended_url', url(RouteServiceProvider::HOME));
+        $intendedUrl = session('intended_url', url(AppServiceProvider::HOME));
         session()->forget('intended_url');
 
         return redirect($intendedUrl)

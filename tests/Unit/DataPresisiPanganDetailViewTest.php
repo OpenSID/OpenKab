@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\View as ViewFacade;
@@ -11,7 +12,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    #[Test]
     public function it_renders_longitude_latitude_columns_in_datatable_header()
     {
         // Mock data untuk testing view
@@ -33,7 +34,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertStringContainsString('<th>LATITUDE</th>', $html);
     }
 
-    /** @test */
+    #[Test]
     public function it_configures_datatable_columns_for_longitude_latitude()
     {
         // Mock data untuk testing view
@@ -58,7 +59,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertStringContainsString("orderable: false", $html);
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_longitude_latitude_in_correct_column_order()
     {
         // Mock data untuk testing view
@@ -85,7 +86,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertLessThan($latitudePos, $longitudePos, 'Longitude should appear before latitude in column configuration');
     }
 
-    /** @test */
+    #[Test]
     public function it_configures_api_filter_with_rtm_id_for_coordinate_data()
     {
         // Mock data untuk testing view
@@ -109,7 +110,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertStringContainsString('/api/v1/data-presisi/pangan', $html);
     }
 
-    /** @test */
+    #[Test]
     public function it_renders_household_info_table_with_correct_data_structure()
     {
         // Mock data untuk testing view
@@ -138,7 +139,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertStringContainsString('No Kartu Rumah Tangga (KRT)', $html);
     }
 
-    /** @test */
+    #[Test]
     public function it_has_proper_datatable_initialization_for_coordinate_display()
     {
         // Mock data untuk testing view
@@ -166,7 +167,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertStringContainsString("data: 'attributes.latitude'", $html);
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_all_expected_column_headers_in_correct_order()
     {
         // Mock data untuk testing view
@@ -222,7 +223,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertLessThan($latitudeHeaderPos, $longitudeHeaderPos);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_coordinate_columns_are_not_orderable()
     {
         // Mock data untuk testing view

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Services\ArtikelService;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class ArtikelWebTest extends BaseTestCase
@@ -14,7 +15,7 @@ class ArtikelWebTest extends BaseTestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_public_artikel_index()
     {
         $this->withoutMiddleware([\App\Http\Middleware\WebsiteEnable::class]);
@@ -44,7 +45,7 @@ class ArtikelWebTest extends BaseTestCase
         $response->assertSee('Berita Desa');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_public_artikel_show()
     {
         $this->withoutMiddleware([\App\Http\Middleware\WebsiteEnable::class]);
@@ -70,7 +71,7 @@ class ArtikelWebTest extends BaseTestCase
         $response->assertSee('Konten detail artikel test');
     }
 
-    /** @test */
+    #[Test]
     public function it_aborts_404_for_disabled_or_missing_artikel()
     {
         $this->withoutMiddleware([\App\Http\Middleware\WebsiteEnable::class]);

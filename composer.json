@@ -25,7 +25,7 @@
         "laravel/tinker": "^3.0",
         "laravel/ui": "^4.2",
         "league/flysystem-ftp": "^3.10",
-        "mews/captcha": "^3.4",
+        "mews/captcha": "^3.3",
         "mews/purifier": "^3.4",
         "openspout/openspout": "^4.24",
         "proengsoft/laravel-jsvalidation": "^4.8",
@@ -47,7 +47,9 @@
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^11.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-browser": "^4.0",
+        "phpunit/phpunit": "^12.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "minimum-stability": "stable",
@@ -91,10 +93,12 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan package:discover --ansi",
+            "bash tests/Browser/apply-patch.sh"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "bash tests/Browser/apply-patch.sh"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

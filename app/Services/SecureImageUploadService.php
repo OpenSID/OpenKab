@@ -318,7 +318,7 @@ class SecureImageUploadService
                     $image->toJpg(85)->save($fullPath); // 85% quality
                     break;
                 case 'png':
-                    $image->toPng(9)->save($fullPath); // Compression level 9
+                    $image->toPng()->save($fullPath);
                     break;
                 case 'gif':
                     $image->toGif()->save($fullPath);

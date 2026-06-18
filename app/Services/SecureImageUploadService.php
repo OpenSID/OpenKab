@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Laravel\Facades\Image;
 use RuntimeException;
 
 class SecureImageUploadService
@@ -297,7 +297,7 @@ class SecureImageUploadService
         
         try {
             // Load image using Intervention Image
-            $image = Image::make($realPath);
+            $image = Image::read($realPath);
             
             // Generate random filename
             $filename = $this->generateRandomFilename($outputFormat);
@@ -311,30 +311,21 @@ class SecureImageUploadService
                 File::makeDirectory($directory, 0755, true, true);
             }
             
-            // Re-encode with stripped metadata
-            $image->orientate(); // Fix orientation from EXIF
-            
             // Save with format-specific settings
             switch ($outputFormat) {
                 case 'jpg':
                 case 'jpeg':
-                    $image->encode('jpg', 85); // 85% quality
+                    $image->toJpg(85)->save($fullPath); // 85% quality
                     break;
                 case 'png':
-                    $image->encode('png', 9); // Compression level 9
+                    $image->toPng(9)->save($fullPath); // Compression level 9
                     break;
                 case 'gif':
-                    $image->encode('gif');
+                    $image->toGif()->save($fullPath);
                     break;
                 default:
-                    $image->encode('jpg', 85);
+                    $image->toJpg(85)->save($fullPath);
             }
-            
-            // Save the re-encoded image
-            $image->save($fullPath);
-            
-            // Destroy image from memory
-            $image->destroy();
             
             return [
                 'path' => trim($destinationFolder, '/') . '/' . $filename,

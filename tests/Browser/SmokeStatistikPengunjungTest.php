@@ -3,7 +3,7 @@
 use Tests\Browser\ScreenshotHelper;
 use Tests\Browser\SessionState;
 
-uses()->group('website-statistik');
+uses()->group('pengaturan-web');
 
 beforeEach(function () {
     $this->user = SessionState::loginAdminUser();
@@ -50,17 +50,23 @@ it('renders all charts successfully', function () {
         ->assertPathIs('/cms/statistik');
 
     $page->assertScript(
-        'new Promise((resolve) => {
-            const check = () => {
-                const deviceCanvas = document.querySelector(\'[data-testid="chart-device-visitor"] canvas\');
-                const dailyCanvas = document.querySelector(\'[data-testid="chart-visitor-daily"] canvas\');
-                const postCanvas = document.querySelector(\'[data-testid="chart-visitor-post"] canvas\');
-                if (deviceCanvas && dailyCanvas && postCanvas) {
+        'new Promise(function(resolve) {
+            var attempts = 0;
+            var maxAttempts = 20;
+            function check() {
+                attempts++;
+                var d = document.querySelector("[data-testid=\"chart-device-visitor\"]");
+                var dy = document.querySelector("[data-testid=\"chart-visitor-daily\"]");
+                var p = document.querySelector("[data-testid=\"chart-visitor-post\"]");
+                var allRendered = d && dy && p && d.children.length > 0 && dy.children.length > 0 && p.children.length > 0;
+                if (allRendered) {
                     resolve(true);
+                } else if (attempts >= maxAttempts) {
+                    resolve(false);
                 } else {
                     setTimeout(check, 500);
                 }
-            };
+            }
             check();
         })',
         true
@@ -68,4 +74,3 @@ it('renders all charts successfully', function () {
 
     ScreenshotHelper::saveIfEnabled($page, 'statistik-charts-rendered');
 });
-

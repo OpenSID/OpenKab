@@ -18,7 +18,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <a href="{{ route('bantuan.create') }}">
-                                    <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i>
+                                    <button type="button" class="btn btn-primary btn-sm" data-testid="bt-tambah"><i class="far fa-plus-square"></i>
                                         Tambah</button>
                                 </a>
                             </div>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table " id="bantuan">
+                        <table class="table " id="bantuan" data-testid="datatable-bantuan">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -106,11 +106,11 @@
                             let canEdit = `{{ $canedit }}`
                             let canDelete = `{{ $candelete }}`
                             let buttonEdit = canEdit ? `<a href="{{ url('master/bantuan/${data.id}/edit') }}">
-                                    <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
+                                    <button type="button" class="btn btn-warning btn-sm edit" title="Ubah" data-testid="bt-edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 </a>` : ``;
-                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
+                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus" data-testid="bt-delete">
                                     <i class="fas fa-trash"></i>
                                 </button>` : ``;
                             return `${buttonEdit} ${buttonDelete}`;

@@ -19,14 +19,14 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="false" aria-controls="collapse-filter">
+                                aria-expanded="false" aria-controls="collapse-filter" data-testid="bt-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
                             <a href="{{ url('point/form') }} ">
-                                <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i>
+                                <button type="button" class="btn btn-primary btn-sm" data-testid="bt-tambah"><i class="far fa-plus-square"></i>
                                     Tambah</button>
                             </a>
-                            <a href="#" title="Hapus Data" id="multiple-delete" class="disabled btn btn-social btn-danger btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-trash-o"></i> Hapus</a>
+                            <a href="#" title="Hapus Data" id="multiple-delete" class="disabled btn btn-social btn-danger btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" data-testid="bt-hapus-multi"><i class="fa fa-trash-o"></i> Hapus</a>
 
                         </div>
                     </div>

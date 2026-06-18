@@ -158,7 +158,7 @@
                     {
                         data: function(data) {
                             return `<a href="{{ url('bantuan/detail') }}/${data.id}">
-                            <button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                            <button class="btn btn-info btn-sm" data-testid="bt-rincian"><i class="fas fa-eye"></i> Detail</button>
                         </a>`;
 
 

@@ -58,6 +58,11 @@ final class MswSetup
         '/api/v1/plan' => 'plan-lokasi.json',
         '/api/v1/point' => 'point-tipe-lokasi.json',
         '/api/v1/point/status' => 'point-status.json',
+        '/cms/pages' => 'cms-halaman.json',
+        '/cms/articles' => 'cms-artikel.json',
+        '/cms/categories' => 'cms-kategori.json',
+        '/cms/slides' => 'cms-slider.json',
+        '/cms/downloads' => 'cms-unduhan.json',
     ];
 
     /**

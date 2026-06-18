@@ -32,7 +32,7 @@ return [
     | requests will be blocked until the decay period has elapsed.
     |
     */
-    'max_attempts' => env('RATE_LIMITER_MAX_ATTEMPTS', 60),
+    'max_attempts' => (int) env('RATE_LIMITER_MAX_ATTEMPTS', 60),
 
     /*
     |--------------------------------------------------------------------------
@@ -44,7 +44,7 @@ return [
     | to zero and new requests will be allowed.
     |
     */
-    'decay_minutes' => env('RATE_LIMITER_DECAY_MINUTES', 1),
+    'decay_minutes' => (int) env('RATE_LIMITER_DECAY_MINUTES', 1),
 
     /*
     |--------------------------------------------------------------------------

@@ -7,7 +7,7 @@ return [
      *
      * Supported: 'jsvalidation::bootstrap', 'jsvalidation::bootstrap4', 'jsvalidation::bootstrap5', 'jsvalidation::uikit'
      */
-    'view' => 'jsvalidation::bootstrap4',
+    'view' => 'jsvalidation::bootstrap',
 
     /*
      * Default JQuery selector find the form to be validated.
@@ -49,6 +49,5 @@ return [
      *
      * See https://jqueryvalidation.org/validate/#ignore
      */
-    // 'ignore' => ":hidden, [contenteditable='true']",
-    'ignore' => "",
+    'ignore' => ":hidden, [contenteditable='true']",
 ];

@@ -362,8 +362,7 @@
                                 });
                                 setTimeout(() => {
                                     window.location.href =
-                                        '{{ route('master-data-artikel.index') }}?clear_cache=' +
-                                        artikelId;
+                                        '{{ route('master-data-artikel.index') }}?clear_all_cache=1';
                                 }, 1500);
                             } else {
                                 Swal.fire({

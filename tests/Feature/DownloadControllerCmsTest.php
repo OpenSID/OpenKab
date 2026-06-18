@@ -5,18 +5,14 @@ namespace Tests\Feature;
 use App\Models\CMS\Download;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DownloadControllerCmsTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    /** @test */
+    #[Test]
     public function halaman_index_download_dapat_diakses()
     {
         $response = $this->get(route('downloads.index'));
@@ -25,7 +21,7 @@ class DownloadControllerCmsTest extends BaseTestCase
         $response->assertViewIs('downloads.index');
     }
 
-    /** @test */
+    #[Test]
     public function form_tambah_download_dapat_diakses()
     {
         $response = $this->get(route('downloads.create'));
@@ -34,7 +30,7 @@ class DownloadControllerCmsTest extends BaseTestCase
         $response->assertViewIs('downloads.create');
     }
 
-    /** @test */
+    #[Test]
     public function file_download_baru_dapat_disimpan()
     {
         // Create a simple text file
@@ -65,7 +61,7 @@ class DownloadControllerCmsTest extends BaseTestCase
         unlink($tempFile);
     }
 
-    /** @test */
+    #[Test]
     public function file_download_baru_ditolak_jika_berisi_kode_php()
     {
         // Create a file with PHP code (should be rejected)
@@ -97,7 +93,7 @@ class DownloadControllerCmsTest extends BaseTestCase
         unlink($tempFile);
     }
 
-    /** @test */
+    #[Test]
     public function form_edit_download_dapat_diakses()
     {
         $download = Download::factory()->create();
@@ -108,7 +104,7 @@ class DownloadControllerCmsTest extends BaseTestCase
         $response->assertViewIs('downloads.edit');
     }
 
-    /** @test */
+    #[Test]
     public function file_download_dapat_diperbarui()
     {
         $download = Download::factory()->create([
@@ -127,7 +123,7 @@ class DownloadControllerCmsTest extends BaseTestCase
         $this->assertDatabaseHas('downloads', ['title' => 'Baru']);
     }
 
-    /** @test */
+    #[Test]
     public function file_download_dengan_file_baru_dapat_diperbarui()
     {
         $download = Download::factory()->create([
@@ -161,8 +157,8 @@ class DownloadControllerCmsTest extends BaseTestCase
         // Clean up
         unlink($tempFile);
     }
-
-    /** @test */
+    
+    #[Test]
     public function file_download_dapat_dihapus()
     {
         $download = Download::factory()->create();

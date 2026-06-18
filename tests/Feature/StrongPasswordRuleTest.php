@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Rules\StrongPassword;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StrongPasswordRuleTest extends TestCase

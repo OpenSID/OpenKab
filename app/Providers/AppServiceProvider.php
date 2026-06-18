@@ -8,33 +8,38 @@ use App\Models\Identitas;
 use App\Models\Setting;
 use App\Services\SecureImageUploadService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Observers\VisitorObserver;
+use Shetabit\Visitor\Models\Visit;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public const HOME = '/dasbor';
+
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
+        $this->configureObservers();
+        $this->configureRateLimiting();
         $this->bootHttps();
         $this->addValidation();
         $this->addLogQuery();
@@ -61,8 +66,21 @@ class AppServiceProvider extends ServiceProvider
             View::share('settingAplikasi', $settingAplikasi);
             config()->set(['app.sebutanDesa' => $identitasAplikasi['sebutan_desa'] ?? 'Desa']);
             config()->set(['app.sebutanKab' => $identitasAplikasi['sebutan_kab'] ?? 'Kabupaten']);
+            config()->set(['app.kodeKabupatenApi' => $identitasAplikasi['kode_kabupaten_api'] ?? '']);
             $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
         }
+    }
+
+    protected function configureObservers(): void
+    {
+        Visit::observe(VisitorObserver::class);
+    }
+
+    protected function configureRateLimiting(): void
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
     }
 
     public function bootHttps()
@@ -129,7 +147,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->config['adminlte.title'] = $identitasAplikasi['nama_aplikasi'];
         $this->app->config['adminlte.title_postfix'] = "| {$identitasAplikasi['sebutan_kab']}";
         $this->app->config['adminlte.logo'] = $identitasAplikasi['nama_aplikasi'];
-        if ($settingAplikasi->get('layout_menu') !== 'Vertikal') {
+        if (strtolower($settingAplikasi->get('layout_menu')) !== 'vertikal') {
             $this->app->config['adminlte.layout_topnav'] = true;
             $this->app->config['adminlte.classes_content'] = 'col-12 p-3';
             $this->app->config['adminlte.classes_sidebar'] = 'sidebar-dark-primary elevation-4';

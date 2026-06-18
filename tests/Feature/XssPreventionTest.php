@@ -10,6 +10,7 @@ use App\Services\ArtikelService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 use Mews\Purifier\Facades\Purifier;
 

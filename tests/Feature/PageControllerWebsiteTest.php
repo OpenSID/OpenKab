@@ -7,11 +7,12 @@ use App\Models\CMS\Category;
 use App\Models\CMS\Page;
 use App\Services\SitemapService;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\WebsiteTestCase;
 
 class PageControllerWebsiteTest extends WebsiteTestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_access_index_page()
     {
         $response = $this->get(route('web.index'));
@@ -19,7 +20,7 @@ class PageControllerWebsiteTest extends WebsiteTestCase
         $response->assertViewIs('web.index');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_category_page()
     {
         $category = Category::factory()->create();
@@ -29,7 +30,7 @@ class PageControllerWebsiteTest extends WebsiteTestCase
         $response->assertViewHas('title', $category->name);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_page_detail()
     {
         $page = Page::factory()->create();
@@ -39,7 +40,7 @@ class PageControllerWebsiteTest extends WebsiteTestCase
         $response->assertViewHas('object', $page);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_article_detail()
     {
         $article = Article::factory()->create();
@@ -49,7 +50,7 @@ class PageControllerWebsiteTest extends WebsiteTestCase
         $response->assertViewHas('object', $article);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_sitemap()
     {
         $mock = Mockery::mock(SitemapService::class);

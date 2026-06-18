@@ -6,13 +6,14 @@ use App\Models\CMS\Slide;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class SlideControllerCmsTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    #[Test]
     public function halaman_index_slide_dapat_diakses()
     {
         $response = $this->get(route('slides.index'));
@@ -20,7 +21,7 @@ class SlideControllerCmsTest extends BaseTestCase
         $response->assertViewIs('slides.index');
     }
 
-    /** @test */
+    #[Test]
     public function form_tambah_slide_dapat_diakses()
     {
         $response = $this->get(route('slides.create'));
@@ -28,7 +29,7 @@ class SlideControllerCmsTest extends BaseTestCase
         $response->assertViewIs('slides.create');
     }
 
-    /** @test */
+    #[Test]
     public function slide_baru_dapat_disimpan()
     {
         Storage::fake('public');
@@ -46,7 +47,7 @@ class SlideControllerCmsTest extends BaseTestCase
         $this->assertDatabaseHas('slides', ['title' => 'Slide Baru']);
     }
 
-    /** @test */
+    #[Test]
     public function form_edit_slide_dapat_diakses()
     {
         $slide = Slide::factory()->create();
@@ -58,7 +59,7 @@ class SlideControllerCmsTest extends BaseTestCase
         $response->assertViewHas('slide');
     }
 
-    /** @test */
+    #[Test]
     public function slide_dapat_diperbarui()
     {
         $slide = Slide::factory()->create([
@@ -77,7 +78,7 @@ class SlideControllerCmsTest extends BaseTestCase
         $this->assertDatabaseHas('slides', ['title' => 'Slide Diperbarui']);
     }
 
-    /** @test */
+    #[Test]
     public function slide_dapat_dihapus()
     {
         $slide = Slide::factory()->create();

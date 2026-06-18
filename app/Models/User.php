@@ -337,7 +337,7 @@ class User extends Authenticatable
     public function recordFailedLogin(): array
     {
         $maxAttempts = config('app.account_lockout_max_attempts', 5);
-        $decayMinutes = config('app.account_lockout_decay_minutes', 15);
+        $decayMinutes = (int) config('app.account_lockout_decay_minutes', 15);
 
         $this->increment('failed_login_attempts');
 

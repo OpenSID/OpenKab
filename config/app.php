@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Facade;
-
 return [
 
     /*
@@ -96,29 +94,7 @@ return [
 
     'locale' => 'id',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Application Fallback Locale
-    |--------------------------------------------------------------------------
-    |
-    | The fallback locale determines the locale to use when the current one
-    | is not available. You may change the value to correspond to any of
-    | the language folders that are provided through your application.
-    |
-    */
-
     'fallback_locale' => 'id',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Faker Locale
-    |--------------------------------------------------------------------------
-    |
-    | This locale will be used by the Faker PHP library when generating fake
-    | data for your database seeds. For example, this will be used to get
-    | localized telephone numbers, street address information and more.
-    |
-    */
 
     'faker_locale' => 'id_ID',
 
@@ -136,6 +112,12 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+
+    'previous_keys' => [
+        ...array_filter(
+            explode(',', (string) env('APP_PREVIOUS_KEYS', ''))
+        ),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -155,82 +137,6 @@ return [
         // 'store'  => 'redis',
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Autoloaded Service Providers
-    |--------------------------------------------------------------------------
-    |
-    | The service providers listed here will be automatically loaded on the
-    | request to your application. Feel free to add your own services to
-    | this array to grant expanded functionality to your applications.
-    |
-    */
-
-    'providers' => [
-
-        /*
-         * Laravel Framework Service Providers...
-         */
-        Illuminate\Auth\AuthServiceProvider::class,
-        Illuminate\Broadcasting\BroadcastServiceProvider::class,
-        Illuminate\Bus\BusServiceProvider::class,
-        Illuminate\Cache\CacheServiceProvider::class,
-        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
-        Illuminate\Cookie\CookieServiceProvider::class,
-        Illuminate\Database\DatabaseServiceProvider::class,
-        Illuminate\Encryption\EncryptionServiceProvider::class,
-        Illuminate\Filesystem\FilesystemServiceProvider::class,
-        Illuminate\Foundation\Providers\FoundationServiceProvider::class,
-        Illuminate\Hashing\HashServiceProvider::class,
-        Illuminate\Mail\MailServiceProvider::class,
-        Illuminate\Notifications\NotificationServiceProvider::class,
-        Illuminate\Pagination\PaginationServiceProvider::class,
-        Illuminate\Pipeline\PipelineServiceProvider::class,
-        Illuminate\Queue\QueueServiceProvider::class,
-        Illuminate\Redis\RedisServiceProvider::class,
-        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
-        Illuminate\Session\SessionServiceProvider::class,
-        Illuminate\Translation\TranslationServiceProvider::class,
-        Illuminate\Validation\ValidationServiceProvider::class,
-        Illuminate\View\ViewServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class,
-        Spatie\Csp\CspServiceProvider::class,
-        /*
-         * Package Service Providers...
-         */
-
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\MacroServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\RecaptchaV3ServiceProvider::class,
-
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Class Aliases
-    |--------------------------------------------------------------------------
-    |
-    | This array of class aliases will be registered when this application
-    | is started. However, feel free to register as many as you wish as
-    | the aliases are "lazy" loaded so they don't hinder performance.
-    |
-    */
-
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
-        'Image' => Intervention\Image\Facades\Image::class,
-        'Html' => Spatie\Html\Facades\Html::class,
-        'Captcha' => Mews\Captcha\Facades\Captcha::class,
-    ])->toArray(),
-
     'format' => [
         'date' => env('FORMAT_DATE', 'd/m/Y'),
         'date_js' => env('FORMAT_DATE_JS', 'DD/MM/YYYY'),
@@ -246,9 +152,9 @@ return [
     |
     */
 
-    'otp_token_expires_minutes' => env('OTP_TOKEN_EXPIRES_MINUTES', 5),
-    'otp_max_verification_attempts' => env('OTP_MAX_VERIFICATION_ATTEMPTS', 3),
-    'otp_length' => env('OTP_LENGTH', 6),
+    'otp_token_expires_minutes' => (int) env('OTP_TOKEN_EXPIRES_MINUTES', 5),
+    'otp_max_verification_attempts' => (int) env('OTP_MAX_VERIFICATION_ATTEMPTS', 3),
+    'otp_length' => (int) env('OTP_LENGTH', 6),
 
     /*
     |--------------------------------------------------------------------------
@@ -260,12 +166,12 @@ return [
     |
     */
 
-    'otp_setup_max_attempts' => env('OTP_SETUP_MAX_ATTEMPTS', 3),
-    'otp_setup_decay_seconds' => env('OTP_SETUP_DECAY_SECONDS', 300),
-    'otp_verify_max_attempts' => env('OTP_VERIFY_MAX_ATTEMPTS', 5),
-    'otp_verify_decay_seconds' => env('OTP_VERIFY_DECAY_SECONDS', 300),
-    'otp_resend_max_attempts' => env('OTP_RESEND_MAX_ATTEMPTS', 2),
-    'otp_resend_decay_seconds' => env('OTP_RESEND_DECAY_SECONDS', 30),
+    'otp_setup_max_attempts' => (int) env('OTP_SETUP_MAX_ATTEMPTS', 3),
+    'otp_setup_decay_seconds' => (int) env('OTP_SETUP_DECAY_SECONDS', 300),
+    'otp_verify_max_attempts' => (int) env('OTP_VERIFY_MAX_ATTEMPTS', 5),
+    'otp_verify_decay_seconds' => (int) env('OTP_VERIFY_DECAY_SECONDS', 300),
+    'otp_resend_max_attempts' => (int) env('OTP_RESEND_MAX_ATTEMPTS', 2),
+    'otp_resend_decay_seconds' => (int) env('OTP_RESEND_DECAY_SECONDS', 30),
 
     /*
     |--------------------------------------------------------------------------
@@ -278,8 +184,8 @@ return [
     |
     */
 
-    'account_lockout_max_attempts' => env('ACCOUNT_LOCKOUT_MAX_ATTEMPTS', 5),
-    'account_lockout_decay_minutes' => env('ACCOUNT_LOCKOUT_DECAY_MINUTES', 15),
-    'progressive_delay_base_seconds' => env('PROGRESSIVE_DELAY_BASE_SECONDS', 2),
-    'progressive_delay_multiplier' => env('PROGRESSIVE_DELAY_MULTIPLIER', 2),
+    'account_lockout_max_attempts' => (int) env('ACCOUNT_LOCKOUT_MAX_ATTEMPTS', 5),
+    'account_lockout_decay_minutes' => (int) env('ACCOUNT_LOCKOUT_DECAY_MINUTES', 15),
+    'progressive_delay_base_seconds' => (int) env('PROGRESSIVE_DELAY_BASE_SECONDS', 2),
+    'progressive_delay_multiplier' => (int) env('PROGRESSIVE_DELAY_MULTIPLIER', 2),
 ];

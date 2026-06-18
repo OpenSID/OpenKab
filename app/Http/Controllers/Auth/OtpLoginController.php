@@ -199,7 +199,7 @@ class OtpLoginController extends LoginController
             return response()->json([
                 'success' => true,
                 'message' => 'Login berhasil',
-                'redirect' => \App\Providers\RouteServiceProvider::HOME
+                'redirect' => \App\Providers\AppServiceProvider::HOME
             ]);
         }
 

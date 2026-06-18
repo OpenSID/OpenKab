@@ -44,15 +44,15 @@
         document.addEventListener("DOMContentLoaded", function (event) {
             "use strict";
 
-            const urlArtikel = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/artikel/list' }}");
-            const header = @include('layouts.components.header_bearer_api_gabungan');
-            const routeDetailBase = "{{ route('web.artikel.show', '') }}";
+            const urlArtikel = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/artikel-public/list' }}");
+            
+            const routeDetailBase = "{{ url('artikel-opensid') }}";
 
             $.ajax({
                 url: urlArtikel.href,
-                method: 'GET',
+                method: 'GET',                
                 dataType: 'json',
-                headers: header,
+                
                 data: {
                     "page[number]": 1,
                     "page[size]": 6,

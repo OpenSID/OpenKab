@@ -1,8 +1,16 @@
 @push('js')
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
+            const AJAX_PARAMS_CONFIG = {
+                metaTagName: 'identitas-openkab',
+                paramNames: ['kode_kabupaten', 'filter[kode_kabupaten]']
+            };
+            const identitasOpenkab = $(`meta[name="${AJAX_PARAMS_CONFIG.metaTagName}"]`).attr('content') || '';
+            let isAutoLoad = false;
+
             let urlKabupaten =
-                "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/get-list-kabupaten' }}";
+                "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/get-list-kabupaten' }}?" +
+                AJAX_PARAMS_CONFIG.paramNames.map(param => `${param}=${identitasOpenkab}`).join('&');
             let urlKecamatan =
                 "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/get-list-kecamatan' }}";
             let urlDesa =
@@ -12,16 +20,23 @@
                 var optionEmpty = new Option("", "");
                 $("#filter_kabupaten").append(optionEmpty);
 
+                const queryKodeKabupaten = new URLSearchParams(window.location.search).get('filter[kode_kabupaten]');
+                const filterValue = queryKodeKabupaten || identitasOpenkab;
+
                 for (var i = 0; i < data.length; i++) {
                     var newOption = new Option(data[i].nama_kabupaten, data[i]
                         .kode_kabupaten, false, false);
                     $("#filter_kabupaten").append(newOption);
+
+                    if (data[i].kode_kabupaten === filterValue) {
+                        isAutoLoad = true;
+                        $("#filter_kabupaten").val(filterValue).trigger('change');
+                    }
                 }
             }, 'json')
 
             $('#filter_kabupaten').select2({
                 placeholder: "Pilih {{ config('app.sebutanKab') }}",
-                allowClear: true,
                 height: '100%',
                 width: '100%',
             })
@@ -60,6 +75,10 @@
                             $("#filter_kecamatan").append(newOption);
                         }
                         $('#filter_kecamatan').prop('disabled', false);
+                        if (isAutoLoad) {
+                            $('#bt_filter').trigger('click');
+                            isAutoLoad = false;
+                        }
                     })
                 }
             })

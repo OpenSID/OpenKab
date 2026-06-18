@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="identitas-openkab" content="{{ str_replace('.','',$identitasAplikasi['kode_kabupaten'] ?? '') }}">
     <title>{{ config('app.namaAplikasi') }}</title>
 
     @include('layouts.presisi.partials.stylesheet')
@@ -59,7 +60,7 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer ml-0">
-            <strong>Hak cipta © <?= date('Y') ?> <a href="https://opendesa.id">OpenDesa</a>.</strong>
+            <strong>Hak cipta © {{ date('Y') }} <a href="https://opendesa.id">OpenDesa</a>.</strong>
             Seluruh hak cipta dilindungi.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Versi</b> {{ openkab_versi() }}

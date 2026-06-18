@@ -48,7 +48,7 @@ class EmployeeRepository extends BaseRepository
             ->jsonPaginate();
     }
 
-    public function allQuery(array $search = [], int $skip = null, int $limit = null): Builder
+    public function allQuery(array $search = [], ?int $skip = null, ?int $limit = null): Builder
     {
         $query = parent::allQuery($search, $skip, $limit)->with(['department', 'position']);
 

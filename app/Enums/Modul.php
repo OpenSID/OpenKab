@@ -104,6 +104,19 @@ final class Modul extends Enum
             ],
         ],
         [
+            'text' => 'Laporan',
+            'icon' => 'fas fa-file-alt',
+            'permission' => 'laporan',
+            'submenu' => [
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Desa Aktif',
+                    'url' => 'laporan/desa-aktif',
+                    'permission' => 'laporan-desa-aktif',
+                ],                
+            ],
+        ],
+        [
             'text' => 'Data Presisi',
             'icon' => 'fa fa-chart-pie',
             'permission' => 'datapresisi',

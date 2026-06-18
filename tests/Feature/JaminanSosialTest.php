@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class JaminanSosialTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function test_can_access_jaminan_sosial_page()
     {
         $response = $this->get(route('jaminan-sosial'));
@@ -16,7 +17,7 @@ class JaminanSosialTest extends BaseTestCase
         $response->assertSee('Data Kepesertaan Program dan Statistik');
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_page_has_required_elements()
     {
         $response = $this->get(route('jaminan-sosial'));
@@ -42,7 +43,7 @@ class JaminanSosialTest extends BaseTestCase
         $this->assertStringContainsString('id="download-excel"', $content, 'Excel download button ID tidak ditemukan');
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_has_correct_table_columns()
     {
         $response = $this->get(route('jaminan-sosial'));
@@ -64,7 +65,7 @@ class JaminanSosialTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_has_print_button()
     {
         $response = $this->get(route('jaminan-sosial'));        
@@ -75,7 +76,7 @@ class JaminanSosialTest extends BaseTestCase
         $this->assertStringContainsString('data-print-url=', $content, 'Route print tidak ditemukan');
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_has_excel_download_button()
     {
         $response = $this->get(route('jaminan-sosial'));
@@ -86,7 +87,7 @@ class JaminanSosialTest extends BaseTestCase
         $this->assertStringContainsString('data-download-url=', $content, 'Download URL tidak ditemukan');
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_has_datatable_configuration()
     {
         $response = $this->get(route('jaminan-sosial'));
@@ -101,7 +102,7 @@ class JaminanSosialTest extends BaseTestCase
         $this->assertStringContainsString('/api/v1/data-presisi/jaminan-sosial', $content, 'API endpoint tidak ditemukan');
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_has_filter_tahun_functionality()
     {
         $response = $this->get(route('jaminan-sosial'));
@@ -113,7 +114,7 @@ class JaminanSosialTest extends BaseTestCase
         $this->assertStringContainsString('grafikPie()', $content, 'Grafik reload pada filter tahun tidak ditemukan');
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_has_detail_control_functionality()
     {
         $response = $this->get(route('jaminan-sosial'));
@@ -125,7 +126,7 @@ class JaminanSosialTest extends BaseTestCase
         $this->assertStringContainsString('row.child.isShown()', $content, 'Logika expand/collapse detail control tidak ditemukan');
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_detail_button_has_correct_route()
     {
         $response = $this->get(route('jaminan-sosial'));
@@ -136,7 +137,7 @@ class JaminanSosialTest extends BaseTestCase
         $this->assertStringContainsString('?data=__DATA__', $content, 'Parameter data pada route detail tidak ditemukan');
     }
 
-    /** @test */
+    #[Test]
     public function test_jaminan_sosial_uses_correct_api_filters()
     {
         $response = $this->get(route('jaminan-sosial'));

@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import '../vendor/bootstrap-5.3.2/js/bootstrap.bundle.min';
 import 'chart.js/dist/Chart.min';
-import 'select2/dist/js/select2.full.min';
+import select2 from 'select2/dist/js/select2.full.min';
+if (typeof select2 === 'function') select2(window, $);
 import { filter } from 'lodash';
 
 window.$ = $;

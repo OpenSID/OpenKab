@@ -1,27 +1,71 @@
 {
+    "draw": 1,
+    "recordsTotal": 4,
+    "recordsFiltered": 4,
     "data": [
         {
+            "id": "1",
             "attributes": {
                 "nama": "Fisik",
-                "jumlah": 150
+                "jumlah": 150,
+                "laki_laki": 80,
+                "perempuan": 70,
+                "persentase_jumlah": "0.60%",
+                "persentase_laki_laki": "0.32%",
+                "persentase_perempuan": "0.28%",
+                "kriteria": "{\"filter[id]\":\"penyandang-cacat\",\"filter[kriteria]\":\"Fisik\"}"
             }
         },
         {
+            "id": "2",
             "attributes": {
                 "nama": "Mental",
-                "jumlah": 50
+                "jumlah": 50,
+                "laki_laki": 30,
+                "perempuan": 20,
+                "persentase_jumlah": "0.20%",
+                "persentase_laki_laki": "0.12%",
+                "persentase_perempuan": "0.08%",
+                "kriteria": "{\"filter[id]\":\"penyandang-cacat\",\"filter[kriteria]\":\"Mental\"}"
             }
         },
         {
+            "id": "3",
             "attributes": {
                 "nama": "Sensorik",
-                "jumlah": 100
+                "jumlah": 100,
+                "laki_laki": 55,
+                "perempuan": 45,
+                "persentase_jumlah": "0.40%",
+                "persentase_laki_laki": "0.22%",
+                "persentase_perempuan": "0.18%",
+                "kriteria": "{\"filter[id]\":\"penyandang-cacat\",\"filter[kriteria]\":\"Sensorik\"}"
             }
         },
         {
+            "id": "4",
             "attributes": {
                 "nama": "Ganda",
-                "jumlah": 30
+                "jumlah": 30,
+                "laki_laki": 18,
+                "perempuan": 12,
+                "persentase_jumlah": "0.12%",
+                "persentase_laki_laki": "0.07%",
+                "persentase_perempuan": "0.05%",
+                "kriteria": "{\"filter[id]\":\"penyandang-cacat\",\"filter[kriteria]\":\"Ganda\"}"
+            }
+        },
+        {
+            "id": "5",
+            "attributes": {
+                "nama": "JUMLAH",
+                "jumlah": 25000,
+                "laki_laki": 12500,
+                "perempuan": 12500,
+                "persentase_jumlah": "100.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{}"
             }
         }
     ]

@@ -1,51 +1,84 @@
 {
+    "draw": 1,
+    "recordsTotal": 8,
+    "recordsFiltered": 8,
     "data": [
         {
+            "id": "1",
             "attributes": {
-                "nama": "0-5 Tahun",
-                "jumlah": 2000
+                "nama": "0-4 Tahun",
+                "jumlah": 1500,
+                "laki_laki": 780,
+                "perempuan": 720,
+                "persentase_jumlah": "6.00%",
+                "persentase_laki_laki": "3.12%",
+                "persentase_perempuan": "2.88%",
+                "kriteria": "{\"filter[id]\":\"rentang-umur\",\"filter[kriteria]\":\"0-4 Tahun\"}"
             }
         },
         {
+            "id": "2",
             "attributes": {
-                "nama": "6-12 Tahun",
-                "jumlah": 3000
+                "nama": "5-9 Tahun",
+                "jumlah": 1800,
+                "laki_laki": 920,
+                "perempuan": 880,
+                "persentase_jumlah": "7.20%",
+                "persentase_laki_laki": "3.68%",
+                "persentase_perempuan": "3.52%",
+                "kriteria": "{\"filter[id]\":\"rentang-umur\",\"filter[kriteria]\":\"5-9 Tahun\"}"
             }
         },
         {
+            "id": "3",
             "attributes": {
-                "nama": "13-18 Tahun",
-                "jumlah": 3500
+                "nama": "10-14 Tahun",
+                "jumlah": 2000,
+                "laki_laki": 1020,
+                "perempuan": 980,
+                "persentase_jumlah": "8.00%",
+                "persentase_laki_laki": "4.08%",
+                "persentase_perempuan": "3.92%",
+                "kriteria": "{\"filter[id]\":\"rentang-umur\",\"filter[kriteria]\":\"10-14 Tahun\"}"
             }
         },
         {
+            "id": "4",
             "attributes": {
-                "nama": "19-25 Tahun",
-                "jumlah": 4000
+                "nama": "15-19 Tahun",
+                "jumlah": 2200,
+                "laki_laki": 1100,
+                "perempuan": 1100,
+                "persentase_jumlah": "8.80%",
+                "persentase_laki_laki": "4.40%",
+                "persentase_perempuan": "4.40%",
+                "kriteria": "{\"filter[id]\":\"rentang-umur\",\"filter[kriteria]\":\"15-19 Tahun\"}"
             }
         },
         {
+            "id": "5",
             "attributes": {
-                "nama": "26-35 Tahun",
-                "jumlah": 5000
+                "nama": "20-24 Tahun",
+                "jumlah": 2500,
+                "laki_laki": 1200,
+                "perempuan": 1300,
+                "persentase_jumlah": "10.00%",
+                "persentase_laki_laki": "4.80%",
+                "persentase_perempuan": "5.20%",
+                "kriteria": "{\"filter[id]\":\"rentang-umur\",\"filter[kriteria]\":\"20-24 Tahun\"}"
             }
         },
         {
+            "id": "6",
             "attributes": {
-                "nama": "36-50 Tahun",
-                "jumlah": 4500
-            }
-        },
-        {
-            "attributes": {
-                "nama": "51-65 Tahun",
-                "jumlah": 2000
-            }
-        },
-        {
-            "attributes": {
-                "nama": "> 65 Tahun",
-                "jumlah": 1000
+                "nama": "JUMLAH",
+                "jumlah": 25000,
+                "laki_laki": 12500,
+                "perempuan": 12500,
+                "persentase_jumlah": "100.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{}"
             }
         }
     ]

@@ -1,51 +1,123 @@
 {
+    "draw": 1,
+    "recordsTotal": 8,
+    "recordsFiltered": 8,
     "data": [
         {
+            "id": "1",
             "attributes": {
                 "nama": "Tidak Sekolah",
-                "jumlah": 1500
+                "jumlah": 1500,
+                "laki_laki": 800,
+                "perempuan": 700,
+                "persentase_jumlah": "6.00%",
+                "persentase_laki_laki": "3.20%",
+                "persentase_perempuan": "2.80%",
+                "kriteria": "{\"filter[id]\":\"pendidikan-dalam-kk\",\"filter[kriteria]\":\"Tidak Sekolah\"}"
             }
         },
         {
+            "id": "2",
             "attributes": {
                 "nama": "Tidak Tamat SD",
-                "jumlah": 2000
+                "jumlah": 2000,
+                "laki_laki": 1100,
+                "perempuan": 900,
+                "persentase_jumlah": "8.00%",
+                "persentase_laki_laki": "4.40%",
+                "persentase_perempuan": "3.60%",
+                "kriteria": "{\"filter[id]\":\"pendidikan-dalam-kk\",\"filter[kriteria]\":\"Tidak Tamat SD\"}"
             }
         },
         {
+            "id": "3",
             "attributes": {
                 "nama": "Tamat SD",
-                "jumlah": 5000
+                "jumlah": 5000,
+                "laki_laki": 2500,
+                "perempuan": 2500,
+                "persentase_jumlah": "20.00%",
+                "persentase_laki_laki": "10.00%",
+                "persentase_perempuan": "10.00%",
+                "kriteria": "{\"filter[id]\":\"pendidikan-dalam-kk\",\"filter[kriteria]\":\"Tamat SD\"}"
             }
         },
         {
+            "id": "4",
             "attributes": {
                 "nama": "SLTP",
-                "jumlah": 4500
+                "jumlah": 4500,
+                "laki_laki": 2300,
+                "perempuan": 2200,
+                "persentase_jumlah": "18.00%",
+                "persentase_laki_laki": "9.20%",
+                "persentase_perempuan": "8.80%",
+                "kriteria": "{\"filter[id]\":\"pendidikan-dalam-kk\",\"filter[kriteria]\":\"SLTP\"}"
             }
         },
         {
+            "id": "5",
             "attributes": {
                 "nama": "SLTA",
-                "jumlah": 6000
+                "jumlah": 6000,
+                "laki_laki": 3000,
+                "perempuan": 3000,
+                "persentase_jumlah": "24.00%",
+                "persentase_laki_laki": "12.00%",
+                "persentase_perempuan": "12.00%",
+                "kriteria": "{\"filter[id]\":\"pendidikan-dalam-kk\",\"filter[kriteria]\":\"SLTA\"}"
             }
         },
         {
+            "id": "6",
             "attributes": {
                 "nama": "Diploma",
-                "jumlah": 2000
+                "jumlah": 2000,
+                "laki_laki": 1000,
+                "perempuan": 1000,
+                "persentase_jumlah": "8.00%",
+                "persentase_laki_laki": "4.00%",
+                "persentase_perempuan": "4.00%",
+                "kriteria": "{\"filter[id]\":\"pendidikan-dalam-kk\",\"filter[kriteria]\":\"Diploma\"}"
             }
         },
         {
+            "id": "7",
             "attributes": {
                 "nama": "Sarjana",
-                "jumlah": 3000
+                "jumlah": 3000,
+                "laki_laki": 1500,
+                "perempuan": 1500,
+                "persentase_jumlah": "12.00%",
+                "persentase_laki_laki": "6.00%",
+                "persentase_perempuan": "6.00%",
+                "kriteria": "{\"filter[id]\":\"pendidikan-dalam-kk\",\"filter[kriteria]\":\"Sarjana\"}"
             }
         },
         {
+            "id": "8",
             "attributes": {
                 "nama": "Pasca Sarjana",
-                "jumlah": 1000
+                "jumlah": 1000,
+                "laki_laki": 500,
+                "perempuan": 500,
+                "persentase_jumlah": "4.00%",
+                "persentase_laki_laki": "2.00%",
+                "persentase_perempuan": "2.00%",
+                "kriteria": "{\"filter[id]\":\"pendidikan-dalam-kk\",\"filter[kriteria]\":\"Pasca Sarjana\"}"
+            }
+        },
+        {
+            "id": "9",
+            "attributes": {
+                "nama": "JUMLAH",
+                "jumlah": 25000,
+                "laki_laki": 12500,
+                "perempuan": 12500,
+                "persentase_jumlah": "100.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{}"
             }
         }
     ]

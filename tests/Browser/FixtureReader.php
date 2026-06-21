@@ -96,4 +96,31 @@ final class FixtureReader
 
         return null;
     }
+
+    public static function kategoriStatistikNames(string $kategori): array
+    {
+        $data = self::read("kategori-statistik-{$kategori}.json");
+
+        return array_map(fn (array $item) => $item['nama'], $data['data'] ?? []);
+    }
+
+    public static function kategoriStatistikPendudukNames(): array
+    {
+        return self::kategoriStatistikNames('penduduk');
+    }
+
+    public static function kategoriStatistikKeluargaNames(): array
+    {
+        return self::kategoriStatistikNames('keluarga');
+    }
+
+    public static function kategoriStatistikRtmNames(): array
+    {
+        return self::kategoriStatistikNames('rtm');
+    }
+
+    public static function kategoriStatistikBantuanNames(): array
+    {
+        return self::kategoriStatistikNames('bantuan');
+    }
 }

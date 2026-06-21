@@ -1,0 +1,46 @@
+{
+    "draw": 1,
+    "recordsTotal": 3,
+    "recordsFiltered": 3,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Ya",
+                "jumlah": 3000,
+                "persentase_jumlah": "30.00%",
+                "laki_laki": 1400,
+                "persentase_laki_laki": "46.67%",
+                "perempuan": 1600,
+                "persentase_perempuan": "53.33%",
+                "kriteria": "{\"bdt\":\"ya\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Tidak",
+                "jumlah": 7000,
+                "persentase_jumlah": "70.00%",
+                "laki_laki": 3400,
+                "persentase_laki_laki": "48.57%",
+                "perempuan": 3600,
+                "persentase_perempuan": "51.43%",
+                "kriteria": "{\"bdt\":\"tidak\"}"
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama": "JUMLAH",
+                "jumlah": 10000,
+                "persentase_jumlah": "100.00%",
+                "laki_laki": 4800,
+                "persentase_laki_laki": "48.00%",
+                "perempuan": 5200,
+                "persentase_perempuan": "52.00%",
+                "kriteria": "{}"
+            }
+        }
+    ]
+}

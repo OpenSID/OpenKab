@@ -1,27 +1,71 @@
 {
+    "draw": 1,
+    "recordsTotal": 4,
+    "recordsFiltered": 4,
     "data": [
         {
+            "id": "1",
             "attributes": {
                 "nama": "Belum Kawin",
-                "jumlah": 8000
+                "jumlah": 8000,
+                "laki_laki": 4000,
+                "perempuan": 4000,
+                "persentase_jumlah": "32.00%",
+                "persentase_laki_laki": "16.00%",
+                "persentase_perempuan": "16.00%",
+                "kriteria": "{\"filter[id]\":\"status-perkawinan\",\"filter[kriteria]\":\"Belum Kawin\"}"
             }
         },
         {
+            "id": "2",
             "attributes": {
                 "nama": "Kawin",
-                "jumlah": 14000
+                "jumlah": 14000,
+                "laki_laki": 7000,
+                "perempuan": 7000,
+                "persentase_jumlah": "56.00%",
+                "persentase_laki_laki": "28.00%",
+                "persentase_perempuan": "28.00%",
+                "kriteria": "{\"filter[id]\":\"status-perkawinan\",\"filter[kriteria]\":\"Kawin\"}"
             }
         },
         {
+            "id": "3",
             "attributes": {
                 "nama": "Cerai Hidup",
-                "jumlah": 1500
+                "jumlah": 1500,
+                "laki_laki": 700,
+                "perempuan": 800,
+                "persentase_jumlah": "6.00%",
+                "persentase_laki_laki": "2.80%",
+                "persentase_perempuan": "3.20%",
+                "kriteria": "{\"filter[id]\":\"status-perkawinan\",\"filter[kriteria]\":\"Cerai Hidup\"}"
             }
         },
         {
+            "id": "4",
             "attributes": {
                 "nama": "Cerai Mati",
-                "jumlah": 1500
+                "jumlah": 1500,
+                "laki_laki": 800,
+                "perempuan": 700,
+                "persentase_jumlah": "6.00%",
+                "persentase_laki_laki": "3.20%",
+                "persentase_perempuan": "2.80%",
+                "kriteria": "{\"filter[id]\":\"status-perkawinan\",\"filter[kriteria]\":\"Cerai Mati\"}"
+            }
+        },
+        {
+            "id": "5",
+            "attributes": {
+                "nama": "JUMLAH",
+                "jumlah": 25000,
+                "laki_laki": 12500,
+                "perempuan": 12500,
+                "persentase_jumlah": "100.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{}"
             }
         }
     ]

@@ -1,6 +1,5 @@
 <?php
 
-use Tests\Browser\SessionState;
 use Tests\TestCase;
 
 uses(TestCase::class)->in('Feature', 'Browser');

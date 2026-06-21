@@ -8,6 +8,7 @@
     'tableId' => '',
     'filters' => [],
     'additionalParams' => [],
+    'testId' => '',
 ])
 
 @php
@@ -15,6 +16,7 @@
 @endphp
 
 <button type="button" class="btn {{ $variant }} {{ $size }}" id="{{ $buttonId }}"
+    @if ($testId) data-testid="{{ $testId }}" @endif
     data-print-url="{{ $printUrl }}" data-table-id="{{ $tableId }}" data-filters="{{ json_encode($filters) }}"
     data-additional-params="{{ json_encode($additionalParams) }}">
     <i class="{{ $icon }}"></i>

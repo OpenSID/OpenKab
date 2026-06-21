@@ -1,0 +1,24 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "nik": "5271010101010001",
+                "pendidikan_kk_id": "SMA",
+                "pendidikan_sedang_id": "SMA",
+                "partisipasi_sekolah": "Ya",
+                "pendidikan_tertinggi": "SMA",
+                "kelas_tertinggi": "XII",
+                "ijazah_tertinggi": "SMA"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

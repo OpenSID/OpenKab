@@ -45,14 +45,14 @@
                     <div>{{ $title }}</div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <x-print-button :print-url="url('data-pokok/kesehatan/cetak')" table-id="kesehatan" :filter="[]" />
-                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data/kesehatan/download'" table-id="kesehatan" filename="data_kesehatan" />
+                            <x-print-button :print-url="url('data-pokok/kesehatan/cetak')" table-id="kesehatan" :filter="[]" testId="bt-cetak" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data/kesehatan/download'" table-id="kesehatan" filename="data_kesehatan" testId="bt-excel" />
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="kesehatan">
+                        <table class="table table-striped" id="kesehatan" data-testid="datatable-kesehatan">
                             <thead>
                                 <tr>
                                     <th>No</th>

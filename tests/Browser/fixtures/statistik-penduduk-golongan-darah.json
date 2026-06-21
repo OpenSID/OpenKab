@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "A",
+                "jumlah": 6000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "B",
+                "jumlah": 5000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "O",
+                "jumlah": 10000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "AB",
+                "jumlah": 4000
+            }
+        }
+    ]
+}

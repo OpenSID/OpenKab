@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "Belum Kawin",
+                "jumlah": 8000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Kawin",
+                "jumlah": 14000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Cerai Hidup",
+                "jumlah": 1500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Cerai Mati",
+                "jumlah": 1500
+            }
+        }
+    ]
+}

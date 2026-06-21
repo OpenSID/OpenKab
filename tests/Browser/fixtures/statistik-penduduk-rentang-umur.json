@@ -1,0 +1,52 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "0-5 Tahun",
+                "jumlah": 2000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "6-12 Tahun",
+                "jumlah": 3000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "13-18 Tahun",
+                "jumlah": 3500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "19-25 Tahun",
+                "jumlah": 4000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "26-35 Tahun",
+                "jumlah": 5000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "36-50 Tahun",
+                "jumlah": 4500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "51-65 Tahun",
+                "jumlah": 2000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "> 65 Tahun",
+                "jumlah": 1000
+            }
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "Diabetes",
+                "jumlah": 500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Hipertensi",
+                "jumlah": 800
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Jantung",
+                "jumlah": 300
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Stroke",
+                "jumlah": 200
+            }
+        }
+    ]
+}

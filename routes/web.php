@@ -467,3 +467,12 @@ Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->nam
 
 // Image proxy route with rate limiting
 Route::middleware('throttle:30,1')->get('/image-proxy', [ImageProxyController::class, 'proxy'])->name('image.proxy');
+
+// Pest Browser Testing - Quick login route (hanya untuk testing)
+if (app()->environment('testing')) {
+    Route::get('/_pest/login/{userId}', function ($userId) {
+        $user = App\Models\User::findOrFail($userId);
+        Auth::login($user);
+        return response(status: 200);
+    })->middleware('web');
+}

@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "attributes": {
+                "nama": "Islam",
+                "jumlah": 20000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Kristen",
+                "jumlah": 2000
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Hindu",
+                "jumlah": 2500
+            }
+        },
+        {
+            "attributes": {
+                "nama": "Buddha",
+                "jumlah": 500
+            }
+        }
+    ]
+}

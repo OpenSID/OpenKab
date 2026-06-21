@@ -1,4 +1,4 @@
-import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import inject from "@rollup/plugin-inject"
 import path from 'path';
@@ -9,8 +9,8 @@ export default defineConfig({
             $: 'jquery',
             jQuery: 'jquery',
             moment: 'moment',
+            exclude: ['**/node_modules/select2/**'],
         }),
-        splitVendorChunkPlugin(),
         laravel({
             input: [
                 'resources/sass/app.scss',
@@ -27,6 +27,11 @@ export default defineConfig({
         },
     },
     build: {
+        commonjsOptions: {
+          include: [/node_modules/, /select2-bridge/, /jsvalidation/],
+          transformMixedEsModules: true,
+          defaultIsModuleExports: true,
+        },
         rollupOptions: {
           output: {
             manualChunks(id) {
@@ -34,7 +39,7 @@ export default defineConfig({
               if (id.includes('admin-lte') || id.includes('bootstrap')) {
                 return 'admin-lte';
               }
-              // creating a chunk to react routes deps. Reducing the vendor chunk size
+              // creating a chunk to tinymce deps. Reducing the vendor chunk size
               if (
                 id.includes('tinymce')
               ) {
@@ -43,7 +48,7 @@ export default defineConfig({
               if (
                 id.includes('datatables')
               ) {
-                return 'datatables';
+                return 'admin-lte';
               }
             },
           },

@@ -18,7 +18,6 @@ class CustomCspPreset implements Preset
             ->add(Directive::STYLE, [
                 Keyword::SELF,
                 Keyword::UNSAFE_INLINE,
-                'sha256-4Hp34kejS2ebnG2znG00qXJODVa0mXDBGtDnbB1o+dk=',
                 'https://fonts.googleapis.com/',
                 'https://fonts.bunny.net/',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
@@ -27,12 +26,7 @@ class CustomCspPreset implements Preset
                 'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',
                 'https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
-                'sha256-z7zcnw/4WalZqx+PrNaRnoeLz/G9WXuFqV1WCJ129sg=',
-                'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=',
-                'sha256-hIQQk/yoM15mwdqWhaRQ/qiDh22AXD54o7w5fUsss+w=',
-                'sha256-wXDqcLlNCfwz7CniAXnDuBVLmG9xeJRAiHkMrCetfeQ=',
             ])
-            ->addNonce(Directive::STYLE)
             ->add(Directive::SCRIPT, [
                 Keyword::SELF,
                 Keyword::UNSAFE_EVAL,
@@ -51,6 +45,7 @@ class CustomCspPreset implements Preset
             ])
             ->add(Directive::CONNECT, [
                 Keyword::SELF,
+                'https://unpkg.com/',
                 config('app.serverPantau'),
                 config('app.databaseGabunganUrl'),
             ])

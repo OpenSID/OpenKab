@@ -1,5 +1,5 @@
 <div class="table-responsive">
-        <table class="table" id="downloads-table">
+        <table class="table" id="downloads-table" data-testid="datatable-unduhan">
             <thead>
             <tr>
                 <th>No</th>

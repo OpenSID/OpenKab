@@ -18,6 +18,7 @@ Di rilis ini, versi 2606.0.1 berisi penambahan dan perbaikan yang diminta penggu
 7. [#1065](https://github.com/OpenSID/OpenKab/issues/1065) Smoke test untuk menu SOTK
 8. [#1069](https://github.com/OpenSID/OpenKab/issues/1069) Smoke test untuk menu pengaturan opensid dan pengaturan peta
 9. [#1070](https://github.com/OpenSID/OpenKab/issues/1070) Smoke test untuk menu pengaturan web
+10. [#1073](https://github.com/OpenSID/OpenKab/issues/1073) Smoke test untuk menu Pengaturan Pengguna dan Pengaturan Aplikasi
 
 
 

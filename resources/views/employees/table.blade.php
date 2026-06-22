@@ -1,6 +1,6 @@
 
     <div class="table-responsive">
-        <table class="table" id="employees-table">
+        <table class="table" id="employees-table" data-testid="datatable-employees">
             <thead>
             <tr>
                 <th>No</th>

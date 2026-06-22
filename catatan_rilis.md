@@ -6,6 +6,7 @@ Di rilis ini, versi 2606.0.1 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perbaikan BUG
 
+1. [#1066](https://github.com/OpenSID/OpenKab/issues/1066) Perbaikan Field tampil ganda saat tambah/edit data pejabat daerah
 
 #### Perubahan Teknis
 

@@ -51,6 +51,13 @@ final class MswSetup
         '/api/v1/data-presisi/jaminan-sosial/rtm' => 'jaminan-sosial.json',
         '/api/v1/data-presisi/laporan' => 'laporan.json',
         '/api/v1/data-presisi/laporan-perdesa' => 'laporan-perdesa.json',
+        '/api/v1/bantuan-kabupaten' => 'bantuan-kabupaten.json',
+        '/api/v1/kategori' => 'kategori-artikel.json',
+        '/api/v1/kategori/tampil' => 'kategori-tampil.json',
+        '/api/v1/artikel/list' => 'artikel-list.json',
+        '/api/v1/plan' => 'plan-lokasi.json',
+        '/api/v1/point' => 'point-tipe-lokasi.json',
+        '/api/v1/point/status' => 'point-status.json',
     ];
 
     /**

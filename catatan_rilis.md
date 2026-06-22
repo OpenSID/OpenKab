@@ -16,6 +16,8 @@ Di rilis ini, versi 2606.0.1 berisi penambahan dan perbaikan yang diminta penggu
 5. [#1061](https://github.com/OpenSID/OpenKab/issues/1061) Smoke test untuk menu statistik kependudukan
 6. [#1062](https://github.com/OpenSID/OpenKab/issues/1062) Smoke test untuk menu data presisi
 7. [#1065](https://github.com/OpenSID/OpenKab/issues/1065) Smoke test untuk menu SOTK
+8. [#1069](https://github.com/OpenSID/OpenKab/issues/1069) Smoke test untuk menu pengaturan opensid dan pengaturan peta
+
 
 
 

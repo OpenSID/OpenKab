@@ -17,7 +17,7 @@
             <div class="card-body">
                 <div>
                     <div class="chart" id="grafik">
-                        <canvas id="barChart"></canvas>
+                        <canvas id="barChart" data-testid="chart-bar-penginapan"></canvas>
                     </div>
                     <hr class="hr-chart">
                 </div>
@@ -30,7 +30,7 @@
             <div class="card-body">                
                 <div>
                     <div class="chart" id="pie">
-                        <canvas id="donutChart"></canvas>
+                        <canvas id="donutChart" data-testid="chart-donut-pemanfaatan"></canvas>
                     </div>
                     <hr class="hr-chart">
                 </div>
@@ -55,12 +55,12 @@
                         <x-filter-komoditas-wisata />
                     </div>
                     <div class="col-auto">
-                        <x-print-button :print-url="url('data-pokok/pariwisata/cetak')" table-id="pariwisata" :filter="[]" />
+                        <x-print-button :print-url="url('data-pokok/pariwisata/cetak')" table-id="pariwisata" :filter="[]" testId="btn-cetak" />
                     </div>
-                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/pariwisata/download'" table-id="pariwisata" filename="data_pariwisata" />
+                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/pariwisata/download'" table-id="pariwisata" filename="data_pariwisata" testId="btn-export-excel" />
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped" id="pariwisata">
+                    <table class="table table-striped" id="pariwisata" data-testid="datatable-data-pokok-pariwisata">
                         <thead>
                             <tr>
                                 <th>ID</th>

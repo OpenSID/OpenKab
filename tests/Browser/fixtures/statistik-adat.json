@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Upacara Ngaben",
+                "jumlah": 30,
+                "laki_laki": 15,
+                "perempuan": 15,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"adat\",\"filter[kriteria]\":\"Upacara Ngaben\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Upacara Melasti",
+                "jumlah": 30,
+                "laki_laki": 15,
+                "perempuan": 15,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"adat\",\"filter[kriteria]\":\"Upacara Melasti\"}"
+            }
+        }
+    ]
+}

@@ -37,6 +37,20 @@ final class MswSetup
         '/api/v1/bantuan/sasaran' => 'bantuan-sasaran.json',
         '/api/v1/bantuan/tahun' => 'bantuan-tahun.json',
         '/api/v1/lembaga' => 'lembaga.json',
+        '/api/v1/pariwisata' => 'pariwisata.json',
+        '/api/v1/infrastruktur' => 'infrastruktur.json',
+        '/api/v1/data-presisi/pangan/rtm' => 'pangan.json',
+        '/api/v1/data-presisi/sandang/rtm' => 'sandang.json',
+        '/api/v1/data-presisi/papan/rtm' => 'papan.json',
+        '/api/v1/data-presisi/seni-budaya/rtm' => 'seni-budaya.json',
+        '/api/v1/data-presisi/adat/rtm' => 'adat.json',
+        '/api/v1/data-presisi/agama/rtm' => 'agama.json',
+        '/api/v1/data-presisi/kesehatan/rtm' => 'kesehatan-presisi.json',
+        '/api/v1/data-presisi/pendidikan/rtm' => 'pendidikan-presisi.json',
+        '/api/v1/data-presisi/ketenagakerjaan/rtm' => 'ketenagakerjaan-presisi.json',
+        '/api/v1/data-presisi/jaminan-sosial/rtm' => 'jaminan-sosial.json',
+        '/api/v1/data-presisi/laporan' => 'laporan.json',
+        '/api/v1/data-presisi/laporan-perdesa' => 'laporan-perdesa.json',
     ];
 
     /**
@@ -51,6 +65,8 @@ final class MswSetup
         '#/api/v1/statistik/keluarga\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'statistik-keluarga-*.json',
         '#/api/v1/statistik/rtm\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'statistik-rtm-*.json',
         '#/api/v1/statistik/bantuan\?.*filter(?:\[id\]|%5Bid%5D)=([^&]+)#' => 'statistik-bantuan-*.json',
+        '#/api/v1/data-presisi/([\w-]+)/kategori-statistik#' => 'kategori-statistik-*.json',
+        '#/api/v1/data-presisi/([\w-]+)/statistik#' => 'statistik-*.json',
     ];
 
     /**

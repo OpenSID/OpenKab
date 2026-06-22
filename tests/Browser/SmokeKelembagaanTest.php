@@ -21,21 +21,21 @@ it('opens the lembaga page', function () {
 
 it('displays filter button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/lembaga')
-        ->assertVisible('[data-testid="bt-toggle-filter"]');
+        ->assertVisible('@bt-toggle-filter');
 
     ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-filter-button');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/lembaga')
-        ->assertVisible('[data-testid="bt-cetak"]');
+        ->assertVisible('@bt-cetak');
 
     ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/lembaga')
-        ->assertVisible('[data-testid="bt-excel"]');
+        ->assertVisible('@bt-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'kelembagaan-excel-button');
 });
@@ -43,7 +43,7 @@ it('displays excel button', function () {
 it('displays datatable with data rows', function () {
     $page = SessionState::loginAndNavigate($this->user, '/lembaga')
         ->assertPathIs('/lembaga')
-        ->assertVisible('[data-testid="datatable-lembaga"]');
+        ->assertVisible('@datatable-lembaga');
 
     $page->assertScript(
         "new Promise((resolve) => {

@@ -15,10 +15,10 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    Jenis Bantuan
+                    Statistik Jenis Bantuan
                 </div>
                 <div class="card-body">
-                    <div class="chart" id="pie1">
+                    <div class="chart" id="pie1" data-testid="chart-pie-bantuan">
 
                     </div>
                 </div>
@@ -27,10 +27,10 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    Jenis Gangguan Mental
+                    Statistik Jenis Gangguan Mental
                 </div>
                 <div class="card-body">
-                    <div class="chart" id="pie2">
+                    <div class="chart" id="pie2" data-testid="chart-pie-mental">
 
                     </div>
                 </div>
@@ -39,10 +39,10 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    Jenis Gangguan Mental
+                    Statistik Jenis Penanganan
                 </div>
                 <div class="card-body">
-                    <div class="chart" id="pie4">
+                    <div class="chart" id="pie4" data-testid="chart-pie-penanganan">
 
                     </div>
                 </div>
@@ -59,18 +59,18 @@
                         <x-filter-tahun />
                         <x-filter-status-presisi />
                         <div class="col-auto">
-                            <x-print-button :print-url="route('jaminan-sosial-cetak')" table-id="jaminanSosial" :filter="[]" />
+                            <x-print-button :print-url="route('jaminan-sosial-cetak')" table-id="jaminanSosial" :filter="[]" testId="btn-cetak" />
                         </div>
                         <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/jaminan-sosial/rtm/download'" table-id="jaminanSosial" filename="data_presisi_jaminan-sosial" :additional-params="[
                                 ['key' => 'kode_kabupaten', 'value' => session('kabupaten.kode_kabupaten') ?? ''],
                                 ['key' => 'kode_kecamatan', 'value' => session('kecamatan.kode_kecamatan') ?? ''],
                                 ['key' => 'config_desa', 'value' => session('desa.id') ?? ''],
-                            ]"/>
+                            ]" testId="btn-export-excel" />
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="jaminanSosial">
+                        <table class="table table-striped" id="jaminanSosial" data-testid="datatable-data-pokok-jaminan-sosial">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>

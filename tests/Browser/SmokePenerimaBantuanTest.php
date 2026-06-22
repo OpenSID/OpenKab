@@ -21,21 +21,21 @@ it('opens the bantuan page', function () {
 
 it('displays filter button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertVisible('[data-testid="bt-toggle-filter"]');
+        ->assertVisible('@bt-toggle-filter');
 
     ScreenshotHelper::saveIfEnabled($page, 'bantuan-filter-button');
 });
 
 it('displays cetak button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertVisible('[data-testid="bt-cetak"]');
+        ->assertVisible('@bt-cetak');
 
     ScreenshotHelper::saveIfEnabled($page, 'bantuan-cetak-button');
 });
 
 it('displays excel button', function () {
     $page = SessionState::loginAndNavigate($this->user, '/bantuan')
-        ->assertVisible('[data-testid="bt-excel"]');
+        ->assertVisible('@bt-excel');
 
     ScreenshotHelper::saveIfEnabled($page, 'bantuan-excel-button');
 });
@@ -43,7 +43,7 @@ it('displays excel button', function () {
 it('displays datatable with data rows', function () {
     $page = SessionState::loginAndNavigate($this->user, '/bantuan')
         ->assertPathIs('/bantuan')
-        ->assertVisible('[data-testid="datatable-bantuan"]');
+        ->assertVisible('@datatable-bantuan');
 
     $page->assertScript(
         "new Promise((resolve) => {

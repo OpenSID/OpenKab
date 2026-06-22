@@ -31,14 +31,14 @@
                     <x-filter-tahun :selectedYear="request('tahun')"/>
                     <x-filter-status-presisi />                    
                     <div class="col-auto">
-                        <x-print-button :print-url="url('data-presisi/pangan/cetak')" table-id="table-pangan" :filter="[]" />
+                        <x-print-button :print-url="url('data-presisi/pangan/cetak')" table-id="table-pangan" :filter="[]" testId="btn-cetak" />
                     </div>
-                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/pangan/rtm/download'" table-id="table-pangan" filename="data_presisi_pangan" />
+                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/pangan/rtm/download'" table-id="table-pangan" filename="data_presisi_pangan" testId="btn-export-excel" />
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="table-pangan">
+                    <table class="table table-striped" id="table-pangan" data-testid="datatable-pangan">
                         <thead>
                             <tr>
                                 <th>Aksi</th>

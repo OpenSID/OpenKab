@@ -7,5 +7,5 @@ uses(TestCase::class)->in('Feature', 'Browser');
 pest()->browser()->timeout(30000);
 
 beforeEach(function () {
-    config(['adminlte.google_fonts.allowed' => false]);
+    config(['adminlte.google_fonts.allowed' => false]);    
 });

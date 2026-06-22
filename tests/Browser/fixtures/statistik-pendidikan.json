@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "SD",
+                "jumlah": 100,
+                "laki_laki": 55,
+                "perempuan": 45,
+                "persentase_jumlah": "33.33%",
+                "persentase_laki_laki": "55.00%",
+                "persentase_perempuan": "45.00%",
+                "kriteria": "{\"filter[id]\":\"pendidikan\",\"filter[kriteria]\":\"SD\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "SMP",
+                "jumlah": 100,
+                "laki_laki": 50,
+                "perempuan": 50,
+                "persentase_jumlah": "33.33%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"pendidikan\",\"filter[kriteria]\":\"SMP\"}"
+            }
+        }
+    ]
+}

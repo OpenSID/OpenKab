@@ -16,7 +16,7 @@
             <div class="card-header">Statistik Adat</div>
             <div class="card-body">
                 <div>
-                    <div class="chart" id="pie1">
+                    <div class="chart" id="pie1" data-testid="chart-pie-adat">
 
                     </div>
                     <hr class="hr-chart">
@@ -33,14 +33,14 @@
                     <x-filter-tahun />
                     <x-filter-status-presisi />
                     <div class="col-auto">
-                        <x-print-button :print-url="url('data-pokok/data-presisi-adat/cetak')" table-id="adat" :filter="[]" />
+                        <x-print-button :print-url="url('data-pokok/data-presisi-adat/cetak')" table-id="adat" :filter="[]" testId="btn-cetak" />
                     </div>
-                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat/rtm/download'" table-id="adat" filename="data_adat" />
+                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat/rtm/download'" table-id="adat" filename="data_adat" testId="btn-export-excel" />
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="adat">
+                    <table class="table table-striped" id="adat" data-testid="datatable-adat">
                         <thead>
                             <tr>
                                 <th>Aksi</th>

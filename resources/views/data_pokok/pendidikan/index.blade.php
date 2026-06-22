@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                            <canvas id="donutChart" data-testid="chart-donut"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                            <canvas id="barChart" data-testid="chart-bar"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -45,14 +45,14 @@
                     <div>Data Pendidikan Penduduk dan DTKS</div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <x-print-button :print-url="url('data-pokok/pendidikan/cetak')" table-id="pendidikan" :filter="[]" />
-                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/pendidikan/download'" table-id="pendidikan" filename="data_pendidikan" />
+                            <x-print-button :print-url="url('data-pokok/pendidikan/cetak')" table-id="pendidikan" :filter="[]" testId="btn-cetak" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/pendidikan/download'" table-id="pendidikan" filename="data_pendidikan" testId="btn-export-excel" />
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="pendidikan">
+                        <table class="table table-striped" id="pendidikan" data-testid="datatable-pendidikan">
                             <thead>
                                 <tr>
                                     <th>No</th>

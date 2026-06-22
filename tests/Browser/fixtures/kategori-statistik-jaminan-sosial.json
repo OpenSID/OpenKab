@@ -1,0 +1,11 @@
+{
+    "success": true,
+    "data": [
+        {
+            "attributes": {
+                "bansos": "Bantuan Sosial",
+                "jaminan": "Jaminan"
+            }
+        }
+    ]
+}

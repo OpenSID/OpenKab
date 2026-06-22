@@ -1,0 +1,42 @@
+{
+    "data": [
+        {
+            "type": "bantuan kabupaten",
+            "id": "1",
+            "attributes": {
+                "nama": "Program Keluarga Harapan (PKH)",
+                "asaldana": "APBN",
+                "jumlah_peserta": 150,
+                "sdate": "2026-01-01",
+                "edate": "2026-12-31",
+                "nama_sasaran": "Keluarga Miskin",
+                "status": 1
+            }
+        },
+        {
+            "type": "bantuan kabupaten",
+            "id": "2",
+            "attributes": {
+                "nama": "Bantuan Pangan Non Tunai (BPNT)",
+                "asaldana": "APBN",
+                "jumlah_peserta": 200,
+                "sdate": "2026-01-01",
+                "edate": "2026-12-31",
+                "nama_sasaran": "Keluarga Prasejahtera",
+                "status": 1
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 2,
+            "count": 2,
+            "per_page": 10,
+            "current_page": 1,
+            "total_pages": 1
+        }
+    },
+    "links": {
+        "self": "http://127.0.0.1:8001/api/v1/bantuan-kabupaten?page%5Bsize%5D=10&page%5Bnumber%5D=1"
+    }
+}

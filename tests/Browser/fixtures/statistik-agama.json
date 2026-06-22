@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Masjid",
+                "jumlah": 50,
+                "laki_laki": 30,
+                "perempuan": 20,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "60.00%",
+                "persentase_perempuan": "40.00%",
+                "kriteria": "{\"filter[id]\":\"agama\",\"filter[kriteria]\":\"Masjid\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Gereja",
+                "jumlah": 50,
+                "laki_laki": 25,
+                "perempuan": 25,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"agama\",\"filter[kriteria]\":\"Gereja\"}"
+            }
+        }
+    ]
+}

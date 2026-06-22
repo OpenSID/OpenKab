@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                            <canvas id="donutChart" data-testid="chart-donut"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                            <canvas id="barChart" data-testid="chart-bar"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -45,14 +45,14 @@
                     <div>{{ $title }}</div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <x-print-button :print-url="url('data-pokok/kesehatan/cetak')" table-id="kesehatan" :filter="[]" />
-                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data/kesehatan/download'" table-id="kesehatan" filename="data_kesehatan" />
+                            <x-print-button :print-url="url('data-pokok/kesehatan/cetak')" table-id="kesehatan" :filter="[]" testId="btn-cetak" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data/kesehatan/download'" table-id="kesehatan" filename="data_kesehatan" testId="btn-export-excel" />
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="kesehatan">
+                        <table class="table table-striped" id="kesehatan" data-testid="datatable-kesehatan">
                             <thead>
                                 <tr>
                                     <th>No</th>

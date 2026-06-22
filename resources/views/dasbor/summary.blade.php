@@ -1,4 +1,4 @@
-<div class="row" id="summary_block">
+<div class="row" id="summary_block" data-testid="summary-block">
     @php
         $colors = ['primary', 'warning', 'success', 'info']; // Array warna
     @endphp

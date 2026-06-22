@@ -21,7 +21,10 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="chart" id="grafik">
-                        <canvas id="barChart"></canvas>
+                        <canvas id="barChart" data-testid="chart-bar-seni-budaya"></canvas>
+                    </div>
+                    <div class="chart" id="pie">
+                        <canvas id="donutChart" data-testid="chart-donut-seni-budaya"></canvas>
                     </div>
                 </div>
             </div>
@@ -31,15 +34,15 @@
                         <x-filter-tahun />
                         <x-filter-status-presisi />
                         <div class="col-auto">
-                            <x-print-button :print-url="url('data-presisi/seni-budaya/cetak')" table-id="table-seni-budaya" :filter="[]" />
+                            <x-print-button :print-url="url('data-presisi/seni-budaya/cetak')" table-id="table-seni-budaya" :filter="[]" testId="btn-cetak" />
                         </div>
-                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/seni-budaya/rtm/download'" table-id="table-seni-budaya" filename="data_presisi_seni-budaya" />
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/seni-budaya/rtm/download'" table-id="table-seni-budaya" filename="data_presisi_seni-budaya" testId="btn-export-excel" />
 
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-seni-budaya">
+                        <table class="table table-striped" id="table-seni-budaya" data-testid="datatable-seni-budaya">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>

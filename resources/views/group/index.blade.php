@@ -16,7 +16,7 @@
                 <div class="card-header">
                     @if($canwrite)
                     <a href="{{ url('pengaturan/groups/tambah') }}">
-                        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i> Tambah</button>
+                        <button type="button" class="btn btn-primary btn-sm" data-testid="bt-tambah"><i class="far fa-plus-square"></i> Tambah</button>
                     </a>
                     @endif
                 </div>
@@ -25,7 +25,7 @@
 
                     <div class="row">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped" id="grup">
+                            <table class="table table-bordered table-striped" id="grup" data-testid="datatable-grup">
                                 <thead>
                                     <tr>
                                         <th width="50">No</th>
@@ -78,11 +78,11 @@
                         let canEdit = `{{ $canedit }}`
                         let canDelete = `{{ $candelete }}`
                         let buttonEdit = canEdit ? `<a href="{{ url('pengaturan/groups/edit/${data.id}') }}">
-                                    <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
+                                    <button type="button" class="btn btn-warning btn-sm edit" title="Ubah" data-testid="bt-edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 </a>` : ``;
-                        let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
+                        let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus" data-testid="bt-delete">
                                     <i class="fas fa-trash"></i>
                                 </button>` : ``;
                         if (data.attributes.name == 'administrator') {

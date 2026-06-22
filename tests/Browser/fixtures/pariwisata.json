@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "type": "pariwisata",
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "kode_desa": "5102102009",
+                "jenis_hiburan": "Prasarana Hiburan dan Wisata Lainnya",
+                "jumlah_penginapan": "1",
+                "lokasi_tempat_area_wisata": "TIDAK TAHU",
+                "keberadaan": "TIDAK TAHU",
+                "luas": "TIDAK TAHU",
+                "tingkat_pemanfaatan": "TIDAK TAHU"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

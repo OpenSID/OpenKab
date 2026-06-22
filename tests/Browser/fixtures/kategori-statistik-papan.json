@@ -1,0 +1,11 @@
+{
+    "success": true,
+    "data": [
+        {
+            "attributes": {
+                "rumah-tangga": "Rumah Tangga",
+                "bangunan": "Bangunan"
+            }
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+{
+    "success": true,
+    "data": [
+        {"id": "penduduk", "nama": "Penerima Bantuan Penduduk", "judul_halaman": "Penerima Bantuan Penduduk", "judul_kolom_nama": "Jenis Kelompok"},
+        {"id": "keluarga", "nama": "Penerima Bantuan Keluarga", "judul_halaman": "Penerima Bantuan Keluarga", "judul_kolom_nama": "Jenis Kelompok"}
+    ]
+}

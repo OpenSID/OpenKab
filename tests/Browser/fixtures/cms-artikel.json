@@ -1,0 +1,32 @@
+{
+    "data": [
+        {
+            "type": "articles",
+            "id": "1",
+            "attributes": {
+                "category_id": "Pemerintahan",
+                "published_at": "01-01-2025",
+                "slug": "berita-desa",
+                "title": "Berita Desa Terkini",
+                "thumbnail": "",
+                "content": "<p>Berita desa</p>",
+                "state": "Aktif",
+                "created_at": "2025-01-01 00:00:00",
+                "updated_at": "2025-01-01 00:00:00",
+                "deleted_at": null
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "count": 1,
+            "per_page": 10,
+            "current_page": 1,
+            "total_pages": 1
+        }
+    },
+    "links": {
+        "self": "http://127.0.0.1:8001/cms/articles?page%5Bsize%5D=10&page%5Bnumber%5D=1"
+    }
+}

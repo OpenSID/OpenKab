@@ -147,14 +147,17 @@ class LoginController extends Controller
 
         if ($successLogin) {
             try {
+                $passwordRule = Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols();
+
+                    $passwordRule->uncompromised();
+
                 $request->validate(['password' => [
                     'required',
-                    Password::min(8)
-                        ->letters()
-                        ->mixedCase()
-                        ->numbers()
-                        ->symbols()
-                        ->uncompromised(),
+                    $passwordRule,
                 ]]);
                 session(['weak_password' => false]);
             } catch (ValidationException $th) {

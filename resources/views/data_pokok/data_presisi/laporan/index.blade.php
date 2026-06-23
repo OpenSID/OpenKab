@@ -81,10 +81,18 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/laporan' }}");
-            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
-            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-            url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
+            url.searchParams.set("kode_kabupaten", kodeKabupaten);
+            url.searchParams.set("kode_kecamatan", kodeKecamatan);
+            url.searchParams.set("kode_desa", configDesa);
             console.log(url);
 
 
@@ -102,8 +110,9 @@
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
                             "filter[status_kelengkapan]": $('#filter-status').val(),
-                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                            "config_desa": "{{ session('desa.id') ?? '' }}",
+                            "kode_kabupaten": kodeKabupaten,
+                            "kode_kecamatan": kodeKecamatan,
+                            "config_desa": configDesa,
                             "sort": row.order[0].dir === 'desc' ? '-nama_desa' : 'nama_desa'
                         };
                     },

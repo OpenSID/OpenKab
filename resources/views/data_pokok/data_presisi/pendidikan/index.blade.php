@@ -68,10 +68,18 @@
         let data_grafik = [];
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pendidikan/rtm' }}");
-            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
-            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-            url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
+            url.searchParams.set("kode_kabupaten", kodeKabupaten);
+            url.searchParams.set("kode_kecamatan", kodeKecamatan);
+            url.searchParams.set("kode_desa", configDesa);
             var dtks = $('#table-pendidikan').DataTable({
                 processing: true,
                 serverSide: true,
@@ -90,10 +98,11 @@
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
-                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                            "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[tahun]": $('#filter-tahun').val(),
                             "filter[status_kelengkapan]": $('#filter-status-kelengkapan').val(),
+                            "kode_kabupaten": kodeKabupaten,
+                            "kode_kecamatan": kodeKecamatan,
+                            "config_desa": configDesa,
                         };
                     },
                     dataSrc: function(json) {

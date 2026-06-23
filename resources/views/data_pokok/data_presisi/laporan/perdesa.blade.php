@@ -58,6 +58,14 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/laporan-perdesa' }}");
 
             var laporanTable = $('#laporanTable').DataTable({
@@ -75,9 +83,9 @@
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
                             // "filter[config_id]": "{{ session('desa.id') ?? '' }}",
-                            "kode_kabupaten": "{{ session('kabupaten.kode_kabupaten') ?? '' }}",
-                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                            "config_desa": "{{ session('desa.id') ?? '' }}",
+                            "kode_kabupaten": kodeKabupaten,
+                            "kode_kecamatan": kodeKecamatan,
+                            "config_desa": configDesa,
                             "sort": row.order[0].dir === 'desc' ? '-nama_desa' : 'nama_desa'
                         };
                     },

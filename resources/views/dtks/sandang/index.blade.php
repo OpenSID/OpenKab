@@ -61,10 +61,16 @@
 @section('js')
 @include('dtks.sandang.chart')
 <script nonce="{{ csp_nonce() }}">
-    let data_grafik = [];
     document.addEventListener("DOMContentLoaded", function(event) {
         const header = @include('layouts.components.header_bearer_api_gabungan');
-
+        @php
+            $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+            $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+            $configDesa = session('desa.id') ?? '';
+        @endphp
+        const kodeKabupaten = "{{ $kodeKabupaten }}";
+        const kodeKecamatan = "{{ $kodeKecamatan }}";
+        const configDesa = "{{ $configDesa }}";
 
         var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/sandang/rtm' }}");
         url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
@@ -98,8 +104,7 @@
                     json.recordsFiltered = json.meta?.pagination?.total || 0;
 
                     if (json.data && json.data.length > 0) {
-                        data_grafik = json.data.map(item => item.attributes);
-                        grafikPie();
+                        grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
                     }
 
                     return json.data || [];
@@ -214,8 +219,7 @@
 
         $('#filter-tahun').on('change', function() {
             dtks.ajax.reload();
-            data_grafik = [];
-            grafikPie();
+            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
         });
 
         $('#cetak').on('click', function() {

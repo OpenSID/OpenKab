@@ -1,5 +1,7 @@
 @extends('layouts.index')
 
+@section('plugins.chart', true)
+
 @section('title', $title)
 
 @section('content_header')
@@ -65,7 +67,6 @@
 @section('js')
 @include('data_pokok.data_presisi.kesehatan.chart')
 <script nonce="{{ csp_nonce() }}">
-    let data_grafik = [];
     document.addEventListener("DOMContentLoaded", function(event) {
         const header = @include('layouts.components.header_bearer_api_gabungan');
         @php
@@ -77,9 +78,6 @@
         const kodeKecamatan = "{{ $kodeKecamatan }}";
         const configDesa = "{{ $configDesa }}";
         var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/kesehatan/rtm' }}");
-        url.searchParams.set("kode_kabupaten", kodeKabupaten);
-        url.searchParams.set("kode_kecamatan", kodeKecamatan);
-        url.searchParams.set("kode_desa", configDesa);
         var dtks = $('#table-kesehatan').DataTable({
             processing: true,
             serverSide: true,
@@ -109,11 +107,6 @@
                     json.recordsTotal = json.meta?.pagination?.total || 0;
                     json.recordsFiltered = json.meta?.pagination?.total || 0;
                     if (json.data.length > 0) {
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })
-                        grafikPie()
                         return json.data;
                     }
                     return false;
@@ -176,6 +169,7 @@
 
             ],
         })
+        grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
         // Add event listener for opening and closing details
         dtks.on('click', 'td.details-control', function() {
             let tr = $(this).closest('tr');
@@ -228,8 +222,7 @@
         // Event listener for year filter change
         $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
             dtks.ajax.reload();
-            data_grafik = [];
-            grafikPie();
+            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
         });
     })
 </script>

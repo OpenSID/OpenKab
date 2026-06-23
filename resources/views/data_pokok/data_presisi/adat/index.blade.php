@@ -1,5 +1,7 @@
 @extends('layouts.index')
 
+@section('plugins.chart', true)
+
 @include('components.progressive-image')
 
 @section('title', 'Data adat')
@@ -64,7 +66,6 @@
 @section('js')
 @include('data_pokok.data_presisi.adat.chart')
 <script nonce="{{ csp_nonce() }}">
-    let data_grafik = [];
     let transformedIncluded = {};
     document.addEventListener("DOMContentLoaded", function(event) {
         const header = @include('layouts.components.header_bearer_api_gabungan');
@@ -109,12 +110,7 @@
                 dataSrc: function(json) {
                     json.recordsTotal = json.meta?.pagination?.total || 0
                     json.recordsFiltered = json.meta?.pagination?.total || 0
-                    if (json.data.length > 0) {                        
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })                        
-                        grafikPie()
+                    if (json.data.length > 0) {
                         return json.data;
                     }
                     return false;
@@ -178,6 +174,7 @@
                 },
             ],
         })
+        grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
 
         // Add event listener for opening and closing details
         adat.on('click', 'td.details-control', function() {
@@ -231,8 +228,7 @@
         // Event listener for year filter change
         $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
             adat.ajax.reload();
-            data_grafik = [];
-            grafikPie();
+            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
         });
     })
 </script>

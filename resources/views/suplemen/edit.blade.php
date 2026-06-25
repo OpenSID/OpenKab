@@ -39,7 +39,7 @@
                                     <option value="">Pilih Sasaran</option>
                                     @foreach ($list_sasaran as $key => $sasaran)
                                         @if (in_array($key, ['1', '2']))
-                                            <option value="{{ $key }}" {{ selected($key, $suplemen->sasaran) }}>{{ $sasaran }}</option>
+                                            <option value="{{ $key }}" {{ $key == $suplemen->sasaran_id ? 'selected' : '' }}>{{ $sasaran }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -62,8 +62,8 @@
                             <div class="col-sm-9">
                                 <select class="form-control form-control-sm required" required name="status">
                                     <option value="">Pilih Status</option>
-                                    <option value="1" {{ selected(1, $suplemen->status) }}>Aktif</option>
-                                    <option value="0" {{ selected(0, $suplemen->status) }}>Tidak Aktif</option>
+                                    <option value="1" {{ $suplemen->status_id == 1 ? 'selected' : '' }}>Aktif</option>
+                                    <option value="0" {{ $suplemen->status_id == 0 ? 'selected' : '' }}>Tidak Aktif</option>
                                 </select>
                             </div>
                         </div>

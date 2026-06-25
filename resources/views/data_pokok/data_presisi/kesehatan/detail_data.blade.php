@@ -50,9 +50,17 @@
 @section('js')
 <script nonce="{{ csp_nonce() }}">
 document.addEventListener("DOMContentLoaded", function(event) {
-const headers = @include('layouts.components.header_bearer_api_gabungan');
-var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/kesehatan' }}");
-var colomn = '{{ $colomn }}';
+        const headers = @include('layouts.components.header_bearer_api_gabungan');
+        @php
+            $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+            $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+            $configDesa = session('desa.id') ?? '';
+        @endphp
+        const kodeKabupaten = "{{ $kodeKabupaten }}";
+        const kodeKecamatan = "{{ $kodeKecamatan }}";
+        const configDesa = "{{ $configDesa }}";
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/kesehatan' }}");
+        var colomn = '{{ $colomn }}';
 
 const filterTahun = $('#filter-tahun');
 const detailKesehatan = $('#detail-kesehatan');
@@ -71,9 +79,12 @@ const data = {
 "page[size]": row.length,
 "page[number]": (row.start / row.length) + 1,
 "filter[search]": row.search.value,
-"filter[tahun]": filterTahun.val(),
-"filter[colomn]": colomn,
-"sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name,
+                    "filter[tahun]": filterTahun.val(),
+                    "filter[colomn]": colomn,
+                    "kode_kabupaten": kodeKabupaten,
+                    "kode_kecamatan": kodeKecamatan,
+                    "config_desa": configDesa,
+                    "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name,
 };
 
 return data;

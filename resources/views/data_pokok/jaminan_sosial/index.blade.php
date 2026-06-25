@@ -95,10 +95,17 @@
 @section('js')
     @include('data_pokok.jaminan_sosial.chart')
     <script nonce="{{ csp_nonce() }}">
-        let data_grafik = [];
         let transformedIncluded = {};
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/jaminan-sosial/rtm' }}");
             url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
@@ -130,11 +137,7 @@
                         json.recordsTotal = json.meta?.pagination?.total || 0
                         json.recordsFiltered = json.meta?.pagination?.total || 0
                         if (json.data.length > 0) {                        
-                            data_grafik = [];
-                            json.data.forEach(function(item, index) {
-                                data_grafik.push(item.attributes)
-                            })                        
-                            grafikPie()
+                            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa })
                             return json.data;
                         }
                         
@@ -223,8 +226,7 @@
 
             $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
                 jaminanSosial.ajax.reload();
-                data_grafik = [];
-                grafikPie();
+                grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
             });
 
             function format(data) {

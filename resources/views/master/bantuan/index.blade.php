@@ -38,6 +38,7 @@
                                     <th>Masa Berlaku</th>
                                     <th>Sasaran</th>
                                     <th>Status</th>
+                                    <th>Publikasi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -139,8 +140,11 @@
                         name: "nama_sasaran",
                     },
                     {
+                        data: "attributes.status"
+                    },
+                    {
                         data: function(data) {
-                            return data.attributes.status == 1 ? 'Aktif' : 'Tidak Aktif'
+                            return data.attributes.publikasi ? 'Ya' : 'Tidak'
                         },
                     },
                 ],

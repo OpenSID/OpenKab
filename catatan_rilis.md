@@ -1,4 +1,4 @@
-Di rilis ini, versi 2606.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2607.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
@@ -8,6 +8,8 @@ Di rilis ini, versi 2606.0.1 berisi penambahan dan perbaikan yang diminta penggu
 
 1. [#1066](https://github.com/OpenSID/OpenKab/issues/1066) Perbaikan Field tampil ganda saat tambah/edit data pejabat daerah
 2. [#1076](https://github.com/OpenSID/OpenKab/issues/1076) Perbaikan bug dan fitur data presisi
+3. [#1079](https://github.com/OpenSID/OpenKab/issues/1079) Perbaikan Fitur bantuan tidak ada inputan penerima ketika sasaran keluarga, inputan publikasi juga belum ada
+
 
 #### Perubahan Teknis
 

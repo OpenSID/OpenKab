@@ -7,9 +7,9 @@
                     <input type="checkbox" id="select-all"> <!-- Select All checkbox -->
                 </th>
                 <th>DETAIL</th>
-                <th>{{ $suplemen->sasaran == 1 ? 'NO.' : 'NIK' }} KK</th>
-                <th>{{ $suplemen->sasaran == 1 ? 'NIK PENDUDUK' : 'NO. KK' }}</th>
-                <th>{{ $suplemen->sasaran == 1 ? 'NAMA PENDUDUK' : 'KEPALA KELUARGA' }}</th>
+                <th>{{ $suplemen->sasaran === 'Penduduk' ? 'NO.' : 'NIK' }} KK</th>
+                <th>{{ $suplemen->sasaran === 'Penduduk' ? 'NIK PENDUDUK' : 'NO. KK' }}</th>
+                <th>{{ $suplemen->sasaran === 'Penduduk' ? 'NAMA PENDUDUK' : 'KEPALA KELUARGA' }}</th>
                 <th>TEMPAT LAHIR</th>
                 <th>TANGGAL LAHIR</th>
                 <th>JENIS KELAMIN</th>

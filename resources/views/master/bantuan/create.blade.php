@@ -1,5 +1,7 @@
 @extends('layouts.index')
 
+@include('partials.select2_multi_select')
+
 @section('title', 'Tambah Bantuan')
 
 @section('content_header')
@@ -15,20 +17,37 @@
                     <a href="{{ route('bantuan.index') }}" class="btn btn-primary btn-sm"><i
                             class="fas fa-arrow-circle-left"></i></i>&ensp;Kembali ke Daftar Bantuan</a>
                 </div>
-                <form id="bantuan-form">
+                <form id="bantuan-form" x-data="{ sasaran: '' }">
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="col">
                             <div class="mb-4">
                                 <label for="sasaran">Sasaran Program<span class="text-danger">*</span></label>
-                                <select class="form-control @error('sasaran') is-invalid @enderror"name="sasaran">
-                                    <option selected disabled>Pilih Sasaran</option>
+                                <select class="form-control @error('sasaran') is-invalid @enderror" name="sasaran" x-model="sasaran">
+                                    <option selected disabled value="">Pilih Sasaran</option>
                                     <option value="1">Penduduk Perorangan</option>
                                     <option value="2">Keluarga / KK</option>
                                     <option value="3">Rumah Tangga</option>
                                     <option value="4">Kelompok / Organisasi</option>
                                 </select>
                                 @error('sasaran')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col" x-show="sasaran == '2'" x-cloak>
+                            <div class="mb-4">
+                                <label for="kk_level">Penerima (Hubungan Dalam KK)<span class="text-danger">*</span></label>
+                                <select class="form-control @error('kk_level') is-invalid @enderror" name="kk_level[]" multiple="multiple" data-placeholder="Pilih Hubungan Dalam KK">
+                                    @php
+                                        $shdkOptions = App\Models\Enums\SHDKEnum::select2();
+                                    @endphp
+                                    @foreach($shdkOptions as $option)
+                                        <option value="{{ $option['id'] }}">{{ $option['text'] }}</option>
+                                    @endforeach
+                                </select>
+                                @error('kk_level')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -58,8 +77,8 @@
                         <div class="col">
                             <div class="mb-4">
                                 <label for="asaldana">Asal Dana<span class="text-danger">*</span></label>
-                                <select class="form-control @error('asaldana') is-invalid @enderror"name="asaldana">
-                                    <option selected disabled>Pilih Asal Dana</option>
+                                <select class="form-control @error('asaldana') is-invalid @enderror" name="asaldana">
+                                    <option selected disabled value="">Pilih Asal Dana</option>
                                     <option>Pusat</option>
                                     <option>Provinsi</option>
                                     <option>Kab/Kota</option>
@@ -68,6 +87,20 @@
                                     <option>Lain-lain (Hibah)</option>
                                 </select>
                                 @error('asaldana')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-4">
+                                <label for="publikasi">Publikasi<span class="text-danger">*</span></label>
+                                <select class="form-control @error('publikasi') is-invalid @enderror" name="publikasi">
+                                    <option selected disabled value="">Pilih Publikasi</option>
+                                    <option value="1">Ya</option>
+                                    <option value="0">Tidak</option>
+                                </select>
+                                @error('publikasi')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -116,6 +149,12 @@
 @section('js')
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
+            $('select[name="kk_level[]"]').select2({                
+                placeholder: 'Pilih Hubungan Dalam KK',
+                allowClear: true,    
+                width: '100%'
+            });
+
             $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();
                 let dateParam = $.param({

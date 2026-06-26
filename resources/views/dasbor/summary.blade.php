@@ -1,4 +1,4 @@
-<div class="row" id="summary_block">
+<div class="row" id="summary_block" data-testid="summary-block">
     @php
         $colors = ['primary', 'warning', 'success', 'info']; // Array warna
     @endphp
@@ -18,7 +18,7 @@
                 let url = "{{ config('app.databaseGabunganUrl') . '/api/v1/data-website' }}";
                 if (kabupaten || kecamatan || desa) {
                     url +=
-                        `?filter[kode_kabupaten]=${kabupaten || ''}&filter[kode_kecamatan]=${kecamatan || ''}&filter[kode_desa]=${desa || ''}`;
+                        `?filter[kode_kabupaten]=${kabupaten || ''}&kode_kabupaten=${kabupaten || ''}&filter[kode_kecamatan]=${kecamatan || ''}&filter[kode_desa]=${desa || ''}`;
                 }
                 $.get(url, {}, function(result) {
                     let category = result.data.categoriesItems;

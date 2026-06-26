@@ -37,14 +37,14 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
-                                role="button" aria-expanded="false" aria-controls="collapse-filter">
+                                role="button" aria-expanded="false" aria-controls="collapse-filter" data-testid="bt-toggle-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm">
+                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-testid="bt-cetak">
                                 <i class="fa fa-print"></i>
                                 Cetak
                             </button>
-                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/penduduk/download'" table-id="penduduk" filename="data_penduduk" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/penduduk/download'" table-id="penduduk" filename="data_penduduk" testId="bt-excel" />
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                         @if ($judul)
                             <h4 class="text-center">{{ $judul }}</h4>
                         @endif
-                        <table class="table table-striped" id="penduduk">
+                        <table class="table table-striped" id="penduduk" data-testid="datatable-penduduk">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -350,6 +350,10 @@
                 penduduk.draw();
             });
 
+            $('#filter_kabupaten, #filter_kecamatan, #filter_desa').on('change', function() {
+                penduduk.draw();
+            });
+
             $(document).on('click', '#reset', function(e) {
                 e.preventDefault();
                 $('#sex').val('').change();
@@ -382,6 +386,8 @@
             for (let i in filterDefault) {
                 $(`#${i}`).val(filterDefault[i]).trigger('change');
             }
+
+            penduduk.draw();
         });
 
         function getDataset(data, chart) {

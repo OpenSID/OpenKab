@@ -15,7 +15,7 @@
                     @if ($canwrite)
                         <div class="row">
                             <div class="col-md-3">
-                                <a class="btn btn-primary btn-sm" href="{{ route('master-data-artikel.create') }}"><i
+                                <a class="btn btn-primary btn-sm" href="{{ route('master-data-artikel.create') }}" data-testid="bt-tambah"><i
                                         class="far fa-plus-square"></i> Tambah</a>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="artikel">
+                        <table class="table table-striped" id="artikel" data-testid="datatable-artikel">
                             <thead>
                                 <tr>
                                     <th class="padat">No</th>
@@ -95,10 +95,11 @@
                             let canEdit = `{{ $canedit }}`
                             let canDelete = `{{ $candelete }}`
                             var id = row.id;
-                            let buttonEdit = canEdit ? `<a href="{{ route('master-data-artikel.index') }}/${id}/edit" class="btn btn-warning btn-sm" title="Edit">
+                            let titleDelete = `Apakah anda yakin menghapus artikel dengan judul ${row.attributes.judul} - kategori ${row.attributes.kategori_nama} ?`
+                            let buttonEdit = canEdit ? `<a href="{{ route('master-data-artikel.index') }}/${id}/edit" class="btn btn-warning btn-sm" title="Edit" data-testid="bt-edit">
                                     <i class="fas fa-edit"></i>
                                 </a>` : ``;
-                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" title="Hapus">
+                            let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${id}" data-title-delete="${titleDelete}" title="Hapus" data-testid="bt-delete">
                                     <i class="fas fa-trash"></i>
                                 </button>` : ``;
                             return `${buttonEdit} ${buttonDelete}`;
@@ -145,10 +146,11 @@
 
             $(document).on('click', 'button.hapus', function() {
                 var id = $(this).data('id')
+                let titleDelete = $(this).data('title-delete')
                 var that = $(this);
                 Swal.fire({
                     title: 'Hapus',
-                    text: "Apakah anda yakin menghapus artikel ini?",
+                    text: titleDelete,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Hapus'
@@ -175,7 +177,10 @@
                                         showConfirmButton: true,
                                         timer: 1500
                                     })
-                                    table.ajax.reload(null, false);
+                                    setTimeout(() => {
+                                        window.location.href =
+                                            '{{ route('master-data-artikel.index') }}?clear_all_cache=1';
+                                    }, 1500);                                    
                                 } else {
                                     Swal.fire({
                                         title: 'Error!',

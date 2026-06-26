@@ -2,14 +2,14 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         "use strict";
 
-        const header = @include('layouts.components.header_bearer_api_gabungan');
+        
         var urlDataWebsite = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-website' }}");
 
         $.ajax({
             url: urlDataWebsite.href,
             method: 'GET',
             dataType: 'json',
-            headers: header,
+            
             success: function(result) {
                 let category = result.data.categoriesItems;
                 let listDesa = result.data.listDesa;

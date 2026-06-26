@@ -1,5 +1,5 @@
 <div class="table-responsive">
-        <table class="table" id="settings-table">
+        <table class="table" id="settings-table" data-testid="datatable-settings">
             <thead>
             <tr>
                 <th>No</th>

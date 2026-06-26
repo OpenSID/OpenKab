@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Golongan Darah O",
+                "jumlah": 150,
+                "laki_laki": 80,
+                "perempuan": 70,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "53.33%",
+                "persentase_perempuan": "46.67%",
+                "kriteria": "{\"filter[id]\":\"kesehatan\",\"filter[kriteria]\":\"Golongan Darah O\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Golongan Darah A",
+                "jumlah": 150,
+                "laki_laki": 75,
+                "perempuan": 75,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"kesehatan\",\"filter[kriteria]\":\"Golongan Darah A\"}"
+            }
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "kode": "LMB001",
+                "nama": "Karang Taruna",
+                "nama_ketua": "Budi Santoso",
+                "kategori": "Keagamaan",
+                "anggota_count": 25
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

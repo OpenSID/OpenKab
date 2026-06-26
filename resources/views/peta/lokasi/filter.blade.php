@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-2">
-        <select id="status" class="form-control input-sm select2">
+        <select id="status" class="form-control input-sm select2" data-testid="filter-status">
             <option value="">Pilih Status</option>
             @foreach ($status as $key => $item)
                 <option value="{{ $key }}">{{ $item }}</option>
@@ -8,7 +8,7 @@
         </select>
     </div>
     <div class="col-sm-3">
-        <select id="point" class="form-control input-sm select2">
+        <select id="point" class="form-control input-sm select2" data-testid="filter-point">
             <option value="">Pilih Jenis</option>
             @foreach ($point as $item)
                 {{-- <option data-children='{!! $item->children->toJson() !!}' value="{{ $item->id }}">{{ $item->nama }}</option> --}}
@@ -18,7 +18,7 @@
     </div>
 
     <div class="col-sm-3">
-        <select id="subpoint" class="form-control input-sm select2">
+        <select id="subpoint" class="form-control input-sm select2" data-testid="filter-subpoint">
             <option value="">Pilih Kategori</option>
             @foreach ($point as $item)
                 {{-- <optgroup label="{{ $item->nama }}">

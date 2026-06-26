@@ -8,6 +8,7 @@ use App\Services\TwoFactorService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\RateLimiter;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class OtpControllerTest extends BaseTestCase
@@ -44,7 +45,7 @@ class OtpControllerTest extends BaseTestCase
         $this->app->instance(TwoFactorService::class, $this->twoFactorService);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_otp_settings_page()
     {
         $this->twoFactorService
@@ -65,7 +66,7 @@ class OtpControllerTest extends BaseTestCase
         $response->assertViewHas('twoFactorStatus');
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_otp_activation_page()
     {
         $response = $this->get(route('otp.activate'));
@@ -75,7 +76,7 @@ class OtpControllerTest extends BaseTestCase
         $response->assertViewHas('user', $this->user);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_setup_otp_with_email()
     {
         $this->otpService
@@ -104,7 +105,7 @@ class OtpControllerTest extends BaseTestCase
         $this->assertEquals($this->user->email, session('temp_otp_config.identifier'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_setup_otp_with_telegram()
     {
         $this->otpService
@@ -133,7 +134,7 @@ class OtpControllerTest extends BaseTestCase
         $this->assertEquals($this->user->telegram_chat_id, session('temp_otp_config.identifier'));
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_otp_setup_failure()
     {
         $this->otpService
@@ -156,12 +157,14 @@ class OtpControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_on_otp_setup()
     {
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = 'otp-setup:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 3; $i++) {
-            RateLimiter::hit('otp-setup:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('otp.setup'), [
@@ -174,7 +177,7 @@ class OtpControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_verify_otp_activation()
     {
         session(['temp_otp_config' => [
@@ -209,7 +212,7 @@ class OtpControllerTest extends BaseTestCase
         $this->assertArrayNotHasKey('temp_otp_config', session()->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_rejects_otp_verification_without_temp_config()
     {
         $response = $this->postJson(route('otp.verify-activation'), [
@@ -223,7 +226,7 @@ class OtpControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_otp_verification_failure()
     {
         session(['temp_otp_config' => [
@@ -251,7 +254,7 @@ class OtpControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_on_otp_verification()
     {
         session(['temp_otp_config' => [
@@ -259,9 +262,11 @@ class OtpControllerTest extends BaseTestCase
             'identifier' => 'test@example.com'
         ]]);
 
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = 'otp-verify:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 5; $i++) {
-            RateLimiter::hit('otp-verify:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('otp.verify-activation'), [
@@ -274,7 +279,7 @@ class OtpControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_disable_otp()
     {
         $this->user->update([
@@ -297,7 +302,7 @@ class OtpControllerTest extends BaseTestCase
         $this->assertNull($this->user->otp_identifier);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_resend_otp()
     {
         session(['temp_otp_config' => [
@@ -325,7 +330,7 @@ class OtpControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_rejects_resend_without_temp_config()
     {
         $response = $this->postJson(route('otp.resend'));
@@ -337,7 +342,7 @@ class OtpControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_enforces_rate_limiting_on_otp_resend()
     {
         session(['temp_otp_config' => [
@@ -345,9 +350,11 @@ class OtpControllerTest extends BaseTestCase
             'identifier' => $this->user->email
         ]]);
 
-        // Hit rate limit
+        // Hit rate limit with new key format (includes IP and User-Agent)
+        $key = 'otp-resend:' . $this->user->id . ':' . $this->app['request']->ip() . ':' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        
         for ($i = 0; $i < 2; $i++) {
-            RateLimiter::hit('otp-resend:' . $this->user->id);
+            RateLimiter::hit($key);
         }
 
         $response = $this->postJson(route('otp.resend'));
@@ -358,7 +365,7 @@ class OtpControllerTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_disable_2fa_from_otp_controller()
     {
         $this->twoFactorService

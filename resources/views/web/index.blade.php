@@ -32,6 +32,12 @@
     </div>
     <!-- Property List End -->
 
+    <!-- Artikel Terbaru Start -->
+    <div class="container-xxl py-5">
+        @include('web.partials.artikel_terbaru')
+    </div>
+    <!-- Artikel Terbaru End -->
+
     <!-- Team Start -->
     <div class="container-xxl py-5">
         @include('web.partials.team')
@@ -41,18 +47,18 @@
 
 @push('scripts')
     <script nonce="{{ csp_nonce() }}" type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function(event) {
+        document.addEventListener("DOMContentLoaded", function (event) {
             "use strict";
 
-            const header = @include('layouts.components.header_bearer_api_gabungan');
+            
             var urlDataWebsite = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-website' }}");
 
             $.ajax({
                 url: urlDataWebsite.href,
                 method: 'GET',
                 dataType: 'json',
-                headers: header,
-                success: function(result) {
+                
+                success: function (result) {
                     let category = result.data.categoriesItems;
 
                     for (let index in category) {

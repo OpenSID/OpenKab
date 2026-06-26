@@ -1,7 +1,7 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
-            <div id="map"></div>
+            <div id="map" data-testid="peta"></div>
         </div>
     </div>
 </div>
@@ -33,6 +33,7 @@
                 const desa = $("#filter_desa").val()
                 var coordUrl =
                     "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/get-list-coordinate' }}";
+                    
                 if (kecamatan != null || desa != null) {
                     coordUrl = coordUrl += "?filter[kabupaten]=" + (kabupaten == null ? "" : kabupaten) +
                         "&filter[kecamatan]=" + (kecamatan == null ? "" : kecamatan) + "&filter[desa]=" + (

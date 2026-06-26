@@ -47,7 +47,7 @@ class BaseTestCase extends TestCase
     {
         $defaultGuard = config('auth.defaults.guard');
         $this->actingAs($admin, 'web');
-        \Auth::shouldUse($defaultGuard);
+        \Illuminate\Support\Facades\Auth::shouldUse($defaultGuard);
 
         return $this;
     }

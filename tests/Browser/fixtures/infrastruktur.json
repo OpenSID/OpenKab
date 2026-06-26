@@ -1,0 +1,50 @@
+[
+    {
+        "kategori": "Transportasi Darat",
+        "jenis_sarana": "Jalan Raya Aspal",
+        "kondisi_baik": 10,
+        "kondisi_rusak": 2,
+        "jumlah": 12,
+        "satuan": "KM"
+    },
+    {
+        "kategori": "Transportasi Darat",
+        "jenis_sarana": "Jembatan Besi Beton",
+        "kondisi_baik": 4,
+        "kondisi_rusak": 0,
+        "jumlah": 4,
+        "satuan": "Unit"
+    },
+    {
+        "kategori": "Sanitasi",
+        "jenis_sarana": "Sumur Resapan",
+        "kondisi_baik": 16,
+        "kondisi_rusak": 0,
+        "jumlah": 16,
+        "satuan": "Unit"
+    },
+    {
+        "kategori": "Sanitasi",
+        "jenis_sarana": "MCK Umum",
+        "kondisi_baik": 14,
+        "kondisi_rusak": 0,
+        "jumlah": 14,
+        "satuan": "Unit"
+    },
+    {
+        "kategori": "Air Bersih",
+        "jenis_sarana": "Sumur Pompa",
+        "kondisi_baik": 46,
+        "kondisi_rusak": 0,
+        "jumlah": 46,
+        "satuan": "Unit"
+    },
+    {
+        "kategori": "Air Bersih",
+        "jenis_sarana": "Embung",
+        "kondisi_baik": 1,
+        "kondisi_rusak": 0,
+        "jumlah": 1,
+        "satuan": "Unit"
+    }
+]

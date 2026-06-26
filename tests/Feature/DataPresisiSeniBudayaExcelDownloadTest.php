@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiSeniBudayaExcelDownloadTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function test_excel_download_button_exists_in_seni_budaya_page()
     {
         $response = $this->get('/data-presisi/seni-budaya');
@@ -24,7 +25,7 @@ class DataPresisiSeniBudayaExcelDownloadTest extends BaseTestCase
         $this->assertStringContainsString('/api/v1/data-presisi/seni-budaya/rtm/download', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_seni_budaya_page_has_filter_tahun()
     {
         $response = $this->get('/data-presisi/seni-budaya');
@@ -40,7 +41,7 @@ class DataPresisiSeniBudayaExcelDownloadTest extends BaseTestCase
         $this->assertStringContainsString('filter-tahun', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_seni_budaya_page_has_print_button()
     {
         $response = $this->get('/data-presisi/seni-budaya');

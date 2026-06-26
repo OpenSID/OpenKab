@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-striped" id="point">
+    <table class="table table-striped" id="point" data-testid="datatable-point">
         <thead>
             <tr>
             <th class="padat">NO</th>

@@ -76,7 +76,7 @@ coordUrl += "?" + filterParams.join("&");
 $.ajax({
 type: 'GET',
 url: coordUrl,
-headers: header,
+
 dataType: 'json',
 success: function(data) {
 // Hapus semua marker dari peta sebelum menambahkan yang baru

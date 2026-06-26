@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="nav nav-pills flex-column" id="daftar-statistik">
+                    <ul class="nav nav-pills flex-column" id="daftar-statistik" data-testid="daftar-statistik">
                     </ul>
                 </div>
             </div>
@@ -36,20 +36,20 @@
                     <div class="row">
                         <x-filter-tahun />
                         <div class="col-md-2">
-                            <button type="button" id="export-excel" class="btn btn-info btn-block btn-sm">
+                            <button type="button" id="export-excel" class="btn btn-info btn-block btn-sm" data-testid="btn-export-excel">
                                 <i class="fa fa-file-excel"></i>
                                 Excel
                             </button>
                         </div>
                         <div class="col-md-2">
-                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
+                            <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse" data-testid="btn-toggle-grafik"
                                 href="#grafik-statistik" role="button" aria-expanded="false"
                                 aria-controls="grafik-statistik">
                                 <i class="fas fa-chart-bar"></i> Grafik
                             </button>
                         </div>
                         <div class="col-md-2">
-                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse"
+                            <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse" data-testid="btn-toggle-pie"
                                 href="#pie-statistik" role="button" aria-expanded="false" aria-controls="pie-statistik">
                                 <i class="fas fa-chart-pie"></i> Chart
                             </button>
@@ -61,14 +61,14 @@
                         <div class="col-md-12">
                             <div id="grafik-statistik" class="collapse">
                                 <div class="chart" id="grafik">
-                                    <canvas id="barChart"></canvas>
+                                    <canvas id="barChart" data-testid="chart-bar"></canvas>
                                 </div>
                                 <hr class="hr-chart">
                             </div>
 
                             <div id="pie-statistik" class="collapse">
                                 <div class="chart" id="pie">
-                                    <canvas id="donutChart"></canvas>
+                                    <canvas id="donutChart" data-testid="chart-donut"></canvas>
                                 </div>
                                 <hr class="hr-chart">
                             </div>
@@ -76,7 +76,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-striped cell-border" id="tabel-data">
+                        <table class="table table-striped cell-border" id="tabel-data" data-testid="datatable-statistik">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -102,15 +102,14 @@
         let kategori = `{{ strtolower($judul) }}`;
         let default_id = null;
         document.addEventListener("DOMContentLoaded", function (event) {
-
-            const header = @include('layouts.components.header_bearer_api_gabungan');
-
+            const header = @include('layouts.components.header_bearer_api_gabungan');            
+            let tipeValue, judulUtama;
             var baseUrl = {!! json_encode(config('app.databaseGabunganUrl')) !!} + "/api/v1";
 
             var urlKategoriStatistik = new URL(`${baseUrl}/data-presisi/pangan/kategori-statistik`);
-
+            const filterTahun = $('#filter-tahun');
             $.ajax({
-                url: urlKategoriStatistik.href,
+                url: urlKategoriStatistik.href,                
                 headers: header,
                 method: 'get',
                 success: function (response) {
@@ -302,17 +301,19 @@
 
             $('#daftar-statistik').on('click', '.pilih-kategori > a', function () {
                 var id = $(this).data('id')
-
+                tipeValue = id
+                judulUtama = $(this).text().trim()
                 $('.pilih-kategori > a').removeClass('active')
                 $(this).addClass('active')
                 $('#title-block').html($(this).text())
                 urlStatistik.searchParams.set('kategori', id);
 
                 statistik.ajax.url(urlStatistik.href, {
-                    headers: header,
+                    
                 }).load();
             });
-            const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;
+            const urlDetailLink = `{{ $detailLink }}?kategori=${kategori}`;            
+            
             var urlStatistik = new URL(`${baseUrl}/data-presisi/pangan/statistik`);
             urlStatistik.searchParams.set('kategori', default_id);
             urlStatistik.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
@@ -325,7 +326,10 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
+                order: [
+                    [2, 'desc']
+                ],
                 searching: false,
                 deferLoading: 0,
                 paging: false,
@@ -336,7 +340,7 @@
                     method: 'get',
                     data: function (row) {
                         return {
-                            "tahun": $('#filter-tahun').val(),
+                            "tahun": filterTahun.val(),
                             "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
                                 .order[0]
                                 ?.column]
@@ -376,20 +380,20 @@
                     data: null,
                     render: function (data, type, row, meta) {
                         return meta.row + 1;
-                    }
+                    },
+                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
-
+                        
                         if (nilai !== 'JUMLAH' && nilai !== 'BELUM MENGISI' && nilai !==
                             'TOTAL') {
-                            let judul = $('.pilih-kategori > a.active').text().trim() + ' : ' + nilai;
+                            let judul = judulUtama + ' : ' + nilai;
                             let urlDetail = new URL(urlDetailLink);
                             urlDetail.searchParams.set('filter[nilai]', data.id);
-                            urlDetail.searchParams.set('filter[tipe]', $('.pilih-kategori > a.active')
-                                .data('id'));
+                            urlDetail.searchParams.set('filter[tipe]', tipeValue);
                             urlDetail.searchParams.set('judul', judul);
-                            urlDetail.searchParams.set('tahun', $('#filter-tahun').val());
+                            urlDetail.searchParams.set('tahun', filterTahun.val());
                             urlDetail.searchParams.set('chart-view', true);
 
                             return `<a target="_blank" href="${urlDetail.href}">${nilai}</a>`
@@ -397,22 +401,23 @@
 
                         return nilai;
                     },
+                    orderable: false,
                 }, {
                     data: function (data) {
                         const nilai = data.attributes?.nilai || data.id || '';
                         const jumlah = data.attributes?.jumlah || 0;
-
-                        if (nilai !== 'JUMLAH' && nilai !== 'BELUM MENGISI' && nilai !==
-                            'TOTAL') {
-                            let judul = $('.pilih-kategori > a.active').text() + ' : ' + nilai;
+                        
+                        
+                            let judul = judulUtama + ' : ' + nilai;
                             let urlDetail = new URL(urlDetailLink);
-                            urlDetail.searchParams.set('filter[nilai]', nilai);
+                            urlDetail.searchParams.set('filter[nilai]', nilai);                            
+                            urlDetail.searchParams.set('filter[tipe]', tipeValue);
                             urlDetail.searchParams.set('judul', judul);
-                            return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`
-                        }
-
-                        return jumlah;
+                            urlDetail.searchParams.set('tahun', filterTahun.val());
+                            return `<a target="_blank" href="${urlDetail.href}">${jumlah}</a>`                        
                     },
+                    orderable: true,
+                    name: 'jumlah',
                 }]
             });
 
@@ -433,7 +438,7 @@
             });
 
             // Event listener for year filter change
-            $('#filter-tahun').on('change', function () {
+            filterTahun.on('change', function () {
                 statistik.ajax.reload();
             });
             $(document).on('click', '#reset', function (e) {

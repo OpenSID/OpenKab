@@ -1,0 +1,21 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "kategori": "Penduduk",
+                "status_kelengkapan": "Lengkap",
+                "tahun": "2024",
+                "bulan": "Januari"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

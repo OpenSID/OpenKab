@@ -68,6 +68,14 @@
                                     <select class="form-control select2" id="id_kategori" name="id_kategori" required>
                                         <option value="">-- Pilih Kategori --</option>
                                     </select>
+                                    <small id="empty-kategori-hint" class="form-text text-danger d-none">
+                                        Kategori artikel belum tersedia.
+                                        @if (($canwrite ?? 0) == 1)
+                                            <a href="{{ url('master/kategori/tambah/0') }}">Buat kategori artikel sekarang</a>.
+                                        @else
+                                            Silakan hubungi admin untuk menambahkan kategori.
+                                        @endif
+                                    </small>
                                 </div>
 
                                 <!-- Tanggal Upload -->
@@ -119,6 +127,8 @@
     @include('partials.asset_tinymce')
     <script nonce="{{ csp_nonce() }}">
         const header = @include('layouts.components.header_bearer_api_gabungan');
+        const canCreateKategori = {{ (($canwrite ?? 0) == 1) ? 'true' : 'false' }};
+        const kategoriCreateUrl = "{{ url('master/kategori/tambah/0') }}";
 
         function artikel() {
             return {
@@ -135,6 +145,8 @@
                 fileData: {
                     gambar: null
                 },
+                hasKategori: true,
+                hasShownKategoriKosongPopup: false,
 
                 init() {
                     this.loadKategori();
@@ -162,7 +174,7 @@
                     formData.append('file', file);
 
                     try {
-                        const response = await fetch('{{ route('artikel.upload_gambar') }}', {
+                        const response = await fetch("{{ route('artikel.upload_gambar') }}", {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -202,15 +214,29 @@
                         },
                         success: function(response) {
                             const select = $('#id_kategori');
+                            const hint = $('#empty-kategori-hint');
                             select.empty();
                             select.append('<option value="">-- Pilih Kategori --</option>');
 
-                            if (response.data) {
-                                response.data.forEach(function(item) {
+                            const kategoriItems = Array.isArray(response.data) ? response.data : [];
+
+                            if (kategoriItems.length > 0) {
+                                self.hasKategori = true;
+                                self.hasShownKategoriKosongPopup = false;
+                                hint.addClass('d-none');
+                                select.prop('disabled', false);
+
+                                kategoriItems.forEach(function(item) {
                                     select.append(
                                         `<option value="${item.id}">${item.attributes.kategori}</option>`
                                     );
                                 });
+                            } else {
+                                self.hasKategori = false;
+                                self.dataArtikel.id_kategori = '';
+                                hint.removeClass('d-none');
+                                select.prop('disabled', true);
+                                self.showKategoriKosongInfo();
                             }
 
                             select.select2({
@@ -227,6 +253,37 @@
                         error: function(xhr) {
                             console.error('Error loading kategori:', xhr);
                         }
+                    });
+                },
+
+                showKategoriKosongInfo() {
+                    if (this.hasShownKategoriKosongPopup) {
+                        return;
+                    }
+
+                    this.hasShownKategoriKosongPopup = true;
+
+                    if (canCreateKategori) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Kategori Belum Tersedia',
+                            text: 'Kategori artikel wajib diisi. Buat kategori artikel terlebih dahulu sebelum menambahkan artikel.',
+                            showCancelButton: true,
+                            confirmButtonText: 'Buat Kategori',
+                            cancelButtonText: 'Nanti Saja'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = kategoriCreateUrl;
+                            }
+                        });
+
+                        return;
+                    }
+
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Kategori Belum Tersedia',
+                        text: 'Kategori artikel wajib diisi. Silakan hubungi admin untuk menambahkan kategori artikel terlebih dahulu.'
                     });
                 },
 
@@ -253,6 +310,12 @@
                         return;
                     }
                     if (!this.dataArtikel.id_kategori) {
+                        if (!this.hasKategori) {
+                            Swal.fire('Info', 'Kategori artikel belum tersedia. Buat kategori terlebih dahulu sebelum menyimpan artikel.',
+                                'info');
+                            return;
+                        }
+
                         Swal.fire('Error!', 'Kategori harus dipilih', 'error');
                         return;
                     }
@@ -302,7 +365,7 @@
                                 });
                                 setTimeout(() => {
                                     window.location.href =
-                                        '{{ route('master-data-artikel.index') }}';
+                                        "{{ route('master-data-artikel.index') }}?clear_all_cache=1";
                                 }, 1500);
                             } else {
                                 Swal.fire({

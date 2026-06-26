@@ -26,7 +26,7 @@ class SitemapService
     {
         return cache()->remember('sitemap', $this->cacheDuration, function () {
             $this->init();
-            $this->addUrl(route('root'));
+            $this->addUrl(route('web.index'));
             Page::all()->each(function ($p) {
                 $this->addUrl($p->link, $p->updated_at);
             });

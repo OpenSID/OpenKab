@@ -6,7 +6,7 @@
                     <div class="form-group">
                         <label>Status</label>
                         <select class="select2 form-control-sm width-100" id="status" name="status"
-                            data-placeholder="Semua Status">
+                            data-placeholder="Semua Status" data-testid="filter-status">
                         </select>
                     </div>
                 </div>
@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="btn-group btn-group-sm btn-block">
-                                <button type="button" id="reset" class="btn btn-secondary"><span
+                                <button type="button" id="reset" class="btn btn-secondary" data-testid="bt-reset"><span
                                         class="fas fa-ban"></span></button>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="btn-group btn-group-sm btn-block">
-                                <button type="button" id="filter" class="btn btn-primary"><span
+                                <button type="button" id="filter" class="btn btn-primary" data-testid="bt-apply-filter"><span
                                         class="fas fa-search"></span></button>
                             </div>
                         </div>

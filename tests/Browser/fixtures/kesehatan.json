@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "nik": "0000000000000001",
+                "golongan_darah": "O",
+                "cacat": "Tidak",
+                "sakit_menahun": "Tidak",
+                "kb": "Tidak",
+                "hamil": "Tidak",
+                "asuransi": "BPJS",
+                "status_gizi": "Normal"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

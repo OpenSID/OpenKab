@@ -37,7 +37,7 @@
                                 </svg>
                             @endif
                             <div class="card-body">
-                                <p class="card-text">{!! Str::limit($article->content, 100) !!}</p>
+                                <p class="card-text">{{ Str::limit(strip_tags($article->content), 100) }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <a href="{{ route('article', $article->slug) }}"

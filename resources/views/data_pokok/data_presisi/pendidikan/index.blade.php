@@ -1,5 +1,7 @@
 @extends('layouts.index')
 
+@section('plugins.chart', true)
+
 @section('title', $title)
 
 @section('content_header')
@@ -21,7 +23,10 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="chart" id="grafik">
-                        <canvas id="barChart"></canvas>
+                        <canvas id="barChart" data-testid="chart-bar"></canvas>
+                    </div>
+                    <div class="chart" id="pie">
+                        <canvas id="donutChart" data-testid="chart-donut"></canvas>
                     </div>
                 </div>
             </div>
@@ -31,14 +36,14 @@
                         <x-filter-tahun />
                         <x-filter-status-presisi />
                         <div class="col-auto">
-                            <x-print-button :print-url="url('data-presisi/pendidikan/cetak')" table-id="table-pendidikan" :filter="[]" />
+                            <x-print-button :print-url="url('data-presisi/pendidikan/cetak')" table-id="table-pendidikan" :filter="[]" testId="bt-cetak" />
                         </div>
-                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/pendidikan/rtm/download'" table-id="table-pendidikan" filename="data_presisi_pendidikan" />
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/pendidikan/rtm/download'" table-id="table-pendidikan" filename="data_presisi_pendidikan" testId="bt-excel" />
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-pendidikan">
+                        <table class="table table-striped" id="table-pendidikan" data-testid="datatable-pendidikan">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>
@@ -62,13 +67,17 @@
 @section('js')
     @include('data_pokok.data_presisi.pendidikan.chart')
     <script nonce="{{ csp_nonce() }}">
-        let data_grafik = [];
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pendidikan/rtm' }}");
-            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
-            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-            url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
             var dtks = $('#table-pendidikan').DataTable({
                 processing: true,
                 serverSide: true,
@@ -87,25 +96,21 @@
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
-                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                            "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[tahun]": $('#filter-tahun').val(),
                             "filter[status_kelengkapan]": $('#filter-status-kelengkapan').val(),
+                            "kode_kabupaten": kodeKabupaten,
+                            "kode_kecamatan": kodeKecamatan,
+                            "config_desa": configDesa,
                         };
                     },
                     dataSrc: function(json) {
                         // Set default values untuk recordsTotal dan recordsFiltered
                         json.recordsTotal = json.meta?.pagination?.total || 0;
                         json.recordsFiltered = json.meta?.pagination?.total || 0;
-                        if (json.data.length > 0) {                        
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })
-                        grafikPie()
-                        return json.data;
-                    }
-                    return false;
+                        if (json.data.length > 0) {
+                            return json.data;
+                        }
+                        return false;
                     },
                 },
                 columnDefs: [{
@@ -161,6 +166,7 @@
                     
                 ],
             })
+            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
             // Add event listener for opening and closing details
             dtks.on('click', 'td.details-control', function () {
                 let tr = $(this).closest('tr');
@@ -216,8 +222,7 @@
             // Event listener for year filter change
             $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
                 dtks.ajax.reload();
-                data_grafik = [];
-                grafikPie();
+                grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
             });
             
         });

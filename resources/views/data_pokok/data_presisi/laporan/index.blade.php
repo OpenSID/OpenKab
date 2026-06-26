@@ -22,7 +22,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-2">
-                            <select id="filter-status" class="form-control form-control-sm">
+                            <select id="filter-status" class="form-control form-control-sm" data-testid="filter-status">
                                 @php
                                     $statusOptions = [
                                         0 => 'Tidak Lengkap',
@@ -37,10 +37,10 @@
                             </select>
                         </div>
                         <div class="col-sm-3">
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="">
+                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="" data-testid="btn-cetak">
                                 <i class="fa fa-print"></i> Cetak
                             </button>
-                            <button type="button" id="export-excel" class="btn btn-info btn-sm">
+                            <button type="button" id="export-excel" class="btn btn-info btn-sm" data-testid="btn-export-excel">
                                 <i class="fa fa-file-excel"></i> Excel
                             </button>
                         </div>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="laporanTable">
+                        <table class="table table-striped" id="laporanTable" data-testid="datatable-laporan">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -81,10 +81,18 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/laporan' }}");
-            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
-            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-            url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
+            url.searchParams.set("kode_kabupaten", kodeKabupaten);
+            url.searchParams.set("kode_kecamatan", kodeKecamatan);
+            url.searchParams.set("kode_desa", configDesa);
             console.log(url);
 
 
@@ -102,8 +110,9 @@
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
                             "filter[status_kelengkapan]": $('#filter-status').val(),
-                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                            "config_desa": "{{ session('desa.id') ?? '' }}",
+                            "kode_kabupaten": kodeKabupaten,
+                            "kode_kecamatan": kodeKecamatan,
+                            "config_desa": configDesa,
                             "sort": row.order[0].dir === 'desc' ? '-nama_desa' : 'nama_desa'
                         };
                     },

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Models\User as ModelsUser;
-use App\Rules\MatchOldPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\Password;
 
 class ChangePasswordController extends ResetPasswordController
 {
@@ -16,26 +16,10 @@ class ChangePasswordController extends ResetPasswordController
     }
 
     /**
-     * Get the password reset validation rules.
-     *
-     * @return array
+     * Change user password.
      */
-    protected function rules()
+    public function change(ChangePasswordRequest $request)
     {
-        return [
-            'password_old' => ['required', new MatchOldPassword],
-            'password' => ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()->uncompromised()],
-        ];
-    }
-
-    /**
-     * Reset the given user's password.
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
-     */
-    public function reset(Request $request)
-    {
-        $request->validate($this->rules(), $this->validationErrorMessages());
         $password = $request->get('password');
         $user = Auth::user();
         $this->changePassword($user, $password);
@@ -68,7 +52,7 @@ class ChangePasswordController extends ResetPasswordController
      */
     protected function changePassword($user, $password)
     {
-        $user->password = $password;
-        $user->save();
+        $expiryDays = config('password.expiry_days');
+        $user->setPasswordWithHistory($password, 'password_change', $expiryDays);
     }
 }

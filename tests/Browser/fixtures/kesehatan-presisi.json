@@ -1,0 +1,40 @@
+{
+    "data": [
+        {
+            "type": "data_presisi_rtm",
+            "id": "1",
+            "attributes": {
+                "config_id": 1,
+                "nik": "0000000000000001",
+                "no_kk": "0000000000000001",
+                "kepala_keluarga": "I GEDE ADI SUARDANA",
+                "dtks": "Tidak Terdaftar",
+                "jumlah_anggota": 16,
+                "jns_ansuransi": "BPJS Kesehatan",
+                "jns_penggunaan_alat_kontrasepsi": "TIDAK TAHU",
+                "jns_penyakit_diderita": "TIDAK TAHU",
+                "frekwensi_kunjungan_faskes_pertahun": "TIDAK TAHU",
+                "frekwensi_rawat_inap_pertahun": "TIDAK TAHU",
+                "frekwensi_kunjungan_dokter_pertahun": "TIDAK TAHU",
+                "kondisi_fisik_sejak_lahir": "TIDAK TAHU",
+                "status_gizi_balita": "TIDAK TAHU",
+                "jumlah_kk": 6,
+                "alamat": "Alamat Test",
+                "dusun": "Dusun Test",
+                "rw": "001",
+                "rt": "001",
+                "status": "Belum Diisi",
+                "tanggal_pengisian": "-",
+                "tgl_daftar": "2025-08-29 02:05:01",
+                "tahun": "2025"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

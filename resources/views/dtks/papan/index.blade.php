@@ -21,38 +21,30 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="chart" id="grafik">
-                        <canvas id="barChart"></canvas>
+                        <canvas id="barChart" data-testid="chart-bar"></canvas>
                     </div>
                 </div>
             </div>
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-sm-2">
-                            <select id="filter-tahun" class="form-control form-control-sm">
-                                @php
-                                    $currentYear = date('Y');
-                                    $startYear = 2020;
-                                @endphp
-                                @for($year = $currentYear; $year >= $startYear; $year--)
-                                    <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
-                                @endfor
-                            </select>
+                        <x-filter-tahun />
+                        <div class="col-auto">
+                            <x-print-button :print-url="url('data-presisi/papan/cetak')" table-id="table-dtks" :filter="[]" testId="btn-cetak" />
                         </div>
-                        <div class="col-sm-3">
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url="">
-                                <i class="fa fa-print"></i> Cetak
-                            </button>
-                        </div>
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/papan/rtm/download'" table-id="table-dtks" filename="data_presisi_papan" testId="btn-export-excel" />
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-dtks">
+                        <table class="table table-striped" id="table-dtks" data-testid="datatable-papan">
                             <thead>
                                 <tr>
+                                    <th>Aksi</th>
                                     <th>#</th>
                                     <th>NIK</th>
+                                    <th>Nama Kepala Keluarga</th>
+                                    <th>Jumlah Anggota RTM</th>
                                     <th>Status Kepemilikan</th>
                                     <th>Luas Lantai (m²)</th>
                                     <th>Jenis Lantai</th>
@@ -71,11 +63,18 @@
 @endsection
 
 @section('js')
-    @include('data_pokok.ketenagakerjaan.chart')
+    @include('dtks.papan.chart')
     <script nonce="{{ csp_nonce() }}">
-        let data_grafik = [];
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var dtks = $('#table-dtks').DataTable({
                 processing: true,
                 serverSide: true,
@@ -86,7 +85,7 @@
                     columns: [0]
                 },
                 ajax: {
-                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/presisi/papan' }}`,
+                    url: `{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/papan/rtm' }}`,
                     headers: header,  
                     method: 'get',
                     data: function(row) {
@@ -99,23 +98,16 @@
                             "filter[tahun]": $('#filter-tahun').val(),
                         };
                     },
-                    dataSrc: function(json) {
-                        json.recordsTotal = json.meta.pagination.total
-                        json.recordsFiltered = json.meta.pagination.total
+                    dataSrc: function(json) {                   
 
-                        // Extract chart data from API response
-                        data_grafik = json.data.filter(item => item.attributes.kd_stat_bangunan_tinggal)
-                            .map(item => ({
-                                label: item.attributes.kd_stat_bangunan_tinggal,
-                                value: 1 // Count each occurrence (can aggregate here)
-                            }));
+                        json.recordsTotal = json.meta?.pagination?.total || 0;
+                        json.recordsFiltered = json.meta?.pagination?.total || 0;
 
-                        // Combine duplicate labels and aggregate values
-                        //data_grafik = combineData(data_grafik);
-                            
-                        tampilChart('bar', 'barChart', generateChartData(data_grafik, 'label', 'Statistik Papan'));
+                        if (json.data && json.data.length > 0) {
+                            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
+                        }
 
-                        return json.data
+                        return json.data || [];
                     },
                 },
                 columnDefs: [{
@@ -128,7 +120,31 @@
                         searchable: false,
                     },
                 ],
-                columns: [
+                columns: [{
+                        data: function(data) {
+
+                            let d = data.attributes
+                            let obj = {
+                                'rtm_id': data.id,
+                                'no_kartu_rumah': d.no_kk,
+                                'nama_kepala_keluarga': d.kepala_keluarga,
+                                'alamat': d.alamat,
+                                'jumlah_anggota': d.jumlah_anggota,
+                                'jumlah_kk': d.jumlah_kk,
+                                'tahun': d.tahun ?? $('#filter-tahun').val()
+                            }
+
+                            let jsonData = encodeURIComponent(JSON.stringify(obj));
+
+                            const _url = "{{ route('data-pokok.data-presisi-papan.detail_datasandang', ['data' => '__DATA__']) }}".replace('__DATA__', jsonData)
+
+                            return `<a href="${_url}" title="Detail" data-button="Detail">
+                                    <button type="button" class="btn btn-info btn-sm">Detail</button>
+                                </a>`;
+                        },
+                        searchable: false,
+                        orderable: false
+                    },
                     {
                         "className": 'details-control',
                         "orderable": false,
@@ -136,10 +152,14 @@
                         "defaultContent": ''
                     },
                     {
-                        data: "attributes.nik_kepala_rtm",
-                        name: "rtm.kepalaKeluarga.nik",
+                        data: "attributes.nik",
                         orderable: false,
-                        render: (data) => data || 'N/A',
+                    },
+                    {
+                        data: "attributes.kepala_keluarga",
+                    },
+                    {
+                        data: "attributes.jumlah_anggota",
                     },
                     {
                         data: "attributes.kd_stat_bangunan_tinggal",
@@ -191,7 +211,7 @@
                     <table class="table table-striped">
                         <tr>
                             <td><strong>NIK Kepala RTM:</strong></td>
-                            <td>${data.attributes.nik_kepala_rtm || 'N/A'}</td>
+                            <td>${data.attributes.nik || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Status Kepemilikan:</strong></td>
@@ -231,16 +251,8 @@
 
             $('#filter-tahun').on('change', function() {
                 dtks.ajax.reload();
-                data_grafik = [];
-                tampilChart('bar', 'barChart', generateChartData(data_grafik, 'label', 'Statistik Papan'));
-            });
-
-            $('#cetak').on('click', function() {
-                let baseUrl = "{{ url('satu-data/dtks/cetak') }}";
-                let params = dtks.ajax.params(); // Get DataTables params
-                let queryString = new URLSearchParams(params).toString(); // Convert params to query string
-                window.open(`${baseUrl}?${queryString}`, '_blank'); // Open the URL with appended query
-            });
+                grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
+            });            
 
             // Combine data by aggregating values for duplicate labels
             function combineData(data) {

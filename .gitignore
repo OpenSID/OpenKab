@@ -7,6 +7,7 @@
 /storage/*.key
 /vendor
 .env
+.env.testing
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -25,3 +26,10 @@ package-lock.json
 /test-results/
 /playwright-report/
 .env.e2e
+/template_ai/
+AGENTS.md
+
+# Pest Browser Testing
+tests/Browser/Screenshots/
+tests/Browser/screenshots/
+tests/Browser/.session_state.json

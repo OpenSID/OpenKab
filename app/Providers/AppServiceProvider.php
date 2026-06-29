@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\VisitorObserver;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Shetabit\Visitor\Models\Visit;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,7 +43,20 @@ class AppServiceProvider extends ServiceProvider
         $this->bootHttps();
         $this->addValidation();
         $this->addLogQuery();
+        
+        try {
+            $this->shareViewIdentitas();
+        } catch (Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+        }
 
+        if (App::runningInConsole()) {
+            activity()->disableLogging();
+        }
+    }
+
+    private function shareViewIdentitas(): void
+    {
         // Share data ke semua view (termasuk Pest browser test context)
         $identitasAplikasi = fractal(
             Identitas::first(),
@@ -63,10 +78,6 @@ class AppServiceProvider extends ServiceProvider
         config()->set(['app.sebutanKab' => $identitasAplikasi['sebutan_kab'] ?? 'Kabupaten']);
         config()->set(['app.kodeKabupatenApi' => $identitasAplikasi['kode_kabupaten_api'] ?? '']);
         $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
-
-        if (App::runningInConsole()) {
-            activity()->disableLogging();
-        }
     }
 
     protected function configureObservers(): void

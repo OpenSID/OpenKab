@@ -6,6 +6,7 @@ use App\Http\Controllers\DataPresisiSeniBudayaController;
 use App\Http\Requests\DetailDataPresisiSeniBudayaRequest;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 /**

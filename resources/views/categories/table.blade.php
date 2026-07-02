@@ -1,5 +1,5 @@
 <div class="table-responsive">
-        <table class="table" id="categories-table">
+        <table class="table" id="categories-table" data-testid="datatable-kategori-cms">
             <thead>
             <tr>
                 <th>No</th>

@@ -12,9 +12,11 @@
     'apiHeaders' => [],
     'additionalParams' => [],
     'class' => '',
+    'testId' => '',
 ])
 
 <button id="{{ $id }}" type="button" class="btn {{ $variant }} {{ $size }} {{ $class }}"
+    @if ($testId) data-testid="{{ $testId }}" @endif
     @if ($disabled) disabled @endif data-download-url="{{ $downloadUrl }}"
     data-table-id="{{ $tableId }}" data-filename="{{ $filename }}">
     <i class="{{ $icon }}"></i>

@@ -18,7 +18,7 @@
                 <div class="card-header">
                     @if ($canedit)
                         <a x-bind:href="'{{ url('pengaturan/identitas') }}/' + id + '/edit'">
-                            <button type="button" class="btn btn-primary btn-sm"><i class="far fa-edit"></i> Ubah
+                            <button type="button" class="btn btn-primary btn-sm" data-testid="bt-ubah-identitas"><i class="far fa-edit"></i> Ubah
                                 Identitas</button>
                         </a>
                     @endif
@@ -30,14 +30,14 @@
                             <img class="img-identitas img-responsive"
                                 :src="dataIdentitas.logo ? '{{ asset('storage/img') }}/' + dataIdentitas.logo :
                                     '{{ asset('assets/img/opensid_logo.png') }}'"
-                                alt="logo-Aplikasi">
+                                alt="logo-Aplikasi" data-testid="logo-identitas">
                             <h3 class="text-identitas"><span x-text="dataIdentitas.nama_aplikasi"></span> </h3>
                         </div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover tabel-rincian">
+                            <table class="table table-bordered table-striped table-hover tabel-rincian" data-testid="info-identitas">
                                 <tbody>
                                     <tr class="table-primary">
                                         <th colspan="3" class="subtitle_head">

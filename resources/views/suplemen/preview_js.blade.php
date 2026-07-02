@@ -20,19 +20,18 @@
             // Ambil nilai dari form
 
             // Ambil data dari PHP
-            const sasaranMap = JSON.parse('<?php echo json_encode(unserialize(SASARAN)); ?>');
 
             // Ambil value yang dipilih dari dropdown
             const selectedValue = document.querySelector('select[name="sasaran"]').value;
 
             // Ambil nama sasaran berdasarkan value
-            const sasaran = sasaranMap[selectedValue] || 'Belum dipilih';
+            const sasaran = selectedValue || 'Belum dipilih';
             const nama = document.querySelector('input[name="nama"]').value || 'Belum diisi';
             const keterangan = document.querySelector('textarea[name="keterangan"]').value || 'Belum diisi';
             const status = document.querySelector('select[name="status"]').value || 'Belum dipilih';
 
             // Format status
-            const statusText = status === '1' ? 'Aktif' : status === '0' ? 'Tidak Aktif' : 'Belum dipilih';
+            const statusText = status || 'Belum dipilih';
 
             // Ambil data kode isian
             const kodeIsianRows = document.querySelectorAll('#dragable-form-utama tr');

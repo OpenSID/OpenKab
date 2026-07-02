@@ -5,7 +5,7 @@
 </tr>
 <tr>
     <td>
-        <strong>Sasaran Suplemen : </strong>{{ $sasaran[$suplemen['sasaran']] }}<br>
+        <strong>Sasaran Suplemen : </strong>{{ $suplemen['sasaran'] }}<br>
         <strong>Keterangan : </strong>{{ $suplemen['keterangan'] }}
     </td>
 </tr>

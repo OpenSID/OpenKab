@@ -15,7 +15,7 @@
     </style>
 @endpush
 <div class="table-responsive">
-    <table id="tfhover" class="table table-bordered table-hover tftable lap-bulanan">
+    <table id="tfhover" class="table table-bordered table-hover tftable lap-bulanan" data-testid="datatable-laporan-bulanan">
         <thead class="bg-gray">
             <tr>
                 <th rowspan="3" width='2%' class="text-center">No</th>

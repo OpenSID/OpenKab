@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Laravel\Facades\Image;
 
 define('SASARAN', serialize([
     '1' => 'Penduduk',
@@ -26,13 +26,20 @@ define('ATTRIBUTES', serialize([
     'select-manual' => 'Pilihan (Kustom)',
 ]));
 
+if (! function_exists('csp_nonce')) {
+    function csp_nonce()
+    {
+        return app('csp-nonce');
+    }
+}
+
 if (! function_exists('openkab_versi')) {
     /**
      * OpenKab database gabungan versi.
      */
     function openkab_versi()
     {
-        return 'v2605.0.1';
+        return 'v2607.0.0';
     }
 }
 
@@ -187,7 +194,7 @@ if (! function_exists('default_favicon')) {
             $pathFavicon = public_path('favicons/'.$favicon);
             if (! file_exists($pathFavicon)) {
                 $filePath = public_path('assets/img/opensid_logo.png');
-                Image::make($filePath)->resize(96, 96)->save($pathFavicon, '100', 'png');
+                Image::read($filePath)->resize(96, 96)->save($pathFavicon, quality: 100);
             }
         }
     }

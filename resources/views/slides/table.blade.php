@@ -1,5 +1,5 @@
 <div class="table-responsive">
-        <table class="table" id="slides-table">
+        <table class="table" id="slides-table" data-testid="datatable-slider">
             <thead>
             <tr>
                 <th>No</th>

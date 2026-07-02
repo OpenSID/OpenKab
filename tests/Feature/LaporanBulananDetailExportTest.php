@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class LaporanBulananDetailExportTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function test_detail_page_has_export_excel_button()
     {
         // Set up session data yang diperlukan
@@ -34,7 +35,7 @@ class LaporanBulananDetailExportTest extends BaseTestCase
         $this->assertStringNotContainsString('>Cetak<', $content, 'Label Cetak seharusnya sudah dihapus');
     }
 
-    /** @test */
+    #[Test]
     public function test_detail_page_export_excel_button_has_correct_route()
     {
         session([

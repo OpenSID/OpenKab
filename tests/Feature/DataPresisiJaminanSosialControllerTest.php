@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\View;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 use Tests\TestCase;
 

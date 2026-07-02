@@ -12,6 +12,13 @@ Seluruh hak cipta dilindungi.
 
 @push('js')
 <script nonce="{{ csp_nonce() }}" type="application/javascript">
+    function randColorRGB() {
+        const r = Math.floor(Math.random() * 200) + 55;
+        const g = Math.floor(Math.random() * 200) + 55;
+        const b = Math.floor(Math.random() * 200) + 55;
+        return `rgba(${r}, ${g}, ${b}, 0.7)`;
+    }
+
     const API_PROXY_BASE = '/api-proxy/get';
 
     function apiProxyGet(endpoint, params, callback) {

@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiAktivitasKeagamaanControllerTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_access_detail_data_page()
     {
         $response = $this->get(route('data-pokok.data-presisi-aktivitas-keagamaan.detail_data'));
@@ -17,7 +18,7 @@ class DataPresisiAktivitasKeagamaanControllerTest extends BaseTestCase
             ->assertViewHas('colomn');
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_judul_parameter()
     {
         $judul = 'Test Title <script>alert("xss")</script>';
@@ -28,7 +29,7 @@ class DataPresisiAktivitasKeagamaanControllerTest extends BaseTestCase
             ->assertViewHas('colomn', '');
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_filter_parameter()
     {
         $filter = [
@@ -41,7 +42,7 @@ class DataPresisiAktivitasKeagamaanControllerTest extends BaseTestCase
             ->assertViewHas('colomn', 'agama_id:1');
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_filter_with_different_tipe()
     {
         $filter = [
@@ -54,7 +55,7 @@ class DataPresisiAktivitasKeagamaanControllerTest extends BaseTestCase
             ->assertViewHas('colomn', 'frekwensi_mengikuti_kegiatan_setahun:2');
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_empty_filter()
     {
         $response = $this->get(route('data-pokok.data-presisi-aktivitas-keagamaan.detail_data', ['filter' => []]));

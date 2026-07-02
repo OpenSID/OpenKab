@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Petani",
+                "jumlah": 100,
+                "laki_laki": 70,
+                "perempuan": 30,
+                "persentase_jumlah": "33.33%",
+                "persentase_laki_laki": "70.00%",
+                "persentase_perempuan": "30.00%",
+                "kriteria": "{\"filter[id]\":\"ketenagakerjaan\",\"filter[kriteria]\":\"Petani\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Pedagang",
+                "jumlah": 100,
+                "laki_laki": 50,
+                "perempuan": 50,
+                "persentase_jumlah": "33.33%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"ketenagakerjaan\",\"filter[kriteria]\":\"Pedagang\"}"
+            }
+        }
+    ]
+}

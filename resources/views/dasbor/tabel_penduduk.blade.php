@@ -1,4 +1,4 @@
-<div id="tabel_penduduk_block" class="col-12">
+<div id="tabel_penduduk_block" class="col-12" data-testid="tabel-penduduk-block">
     @include('dasbor.data-desa')
 </div>
 

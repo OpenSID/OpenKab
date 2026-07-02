@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class ArtikelUploadTest extends BaseTestCase
@@ -14,7 +15,7 @@ class ArtikelUploadTest extends BaseTestCase
         Storage::fake('public');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_upload_valid_image()
     {
         $file = UploadedFile::fake()->image('test-artikel.jpg', 800, 600);
@@ -34,7 +35,7 @@ class ArtikelUploadTest extends BaseTestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_rejects_non_image_files()
     {
         $file = UploadedFile::fake()->create('document.pdf', 100);
@@ -47,7 +48,7 @@ class ArtikelUploadTest extends BaseTestCase
         $this->assertNotEquals(200, $response->status());
     }
 
-    /** @test */
+    #[Test]
     public function it_rejects_files_larger_than_2mb()
     {
         $file = UploadedFile::fake()->image('large-image.jpg')->size(3000); // 3MB
@@ -60,7 +61,7 @@ class ArtikelUploadTest extends BaseTestCase
         $this->assertNotEquals(200, $response->status());
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_jpg_format()
     {
         $file = UploadedFile::fake()->image('test.jpg');
@@ -73,7 +74,7 @@ class ArtikelUploadTest extends BaseTestCase
         $response->assertJsonFragment(['success' => true]);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_jpeg_format()
     {
         $file = UploadedFile::fake()->image('test.jpeg');
@@ -86,7 +87,7 @@ class ArtikelUploadTest extends BaseTestCase
         $response->assertJsonFragment(['success' => true]);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_png_format()
     {
         $file = UploadedFile::fake()->image('test.png');
@@ -99,7 +100,7 @@ class ArtikelUploadTest extends BaseTestCase
         $response->assertJsonFragment(['success' => true]);
     }
 
-    /** @test */
+    #[Test]
     public function it_requires_file_parameter()
     {
         $response = $this->post(route('artikel.upload_gambar'), []);
@@ -108,7 +109,7 @@ class ArtikelUploadTest extends BaseTestCase
         $this->assertContains($response->status(), [302, 400, 500]);
     }
 
-    /** @test */
+    #[Test]
     public function upload_returns_valid_url()
     {
         $file = UploadedFile::fake()->image('artikel-gambar.jpg');
@@ -125,7 +126,7 @@ class ArtikelUploadTest extends BaseTestCase
         $this->assertNotEmpty($data['url']);
     }
 
-    /** @test */
+    #[Test]
     public function upload_returns_valid_path()
     {
         $file = UploadedFile::fake()->image('artikel-gambar.jpg');
@@ -142,7 +143,7 @@ class ArtikelUploadTest extends BaseTestCase
         $this->assertStringContainsString('uploads/artikel', $data['path']);
     }
 
-    /** @test */
+    #[Test]
     public function upload_requires_authentication()
     {
         auth()->logout();

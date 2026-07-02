@@ -1,0 +1,11 @@
+{
+    "success": true,
+    "data": [
+        {
+            "attributes": {
+                "pekerjaan": "Pekerjaan",
+                "pengangguran": "Pengangguran"
+            }
+        }
+    ]
+}

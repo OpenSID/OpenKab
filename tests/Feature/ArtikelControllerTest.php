@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class ArtikelControllerTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_access_artikel_index()
     {
         $response = $this->get(route('master-data-artikel.index'));
@@ -16,7 +17,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertSee('Data Artikel');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_artikel_create()
     {
         $response = $this->get(route('master-data-artikel.create'));
@@ -29,7 +30,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertSee('Kategori');
     }
 
-    /** @test */
+    #[Test]
     public function artikel_create_has_empty_kategori_popup_guard()
     {
         $response = $this->get(route('master-data-artikel.create'));
@@ -40,7 +41,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertSee('this.hasShownKategoriKosongPopup = true', false);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_artikel_edit()
     {
         $artikelId = 1; // ID artikel untuk testing
@@ -51,7 +52,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertSee('Edit Artikel');
     }
 
-    /** @test */
+    #[Test]
     public function artikel_index_requires_authentication()
     {
         auth()->logout();
@@ -59,7 +60,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertRedirect(route('login'));
     }
 
-    /** @test */
+    #[Test]
     public function artikel_create_requires_authentication()
     {
         auth()->logout();
@@ -67,7 +68,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertRedirect(route('login'));
     }
 
-    /** @test */
+    #[Test]
     public function artikel_edit_requires_authentication()
     {
         auth()->logout();
@@ -75,7 +76,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertRedirect(route('login'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_upload_gambar_route()
     {
         $response = $this->post(route('artikel.upload_gambar'), [
@@ -86,7 +87,7 @@ class ArtikelControllerTest extends BaseTestCase
         $this->assertContains($response->status(), [302, 400, 500]);
     }
 
-    /** @test */
+    #[Test]
     public function artikel_index_shows_proper_table_structure()
     {
         $response = $this->get(route('master-data-artikel.index'));
@@ -101,7 +102,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertSee('Status');
     }
 
-    /** @test */
+    #[Test]
     public function artikel_create_shows_required_fields()
     {
         $response = $this->get(route('master-data-artikel.create'));
@@ -114,7 +115,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertSee('text-danger'); // asterisk styling
     }
 
-    /** @test */
+    #[Test]
     public function artikel_create_has_upload_functionality()
     {
         $response = $this->get(route('master-data-artikel.create'));
@@ -125,7 +126,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertSee('Gambar Utama');
     }
 
-    /** @test */
+    #[Test]
     public function artikel_edit_loads_with_id()
     {
         $artikelId = 123;
@@ -137,7 +138,7 @@ class ArtikelControllerTest extends BaseTestCase
         $response->assertSee((string) $artikelId);
     }
 
-    /** @test */
+    #[Test]
     public function artikel_routes_are_registered()
     {
         // Check if routes exist

@@ -348,6 +348,8 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         
         Route::prefix('papan')->group(function () {            
             Route::get('detail_data', [App\Http\Controllers\DataPresisiPapanController::class, 'detailData'])->name('data-pokok.data-presisi-papan.detail_data');            
+            Route::get('detail', [App\Http\Controllers\DataPresisiPapanController::class, 'detail'])->name('data-pokok.data-presisi-papan.detail_datasandang');
+            Route::get('cetak', [App\Http\Controllers\DataPresisiPapanController::class, 'cetak'])->name('data-pokok.data-presisi-papan.cetak');
         })
             ->middleware(['permission:datapresisi-papan-read']);
 
@@ -392,15 +394,15 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::get('/suplemen/form/{id?}', [SuplemenController::class, 'form'])->name('suplemen.form');
 
     Route::get('/point', [PointController::class, 'index'])->name('point');
-    Route::get('/point/form/', [PointController::class, 'form'])->name('point.create');
-    Route::get('/point/form/{id}', [PointController::class, 'edit'])->name('point.create');
-    Route::get('/point/sub/{id?}', [PointController::class, 'sub'])->name('point.create');
+    Route::get('/point/form/', [PointController::class, 'form'])->name('point.form');
+    Route::get('/point/form/{id}', [PointController::class, 'edit'])->name('point.edit');
+    Route::get('/point/sub/{id?}', [PointController::class, 'sub'])->name('point.sub');
     Route::get('/point/rincian/{id}', [PointController::class, 'detail'])->name('point.detail');
     Route::get('/point/lock/{id}/{status}', [PointController::class, 'lock'])->name('point.lock');
-    Route::post('/point/form', [PointController::class, 'store'])->name('point.create');
+    Route::post('/point/form', [PointController::class, 'store'])->name('point.store');
     Route::post('/point/update/{id}', [PointController::class, 'update'])->name('point.update');
-    Route::post('/point/sub/{id?}', [PointController::class, 'store'])->name('point.create');
-    Route::post('/point/form/{id}', [PointController::class, 'update'])->name('point.update');
+    Route::post('/point/sub/{id?}', [PointController::class, 'store'])->name('point.sub_store');
+    Route::post('/point/form/{id}', [PointController::class, 'update'])->name('point.form_update');
 
     Route::get('/plan/{parent?}', [PlanController::class, 'index'])->name('plan');
     Route::get('/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'ajax_lokasi_maps'])->name('plan.ajax_lokasi_maps');
@@ -429,14 +431,14 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/kependudukan', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
 
     Route::get('/rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
-    Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm');
+    Route::get('/statistik-rtm', [PresisiController::class, 'rtm'])->name('presisi.rtm_statistik');
     Route::get('/keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
-    Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
+Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga_statistik_outer');
 
     Route::get('/kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
     Route::get('/kesehatan/{kuartal}/{tahun}/{id}/{kabupaten?}/{kecamatan?}/{desa?}', [PresisiController::class, 'kesehatan']);
     Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
-    Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
+Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan_statistik_outer');
     Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
 });
 
@@ -453,15 +455,24 @@ Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::post('download/{download}', DownloadCounterController::class)->name('web.download.counter');
 });
 
-Route::get('/module/penduduk/{id}', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
-Route::get('/statistik-penduduk', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan');
-Route::get('/module/rtm/{id}', [PresisiController::class, 'rtm'])->name('presisi.rtm');
-Route::get('/module/bantuan/{id}', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
-Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
-Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
-Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga');
-Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
-Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan');
+Route::get('/module/penduduk/{id}', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan_module');
+Route::get('/statistik-penduduk', [PresisiController::class, 'kependudukan'])->name('presisi.kependudukan_statistik');
+Route::get('/module/rtm/{id}', [PresisiController::class, 'rtm'])->name('presisi.rtm_module');
+Route::get('/module/bantuan/{id}', [PresisiController::class, 'bantuan'])->name('presisi.bantuan_module');
+Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan_statistik');
+Route::get('/module/keluarga/{id}', [PresisiController::class, 'keluarga'])->name('presisi.keluarga_module');
+Route::get('/statistik-keluarga', [PresisiController::class, 'keluarga'])->name('presisi.keluarga_statistik');
+Route::get('/module/kesehatan/{id}', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan_module');
+Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->name('presisi.kesehatan_statistik');
 
 // Image proxy route with rate limiting
 Route::middleware('throttle:30,1')->get('/image-proxy', [ImageProxyController::class, 'proxy'])->name('image.proxy');
+
+// Pest Browser Testing - Quick login route (hanya untuk testing)
+if (app()->environment('testing')) {
+    Route::get('/_pest/login/{userId}', function ($userId) {
+        $user = App\Models\User::findOrFail($userId);
+        Auth::login($user);
+        return response(status: 200);
+    })->middleware('web');
+}

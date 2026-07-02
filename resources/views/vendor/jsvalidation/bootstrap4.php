@@ -1,5 +1,5 @@
-<script nonce="<?= csp_nonce() ?>">
-    document.addEventListener("DOMContentLoaded", function(event) {
+<script>
+    jQuery(document).ready(function(){
 
         $("<?= $validator['selector']; ?>").each(function() {
             $(this).validate({
@@ -24,11 +24,11 @@
                 ignore: "<?= $validator['ignore']; ?>",
                 <?php endif; ?>
 
-
+                
                 unhighlight: function(element) {
                     $(element).closest('.form-control').removeClass('is-invalid').addClass('is-valid');
                 },
-
+                
                 success: function (element) {
                     $(element).closest('.form-control').removeClass('is-invalid').addClass('is-valid'); // remove the Boostrap error class from the control group
                 },

@@ -1,0 +1,11 @@
+{
+    "success": true,
+    "data": [
+        {
+            "attributes": {
+                "sekolah": "Sekolah",
+                "madrasah": "Madrasah"
+            }
+        }
+    ]
+}

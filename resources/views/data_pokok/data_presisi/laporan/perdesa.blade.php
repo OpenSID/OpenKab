@@ -22,10 +22,10 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-3">
-                            <button id="cetak" type="button" class="btn btn-primary btn-sm mt-4" data-url="">
+                            <button id="cetak" type="button" class="btn btn-primary btn-sm mt-4" data-url="" data-testid="btn-cetak">
                                 <i class="fa fa-print"></i> Cetak
                             </button>
-                            <button type="button" id="export-excel" class="btn btn-info btn-sm mt-4">
+                            <button type="button" id="export-excel" class="btn btn-info btn-sm mt-4" data-testid="btn-export-excel">
                                 <i class="fa fa-file-excel"></i> Excel
                             </button>
                         </div>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="laporanTable">
+                        <table class="table table-striped" id="laporanTable" data-testid="datatable-laporan-perdesa">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -58,6 +58,14 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/laporan-perdesa' }}");
 
             var laporanTable = $('#laporanTable').DataTable({
@@ -75,9 +83,9 @@
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
                             // "filter[config_id]": "{{ session('desa.id') ?? '' }}",
-                            "kode_kabupaten": "{{ session('kabupaten.kode_kabupaten') ?? '' }}",
-                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                            "config_desa": "{{ session('desa.id') ?? '' }}",
+                            "kode_kabupaten": kodeKabupaten,
+                            "kode_kecamatan": kodeKecamatan,
+                            "config_desa": configDesa,
                             "sort": row.order[0].dir === 'desc' ? '-nama_desa' : 'nama_desa'
                         };
                     },

@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DetailDataPresisiAktivitasKeagamaanRequestTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function it_validates_judul_as_nullable_string_max_255()
     {
         // Valid judul
@@ -20,7 +21,7 @@ class DetailDataPresisiAktivitasKeagamaanRequestTest extends BaseTestCase
         $response->assertSessionHasErrors('judul');
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_filter_as_nullable_array()
     {
         // Valid filter
@@ -33,7 +34,7 @@ class DetailDataPresisiAktivitasKeagamaanRequestTest extends BaseTestCase
         $response->assertSessionHasErrors('filter');
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_filter_tipe_required_with_filter_and_in_allowed_values()
     {
         // Valid tipe
@@ -54,7 +55,7 @@ class DetailDataPresisiAktivitasKeagamaanRequestTest extends BaseTestCase
         $response->assertSessionHasErrors('filter.tipe');
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_filter_nilai_required_with_filter_as_string()
     {
         // Valid nilai

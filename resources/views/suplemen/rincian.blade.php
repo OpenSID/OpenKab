@@ -11,7 +11,7 @@
                 <tr>
                     <td>Sasaran Terdata</td>
                     <td>:</td>
-                    <td>{{ $sasaran[$suplemen->sasaran] }}</td>
+                    <td>{{ $suplemen->sasaran }}</td>
                 </tr>
                 <tr>
                     <td>Keterangan</td>

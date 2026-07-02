@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
+use App\Providers\AppServiceProvider;
 use App\Services\CaptchaService;
 use App\Services\OtpService;
 use App\Services\TwoFactorService;
@@ -32,7 +32,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = AppServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -147,14 +147,17 @@ class LoginController extends Controller
 
         if ($successLogin) {
             try {
+                $passwordRule = Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols();
+
+                    $passwordRule->uncompromised();
+
                 $request->validate(['password' => [
                     'required',
-                    Password::min(8)
-                        ->letters()
-                        ->mixedCase()
-                        ->numbers()
-                        ->symbols()
-                        ->uncompromised(),
+                    $passwordRule,
                 ]]);
                 session(['weak_password' => false]);
             } catch (ValidationException $th) {

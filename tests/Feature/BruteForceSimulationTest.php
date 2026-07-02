@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -39,10 +40,7 @@ class BruteForceSimulationTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * Simulasi brute force pada API login - akun terkunci setelah 5 gagal attempt
-     */
+    #[Test]
     public function account_locked_after_multiple_failed_api_login_attempts()
     {
         Config::set('app.account_lockout_max_attempts', 5);
@@ -71,10 +69,7 @@ class BruteForceSimulationTest extends TestCase
         $this->assertNotNull($this->user->lockout_expires_at);
     }
 
-    /**
-     * @test
-     * Simulasi brute force - akun terkunci tidak bisa login meski password benar
-     */
+    #[Test]
     public function locked_account_rejects_even_correct_password()
     {
         Config::set('app.account_lockout_max_attempts', 3);
@@ -105,10 +100,7 @@ class BruteForceSimulationTest extends TestCase
         $this->assertStringContainsString('TERKUNCI', $response->json('message'));
     }
 
-    /**
-     * @test
-     * Simulasi successful login resets failed attempts - verify reset method works
-     */
+    #[Test]
     public function successful_login_resets_failed_attempts()
     {
         // Test ini memverifikasi bahwa method resetFailedLogins() bekerja
@@ -135,10 +127,7 @@ class BruteForceSimulationTest extends TestCase
         $this->assertFalse($this->user->isLocked());
     }
 
-    /**
-     * @test
-     * Simulasi distributed attack - different IPs tapi same User-Agent tetap di-rate limit
-     */
+    #[Test]
     public function resists_distributed_attack_with_same_user_agent()
     {
         Config::set('rate-limiter.enabled', true);
@@ -176,10 +165,7 @@ class BruteForceSimulationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * Simulasi VPN rotation - different IPs tapi same browser fingerprint tetap di-rate limit
-     */
+    #[Test]
     public function resists_vpn_ip_rotation_attack()
     {
         Config::set('rate-limiter.enabled', true);
@@ -218,10 +204,7 @@ class BruteForceSimulationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * Simulasi brute force dengan username (bukan email)
-     */
+    #[Test]
     public function brute_force_protection_works_with_username()
     {
         Config::set('app.account_lockout_max_attempts', 3);
@@ -251,10 +234,7 @@ class BruteForceSimulationTest extends TestCase
         $response->assertJson(['locked' => true]);
     }
 
-    /**
-     * @test
-     * Simulasi progressive delay - delay meningkat setiap failed attempt
-     */
+    #[Test]
     public function progressive_delay_increases_with_failed_attempts()
     {
         Config::set('app.progressive_delay_base_seconds', 2);
@@ -285,10 +265,7 @@ class BruteForceSimulationTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     * Simulasi lockout expiration - verify lockout has expiration time set
-     */
+    #[Test]
     public function account_lockout_has_expiration_time()
     {
         // Clear cache dari test sebelumnya
@@ -315,10 +292,7 @@ class BruteForceSimulationTest extends TestCase
         $this->assertLessThanOrEqual(now()->addMinutes(15), $this->user->lockout_expires_at);
     }
 
-    /**
-     * @test
-     * Simulasi different accounts independent lockout - verify second account not locked
-     */
+    #[Test]
     public function different_accounts_have_independent_lockout()
     {
         // Clear cache dari test sebelumnya
@@ -356,10 +330,7 @@ class BruteForceSimulationTest extends TestCase
         $this->assertFalse($user2->isLocked());
     }
 
-    /**
-     * @test
-     * Simulasi rate limit response headers
-     */
+    #[Test]
     public function rate_limit_responses_include_proper_headers()
     {
         Config::set('rate-limiter.enabled', true);

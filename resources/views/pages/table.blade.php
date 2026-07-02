@@ -1,5 +1,5 @@
 <div class="table-responsive">
-        <table class="table" id="pages-table">
+        <table class="table" id="pages-table" data-testid="datatable-halaman">
             <thead>
             <tr>
                 <th>No</th>

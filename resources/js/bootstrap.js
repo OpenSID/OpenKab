@@ -4,16 +4,21 @@ import * as bootstrap from 'bootstrap';
 import 'admin-lte/dist/js/adminlte.min';
 import 'alpinejs/dist/cdn.min';
 import Swal from 'sweetalert2/dist/sweetalert2.min';
-import 'select2/dist/js/select2.full.min';
-import 'datatables.net/js/jquery.dataTables.min';
-import 'datatables.net-bs4/js/dataTables.bootstrap4.min';
-import 'datatables.net-responsive-bs4/js/responsive.bootstrap4.min';
-import 'datatables.net-select-bs4/js/select.bootstrap4.min';
+import 'datatables.net/js/jquery.dataTables.mjs';
+import 'datatables.net-bs4/js/dataTables.bootstrap4.mjs';
+import 'datatables.net-responsive/js/dataTables.responsive.mjs';
+import 'datatables.net-responsive-bs4/js/responsive.bootstrap4.mjs';
+import 'datatables.net-select/js/dataTables.select.mjs';
+import 'datatables.net-select-bs4/js/select.bootstrap4.mjs';
 import 'daterangepicker/daterangepicker';
 import 'chart.js/dist/Chart.min';
 import 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min';
 import 'moment/min/moment.min';
 import './jsvalidation.min';
+
+// Load select2 (import via CJS bridge to avoid Rollup CJS detection issues)
+import select2Factory from './select2-bridge';
+if (typeof select2Factory === 'function') select2Factory(window, $);
 
 window.isEmpty = _.isEmpty;
 window._ = _;

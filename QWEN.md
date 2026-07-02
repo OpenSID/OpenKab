@@ -191,13 +191,6 @@ DB_DATABASE=testing_db
 DB_USERNAME=root
 DB_PASSWORD=secret
 
-# OpenSID Combined Database (secondary)
-OPENKAB_DB_HOST=127.0.0.1
-OPENKAB_DB_PORT=3 Playwright configuration
-OPENKAB_DB_DATABASE=testing_gabungan_db
-OPENKAB_DB_USERNAME=root
-OPENKAB_DB_PASSWORD=secret
-
 # Map Configuration
 LATTITUDE_MAP=-8.459556
 LONGITUDE_MAP=115.046600

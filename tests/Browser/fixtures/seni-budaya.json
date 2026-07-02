@@ -1,0 +1,35 @@
+{
+    "data": [
+        {
+            "type": "data_presisi_rtm",
+            "id": "1",
+            "attributes": {
+                "config_id": 1,
+                "nik": "0000000000000001",
+                "no_kk": "0000000000000001",
+                "kepala_keluarga": "I GEDE ADI SUARDANA",
+                "dtks": "Tidak Terdaftar",
+                "jumlah_anggota": 16,
+                "jenis_seni_yang_dikuasai": {
+                    "jenis_seni_value": "Tari Tradisional"
+                },
+                "jumlah_penghasilan_dari_seni": "TIDAK TAHU",
+                "jumlah_kk": 6,
+                "alamat": "BR DINAS BAJERA KAJA RT 001 / RW 001",
+                "dusun": "BR DINAS BAJERA KAJA",
+                "rw": "001",
+                "rt": "001",
+                "status": "Belum Diisi",
+                "tanggal_pengisian": "-",
+                "tgl_daftar": "2025-08-29 02:05:01"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

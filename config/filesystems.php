@@ -54,7 +54,7 @@ return [
 
         'backups' => [
             'driver' => 'local',
-            'root' => storage_path('app/backups/' . env('APP_NAME', 'laravel-backup')),
+            'root' => storage_path('app/backups'),
             'throw' => false,
         ],
 

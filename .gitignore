@@ -33,3 +33,4 @@ AGENTS.md
 tests/Browser/Screenshots/
 tests/Browser/screenshots/
 tests/Browser/.session_state.json
+graphify-out

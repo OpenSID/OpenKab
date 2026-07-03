@@ -9,10 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         $permissions = [
-            'pengaturan-backup-read',
-            'pengaturan-backup-write',
-            'pengaturan-backup-edit',
-            'pengaturan-backup-delete',
+            'pengaturan-database-read',
+            'pengaturan-database-write',
+            'pengaturan-database-edit',
+            'pengaturan-database-delete',
         ];
 
         foreach ($permissions as $name) {
@@ -29,10 +29,10 @@ return new class extends Migration
     public function down(): void
     {
         Permission::whereIn('name', [
-            'pengaturan-backup-read',
-            'pengaturan-backup-write',
-            'pengaturan-backup-edit',
-            'pengaturan-backup-delete',
+            'pengaturan-database-read',
+            'pengaturan-database-write',
+            'pengaturan-database-edit',
+            'pengaturan-database-delete',
         ])->delete();
     }
 };

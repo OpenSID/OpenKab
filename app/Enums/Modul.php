@@ -446,9 +446,9 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',
-                    'text' => 'Backup Database',
-                    'url' => 'pengaturan/backup',
-                    'permission' => 'pengaturan-backup',
+                    'text' => 'Database',
+                    'url' => 'pengaturan/database',
+                    'permission' => 'pengaturan-database',
                 ],
             ],
         ],

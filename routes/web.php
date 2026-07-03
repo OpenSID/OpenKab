@@ -91,13 +91,13 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show'])->middleware('easyauthorize:pengaturan-activities');
         Route::resource('settings', App\Http\Controllers\SettingController::class)->except(['show', 'create', 'delete'])->middleware('easyauthorize:pengaturan-settings');
 
-        Route::prefix('backup')->group(function () {
-            Route::get('/', [App\Http\Controllers\BackupController::class, 'index'])->name('backup.index')->middleware('easyauthorize:pengaturan-backup');
-            Route::post('/backup', [App\Http\Controllers\BackupController::class, 'run'])->name('backup.store')->middleware('easyauthorize:pengaturan-backup');
-            Route::get('/download/{filename}', [App\Http\Controllers\BackupController::class, 'download'])->name('backup.show')->middleware('easyauthorize:pengaturan-backup');
-            Route::post('/restore/{filename}', [App\Http\Controllers\BackupController::class, 'restore'])->name('backup.update')->middleware('easyauthorize:pengaturan-backup');
-            Route::post('/upload-restore', [App\Http\Controllers\BackupController::class, 'uploadAndRestore'])->name('backup.upload')->middleware('easyauthorize:pengaturan-backup');
-            Route::delete('/{filename}', [App\Http\Controllers\BackupController::class, 'destroy'])->name('backup.destroy')->middleware('easyauthorize:pengaturan-backup');
+        Route::prefix('database')->group(function () {
+            Route::get('/', [App\Http\Controllers\BackupController::class, 'index'])->name('backup.index')->middleware('easyauthorize:pengaturan-database');
+            Route::post('/backup', [App\Http\Controllers\BackupController::class, 'run'])->name('backup.store')->middleware('easyauthorize:pengaturan-database');
+            Route::get('/download/{filename}', [App\Http\Controllers\BackupController::class, 'download'])->name('backup.show')->middleware('easyauthorize:pengaturan-database');
+            Route::post('/restore/{filename}', [App\Http\Controllers\BackupController::class, 'restore'])->name('backup.update')->middleware('easyauthorize:pengaturan-database');
+            Route::post('/upload-restore', [App\Http\Controllers\BackupController::class, 'uploadAndRestore'])->name('backup.upload')->middleware('easyauthorize:pengaturan-database');
+            Route::delete('/{filename}', [App\Http\Controllers\BackupController::class, 'destroy'])->name('backup.destroy')->middleware('easyauthorize:pengaturan-database');
         });
 
         // OTP & 2FA Routes - combined into one page

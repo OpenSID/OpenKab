@@ -20,7 +20,7 @@ class BackupController extends AppBaseController
 {
     use UploadedFile;
 
-    protected $permission = 'pengaturan-backup';
+    protected $permission = 'pengaturan-database';
 
     protected string $diskName = 'backups';
 

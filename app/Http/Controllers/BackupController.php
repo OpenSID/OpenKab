@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RestoreBackupRequest;
 use App\Traits\UploadedFile;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -108,6 +109,14 @@ class BackupController extends AppBaseController
                 throw new Exception('Tidak dapat membuka file backup.');
             }
 
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $entry = $zip->getNameIndex($i);
+                if (str_contains($entry, '..') || str_starts_with($entry, '/')) {
+                    $zip->close();
+                    throw new Exception('File backup tidak valid.');
+                }
+            }
+
             $zip->extractTo($tempPath);
             $zip->close();
 
@@ -128,7 +137,7 @@ class BackupController extends AppBaseController
         }
     }
 
-    public function uploadAndRestore(Request $request): JsonResponse
+    public function uploadAndRestore(RestoreBackupRequest $request): JsonResponse
     {
         $this->pathFolder = 'backups_upload';
         $relativePath = $this->uploadFile($request, 'file');
@@ -137,13 +146,24 @@ class BackupController extends AppBaseController
             return $this->sendError('Gagal mengupload file.', 500);
         }
 
-        $fullPath = storage_path('app/public/' . $relativePath);
+        $publicPath = storage_path('app/public/' . $relativePath);
+        $tempZipPath = storage_path('app/backups/temp_upload_' . uniqid() . '.zip');
         $tempPath = storage_path('app/backups/temp_restore_' . uniqid());
+
+        rename($publicPath, $tempZipPath);
 
         try {
             $zip = new ZipArchive;
-            if ($zip->open($fullPath) !== true) {
+            if ($zip->open($tempZipPath) !== true) {
                 throw new Exception('Tidak dapat membuka file backup.');
+            }
+
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $entry = $zip->getNameIndex($i);
+                if (str_contains($entry, '..') || str_starts_with($entry, '/')) {
+                    $zip->close();
+                    throw new Exception('File backup tidak valid.');
+                }
             }
 
             $zip->extractTo($tempPath);
@@ -153,14 +173,14 @@ class BackupController extends AppBaseController
             $this->restoreStorageFiles($tempPath);
 
             $this->cleanTempDir($tempPath);
-            @unlink($fullPath);
+            @unlink($tempZipPath);
 
             Log::warning('Restore database dan storage dari upload oleh ' . (auth()->user()?->username ?? 'system'));
 
             return $this->sendSuccess('Restore database dan storage berhasil.');
         } catch (Exception $e) {
             $this->cleanTempDir($tempPath);
-            @unlink($fullPath);
+            @unlink($tempZipPath);
 
             Log::error('Restore dari upload gagal: ' . $e->getMessage());
 

@@ -244,10 +244,16 @@ class BackupController extends AppBaseController
             return $sqlFiles[0];
         }
 
-        $dumperFiles = glob($tempPath . '/*/db-dumps/*.sql');
+        $dumperFiles = glob($tempPath . '/db-dumps/*.sql');
 
         if (! empty($dumperFiles)) {
             return $dumperFiles[0];
+        }
+
+        $nestedDumperFiles = glob($tempPath . '/*/db-dumps/*.sql');
+
+        if (! empty($nestedDumperFiles)) {
+            return $nestedDumperFiles[0];
         }
 
         return null;

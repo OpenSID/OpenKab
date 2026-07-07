@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use App\Http\Transformers\IdentitasTransformer;
 use App\Http\Transformers\SettingTransformer;
+use App\Listeners\MenuListener;
 use App\Models\Identitas;
 use App\Models\Setting;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
@@ -19,6 +21,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Observers\VisitorObserver;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Shetabit\Visitor\Models\Visit;
 
 class AppServiceProvider extends ServiceProvider
@@ -43,7 +46,8 @@ class AppServiceProvider extends ServiceProvider
         $this->bootHttps();
         $this->addValidation();
         $this->addLogQuery();
-        
+        $this->registerMenuListener();
+
         try {
             $this->shareViewIdentitas();
         } catch (Exception $e) {
@@ -53,6 +57,15 @@ class AppServiceProvider extends ServiceProvider
         if (App::runningInConsole()) {
             activity()->disableLogging();
         }
+    }
+
+    /**
+     * Register MenuListener for BuildingMenu event.
+     * Required for Laravel 11+ where vendor event auto-discovery may not work.
+     */
+    private function registerMenuListener(): void
+    {
+        Event::listen(BuildingMenu::class, MenuListener::class);
     }
 
     private function shareViewIdentitas(): void

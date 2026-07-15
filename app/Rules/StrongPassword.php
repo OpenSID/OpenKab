@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Models\PasswordHistory;
+use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
@@ -31,6 +32,11 @@ class StrongPassword implements Rule
     protected array $weakPatterns;
 
     /**
+     * Specific user to check history against (for unauthenticated contexts).
+     */
+    protected ?User $user = null;
+
+    /**
      * Common passwords list.
      */
     protected array $commonPasswords;
@@ -41,13 +47,15 @@ class StrongPassword implements Rule
     public function __construct(
         ?int $minLength = null,
         ?bool $checkHibp = null,
-        ?int $historySize = null
+        ?int $historySize = null,
+        ?User $user = null
     ) {
         $this->minLength = $minLength ?? config('password.min_length', 12);
         $this->checkHibp = $checkHibp ?? config('password.check_hibp', true);
-        $this->historySize = $historySize ?? config('password.history_count', 5);
+        $this->historySize = $historySize ?? config('password.history_count', 10);
         $this->weakPatterns = config('password.weak_patterns', []);
         $this->commonPasswords = config('password.common_passwords', []);
+        $this->user = $user;
     }
 
     /**
@@ -168,11 +176,12 @@ class StrongPassword implements Rule
      */
     protected function isNotInHistory(string $password): bool
     {
-        if (!auth()->check()) {
-            return true; // No logged in user to check history for
+        $user = $this->user ?? (auth()->check() ? auth()->user() : null);
+
+        if (!$user) {
+            return true;
         }
 
-        $user = auth()->user();
         $passwordHistory = PasswordHistory::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->limit($this->historySize)

@@ -22,10 +22,15 @@ class ResetPasswordRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = null;
+        if ($this->has('email')) {
+            $user = \App\Models\User::where('email', $this->input('email'))->first();
+        }
+
         return [
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'string', 'confirmed', new StrongPassword()],
+            'password' => ['required', 'string', 'confirmed', new StrongPassword(user: $user)],
         ];
     }
 

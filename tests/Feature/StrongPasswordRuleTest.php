@@ -223,4 +223,85 @@ class StrongPasswordRuleTest extends TestCase
         // New password should pass
         $this->assertTrue($rule->passes('password', 'NewSecurePass456!'));
     }
+
+    /**
+     * Test password history check with $user parameter (unauthenticated).
+     */
+    public function test_password_history_with_user_parameter(): void
+    {
+        $user = User::factory()->create();
+        $user->passwordHistory()->create([
+            'password' => \Illuminate\Support\Facades\Hash::make('OldSecurePass123!'),
+            'reason' => 'password_change',
+        ]);
+
+        // Not logged in — history check should use the $user parameter
+        $rule = new StrongPassword(checkHibp: false, user: $user);
+
+        $this->assertFalse($rule->passes('password', 'OldSecurePass123!'));
+        $this->assertTrue($rule->passes('password', 'NewSecurePass456!'));
+    }
+
+    /**
+     * Test password history check skips when no user context.
+     */
+    public function test_password_history_skips_when_no_user(): void
+    {
+        // No user passed, not logged in — history check should allow
+        $rule = new StrongPassword(checkHibp: false);
+
+        $this->assertTrue($rule->passes('password', 'AnyPassword123!'));
+    }
+
+    /**
+     * Test password check against configured history count (10).
+     */
+    public function test_password_history_checks_against_all_entries(): void
+    {
+        $user = User::factory()->create();
+        $historyCount = config('password.history_count', 10);
+
+        for ($i = 0; $i < $historyCount; $i++) {
+            $user->passwordHistory()->create([
+                'password' => \Illuminate\Support\Facades\Hash::make("UsedP@ssw0rd{$i}!"),
+                'reason' => 'password_change',
+            ]);
+        }
+
+        $rule = new StrongPassword(checkHibp: false, user: $user);
+
+        for ($i = 0; $i < $historyCount; $i++) {
+            $this->assertFalse(
+                $rule->passes('password', "UsedP@ssw0rd{$i}!"),
+                "Password 'UsedP@ssw0rd{$i}!' should be rejected"
+            );
+        }
+
+        $this->assertTrue($rule->passes('password', 'BrandN3wP@ss!'));
+    }
+
+    /**
+     * Test history check respects custom historySize parameter.
+     */
+    public function test_password_history_respects_custom_size(): void
+    {
+        $user = User::factory()->create();
+
+        // Create 10 history entries
+        for ($i = 0; $i < 10; $i++) {
+            $user->passwordHistory()->create([
+                'password' => \Illuminate\Support\Facades\Hash::make("UsedP@ssw0rd{$i}!"),
+                'reason' => 'password_change',
+            ]);
+        }
+
+        // Only check last 3
+        $rule = new StrongPassword(checkHibp: false, historySize: 3, user: $user);
+
+        // The 10th entry (most recent, index 9) should be blocked
+        $this->assertFalse($rule->passes('password', 'UsedP@ssw0rd9!'));
+
+        // The 1st entry (oldest, index 0) should be allowed (outside the 3)
+        $this->assertTrue($rule->passes('password', 'UsedP@ssw0rd0!'));
+    }
 }

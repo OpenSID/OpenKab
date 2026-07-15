@@ -90,6 +90,7 @@
         const headers = @include('layouts.components.header_bearer_api_gabungan');
         var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pendidikan' }}");
         url.searchParams.set("filter[rtm_id]", "{{ $data->rtm_id }}");
+        url.searchParams.set("filter[tahun]", "{{ $data->tahun }}");
         var pendidikan = $('#detail-pendidikan').DataTable({
             processing: true,
             serverSide: true,

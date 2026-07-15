@@ -147,14 +147,24 @@ class StrongPasswordRuleTest extends TestCase
     public function test_error_messages(): void
     {
         $rule = new StrongPassword();
-        $messages = $rule->message();
 
-        $this->assertArrayHasKey('length', $messages);
-        $this->assertArrayHasKey('complexity', $messages);
-        $this->assertArrayHasKey('hibp', $messages);
-        $this->assertArrayHasKey('history', $messages);
-        $this->assertArrayHasKey('weak_pattern', $messages);
-        $this->assertArrayHasKey('common', $messages);
+        $this->assertFalse($rule->passes('password', 'short1A@'));
+        $this->assertStringContainsString('minimal 12', $rule->message());
+
+        $this->assertFalse($rule->passes('password', 'nouppercase1!@#'));
+        $this->assertStringContainsString('huruf kapital', $rule->message());
+
+        $this->assertFalse($rule->passes('password', 'NOLOWERCASE1!@#'));
+        $this->assertStringContainsString('huruf kecil', $rule->message());
+
+        $this->assertFalse($rule->passes('password', 'NoNumber!@#abc'));
+        $this->assertStringContainsString('angka', $rule->message());
+
+        $this->assertFalse($rule->passes('password', 'NoSpecialChar1abc'));
+        $this->assertStringContainsString('karakter spesial', $rule->message());
+
+        $generic = (new StrongPassword())->message();
+        $this->assertIsString($generic);
     }
 
     /**

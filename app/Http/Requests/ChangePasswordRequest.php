@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\MatchOldPassword;
 use App\Rules\StrongPassword;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ChangePasswordRequest extends FormRequest
@@ -14,6 +15,16 @@ class ChangePasswordRequest extends FormRequest
     public function authorize(): bool
     {
         return auth()->check();
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        session()->flash('error', $validator->errors()->first());
+
+        parent::failedValidation($validator);
     }
 
     /**

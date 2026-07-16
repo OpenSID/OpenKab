@@ -75,6 +75,8 @@
                                     <th>KUNJUNGAN KE DOKTER DALAM 1 TAHUN</th>
                                     <th>KONDISI FISIK SEJAK LAHIR</th>
                                     <th>STATUS GIZI BALITA</th>
+                                    <th>TANGGAL PENGISIAN</th>
+                                    <th>STATUS PENGISIAN</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -130,6 +132,13 @@
             }],
             columns: [
                 {
+                    data: null,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
                     data: 'attributes.nik',
                     orderable: false,
                 },
@@ -183,7 +192,7 @@
                 },
             ],
             order: [
-                [10, 'asc']
+                [11, 'asc']
             ]
         });
         kesehatan.on('draw.dt', function() {

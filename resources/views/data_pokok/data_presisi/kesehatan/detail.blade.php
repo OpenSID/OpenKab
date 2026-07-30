@@ -41,7 +41,7 @@
                                         <td>{{ $data->alamat }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Jumalah Anggota</td>
+                                        <td>Jumlah Anggota</td>
                                         <td>:</td>
                                         <td>{{ $data->jumlah_anggota }}</td>
                                     </tr>
@@ -75,6 +75,8 @@
                                     <th>KUNJUNGAN KE DOKTER DALAM 1 TAHUN</th>
                                     <th>KONDISI FISIK SEJAK LAHIR</th>
                                     <th>STATUS GIZI BALITA</th>
+                                    <th>TANGGAL PENGISIAN</th>
+                                    <th>STATUS PENGISIAN</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -92,6 +94,7 @@
         const headers = @include('layouts.components.header_bearer_api_gabungan');
         var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/kesehatan' }}");
         url.searchParams.set("filter[rtm_id]", "{{ $data->rtm_id }}");
+        url.searchParams.set("filter[tahun]", "{{ $data->tahun }}");
         var kesehatan = $('#detail-kesehatan').DataTable({
             processing: true,
             serverSide: true,
@@ -128,6 +131,13 @@
                 searchable: false,
             }],
             columns: [
+                {
+                    data: null,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
                 {
                     data: 'attributes.nik',
                     orderable: false,
@@ -182,7 +192,7 @@
                 },
             ],
             order: [
-                [10, 'asc']
+                [11, 'asc']
             ]
         });
         kesehatan.on('draw.dt', function() {

@@ -14,5 +14,6 @@ Di rilis ini, versi 2607.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perubahan Teknis
 
+1. [#1095](https://github.com/OpenSID/OpenKab/issues/1095) Terapkan Password History (10 Kata Sandi Terakhir).
 
 

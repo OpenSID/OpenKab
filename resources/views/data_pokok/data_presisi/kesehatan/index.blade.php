@@ -126,6 +126,7 @@
                             'alamat': d.alamat,
                             'jumlah_anggota': d.jumlah_anggota,
                             'jumlah_kk': d.jumlah_kk,
+                            'tahun': $('#filter-tahun').val(),
                         }
                         let jsonData = encodeURIComponent(JSON.stringify(obj));
                         const _url =

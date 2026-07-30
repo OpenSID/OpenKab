@@ -295,7 +295,8 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::prefix('laporan')->group(function () {
         Route::prefix('desa-aktif')->group(function () {
             Route::get('', [App\Http\Controllers\LaporanDesaAktifController::class, 'index'])->name('laporan.desa-aktif.index');
-            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');            
+            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');
+            Route::get('export-excel', [App\Http\Controllers\LaporanDesaAktifController::class, 'exportExcel'])->name('laporan.desa-aktif.export-excel');
         });
     });
     Route::prefix('data-presisi')->group(function () {

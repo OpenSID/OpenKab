@@ -41,7 +41,7 @@
                                         <td>{{ $data->alamat }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Jumalah Anggota</td>
+                                        <td>Jumlah Anggota</td>
                                         <td>:</td>
                                         <td>{{ $data->jumlah_anggota }}</td>
                                     </tr>
@@ -101,17 +101,14 @@
     <script nonce="{{ csp_nonce() }}">
     document.addEventListener("DOMContentLoaded", function(event) {
         const headers = @include('layouts.components.header_bearer_api_gabungan');
-        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pangan/rtm' }}");
-        url.searchParams.set("filter[rtm_id]", "{{ $data->rtm_id }}");
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pangan/anggota' }}");
+        url.searchParams.set("filter[id_rtm]", "{{ $data->no_kartu_rumah }}");
+
         var pangan = $('#detail-pangan').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
-            searchPanes: {
-                viewTotal: false,
-                columns: [0]
-            },
             ajax: {
                 url: url.href,
                 headers: headers,
@@ -146,41 +143,30 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {
-                    data: 'attributes.nik',
-                    orderable: false,
-                },
-                {
-                    data: 'attributes.no_kk',
-                    orderable: false,
-                },
-                {
-                    data: 'attributes.nama',
-                    orderable: false,
-                },
-                { data: 'attributes.jenis_lahan', orderable: false },
-                { data: 'attributes.luas_lahan', orderable: false },
-                { data: 'attributes.luas_tanam', orderable: false },
-                { data: 'attributes.status_lahan', orderable: false },
-                { data: 'attributes.komoditi_utama_tanaman_pangan', orderable: false },
-                { data: 'attributes.komoditi_tanaman_pangan_lainnya', orderable: false },
-                { data: 'attributes.jumlah_berdasarkan_jenis_komoditi', orderable: false },
-                { data: 'attributes.usia_komoditi', orderable: false },
-                { data: 'attributes.jenis_peternakan', orderable: false },
-                { data: 'attributes.jumlah_populasi', orderable: false },
-                { data: 'attributes.jenis_perikanan', orderable: false },
-                { data: 'attributes.frekwensi_makanan_perhari', orderable: false },
-                { data: 'attributes.frekwensi_konsumsi_sayur_perhari', orderable: false },
-                { data: 'attributes.frekwensi_konsumsi_buah_perhari', orderable: false },
-                { data: 'attributes.frekwensi_konsumsi_daging_perhari', orderable: false },
-                { data: 'attributes.longitude', orderable: false },
-                { data: 'attributes.latitude', orderable: false },
-                { data: 'attributes.tanggal_pengisian', orderable: false },
-                { data: 'attributes.status_pengisian', orderable: false },
+                { data: 'attributes.nik', orderable: false },
+                { data: 'attributes.no_kk', orderable: false },
+                { data: 'attributes.nama', defaultContent: "-", orderable: false },
+                { data: 'attributes.jenis_lahan', defaultContent: "-", orderable: false },
+                { data: 'attributes.luas_lahan', defaultContent: "-", orderable: false },
+                { data: 'attributes.luas_tanam', defaultContent: "-", orderable: false },
+                { data: 'attributes.status_lahan', defaultContent: "-", orderable: false },
+                { data: 'attributes.komoditi_utama_tanaman_pangan', defaultContent: "-", orderable: false },
+                { data: 'attributes.komoditi_tanaman_pangan_lainnya', defaultContent: "-", orderable: false },
+                { data: 'attributes.jumlah_berdasarkan_jenis_komoditi', defaultContent: "-", orderable: false },
+                { data: 'attributes.usia_komoditi', defaultContent: "-", orderable: false },
+                { data: 'attributes.jenis_peternakan', defaultContent: "-", orderable: false },
+                { data: 'attributes.jumlah_populasi', defaultContent: "-", orderable: false },
+                { data: 'attributes.jenis_perikanan', defaultContent: "-", orderable: false },
+                { data: 'attributes.frekwensi_makanan_perhari', defaultContent: "-", orderable: false },
+                { data: 'attributes.frekwensi_konsumsi_sayur_perhari', defaultContent: "-", orderable: false },
+                { data: 'attributes.frekwensi_konsumsi_buah_perhari', defaultContent: "-", orderable: false },
+                { data: 'attributes.frekwensi_konsumsi_daging_perhari', defaultContent: "-", orderable: false },
+                { data: 'attributes.longitude', defaultContent: "-", orderable: false },
+                { data: 'attributes.latitude', defaultContent: "-", orderable: false },
+                { data: 'attributes.tanggal_pengisian', defaultContent: "-", orderable: false },
+                { data: 'attributes.status_pengisian', defaultContent: "-", orderable: false },
             ],
-            order: [
-                [10, 'asc']
-            ]
+            order: [[10, 'asc']]
         });
         pangan.on('draw.dt', function() {
             var PageInfo = $('#detail-pangan').DataTable().page.info();
@@ -189,9 +175,6 @@
             }).nodes().each(function(cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
             });
-        });
-        $('#sex, #dusun, #rw, #rt').change(function() {
-            pangan.draw();
         });
     });
     </script>

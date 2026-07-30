@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\StrongPassword;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ResetPasswordRequest extends FormRequest
@@ -16,16 +17,31 @@ class ResetPasswordRequest extends FormRequest
     }
 
     /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        session()->flash('error', $validator->errors()->first());
+
+        parent::failedValidation($validator);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
+        $user = null;
+        if ($this->has('email')) {
+            $user = \App\Models\User::where('email', $this->input('email'))->first();
+        }
+
         return [
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'string', 'confirmed', new StrongPassword()],
+            'password' => ['required', 'string', 'confirmed', new StrongPassword(user: $user)],
         ];
     }
 

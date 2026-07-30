@@ -48,10 +48,10 @@ class AuthController extends Controller
         // Check if account is locked
         if ($user && $user->isLocked()) {
             $remainingSeconds = $user->getLockoutRemainingSeconds();
-            $minutes = ceil($remainingSeconds / 60);
+            $timeText = $remainingSeconds < 60 ? "{$remainingSeconds} detik" : ceil($remainingSeconds / 60) . " menit";
 
             return response()->json([
-                'message' => "AKUN TERKUNCI. Terlalu banyak gagal login. Coba lagi dalam {$minutes} menit.",
+                'message' => "AKUN TERKUNCI. Terlalu banyak gagal login. Coba lagi dalam {$timeText}.",
                 'locked' => true,
                 'retry_after' => $remainingSeconds,
             ], Response::HTTP_FORBIDDEN);
@@ -62,9 +62,10 @@ class AuthController extends Controller
             event(new Lockout($request));
 
             $seconds = RateLimiter::availableIn($this->throttleKey());
+            $timeText = $seconds < 60 ? "{$seconds} detik" : ceil($seconds / 60) . " menit";
 
             return response()->json([
-                'message' => 'TERLALU BANYAK PERCobaAN. Silakan tunggu ' . ceil($seconds / 60) . ' menit sebelum mencoba lagi.',
+                'message' => "TERLALU BANYAK PERCOBAAN. Silakan tunggu {$timeText} sebelum mencoba lagi.",
                 'retry_after' => $seconds,
             ], Response::HTTP_TOO_MANY_REQUESTS);
         }
@@ -92,9 +93,11 @@ class AuthController extends Controller
 
             // Add lockout warning
             if ($result['locked']) {
-                $response['message'] = "AKUN TERKUNCI. Terlalu banyak gagal login ({$result['attempts']} kali).";
+                $remainingSeconds = $result['lockout_expires_in'] ?? 900;
+                $timeText = $remainingSeconds < 60 ? "{$remainingSeconds} detik" : ceil($remainingSeconds / 60) . " menit";
+                $response['message'] = "AKUN TERKUNCI. Terlalu banyak gagal login ({$result['attempts']} kali). Coba lagi dalam {$timeText}.";
                 $response['locked'] = true;
-                $response['lockout_expires_in'] = $result['lockout_expires_in'] ?? 900;
+                $response['lockout_expires_in'] = $remainingSeconds;
             } elseif ($result['remaining'] === 0) {
                 $response['message'] = "PERINGATAN: Akun akan terkunci setelah {$result['attempts']} kali gagal login.";
             }

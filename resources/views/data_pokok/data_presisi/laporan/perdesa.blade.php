@@ -67,6 +67,9 @@
             const kodeKecamatan = "{{ $kodeKecamatan }}";
             const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/laporan-perdesa' }}");
+            url.searchParams.set("kode_kabupaten", kodeKabupaten);
+            url.searchParams.set("kode_kecamatan", kodeKecamatan);
+            url.searchParams.set("config_desa", configDesa);
 
             var laporanTable = $('#laporanTable').DataTable({
                 processing: true,

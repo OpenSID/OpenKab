@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ForcePasswordResetRequest;
-use App\Models\PasswordHistory;
 use App\Providers\AppServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,22 +38,13 @@ class ForcePasswordResetController extends Controller
 
         $expiryDays = config('password.expiry_days');
 
-        // Save old password to history
-        PasswordHistory::create([
-            'user_id' => $user->id,
-            'password' => $user->password,
-            'reason' => 'forced_reset_completed',
-        ]);
-
-        // Set new password
+        $user->passwordHistoryReason = 'forced_reset_completed';
         $user->password = $request->password;
 
-        // Set expiry if configured
         if ($expiryDays) {
             $user->password_expires_at = now()->addDays($expiryDays);
         }
 
-        // Reset force_password_reset flag
         $user->force_password_reset = false;
         $user->save();
 

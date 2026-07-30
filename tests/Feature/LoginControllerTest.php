@@ -55,9 +55,7 @@ class LoginControllerTest extends TestCase
         $this->app->instance(TwoFactorService::class, $this->twoFactorService);
 
         // Clear any existing rate limiters
-        $userAgent = $this->app['request']->userAgent() ?? 'unknown';
-        $ip = '127.0.0.1';
-        RateLimiter::clear("captcha:{$ip}:" . hash('xxh64', $userAgent));
+        RateLimiter::clear('captcha:127.0.0.1:' . hash('xxh64', 'Symfony'));
     }
 
     #[Test]
@@ -74,9 +72,18 @@ class LoginControllerTest extends TestCase
     #[Test]
     public function it_shows_login_form_with_captcha_when_threshold_reached()
     {
-        // Simulate failed attempts to trigger captcha
-        $key = 'captcha:127.0.0.1:' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
-        RateLimiter::clear($key); // Clear first to ensure clean state
+        // Ensure captcha is enabled for this test
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'captcha_enabled'],
+            ['value' => '1']
+        );
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'captcha_threshold'],
+            ['value' => '2']
+        );
+
+        $key = 'captcha:127.0.0.1:' . hash('xxh64', 'Symfony');
+        RateLimiter::clear($key);
         RateLimiter::hit($key);
         RateLimiter::hit($key);
         RateLimiter::hit($key);
@@ -384,11 +391,8 @@ class LoginControllerTest extends TestCase
 
     protected function tearDown(): void
     {
-        // Clean up rate limiters
-        $userAgent = $this->app['request']->userAgent() ?? 'unknown';
-        $ip = '127.0.0.1';
-        RateLimiter::clear("captcha:{$ip}:" . hash('xxh64', $userAgent));
-        
+        RateLimiter::clear('captcha:127.0.0.1:' . hash('xxh64', 'Symfony'));
+
         parent::tearDown();
     }
 }

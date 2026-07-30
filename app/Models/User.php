@@ -326,7 +326,7 @@ class User extends Authenticatable
             return 0;
         }
 
-        return max(0, $this->lockout_expires_at->diffInSeconds(now()));
+        return (int) max(0, ceil(now()->diffInSeconds($this->lockout_expires_at, false)));
     }
 
     /**

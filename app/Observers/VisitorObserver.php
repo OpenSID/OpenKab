@@ -28,7 +28,7 @@ class VisitorObserver
 
             static::$updating = true;
 
-            $visit->update([                
+            $visit->update([
                 'country_code' => $location->countryCode,
                 'country' => $location->countryName,
                 'region' => $location->regionCode,

@@ -14,6 +14,8 @@ class SsoGenerateSessionTest extends BaseTestCase
 {
     protected function adminWith2fa(): User
     {
+        config(['sso.opensid_base_url' => 'http://opensid.test']);
+
         $user = User::first();
         $user->forceFill([
             '2fa_enabled' => true,

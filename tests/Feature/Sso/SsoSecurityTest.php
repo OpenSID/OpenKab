@@ -10,6 +10,8 @@ class SsoSecurityTest extends BaseTestCase
 {
     protected function loginAsAdminState(array $attrs = [], bool $twoFaVerified = true, bool $twoFaEnabled = true): User
     {
+        config(['sso.opensid_base_url' => 'http://opensid.test']);
+
         $user = User::first();
         $user->forceFill(array_merge([
             'active' => 1,

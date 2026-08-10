@@ -103,7 +103,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test No. 1',
             'jumlah_anggota' => 4,
             'jumlah_kk' => 1,
-            'tahun' => '2024',
+            'tahun' => '',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -122,7 +122,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test No. 1',
             'jumlah_anggota' => 4,
             'jumlah_kk' => 1,
-            'tahun' => '2024',
+            'tahun' => '',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -149,7 +149,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test',
             'jumlah_anggota' => 3,
             'jumlah_kk' => 1,
-            'tahun' => '2024',
+            'tahun' => '',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -170,7 +170,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test',
             'jumlah_anggota' => 3,
             'jumlah_kk' => 1,
-            'tahun' => '2024',
+            'tahun' => '',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -190,7 +190,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test',
             'jumlah_anggota' => 3,
             'jumlah_kk' => 1,
-            'tahun' => '2024',
+            'tahun' => '',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));

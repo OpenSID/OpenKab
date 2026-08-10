@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\View as ViewFacade;
+use Illuminate\View\View;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\View as ViewFacade;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class DataPresisiPanganDetailViewTest extends BaseTestCase
 {
@@ -52,11 +52,11 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $html = $view->render();
 
         // Assert bahwa JavaScript DataTable configuration mengandung mapping untuk longitude dan latitude
-        $this->assertStringContainsString("{ data: 'attributes.longitude', orderable: false }", $html);
-        $this->assertStringContainsString("{ data: 'attributes.latitude', orderable: false }", $html);
-        
+        $this->assertStringContainsString("{ data: 'attributes.longitude', defaultContent: \"-\", orderable: false }", $html);
+        $this->assertStringContainsString("{ data: 'attributes.latitude', defaultContent: \"-\", orderable: false }", $html);
+
         // Assert bahwa koordinat dikonfigurasi sebagai kolom yang tidak dapat diurutkan
-        $this->assertStringContainsString("orderable: false", $html);
+        $this->assertStringContainsString('orderable: false', $html);
     }
 
     #[Test]
@@ -80,14 +80,14 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         // Longitude harus muncul sebelum latitude dalam urutan kolom
         $longitudePos = strpos($html, "data: 'attributes.longitude'");
         $latitudePos = strpos($html, "data: 'attributes.latitude'");
-        
+
         $this->assertNotFalse($longitudePos, 'Longitude column configuration not found');
         $this->assertNotFalse($latitudePos, 'Latitude column configuration not found');
         $this->assertLessThan($latitudePos, $longitudePos, 'Longitude should appear before latitude in column configuration');
     }
 
     #[Test]
-    public function it_configures_api_filter_with_rtm_id_for_coordinate_data()
+    public function it_configures_api_filter_with_id_rtm_for_coordinate_data()
     {
         // Mock data untuk testing view
         $mockData = (object) [
@@ -103,9 +103,9 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $view = ViewFacade::make('data_pokok.data_presisi.pangan.detail', ['data' => $mockData]);
         $html = $view->render();
 
-        // Assert bahwa filter API menggunakan rtm_id yang benar untuk mengambil data koordinat
-        $this->assertStringContainsString('url.searchParams.set("filter[rtm_id]", "TEST_RTM_123")', $html);
-        
+        // Assert bahwa filter API menggunakan no_kartu_rumah sebagai id_rtm untuk mengambil data anggota
+        $this->assertStringContainsString('url.searchParams.set("filter[id_rtm]", "KRT001")', $html);
+
         // Assert bahwa endpoint API untuk data presisi pangan dikonfigurasi dengan benar
         $this->assertStringContainsString('/api/v1/data-presisi/pangan', $html);
     }
@@ -133,7 +133,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertStringContainsString('Jl. Contoh No. 123', $html);
         $this->assertStringContainsString('4', $html); // jumlah anggota
         $this->assertStringContainsString('1', $html); // jumlah kk
-        
+
         // Assert struktur tabel rincian suplemen
         $this->assertStringContainsString('tabel-rincian', $html);
         $this->assertStringContainsString('No Kartu Rumah Tangga (KRT)', $html);
@@ -161,7 +161,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $this->assertStringContainsString('processing: true', $html);
         $this->assertStringContainsString('serverSide: true', $html);
         $this->assertStringContainsString('autoWidth: false', $html);
-        
+
         // Assert bahwa longitude dan latitude columns ada dalam konfigurasi
         $this->assertStringContainsString("data: 'attributes.longitude'", $html);
         $this->assertStringContainsString("data: 'attributes.latitude'", $html);
@@ -187,7 +187,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         // Daftar header kolom yang diharapkan sesuai urutan
         $expectedHeaders = [
             'NO',
-            'NIK', 
+            'NIK',
             'NOMOR KK',
             'NAMA',
             'JENIS LAHAN',
@@ -202,13 +202,13 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
             'JUMLAH POPULASI',
             'JENIS PERIKANAN',
             'FREKWENSI MAKANAN PERHARI',
-            'FREKWENSI KONSUMSI SAYUR PERHARI', 
+            'FREKWENSI KONSUMSI SAYUR PERHARI',
             'FREKWENSI KONSUMSI BUAH PERHARI',
             'FREKWENSI KONSUMSI DAGING PERHARI',
             'LONGITUDE',
             'LATITUDE',
             'TANGGAL PENGISIAN',
-            'STATUS PENGISIAN'
+            'STATUS PENGISIAN',
         ];
 
         // Assert bahwa semua header ada dalam HTML
@@ -219,7 +219,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         // Assert urutan longitude dan latitude (longitude harus sebelum latitude)
         $longitudeHeaderPos = strpos($html, '<th>LONGITUDE</th>');
         $latitudeHeaderPos = strpos($html, '<th>LATITUDE</th>');
-        
+
         $this->assertLessThan($latitudeHeaderPos, $longitudeHeaderPos);
     }
 
@@ -242,9 +242,9 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
 
         // Assert bahwa longitude dan latitude dikonfigurasi sebagai non-orderable
         // Ini penting karena koordinat biasanya tidak perlu diurutkan
-        $this->assertStringContainsString("{ data: 'attributes.longitude', orderable: false }", $html);
-        $this->assertStringContainsString("{ data: 'attributes.latitude', orderable: false }", $html);
-        
+        $this->assertStringContainsString("{ data: 'attributes.longitude', defaultContent: \"-\", orderable: false }", $html);
+        $this->assertStringContainsString("{ data: 'attributes.latitude', defaultContent: \"-\", orderable: false }", $html);
+
         // Assert bahwa semua kolom selain nomor urut dikonfigurasi sebagai non-orderable
         $columnDefPattern = '/targets: \[0, 1, 2, 3, 4, 5\],\s*orderable: false,\s*searchable: false/';
         $this->assertMatchesRegularExpression($columnDefPattern, $html);

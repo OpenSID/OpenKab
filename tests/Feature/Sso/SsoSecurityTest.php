@@ -14,6 +14,7 @@ class SsoSecurityTest extends BaseTestCase
         $user->forceFill(array_merge([
             'active' => 1,
             '2fa_enabled' => $twoFaEnabled,
+            'kode_kabupaten' => null,
         ], $attrs))->save();
 
         $fresh = $user->fresh();

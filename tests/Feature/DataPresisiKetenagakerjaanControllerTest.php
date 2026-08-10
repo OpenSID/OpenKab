@@ -103,6 +103,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test No. 1',
             'jumlah_anggota' => 4,
             'jumlah_kk' => 1,
+            'tahun' => '2024',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -121,6 +122,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test No. 1',
             'jumlah_anggota' => 4,
             'jumlah_kk' => 1,
+            'tahun' => '2024',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -134,6 +136,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
         $this->assertEquals('Jl. Test No. 1', $viewData->alamat);
         $this->assertEquals(4, $viewData->jumlah_anggota);
         $this->assertEquals(1, $viewData->jumlah_kk);
+        $this->assertEquals('2024', $viewData->tahun);
     }
 
     #[Test]
@@ -146,6 +149,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test',
             'jumlah_anggota' => 3,
             'jumlah_kk' => 1,
+            'tahun' => '2024',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -166,6 +170,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test',
             'jumlah_anggota' => 3,
             'jumlah_kk' => 1,
+            'tahun' => '2024',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -185,6 +190,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
             'alamat' => 'Jl. Test',
             'jumlah_anggota' => 3,
             'jumlah_kk' => 1,
+            'tahun' => '2024',
         ]);
 
         $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.detail', ['data' => $data]));
@@ -218,7 +224,7 @@ class DataPresisiKetenagakerjaanControllerTest extends BaseTestCase
     #[Test]
     public function test_cetak_page_passes_query_string_as_filter(): void
     {
-        $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.cetak') . '?tahun=2024&status=active');
+        $response = $this->get(route('data-pokok.data-presisi-ketenagakerjaan.cetak').'?tahun=2024&status=active');
 
         $response->assertViewHas('filter');
         $filter = $response->viewData('filter');

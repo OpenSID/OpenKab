@@ -18,6 +18,7 @@ class SsoGenerateSessionTest extends BaseTestCase
         $user->forceFill([
             '2fa_enabled' => true,
             'active' => 1,
+            'kode_kabupaten' => null,
         ])->save();
 
         $fresh = $user->fresh();

@@ -43,7 +43,7 @@
                                         <td>{{ $data->alamat }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Jumalah Anggota</td>
+                                        <td>Jumlah Anggota</td>
                                         <td>:</td>
                                         <td>{{ $data->jumlah_anggota }}</td>
                                     </tr>

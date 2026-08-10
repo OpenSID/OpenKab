@@ -48,12 +48,16 @@ class OtpLoginControllerTest extends TestCase
         $this->app->instance(OtpService::class, $this->otpService);
         $this->app->instance(TwoFactorService::class, $this->twoFactorService);
 
+        // Ensure consistent user agent for rate limiter keys.
+        // Request::create() defaults HTTP_USER_AGENT to 'Symfony', but the
+        // app request in CLI context may have null UA.
+        $this->app['request']->server->set('HTTP_USER_AGENT', 'Symfony');
+
         // Clear any existing rate limiters
-        $userAgent = $this->app['request']->userAgent() ?? 'unknown';
-        RateLimiter::clear('captcha:127.0.0.1:' . hash('xxh64', $userAgent));
-        RateLimiter::clear('otp:login:test@example.com:127.0.0.1:' . hash('xxh64', $userAgent));
-        RateLimiter::clear('otp:verify:' . $this->user->id . ':127.0.0.1:' . hash('xxh64', $userAgent));
-        RateLimiter::clear('otp:resend:' . $this->user->id . ':127.0.0.1:' . hash('xxh64', $userAgent));
+        RateLimiter::clear('captcha:127.0.0.1:' . hash('xxh64', 'Symfony'));
+        RateLimiter::clear('otp:login:test@example.com:127.0.0.1:' . hash('xxh64', 'Symfony'));
+        RateLimiter::clear('otp:verify:' . $this->user->id . ':127.0.0.1:' . hash('xxh64', 'Symfony'));
+        RateLimiter::clear('otp:resend:' . $this->user->id . ':127.0.0.1:' . hash('xxh64', 'Symfony'));
     }
 
     #[Test]
@@ -70,8 +74,17 @@ class OtpLoginControllerTest extends TestCase
     #[Test]
     public function it_shows_otp_login_form_with_captcha_when_threshold_reached()
     {
-        // Simulate failed attempts to trigger captcha
-        $key = 'captcha:127.0.0.1:' . hash('xxh64', $this->app['request']->userAgent() ?? 'unknown');
+        // Ensure captcha is enabled for this test
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'captcha_enabled'],
+            ['value' => '1']
+        );
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'captcha_threshold'],
+            ['value' => '2']
+        );
+
+        $key = 'captcha:127.0.0.1:' . hash('xxh64', 'Symfony');
         RateLimiter::clear($key);
         RateLimiter::hit($key);
         RateLimiter::hit($key);

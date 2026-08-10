@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Models\User;
+use App\Observers\UserObserver;
 use App\Observers\VisitorObserver;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -82,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected function configureObservers(): void
     {
+        User::observe(UserObserver::class);
         Visit::observe(VisitorObserver::class);
     }
 

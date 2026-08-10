@@ -15,6 +15,9 @@
                 <button id="cetak" type="button" class="btn btn-primary btn-sm" data-url=""><i
                         class="fa fa-print"></i>
                     Cetak</button>
+                <button id="export-excel" type="button" class="btn btn-success btn-sm"><i
+                        class="fa fa-file-excel"></i>
+                    Excel</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -23,10 +26,12 @@
                             <tr>
                                 <th width="50">No</th>
                                 <th>Desa</th>
+                                <th>Kecamatan</th>
                                 <th class="text-center">Artikel<br>Terbit</th>
                                 <th class="text-center">Jumlah<br>Akses</th>
                                 <th class="text-center">Jml Surat</th>
                                 <th class="text-center">Penduduk</th>
+                                <th class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -82,6 +87,9 @@
                     data: 'attributes.nama_desa'
                 },
                 {
+                    data: 'attributes.nama_kecamatan'
+                },
+                {
                     data: 'attributes.artikel',
                     className: 'text-center'
                 },
@@ -97,11 +105,48 @@
                     data: 'attributes.penduduk',
                     className: 'text-center'
                 },
+                {
+                    data: null,
+                    className: 'text-center'
+                },
             ],
             columnDefs: [{
                 targets: 0,
                 render: function(data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                targets: 7,
+                render: function(data, type, row) {
+                    const attr = row.attributes || {};
+                    const loginTerakhir = attr.login_terakhir;
+                    const perubahanTerakhir = attr.perubahan_terakhir;
+
+                    const batasWaktu = new Date();
+                    batasWaktu.setDate(batasWaktu.getDate() - 7);
+
+                    let loginAktif = false;
+                    if (loginTerakhir && loginTerakhir !== '0000-00-00' && loginTerakhir !== '0000-00-00 00:00:00') {
+                        const tglLogin = new Date(loginTerakhir);
+                        if (!isNaN(tglLogin.getTime()) && tglLogin >= batasWaktu) {
+                            loginAktif = true;
+                        }
+                    }
+
+                    let perubahanAktif = false;
+                    if (perubahanTerakhir && perubahanTerakhir !== '0000-00-00' && perubahanTerakhir !== '0000-00-00 00:00:00') {
+                        const tglPerubahan = new Date(perubahanTerakhir);
+                        if (!isNaN(tglPerubahan.getTime()) && tglPerubahan >= batasWaktu) {
+                            perubahanAktif = true;
+                        }
+                    }
+
+                    const aktif = loginAktif || perubahanAktif;
+
+                    return aktif
+                        ? '<span class="badge badge-success">Aktif</span>'
+                        : '<span class="badge badge-danger">Tidak Aktif</span>';
                 }
             }],
             order: [
@@ -111,6 +156,12 @@
 
         $('#cetak').on('click', function() {
             let url = new URL("{{ url('laporan/desa-aktif/cetak') }}");
+            url.searchParams.append("search", $('input[aria-controls="desaAktifTable"]').val() ?? '');
+            window.open(url.href, '_blank');
+        });
+
+        $('#export-excel').on('click', function() {
+            let url = new URL("{{ url('laporan/desa-aktif/export-excel') }}");
             url.searchParams.append("search", $('input[aria-controls="desaAktifTable"]').val() ?? '');
             window.open(url.href, '_blank');
         });

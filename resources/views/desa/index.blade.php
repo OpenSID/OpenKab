@@ -263,9 +263,11 @@
                     })
                     .then(function(result) {
                         if (result.data.status !== 'success') {
+                            const code = result.data.code || '';
+                            const reason = result.data.message || 'Autentikasi gagal. Silakan coba lagi.';
                             Swal.fire(
                                 'Gagal',
-                                result.data.message || 'Autentikasi gagal. Silakan coba lagi.',
+                                code ? `${reason} (${code})` : reason,
                                 'error'
                             );
                             return;

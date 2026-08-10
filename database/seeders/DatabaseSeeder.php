@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         /* untuk IdentitasSeeder dan CreateAdminUserSeeder sudah dipanggil dalam migration */
         $this->call(SettingSeeder::class);
+        $this->call(SsoPermissionsSeeder::class);
     }
 }

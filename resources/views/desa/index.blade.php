@@ -106,6 +106,7 @@
                                     <th>{{ config('app.sebutanDesa') }}</th>
                                     <th>Kecamatan</th>
                                     <th class="padat">Jumlah Penduduk</th>
+                                    <th class="padat">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -173,7 +174,7 @@
                         }
                     },
                     {
-                        targets: [0, 1, 2, 3],
+                        targets: [0, 1, 2, 3, 4],
                         orderable: false,
                         searchable: false,
                     },
@@ -197,6 +198,17 @@
                         orderable: true,
                         className: 'text-center'
                     },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            const kodeDesa = (row.attributes && row.attributes.kode_desa) || row.id || '';
+                            if (!kodeDesa) return '';
+
+                            return `<button type="button" class="btn btn-sm btn-primary btn-sso-opensid" data-kode-desa="${kodeDesa}" title="Masuk ke OpenSID">
+                                <i class="fas fa-sign-in-alt"></i> Masuk ke OpenSID
+                            </button>`;
+                        }
+                    },
                 ],
             })
             $('#tabel_penduduk_block').change(function(event) {
@@ -219,6 +231,70 @@
             $('#cetak').on('click', function() {
                 window.open(`{{ url('desa/cetak') }}?${$.param(pendudukDatatable.ajax.params())}`,
                     '_blank');
+            });
+
+            const ssoCsrfToken = '{{ csrf_token() }}';
+            const ssoGenerateUrl = '/sso/generate-session';
+
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-sso-opensid');
+                if (!btn) return;
+
+                e.preventDefault();
+
+                const desaId = btn.getAttribute('data-kode-desa');
+                if (!desaId) return;
+
+                btn.disabled = true;
+
+                fetch(ssoGenerateUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': ssoCsrfToken,
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({ desa_id: desaId }),
+                    })
+                    .then(function(response) {
+                        return response.json().then(function(data) {
+                            return { ok: response.ok, status: response.status, data: data };
+                        });
+                    })
+                    .then(function(result) {
+                        if (result.data.status !== 'success') {
+                            Swal.fire(
+                                'Gagal',
+                                result.data.message || 'Autentikasi gagal. Silakan coba lagi.',
+                                'error'
+                            );
+                            return;
+                        }
+
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = result.data.redirect_url;
+                        form.style.display = 'none';
+
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'sso_token';
+                        input.value = result.data.token;
+                        form.appendChild(input);
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    })
+                    .catch(function() {
+                        Swal.fire(
+                            'Gagal',
+                            'Terjadi kesalahan. Silakan coba lagi.',
+                            'error'
+                        );
+                    })
+                    .finally(function() {
+                        btn.disabled = false;
+                    });
             });
 
             @if ($filters['kode_kabupaten'] ?? false)

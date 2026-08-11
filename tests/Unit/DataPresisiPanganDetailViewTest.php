@@ -103,11 +103,11 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $view = ViewFacade::make('data_pokok.data_presisi.pangan.detail', ['data' => $mockData]);
         $html = $view->render();
 
-        // Assert bahwa filter API menggunakan no_kartu_rumah sebagai id_rtm untuk mengambil data anggota
+        // Assert bahwa filter API menggunakan id_rtm (no_kartu_rumah) yang benar untuk mengambil data koordinat
         $this->assertStringContainsString('url.searchParams.set("filter[id_rtm]", "KRT001")', $html);
         
         // Assert bahwa endpoint API untuk data presisi pangan dikonfigurasi dengan benar
-        $this->assertStringContainsString('/api/v1/data-presisi/pangan', $html);
+        $this->assertStringContainsString('/api/v1/data-presisi/pangan/anggota', $html);
     }
 
     #[Test]

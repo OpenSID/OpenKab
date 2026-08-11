@@ -209,6 +209,69 @@ class SsoSecurityTest extends BaseTestCase
     }
 
     #[Test]
+    public function request_dengan_origin_tidak_sesuai_ditolak()
+    {
+        $user = $this->loginAsAdminState();
+        config(['sso.origin_check_skip_envs' => []]);
+
+        $response = $this->postJson(route('sso.generate'), ['desa_id' => '5271010001'], [
+            'Origin' => 'https://evil.example',
+        ]);
+
+        $response->assertStatus(403);
+        $response->assertJson(['status' => 'error', 'code' => 'ORIGIN_INVALID']);
+        $response->assertJsonPath('message', 'Autentikasi gagal.');
+        $this->assertDatabaseHas('openkab_sso_logs', [
+            'admin_id' => $user->id,
+            'status' => 'failed',
+            'reason_if_failed' => 'origin_invalid',
+        ]);
+    }
+
+    #[Test]
+    public function request_tanpa_origin_atau_referer_ditolak()
+    {
+        $this->loginAsAdminState();
+        config(['sso.origin_check_skip_envs' => []]);
+
+        $response = $this->postGenerate();
+
+        $response->assertStatus(403);
+        $response->assertJson(['status' => 'error', 'code' => 'ORIGIN_INVALID']);
+        $this->assertDatabaseHas('openkab_sso_logs', [
+            'status' => 'failed',
+            'reason_if_failed' => 'origin_invalid',
+        ]);
+    }
+
+    #[Test]
+    public function request_dengan_origin_cocok_diterima()
+    {
+        $this->loginAsAdminState();
+        config(['sso.origin_check_skip_envs' => []]);
+
+        $response = $this->postJson(route('sso.generate'), ['desa_id' => '5271010001'], [
+            'Origin' => rtrim((string) config('app.url'), '/'),
+        ]);
+
+        $response->assertOk();
+        $response->assertJsonPath('status', 'success');
+        $response->assertJsonPath('token_method', 'post_param');
+    }
+
+    #[Test]
+    public function validasi_asal_dilewati_di_environment_skip_default()
+    {
+        // Regression: di env local/testing default, permintaan tanpa Origin tetap diterima.
+        $this->loginAsAdminState();
+
+        $response = $this->postGenerate();
+
+        $response->assertOk();
+        $response->assertJsonPath('status', 'success');
+    }
+
+    #[Test]
     public function rate_limit_memblokir_permintaan_berlebih()
     {
         config(['sso.rate_limit_max' => 2]);

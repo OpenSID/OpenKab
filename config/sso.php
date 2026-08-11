@@ -44,6 +44,11 @@ return [
     // Maksimum permintaan generate-session per menit per user+IP.
     'rate_limit_max' => (int) env('SSO_RATE_LIMIT_MAX', 5),
 
+    // Environment yang melewati validasi asal (Origin/Referer) di generate-session
+    // agar alur development/testing tidak perlu mengirim header Origin. Daftar ini
+    // dapat dikosongkan lewat config untuk memaksa validasi (dipakai di pengujian).
+    'origin_check_skip_envs' => ['local', 'testing'],
+
     // Klaim iss / aud pada token.
     'issuer' => env('APP_URL', 'openkab'),
 

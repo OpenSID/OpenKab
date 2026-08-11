@@ -105,7 +105,7 @@ class SsoLoginController extends Controller
      */
     protected function isOriginAllowed(Request $request): bool
     {
-        if (app()->environment(['local', 'testing'])) {
+        if (in_array(app()->environment(), config('sso.origin_check_skip_envs', ['local', 'testing']), true)) {
             return true;
         }
 

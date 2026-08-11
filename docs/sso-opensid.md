@@ -84,6 +84,7 @@ Administrator OpenKab (sesi aktif + 2FA selesai) dapat masuk ke panel admin Open
 5. **Integrasi sisi OpenSID**
    - Implementasi `POST /admin/sso-login` dan tabel `opensid_sso_logs` sesuai kontrak.
    - OpenSID memanggil `POST {openkab}/api/v1/sso/verify-token` dengan header `X-SSO-Callback-Key`, `X-SSO-Callback-Timestamp`, `X-SSO-Callback-Signature` (HMAC-SHA256 atas body memakai `SSO_CALLBACK_SECRET`).
+   - **Proteksi lintas-situs (FR-011, wajib)**: `POST /admin/sso-login` harus menolak request yang header `Origin`/`Referer`-nya tidak cocok dengan daftar `openkab_allowed_origins` (stateless, tanpa CSRF token pre-login); halaman login SSO wajib mengirim `X-Frame-Options: DENY` + `Content-Security-Policy: frame-ancestors 'none'` (anti-clickjacking). Detail: `contracts/opensid-sso-contract.md`.
 
 ## Operasional
 
@@ -113,6 +114,9 @@ Super admin (role `administrator`) dapat meninjau seluruh percobaan akses melalu
 - `exp` ≤ 600 detik; `nbf` = `iat`; toleransi selisih jam 30 detik; `jti` unik sekali pakai (konsumsi atomik).
 - Generate-session: rate limit 5/menit per user+IP; wajib sesi aktif, role administrator, dan 2FA terverifikasi.
 - Callback verify: otentikasi sekret bersama + HMAC + timestamp; respons error generik tanpa data pribadi.
+- **Lintas-situs (CSRF/clickjacking, FR-011)**:
+  - OpenKab `generate-session`: request yang header `Origin`/`Referer`-nya tidak cocok dengan `config('app.url')` ditolak (403 `ORIGIN_INVALID`, tercatat `reason=origin_invalid`). Validasi dilewati di env `local`/`testing` — daftar env skip dapat diubah via `config('sso.origin_check_skip_envs')`.
+  - OpenSID `POST /admin/sso-login`: Origin/Referer wajib cocok dengan `openkab_allowed_origins` (tanpa CSRF token pre-login); halaman login SSO wajib mengirim `X-Frame-Options: DENY` + `Content-Security-Policy: frame-ancestors 'none'`.
 - Semua komunikasi wajib HTTPS di produksi (URL OpenSID non-HTTPS ditolak di luar lingkungan lokal).
 - Seluruh percobaan (berhasil/gagal) tercatat di `openkab_sso_logs`.
 

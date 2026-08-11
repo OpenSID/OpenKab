@@ -7,14 +7,45 @@ use App\Services\SsoKeyManager;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class SsoGenerateSessionTest extends BaseTestCase
 {
+    /**
+     * Fake API database gabungan (sumber field website desa).
+     *
+     * Http::fake() mengakumulasi callback dan yang terdaftar lebih dulu menang,
+     * sehingga perilaku di-drive lewat cache (dibaca saat request berjalan).
+     */
+    protected function fakeDesaApi(?string $website = 'http://opensid.test', bool $fails = false): void
+    {
+        Cache::flush();
+
+        Cache::put('test:gabungan:website', $website, 60);
+        Cache::put('test:gabungan:fails', $fails, 60);
+
+        Http::fake(function () {
+            if (Cache::get('test:gabungan:fails', false)) {
+                return Http::response([], 500);
+            }
+
+            return Http::response([
+                'data' => [[
+                    'attributes' => [
+                        'website' => (string) Cache::get('test:gabungan:website', ''),
+                    ],
+                ]],
+                'meta' => ['pagination' => ['total' => 1]],
+            ], 200);
+        });
+    }
+
     protected function adminWith2fa(): User
     {
-        config(['sso.opensid_base_url' => 'http://opensid.test']);
+        $this->fakeDesaApi();
 
         $user = User::first();
         $user->forceFill([
@@ -125,5 +156,50 @@ class SsoGenerateSessionTest extends BaseTestCase
         $this->assertSame('3201012001', $payload->desa_id);
         $this->assertSame(config('sso.issuer'), $payload->iss);
         $this->assertSame(config('sso.audience'), $payload->aud);
+    }
+
+    #[Test]
+    public function desa_tanpa_website_ditolak_dengan_pesan_generik_dan_dicatat()
+    {
+        $user = $this->adminWith2fa();
+        $this->fakeDesaApi('');
+
+        $response = $this->postJson(route('sso.generate'), [
+            'desa_id' => '3201012001',
+        ]);
+
+        $response->assertStatus(500);
+        $response->assertJson([
+            'status' => 'error',
+            'code' => 'CONFIGURATION_ERROR',
+        ]);
+        $this->assertDatabaseHas('openkab_sso_logs', [
+            'admin_id' => $user->id,
+            'desa_id' => '3201012001',
+            'status' => 'failed',
+            'reason_if_failed' => 'unknown',
+        ]);
+    }
+
+    #[Test]
+    public function api_gabungan_gagal_ditolak_dengan_pesan_generik_dan_dicatat()
+    {
+        $user = $this->adminWith2fa();
+        $this->fakeDesaApi(fails: true);
+
+        $response = $this->postJson(route('sso.generate'), [
+            'desa_id' => '3201012001',
+        ]);
+
+        $response->assertStatus(500);
+        $response->assertJson([
+            'status' => 'error',
+            'code' => 'CONFIGURATION_ERROR',
+        ]);
+        $this->assertDatabaseHas('openkab_sso_logs', [
+            'admin_id' => $user->id,
+            'desa_id' => '3201012001',
+            'status' => 'failed',
+        ]);
     }
 }

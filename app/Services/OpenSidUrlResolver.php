@@ -3,33 +3,49 @@
 namespace App\Services;
 
 use App\Exceptions\SsoConfigurationException;
-use App\Models\Sso\DesaSsoConfig;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Resolusi URL panel admin OpenSID untuk sebuah desa.
  *
- * Urutan: baris desa_sso_configs (enabled) → fallback config('sso.opensid_base_url').
+ * Base URL diambil server-side dari field `attributes.website` desa pada API
+ * database gabungan (/api/v1/wilayah/penduduk). Hasil resolusi di-cache singkat
+ * agar tidak memanggil API eksternal setiap klik (SC-001).
  */
 class OpenSidUrlResolver
 {
     /**
+     * Durasi cache resolusi base URL (detik).
+     */
+    protected const CACHE_TTL = 300;
+
+    public function __construct(
+        protected PendudukApiService $desaApi,
+    ) {}
+
+    /**
      * Base URL instalasi OpenSID untuk desa (tanpa trailing slash).
+     *
+     * Melempar SsoConfigurationException bila website kosong/tidak valid atau
+     * API gabungan tidak mengembalikan data desa.
      */
     public function resolveBaseUrl(string $desaId): string
     {
-        $config = DesaSsoConfig::query()
-            ->where('desa_id', $desaId)
-            ->enabled()
-            ->first();
+        $base = Cache::remember($this->cacheKey($desaId), self::CACHE_TTL, function () use ($desaId) {
+            $desa = $this->desaApi->desaSummary([
+                'filter[kode_desa]' => $desaId,
+                'page[size]' => 1,
+            ])->first();
 
-        $base = rtrim((string) ($config?->opensid_url ?: config('sso.opensid_base_url')), '/');
+            if (! $desa || empty($desa->website)) {
+                throw new SsoConfigurationException('URL website desa belum diisi.');
+            }
 
-        if ($base === '') {
-            throw new SsoConfigurationException('URL OpenSID untuk desa ini belum dikonfigurasi.');
-        }
+            return rtrim((string) $desa->website, '/');
+        });
 
         $scheme = parse_url($base, PHP_URL_SCHEME);
-        $isLocalEnv = app()->environment(['local', 'testing']);
+        $isLocalEnv = app()->environment(['development', 'local', 'testing']);
 
         if (! in_array($scheme, ['http', 'https'], true)) {
             throw new SsoConfigurationException('URL OpenSID tidak valid.');
@@ -50,5 +66,13 @@ class OpenSidUrlResolver
         $path = (string) config('sso.endpoint.sso_login', 'admin/sso-login');
 
         return $this->resolveBaseUrl($desaId).'/'.ltrim($path, '/');
+    }
+
+    /**
+     * Kunci cache per desa.
+     */
+    protected function cacheKey(string $desaId): string
+    {
+        return 'sso:opensid:base_url:'.$desaId;
     }
 }

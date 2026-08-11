@@ -3,14 +3,45 @@
 namespace Tests\Feature\Sso;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class SsoSecurityTest extends BaseTestCase
 {
+    /**
+     * Fake API database gabungan (sumber field website desa).
+     *
+     * Http::fake() mengakumulasi callback dan yang terdaftar lebih dulu menang,
+     * sehingga perilaku di-drive lewat cache (dibaca saat request berjalan).
+     */
+    protected function fakeDesaApi(?string $website = 'http://opensid.test', bool $fails = false): void
+    {
+        Cache::flush();
+
+        Cache::put('test:gabungan:website', $website, 60);
+        Cache::put('test:gabungan:fails', $fails, 60);
+
+        Http::fake(function () {
+            if (Cache::get('test:gabungan:fails', false)) {
+                return Http::response([], 500);
+            }
+
+            return Http::response([
+                'data' => [[
+                    'attributes' => [
+                        'website' => (string) Cache::get('test:gabungan:website', ''),
+                    ],
+                ]],
+                'meta' => ['pagination' => ['total' => 1]],
+            ], 200);
+        });
+    }
+
     protected function loginAsAdminState(array $attrs = [], bool $twoFaVerified = true, bool $twoFaEnabled = true): User
     {
-        config(['sso.opensid_base_url' => 'http://opensid.test']);
+        $this->fakeDesaApi();
 
         $user = User::first();
         $user->forceFill(array_merge([
@@ -154,6 +185,27 @@ class SsoSecurityTest extends BaseTestCase
         $this->assertStringNotContainsString($user->email, $content);
         $this->assertStringNotContainsString('SsoTokenService', $content);
         $this->assertStringNotContainsString('SQLSTATE', $content);
+    }
+
+    #[Test]
+    public function desa_tanpa_website_ditolak_dengan_pesan_generik_dan_dicatat()
+    {
+        $user = $this->loginAsAdminState();
+        $this->fakeDesaApi('');
+
+        $response = $this->postGenerate();
+
+        $response->assertStatus(500);
+        $response->assertJson([
+            'status' => 'error',
+            'code' => 'CONFIGURATION_ERROR',
+        ]);
+        $response->assertJsonPath('message', 'Autentikasi gagal.');
+        $this->assertDatabaseHas('openkab_sso_logs', [
+            'admin_id' => $user->id,
+            'status' => 'failed',
+            'reason_if_failed' => 'unknown',
+        ]);
     }
 
     #[Test]

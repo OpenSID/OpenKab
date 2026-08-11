@@ -38,9 +38,6 @@ return [
     // Sekret callback verify-token (dibagikan ke OpenSID).
     'callback_secret' => (string) env('SSO_CALLBACK_SECRET', ''),
 
-    // Base URL fallback instalasi OpenSID (tanpa trailing slash).
-    'opensid_base_url' => rtrim((string) env('SSO_OPENSID_BASE_URL', ''), '/'),
-
     // Daftar IP yang diizinkan memanggil endpoint callback (kosong = semua).
     'ip_whitelist' => array_values(array_filter(array_map('trim', explode(',', (string) env('SSO_IP_WHITELIST', ''))))),
 

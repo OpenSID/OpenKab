@@ -10,10 +10,10 @@ Administrator OpenKab (sesi aktif + 2FA selesai) dapat masuk ke panel admin Open
 ## Prasyarat
 
 - PHP 8.4, Laravel 13 (repositori OpenKab ini).
-- MySQL dengan 3 tabel baru hasil migrasi:
+- MySQL dengan 2 tabel baru hasil migrasi:
   - `openkab_sso_logs` (audit append-only)
   - `openkab_sso_tokens` (token sekali pakai / anti-replay)
-  - `desa_sso_configs` (override URL OpenSID per desa, opsional)
+- **API database gabungan** harus mengembalikan field `website` per desa pada `/api/v1/wilayah/penduduk` — ini satu-satunya sumber base URL instalasi OpenSID. Desa tanpa `website` tidak menampilkan tombol SSO (diganti keterangan "URL website belum diisi").
 - Dependency baru: `firebase/php-jwt` (^7.0). v6.x tidak digunakan karena terdampak security advisory.
 - Sisi OpenSID (repo terpisah) harus menerapkan `specs/001-opensid-sso-access/contracts/opensid-sso-contract.md`.
 
@@ -47,7 +47,6 @@ Administrator OpenKab (sesi aktif + 2FA selesai) dapat masuk ke panel admin Open
 
    # Opsional
    SSO_TOKEN_TTL=300              # detik; maksimum 600
-   SSO_OPENSID_BASE_URL=          # fallback base URL OpenSID
    SSO_IP_WHITELIST=              # IP callback yang diizinkan (koma), kosong = semua
    SSO_RATE_LIMIT_MAX=5           # generate-session per menit per user+IP
    SSO_CLOCK_SKEW_TOLERANCE=30    # toleransi selisih jam callback
@@ -67,10 +66,11 @@ Administrator OpenKab (sesi aktif + 2FA selesai) dapat masuk ke panel admin Open
    php artisan admin:menu-update                       # memperbarui menu admin (Audit Akses SSO)
    ```
 
-4. **Konfigurasi URL OpenSID per desa (opsional)**
-   - Bila semua desa memakai satu base URL: cukup `SSO_OPENSID_BASE_URL`.
-   - Bila berbeda per desa: gunakan menu Pengaturan OpenSID → "Konfigurasi SSO Desa" (`/pengaturan/sso-config`) atau isi tabel `desa_sso_configs`.
-   - Resolver memakai: baris `desa_sso_configs` (enabled) → fallback `SSO_OPENSID_BASE_URL`.
+4. **Resolusi URL OpenSID dari website desa (API gabungan)**
+   - Base URL panel admin di-resolve **server-side** dari field `attributes.website` desa pada `/api/v1/wilayah/penduduk` (`OpenSidUrlResolver`, hasil di-cache singkat). URL akhir = `<website>/admin/sso-login`.
+   - Input klien (frontend) **tidak pernah** menjadi sumber URL redirect (FR-022).
+   - Desa tanpa `website` → tombol "Masuk ke OpenSID" tidak ditampilkan; diganti keterangan "URL website belum diisi". `generate-session` untuk desa tersebut ditolak (CONFIGURATION_ERROR) dan dicatat.
+   - Tidak ada lagi konfigurasi manual per desa (`desa_sso_configs`/`SSO_OPENSID_BASE_URL` dihapus).
 
 5. **Integrasi sisi OpenSID**
    - Implementasi `POST /admin/sso-login` dan tabel `opensid_sso_logs` sesuai kontrak.

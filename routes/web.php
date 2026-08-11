@@ -52,7 +52,6 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RiwayatPenggunaController;
 use App\Http\Controllers\RtmController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\Sso\DesaSsoConfigController;
 use App\Http\Controllers\Sso\SsoAuditController;
 use App\Http\Controllers\Sso\SsoLoginController;
 use App\Http\Controllers\StatistikAdatController;
@@ -118,9 +117,6 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
 
     // SSO OpenSID: dashboard audit percobaan akses (super admin)
     Route::middleware('permission:sso-audit-read')->get('/sso/audit', [SsoAuditController::class, 'index'])->name('sso.audit');
-
-    // SSO OpenSID: kelola URL OpenSID per desa (opsional, pengaturan OpenSID)
-    Route::middleware('permission:pengaturan-opensid')->resource('sso-config', DesaSsoConfigController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
     // Force Password Reset Routes
     Route::get('password-reset/force', [ForcePasswordResetController::class, 'showForm'])->name('password.reset.form');

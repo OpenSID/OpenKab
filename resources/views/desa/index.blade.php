@@ -204,6 +204,13 @@
                             const kodeDesa = (row.attributes && row.attributes.kode_desa) || row.id || '';
                             if (!kodeDesa) return '';
 
+                            const website = (row.attributes && row.attributes.website) || '';
+                            if (!website) {
+                                return `<span class="sso-website-kosong text-muted" title="Isi URL website desa pada database gabungan agar akses SSO aktif">
+                                    <i class="fas fa-info-circle"></i> URL website belum diisi
+                                </span>`;
+                            }
+
                             return `<button type="button" class="btn btn-sm btn-primary btn-sso-opensid" data-kode-desa="${kodeDesa}" title="Masuk ke OpenSID">
                                 <i class="fas fa-sign-in-alt"></i> Masuk ke OpenSID
                             </button>`;
@@ -262,12 +269,11 @@
                         });
                     })
                     .then(function(result) {
-                        if (result.data.status !== 'success') {
-                            const code = result.data.code || '';
+                        if (result.data.status !== 'success') {                            
                             const reason = result.data.message || 'Autentikasi gagal. Silakan coba lagi.';
                             Swal.fire(
                                 'Gagal',
-                                code ? `${reason} (${code})` : reason,
+                                reason,
                                 'error'
                             );
                             return;

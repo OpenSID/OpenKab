@@ -28,6 +28,15 @@ Administrator OpenKab (sesi aktif + 2FA selesai) dapat masuk ke panel admin Open
 2. **Generasi & konfigurasi kunci RS256** (sekali saat pemasangan)
 
    ```bash
+   php artisan sso:generate-keys
+   # Opsional: --bits=4096 --path=storage/sso --env-file=.env --force
+   ```
+
+   Command ini membuat keypair (private chmod 0600 + public), menulisnya ke
+   `storage/sso/`, dan mengisi `SSO_SIGNING_PRIVATE_KEY_FILE`/`SSO_SIGNING_PUBLIC_KEY_FILE`
+   di `.env`. Alternatif manual:
+
+   ```bash
    openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out sso-private.pem
    openssl pkey -in sso-private.pem -pubout -out sso-public.pem
    chmod 600 sso-private.pem
@@ -58,13 +67,13 @@ Administrator OpenKab (sesi aktif + 2FA selesai) dapat masuk ke panel admin Open
    `SSO_CALLBACK_SECRET` HARUS di-set. Aplikasi menolak operasi SSO bila private key
    tidak valid RSA ≥2048-bit atau callback secret < 32 byte.
 
-3. **Migrasi & seeder**
+3. **Migrasi**
 
    ```bash
    php artisan migrate
-   php artisan db:seed --class=SsoPermissionsSeeder   # menambah permission sso-audit-read
-   php artisan admin:menu-update                       # memperbarui menu admin (Audit Akses SSO)
    ```
+
+   Migration `2026_08_11_000001_add_sso_audit_permission` otomatis membuat permission `sso-audit-read` + melampirkannya ke role `administrator` dan menjalankan `admin:menu-update` (menu "Audit Akses SSO").
 
 4. **Resolusi URL OpenSID dari website desa (API gabungan)**
    - Base URL panel admin di-resolve **server-side** dari field `attributes.website` desa pada `/api/v1/wilayah/penduduk` (`OpenSidUrlResolver`, hasil di-cache singkat). URL akhir = `<website>/admin/sso-login`.

@@ -43,6 +43,7 @@ class SsoLoginController extends Controller
             $redirectUrl = $this->resolver->resolveAdminLoginUrl($desaId);
             $issued = $this->tokens->issue($user->id, $desaId);
         } catch (SsoConfigurationException $e) {
+            logger('error', [$e->getMessage()]);
             return $this->reject($user, $desaId, SsoStatusEnum::REASON_UNKNOWN, 'CONFIGURATION_ERROR', 500);
         }
 

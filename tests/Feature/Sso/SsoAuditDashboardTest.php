@@ -3,17 +3,33 @@
 namespace Tests\Feature\Sso;
 
 use App\Models\Sso\OpenKabSsoLog;
+use App\Models\Team;
 use App\Models\User;
-use Database\Seeders\SsoPermissionsSeeder;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Test;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\BaseTestCase;
 
 class SsoAuditDashboardTest extends BaseTestCase
 {
     protected function grantAuditPermission(): void
     {
-        $this->seed(SsoPermissionsSeeder::class);
+        $permission = Permission::findOrCreate('sso-audit-read', 'web');
+
+        $team = Team::query()->where('name', 'administrator')->first();
+
+        if (! $team) {
+            return;
+        }
+
+        setPermissionsTeamId($team->id);
+
+        $role = Role::query()->where('name', 'administrator')->where('guard_name', 'web')->first();
+
+        if ($role) {
+            $role->givePermissionTo($permission);
+        }
     }
 
     #[Test]

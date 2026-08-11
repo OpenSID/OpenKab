@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\SsoStatusEnum;
 use App\Exceptions\SsoConfigurationException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SsoVerifyRequest;
 use App\Models\Sso\OpenKabSsoToken;
 use App\Models\User;
 use App\Services\SsoAuditLogger;
@@ -13,7 +14,6 @@ use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\SignatureInvalidException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use UnexpectedValueException;
 
 class SsoVerifyController extends Controller
@@ -27,13 +27,8 @@ class SsoVerifyController extends Controller
      * Verifikasi token yang dikirim OpenSID sebelum pembuatan sesi.
      * Dipanggil server-to-server (diotentikasi oleh SsoCallbackAuth).
      */
-    public function verify(Request $request): JsonResponse
+    public function verify(SsoVerifyRequest $request): JsonResponse
     {
-        $request->validate([
-            'token' => ['required', 'string'],
-            'callback_nonce' => ['required', 'string', 'min:8'],
-        ]);
-
         $token = (string) $request->input('token');
 
         try {

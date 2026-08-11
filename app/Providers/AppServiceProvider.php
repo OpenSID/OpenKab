@@ -52,28 +52,6 @@ class AppServiceProvider extends ServiceProvider
             Log::error($e->getMessage(), ['exception' => $e]);
         }
 
-        // Share data ke semua view (termasuk Pest browser test context)
-        $identitasAplikasi = fractal(
-            Identitas::first(),
-            IdentitasTransformer::class,
-            \League\Fractal\Serializer\JsonApiSerializer::class
-        )->toArray()['data']['attributes'];
-
-        $settingAplikasi = collect(
-            fractal(
-                Setting::all(),
-                SettingTransformer::class,
-                \League\Fractal\Serializer\JsonApiSerializer::class
-            )->toArray()['data']
-        )->pluck('attributes.value', 'attributes.key');
-
-        View::share('identitasAplikasi', $identitasAplikasi);
-        View::share('settingAplikasi', $settingAplikasi);
-        config()->set(['app.sebutanDesa' => $identitasAplikasi['sebutan_desa'] ?? 'Desa']);
-        config()->set(['app.sebutanKab' => $identitasAplikasi['sebutan_kab'] ?? 'Kabupaten']);
-        config()->set(['app.kodeKabupatenApi' => $identitasAplikasi['kode_kabupaten_api'] ?? '']);
-        $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
-
         if (App::runningInConsole()) {
             activity()->disableLogging();
         }

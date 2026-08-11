@@ -14,7 +14,7 @@
         "bensampo/laravel-enum": "^6.3",
         "cviebrock/eloquent-sluggable": "^13.0",
         "diglactic/laravel-breadcrumbs": "^10.1",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.15",
         "intervention/image": "^3.0",
         "intervention/image-laravel": "^1.2",
         "jeroennoten/laravel-adminlte": "^3.9",

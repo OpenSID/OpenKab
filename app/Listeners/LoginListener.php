@@ -68,7 +68,7 @@ class LoginListener
             }
         }
 
-        session(['presisi_enabled' => $presisiStatus, 'prodeskel_enabled' => $prodeskelStatus, 'kabupaten.kode_kabupaten' => auth()->user()->kode_kabupaten ?? null]);
+        session(['presisi_enabled' => $presisiStatus, 'prodeskel_enabled' => $prodeskelStatus, 'kabupaten.kode_kabupaten' => config('app.kodeKabupatenApi')]);
 
         activity('authentication-log')->event('login')->withProperties($this->request)->log('Login');
     }

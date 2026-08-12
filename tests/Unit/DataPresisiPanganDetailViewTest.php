@@ -87,7 +87,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
     }
 
     #[Test]
-    public function it_configures_api_filter_with_rtm_id_for_coordinate_data()
+    public function it_configures_api_filter_with_id_rtm_for_coordinate_data()
     {
         // Mock data untuk testing view
         $mockData = (object) [

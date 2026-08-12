@@ -41,8 +41,7 @@
                                 });
                     }
                 }, 'json');
-            })
-            $('#summary_block').trigger('change');
+            })            
 
             $('#summary_block a.btn-detail').click(function(event) {
                 event.preventDefault();

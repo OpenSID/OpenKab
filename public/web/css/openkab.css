@@ -73,7 +73,7 @@ button.btn-dark {
     position: relative;
     z-index: 2;
     margin: 0 auto;
-    margin-top: -143px;
+    /*margin-top: -143px;*/
     margin-bottom: 20px;
 }
 

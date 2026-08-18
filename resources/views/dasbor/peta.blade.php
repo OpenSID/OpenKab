@@ -79,8 +79,6 @@
                     error: function(jqXHR, textStatus, errorThrown) {}
                 });
             })
-
-            $('#map').trigger('change');
         });
     </script>
 @endpush

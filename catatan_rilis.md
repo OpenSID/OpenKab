@@ -9,7 +9,7 @@ Di rilis ini, versi 2608.0.1 berisi penambahan dan perbaikan yang diminta penggu
 3. [#1111](https://github.com/OpenSID/OpenKab/issues/1111) Perbaikan style pada halaman slide tertutupi card icon penduduk.
 4. [#1262](https://github.com/OpenSID/OpenKab/issues/1262) Perbaikan grafik tidak tampil pada Profile Kependudukan - Kesehatan.
 5. [#1260](https://github.com/OpenSID/OpenKab/issues/1260) Perbaikan Error 500 gagal ambil data statistik partisipasi sekolah dan ijazah tertinggi.
-
+6. [#1265](https://github.com/OpenSID/OpenKab/issues/1265) perbaikan data desa tidak tampil di OpenKab.
 
 #### Perubahan Teknis
 

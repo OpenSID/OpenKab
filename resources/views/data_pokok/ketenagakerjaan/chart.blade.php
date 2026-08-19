@@ -12,7 +12,7 @@
             'kode_kecamatan': filters ? filters.kodeKecamatan : '',
             'config_desa': filters ? filters.configDesa : '',
         };
-        apiProxyGet('ketenagakerjaan/statistik', params, function(json) {
+        apiProxyGet('data-presisi/ketenagakerjaan/statistik', params, function(json) {
             var data = [];
             if (json.data && json.data.length > 0) {
                 json.data.forEach(function(item) {

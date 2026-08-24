@@ -146,6 +146,8 @@ class ApiProxyService
         } catch (\Exception $e) {
             Log::error('API Proxy: Exception', [
                 'endpoint' => $endpoint,
+                'url' => $url,
+                'method' => $method,
                 'file' => __FILE__,
                 'error' => $e->getMessage(),
             ]);

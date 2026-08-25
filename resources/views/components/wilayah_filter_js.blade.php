@@ -7,6 +7,10 @@
             };
             const identitasOpenkab = $(`meta[name="${AJAX_PARAMS_CONFIG.metaTagName}"]`).attr('content') || '';
             let isAutoLoad = false;
+            let urlFilterRestoring = false;
+            const queryKodeKabupaten = new URLSearchParams(window.location.search).get('filter[kode_kabupaten]');
+            const queryKodeKecamatan = new URLSearchParams(window.location.search).get('filter[kode_kecamatan]');
+            const queryKodeDesa = new URLSearchParams(window.location.search).get('filter[kode_desa]');
 
             let urlKabupaten =
                 "{{ config('app.databaseGabunganUrl') . '/api/v1/statistik-web/get-list-kabupaten' }}?" +
@@ -20,7 +24,6 @@
                 var optionEmpty = new Option("", "");
                 $("#filter_kabupaten").append(optionEmpty);
 
-                const queryKodeKabupaten = new URLSearchParams(window.location.search).get('filter[kode_kabupaten]');
                 const filterValue = queryKodeKabupaten || identitasOpenkab;
 
                 for (var i = 0; i < data.length; i++) {
@@ -30,6 +33,7 @@
 
                     if (data[i].kode_kabupaten === filterValue) {
                         isAutoLoad = true;
+                        urlFilterRestoring = true;
                         $("#filter_kabupaten").val(filterValue).trigger('change');
                     }
                 }
@@ -75,8 +79,18 @@
                             $("#filter_kecamatan").append(newOption);
                         }
                         $('#filter_kecamatan').prop('disabled', false);
+                        if (urlFilterRestoring && queryKodeKecamatan) {
+                            $('#filter_kecamatan').val(queryKodeKecamatan);
+                            if ($('#filter_kecamatan').val() === queryKodeKecamatan) {
+                                $('#filter_kecamatan').trigger('change');
+                            } else {
+                                urlFilterRestoring = false;
+                            }
+                        } else {
+                            urlFilterRestoring = false;
+                        }
                         if (isAutoLoad) {
-                            $('#bt_filter').trigger('click');
+                            $('#bt_filter, #filter').trigger('click');
                             isAutoLoad = false;
                         }
                     })
@@ -104,6 +118,11 @@
                             $("#filter_desa").append(newOption);
                         }
                         $('#filter_desa').prop('disabled', false);
+                        if (urlFilterRestoring && queryKodeDesa) {
+                            $('#filter_desa').val(queryKodeDesa);
+                            $('#filter_desa').trigger('change');
+                        }
+                        urlFilterRestoring = false;
                     })
                 }
             })

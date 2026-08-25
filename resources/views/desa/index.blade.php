@@ -133,25 +133,30 @@
                 serverSide: true,
                 autoWidth: false,
                 ordering: true,
+                order: [
+                    [1, 'asc']
+                ],
                 searchPanes: {
                     viewTotal: false,
                     columns: [0]
                 },
                 ajax: {
                     url: urlPenduduk,
+                    headers: header,
                     method: 'get',
                     data: function(row) {
                         return {
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
-                            "filter[kode_kabupaten]": $("#filter_kabupaten").val(),
-                            "filter[kode_kecamatan]": $("#filter_kecamatan").val(),
-                            "filter[kode_desa]": $("#filter_desa").val(),
-                            "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
+                            "filter[kode_kabupaten]": $("#filter_kabupaten").val() || '',
+                            "filter[kode_kecamatan]": $("#filter_kecamatan").val() || '',
+                            "filter[kode_desa]": $("#filter_desa").val() || '',
+                            "sort": row.columns[row.order[0]?.column]?.name ?
+                                (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row
                                     .order[0]
                                     ?.column]
-                                ?.name
+                                ?.name : undefined
                         };
                     },
                     dataSrc: function(json) {
@@ -174,7 +179,7 @@
                         }
                     },
                     {
-                        targets: [0, 1, 2, 3, 4],
+                        targets: 0,
                         orderable: false,
                         searchable: false,
                     },
@@ -229,8 +234,8 @@
             $(document).on('click', '#reset', function(e) {
                 e.preventDefault();
                 $('#filter_kabupaten').val('').change();
-                $('#filter_kabupaten').val('').change();
-                $('#filter_kabupaten').val('').change();
+                $('#filter_kecamatan').val('').change();
+                $('#filter_desa').val('').change();
 
                 pendudukDatatable.ajax.reload();
             });

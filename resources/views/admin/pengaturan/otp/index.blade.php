@@ -9,11 +9,11 @@
 @section('content')
 
     <div class="row">
-        <div class="col-8">
+        <div class="col-8" data-testid="panel-otp-2fa">
             @include('admin.pengaturan.otp.partials.status-cards')                     
         </div>
         
-        <div class="col-4">
+        <div class="col-4" data-testid="panel-info-sidebar">
             @include('admin.pengaturan.otp.partials.info-sidebar')
         </div>
     </div>

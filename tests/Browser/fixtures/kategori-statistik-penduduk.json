@@ -1,0 +1,12 @@
+{
+    "success": true,
+    "data": [
+        {"id": "rentang-umur", "nama": "Rentang Umur", "judul_halaman": "Penduduk", "judul_kolom_nama": "Jenis Kelompok"},
+        {"id": "kategori-umur", "nama": "Kategori Umur", "judul_halaman": "Penduduk", "judul_kolom_nama": "Jenis Kelompok"},
+        {"id": "pendidikan-dalam-kk", "nama": "Pendidikan Dalam KK", "judul_halaman": "Penduduk", "judul_kolom_nama": "Jenis Kelompok"},
+        {"id": "pekerjaan", "nama": "Pekerjaan", "judul_halaman": "Penduduk", "judul_kolom_nama": "Jenis Kelompok"},
+        {"id": "status-perkawinan", "nama": "Status Perkawinan", "judul_halaman": "Penduduk", "judul_kolom_nama": "Jenis Kelompok"},
+        {"id": "agama", "nama": "Agama", "judul_halaman": "Penduduk", "judul_kolom_nama": "Jenis Kelompok"},
+        {"id": "jenis-kelamin", "nama": "Jenis Kelamin", "judul_halaman": "Penduduk", "judul_kolom_nama": "Jenis Kelompok"}
+    ]
+}

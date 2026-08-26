@@ -327,6 +327,12 @@ final class Modul extends Enum
                     'url' => 'master/kategori/0',
                     'permission' => 'master-data-artikel',
                 ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Artikel',
+                    'url' => 'master/artikel',
+                    'permission' => 'master-data-artikel',
+                ],
             ],
         ],
         [

@@ -41,6 +41,21 @@
                 $('#tabel_penduduk_block').trigger('change');
                 $('#map').trigger('change');
             });
+
+            var kabLoaded = false;
+            var loadAttempts = 0;
+            var loadInterval = setInterval(function() {
+                loadAttempts++;
+                kabLoaded = $('#filter_kabupaten option').filter(function() {
+                    return this.value !== '';
+                }).length > 0;
+                if (kabLoaded || loadAttempts > 50) {
+                    clearInterval(loadInterval);
+                    if (kabLoaded && !$('#filter_kabupaten').val()) {
+                        $('#bt_filter').trigger('click');
+                    }
+                }
+            }, 100);
         })
     </script>
 @endpush

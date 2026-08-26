@@ -1,5 +1,7 @@
 @extends('layouts.index')
 
+@section('plugins.chart', true)
+
 @section('title', $title)
 
 @section('content_header')
@@ -21,7 +23,10 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="chart" id="grafik">
-                        <canvas id="barChart"></canvas>
+                        <canvas id="barChart" data-testid="chart-bar-seni-budaya"></canvas>
+                    </div>
+                    <div class="chart" id="pie">
+                        <canvas id="donutChart" data-testid="chart-donut-seni-budaya"></canvas>
                     </div>
                 </div>
             </div>
@@ -31,15 +36,15 @@
                         <x-filter-tahun />
                         <x-filter-status-presisi />
                         <div class="col-auto">
-                            <x-print-button :print-url="url('data-presisi/seni-budaya/cetak')" table-id="table-seni-budaya" :filter="[]" />
+                            <x-print-button :print-url="url('data-presisi/seni-budaya/cetak')" table-id="table-seni-budaya" :filter="[]" testId="btn-cetak" />
                         </div>
-                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/seni-budaya/rtm/download'" table-id="table-seni-budaya" filename="data_presisi_seni-budaya" />
+                        <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/seni-budaya/rtm/download'" table-id="table-seni-budaya" filename="data_presisi_seni-budaya" testId="btn-export-excel" />
 
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-seni-budaya">
+                        <table class="table table-striped" id="table-seni-budaya" data-testid="datatable-seni-budaya">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>
@@ -63,13 +68,20 @@
 @section('js')
     @include('data_pokok.data_presisi.seni_budaya.chart')
     <script nonce="{{ csp_nonce() }}">
-        let data_grafik = [];
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/seni-budaya/rtm' }}");
-            url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
-            url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-            url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");
+            url.searchParams.set("kode_kabupaten", kodeKabupaten);
+            url.searchParams.set("kode_kecamatan", kodeKecamatan);
+            url.searchParams.set("kode_desa", configDesa);
 
             var dtks = $('#table-seni-budaya').DataTable({
                 processing: true,
@@ -89,25 +101,21 @@
                             "page[size]": row.length,
                             "page[number]": (row.start / row.length) + 1,
                             "filter[search]": row.search.value,
-                            "kode_kecamatan": "{{ session('kecamatan.kode_kecamatan') ?? '' }}",
-                            "config_desa": "{{ session('desa.id') ?? '' }}",
                             "filter[tahun]": $('#filter-tahun').val(),
                             "filter[status_kelengkapan]": $('#filter-status-kelengkapan').val(),
+                            "kode_kabupaten": kodeKabupaten,
+                            "kode_kecamatan": kodeKecamatan,
+                            "config_desa": configDesa,
                         };
                     },
                     dataSrc: function(json) {
                         // Set default values untuk recordsTotal dan recordsFiltered
                         json.recordsTotal = json.meta?.pagination?.total || 0;
                         json.recordsFiltered = json.meta?.pagination?.total || 0;
-                        if (json.data && json.data.length > 0) {                            
-                            data_grafik = [];
-                            json.data.forEach(function(item, index) {
-                                data_grafik.push(item.attributes);
-                            });
-                            grafikPie();  // Pastikan grafikPie() ada
+                        if (json.data && json.data.length > 0) {
                             return json.data;
                         }
-                        return []; // Return empty array jika data kosong
+                        return [];
                     },
                 },
                 columnDefs: [{
@@ -167,6 +175,8 @@
                 ],
             });
 
+            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
+
             // Add event listener for opening and closing details
             dtks.on('click', 'td.details-control', function () {
                 let tr = $(this).closest('tr');
@@ -215,8 +225,7 @@
             // Event listener for year filter change
             $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
                 dtks.ajax.reload();
-                data_grafik = [];
-                grafikPie();
+                grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
             });
         });
     </script>

@@ -1,0 +1,47 @@
+{
+    "data": [
+        {
+            "type": "data_presisi_rtm",
+            "id": "1",
+            "attributes": {
+                "config_id": 1,
+                "nik": "0000000000000001",
+                "no_kk": "0000000000000001",
+                "kepala_keluarga": "I GEDE ADI SUARDANA",
+                "dtks": "Tidak Terdaftar",
+                "jumlah_anggota": 16,
+                "jenis_lahan": "TIDAK TAHU",
+                "luas_lahan": "TIDAK TAHU",
+                "luas_tanam": "TIDAK TAHU",
+                "status_lahan": "TIDAK TAHU",
+                "komoditi_utama_tanaman_pangan": "TIDAK TAHU",
+                "komoditi_tanaman_pangan_lainnya": "TIDAK TAHU",
+                "jumlah_berdasarkan_jenis_komoditi": "TIDAK TAHU",
+                "usia_komoditi": "TIDAK TAHU",
+                "jenis_peternakan": "TIDAK TAHU",
+                "jumlah_populasi": "TIDAK TAHU",
+                "jenis_perikanan": "TIDAK TAHU",
+                "frekwensi_makanan_perhari": "3 Kali",
+                "frekwensi_konsumsi_sayur_perhari": "3 Kali",
+                "frekwensi_konsumsi_buah_perhari": "1 Kali",
+                "frekwensi_konsumsi_daging_perhari": "3 Kali",
+                "jumlah_kk": 6,
+                "alamat": "BR DINAS BAJERA KAJA RT 001 / RW 001",
+                "dusun": "BR DINAS BAJERA KAJA",
+                "rw": "001",
+                "rt": "001",
+                "status": "Belum Diisi",
+                "tanggal_pengisian": "01-09-2025",
+                "tgl_daftar": "2025-08-29 02:05:01",
+                "tahun": "2025"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

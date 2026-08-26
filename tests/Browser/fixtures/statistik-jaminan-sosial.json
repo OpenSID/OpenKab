@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "BPJS Kesehatan",
+                "jumlah": 200,
+                "laki_laki": 100,
+                "perempuan": 100,
+                "persentase_jumlah": "66.67%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"jaminan-sosial\",\"filter[kriteria]\":\"BPJS Kesehatan\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "BPJS Ketenagakerjaan",
+                "jumlah": 100,
+                "laki_laki": 60,
+                "perempuan": 40,
+                "persentase_jumlah": "33.33%",
+                "persentase_laki_laki": "60.00%",
+                "persentase_perempuan": "40.00%",
+                "kriteria": "{\"filter[id]\":\"jaminan-sosial\",\"filter[kriteria]\":\"BPJS Ketenagakerjaan\"}"
+            }
+        }
+    ]
+}

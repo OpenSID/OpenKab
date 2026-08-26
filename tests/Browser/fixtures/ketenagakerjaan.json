@@ -1,0 +1,22 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "nik": "0000000000000001",
+                "pekerjaan": "Petani",
+                "jabatan": "Kepala Keluarga",
+                "jumlah_penghasilan": "Rp 2.000.000",
+                "pelatihan": "Tidak"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

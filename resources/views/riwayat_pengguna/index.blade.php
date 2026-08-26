@@ -27,7 +27,7 @@
                 <div class="card-body">
                     @include('riwayat_pengguna.filter')
                     <div class="table-responsive">
-                        <table class="table table-striped" id="riwayat_pengguna">
+                        <table class="table table-striped" id="riwayat_pengguna" data-testid="datatable-riwayat">
                             <thead>
                                 <tr>
                                     <th>No</th>

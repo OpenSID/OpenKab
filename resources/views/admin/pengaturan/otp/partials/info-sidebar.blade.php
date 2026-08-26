@@ -1,5 +1,5 @@
 <!-- Information Cards -->
-<div class="card">
+<div class="card" data-testid="card-info-keamanan">
     <div class="card-header">
         <h3 class="card-title">
             <i class="fas fa-info-circle mr-2"></i>
@@ -43,7 +43,7 @@
 </div>
 
 <!-- Tips & Tricks -->
-<div class="card">
+<div class="card" data-testid="card-tips-tricks">
     <div class="card-header">
         <h3 class="card-title">
             <i class="fas fa-lightbulb mr-2"></i>

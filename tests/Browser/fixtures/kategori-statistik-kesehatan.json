@@ -1,0 +1,11 @@
+{
+    "success": true,
+    "data": [
+        {
+            "attributes": {
+                "faskes": "Fasilitas Kesehatan",
+                "tenaga-medis": "Tenaga Medis"
+            }
+        }
+    ]
+}

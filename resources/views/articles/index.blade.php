@@ -18,7 +18,7 @@
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <a href="{{ route('articles.create') }} ">
-                                <button type="button" class="btn btn-primary btn-sm"><i class="far fa-plus-square"></i>
+                                <button type="button" class="btn btn-primary btn-sm" data-testid="bt-tambah"><i class="far fa-plus-square"></i>
                                     Tambah</button>
                             </a>
                         </div>
@@ -106,11 +106,11 @@
                         let canEdit = `{{ $canedit }}`
                         let canDelete = `{{ $candelete }}`
                         let buttonEdit = canEdit ? `<a href="{{ route('articles.index') }}/${data.id}/edit">
-                                        <button type="button" class="btn btn-warning btn-sm edit" title="Ubah">
+                                        <button type="button" class="btn btn-warning btn-sm edit" title="Ubah" data-testid="bt-edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </a>` : ``;
-                        let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus">
+                        let buttonDelete = canDelete ? `<button type="button" class="btn btn-danger btn-sm hapus" data-id="${data.id}" title="Hapus" data-testid="bt-delete">
                                         <i class="fas fa-trash"></i>
                                     </button>` : ``;
                         return `${buttonEdit} ${buttonDelete}`;

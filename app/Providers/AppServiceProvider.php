@@ -18,7 +18,11 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Models\User;
+use App\Observers\UserObserver;
 use App\Observers\VisitorObserver;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Shetabit\Visitor\Models\Visit;
 
 class AppServiceProvider extends ServiceProvider
@@ -43,36 +47,46 @@ class AppServiceProvider extends ServiceProvider
         $this->bootHttps();
         $this->addValidation();
         $this->addLogQuery();
+        
+        try {
+            $this->shareViewIdentitas();
+        } catch (Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+        }
 
         if (App::runningInConsole()) {
             activity()->disableLogging();
-        } else {
-            $identitasAplikasi = fractal(
-                Identitas::first(),
-                IdentitasTransformer::class,
-                \League\Fractal\Serializer\JsonApiSerializer::class
-            )->toArray()['data']['attributes'];
-
-            $settingAplikasi = collect(
-                fractal(
-                    Setting::all(),
-                    SettingTransformer::class,
-                    \League\Fractal\Serializer\JsonApiSerializer::class
-                )->toArray()['data']
-            )->pluck('attributes.value', 'attributes.key');
-
-            // daftarkan data identitas aplikasi disini, karena akan dipakai di hampir semua view
-            View::share('identitasAplikasi', $identitasAplikasi);
-            View::share('settingAplikasi', $settingAplikasi);
-            config()->set(['app.sebutanDesa' => $identitasAplikasi['sebutan_desa'] ?? 'Desa']);
-            config()->set(['app.sebutanKab' => $identitasAplikasi['sebutan_kab'] ?? 'Kabupaten']);
-            config()->set(['app.kodeKabupatenApi' => $identitasAplikasi['kode_kabupaten_api'] ?? '']);
-            $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
         }
+    }
+
+    private function shareViewIdentitas(): void
+    {
+        // Share data ke semua view (termasuk Pest browser test context)
+        $identitasAplikasi = fractal(
+            Identitas::first(),
+            IdentitasTransformer::class,
+            \League\Fractal\Serializer\JsonApiSerializer::class
+        )->toArray()['data']['attributes'];
+
+        $settingAplikasi = collect(
+            fractal(
+                Setting::all(),
+                SettingTransformer::class,
+                \League\Fractal\Serializer\JsonApiSerializer::class
+            )->toArray()['data']
+        )->pluck('attributes.value', 'attributes.key');
+
+        View::share('identitasAplikasi', $identitasAplikasi);
+        View::share('settingAplikasi', $settingAplikasi);
+        config()->set(['app.sebutanDesa' => $identitasAplikasi['sebutan_desa'] ?? 'Desa']);
+        config()->set(['app.sebutanKab' => $identitasAplikasi['sebutan_kab'] ?? 'Kabupaten']);
+        config()->set(['app.kodeKabupatenApi' => $identitasAplikasi['kode_kabupaten_api'] ?? '']);
+        $this->bootConfigAdminLTE($identitasAplikasi, $settingAplikasi);
     }
 
     protected function configureObservers(): void
     {
+        User::observe(UserObserver::class);
         Visit::observe(VisitorObserver::class);
     }
 

@@ -2,7 +2,7 @@
 
 @include('components.progressive-image')
 
-@section('title', 'Data Kependudukan dan Statistik')
+@section('title', 'Data Kesehatan dan Statistik')
 
 @section('content_header')
     <h1>{{ $title }}</h1>
@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header">Statistik Golongan Darah</div>
+                <div class="card-header">Statistik Asuransi Kesehatan</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">

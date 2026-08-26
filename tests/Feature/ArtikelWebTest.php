@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\CMS\Article;
+use App\Models\CMS\Category;
 use App\Services\ArtikelService;
 use Mockery;
 use PHPUnit\Framework\Attributes\Test;
@@ -22,7 +24,7 @@ class ArtikelWebTest extends BaseTestCase
 
         // Mock the ArtikelService
         $mockService = Mockery::mock(ArtikelService::class);
-        $mockService->shouldReceive('artikel')->andReturn(collect([
+        $mockService->shouldReceive('getCombinedArticles')->andReturn(collect([
             (object) [
                 'id' => 1,
                 'judul' => 'Test Artikel OpenSID',
@@ -31,18 +33,62 @@ class ArtikelWebTest extends BaseTestCase
                 'kategori_nama' => 'Berita Desa',
                 'tgl_upload' => '2023-10-01 10:00:00',
                 'enabled' => 1,
+                'source' => 'opensid',
+                'detail_url' => route('web.artikel.show', 1),
             ]
         ]));
 
         $this->app->instance(ArtikelService::class, $mockService);
 
         $response = $this->get(route('web.artikel.index'));
-        $response->dump();
         $response->assertStatus(200);
         $response->assertViewIs('web.artikel.index');
         $response->assertSee('Artikel Berita');
         $response->assertSee('Test Artikel OpenSID');
         $response->assertSee('Berita Desa');
+    }
+
+    #[Test]
+    public function it_displays_openkab_cms_articles_in_public_index()
+    {
+        $this->withoutMiddleware([\App\Http\Middleware\WebsiteEnable::class]);
+
+        $category = Category::factory()->create(['name' => 'Kategori OpenKab']);
+        $localArticle = Article::factory()->create([
+            'category_id' => $category->id,
+            'title' => 'Judul Artikel OpenKab CMS',
+            'content' => 'Konten artikel cms openkab lokal',
+            'state' => Article::PUBLISH,
+            'published_at' => now()->subDay(),
+        ]);
+
+        $response = $this->get(route('web.artikel.index'));
+        $response->assertStatus(200);
+        $response->assertSee('Judul Artikel OpenKab CMS');
+        $response->assertSee('OpenKab');
+    }
+
+    #[Test]
+    public function it_can_access_artikel_terbaru_json_endpoint()
+    {
+        $this->withoutMiddleware([\App\Http\Middleware\WebsiteEnable::class]);
+
+        $category = Category::factory()->create(['name' => 'Kategori OpenKab']);
+        $localArticle = Article::factory()->create([
+            'category_id' => $category->id,
+            'title' => 'Berita Terkini OpenKab',
+            'content' => 'Cuplikan berita terkini',
+            'state' => Article::PUBLISH,
+            'published_at' => now(),
+        ]);
+
+        $response = $this->get(route('web.artikel.terbaru'));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'status',
+            'data',
+        ]);
+        $response->assertSee('Berita Terkini OpenKab');
     }
 
     #[Test]
@@ -72,13 +118,35 @@ class ArtikelWebTest extends BaseTestCase
     }
 
     #[Test]
+    public function it_redirects_to_local_cms_article_if_id_matches_local_article()
+    {
+        $this->withoutMiddleware([\App\Http\Middleware\WebsiteEnable::class]);
+
+        $category = Category::factory()->create();
+        $localArticle = Article::factory()->create([
+            'category_id' => $category->id,
+            'title' => 'Artikel Lokal Redirect',
+            'slug' => 'artikel-lokal-redirect',
+            'state' => Article::PUBLISH,
+            'published_at' => now()->subDay(),
+        ]);
+
+        $mockService = Mockery::mock(ArtikelService::class);
+        $mockService->shouldReceive('artikelById')->with($localArticle->id)->andReturn(null);
+        $this->app->instance(ArtikelService::class, $mockService);
+
+        $response = $this->get(route('web.artikel.show', ['id' => $localArticle->id]));
+        $response->assertRedirect(route('article', ['aSlug' => $localArticle->slug]));
+    }
+
+    #[Test]
     public function it_aborts_404_for_disabled_or_missing_artikel()
     {
         $this->withoutMiddleware([\App\Http\Middleware\WebsiteEnable::class]);
 
         // Mock the ArtikelService
         $mockService = Mockery::mock(ArtikelService::class);
-        $mockService->shouldReceive('artikelById')->with(99)->andReturn(null);
+        $mockService->shouldReceive('artikelById')->with(999999)->andReturn(null);
 
         $mockService->shouldReceive('artikelById')->with(2)->andReturn((object) [
             'id' => 2,
@@ -89,7 +157,7 @@ class ArtikelWebTest extends BaseTestCase
         $this->app->instance(ArtikelService::class, $mockService);
 
         // Test non-existent article
-        $response404 = $this->get(route('web.artikel.show', ['id' => 99]));
+        $response404 = $this->get(route('web.artikel.show', ['id' => 999999]));
         $response404->assertStatus(404);
 
         // Test disabled article
@@ -97,3 +165,4 @@ class ArtikelWebTest extends BaseTestCase
         $responseDisabled->assertStatus(404);
     }
 }
+

@@ -14,6 +14,10 @@ class DesaController extends Controller
             'kode_kecamatan' => null,
         ]);
 
+        $filters = collect($filters)->map(function ($value) {
+            return in_array($value, ['null', 'undefined'], true) ? null : $value;
+        })->all();
+
         return view('desa.index', compact('filters'));
     }
 

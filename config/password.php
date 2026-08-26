@@ -42,7 +42,7 @@ return [
     | Set to 0 to disable password history check.
     |
     */
-    'history_count' => 5,
+    'history_count' => 10,
 
     /*
     |--------------------------------------------------------------------------

@@ -52,8 +52,8 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $html = $view->render();
 
         // Assert bahwa JavaScript DataTable configuration mengandung mapping untuk longitude dan latitude
-        $this->assertStringContainsString("{ data: 'attributes.longitude', orderable: false }", $html);
-        $this->assertStringContainsString("{ data: 'attributes.latitude', orderable: false }", $html);
+        $this->assertStringContainsString("{ data: 'attributes.longitude', defaultContent: \"-\", orderable: false }", $html);
+        $this->assertStringContainsString("{ data: 'attributes.latitude', defaultContent: \"-\", orderable: false }", $html);
         
         // Assert bahwa koordinat dikonfigurasi sebagai kolom yang tidak dapat diurutkan
         $this->assertStringContainsString("orderable: false", $html);
@@ -87,7 +87,7 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
     }
 
     #[Test]
-    public function it_configures_api_filter_with_rtm_id_for_coordinate_data()
+    public function it_configures_api_filter_with_id_rtm_for_coordinate_data()
     {
         // Mock data untuk testing view
         $mockData = (object) [
@@ -103,11 +103,11 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
         $view = ViewFacade::make('data_pokok.data_presisi.pangan.detail', ['data' => $mockData]);
         $html = $view->render();
 
-        // Assert bahwa filter API menggunakan rtm_id yang benar untuk mengambil data koordinat
-        $this->assertStringContainsString('url.searchParams.set("filter[rtm_id]", "TEST_RTM_123")', $html);
+        // Assert bahwa filter API menggunakan id_rtm (no_kartu_rumah) yang benar untuk mengambil data koordinat
+        $this->assertStringContainsString('url.searchParams.set("filter[id_rtm]", "KRT001")', $html);
         
         // Assert bahwa endpoint API untuk data presisi pangan dikonfigurasi dengan benar
-        $this->assertStringContainsString('/api/v1/data-presisi/pangan', $html);
+        $this->assertStringContainsString('/api/v1/data-presisi/pangan/anggota', $html);
     }
 
     #[Test]
@@ -242,8 +242,8 @@ class DataPresisiPanganDetailViewTest extends BaseTestCase
 
         // Assert bahwa longitude dan latitude dikonfigurasi sebagai non-orderable
         // Ini penting karena koordinat biasanya tidak perlu diurutkan
-        $this->assertStringContainsString("{ data: 'attributes.longitude', orderable: false }", $html);
-        $this->assertStringContainsString("{ data: 'attributes.latitude', orderable: false }", $html);
+        $this->assertStringContainsString("{ data: 'attributes.longitude', defaultContent: \"-\", orderable: false }", $html);
+        $this->assertStringContainsString("{ data: 'attributes.latitude', defaultContent: \"-\", orderable: false }", $html);
         
         // Assert bahwa semua kolom selain nomor urut dikonfigurasi sebagai non-orderable
         $columnDefPattern = '/targets: \[0, 1, 2, 3, 4, 5\],\s*orderable: false,\s*searchable: false/';

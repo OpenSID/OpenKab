@@ -29,7 +29,6 @@ class VisitorObserver
             static::$updating = true;
 
             $visit->update([
-                'location' => $location->toJson(),
                 'country_code' => $location->countryCode,
                 'country' => $location->countryName,
                 'region' => $location->regionCode,

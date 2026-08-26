@@ -1,8 +1,8 @@
 @include('data_pokok.data_presisi.partials.chart')
 <script nonce="{{ csp_nonce() }}">
     function grafik(filters) {
-        loadChartData(filters, 'barChart', 'bar', 'status_gizi');
-        loadChartData(filters, 'donutChart', 'doughnut', 'golongan_darah');
+        loadChartData(filters, 'barChart', 'bar', 'status_gizi_balita');
+        loadChartData(filters, 'donutChart', 'doughnut', 'jns_ansuransi');
     }
 
     function loadChartData(filters, canvasId, chartType, kategori) {
@@ -12,7 +12,7 @@
             'kode_kecamatan': filters ? filters.kodeKecamatan : '',
             'config_desa': filters ? filters.configDesa : '',
         };
-        apiProxyGet('data/kesehatan/statistik', params, function(json) {
+        apiProxyGet('data-presisi/kesehatan/statistik', params, function(json) {
             var data = [];
             if (json.data && json.data.length > 0) {
                 json.data.forEach(function(item) {

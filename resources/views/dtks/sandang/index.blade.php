@@ -71,11 +71,11 @@
         const kodeKabupaten = "{{ $kodeKabupaten }}";
         const kodeKecamatan = "{{ $kodeKecamatan }}";
         const configDesa = "{{ $configDesa }}";
-
+        
         var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/sandang/rtm' }}");
         url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
         url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-        url.searchParams.set("kode_desa", "{{ session('desa.id') ?? '' }}");        
+        url.searchParams.set("config_desa", configDesa);        
 
         var dtks = $('#table-dtks').DataTable({
             processing: true,
@@ -95,7 +95,7 @@
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
-                        "filter[tahun]": $('#filter-tahun').val(),                      
+                        "filter[tahun]": $('#filter-tahun').val()
                     };
                 },
                 dataSrc: function(json) {                   

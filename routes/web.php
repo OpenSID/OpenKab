@@ -286,7 +286,8 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::prefix('laporan')->group(function () {
         Route::prefix('desa-aktif')->group(function () {
             Route::get('', [App\Http\Controllers\LaporanDesaAktifController::class, 'index'])->name('laporan.desa-aktif.index');
-            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');            
+            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');
+            Route::get('export-excel', [App\Http\Controllers\LaporanDesaAktifController::class, 'exportExcel'])->name('laporan.desa-aktif.export-excel');
         });
     });
     Route::prefix('data-presisi')->group(function () {
@@ -444,6 +445,7 @@ Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('p
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
+    Route::get('artikel/terbaru', [ArtikelController::class, 'terbaru'])->name('web.artikel.terbaru');
     Route::get('artikel-opensid', [ArtikelController::class, 'index'])->name('web.artikel.index');
     Route::get('artikel-opensid/{id}', [ArtikelController::class, 'show'])->name('web.artikel.show');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');

@@ -1,19 +1,18 @@
-Di rilis ini, versi 2608.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2608.0.2 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
+1. [#1268](https://github.com/OpenSID/OpenKab/issues/1268) Penambahan fitur artikel tidak tampil di website.
+
 #### Perbaikan BUG
 
-1. [#1094](https://github.com/OpenSID/OpenKab/issues/1094) Perbaikan pangan error data table.
-2. [#1098](https://github.com/OpenSID/OpenKab/issues/1098) Perbaikan tampilan durasi lockout akun login (menit dan detik) serta koreksi perhitungan selisih waktu carbon.
-3. [#1100](https://github.com/OpenSID/OpenKab/issues/1100) Lengkapi fungsi laporan desa aktif.
-4. [#1083](https://github.com/OpenSID/OpenKab/issues/1083) Perbaikan ketika buka website default OpenKab.
-5. [#1091](https://github.com/OpenSID/OpenKab/pull/1091) Perbaikan menu artikel hilang.
-
- 
+1. [#1105](https://github.com/OpenSID/OpenKab/issues/1105) Perbaikan filter kecamatan tampil tanpa memilih kabupaten terlebih dahulu.
+2. [#1108](https://github.com/OpenSID/OpenKab/issues/1108) Perbaikan filter tahun dan desa masih ada yang kurang di data sandang.
+3. [#1111](https://github.com/OpenSID/OpenKab/issues/1111) Perbaikan style pada halaman slide tertutupi card icon penduduk.
+4. [#1262](https://github.com/OpenSID/OpenKab/issues/1262) Perbaikan grafik tidak tampil pada Profile Kependudukan - Kesehatan.
+5. [#1260](https://github.com/OpenSID/OpenKab/issues/1260) Perbaikan Error 500 gagal ambil data statistik partisipasi sekolah dan ijazah tertinggi.
+6. [#1265](https://github.com/OpenSID/OpenKab/issues/1265) perbaikan data desa tidak tampil di OpenKab.
 
 #### Perubahan Teknis
-
-1. [#1095](https://github.com/OpenSID/OpenKab/issues/1095) Terapkan Password History (10 Kata Sandi Terakhir).
 
 

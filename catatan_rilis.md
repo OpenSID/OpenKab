@@ -2,6 +2,8 @@ Di rilis ini, versi 2608.0.2 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Penambahan Fitur
 
+1. [#1268](https://github.com/OpenSID/OpenKab/issues/1268) Penambahan fitur artikel tidak tampil di website.
+
 #### Perbaikan BUG
 
 1. [#1105](https://github.com/OpenSID/OpenKab/issues/1105) Perbaikan filter kecamatan tampil tanpa memilih kabupaten terlebih dahulu.

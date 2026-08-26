@@ -1,8 +1,8 @@
 <!-- Name Field -->
 <div class="form-group row">
     <div class="col-12">
-        {!! Html::select('menu_type', ['1' => 'Default', '2' => 'Presisi'], '1')->class('form-control') !!}<br>
-        {!! Html::text('text')->class('form-control item-menu')->attribute('maxlength', 255)->attribute('placeholder', 'Nama Menu') !!}<br>
+        {!! Html::select('menu_type', ['1' => 'Default', '2' => 'Presisi'], '1')->class('form-control')->attribute('data-testid', 'select-sumber-menu-url') !!}<br>
+        {!! Html::text('text')->class('form-control item-menu')->attribute('maxlength', 255)->attribute('placeholder', 'Nama Menu')->attribute('data-testid', 'input-nama-menu') !!}<br>
 
         <!-- Icon Field as Dropdown -->
         {!! Html::select(
@@ -51,7 +51,7 @@
                 'fas fa-shopping-cart' => 'Shopping Cart',
             ],
             '',
-        )->class('form-control item-menu') !!}
+        )->class('form-control item-menu')->attribute('data-testid', 'select-pilih-icon') !!}
     </div>
 </div>
 
@@ -59,16 +59,16 @@
 <div class="form-group row">
     <div class="col-12">
         <label class="form-check-inline">
-            {!! Html::radio('source')->value('link')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'link') !!} Link
+            {!! Html::radio('source')->value('link')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'link')->attribute('data-testid', 'radio-link') !!} Link
         </label>
         <label class="form-check-inline">
-            {!! Html::radio('source')->value('Halaman')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Halaman') !!} Halaman
+            {!! Html::radio('source')->value('Halaman')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Halaman')->attribute('data-testid', 'radio-halaman') !!} Halaman
         </label>
         <label class="form-check-inline">
-            {!! Html::radio('source')->value('Kategori')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Kategori') !!} Kategori
+            {!! Html::radio('source')->value('Kategori')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Kategori')->attribute('data-testid', 'radio-kategori') !!} Kategori
         </label>
         <label class="form-check-inline">
-            {!! Html::radio('source')->value('Modul')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Modul') !!} Modul
+            {!! Html::radio('source')->value('Modul')->class('form-check-input')->checked(old('source', $menu->source ?? 'link') == 'Modul')->attribute('data-testid', 'radio-modul') !!} Modul
         </label>
     </div>
 </div>
@@ -76,8 +76,8 @@
 <!-- Url Field -->
 <div class="form-group row">
     <div class="col-12">
-        {!! Html::select('sourcelist', $sourceItem)->class('form-control') !!}
-        {!! Html::text('href')->class('form-control item-menu')->attribute('maxlength', 255)->attribute('placeholder', 'http://contoh.com') !!}
+        {!! Html::select('sourcelist', $sourceItem)->class('form-control')->attribute('data-testid', 'select-sourcelist') !!}
+        {!! Html::text('href')->class('form-control item-menu')->attribute('maxlength', 255)->attribute('placeholder', 'http://contoh.com')->attribute('data-testid', 'input-url') !!}
     </div>
 </div>
 

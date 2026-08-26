@@ -1,7 +1,7 @@
 <!-- Status Cards -->
 <div class="row mb-4">
     <!-- OTP Status Card -->
-    <div class="col-md-6 mb-3">
+    <div class="col-md-6 mb-3" data-testid="panel-otp">
         <div class="card {{ $user->hasOtpEnabled() ? 'border-success' : 'border-secondary' }}">
             <div class="card-header {{ $user->hasOtpEnabled() ? 'bg-success' : 'bg-secondary' }} text-white">
                 <h3 class="card-title">
@@ -46,11 +46,11 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         @if($user->hasOtpEnabled())
-                        <button type="button" class="btn btn-outline-warning" id="disableOtpBtn">
+                        <button type="button" class="btn btn-outline-warning" id="disableOtpBtn" data-testid="bt-disable-otp">
                             <i class="fas fa-times-circle mr-2"></i>Non Aktifkan
                         </button>
                         @else
-                        <button type="button" class="btn btn-outline-primary" id="enableOtpBtn">
+                        <button type="button" class="btn btn-outline-primary" id="enableOtpBtn" data-testid="bt-enable-otp">
                             <i class="fas fa-plus-circle mr-2"></i>Aktifkan OTP
                         </button>
                         @endif
@@ -61,7 +61,7 @@
         </div>
     </div>
     <!-- 2FA Status Card -->
-    <div class="col-md-6 mb-3">
+    <div class="col-md-6 mb-3" data-testid="panel-2fa">
         <div class="card {{ $twoFactorStatus['enabled'] ? 'border-success' : 'border-secondary' }}">
             <div class="card-header {{ $twoFactorStatus['enabled'] ? 'bg-success' : 'bg-secondary' }} text-white">
                 <h3 class="card-title">
@@ -106,11 +106,11 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         @if($twoFactorStatus['enabled'])
-                        <button type="button" class="btn btn-outline-warning" id="disable2faBtn">
+                        <button type="button" class="btn btn-outline-warning" id="disable2faBtn" data-testid="bt-disable-2fa">
                             <i class="fas fa-times-circle mr-2"></i>Non Aktifkan
                         </button>
                         @else
-                        <button type="button" class="btn btn-outline-primary" id="enable2faBtn">
+                        <button type="button" class="btn btn-outline-primary" id="enable2faBtn" data-testid="bt-enable-2fa">
                             <i class="fas fa-plus-circle mr-2"></i>Aktifkan 2FA
                         </button>
                         @endif

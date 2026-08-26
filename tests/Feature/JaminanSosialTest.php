@@ -111,7 +111,7 @@ class JaminanSosialTest extends BaseTestCase
         // Test filter tahun change event listener exists
         $this->assertStringContainsString("$('#filter-tahun, #filter-status-kelengkapan').on('change'", $content, 'Event listener filter tahun tidak ditemukan');
         $this->assertStringContainsString('jaminanSosial.ajax.reload()', $content, 'DataTable reload pada filter tahun tidak ditemukan');
-        $this->assertStringContainsString('grafikPie()', $content, 'Grafik reload pada filter tahun tidak ditemukan');
+        $this->assertStringContainsString('grafikPie(', $content, 'Grafik reload pada filter tahun tidak ditemukan');
     }
 
     #[Test]

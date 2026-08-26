@@ -18,10 +18,10 @@
         $('#barChart').remove();
         $('#donutChart').remove();
         $('#grafik').append(
-            '<canvas id="barChart"></canvas>'
+            '<canvas id="barChart" data-testid="chart-bar-penginapan"></canvas>'
         );
         $('#pie').append(
-            '<canvas id="donutChart"></canvas>'
+            '<canvas id="donutChart" data-testid="chart-donut-pemanfaatan"></canvas>'
         );
         var grafik = modifikasiDataGrafik(data_grafik);
         var pie = modifikasiDataPie(data_grafik, 'tingkat_pemanfaatan');

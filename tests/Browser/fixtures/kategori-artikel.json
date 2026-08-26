@@ -1,0 +1,40 @@
+{
+    "data": [
+        {
+            "type": "daftar kategori",
+            "id": "1001",
+            "attributes": {
+                "tipe": 1,
+                "urut": 0,
+                "slug": "pemerintahan",
+                "parrent": 0,
+                "kategori": "Pemerintahan",
+                "jml_artikel": 5
+            }
+        },
+        {
+            "type": "daftar kategori",
+            "id": "1002",
+            "attributes": {
+                "tipe": 1,
+                "urut": 1,
+                "slug": "pembangunan",
+                "parrent": 0,
+                "kategori": "Pembangunan",
+                "jml_artikel": 3
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 2,
+            "count": 2,
+            "per_page": 10,
+            "current_page": 1,
+            "total_pages": 1
+        }
+    },
+    "links": {
+        "self": "http://127.0.0.1:8001/api/v1/kategori?page%5Bsize%5D=10&page%5Bnumber%5D=1"
+    }
+}

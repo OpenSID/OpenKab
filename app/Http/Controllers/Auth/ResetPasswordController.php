@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\PasswordHistory;
 use App\Providers\AppServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Support\Facades\Password;
 
 class ResetPasswordController extends Controller
 {
@@ -75,26 +73,14 @@ class ResetPasswordController extends Controller
     {
         $expiryDays = config('password.expiry_days');
 
-        // Save old password to history
-        if ($user->password) {
-            PasswordHistory::create([
-                'user_id' => $user->id,
-                'password' => $user->password,
-                'reason' => 'password_reset',
-            ]);
-        }
-
-        // Set new password
+        $user->passwordHistoryReason = 'password_reset';
         $user->password = $password;
 
-        // Set expiry if configured
         if ($expiryDays) {
             $user->password_expires_at = now()->addDays($expiryDays);
         }
 
-        // Reset force_password_reset flag
         $user->force_password_reset = false;
-
         $user->save();
     }
 }

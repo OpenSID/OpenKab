@@ -1,0 +1,32 @@
+{
+    "data": [
+        {
+            "type": "point",
+            "id": "1",
+            "nama": "Gedung",
+            "enabled_str": "Aktif",
+            "path_simbol": "/images/simbol/gedung.png",
+            "aksi": "<a href='#' class='btn btn-warning btn-sm' title='Ubah' data-testid='bt-edit'><i class='fas fa-edit'></i></a> <button type='button' class='btn btn-danger btn-sm hapus' data-id='1' title='Hapus' data-testid='bt-delete'><i class='fas fa-trash'></i></button> <a href='#' class='btn btn-info btn-sm' title='Rincian' data-testid='bt-rincian'><i class='fas fa-search'></i></a> <a href='#' class='btn btn-success btn-sm' title='Lock' data-testid='bt-lock'><i class='fas fa-lock'></i></a>"
+        },
+        {
+            "type": "point",
+            "id": "2",
+            "nama": "Jalan",
+            "enabled_str": "Aktif",
+            "path_simbol": "/images/simbol/jalan.png",
+            "aksi": "<a href='#' class='btn btn-warning btn-sm' title='Ubah' data-testid='bt-edit'><i class='fas fa-edit'></i></a> <button type='button' class='btn btn-danger btn-sm hapus' data-id='2' title='Hapus' data-testid='bt-delete'><i class='fas fa-trash'></i></button> <a href='#' class='btn btn-info btn-sm' title='Rincian' data-testid='bt-rincian'><i class='fas fa-search'></i></a> <a href='#' class='btn btn-success btn-sm' title='Lock' data-testid='bt-lock'><i class='fas fa-lock'></i></a>"
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 2,
+            "count": 2,
+            "per_page": 10,
+            "current_page": 1,
+            "total_pages": 1
+        }
+    },
+    "links": {
+        "self": "http://127.0.0.1:8001/api/v1/point?page%5Bsize%5D=10&page%5Bnumber%5D=1"
+    }
+}

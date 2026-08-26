@@ -2,7 +2,7 @@
 
 @include('components.progressive-image')
 
-@section('title', 'Data Kependudukan dan Statistik')
+@section('title', 'Data Kesehatan dan Statistik')
 
 @section('content_header')
     <h1>{{ $title }}</h1>
@@ -13,11 +13,11 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header">Statistik Golongan Darah</div>
+                <div class="card-header">Statistik Asuransi Kesehatan</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                            <canvas id="donutChart" data-testid="chart-donut"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                            <canvas id="barChart" data-testid="chart-bar"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -45,14 +45,14 @@
                     <div>{{ $title }}</div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <x-print-button :print-url="url('data-pokok/kesehatan/cetak')" table-id="kesehatan" :filter="[]" />
-                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data/kesehatan/download'" table-id="kesehatan" filename="data_kesehatan" />
+                            <x-print-button :print-url="url('data-pokok/kesehatan/cetak')" table-id="kesehatan" :filter="[]" testId="btn-cetak" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data/kesehatan/download'" table-id="kesehatan" filename="data_kesehatan" testId="btn-export-excel" />
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="kesehatan">
+                        <table class="table table-striped" id="kesehatan" data-testid="datatable-kesehatan">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -79,9 +79,16 @@
 @section('js')
     @include('data_pokok.kesehatan.chart')
     <script nonce="{{ csp_nonce() }}">
-        let data_grafik = [];
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data/kesehatan' }}");
             url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
@@ -115,11 +122,7 @@
                         if (json.data.length > 0) {
                             json.recordsTotal = json.meta.pagination.total
                             json.recordsFiltered = json.meta.pagination.total
-                            data_grafik = [];
-                            json.data.forEach(function(item, index) {
-                                data_grafik.push(item.attributes)
-                            })
-                            grafik()
+                            grafik({ kodeKabupaten, kodeKecamatan, configDesa })
                             return json.data;
                         }
                         return false;

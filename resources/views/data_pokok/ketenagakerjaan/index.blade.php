@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
-                            <canvas id="barChart"></canvas>
+                            <canvas id="barChart" data-testid="chart-bar"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">
-                            <canvas id="donutChart"></canvas>
+                            <canvas id="donutChart" data-testid="chart-donut"></canvas>
                         </div>
                         <hr class="hr-chart">
                     </div>
@@ -45,15 +45,15 @@
                     <div>{{ $title }}</div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <x-print-button :print-url="url('data-pokok/ketenagakerjaan/cetak')" table-id="ketenagakerjaan" :filter="[]" />
+                            <x-print-button :print-url="url('data-pokok/ketenagakerjaan/cetak')" table-id="ketenagakerjaan" :filter="[]" testId="btn-cetak" />
                             <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/ketenagakerjaan/download'" table-id="ketenagakerjaan"
-                                filename="data_ketenagakerjaan" />
+                                filename="data_ketenagakerjaan" testId="btn-export-excel" />
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="ketenagakerjaan">
+                        <table class="table table-striped" id="ketenagakerjaan" data-testid="datatable-ketenagakerjaan">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -77,10 +77,17 @@
 @section('js')
     @include('data_pokok.ketenagakerjaan.chart')
     <script nonce="{{ csp_nonce() }}">
-        let data_grafik = [];
         document.addEventListener("DOMContentLoaded", function(event) {
 
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/ketenagakerjaan' }}");
             url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
@@ -112,11 +119,7 @@
                         if (json.data.length > 0) {
                             json.recordsTotal = json.meta.pagination.total
                             json.recordsFiltered = json.meta.pagination.total
-                            data_grafik = [];
-                            json.data.forEach(function(item, index) {
-                                data_grafik.push(item.attributes)
-                            })
-                            grafikPie()
+                            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa })
                             return json.data;
                         }
                         return false;

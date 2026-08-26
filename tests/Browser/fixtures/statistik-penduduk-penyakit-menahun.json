@@ -1,0 +1,72 @@
+{
+    "draw": 1,
+    "recordsTotal": 4,
+    "recordsFiltered": 4,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Diabetes",
+                "jumlah": 500,
+                "laki_laki": 250,
+                "perempuan": 250,
+                "persentase_jumlah": "2.00%",
+                "persentase_laki_laki": "1.00%",
+                "persentase_perempuan": "1.00%",
+                "kriteria": "{\"filter[id]\":\"penyakit-menahun\",\"filter[kriteria]\":\"Diabetes\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Hipertensi",
+                "jumlah": 800,
+                "laki_laki": 400,
+                "perempuan": 400,
+                "persentase_jumlah": "3.20%",
+                "persentase_laki_laki": "1.60%",
+                "persentase_perempuan": "1.60%",
+                "kriteria": "{\"filter[id]\":\"penyakit-menahun\",\"filter[kriteria]\":\"Hipertensi\"}"
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama": "Jantung",
+                "jumlah": 300,
+                "laki_laki": 180,
+                "perempuan": 120,
+                "persentase_jumlah": "1.20%",
+                "persentase_laki_laki": "0.72%",
+                "persentase_perempuan": "0.48%",
+                "kriteria": "{\"filter[id]\":\"penyakit-menahun\",\"filter[kriteria]\":\"Jantung\"}"
+            }
+        },
+        {
+            "id": "4",
+            "attributes": {
+                "nama": "Stroke",
+                "jumlah": 200,
+                "laki_laki": 120,
+                "perempuan": 80,
+                "persentase_jumlah": "0.80%",
+                "persentase_laki_laki": "0.48%",
+                "persentase_perempuan": "0.32%",
+                "kriteria": "{\"filter[id]\":\"penyakit-menahun\",\"filter[kriteria]\":\"Stroke\"}"
+            }
+        },
+        {
+            "id": "5",
+            "attributes": {
+                "nama": "JUMLAH",
+                "jumlah": 25000,
+                "laki_laki": 12500,
+                "perempuan": 12500,
+                "persentase_jumlah": "100.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{}"
+            }
+        }
+    ]
+}

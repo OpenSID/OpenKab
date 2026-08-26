@@ -18,12 +18,12 @@
 
 @section('auth_body')
     @include('partials.flash_message')
-    <form action="{{ $login_url }}" method="post">
+    <form action="{{ $login_url }}" method="post" data-testid="login-form">
         @csrf
 
         {{-- Email / Username field --}}
         <div class="input-group mb-3">
-            <input type="text" name="login"
+            <input type="text" name="login" data-testid="login-email"
                 class="form-control {{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
                 value="{{ old('username') ?: old('email') }}" placeholder="Email atau nama pengguna" autofocus>
 
@@ -42,7 +42,8 @@
 
         {{-- Password field --}}
         <div class="input-group mb-3">
-            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+            <input type="password" name="password" data-testid="login-password"
+                class="form-control @error('password') is-invalid @enderror"
                 placeholder="{{ __('adminlte::adminlte.password') }}">
 
             <div class="input-group-append">
@@ -63,7 +64,8 @@
         <div class="row">
             <div class="col-7">
                 <div class="icheck-primary" title="{{ __('adminlte::adminlte.remember_me_hint') }}">
-                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                    <input type="checkbox" name="remember" id="remember" data-testid="login-remember"
+                        {{ old('remember') ? 'checked' : '' }}>
 
                     <label for="remember">
                         {{ __('adminlte::adminlte.remember_me') }}
@@ -72,7 +74,7 @@
             </div>
 
             <div class="col-5">
-                <button type=submit
+                <button type=submit data-testid="login-submit"
                     class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
                     <span class="fas fa-sign-in-alt"></span>
                     {{ __('adminlte::adminlte.sign_in') }}

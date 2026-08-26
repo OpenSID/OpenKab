@@ -14,13 +14,13 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     @if($canwrite)
-                    <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm" judul="Tambah Data"><i
+                    <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm" judul="Tambah Data" data-testid="bt-tambah"><i
                             class="fa fa-plus"></i>&ensp;Tambah</a>
                     @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped" id="user">
+                        <table class="table table-bordered table-striped" id="user" data-testid="datatable-pengguna">
                             <thead>
                                 <tr>
                                     <th>No</th>

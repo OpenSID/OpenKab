@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Models\PasswordHistory;
+use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
@@ -31,9 +32,19 @@ class StrongPassword implements Rule
     protected array $weakPatterns;
 
     /**
+     * Specific user to check history against (for unauthenticated contexts).
+     */
+    protected ?User $user = null;
+
+    /**
      * Common passwords list.
      */
     protected array $commonPasswords;
+
+    /**
+     * The validation rule that failed.
+     */
+    protected ?string $failedRule = null;
 
     /**
      * Create a new rule instance.
@@ -41,13 +52,15 @@ class StrongPassword implements Rule
     public function __construct(
         ?int $minLength = null,
         ?bool $checkHibp = null,
-        ?int $historySize = null
+        ?int $historySize = null,
+        ?User $user = null
     ) {
         $this->minLength = $minLength ?? config('password.min_length', 12);
         $this->checkHibp = $checkHibp ?? config('password.check_hibp', true);
-        $this->historySize = $historySize ?? config('password.history_count', 5);
+        $this->historySize = $historySize ?? config('password.history_count', 10);
         $this->weakPatterns = config('password.weak_patterns', []);
         $this->commonPasswords = config('password.common_passwords', []);
+        $this->user = $user;
     }
 
     /**
@@ -60,48 +73,48 @@ class StrongPassword implements Rule
      */
     public function passes($attribute, $value)
     {
-        // Check minimum length
         if (strlen($value) < $this->minLength) {
+            $this->failedRule = 'length';
             return false;
         }
 
-        // Check for at least one uppercase letter
         if (!preg_match('/[A-Z]/', $value)) {
+            $this->failedRule = 'complexity';
             return false;
         }
 
-        // Check for at least one lowercase letter
         if (!preg_match('/[a-z]/', $value)) {
+            $this->failedRule = 'complexity';
             return false;
         }
 
-        // Check for at least one number
         if (!preg_match('/[0-9]/', $value)) {
+            $this->failedRule = 'complexity';
             return false;
         }
 
-        // Check for at least one special character
         if (!preg_match('/[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\;\'\/`~]/', $value)) {
+            $this->failedRule = 'complexity';
             return false;
         }
 
-        // Check for weak patterns
         if ($this->matchesWeakPattern($value)) {
+            $this->failedRule = 'weak_pattern';
             return false;
         }
 
-        // Check for common passwords
         if ($this->isCommonPassword($value)) {
+            $this->failedRule = 'common';
             return false;
         }
 
-        // Check HIBP database
         if ($this->checkHibp && !$this->isNotPwned($value)) {
+            $this->failedRule = 'hibp';
             return false;
         }
 
-        // Check password history
         if (!$this->isNotInHistory($value)) {
+            $this->failedRule = 'history';
             return false;
         }
 
@@ -168,11 +181,12 @@ class StrongPassword implements Rule
      */
     protected function isNotInHistory(string $password): bool
     {
-        if (!auth()->check()) {
-            return true; // No logged in user to check history for
+        $user = $this->user ?? (auth()->check() ? auth()->user() : null);
+
+        if (!$user) {
+            return true;
         }
 
-        $user = auth()->user();
         $passwordHistory = PasswordHistory::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->limit($this->historySize)
@@ -194,14 +208,20 @@ class StrongPassword implements Rule
      */
     public function message()
     {
-        return [
-            'length' => 'Password harus memiliki minimal :min karakter.',
+        $messages = [
+            'length' => 'Password harus memiliki minimal '.$this->minLength.' karakter.',
             'complexity' => 'Password harus mengandung huruf kapital, huruf kecil, angka, dan karakter spesial (!@#$%^&*...).',
             'hibp' => 'Password ini telah bocor di database password yang pernah diretas. Silakan gunakan password lain yang lebih unik.',
             'history' => 'Password ini telah digunakan sebelumnya. Silakan gunakan password baru.',
             'weak_pattern' => 'Password terlalu lemah atau mudah ditebak. Hindari pola berulang atau berurutan.',
             'common' => 'Password ini terlalu umum dan mudah ditebak. Silakan gunakan password yang lebih unik.',
         ];
+
+        if ($this->failedRule && isset($messages[$this->failedRule])) {
+            return $messages[$this->failedRule];
+        }
+
+        return 'Password tidak memenuhi persyaratan keamanan.';
     }
 
     /**

@@ -286,7 +286,8 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::prefix('laporan')->group(function () {
         Route::prefix('desa-aktif')->group(function () {
             Route::get('', [App\Http\Controllers\LaporanDesaAktifController::class, 'index'])->name('laporan.desa-aktif.index');
-            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');            
+            Route::get('cetak', [App\Http\Controllers\LaporanDesaAktifController::class, 'cetak'])->name('laporan.desa-aktif.cetak');
+            Route::get('export-excel', [App\Http\Controllers\LaporanDesaAktifController::class, 'exportExcel'])->name('laporan.desa-aktif.export-excel');
         });
     });
     Route::prefix('data-presisi')->group(function () {
@@ -444,6 +445,7 @@ Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('p
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
+    Route::get('artikel/terbaru', [ArtikelController::class, 'terbaru'])->name('web.artikel.terbaru');
     Route::get('artikel-opensid', [ArtikelController::class, 'index'])->name('web.artikel.index');
     Route::get('artikel-opensid/{id}', [ArtikelController::class, 'show'])->name('web.artikel.show');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');
@@ -467,3 +469,12 @@ Route::get('/statistik-kesehatan', [PresisiController::class, 'kesehatan'])->nam
 
 // Image proxy route with rate limiting
 Route::middleware('throttle:30,1')->get('/image-proxy', [ImageProxyController::class, 'proxy'])->name('image.proxy');
+
+// Pest Browser Testing - Quick login route (hanya untuk testing)
+if (app()->environment('testing')) {
+    Route::get('/_pest/login/{userId}', function ($userId) {
+        $user = App\Models\User::findOrFail($userId);
+        Auth::login($user);
+        return response(status: 200);
+    })->middleware('web');
+}

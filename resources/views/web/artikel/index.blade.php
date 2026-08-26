@@ -54,6 +54,9 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">{{ $article->judul ?? '' }}</h5>
                                 <div class="mb-2">
+                                    @if (isset($article->source) && $article->source === 'openkab')
+                                        <span class="badge bg-success me-1">OpenKab</span>
+                                    @endif
                                     <span class="badge bg-primary">{{ $article->kategori_nama ?? 'Kategori' }}</span>
                                 </div>
                                 <div class="card-text flex-grow-1">
@@ -61,13 +64,11 @@
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>
-                                        @if (isset($article->id))
-                                        <a href="{{ route('web.artikel.show', $article->id) }}"
+                                        <a href="{{ $article->detail_url ?? route('web.artikel.show', $article->id) }}"
                                             class="text-decoration-none btn btn-sm btn-outline-primary">Selengkapnya</a>
-                                        @endif
                                     </div>
                                     <small class="text-muted">
-                                        {{ isset($article->tgl_upload) ? \Carbon\Carbon::parse($article->tgl_upload)->translatedFormat('d F Y') : '' }}
+                                        {{ isset($article->tgl_upload) && !empty($article->tgl_upload) ? \Carbon\Carbon::parse($article->tgl_upload)->translatedFormat('d F Y') : '' }}
                                     </small>
                                 </div>
                             </div>
@@ -82,9 +83,11 @@
                 @endforelse
             </div>
 
-            <!-- Mengingat ini adalah array/collection dari API (bukan standard Laravel paginator), 
-                     UI pagination native agak tricky untuk di-render otomatis. 
-                     Kita tampilkan tombol Muat Lebih Banyak dengan parameter halaman jika diperlukan -->
+            @if ($articles->hasPages())
+                <div class="d-flex justify-content-center mb-5">
+                    {{ $articles->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
         </div>
         <!-- Konten Halaman -->
     </div>

@@ -85,10 +85,10 @@ class LoginController extends Controller
         
         if ($user && $user->isLocked()) {
             $remainingSeconds = $user->getLockoutRemainingSeconds();
-            $minutes = ceil($remainingSeconds / 60);
+            $timeText = $remainingSeconds < 60 ? "{$remainingSeconds} detik" : ceil($remainingSeconds / 60) . " menit";
 
             throw ValidationException::withMessages([
-                $this->username() => "AKUN TERKUNCI. Terlalu banyak gagal login. Coba lagi dalam {$minutes} menit.",
+                $this->username() => "AKUN TERKUNCI. Terlalu banyak gagal login. Coba lagi dalam {$timeText}.",
             ]);
         }
 
@@ -116,8 +116,9 @@ class LoginController extends Controller
             $result = $user->recordFailedLogin();
             
             if ($result['locked']) {
-                $minutes = ceil($result['lockout_expires_in'] / 60);
-                $message = "AKUN TERKUNCI. Terlalu banyak gagal login ({$result['attempts']} kali). Coba lagi dalam {$minutes} menit.";
+                $remainingSeconds = $result['lockout_expires_in'] ?? 900;
+                $timeText = $remainingSeconds < 60 ? "{$remainingSeconds} detik" : ceil($remainingSeconds / 60) . " menit";
+                $message = "AKUN TERKUNCI. Terlalu banyak gagal login ({$result['attempts']} kali). Coba lagi dalam {$timeText}.";
             } elseif ($result['remaining'] === 0) {
                 $message = "PERINGATAN: Akun akan terkunci setelah {$result['attempts']} kali gagal login.";
             } else {
@@ -147,14 +148,17 @@ class LoginController extends Controller
 
         if ($successLogin) {
             try {
+                $passwordRule = Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols();
+
+                    $passwordRule->uncompromised();
+
                 $request->validate(['password' => [
                     'required',
-                    Password::min(8)
-                        ->letters()
-                        ->mixedCase()
-                        ->numbers()
-                        ->symbols()
-                        ->uncompromised(),
+                    $passwordRule,
                 ]]);
                 session(['weak_password' => false]);
             } catch (ValidationException $th) {
@@ -320,11 +324,11 @@ class LoginController extends Controller
         
         if ($user && $user->isLocked()) {
             $remainingSeconds = $user->getLockoutRemainingSeconds();
-            $minutes = ceil($remainingSeconds / 60);
+            $timeText = $remainingSeconds < 60 ? "{$remainingSeconds} detik" : ceil($remainingSeconds / 60) . " menit";
 
             return [
                 'locked' => true,
-                'message' => "AKUN TERKUNCI. Terlalu banyak gagal login. Coba lagi dalam {$minutes} menit.",
+                'message' => "AKUN TERKUNCI. Terlalu banyak gagal login. Coba lagi dalam {$timeText}.",
                 'retry_after' => $remainingSeconds,
             ];
         }

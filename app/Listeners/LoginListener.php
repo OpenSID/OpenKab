@@ -33,40 +33,42 @@ class LoginListener
     public function handle(Login $event)
     {
         $presisiStatus = false;
-        try {
-            $url = config('app.databaseGabunganUrl').'/api/v1/setting-modul';
-            $setting = Setting::where('key', 'database_gabungan_api_key')->first();
-            $settingModul = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$setting->value ?? '',
-            ])->get($url, [
-                'filter[slug]' => 'data-presisi',
-                'page[size]' => 1,
-            ])->throw()
-                ->json();
+        $prodeskelStatus = false;
 
-            $prodeskel = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$setting->value ?? '',
-            ])->get($url, [
-                'filter[slug]' => 'prodeskel',
-                'page[size]' => 1,
-            ])->throw()
-                ->json();
+        if (!app()->environment('testing')) {
+            try {
+                $url = config('app.databaseGabunganUrl').'/api/v1/setting-modul';
+                $setting = Setting::where('key', 'database_gabungan_api_key')->first();
+                $settingModul = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.$setting->value ?? '',
+                ])->get($url, [
+                    'filter[slug]' => 'data-presisi',
+                    'page[size]' => 1,
+                ])->throw()
+                    ->json();
 
-            // Assuming the response contains a 'data' key with the status
-            $presisiStatus = count($settingModul['data']) > 0 ? true : false;
-            $prodeskelStatus = count($prodeskel['data']) > 0 ? true : false;
+                $prodeskel = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.$setting->value ?? '',
+                ])->get($url, [
+                    'filter[slug]' => 'prodeskel',
+                    'page[size]' => 1,
+                ])->throw()
+                    ->json();
 
-            session(['presisi_enabled' => $presisiStatus, 'prodeskel_enabled' => $prodeskelStatus]);
+                $presisiStatus = count($settingModul['data']) > 0 ? true : false;
+                $prodeskelStatus = count($prodeskel['data']) > 0 ? true : false;
 
-            activity('authentication-log')->event('login')->withProperties($this->request)->log('Login');
-        } catch (Exception $e) {
-            Log::error('Error fetching setting-modul: '.$e->getMessage());
+                session(['presisi_enabled' => $presisiStatus, 'prodeskel_enabled' => $prodeskelStatus]);
+            } catch (Exception $e) {
+                Log::error('Error fetching setting-modul: '.$e->getMessage());
+            }
         }
-        session(['presisi_enabled' => $presisiStatus, 'kabupaten.kode_kabupaten' => auth()->user()->kode_kabupaten ?? null]);
+
+        session(['presisi_enabled' => $presisiStatus, 'prodeskel_enabled' => $prodeskelStatus, 'kabupaten.kode_kabupaten' => config('app.kodeKabupatenApi')]);
 
         activity('authentication-log')->event('login')->withProperties($this->request)->log('Login');
     }

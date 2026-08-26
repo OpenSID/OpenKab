@@ -1,0 +1,34 @@
+{
+    "data": [
+        {
+            "type": "plan",
+            "id": "1",
+            "nama": "Kantor Desa",
+            "enabled": "YA",
+            "jenis": "Gedung",
+            "kategori": "Pemerintahan",
+            "aksi": "<a href='#' class='btn btn-info btn-sm' title='Rincian' data-testid='bt-rincian'><i class='fas fa-search'></i></a> <a href='#' class='btn btn-warning btn-sm' title='Ubah' data-testid='bt-edit'><i class='fas fa-edit'></i></a> <button type='button' class='btn btn-danger btn-sm hapus' data-id='1' title='Hapus' data-testid='bt-delete'><i class='fas fa-trash'></i></button>"
+        },
+        {
+            "type": "plan",
+            "id": "2",
+            "nama": "Puskesmas Pembantu",
+            "enabled": "YA",
+            "jenis": "Gedung",
+            "kategori": "Kesehatan",
+            "aksi": "<a href='#' class='btn btn-info btn-sm' title='Rincian' data-testid='bt-rincian'><i class='fas fa-search'></i></a> <a href='#' class='btn btn-warning btn-sm' title='Ubah' data-testid='bt-edit'><i class='fas fa-edit'></i></a> <button type='button' class='btn btn-danger btn-sm hapus' data-id='2' title='Hapus' data-testid='bt-delete'><i class='fas fa-trash'></i></button>"
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 2,
+            "count": 2,
+            "per_page": 10,
+            "current_page": 1,
+            "total_pages": 1
+        }
+    },
+    "links": {
+        "self": "http://127.0.0.1:8001/api/v1/plan?page%5Bsize%5D=10&page%5Bnumber%5D=1"
+    }
+}

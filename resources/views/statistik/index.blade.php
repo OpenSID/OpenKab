@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="nav nav-pills flex-column" id="daftar-statistik">
+                    <ul class="nav nav-pills flex-column" id="daftar-statistik" data-testid="daftar-statistik">
                     </ul>
                 </div>
             </div>
@@ -47,12 +47,12 @@
                         @endif
 
                         <div class="col-md-2">
-                            <button id="cetak" type="button" class="btn btn-primary btn-block btn-sm" data-url=""><i
+                            <button id="cetak" type="button" class="btn btn-primary btn-block btn-sm" data-url="" data-testid="bt-cetak"><i
                                     class="fa fa-print"></i>
                                 Cetak</button>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" id="export-excel" class="btn btn-info btn-block btn-sm">
+                            <button type="button" id="export-excel" class="btn btn-info btn-block btn-sm" data-testid="bt-excel">
                                 <i class="fa fa-file-excel"></i>
                                 Excel
                             </button>
@@ -60,13 +60,13 @@
                         <div class="col-md-2">
                             <button id="btn-grafik" class="btn btn-sm btn-success btn-block btn-sm" data-toggle="collapse"
                                 href="#grafik-statistik" role="button" aria-expanded="false"
-                                aria-controls="grafik-statistik">
+                                aria-controls="grafik-statistik" data-testid="bt-grafik">
                                 <i class="fas fa-chart-bar"></i> Grafik
                             </button>
                         </div>
                         <div class="col-md-2">
                             <button id="btn-pie" class="btn btn-sm btn-warning btn-block btn-sm" data-toggle="collapse"
-                                href="#pie-statistik" role="button" aria-expanded="false" aria-controls="pie-statistik">
+                                href="#pie-statistik" role="button" aria-expanded="false" aria-controls="pie-statistik" data-testid="bt-chart">
                                 <i class="fas fa-chart-pie"></i> Chart
                             </button>
                         </div>
@@ -126,15 +126,15 @@
                     @endif
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="grafik-statistik" class="collapse">
-                                <div class="chart" id="grafik">
+                            <div id="grafik-statistik" class="collapse" data-testid="grafik-statistik">
+                                <div class="chart" id="grafik" data-testid="grafik-content">
                                     <canvas id="barChart"></canvas>
                                 </div>
                                 <hr class="hr-chart">
                             </div>
 
-                            <div id="pie-statistik" class="collapse">
-                                <div class="chart" id="pie">
+                            <div id="pie-statistik" class="collapse" data-testid="pie-statistik">
+                                <div class="chart" id="pie" data-testid="pie-content">
                                     <canvas id="donutChart"></canvas>
                                 </div>
                                 <hr class="hr-chart">
@@ -143,7 +143,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-striped cell-border" id="tabel-data">
+                        <table class="table table-striped cell-border" id="tabel-data" data-testid="datatable-statistik">
                             <thead>
                                 <tr>
                                     <th>No</th>

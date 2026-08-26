@@ -1,0 +1,24 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama_desa": "Desa Test",
+                "nik": "0000000000000001",
+                "nama": "Test User",
+                "jenis_papan": "Rumah Sendiri",
+                "kondisi_rumah": "Baik",
+                "luas_rumah": "120 m2",
+                "tahun": "2024",
+                "status_kelengkapan": "Lengkap"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1,
+            "current_page": 1,
+            "last_page": 1
+        }
+    }
+}

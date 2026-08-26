@@ -1,4 +1,4 @@
-var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/suplemen/terdata/'.$suplemen->sasaran.'/'.$suplemen->id }}");
+var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/suplemen/terdata/'.$suplemen->sasaran_id.'/'.$suplemen->id }}");
 var suplemen = $('#suplemen').DataTable({
     processing: true,
     serverSide: true,

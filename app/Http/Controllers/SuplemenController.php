@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Config;
-use App\Models\Suplemen;
-use App\Models\SuplemenTerdata;
-use App\Models\Wilayah;
+use App\Services\SuplemenService;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\Border;
 use OpenSpout\Common\Entity\Style\BorderPart;
@@ -15,6 +12,13 @@ use OpenSpout\Writer\XLSX\Writer;
 
 class SuplemenController extends Controller
 {
+    protected SuplemenService $service;
+
+    public function __construct(SuplemenService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
         $list_sasaran = unserialize(SASARAN);
@@ -30,8 +34,8 @@ class SuplemenController extends Controller
         if ($id) {
             $action = 'Ubah';
             $form_action = '/api/v1/suplemen/update/'.$id;
-            $suplemen = Suplemen::with('terdata')->findOrFail($id);
-
+            $suplemen = $this->service->suplemenById($id);
+            
             return view('suplemen.edit', compact('list_sasaran', 'attributes', 'action', 'form_action', 'suplemen'));
         } else {
             $action = 'Tambah';
@@ -45,42 +49,37 @@ class SuplemenController extends Controller
     public function detail($id)
     {
         $sasaran = unserialize(SASARAN);
-        $suplemen = Suplemen::findOrFail($id);
-        $wilayah = Wilayah::treeAccess();
+        $suplemen = $this->service->suplemenById($id);
 
-        return view('suplemen.detail', compact('id', 'sasaran', 'suplemen', 'wilayah'));
+        return view('suplemen.detail', compact('id', 'sasaran', 'suplemen'));
     }
 
     public function ekspor($id = 0)
     {
-        $data_suplemen['suplemen'] = Suplemen::findOrFail($id)->toArray();
-        $data_suplemen['terdata'] = SuplemenTerdata::anggota($data_suplemen['suplemen']['sasaran'], $id)->get()->toArray();
+        $suplemen = $this->service->suplemenById($id);
+        if (! $suplemen) {
+            abort(404);
+        }
 
-    // Ambil form_isian dari suplemen dan dekode
-        $formIsian = json_decode($data_suplemen['suplemen']['form_isian'], true); // pastikan form_isian didecode menjadi array
+        $data_suplemen['suplemen'] = (array) $suplemen;
+        $data_suplemen['terdata'] = $this->service->terdata($suplemen->sasaran, $id)->toArray();
 
-        // Nama file untuk ekspor
-        $file_name = $data_suplemen['suplemen']['nama'].'_'.date('d_m_Y').'.xlsx';
+        $formIsian = is_array($suplemen->form_isian) ? $suplemen->form_isian : json_decode($suplemen->form_isian, true);
 
-        // Path untuk menyimpan file
+        $file_name = $suplemen->nama.'_'.date('d_m_Y').'.xlsx';
         $file_path = storage_path('app/exports/'.$file_name);
 
-        // Pastikan folder 'exports' ada
         $exportDir = storage_path('app/exports');
         if (! file_exists($exportDir)) {
-            // Buat folder 'exports' jika belum ada
             mkdir($exportDir, 0775, true);
         }
 
-        // Buat instance writer
-        $writer = new Writer();
-        $writer->openToFile($file_path); // Gunakan openToFile daripada openToBrowser untuk menyimpan di server
+        $writer = new Writer;
+        $writer->openToFile($file_path);
 
-        // Ubah Nama Sheet
         $sheet = $writer->getCurrentSheet();
         $sheet->setName('Peserta');
 
-        // Deklarasi Style
         $border = new Border(
             new BorderPart(Border::TOP, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID),
             new BorderPart(Border::BOTTOM, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID),
@@ -88,28 +87,25 @@ class SuplemenController extends Controller
             new BorderPart(Border::RIGHT, Color::GREEN, Border::WIDTH_THIN, Border::STYLE_SOLID)
         );
 
-        $headerStyle = (new Style())
+        $headerStyle = (new Style)
             ->setBorder($border)
             ->setBackgroundColor(Color::YELLOW)
             ->setFontBold();
 
-        $footerStyle = (new Style())
+        $footerStyle = (new Style)
             ->setBackgroundColor(Color::LIGHT_GREEN);
 
-        // Cetak Header Tabel
         $values = ['Peserta', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Keterangan'];
 
-        // Ambil header dinamis berdasarkan label_kode dari form_isian
         if ($formIsian) {
             foreach ($formIsian as $field) {
-                $values[] = $field['label_kode']; // Tambahkan label_kode sebagai header
+                $values[] = $field['label_kode'];
             }
         }
 
         $rowFromValues = Row::fromValues($values, $headerStyle);
         $writer->addRow($rowFromValues);
 
-        // Cetak Data Anggota Suplemen
         $data_anggota = $data_suplemen['terdata'];
 
         foreach ($data_anggota as $data) {
@@ -122,13 +118,12 @@ class SuplemenController extends Controller
                 empty($data['keterangan']) ? '-' : $data['keterangan'],
             ];
 
-        // Tambahkan data dari data_form_isian sesuai dengan form_isian
-            $dataFormIsian = json_decode($data['data_form_isian'], true); // Dekode data_form_isian
+            $dataFormIsian = is_array($data['data_form_isian']) ? $data['data_form_isian'] : json_decode($data['data_form_isian'], true);
 
             if ($formIsian) {
                 foreach ($formIsian as $field) {
-                    $kode = $field['nama_kode']; // Ambil nama_kode dari form_isian
-                    $cells[] = isset($dataFormIsian[$kode]) ? $dataFormIsian[$kode] : 'Tidak Ada Data'; // Tambahkan nilai sesuai nama_kode
+                    $kode = $field['nama_kode'];
+                    $cells[] = isset($dataFormIsian[$kode]) ? $dataFormIsian[$kode] : 'Tidak Ada Data';
                 }
             }
 
@@ -136,14 +131,12 @@ class SuplemenController extends Controller
             $writer->addRow($singleRow);
         }
 
-        // Tambahkan Baris Kosong
         $cells = [
             '###', '', '', '', '', '',
         ];
         $singleRow = Row::fromValues($cells);
         $writer->addRow($singleRow);
 
-        // Cetak Catatan
         $array_catatan = [
             [
                 'Catatan:', '', '', '', '', '',
@@ -169,26 +162,30 @@ class SuplemenController extends Controller
         }
         $writer->addRows($rows_catatan);
 
-        // Tutup Writer
         $writer->close();
 
-        // Mengirim file ke browser jika perlu
         return response()->download($file_path);
     }
 
     public function daftar($id = 0, $aksi = '')
     {
         if ($id > 0) {
-            $data['suplemen'] = Suplemen::findOrFail($id)->toArray();
-            $data['terdata'] = SuplemenTerdata::anggota($data['suplemen']['sasaran'], $data['suplemen']['id'])->get()->toArray();
-            $data['sasaran'] = unserialize(SASARAN);
-            $suplemenTerdata = SuplemenTerdata::anggota($data['suplemen']['sasaran'], $data['suplemen']['id'])->first();
+            $suplemen = $this->service->suplemenById($id);
+            if (! $suplemen) {
+                abort(404);
+            }
 
-            if ($suplemenTerdata) {
-                $wilayah = Config::where('id', $suplemenTerdata->config_id)->first() ?? '';
-                $data['nama_desa'] = $wilayah->nama_desa ?? '';
-                $data['nama_kecamatan'] = $wilayah->nama_kecamatan ?? '';
-                $data['nama_kabupaten'] = $wilayah->nama_kabupaten ?? '';
+            $data['suplemen'] = (array) $suplemen;
+            $data['terdata'] = $this->service->terdata($suplemen->sasaran, $id)->toArray();
+            $data['sasaran'] = unserialize(SASARAN);
+
+            $terdataPertama = $this->service->terdata($suplemen->sasaran, $id)->first();
+
+            if ($terdataPertama && ! empty($terdataPertama->config_id)) {
+                $config = $this->service->configDesa(['filter[id]' => $terdataPertama->config_id])->first();
+                $data['nama_desa'] = $config->nama_desa ?? '';
+                $data['nama_kecamatan'] = $config->nama_kecamatan ?? '';
+                $data['nama_kabupaten'] = $config->nama_kabupaten ?? '';
             } else {
                 $data['nama_desa'] = '';
                 $data['nama_kecamatan'] = '';
@@ -197,7 +194,6 @@ class SuplemenController extends Controller
 
             $data['aksi'] = $aksi;
 
-            //pengaturan data untuk format cetak/ unduh
             $data['file'] = 'Laporan Suplemen '.$data['suplemen']['nama'];
             $data['isi'] = 'suplemen.cetak';
             $data['letak_ttd'] = ['2', '2', '3'];

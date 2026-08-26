@@ -128,6 +128,9 @@ class User extends Authenticatable
         return parent::delete();
     }
 
+    public ?string $passwordHistoryReason = null;
+    public ?string $oldPasswordHash = null;
+
     public function team()
     {
         return $this->belongsToMany(
@@ -273,27 +276,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Set password dengan expiry dan history
+     * Set password dengan expiry.
+     * Riwayat password lama otomatis disimpan oleh UserObserver.
      */
     public function setPasswordWithHistory(string $password, string $reason = 'password_change', ?int $expiryDays = null): void
     {
-        // Simpan password lama ke history
-        if ($this->exists && $this->password) {
-            $this->passwordHistory()->create([
-                'password' => $this->password,
-                'reason' => $reason,
-            ]);
-        }
+        $this->passwordHistoryReason = $reason;
 
-        // Set password baru
         $this->password = $password;
 
-        // Set expiry jika ditentukan
         if ($expiryDays !== null) {
             $this->password_expires_at = now()->addDays($expiryDays);
         }
 
-        // Reset flag force_password_reset
         $this->force_password_reset = false;
 
         $this->save();
@@ -334,7 +329,7 @@ class User extends Authenticatable
             return 0;
         }
 
-        return max(0, $this->lockout_expires_at->diffInSeconds(now()));
+        return (int) max(0, ceil(now()->diffInSeconds($this->lockout_expires_at, false)));
     }
 
     /**

@@ -1,4 +1,4 @@
-<div id="tabel_penduduk_block" class="col-12">
+<div id="tabel_penduduk_block" class="col-12" data-testid="tabel-penduduk-block">
     @include('dasbor.data-desa')
 </div>
 
@@ -19,6 +19,7 @@
                     viewTotal: false,
                     columns: [0]
                 },
+                deferLoading: 0,
                 ajax: {
                     url: urlPenduduk,
                     method: 'get',
@@ -94,7 +95,6 @@
             $('#tabel_penduduk_block').change(function(event) {
                 pendudukDatatable.draw();
             })
-            $('#tabel_penduduk_block').trigger('change');
         });
     </script>
 @endpush

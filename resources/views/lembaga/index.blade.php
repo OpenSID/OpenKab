@@ -23,11 +23,11 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="false" aria-controls="collapse-filter">
+                                aria-expanded="false" aria-controls="collapse-filter" data-testid="bt-toggle-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            <x-print-button :print-url="route('lembaga.cetak')" table-id="table-lembaga" label="Cetak" />
-                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/lembaga/download'" table-id="table-lembaga" filename="data_lembaga" />
+                            <x-print-button :print-url="route('lembaga.cetak')" table-id="table-lembaga" label="Cetak" testId="bt-cetak" />
+                            <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/lembaga/download'" table-id="table-lembaga" filename="data_lembaga" testId="bt-excel" />
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-lembaga">
+                        <table class="table table-striped" id="table-lembaga" data-testid="datatable-lembaga">
                             <thead>
                                 <tr>
                                     <th>No</th>

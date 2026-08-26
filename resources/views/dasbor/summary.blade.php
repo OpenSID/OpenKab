@@ -1,4 +1,4 @@
-<div class="row" id="summary_block">
+<div class="row" id="summary_block" data-testid="summary-block">
     @php
         $colors = ['primary', 'warning', 'success', 'info']; // Array warna
     @endphp
@@ -30,9 +30,9 @@
                         $(`.kategori-item .jumlah-${index}-elm`).closest('.item-box').find('a')
                             .data(
                                 'filter', {
-                                    'kode_kabupaten': kabupaten,
-                                    'kode_kecamatan': kecamatan,
-                                    'kode_desa': desa,
+                                    'kode_kabupaten': kabupaten || '',
+                                    'kode_kecamatan': kecamatan || '',
+                                    'kode_desa': desa || '',
                                     'nama_kabupaten': $('#filter_kabupaten').find(':selected')
                                         .text(),
                                     'nama_kecamatan': $('#filter_kecamatan').find(':selected')
@@ -41,19 +41,19 @@
                                 });
                     }
                 }, 'json');
-            })
-            $('#summary_block').trigger('change');
+            })            
 
             $('#summary_block a.btn-detail').click(function(event) {
                 event.preventDefault();
                 let url = $(this).data('url');
                 let _url = new URL(url);
-                _url.searchParams.set('filter[kode_kabupaten]', $(this).data('filter')['kode_kabupaten']);
-                _url.searchParams.set('filter[kode_kecamatan]', $(this).data('filter')['kode_kecamatan']);
-                _url.searchParams.set('filter[kode_desa]', $(this).data('filter')['kode_desa']);
-                _url.searchParams.set('filter[nama_kabupaten]', $(this).data('filter')['nama_kabupaten']);
-                _url.searchParams.set('filter[nama_kecamatan]', $(this).data('filter')['nama_kecamatan']);
-                _url.searchParams.set('filter[nama_desa]', $(this).data('filter')['nama_desa']);
+                let filter = $(this).data('filter');
+                ['kode_kabupaten', 'kode_kecamatan', 'kode_desa', 'nama_kabupaten', 'nama_kecamatan', 'nama_desa']
+                    .forEach(function(key) {
+                        if (filter[key]) {
+                            _url.searchParams.set('filter[' + key + ']', filter[key]);
+                        }
+                    });
                 window.location.href = _url.href;
             })
         })

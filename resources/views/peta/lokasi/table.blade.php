@@ -1,4 +1,4 @@
-<table class="table table-striped" id="plan">
+<table class="table table-striped" id="plan" data-testid="datatable-lokasi">
     <thead>
         <tr>
             <th class="padat">No</th>

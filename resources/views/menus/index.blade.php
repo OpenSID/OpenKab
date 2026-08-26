@@ -17,21 +17,21 @@
                         {!! Html::form('POST', route('menus.store'))->id('frmEdit')->open() !!}
                         <div class="row">
                             <div class="col-5">
-                                <div class="card card-default">
+                                <div class="card card-default" data-testid="panel-sumber-menu-url">
                                     <div class="card-header">Sumber Menu URL</div>
                                     <div class="card-body">
                                         @include('menus.fields')
                                     </div>
                                     @if ($canwrite)
-                                        <div class="card-footer">
-                                            {!! Html::button('<i class="fas fa-save"></i> Simpan')->type('button')->class('btn btn-primary btn-sm')->id('btnUpdate') !!}
-                                            {!! Html::button('<i class="fas fa-plus-square"></i> Tambah')->type('button')->class('btn btn-success btn-sm')->id('btnAdd') !!}
+                                        <div class="card-footer" data-testid="footer-sumber-menu">
+                                            {!! Html::button('<i class="fas fa-save"></i> Simpan')->type('button')->class('btn btn-primary btn-sm')->id('btnUpdate')->attribute('data-testid', 'bt-simpan-sumber') !!}
+                                            {!! Html::button('<i class="fas fa-plus-square"></i> Tambah')->type('button')->class('btn btn-success btn-sm')->id('btnAdd')->attribute('data-testid', 'bt-tambah-sumber') !!}
                                         </div>
                                     @endif
                                 </div>
                             </div>
                             <div class="col-7">
-                                <div class="card card-default">
+                                <div class="card card-default" data-testid="panel-struktur-menu">
                                     <div class="card-header">Struktur Menu</div>
                                     <div class="card-body">
                                         <ul id="myEditor" class="sortableLists list-group"></ul>
@@ -40,9 +40,9 @@
                                         </div>
                                     </div>
                                     @if ($canwrite)
-                                        <div class="card-footer">
-                                            {!! Html::button('<i class="fas fa-times"></i> Batal')->type('button')->class('btn btn-danger btn-sm reload') !!}
-                                            {!! Html::button('<i class="fas fa-save"></i> Simpan')->type('submit')->class('btn btn-primary btn-sm') !!}
+                                        <div class="card-footer" data-testid="footer-struktur-menu">
+                                            {!! Html::button('<i class="fas fa-times"></i> Batal')->type('button')->class('btn btn-danger btn-sm reload')->attribute('data-testid', 'bt-batal-struktur') !!}
+                                            {!! Html::button('<i class="fas fa-save"></i> Simpan')->type('submit')->class('btn btn-primary btn-sm')->attribute('data-testid', 'bt-simpan-struktur') !!}
                                         </div>
                                     @endif
                                 </div>

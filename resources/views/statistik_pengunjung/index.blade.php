@@ -10,13 +10,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-4">
-                {!! $chartDeviceVisitor->container() !!}
+                <div data-testid="chart-device-visitor">{!! $chartDeviceVisitor->container() !!}</div>
             </div>
             <div class="col-8">
-                {!! $chartVisitorDaily->container() !!}
+                <div data-testid="chart-visitor-daily">{!! $chartVisitorDaily->container() !!}</div>
             </div>
             <div class="col-12">
-                {!! $chartVisitorPost->container() !!}
+                <div data-testid="chart-visitor-post">{!! $chartVisitorPost->container() !!}</div>
             </div>
         </div>
     </div>

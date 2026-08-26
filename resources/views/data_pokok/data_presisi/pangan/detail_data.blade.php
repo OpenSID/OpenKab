@@ -59,8 +59,16 @@
 @section('js')
 <script nonce="{{ csp_nonce() }}">
     document.addEventListener("DOMContentLoaded", function(event) {
-        const headers = @include('layouts.components.header_bearer_api_gabungan');        
-        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pangan' }}");
+        const headers = @include('layouts.components.header_bearer_api_gabungan');
+        @php
+            $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+            $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+            $configDesa = session('desa.id') ?? '';
+        @endphp
+        const kodeKabupaten = "{{ $kodeKabupaten }}";
+        const kodeKecamatan = "{{ $kodeKecamatan }}";
+        const configDesa = "{{ $configDesa }}";
+        var url = new URL("{{ config('app.databaseGabunganUrl').'/api/v1/data-presisi/pangan' }}");        
         var pangan = $('#detail-pangan').DataTable({
             processing: true,
             serverSide: true,
@@ -79,8 +87,11 @@
                         "page[size]": row.length,
                         "page[number]": (row.start / row.length) + 1,
                         "filter[search]": row.search.value,
-                        "filter[tahun]": $('#filter-tahun').val(),                        
+                        "filter[tahun]": $('#filter-tahun').val(),
                         "filter[colomn]": '{{ $colomn }}',
+                        "kode_kabupaten": kodeKabupaten,
+                        "kode_kecamatan": kodeKecamatan,
+                        "config_desa": configDesa,
                         "sort": (row.order[0]?.dir === "asc" ? "" : "-") + row.columns[row.order[0]?.column]?.name,
                     };
                     

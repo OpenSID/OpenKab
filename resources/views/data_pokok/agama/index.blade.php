@@ -16,7 +16,7 @@
                 <div class="card-header">Statistik Agama</div>
                 <div class="card-body">
                     <div>
-                        <div class="chart" id="pie1">
+                        <div class="chart" id="pie1" data-testid="chart-pie-agama">
 
                         </div>
                         <hr class="hr-chart">
@@ -33,19 +33,19 @@
                         <x-filter-tahun />
                         <x-filter-status-presisi />
                         <div class="col-auto">
-                            <x-print-button :print-url="route('cetak_agama')" table-id="agama" :filter="[]" />
+                            <x-print-button :print-url="route('cetak_agama')" table-id="agama" :filter="[]" testId="btn-cetak" />
                         </div>
                         <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/agama/rtm/download'" table-id="agama" filename="data_presisi_agama"
                             :additional-params="[
                                 ['key' => 'kode_kabupaten', 'value' => session('kabupaten.kode_kabupaten') ?? ''],
                                 ['key' => 'kode_kecamatan', 'value' => session('kecamatan.kode_kecamatan') ?? ''],
                                 ['key' => 'config_desa', 'value' => session('desa.id') ?? ''],
-                            ]" />
+                            ]" testId="btn-export-excel" />
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="agama">
+                        <table class="table table-striped" id="agama" data-testid="datatable-agama">
                             <thead>
                                 <tr>
                                     <th>Aksi</th>
@@ -69,10 +69,17 @@
 @section('js')
     @include('data_pokok.agama.chart')
     <script nonce="{{ csp_nonce() }}">
-        let data_grafik = [];
         let transformedIncluded = {};
         document.addEventListener("DOMContentLoaded", function(event) {
             const header = @include('layouts.components.header_bearer_api_gabungan');
+            @php
+                $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+                $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+                $configDesa = session('desa.id') ?? '';
+            @endphp
+            const kodeKabupaten = "{{ $kodeKabupaten }}";
+            const kodeKecamatan = "{{ $kodeKecamatan }}";
+            const configDesa = "{{ $configDesa }}";
             var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/agama/rtm' }}");
             url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
             url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
@@ -105,11 +112,7 @@
                         json.recordsTotal = json.meta?.pagination?.total || 0
                         json.recordsFiltered = json.meta?.pagination?.total || 0
                         if (json.data.length > 0) {                        
-                            data_grafik = [];
-                            json.data.forEach(function(item, index) {
-                                data_grafik.push(item.attributes)
-                            })                        
-                            grafikPie()
+                            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa })
                             return json.data;
                         }
                         return false;
@@ -226,8 +229,7 @@
 
             $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
                 agama.ajax.reload();
-                data_grafik = [];
-                grafikPie();
+                grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
             });
         })
     </script>

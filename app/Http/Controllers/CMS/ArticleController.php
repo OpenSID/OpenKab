@@ -55,10 +55,15 @@ class ArticleController extends AppBaseController
     public function store(CreateArticleRequest $request)
     {
         $input = $request->all();
+        if (isset($input['content'])) {
+            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+        }
         if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
         }
         $this->articleRepository->create($input);
+
+        (new \App\Services\ArtikelService)->clearAllCache();
 
         Session::flash('success', 'Artikel berhasil disimpan.');
 
@@ -78,6 +83,9 @@ class ArticleController extends AppBaseController
             return redirect(route('articles.index'));
         }
 
+        // IDOR Prevention: Authorization check
+        $this->authorize('view', $article);
+
         return view('articles.show')->with('article', $article);
     }
 
@@ -92,6 +100,9 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $article);
 
         return view('articles.edit', $this->getOptionItems($id))->with('article', $article);
     }
@@ -108,7 +119,14 @@ class ArticleController extends AppBaseController
 
             return redirect(route('articles.index'));
         }
+
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $article);
+
         $input = $request->all();
+        if (isset($input['content'])) {
+            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+        }
         $removeThumbnail = $request->get('remove_thumbnail');
         if ($request->file('foto')) {
             $input['thumbnail'] = $this->uploadFile($request, 'foto');
@@ -118,6 +136,8 @@ class ArticleController extends AppBaseController
             }
         }
         $article = $this->articleRepository->update($input, $id);
+
+        (new \App\Services\ArtikelService)->clearAllCache();
 
         Session::flash('success', 'Artikel berhasil diupdate.');
 
@@ -139,7 +159,13 @@ class ArticleController extends AppBaseController
             return redirect(route('articles.index'));
         }
 
+        // IDOR Prevention: Authorization check
+        $this->authorize('delete', $article);
+
         $this->articleRepository->delete($id);
+
+        (new \App\Services\ArtikelService)->clearAllCache();
+
         if (request()->ajax()) {
             return $this->sendSuccess('Artikel berhasil dihapus.');
         }

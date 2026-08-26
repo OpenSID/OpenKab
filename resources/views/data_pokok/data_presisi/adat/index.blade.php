@@ -1,5 +1,7 @@
 @extends('layouts.index')
 
+@section('plugins.chart', true)
+
 @include('components.progressive-image')
 
 @section('title', 'Data adat')
@@ -16,7 +18,7 @@
             <div class="card-header">Statistik Adat</div>
             <div class="card-body">
                 <div>
-                    <div class="chart" id="pie1">
+                    <div class="chart" id="pie1" data-testid="chart-pie-adat">
 
                     </div>
                     <hr class="hr-chart">
@@ -33,14 +35,14 @@
                     <x-filter-tahun />
                     <x-filter-status-presisi />
                     <div class="col-auto">
-                        <x-print-button :print-url="url('data-pokok/data-presisi-adat/cetak')" table-id="adat" :filter="[]" />
+                        <x-print-button :print-url="url('data-pokok/data-presisi-adat/cetak')" table-id="adat" :filter="[]" testId="btn-cetak" />
                     </div>
-                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat/rtm/download'" table-id="adat" filename="data_adat" />
+                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat/rtm/download'" table-id="adat" filename="data_adat" testId="btn-export-excel" />
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="adat">
+                    <table class="table table-striped" id="adat" data-testid="datatable-adat">
                         <thead>
                             <tr>
                                 <th>Aksi</th>
@@ -64,14 +66,21 @@
 @section('js')
 @include('data_pokok.data_presisi.adat.chart')
 <script nonce="{{ csp_nonce() }}">
-    let data_grafik = [];
     let transformedIncluded = {};
     document.addEventListener("DOMContentLoaded", function(event) {
         const header = @include('layouts.components.header_bearer_api_gabungan');
+        @php
+            $kodeKabupaten = session('kabupaten.kode_kabupaten') ?? '';
+            $kodeKecamatan = session('kecamatan.kode_kecamatan') ?? '';
+            $configDesa = session('desa.id') ?? '';
+        @endphp
+        const kodeKabupaten = "{{ $kodeKabupaten }}";
+        const kodeKecamatan = "{{ $kodeKecamatan }}";
+        const configDesa = "{{ $configDesa }}";
         var url = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/data-presisi/adat/rtm' }}");
-        url.searchParams.set("kode_kabupaten", "{{ session('kabupaten.kode_kabupaten') ?? '' }}");
-        url.searchParams.set("kode_kecamatan", "{{ session('kecamatan.kode_kecamatan') ?? '' }}");
-        url.searchParams.set("config_desa", "{{ session('desa.id') ?? '' }}");
+        url.searchParams.set("kode_kabupaten", kodeKabupaten);
+        url.searchParams.set("kode_kecamatan", kodeKecamatan);
+        url.searchParams.set("config_desa", configDesa);
         var adat = $('#adat').DataTable({
             processing: true,
             serverSide: true,
@@ -93,17 +102,15 @@
                         "sort": "id",
                         "filter[tahun]": $('#filter-tahun').val(),
                         "filter[status_kelengkapan]": $('#filter-status-kelengkapan').val(),
+                        "kode_kabupaten": kodeKabupaten,
+                        "kode_kecamatan": kodeKecamatan,
+                        "config_desa": configDesa,
                     };
                 },
                 dataSrc: function(json) {
                     json.recordsTotal = json.meta?.pagination?.total || 0
                     json.recordsFiltered = json.meta?.pagination?.total || 0
-                    if (json.data.length > 0) {                        
-                        data_grafik = [];
-                        json.data.forEach(function(item, index) {
-                            data_grafik.push(item.attributes)
-                        })                        
-                        grafikPie()
+                    if (json.data.length > 0) {
                         return json.data;
                     }
                     return false;
@@ -167,6 +174,7 @@
                 },
             ],
         })
+        grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
 
         // Add event listener for opening and closing details
         adat.on('click', 'td.details-control', function() {
@@ -220,8 +228,7 @@
         // Event listener for year filter change
         $('#filter-tahun, #filter-status-kelengkapan').on('change', function() {
             adat.ajax.reload();
-            data_grafik = [];
-            grafikPie();
+            grafikPie({ kodeKabupaten, kodeKecamatan, configDesa });
         });
     })
 </script>

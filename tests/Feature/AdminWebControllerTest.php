@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class AdminWebControllerTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_access_kategori_index()
     {
         $response = $this->get(route('master-data-artikel.kategori', ['parrent' => 0]));
@@ -14,7 +15,7 @@ class AdminWebControllerTest extends BaseTestCase
         $response->assertViewIs('master.kategori.index');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_kategori_create()
     {
         $response = $this->get(route('master-data-artikel.kategori-create', ['parrent' => 1]));
@@ -22,7 +23,7 @@ class AdminWebControllerTest extends BaseTestCase
         $response->assertViewIs('master.kategori.create');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_kategori_edit()
     {
         $response = $this->get(route('master-data-artikel.kategori-edit', ['parrent' => 0, 'id' => 1]));

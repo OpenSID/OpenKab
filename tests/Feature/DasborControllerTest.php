@@ -4,13 +4,14 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DasborControllerTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    /** @test */
+    #[Test]
     public function it_can_access_dasbor_index()
     {
         $response = $this->get(route('dasbor'));
@@ -21,7 +22,7 @@ class DasborControllerTest extends BaseTestCase
         $response->assertViewHas('categoriesItems');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_categories_items_structure()
     {
         $response = $this->get(route('dasbor'));
@@ -35,7 +36,7 @@ class DasborControllerTest extends BaseTestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function it_has_correct_category_keys()
     {
         $response = $this->get(route('dasbor'));

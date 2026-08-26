@@ -8,7 +8,7 @@ use App\Http\Requests\UploadImageRequest;
 use App\Http\Transformers\IdentitasTransformer;
 use App\Models\Identitas;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\Response;
 
 class IdentitasController extends Controller
@@ -67,10 +67,7 @@ class IdentitasController extends Controller
             $filename = uniqid('img_');
             $file = $request->file('file');
 
-            Image::make($file->path())->resize(150, 150,
-                function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($path.'/'.$filename.'.png'); //create logo
+            ImageManager::gd()->read($file->path())->scale(width: 150, height: 150)->save($path.'/'.$filename.'.png'); //create logo
 
             Identitas::where('id', $id)->update([
                 'logo' => $filename.'.png',
@@ -123,13 +120,13 @@ class IdentitasController extends Controller
         // create an image manager instance with imagick driver
         // Image::configure(['driver' => 'imagick']);
 
-        Image::make($filePath)->resize(192, 192)->save($distPath.'/android-chrome-192x192.png', '100', 'png');
-        Image::make($filePath)->resize(512, 512)->save($distPath.'/android-chrome-512x512.png', '100', 'png');
-        Image::make($filePath)->resize(180, 180)->save($distPath.'/apple-touch-icon.png', '100', 'png');
-        Image::make($filePath)->resize(16, 16)->save($distPath.'/favicon-16x16.png', '100', 'png');
-        Image::make($filePath)->resize(32, 32)->save($distPath.'/favicon-32x32.png', '100', 'png');
-        Image::make($filePath)->resize(96, 96)->save($distPath.'/favicon-96x96.png', '100', 'png');
-        Image::make($filePath)->resize(150, 150)->save($distPath.'/mstile-150x150.png', '100', 'png');
+        ImageManager::gd()->read($filePath)->resize(192, 192)->save($distPath.'/android-chrome-192x192.png', quality: 100);
+        ImageManager::gd()->read($filePath)->resize(512, 512)->save($distPath.'/android-chrome-512x512.png', quality: 100);
+        ImageManager::gd()->read($filePath)->resize(180, 180)->save($distPath.'/apple-touch-icon.png', quality: 100);
+        ImageManager::gd()->read($filePath)->resize(16, 16)->save($distPath.'/favicon-16x16.png', quality: 100);
+        ImageManager::gd()->read($filePath)->resize(32, 32)->save($distPath.'/favicon-32x32.png', quality: 100);
+        ImageManager::gd()->read($filePath)->resize(96, 96)->save($distPath.'/favicon-96x96.png', quality: 100);
+        ImageManager::gd()->read($filePath)->resize(150, 150)->save($distPath.'/mstile-150x150.png', quality: 100);
         copy($distPath.'/favicon-16x16.png', $distPath.'/favicon.ico');
 
         $dataManifest = [

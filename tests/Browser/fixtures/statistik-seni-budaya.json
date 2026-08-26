@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Tari Tradisional",
+                "jumlah": 50,
+                "laki_laki": 20,
+                "perempuan": 30,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "40.00%",
+                "persentase_perempuan": "60.00%",
+                "kriteria": "{\"filter[id]\":\"seni-budaya\",\"filter[kriteria]\":\"Tari Tradisional\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Musik Tradisional",
+                "jumlah": 50,
+                "laki_laki": 30,
+                "perempuan": 20,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "60.00%",
+                "persentase_perempuan": "40.00%",
+                "kriteria": "{\"filter[id]\":\"seni-budaya\",\"filter[kriteria]\":\"Musik Tradisional\"}"
+            }
+        }
+    ]
+}

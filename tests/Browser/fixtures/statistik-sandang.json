@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Pakaian Layak",
+                "jumlah": 200,
+                "laki_laki": 100,
+                "perempuan": 100,
+                "persentase_jumlah": "60.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"sandang\",\"filter[kriteria]\":\"Pakaian Layak\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Pakaian Tidak Layak",
+                "jumlah": 130,
+                "laki_laki": 70,
+                "perempuan": 60,
+                "persentase_jumlah": "40.00%",
+                "persentase_laki_laki": "53.85%",
+                "persentase_perempuan": "46.15%",
+                "kriteria": "{\"filter[id]\":\"sandang\",\"filter[kriteria]\":\"Pakaian Tidak Layak\"}"
+            }
+        }
+    ]
+}

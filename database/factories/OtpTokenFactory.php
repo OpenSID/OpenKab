@@ -73,7 +73,7 @@ class OtpTokenFactory extends Factory
     /**
      * Set email channel.
      */
-    public function email(string $email = null): static
+    public function email(?string $email = null): static
     {
         return $this->state(fn (array $attributes) => [
             'channel' => 'email',
@@ -84,7 +84,7 @@ class OtpTokenFactory extends Factory
     /**
      * Set telegram channel.
      */
-    public function telegram(string $chatId = null): static
+    public function telegram(?string $chatId = null): static
     {
         return $this->state(fn (array $attributes) => [
             'channel' => 'telegram',

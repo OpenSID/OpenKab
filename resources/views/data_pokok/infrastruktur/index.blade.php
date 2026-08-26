@@ -16,7 +16,7 @@
             <div class="card-header">Statistik Kondisi Transportasi</div>
             <div class="card-body">
                 <div class="chart" id="grafik">
-                    <canvas id="kondisiChart"></canvas>
+                    <canvas id="kondisiChart" data-testid="chart-transportasi"></canvas>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
             <div class="card-header">Statistik Sanitasi</div>
             <div class="card-body">
                 <div class="chart">
-                    <canvas id="sanitasiChart"></canvas>
+                    <canvas id="sanitasiChart" data-testid="chart-sanitasi"></canvas>
                 </div>
                 <hr>
             </div>
@@ -43,12 +43,12 @@
                 <div class="row mb-2">
                     <x-filter-tahun />
                     <div class="col-auto">
-                        <x-print-button :print-url="url('data-pokok/infrastruktur/cetak')" table-id="infrastruktur" :filter="[]" />
+                        <x-print-button :print-url="url('data-pokok/infrastruktur/cetak')" table-id="infrastruktur" :filter="[]" testId="btn-cetak" />
                     </div>
-                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/infrastruktur/download'" table-id="infrastruktur" filename="data_infrastruktur" />
+                    <x-excel-download-button :download-url="config('app.databaseGabunganUrl') . '/api/v1/infrastruktur/download'" table-id="infrastruktur" filename="data_infrastruktur" testId="btn-export-excel" />
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped" id="infrastruktur">
+                    <table class="table table-striped" id="infrastruktur" data-testid="datatable-data-pokok-infrastruktur">
                         <thead>
                             <tr>
                                 <th>Kategori</th>

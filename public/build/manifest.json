@@ -1,84 +1,74 @@
 {
-  "_admin-lte-a7317676.js": {
-    "file": "assets/admin-lte-a7317676.js",
-    "imports": [
-      "_vendor-29b55365.js",
-      "_datatables-73759265.js"
-    ]
-  },
-  "_datatables-73759265.js": {
-    "file": "assets/datatables-73759265.js",
-    "imports": [
-      "_vendor-29b55365.js"
-    ]
-  },
-  "_vendor-29b55365.js": {
-    "file": "assets/vendor-29b55365.js",
-    "imports": [
-      "_admin-lte-a7317676.js"
-    ]
+  "_admin-lte-CPddpSFE.js": {
+    "file": "assets/admin-lte-CPddpSFE.js",
+    "name": "admin-lte"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
-    "file": "assets/fa-brands-400-003f1154.ttf",
+    "file": "assets/fa-brands-400-Dh9Nz-AR.ttf",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2": {
-    "file": "assets/fa-brands-400-faae6fc0.woff2",
+    "file": "assets/fa-brands-400-B0G11Utd.woff2",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf": {
-    "file": "assets/fa-regular-400-7d81a1a7.ttf",
+    "file": "assets/fa-regular-400-BHXLjBeH.ttf",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2": {
-    "file": "assets/fa-regular-400-9169d8be.woff2",
+    "file": "assets/fa-regular-400-B0w-yroU.woff2",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf": {
-    "file": "assets/fa-solid-900-cea79b34.ttf",
+    "file": "assets/fa-solid-900-BLLQy4Ml.ttf",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2": {
-    "file": "assets/fa-solid-900-886c8611.woff2",
+    "file": "assets/fa-solid-900-DPO7AZHW.woff2",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf": {
-    "file": "assets/fa-v4compatibility-455e8e72.ttf",
+    "file": "assets/fa-v4compatibility-CzA-yRXe.ttf",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2": {
-    "file": "assets/fa-v4compatibility-335fd7d9.woff2",
+    "file": "assets/fa-v4compatibility-QamTF9-e.woff2",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/js/app.js": {
-    "file": "assets/app-497f3add.js",
-    "imports": [
-      "_admin-lte-a7317676.js",
-      "_vendor-29b55365.js",
-      "_datatables-73759265.js"
-    ],
+    "file": "assets/app-BXc0UT1p.js",
+    "name": "app",
+    "src": "resources/js/app.js",
     "isEntry": true,
-    "src": "resources/js/app.js"
+    "imports": [
+      "_admin-lte-CPddpSFE.js"
+    ]
   },
   "resources/js/tinymce.js": {
-    "file": "assets/tinymce-c9a62ee6.js",
+    "file": "assets/tinymce-B8JCLYqJ.js",
+    "name": "tinymce",
+    "src": "resources/js/tinymce.js",
+    "isEntry": true,
     "imports": [
       "resources/sass/tinymce.scss"
-    ],
-    "isEntry": true,
-    "src": "resources/js/tinymce.js"
+    ]
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-6e0a124f.css",
+    "file": "assets/app-CIHurvXU.css",
+    "src": "resources/sass/app.scss",
     "isEntry": true,
-    "src": "resources/sass/app.scss"
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
   },
   "resources/sass/tinymce.scss": {
-    "css": [
-      "assets/tinymce-ede989c3.css"
-    ],
-    "file": "assets/tinymce-7862aad6.js",
+    "file": "assets/tinymce-Da0pDZlo.js",
+    "name": "tinymce",
+    "src": "resources/sass/tinymce.scss",
     "isEntry": true,
-    "src": "resources/sass/tinymce.scss"
+    "css": [
+      "assets/tinymce-Dab20Taj.css"
+    ]
   }
 }

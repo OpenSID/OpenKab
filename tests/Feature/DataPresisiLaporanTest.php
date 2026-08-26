@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\BaseTestCase;
 
 class DataPresisiLaporanTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function test_can_access_laporan_semua_desa_page()
     {
         $response = $this->get(route('laporan.data-presisi.index'));
@@ -16,7 +17,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $response->assertViewHas('title', 'Data Presisi Pengisian Laporan Semua Desa');
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_semua_desa_has_required_elements()
     {
         $response = $this->get(route('laporan.data-presisi.index'));
@@ -35,7 +36,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString('Data Lengkap', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_semua_desa_has_correct_table_columns()
     {
         $response = $this->get(route('laporan.data-presisi.index'));
@@ -64,7 +65,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_semua_desa_has_filter_status_javascript()
     {
         $response = $this->get(route('laporan.data-presisi.index'));
@@ -76,7 +77,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString("$('#laporanTable').DataTable().ajax.reload()", $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_semua_desa_has_datatable_configuration()
     {
         $response = $this->get(route('laporan.data-presisi.index'));
@@ -92,7 +93,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString("$('#filter-status').val()", $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_can_access_laporan_perdesa_page()
     {
         $response = $this->get(route('laporan.data-presisi.perdesa'));
@@ -102,7 +103,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $response->assertViewHas('title', 'Data Presisi Pengisian Laporan Per Desa');
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_perdesa_has_correct_table_columns()
     {
         $response = $this->get(route('laporan.data-presisi.perdesa'));
@@ -123,7 +124,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_perdesa_has_datatable_configuration()
     {
         $response = $this->get(route('laporan.data-presisi.perdesa'));
@@ -141,7 +142,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString('"config_desa"', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_perdesa_number_formatting_for_columns()
     {
         $response = $this->get(route('laporan.data-presisi.perdesa'));
@@ -152,7 +153,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString("render: $.fn.dataTable.render.number('.', ',', 0, '')", $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_both_pages_use_correct_api_endpoints()
     {
         // Test laporan index
@@ -166,7 +167,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString('/api/v1/data-presisi/laporan-perdesa', $content2);
     }
 
-    /** @test */
+    #[Test]
     public function test_both_pages_have_breadcrumbs()
     {
         // Test laporan index has breadcrumb section
@@ -180,7 +181,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function test_both_pages_extend_correct_layout()
     {
         // Test laporan index uses correct layout (has main-footer)
@@ -194,7 +195,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString('class="main-footer"', $content2);
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_semua_desa_has_export_buttons()
     {
         $response = $this->get(route('laporan.data-presisi.index'));
@@ -205,7 +206,7 @@ class DataPresisiLaporanTest extends BaseTestCase
         $this->assertStringContainsString('id="export-excel"', $content);
     }
 
-    /** @test */
+    #[Test]
     public function test_laporan_perdesa_has_export_buttons()
     {
         $response = $this->get(route('laporan.data-presisi.perdesa'));

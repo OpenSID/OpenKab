@@ -1,0 +1,85 @@
+{
+    "draw": 1,
+    "recordsTotal": 5,
+    "recordsFiltered": 5,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Sasak",
+                "jumlah": 18000,
+                "laki_laki": 9000,
+                "perempuan": 9000,
+                "persentase_jumlah": "72.00%",
+                "persentase_laki_laki": "36.00%",
+                "persentase_perempuan": "36.00%",
+                "kriteria": "{\"filter[id]\":\"suku\",\"filter[kriteria]\":\"Sasak\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Jawa",
+                "jumlah": 3000,
+                "laki_laki": 1500,
+                "perempuan": 1500,
+                "persentase_jumlah": "12.00%",
+                "persentase_laki_laki": "6.00%",
+                "persentase_perempuan": "6.00%",
+                "kriteria": "{\"filter[id]\":\"suku\",\"filter[kriteria]\":\"Jawa\"}"
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama": "Bali",
+                "jumlah": 2000,
+                "laki_laki": 1000,
+                "perempuan": 1000,
+                "persentase_jumlah": "8.00%",
+                "persentase_laki_laki": "4.00%",
+                "persentase_perempuan": "4.00%",
+                "kriteria": "{\"filter[id]\":\"suku\",\"filter[kriteria]\":\"Bali\"}"
+            }
+        },
+        {
+            "id": "4",
+            "attributes": {
+                "nama": "Sumbawa",
+                "jumlah": 1500,
+                "laki_laki": 750,
+                "perempuan": 750,
+                "persentase_jumlah": "6.00%",
+                "persentase_laki_laki": "3.00%",
+                "persentase_perempuan": "3.00%",
+                "kriteria": "{\"filter[id]\":\"suku\",\"filter[kriteria]\":\"Sumbawa\"}"
+            }
+        },
+        {
+            "id": "5",
+            "attributes": {
+                "nama": "Lainnya",
+                "jumlah": 500,
+                "laki_laki": 250,
+                "perempuan": 250,
+                "persentase_jumlah": "2.00%",
+                "persentase_laki_laki": "1.00%",
+                "persentase_perempuan": "1.00%",
+                "kriteria": "{\"filter[id]\":\"suku\",\"filter[kriteria]\":\"Lainnya\"}"
+            }
+        },
+        {
+            "id": "6",
+            "attributes": {
+                "nama": "JUMLAH",
+                "jumlah": 25000,
+                "laki_laki": 12500,
+                "perempuan": 12500,
+                "persentase_jumlah": "100.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{}"
+            }
+        }
+    ]
+}

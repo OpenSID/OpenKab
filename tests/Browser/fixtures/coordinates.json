@@ -1,0 +1,18 @@
+[
+    {
+        "lat": -8.5833,
+        "lng": 116.1167,
+        "nama_propinsi": "Nusa Tenggara Barat",
+        "nama_kabupaten": "Kota Mataram",
+        "nama_kecamatan": "Kecamatan Ampenan",
+        "nama_desa": "Desa Ampenan Tua"
+    },
+    {
+        "lat": -8.5667,
+        "lng": 116.1333,
+        "nama_propinsi": "Nusa Tenggara Barat",
+        "nama_kabupaten": "Kota Mataram",
+        "nama_kecamatan": "Kecamatan Cakranegara",
+        "nama_desa": "Desa Cakranegara"
+    }
+]

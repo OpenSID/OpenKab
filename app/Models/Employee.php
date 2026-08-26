@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends OpenKabModel
 {
+    use HasFactory;
     use SoftDeletes;
 
     public $table = 'employees';

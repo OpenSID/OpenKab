@@ -1,0 +1,33 @@
+{
+    "draw": 1,
+    "recordsTotal": 2,
+    "recordsFiltered": 2,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "Laki-Laki",
+                "jumlah": 12500,
+                "laki_laki": 12500,
+                "perempuan": 0,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "0.00%",
+                "kriteria": "{\"filter[id]\":\"jenis-kelamin\",\"filter[kriteria]\":\"Laki-Laki\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "Perempuan",
+                "jumlah": 12500,
+                "laki_laki": 0,
+                "perempuan": 12500,
+                "persentase_jumlah": "50.00%",
+                "persentase_laki_laki": "0.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{\"filter[id]\":\"jenis-kelamin\",\"filter[kriteria]\":\"Perempuan\"}"
+            }
+        }
+    ]
+}

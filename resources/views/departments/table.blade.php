@@ -1,6 +1,6 @@
 <div class="card-body p-0">
     <div class="table-responsive">
-        <table class="table" id="departments-table">
+        <table class="table" id="departments-table" data-testid="datatable-departments">
             <thead>
             <tr>
                 <th>No</th>

@@ -1,11 +1,11 @@
-<div class="col-4 card-chart">
+<div class="col-4 card-chart" data-testid="chart-item-{{ $chart['key'] }}">
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Komposisi {{ $chart['text'] }}</h5>
+            <h5 class="card-title" data-testid="chart-title-{{ $chart['key'] }}">Komposisi {{ $chart['text'] }}</h5>
         </div>
         <div class="card-body">
             <div id="pie-{{ $chart['key'] }}" data-key="{{ $chart['key'] }}" class="chart_content"
-                data-url="{{ $statistikUrl }}?filter[id]={{ $chart['key'] }}" class="chart-container">
+                data-url="{{ $statistikUrl }}?filter[id]={{ $chart['key'] }}" class="chart-container" data-testid="chart-content-{{ $chart['key'] }}">
                 <canvas id="donutChart-{{ $chart['key'] }}"></canvas>
             </div>
         </div>

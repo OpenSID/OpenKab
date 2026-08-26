@@ -1,0 +1,72 @@
+{
+    "draw": 1,
+    "recordsTotal": 4,
+    "recordsFiltered": 4,
+    "data": [
+        {
+            "id": "1",
+            "attributes": {
+                "nama": "A",
+                "jumlah": 6000,
+                "laki_laki": 3000,
+                "perempuan": 3000,
+                "persentase_jumlah": "24.00%",
+                "persentase_laki_laki": "12.00%",
+                "persentase_perempuan": "12.00%",
+                "kriteria": "{\"filter[id]\":\"golongan-darah\",\"filter[kriteria]\":\"A\"}"
+            }
+        },
+        {
+            "id": "2",
+            "attributes": {
+                "nama": "B",
+                "jumlah": 5000,
+                "laki_laki": 2500,
+                "perempuan": 2500,
+                "persentase_jumlah": "20.00%",
+                "persentase_laki_laki": "10.00%",
+                "persentase_perempuan": "10.00%",
+                "kriteria": "{\"filter[id]\":\"golongan-darah\",\"filter[kriteria]\":\"B\"}"
+            }
+        },
+        {
+            "id": "3",
+            "attributes": {
+                "nama": "O",
+                "jumlah": 10000,
+                "laki_laki": 5000,
+                "perempuan": 5000,
+                "persentase_jumlah": "40.00%",
+                "persentase_laki_laki": "20.00%",
+                "persentase_perempuan": "20.00%",
+                "kriteria": "{\"filter[id]\":\"golongan-darah\",\"filter[kriteria]\":\"O\"}"
+            }
+        },
+        {
+            "id": "4",
+            "attributes": {
+                "nama": "AB",
+                "jumlah": 4000,
+                "laki_laki": 2000,
+                "perempuan": 2000,
+                "persentase_jumlah": "16.00%",
+                "persentase_laki_laki": "8.00%",
+                "persentase_perempuan": "8.00%",
+                "kriteria": "{\"filter[id]\":\"golongan-darah\",\"filter[kriteria]\":\"AB\"}"
+            }
+        },
+        {
+            "id": "5",
+            "attributes": {
+                "nama": "JUMLAH",
+                "jumlah": 25000,
+                "laki_laki": 12500,
+                "perempuan": 12500,
+                "persentase_jumlah": "100.00%",
+                "persentase_laki_laki": "50.00%",
+                "persentase_perempuan": "50.00%",
+                "kriteria": "{}"
+            }
+        }
+    ]
+}

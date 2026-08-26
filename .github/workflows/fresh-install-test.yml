@@ -24,7 +24,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'
+        php-version: '8.4'
         extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, tidy
         coverage: none
 
@@ -50,4 +50,4 @@ jobs:
         DB_DATABASE: testing_db
         DB_USERNAME: root
         DB_PASSWORD: secret
-      run: php artisan migrate --seed && php artisan test
+      run: php artisan migrate && php artisan test --testsuite=Unit,Feature

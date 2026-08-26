@@ -4,6 +4,8 @@ namespace Tests\Unit;
 
 use App\Services\ArtikelService;
 use Illuminate\Support\Facades\Cache;
+use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ArtikelServiceTest extends TestCase
@@ -16,13 +18,13 @@ class ArtikelServiceTest extends TestCase
         $this->service = new ArtikelService();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_instantiate_artikel_service()
     {
         $this->assertInstanceOf(ArtikelService::class, $this->service);
     }
 
-    /** @test */
+    #[Test]
     public function it_builds_cache_key_correctly()
     {
         $reflection = new \ReflectionClass($this->service);
@@ -30,38 +32,38 @@ class ArtikelServiceTest extends TestCase
         $method->setAccessible(true);
 
         $cacheKey = $method->invokeArgs($this->service, ['artikel', ['id' => 1]]);
-        
+
         $this->assertIsString($cacheKey);
         $this->assertStringContainsString('artikel', $cacheKey);
     }
 
-    /** @test */
+    #[Test]
     public function clear_cache_removes_cached_data()
     {
         $cacheKey = 'test_artikel_cache';
         Cache::put($cacheKey, 'test_data', 3600);
-        
+
         $this->assertTrue(Cache::has($cacheKey));
-        
+
         Cache::forget($cacheKey);
-        
+
         $this->assertFalse(Cache::has($cacheKey));
     }
 
-    /** @test */
+    #[Test]
     public function it_has_cache_ttl_property()
     {
         $reflection = new \ReflectionClass($this->service);
         $property = $reflection->getProperty('cacheTtl');
         $property->setAccessible(true);
-        
+
         $ttl = $property->getValue($this->service);
-        
+
         $this->assertEquals(3600, $ttl);
         $this->assertIsInt($ttl);
     }
 
-    /** @test */
+    #[Test]
     public function artikel_method_returns_collection()
     {
         // Mock API response untuk testing
@@ -70,21 +72,65 @@ class ArtikelServiceTest extends TestCase
         $this->assertTrue(method_exists($this->service, 'artikel'));
     }
 
-    /** @test */
+    #[Test]
     public function artikel_by_id_method_exists()
     {
         $this->assertTrue(method_exists($this->service, 'artikelById'));
     }
 
-    /** @test */
+    #[Test]
     public function clear_cache_method_exists()
     {
         $this->assertTrue(method_exists($this->service, 'clearCache'));
     }
 
-    /** @test */
+    #[Test]
     public function service_extends_base_api_service()
     {
         $this->assertInstanceOf(\App\Services\BaseApiService::class, $this->service);
     }
+
+    // tests/Unit/Services/ArtikelServiceTest.php
+    public function test_clear_all_cache_removes_all_registered_keys(): void
+    {
+        $registeredKeys = [
+            'artikel_cache_key_1' => time(),
+            'artikel_cache_key_2' => time(),
+        ];
+
+        Cache::shouldReceive('get')
+            ->once()
+            ->with('artikel_cache_registry', [])
+            ->andReturn($registeredKeys);
+
+        Cache::shouldReceive('forget')
+            ->once()
+            ->with('artikel_cache_key_1');
+
+        Cache::shouldReceive('forget')
+            ->once()
+            ->with('artikel_cache_key_2');
+
+        Cache::shouldReceive('forget')
+            ->once()
+            ->with('artikel_cache_registry');
+
+        $service = new ArtikelService();
+        $service->clearAllCache();
+    }
+
+    public function test_clear_all_cache_handles_empty_registry(): void
+    {
+        Cache::shouldReceive('get')
+            ->once()
+            ->with('artikel_cache_registry', [])
+            ->andReturn([]);
+
+        Cache::shouldReceive('forget')
+            ->once()
+            ->with('artikel_cache_registry');
+
+        $service = new ArtikelService();
+        $service->clearAllCache();
+    }    
 }

@@ -4,7 +4,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped" id="summary-penduduk">
+                <table class="table table-striped" id="summary-penduduk" data-testid="summary-penduduk">
                     <thead>
                         <tr>
                             <th class="padat">No</th>

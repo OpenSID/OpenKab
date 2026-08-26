@@ -493,6 +493,7 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {
     Route::get('/', [PageController::class, 'getIndex'])->name('web.index');
+    Route::get('artikel/terbaru', [ArtikelController::class, 'terbaru'])->name('web.artikel.terbaru');
     Route::get('artikel-opensid', [ArtikelController::class, 'index'])->name('web.artikel.index');
     Route::get('artikel-opensid/{id}', [ArtikelController::class, 'show'])->name('web.artikel.show');
     Route::get('a/{aSlug}', [PageController::class, 'getArticle'])->name('article');

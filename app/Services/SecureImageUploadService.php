@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\ImageManager;
 use RuntimeException;
 
 class SecureImageUploadService
@@ -297,7 +297,7 @@ class SecureImageUploadService
         
         try {
             // Load image using Intervention Image
-            $image = Image::read($realPath);
+            $image = ImageManager::gd()->read($realPath);
             
             // Generate random filename
             $filename = $this->generateRandomFilename($outputFormat);

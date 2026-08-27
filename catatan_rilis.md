@@ -1,4 +1,4 @@
-Di rilis ini, versi 2608.0.2 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2609.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 

@@ -16,3 +16,4 @@ Di rilis ini, versi 2608.0.2 berisi penambahan dan perbaikan yang diminta penggu
 #### Perubahan Teknis
 
 
+1. [#1270](https://github.com/OpenSID/OpenKab/issues/1270) Perbaiki seeder data identitas.

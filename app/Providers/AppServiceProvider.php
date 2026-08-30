@@ -2,25 +2,28 @@
 
 namespace App\Providers;
 
+use App\Enums\SsoStatusEnum;
 use App\Http\Transformers\IdentitasTransformer;
 use App\Http\Transformers\SettingTransformer;
 use App\Models\Identitas;
 use App\Models\Setting;
+use App\Models\User;
+use App\Observers\UserObserver;
+use App\Observers\VisitorObserver;
+use App\Services\SsoAuditLogger;
+use Exception;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use App\Models\User;
-use App\Observers\UserObserver;
-use App\Observers\VisitorObserver;
-use Exception;
-use Illuminate\Support\Facades\Log;
+use League\Fractal\Serializer\JsonApiSerializer;
 use Shetabit\Visitor\Models\Visit;
 
 class AppServiceProvider extends ServiceProvider
@@ -45,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
         $this->bootHttps();
         $this->addValidation();
         $this->addLogQuery();
-        
+
         try {
             $this->shareViewIdentitas();
         } catch (Exception $e) {
@@ -63,14 +66,14 @@ class AppServiceProvider extends ServiceProvider
         $identitasAplikasi = fractal(
             Identitas::first(),
             IdentitasTransformer::class,
-            \League\Fractal\Serializer\JsonApiSerializer::class
+            JsonApiSerializer::class
         )->toArray()['data']['attributes'];
 
         $settingAplikasi = collect(
             fractal(
                 Setting::all(),
                 SettingTransformer::class,
-                \League\Fractal\Serializer\JsonApiSerializer::class
+                JsonApiSerializer::class
             )->toArray()['data']
         )->pluck('attributes.value', 'attributes.key');
 
@@ -93,6 +96,51 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+
+        RateLimiter::for('sso-generate', function (Request $request) {
+            $key = ($request->user()?->getAuthIdentifier() ?? 'guest').':'.$request->ip();
+
+            return Limit::perMinute((int) config('sso.rate_limit_max', 5))
+                ->by($key)
+                ->response(function (Request $request, array $headers) {
+                    $availableIn = max(1, (int) ($headers['X-RateLimit-Reset'] ?? 1));
+
+                    $this->logSsoRateLimitedAttempt($request);
+
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Terlalu banyak permintaan. Coba lagi nanti.',
+                        'code' => 'RATE_LIMITED',
+                        'retry_after' => $availableIn,
+                    ], 429, ['Retry-After' => $availableIn]);
+                });
+        });
+    }
+
+    /**
+     * Catat percobaan yang diblokir rate limit ke log audit SSO.
+     */
+    protected function logSsoRateLimitedAttempt(Request $request): void
+    {
+        $user = $request->user();
+        $desaId = (string) $request->input('desa_id', '');
+
+        if (! $user || $desaId === '') {
+            return;
+        }
+
+        try {
+            app(SsoAuditLogger::class)->logAttempt(
+                $user->getAuthIdentifier(),
+                $desaId,
+                SsoStatusEnum::FAILED,
+                SsoStatusEnum::REASON_RATE_LIMITED,
+                $request->ip(),
+                $request->userAgent(),
+            );
+        } catch (\Throwable $e) {
+            Log::error('Gagal mencatat attempt SSO yang di-rate-limit', ['exception' => $e]);
+        }
     }
 
     public function bootHttps()

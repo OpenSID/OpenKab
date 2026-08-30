@@ -68,7 +68,7 @@ class updateAdminMenu extends Command
                 if(empty($menuPermission)){
                     continue;
                 }
-                $permissionName = $main_menu['permission'].'-'.$permission;
+                $permissionName = $this->permissionName((string) $main_menu['permission'], $permission);
                 Permission::findOrCreate($permissionName, 'web');
                 $permissions[] = $permissionName;
             }
@@ -79,7 +79,7 @@ class updateAdminMenu extends Command
                         if(empty($subMenuPermission)){
                             continue;
                         }
-                        $permissionName = $sub_menu['permission'].'-'.$permission;
+                        $permissionName = $this->permissionName((string) $sub_menu['permission'], $permission);
                         Permission::findOrCreate($permissionName, 'web');
                         $permissions[] = $permissionName;
                     }
@@ -88,5 +88,15 @@ class updateAdminMenu extends Command
         }
 
         return $permissions;
+    }
+
+    /**
+     * Nama permission menu: tambahkan suffix bila belum ada.
+     * Menghindari hasil ganda seperti "sso-audit-read-read" untuk entry yang
+     * sudah memakai nama permission lengkap (mis. 'sso-audit-read').
+     */
+    private function permissionName(string $base, string $suffix): string
+    {
+        return str_ends_with($base, $suffix) ? $base : $base.'-'.$suffix;
     }
 }

@@ -116,7 +116,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function addLogQuery()
     {
-        if (config('app.debug')) {
+        if (config('app.debug') && app()->environment() !== 'production') {
             DB::listen(function ($query) {
                 File::append(
                     storage_path('/logs/query.log'),

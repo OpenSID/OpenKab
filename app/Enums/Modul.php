@@ -449,7 +449,13 @@ final class Modul extends Enum
                     'text' => 'Aktivasi OTP dan 2FA',
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'pengaturan/otp',
-                ]
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Database',
+                    'url' => 'pengaturan/database',
+                    'permission' => 'pengaturan-database',
+                ],
             ],
         ],
     ];

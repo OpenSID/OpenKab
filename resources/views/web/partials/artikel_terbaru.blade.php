@@ -44,50 +44,45 @@
         document.addEventListener("DOMContentLoaded", function (event) {
             "use strict";
 
-            const urlArtikel = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/artikel-public/list' }}");
-            
-            const routeDetailBase = "{{ url('artikel-opensid') }}";
+            const urlArtikel = "{{ route('web.artikel.terbaru') }}";
 
             $.ajax({
-                url: urlArtikel.href,
-                method: 'GET',                
+                url: urlArtikel,
+                method: 'GET',
                 dataType: 'json',
-                
                 data: {
-                    "page[number]": 1,
-                    "page[size]": 6,
-                    "sort": "-tgl_upload",
-                    "filter[enabled]": "1" // Only get active articles
+                    limit: 6
                 },
                 success: function (result) {
                     if (result.data && result.data.length > 0) {
                         let htmlContent = '';
 
                         result.data.forEach((item) => {
-                            let attr = item.attributes || {};
                             // Use dummy image if none provided
-                            let imgSrc = attr.gambar ? attr.gambar : `data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22100%25%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18e19c362b5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18e19c362b5%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E`;
+                            let imgSrc = item.gambar ? item.gambar : `data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22100%25%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18e19c362b5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18e19c362b5%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E`;
 
                             // Strip HTML tags from isi
                             let tmp = document.createElement("DIV");
-                            tmp.innerHTML = attr.isi || '';
+                            tmp.innerHTML = item.isi || '';
                             let textLength = 100;
                             let plainText = tmp.textContent || tmp.innerText || "";
                             let isiExcerpt = plainText.length > textLength ? plainText.substring(0, textLength) + "..." : plainText;
 
                             // Format date simple
-                            let dateStr = attr.tgl_upload ? attr.tgl_upload.split(' ')[0] : '';
-
-                            let detailUrl = `${routeDetailBase}/${item.id}`;
+                            let dateStr = item.tgl_upload ? item.tgl_upload.split(' ')[0] : '';
+                            let detailUrl = item.detail_url || '#';
+                            let kategori = item.kategori_nama || 'Kategori';
+                            let badgeSource = item.source === 'openkab' ? '<span class="badge bg-success me-1">OpenKab</span>' : '';
 
                             htmlContent += `
                                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="card shadow-sm h-100">
-                                            <img src="${imgSrc}" width="100%" height="225" class="card-img-top object-fit-cover" alt="${attr.judul || ''}">
+                                            <img src="${imgSrc}" width="100%" height="225" class="card-img-top object-fit-cover" alt="${item.judul || ''}">
                                             <div class="card-body d-flex flex-column">
-                                                <h5 class="card-title text-truncate">${attr.judul || ''}</h5>
+                                                <h5 class="card-title text-truncate">${item.judul || ''}</h5>
                                                 <div class="mb-2">
-                                                    <span class="badge bg-primary">${attr.kategori_nama || 'Kategori'}</span>
+                                                    ${badgeSource}
+                                                    <span class="badge bg-primary">${kategori}</span>
                                                 </div>
                                                 <div class="card-text flex-grow-1" style="font-size: 0.9rem;">
                                                     ${isiExcerpt}
@@ -114,7 +109,7 @@
                 error: function () {
                     $('.replace-content-artikel').html(`
                             <div class="col-12 text-center text-danger py-4">
-                                <i>Gagal memuat artikel jaringan atau server bermasalah</i>
+                                <i>Gagal memuat artikel terbaru</i>
                             </div>
                         `);
                 }

@@ -63,6 +63,8 @@ class ArticleController extends AppBaseController
         }
         $this->articleRepository->create($input);
 
+        (new \App\Services\ArtikelService)->clearAllCache();
+
         Session::flash('success', 'Artikel berhasil disimpan.');
 
         return redirect(route('articles.index'));
@@ -135,6 +137,8 @@ class ArticleController extends AppBaseController
         }
         $article = $this->articleRepository->update($input, $id);
 
+        (new \App\Services\ArtikelService)->clearAllCache();
+
         Session::flash('success', 'Artikel berhasil diupdate.');
 
         return redirect(route('articles.index'));
@@ -159,6 +163,9 @@ class ArticleController extends AppBaseController
         $this->authorize('delete', $article);
 
         $this->articleRepository->delete($id);
+
+        (new \App\Services\ArtikelService)->clearAllCache();
+
         if (request()->ajax()) {
             return $this->sendSuccess('Artikel berhasil dihapus.');
         }

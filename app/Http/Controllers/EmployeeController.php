@@ -55,14 +55,27 @@ class EmployeeController extends AppBaseController
     public function store(CreateEmployeeRequest $request)
     {
         $input = $request->all();
-        if ($request->file('foto')) {
-            $input['foto'] = $this->uploadFile($request, 'foto');
+        
+        try {
+            if ($request->file('foto')) {
+                $input['foto'] = $this->uploadFile($request, 'foto');
+            }
+            
+            $employee = $this->employeeRepository->create($input);
+
+            Session::flash('success', 'Pejabat Daerah berhasil disimpan.');
+
+            return redirect(route('employees.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['foto' => 'Gagal mengunggah foto: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-        $employee = $this->employeeRepository->create($input);
-
-        Session::flash('success', 'Pejabat Daerah berhasil disimpan.');
-
-        return redirect(route('employees.index'));
     }
 
     /**
@@ -111,15 +124,27 @@ class EmployeeController extends AppBaseController
         }
 
         $input = $request->all();
-        if ($request->file('foto')) {
-            $input['foto'] = $this->uploadFile($request, 'foto');
+        
+        try {
+            if ($request->file('foto')) {
+                $input['foto'] = $this->uploadFile($request, 'foto');
+            }
+
+            $employee = $this->employeeRepository->update($input, $id);
+
+            Session::flash('success', 'Pejabat Daerah berhasil diupdate.');
+
+            return redirect(route('employees.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['foto' => 'Gagal mengunggah foto: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat mengupdate data. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-
-        $employee = $this->employeeRepository->update($input, $id);
-
-        Session::flash('success', 'Pejabat Daerah berhasil diupdate.');
-
-        return redirect(route('employees.index'));
     }
 
     /**

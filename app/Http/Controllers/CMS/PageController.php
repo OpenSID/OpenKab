@@ -55,18 +55,31 @@ class PageController extends AppBaseController
     public function store(CreatePageRequest $request)
     {
         $input = $request->all();
-        if (isset($input['content'])) {
-            $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
-        }
-        if ($request->file('foto')) {
-            $this->pathFolder .= '/profile';
-            $input['thumbnail'] = $this->uploadFile($request, 'foto');
-        }
-        $this->pageRepository->create($input);
 
-        Session::flash('success', 'Halaman berhasil disimpan.');
+        try {
+            if ($request->file('foto')) {
+                $this->pathFolder .= '/profile';
+                $input['thumbnail'] = $this->uploadFile($request, 'foto');
+            }
+            if (isset($input['content'])) {
+                $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
+            }
 
-        return redirect(route('pages.index'));
+            $this->pageRepository->create($input);
+
+            Session::flash('success', 'Halaman berhasil disimpan.');
+
+            return redirect(route('pages.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['foto' => 'Gagal mengunggah gambar: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat menyimpan halaman. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -113,23 +126,37 @@ class PageController extends AppBaseController
 
             return redirect(route('pages.index'));
         }
+
         $input = $request->all();
         if (isset($input['content'])) {
             $input['content'] = \Mews\Purifier\Facades\Purifier::clean($input['content']);
         }
         $removeThumbnail = $request->get('remove_thumbnail');
-        if ($request->file('foto')) {
-            $input['thumbnail'] = $this->uploadFile($request, 'foto');
-        } else {
-            if ($removeThumbnail) {
-                $input['thumbnail'] = null;
+
+        try {
+            if ($request->file('foto')) {
+                $input['thumbnail'] = $this->uploadFile($request, 'foto');
+            } else {
+                if ($removeThumbnail) {
+                    $input['thumbnail'] = null;
+                }
             }
+
+            $page = $this->pageRepository->update($input, $id);
+
+            Session::flash('success', 'Halaman berhasil diupdate.');
+
+            return redirect(route('pages.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['foto' => 'Gagal mengunggah gambar: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat mengupdate halaman. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-        $page = $this->pageRepository->update($input, $id);
-
-        Session::flash('success', 'Halaman berhasil diupdate.');
-
-        return redirect(route('pages.index'));
     }
 
     /**

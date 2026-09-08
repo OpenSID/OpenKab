@@ -523,7 +523,7 @@
                             let kriteria = new URLSearchParams(JSON.parse(data.attributes
                                 .kriteria));
 
-                            let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
+                            let judul = $('.pilih-kategori > a.active').text().trim() + ' : ' + data
                                 .attributes.nama;
                             let urlDetail = new URL(urlDetailLink);
                             urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());
@@ -544,7 +544,7 @@
                     data: function(data) {
                         let kriteria = new URLSearchParams(JSON.parse(data.attributes
                             .kriteria));
-                        let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
+                        let judul = $('.pilih-kategori > a.active').text().trim() + ' : ' + data
                             .attributes.nama;
                         let urlDetail = new URL(urlDetailLink);
                         urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());
@@ -562,7 +562,7 @@
                     data: function(data) {
                         let kriteria = new URLSearchParams(JSON.parse(data.attributes
                             .kriteria));
-                        let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
+                        let judul = $('.pilih-kategori > a.active').text().trim() + ' : ' + data
                             .attributes.nama + ' - Laki-laki';
                         let urlDetail = new URL(urlDetailLink);
                         urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());
@@ -581,7 +581,7 @@
                     data: function(data) {
                         let kriteria = new URLSearchParams(JSON.parse(data.attributes
                             .kriteria));
-                        let judul = $('.pilih-kategori > a.active').text() + ' : ' + data
+                        let judul = $('.pilih-kategori > a.active').text().trim() + ' : ' + data
                             .attributes.nama + ' - Perempuan';
                         let urlDetail = new URL(urlDetailLink);
                         urlDetail.searchParams.set('filter[kriteria]', kriteria.toString());

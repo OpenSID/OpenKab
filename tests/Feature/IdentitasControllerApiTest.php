@@ -95,4 +95,27 @@ class IdentitasControllerApiTest extends TestCase
         $this->assertTrue(File::exists('public/favicons/favicon-96x96.png'));
         $this->assertDatabaseHas('identitas', $dataLogo);
     }
+
+    public function test_get_logo()
+    {
+        ob_start();
+        $response = $this->get('/pengaturan/logo');
+        ob_end_clean();
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function test_get_logo_fallback_when_null()
+    {
+        $identitas = \App\Models\Identitas::first();
+        if ($identitas) {
+            $identitas->update(['logo' => null]);
+        }
+
+        ob_start();
+        $response = $this->get('/pengaturan/logo');
+        ob_end_clean();
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
 }

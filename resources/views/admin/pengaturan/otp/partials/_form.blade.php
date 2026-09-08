@@ -18,8 +18,8 @@
      </div>
      @else 
         <p class="pl-3">Id Telegram belum tersedia
-        <a href="{{ Auth::user()->adminlte_profile_url() }}">
-            <button class="btn btn-sm btn-primary">Tambahkan id telegram</button>
+        <a href="{{ Auth::user()->adminlte_profile_url() }}" class="btn btn-sm btn-primary">
+            Tambahkan id telegram
         </a>
         </p>
      @endif

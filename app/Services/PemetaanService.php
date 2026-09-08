@@ -19,7 +19,7 @@ class PemetaanService extends BaseApiService
 
     public function getAllPoint(array $query = [])
     {
-        return $this->apiRequest('/api/v1/point');
+        return $this->apiRequest('/api/v1/point', $query);
     }
 
     public function pointLock(array $data, string $id): ?array

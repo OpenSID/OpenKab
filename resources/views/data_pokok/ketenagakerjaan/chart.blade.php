@@ -1,8 +1,8 @@
 @include('data_pokok.data_presisi.partials.chart')
 <script nonce="{{ csp_nonce() }}">
     function grafikPie(filters) {
-        loadChartData(filters, 'barChart', 'bar', 'jumlah_penghasilan');
-        loadChartData(filters, 'donutChart', 'doughnut', 'pelatihan');
+        loadChartData(filters, 'barChart', 'bar', 'jenis_pekerjaan');
+        loadChartData(filters, 'donutChart', 'doughnut', 'jenis_pelatihan_diikuti_setahun');
     }
 
     function loadChartData(filters, canvasId, chartType, kategori) {

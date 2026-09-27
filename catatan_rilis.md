@@ -8,7 +8,7 @@ Di rilis ini, versi 2609.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 1. [#1273](https://github.com/OpenSID/OpenKab/issues/1273) Perbaikan gagal pada fungsi pindah penduduk.
 2. [#1275](https://github.com/OpenSID/OpenKab/issues/1275) Perbaikan gagal ambil data untuk menu ketenagakerjaan.
-
+3. [#1279](https://github.com/OpenSID/OpenKab/issues/1279) Perbaikan parameter query tidak diteruskan pada getAllPoint.
 
 #### Perubahan Teknis
 

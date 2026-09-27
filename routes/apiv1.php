@@ -3,8 +3,10 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
+use App\Http\Controllers\Api\RefreshTokenController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\TeamController;
+use App\Http\Controllers\Api\TokenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,14 +45,24 @@ Route::middleware('auth:sanctum')->get('validate-token', function (Request $requ
     ], 401);
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'token.anomaly'])->group(function () {
     Route::get('/token', [AuthController::class, 'token']);
     Route::post('/logout', [AuthController::class, 'logOut']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
-    // Identitas
+    // Token Management
+    Route::prefix('tokens')->group(function () {
+        Route::get('/', [TokenController::class, 'index']);
+        Route::get('/{tokenId}', [TokenController::class, 'show']);
+        Route::post('/revoke', [TokenController::class, 'revoke']);
+        Route::post('/rotate', [TokenController::class, 'rotate']);
+        Route::post('/revoke-all', [TokenController::class, 'revokeAll']);
+        Route::post('/revoke-all-including-current', [TokenController::class, 'revokeAllIncludingCurrent']);
+    });
+
+    // Identitas - bisa diakses via session auth (admin dashboard) atau Sanctum token (API)
     Route::controller(IdentitasController::class)
         ->prefix('identitas')->group(function () {
             Route::get('/', 'index');
@@ -86,4 +98,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('data', [OpendkSynchronizeController::class, 'getData']);
         });
     });
+});
+
+// Refresh Token Management (no auth:sanctum needed - uses refresh token)
+Route::prefix('refresh-token')->group(function () {
+    Route::post('/refresh', [RefreshTokenController::class, 'refresh']);
+    Route::post('/revoke', [RefreshTokenController::class, 'revoke']);
+    Route::post('/revoke-all', [RefreshTokenController::class, 'revokeAll'])->middleware('auth:sanctum');
 });

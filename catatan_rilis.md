@@ -6,7 +6,10 @@ Di rilis ini, versi 2609.0.0 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perbaikan BUG
 
+1. [#1273](https://github.com/OpenSID/OpenKab/issues/1273) Perbaikan gagal pada fungsi pindah penduduk.
+
+
 #### Perubahan Teknis
 
 
-1. [#1270](https://github.com/OpenSID/OpenKab/issues/1270) Perbaiki seeder data identitas.
+1. [#1270](https://github.com/OpenSID/OpenKab/issues/1270) Perbaikan seeder data identitas.

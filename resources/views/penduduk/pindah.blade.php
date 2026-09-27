@@ -107,7 +107,7 @@
                     status: 1,
                     tgl_lapor: moment().format("YYYY-MM-DD"),
                     tgl_peristiwa: moment().format("YYYY-MM-DD"),
-                    catatan: undefined
+                    catatan: ''
                 },
                 dataPenduduk: {},
                 loading: false,
@@ -231,7 +231,8 @@
                         type: "Post",
                         headers: header,
                         url: `{{ config('app.databaseGabunganUrl') . '/api/v1/penduduk/aksi/pindah' }}`,
-                        data: data,
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
                         dataType: "json",
                         success: function(response) {
                             if (response.success == true) {

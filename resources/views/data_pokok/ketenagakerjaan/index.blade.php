@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">Statistik Jumlah Penghasilan</div>
+                <div class="card-header">Statistik Jenis Pekerjaan</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="grafik">
@@ -26,7 +26,7 @@
         </div>
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header">Statistik Pelatihan</div>
+                <div class="card-header">Statistik Pelatihan Yang Diikuti</div>
                 <div class="card-body">
                     <div>
                         <div class="chart" id="pie">

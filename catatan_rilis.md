@@ -12,6 +12,7 @@ Di rilis ini, versi 2609.0.0 berisi penambahan dan perbaikan yang diminta penggu
 4. [#1276](https://github.com/OpenSID/OpenKab/issues/1276) Masalah cros origin pada details statistik penduduk masih terjadi perlu ada solusi terkait ini.
 5. [#1281](https://github.com/OpenSID/OpenKab/issues/1281) Perbaikan tampilan logo identitas dan perbaikan opsi undefined pada dropdown kabupaten.
 6. [#1282](https://github.com/OpenSID/OpenKab/issues/1282) Perbaiki aktivasi OTP.
+7. [#1278](https://github.com/OpenSID/OpenKab/issues/1278) Perbaikan penanganan error validasi pada form create dan edit master bantuan.
 
 #### Perubahan Teknis
 

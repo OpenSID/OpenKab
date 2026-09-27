@@ -196,6 +196,63 @@
                 })
                 .catch(error => console.error('Error saat mengambil data:', error));
 
+            function showErrorAlert(response, fallbackMessage) {
+                let data = response;
+                if (typeof data === 'string') {
+                    try {
+                        data = JSON.parse(data);
+                    } catch (e) {
+                        data = null;
+                    }
+                }
+
+                let errorList = [];
+                if (data && data.errors) {
+                    if (Array.isArray(data.errors)) {
+                        errorList = data.errors;
+                    } else if (typeof data.errors === 'object') {
+                        Object.values(data.errors).forEach(function(err) {
+                            if (Array.isArray(err)) {
+                                errorList.push(...err);
+                            } else if (typeof err === 'string') {
+                                errorList.push(err);
+                            }
+                        });
+                    } else if (typeof data.errors === 'string') {
+                        errorList.push(data.errors);
+                    }
+                }
+
+                if (errorList.length > 1) {
+                    let escapeHtml = function(text) {
+                        let div = document.createElement('div');
+                        div.textContent = text;
+                        return div.innerHTML;
+                    };
+                    Swal.fire({
+                        title: 'Error!',
+                        html: '<ul style="text-align: left; margin: 0; padding-left: 20px;">' +
+                            errorList.map(function(err) {
+                                return '<li>' + escapeHtml(err) + '</li>';
+                            }).join('') + '</ul>',
+                        icon: 'error'
+                    });
+                } else if (errorList.length === 1) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: errorList[0],
+                        icon: 'error'
+                    });
+                } else {
+                    let message = (data && data.message) ? data.message : (fallbackMessage || 'Terjadi kesalahan sistem');
+                    Swal.fire({
+                        title: 'Error!',
+                        text: message,
+                        icon: 'error'
+                    });
+                }
+            }
+
             $(document).on('click', 'button#submit', function(e) {
                 e.preventDefault();
                 let dateParam = $.param({
@@ -239,11 +296,11 @@
                                     })
                                     window.location = `{{ url('master/bantuan') }}?clear_cache=${id}`
                                 } else {
-                                    Swal.fire('Error!', response.message, 'error')
+                                    showErrorAlert(response);
                                 }
                             },
                             error: function(xhr, ajaxOptions, thrownError) {
-                                Swal.fire('Error!', xhr.responseJSON.message, 'error')
+                                showErrorAlert(xhr.responseJSON || xhr.responseText, thrownError);
                             }
                         });
                     }

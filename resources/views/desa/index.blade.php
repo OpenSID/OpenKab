@@ -286,6 +286,7 @@
 
                         const form = document.createElement('form');
                         form.method = 'POST';
+                        form.target = '_blank';
                         form.action = result.data.redirect_url;
                         form.style.display = 'none';
 

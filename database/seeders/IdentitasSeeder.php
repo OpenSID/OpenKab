@@ -16,16 +16,16 @@ class IdentitasSeeder extends Seeder
     public function run()
     {
         $defaultData = [
-            'nama_aplikasi' => 'Simatik',
-            'nama_kabupaten' => 'KOTA BIMA',
-            'kode_kabupaten' => '52.72',
-            'nama_provinsi' => 'Nusa Tenggara Barat',
-            'kode_provinsi' => '52',
-            'sebutan_kab' => 'Kota'
+            'nama_aplikasi' => 'OpenKab',
+            'nama_kabupaten' => 'Belum Ditentukan',
+            'kode_kabupaten' => '00.00',
+            'nama_provinsi' => 'Belum Ditentukan',
+            'kode_provinsi' => '00',
+            'sebutan_kab' => 'Kabupaten'
         ];
         if(Schema::hasColumn('identitas', 'sebutan_desa')){
-            $defaultData['sebutan_desa'] = 'Kelurahan';
+            $defaultData['sebutan_desa'] = 'Desa';
         }
-        return Identitas::create($defaultData);
+        Identitas::create($defaultData);
     }
 }

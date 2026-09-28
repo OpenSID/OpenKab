@@ -22,6 +22,7 @@
                 <div class="widget-user-header text-center  p-4">
                     <img :src="dataIdentitas.logo ? '{{ asset('storage/img') }}/' + dataIdentitas.logo :
                         '{{ asset('assets/img/opensid_logo.png') }}'"
+                        x-on:error="$event.target.src = '{{ asset('assets/img/opensid_logo.png') }}'"
                         alt="Logo" width="150px">
                     <h5 class="mt-3" x-text="'Logo ' + dataIdentitas.nama_aplikasi">Logo {{ config('app.namaAplikasi') }}
                     </h5>
@@ -153,16 +154,18 @@
                                 };
                             },
                             processResults: function(data) {
-                                let results = data.results;
+                                let results = data.results || [];
                                 return {
-                                    results: results.map(value => {
-                                        return {
-                                            'id': value.kode_prov,
-                                            'text': value.nama_prov,
-                                            'kode_prov': value.kode_prov,
-                                            'nama_prov': value.nama_prov
-                                        }
-                                    }),
+                                    results: results
+                                        .filter(value => value.kode_prov && value.nama_prov)
+                                        .map(value => {
+                                            return {
+                                                'id': value.kode_prov,
+                                                'text': value.nama_prov,
+                                                'kode_prov': value.kode_prov,
+                                                'nama_prov': value.nama_prov
+                                            }
+                                        }),
                                     pagination: data.pagination,
                                 }
                             },
@@ -177,13 +180,30 @@
                         },
                     });
 
+                    if (this.dataIdentitas.kode_provinsi && this.dataIdentitas.nama_provinsi) {
+                        let optionProv = new Option(this.dataIdentitas.nama_provinsi, this.dataIdentitas.kode_provinsi, true, true);
+                        $(this.$refs.selectProv).append(optionProv).trigger('change');
+                    }
+
                     this.select2Prov.on("select2:select", (event) => {
                         this.dataIdentitas.kode_provinsi = event.params.data.kode_prov;
                         this.dataIdentitas.nama_provinsi = event.params.data.nama_prov;
+                        this.dataIdentitas.kode_kabupaten = null;
+                        this.dataIdentitas.nama_kabupaten = null;
+                        $(this.$refs.select).val(null).trigger('change');
+                    });
+
+                    this.select2Prov.on("select2:clear", () => {
+                        this.dataIdentitas.kode_provinsi = null;
+                        this.dataIdentitas.nama_provinsi = null;
+                        this.dataIdentitas.kode_kabupaten = null;
+                        this.dataIdentitas.nama_kabupaten = null;
+                        $(this.$refs.select).val(null).trigger('change');
                     });
                 },
 
                 selectKab() {
+                    const _this = this;
                     this.select2 = $(this.$refs.select).select2({
                         ajax: {
                             url: function() {
@@ -195,23 +215,25 @@
                             data: function(params) {
                                 return {
                                     cari: params.term || '',
-                                    kode: $('select[name=prov]').val(),
+                                    kode: $('select[name=prov]').val() || _this.dataIdentitas.kode_provinsi,
                                     page: params.page || 1,
                                 };
                             },
                             processResults: function(data) {
-                                let results = data.results;
+                                let results = data.results || [];
                                 return {
-                                    results: results.map(value => {
-                                        return {
-                                            'id': value.kode_kab,
-                                            'text': value.nama_prov + ' - ' + value.nama_kab,
-                                            'kode_kab': value.kode_kab,
-                                            'kode_prov': value.kode_prov,
-                                            'nama_kab': value.nama_kab,
-                                            'nama_prov': value.nama_prov
-                                        }
-                                    }),
+                                    results: results
+                                        .filter(value => value.kode_kab && value.nama_kab)
+                                        .map(value => {
+                                            return {
+                                                'id': value.kode_kab,
+                                                'text': (value.nama_prov ? value.nama_prov + ' - ' : '') + value.nama_kab,
+                                                'kode_kab': value.kode_kab,
+                                                'kode_prov': value.kode_prov,
+                                                'nama_kab': value.nama_kab,
+                                                'nama_prov': value.nama_prov
+                                            }
+                                        }),
                                     pagination: data.pagination,
                                 }
                             },
@@ -226,11 +248,22 @@
                         },
                     });
 
+                    if (this.dataIdentitas.kode_kabupaten && this.dataIdentitas.nama_kabupaten) {
+                        let kabText = (this.dataIdentitas.nama_provinsi ? this.dataIdentitas.nama_provinsi + ' - ' : '') + this.dataIdentitas.nama_kabupaten;
+                        let optionKab = new Option(kabText, this.dataIdentitas.kode_kabupaten, true, true);
+                        $(this.$refs.select).append(optionKab).trigger('change');
+                    }
+
                     this.select2.on("select2:select", (event) => {
                         this.dataIdentitas.kode_kabupaten = event.params.data.kode_kab;
                         this.dataIdentitas.kode_provinsi = event.params.data.kode_prov;
                         this.dataIdentitas.nama_kabupaten = event.params.data.nama_kab;
                         this.dataIdentitas.nama_provinsi = event.params.data.nama_prov;
+                    });
+
+                    this.select2.on("select2:clear", () => {
+                        this.dataIdentitas.kode_kabupaten = null;
+                        this.dataIdentitas.nama_kabupaten = null;
                     });
                 },
 
@@ -267,15 +300,15 @@
                                 contentType: false, // tell jQuery not to set contentType
                                 success: function(response) {
                                     if (response.success == true) {
-                                        this.data.logo = response.data
                                         Swal.fire({
                                             title: 'Simpan!',
                                             text: 'Data berhasil tersimpan',
                                             icon: 'success',
-                                            showConfirmButton: false,
+                                            showConfirmButton: true,
                                             timer: 1500,
-                                        })
-                                        location.reload();
+                                        }).then(function() {
+                                            window.location.reload();
+                                        });
 
                                     } else {
                                         Swal.fire({

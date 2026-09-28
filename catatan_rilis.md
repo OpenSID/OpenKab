@@ -1,4 +1,4 @@
-Di rilis ini, versi 2608.0.2 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2609.0.0 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
@@ -6,13 +6,15 @@ Di rilis ini, versi 2608.0.2 berisi penambahan dan perbaikan yang diminta penggu
 
 #### Perbaikan BUG
 
-1. [#1105](https://github.com/OpenSID/OpenKab/issues/1105) Perbaikan filter kecamatan tampil tanpa memilih kabupaten terlebih dahulu.
-2. [#1108](https://github.com/OpenSID/OpenKab/issues/1108) Perbaikan filter tahun dan desa masih ada yang kurang di data sandang.
-3. [#1111](https://github.com/OpenSID/OpenKab/issues/1111) Perbaikan style pada halaman slide tertutupi card icon penduduk.
-4. [#1262](https://github.com/OpenSID/OpenKab/issues/1262) Perbaikan grafik tidak tampil pada Profile Kependudukan - Kesehatan.
-5. [#1260](https://github.com/OpenSID/OpenKab/issues/1260) Perbaikan Error 500 gagal ambil data statistik partisipasi sekolah dan ijazah tertinggi.
-6. [#1265](https://github.com/OpenSID/OpenKab/issues/1265) perbaikan data desa tidak tampil di OpenKab.
+1. [#1273](https://github.com/OpenSID/OpenKab/issues/1273) Perbaikan gagal pada fungsi pindah penduduk.
+2. [#1275](https://github.com/OpenSID/OpenKab/issues/1275) Perbaikan gagal ambil data untuk menu ketenagakerjaan.
+3. [#1279](https://github.com/OpenSID/OpenKab/issues/1279) Perbaikan parameter query tidak diteruskan pada getAllPoint.
+4. [#1276](https://github.com/OpenSID/OpenKab/issues/1276) Masalah cros origin pada details statistik penduduk masih terjadi perlu ada solusi terkait ini.
+5. [#1281](https://github.com/OpenSID/OpenKab/issues/1281) Perbaikan tampilan logo identitas dan perbaikan opsi undefined pada dropdown kabupaten.
+6. [#1282](https://github.com/OpenSID/OpenKab/issues/1282) Perbaiki aktivasi OTP.
+7. [#1278](https://github.com/OpenSID/OpenKab/issues/1278) Perbaikan penanganan error validasi pada form create dan edit master bantuan.
 
 #### Perubahan Teknis
 
 
+1. [#1270](https://github.com/OpenSID/OpenKab/issues/1270) Perbaikan seeder data identitas.

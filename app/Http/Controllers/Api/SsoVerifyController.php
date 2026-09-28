@@ -83,8 +83,10 @@ class SsoVerifyController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'valid' => true,
             'data' => [
                 'desa_id' => $desaId,
+                'desa_kode' => $desaId,
                 'username' => $admin->username,
                 'admin_id' => $adminId,
                 'expires_at' => (int) $payload['exp'],

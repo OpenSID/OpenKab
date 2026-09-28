@@ -30,11 +30,12 @@ class SsoVerifyTokenTest extends BaseTestCase
     protected function verifyRequest(array $body): TestResponse
     {
         $secret = (string) config('sso.callback_secret');
+        $timestamp = (string) time();
 
         return $this->postJson('/api/v1/sso/verify-token', $body, [
             'X-SSO-Callback-Key' => $secret,
-            'X-SSO-Callback-Timestamp' => (string) time(),
-            'X-SSO-Callback-Signature' => hash_hmac('sha256', json_encode($body), $secret),
+            'X-SSO-Callback-Timestamp' => $timestamp,
+            'X-SSO-Callback-Signature' => hash_hmac('sha256', $timestamp . '.' . json_encode($body), $secret),
         ]);
     }
 
@@ -42,7 +43,6 @@ class SsoVerifyTokenTest extends BaseTestCase
     {
         return [
             'token' => $token,
-            'callback_nonce' => (string) Str::uuid(),
         ];
     }
 
@@ -179,10 +179,13 @@ class SsoVerifyTokenTest extends BaseTestCase
         $issued = $this->issueTokenForAdmin();
         $body = $this->validBody($issued['token']);
 
+        $wrongSecret = 'kunci-salah-yang-sangat-panjang-bgt-12345678';
+        $timestamp = (string) time();
+
         $response = $this->postJson('/api/v1/sso/verify-token', $body, [
-            'X-SSO-Callback-Key' => 'kunci-salah-yang-sangat-panjang-bgt-12345678',
-            'X-SSO-Callback-Timestamp' => (string) time(),
-            'X-SSO-Callback-Signature' => hash_hmac('sha256', json_encode($body), 'kunci-salah-yang-sangat-panjang-bgt-12345678'),
+            'X-SSO-Callback-Key' => $wrongSecret,
+            'X-SSO-Callback-Timestamp' => $timestamp,
+            'X-SSO-Callback-Signature' => hash_hmac('sha256', $timestamp . '.' . json_encode($body), $wrongSecret),
         ]);
 
         $response->assertStatus(401);
@@ -211,10 +214,12 @@ class SsoVerifyTokenTest extends BaseTestCase
         $body = $this->validBody($issued['token']);
         $secret = (string) config('sso.callback_secret');
 
+        $expiredTimestamp = (string) (time() - 3600);
+
         $response = $this->postJson('/api/v1/sso/verify-token', $body, [
             'X-SSO-Callback-Key' => $secret,
-            'X-SSO-Callback-Timestamp' => (string) (time() - 3600),
-            'X-SSO-Callback-Signature' => hash_hmac('sha256', json_encode($body), $secret),
+            'X-SSO-Callback-Timestamp' => $expiredTimestamp,
+            'X-SSO-Callback-Signature' => hash_hmac('sha256', $expiredTimestamp . '.' . json_encode($body), $secret),
         ]);
 
         $response->assertStatus(401);

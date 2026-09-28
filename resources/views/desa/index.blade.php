@@ -292,7 +292,7 @@
 
                         const input = document.createElement('input');
                         input.type = 'hidden';
-                        input.name = 'sso_token';
+                        input.name = 'token';
                         input.value = result.data.token;
                         form.appendChild(input);
 

@@ -25,7 +25,6 @@ class SsoVerifyRequest extends FormRequest
     {
         return [
             'token' => ['required', 'string'],
-            'callback_nonce' => ['required', 'string', 'min:8'],
         ];
     }
 }

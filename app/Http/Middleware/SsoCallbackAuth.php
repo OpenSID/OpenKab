@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * Memvalidasi: X-SSO-Callback-Key (sekret bersama), X-SSO-Callback-Timestamp
  * (± toleransi selisih jam), dan X-SSO-Callback-Signature (HMAC-SHA256 dari
- * raw body). Semua perbandingan memakai hash_equals (constant-time).
+ * string kanonis "{timestamp}.{raw body}"). Semua perbandingan memakai
+ * hash_equals (constant-time).
  */
 class SsoCallbackAuth
 {
@@ -24,21 +25,19 @@ class SsoCallbackAuth
         if (strlen($secret) < 32) {
             throw new SsoConfigurationException('SSO_CALLBACK_SECRET wajib minimal 32 byte.');
         }
-
-        $key = (string) $request->header('X-SSO-Callback-Key', '');
+        
         $timestamp = (int) $request->header('X-SSO-Callback-Timestamp', 0);
-        $signature = (string) $request->header('X-SSO-Callback-Signature', '');
-
-        if (! hash_equals($secret, $key)) {
-            return $this->unauthorized();
-        }
+        $signature = (string) $request->header('X-SSO-Callback-Signature', '');        
 
         $tolerance = (int) config('sso.clock_skew_tolerance', 30);
+        
         if ($timestamp === 0 || abs(time() - $timestamp) > $tolerance) {
             return $this->unauthorized();
         }
-
-        $expected = hash_hmac('sha256', $request->getContent(), $secret);
+        // String kanonis harus sama persis dengan pengirim (OpenSID):
+        // "{timestamp}.{raw body}". Menyertakan timestamp mengikat signature
+        // ke header waktu sehingga tidak bisa dipakai ulang di luar toleransi jam.
+        $expected = hash_hmac('sha256', $timestamp . '.' . $request->getContent(), $secret);
         if (! hash_equals($expected, $signature)) {
             return $this->unauthorized();
         }

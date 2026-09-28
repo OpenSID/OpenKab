@@ -136,7 +136,7 @@ class SsoLoginController extends Controller
 
         return response()->json([
             'status' => 'error',
-            'message' => $reason ?? 'Autentikasi gagal.',
+            'message' => 'Autentikasi gagal.',
             'code' => $code,
         ], $status);
     }

@@ -54,15 +54,27 @@ class SlideController extends AppBaseController
     public function store(CreateSlideRequest $request)
     {
         $input = $request->all();
-        if ($request->file('foto')) {
-            $input['thumbnail'] = $this->uploadFile($request, 'foto');
+        
+        try {
+            if ($request->file('foto')) {
+                $input['thumbnail'] = $this->uploadFile($request, 'foto');
+            }
+
+            $this->slideRepository->create($input);
+
+            Session::flash('success', 'Slide berhasil disimpan.');
+
+            return redirect(route('slides.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['foto' => 'Gagal mengunggah gambar: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat menyimpan slide. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-
-        $this->slideRepository->create($input);
-
-        Session::flash('success', 'Slide berhasil disimpan.');
-
-        return redirect(route('slides.index'));
     }
 
     /**
@@ -109,20 +121,34 @@ class SlideController extends AppBaseController
 
             return redirect(route('slides.index'));
         }
+        
         $input = $request->all();
         $removeThumbnail = $request->get('remove_thumbnail');
-        if ($request->file('foto')) {
-            $input['thumbnail'] = $this->uploadFile($request, 'foto');
-        } else {
-            if ($removeThumbnail) {
-                $input['thumbnail'] = null;
+        
+        try {
+            if ($request->file('foto')) {
+                $input['thumbnail'] = $this->uploadFile($request, 'foto');
+            } else {
+                if ($removeThumbnail) {
+                    $input['thumbnail'] = null;
+                }
             }
+            
+            $slide = $this->slideRepository->update($input, $id);
+
+            Session::flash('success', 'Slide berhasil diupdate.');
+
+            return redirect(route('slides.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['foto' => 'Gagal mengunggah gambar: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat mengupdate slide. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-        $slide = $this->slideRepository->update($input, $id);
-
-        Session::flash('success', 'Slide berhasil diupdate.');
-
-        return redirect(route('slides.index'));
     }
 
     /**

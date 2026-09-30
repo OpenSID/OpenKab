@@ -3,49 +3,40 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\AppBaseController;
-use App\Traits\UploadedFile;
-use Illuminate\Http\Request;
+use App\Http\Requests\ArtikelImageRequest;
+use App\Services\SecureImageUploadService;
 use Illuminate\Support\Facades\Storage;
 
 class ArtikelUploadController extends AppBaseController
 {
-    use UploadedFile;
-
-    public function __construct()
-    {
-        $this->pathFolder = 'uploads/artikel';
-    }
+    protected $pathFolder = 'uploads/artikel';
 
     /**
-     * Upload gambar artikel
+     * Upload gambar artikel dengan validasi keamanan yang ketat
      */
-    public function uploadGambar(Request $request)
+    public function uploadGambar(ArtikelImageRequest $request)
     {
         try {
-            $request->validate([
-                'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
-            ]);
-
-            if ($request->file('file')) {
-                $path = $this->uploadFile($request, 'file');
-                $url = Storage::url($path);
-
-                return response()->json([
-                    'success' => true,
-                    'url' => $url,
-                    'path' => $path,
-                ], 200);
-            }
+            $file = $request->file('file');
+            
+            // Use secure image upload service
+            $secureService = new SecureImageUploadService(2048);
+            $result = $secureService->processSecureUpload($file, 'jpg', $this->pathFolder);
+            
+            $url = Storage::url($result['path']);
 
             return response()->json([
-                'success' => false,
-                'message' => 'File tidak ditemukan',
-            ], 400);
+                'success' => true,
+                'url' => $url,
+                'path' => $result['path'],
+                'filename' => $result['filename'],
+                'size' => $result['size'],
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Upload gagal: ' . $e->getMessage(),
-            ], 500);
+                'message' => 'Upload ditolak: ' . $e->getMessage(),
+            ], 400);
         }
     }
 }

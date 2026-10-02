@@ -113,7 +113,7 @@ final class Modul extends Enum
                     'text' => 'Desa Aktif',
                     'url' => 'laporan/desa-aktif',
                     'permission' => 'laporan-desa-aktif',
-                ],                
+                ],
             ],
         ],
         [
@@ -123,8 +123,8 @@ final class Modul extends Enum
             'submenu' => [
                 [
                     'text' => 'Statistik',
-                    'icon' => 'fa fa-chart-pie',                    
-                    'submenu' => [                        
+                    'icon' => 'fa fa-chart-pie',
+                    'submenu' => [
                         [
                             'text' => 'Pangan',
                             'url' => 'data-presisi/statistik/pangan',
@@ -183,8 +183,8 @@ final class Modul extends Enum
                             'text' => 'Adat',
                             'url' => 'data-presisi/statistik/adat',
                             'permission' => 'statistik-datapresisi-adat',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',
@@ -227,13 +227,13 @@ final class Modul extends Enum
                     'text' => 'Ketenagakerjaan',
                     'url' => 'data-presisi/ketenagakerjaan',
                     'permission' => 'datapresisi-ketenagakerjaan',
-                ], 
+                ],
                 [
                     'icon' => 'far fa-fw fa-circle',
                     'text' => 'Adat',
                     'url' => 'data-presisi/adat',
                     'permission' => 'datapresisi-adat',
-                ],                
+                ],
                 [
                     'icon' => 'far fa-fw fa-circle',
                     'text' => 'Agama',
@@ -245,7 +245,7 @@ final class Modul extends Enum
                     'text' => 'Seni Budaya',
                     'url' => 'data-presisi/seni-budaya',
                     'permission' => 'datapresisi-seni-budaya',
-                ],                               
+                ],
                 [
                     'icon' => 'far fa-fw fa-circle',
                     'text' => 'Pariwisata',
@@ -257,8 +257,8 @@ final class Modul extends Enum
                     'text' => 'Data Infrastruktur',
                     'url' => 'data-pokok/infrastruktur',
                     'permission' => 'datapokok-infrastruktur',
-                ],                                                
-                 [
+                ],
+                [
                     'icon' => 'far fa-fw fa-circle',
                     'text' => 'Laporan Pengisian',
                     'url' => 'data-presisi/laporan',
@@ -332,6 +332,12 @@ final class Modul extends Enum
                     'text' => 'Artikel',
                     'url' => 'master/artikel',
                     'permission' => 'master-data-artikel',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Audit Akses SSO',
+                    'url' => 'sso/audit',
+                    'permission' => 'sso-audit-read',
                 ],
             ],
         ],
@@ -449,7 +455,7 @@ final class Modul extends Enum
                     'text' => 'Aktivasi OTP dan 2FA',
                     'icon' => 'far fa-fw fa-circle',
                     'url' => 'pengaturan/otp',
-                ]
+                ],
             ],
         ],
     ];

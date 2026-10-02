@@ -11,7 +11,7 @@
     "test:e2e:report": "playwright show-report"
   },
   "devDependencies": {
-    "@playwright/test": "^1.54.1",
+    "@playwright/test": "^1.61.0",
     "admin-lte": "^4.0.2",
     "axios": "^1.1.2",
     "jquery": "^3.6",

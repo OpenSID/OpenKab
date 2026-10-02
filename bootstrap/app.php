@@ -1,17 +1,55 @@
 <?php
 
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CheckPasswordExpiry;
+use App\Http\Middleware\CheckPresisiStatus;
+use App\Http\Middleware\CspExclusion;
+use App\Http\Middleware\EasyAuthorize;
+use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\GlobalRateLimiter;
+use App\Http\Middleware\PreventRequestsDuringMaintenance;
+use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\SsoCallbackAuth;
+use App\Http\Middleware\SsoIpWhitelist;
+use App\Http\Middleware\TeamsPermission;
+use App\Http\Middleware\TrimStrings;
+use App\Http\Middleware\TrustProxies;
+use App\Http\Middleware\TwoFactorMiddleware;
+use App\Http\Middleware\VerifyCsrfToken;
+use App\Http\Middleware\WeakPassword;
+use App\Http\Middleware\WebsiteEnable;
 use App\Models\CMS\Article;
 use App\Models\CMS\Category;
 use App\Models\CMS\Page;
-use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+use Illuminate\Auth\Middleware\RequirePassword;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Middleware\ValidatePathEncoding;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\HandleCors;
+use Illuminate\Http\Middleware\SetCacheHeaders;
+use Illuminate\Http\Middleware\ValidatePathEncoding;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Routing\Middleware\ValidateSignature;
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
+use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Shetabit\Visitor\Middlewares\LogVisits;
+use Spatie\Csp\AddCspHeaders;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 
 return Application::configure(
     basePath: dirname(__DIR__),
@@ -46,56 +84,58 @@ return Application::configure(
         $middleware->use([
             ValidatePathEncoding::class,
             InvokeDeferredCallbacks::class,
-            App\Http\Middleware\TrustProxies::class,
-            \Illuminate\Http\Middleware\HandleCors::class,
-            App\Http\Middleware\PreventRequestsDuringMaintenance::class,
-            \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-            App\Http\Middleware\TrimStrings::class,
-            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-            App\Http\Middleware\GlobalRateLimiter::class,
+            TrustProxies::class,
+            HandleCors::class,
+            PreventRequestsDuringMaintenance::class,
+            ValidatePostSize::class,
+            TrimStrings::class,
+            ConvertEmptyStringsToNull::class,
+            GlobalRateLimiter::class,
         ]);
 
         $middleware->group('web', [
-            App\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            App\Http\Middleware\CspExclusion::class,
-            \Spatie\Csp\AddCspHeaders::class,
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            ShareErrorsFromSession::class,
+            VerifyCsrfToken::class,
+            SubstituteBindings::class,
+            CspExclusion::class,
+            AddCspHeaders::class,
         ]);
 
         $middleware->group('api', [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            SubstituteBindings::class,
         ]);
 
         $middleware->alias([
-            'auth' => App\Http\Middleware\Authenticate::class,
-            'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-            'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
-            'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-            'can' => \Illuminate\Auth\Middleware\Authorize::class,
-            'guest' => App\Http\Middleware\RedirectIfAuthenticated::class,
-            'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-            'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
-            'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-            'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-            'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
-            'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
-            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-            'teams_permission' => App\Http\Middleware\TeamsPermission::class,
-            'password.weak' => App\Http\Middleware\WeakPassword::class,
-            'password.expiry' => App\Http\Middleware\CheckPasswordExpiry::class,
-            'website.enable' => App\Http\Middleware\WebsiteEnable::class,
-            'log.visitor' => \Shetabit\Visitor\Middlewares\LogVisits::class,
-            'easyauthorize' => App\Http\Middleware\EasyAuthorize::class,
-            'check.presisi' => App\Http\Middleware\CheckPresisiStatus::class,
-            '2fa' => App\Http\Middleware\TwoFactorMiddleware::class,
+            'auth' => Authenticate::class,
+            'auth.basic' => AuthenticateWithBasicAuth::class,
+            'auth.session' => AuthenticateSession::class,
+            'cache.headers' => SetCacheHeaders::class,
+            'can' => Authorize::class,
+            'guest' => RedirectIfAuthenticated::class,
+            'password.confirm' => RequirePassword::class,
+            'signed' => ValidateSignature::class,
+            'throttle' => ThrottleRequests::class,
+            'verified' => EnsureEmailIsVerified::class,
+            'abilities' => CheckAbilities::class,
+            'ability' => CheckForAnyAbility::class,
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'role_or_permission' => RoleOrPermissionMiddleware::class,
+            'teams_permission' => TeamsPermission::class,
+            'password.weak' => WeakPassword::class,
+            'password.expiry' => CheckPasswordExpiry::class,
+            'website.enable' => WebsiteEnable::class,
+            'log.visitor' => LogVisits::class,
+            'easyauthorize' => EasyAuthorize::class,
+            'check.presisi' => CheckPresisiStatus::class,
+            '2fa' => TwoFactorMiddleware::class,
+            'sso.callback' => SsoCallbackAuth::class,
+            'sso.ip-whitelist' => SsoIpWhitelist::class,
         ]);
 
         $middleware->statefulApi();

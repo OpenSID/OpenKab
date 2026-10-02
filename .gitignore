@@ -5,6 +5,7 @@
 /public/favicon.png
 /public/favicon.ico
 /storage/*.key
+/storage/sso/
 /vendor
 .env
 .env.testing

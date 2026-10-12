@@ -47,7 +47,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => 1440, // Token expired dalam 24 jam (1440 menit)
 
     /*
     |--------------------------------------------------------------------------

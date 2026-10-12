@@ -96,6 +96,7 @@ return Application::configure(
             'easyauthorize' => App\Http\Middleware\EasyAuthorize::class,
             'check.presisi' => App\Http\Middleware\CheckPresisiStatus::class,
             '2fa' => App\Http\Middleware\TwoFactorMiddleware::class,
+            'token.anomaly' => App\Http\Middleware\DetectTokenAnomaly::class,
         ]);
 
         $middleware->statefulApi();

@@ -20,6 +20,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Refresh Token Lifetime
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the lifetime of refresh tokens in seconds.
+    | Default is 30 days (2592000 seconds).
+    | Users can use refresh tokens to get new access tokens without re-login.
+    |
+    */
+
+    'refresh_token_lifetime' => env('REFRESH_TOKEN_LIFETIME', 2592000), // 30 days
+    'refresh_token_lifetime_days' => env('REFRESH_TOKEN_LIFETIME_DAYS', 30),
+
+    /*
+    |--------------------------------------------------------------------------
     | Authentication Guards
     |--------------------------------------------------------------------------
     |

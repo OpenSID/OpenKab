@@ -28,7 +28,7 @@ class UserFactory extends Factory
 
         return [
             'username' => $this->faker->userName,
-            'password' => Hash::make('password'), // default password
+            'password' => 'password', // will be hashed by User model mutator
             'email' => $this->faker->unique()->safeEmail,
             'last_login' => now(),
             'email_verified_at' => now(),

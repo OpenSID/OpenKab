@@ -47,6 +47,7 @@ class EasyAuthorize
             'destroy' => 'delete',
             'update' => 'edit',
             'edit' => 'edit',
+            'upload' => 'write',
         ];
         $route = $request->route()->getName();
         $tmp = explode('.', $route);

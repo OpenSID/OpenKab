@@ -88,6 +88,14 @@ Breadcrumbs::for('password.change', function (BreadcrumbTrail $trail) {
     $trail->push('Ganti Password');
 });
 
+Breadcrumbs::for('backup.index', function (BreadcrumbTrail $trail) {
+    $trail->push('Backup Database', route('backup.index'));
+});
+Breadcrumbs::for('backup.show', function (BreadcrumbTrail $trail) {
+    $trail->parent('backup.index');
+    $trail->push('Download Backup');
+});
+
 Breadcrumbs::for('identitas.index', function (BreadcrumbTrail $trail) {
     $trail->push('Pengaturan Identitas', route('identitas.index'));
 });

@@ -54,15 +54,28 @@ class DownloadController extends AppBaseController
     public function store(CreateDownloadRequest $request)
     {
         $input = $request->all();
-        if ($request->file('download_file')) {
-            $input['url'] = $this->uploadFile($request, 'download_file');
+        
+        try {
+            if ($request->file('download_file')) {
+                // Upload as generic file (not image)
+                $input['url'] = $this->uploadFile($request, 'download_file', null, 5120);
+            }
+
+            $this->downloadRepository->create($input);
+
+            Session::flash('success', 'File berhasil disimpan.');
+
+            return redirect(route('downloads.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['download_file' => 'Gagal mengunggah file: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat menyimpan file. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-
-        $this->downloadRepository->create($input);
-
-        Session::flash('success', 'File berhasil disimpan.');
-
-        return redirect(route('downloads.index'));
     }
 
     /**
@@ -109,15 +122,30 @@ class DownloadController extends AppBaseController
 
             return redirect(route('downloads.index'));
         }
+        
         $input = $request->all();
-        if ($request->file('download_file')) {
-            $input['url'] = $this->uploadFile($request, 'download_file');
+        
+        try {
+            if ($request->file('download_file')) {
+                // Upload as generic file (not image)
+                $input['url'] = $this->uploadFile($request, 'download_file', null, 5120);
+            }
+            
+            $download = $this->downloadRepository->update($input, $id);
+
+            Session::flash('success', 'File berhasil diupdate.');
+
+            return redirect(route('downloads.index'));
+        } catch (\RuntimeException $e) {
+            // Convert to validation error so it appears in $errors
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['download_file' => 'Gagal mengunggah file: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan saat mengupdate file. Silakan coba lagi.');
+            report($e);
+            return redirect()->back()->withInput();
         }
-        $download = $this->downloadRepository->update($input, $id);
-
-        Session::flash('success', 'File berhasil diupdate.');
-
-        return redirect(route('downloads.index'));
     }
 
     /**

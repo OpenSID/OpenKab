@@ -2,25 +2,28 @@
 
 namespace App\Traits;
 
+use App\Services\GenericFileUploadService;
+use App\Services\SecureImageUploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Ramsey\Uuid\Uuid;
 use RuntimeException;
 
 trait UploadedFile
 {
-    private $basePath = 'app/public/';
-
     protected $pathFolder = 'uploads';
 
-    protected function uploadFile(Request $request, $name)
+    /**
+     * Upload file dengan validasi keamanan
+     *
+     * @param Request $request
+     * @param string $name
+     * @param string|null $outputFormat Format output: jpg, png, gif (null untuk non-image)
+     * @param int $maxSizeKb Ukuran maksimal dalam KB
+     * @return string Path relatif file yang diupload
+     * @throws RuntimeException Jika validasi atau upload gagal
+     */
+    protected function uploadFile(Request $request, $name, ?string $outputFormat = 'jpg', int $maxSizeKb = 2048): string
     {
         $file = $request->file($name);
-        $storagePathFolder = storage_path($this->basePath.$this->pathFolder);
-        if (! File::isDirectory($storagePathFolder)) {
-            \Log::error('buat folder dulu '.$storagePathFolder);
-            File::makeDirectory($storagePathFolder, 0755, true, true);
-        }
 
         if (empty($file)) {
             throw new RuntimeException('file '.$name.' is required');
@@ -30,12 +33,31 @@ trait UploadedFile
             throw new RuntimeException($file->getErrorString().'('.$file->getError().')');
         }
 
-        $extensionPhoto = File::guessExtension(request()->file($name));
-        $newName = $name.'_'.Uuid::uuid4()->toString().'.'.$extensionPhoto;
-        if ($file->move($storagePathFolder, $newName)) {
-            return $this->pathFolder.'/'.$newName;
+        // For image files, use secure image upload service
+        if ($outputFormat !== null) {
+            $secureService = new SecureImageUploadService($maxSizeKb);
+
+            try {
+                $result = $secureService->processSecureUpload(
+                    $file,
+                    $outputFormat,
+                    $this->pathFolder
+                );
+
+                return $result['path'];
+            } catch (\Exception $e) {
+                throw new RuntimeException('Upload gagal: ' . $e->getMessage());
+            }
         }
 
-        return false;
+        // For non-image files, use generic file upload service
+        $genericService = new GenericFileUploadService($maxSizeKb, $this->pathFolder);
+        
+        try {
+            $result = $genericService->processUpload($file);
+            return $result['path'];
+        } catch (\Exception $e) {
+            throw new RuntimeException('Upload gagal: ' . $e->getMessage());
+        }
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Transformers\IdentitasTransformer;
 use App\Http\Transformers\SettingTransformer;
 use App\Models\Identitas;
 use App\Models\Setting;
+use App\Services\SecureImageUploadService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -104,13 +106,41 @@ class AppServiceProvider extends ServiceProvider
 
     protected function addValidation()
     {
-        Validator::extend('valid_file', function ($attributes, $value, $parameters) {
-            $contains = preg_match('/<\?php|<script|function|__halt_compiler|<html/i', File::get($value));
-            if ($contains) {
+        Validator::extend('valid_file', function ($attributes, $value, $parameters, $validator) {
+            // $value is the UploadedFile instance
+            if (!$value instanceof UploadedFile) {
                 return false;
             }
-
-            return true;
+            
+            try {
+                $secureService = new SecureImageUploadService();
+                
+                // Perform comprehensive security validation
+                $secureService->validateFileExists($value);
+                $secureService->validateFileSize($value);
+                
+                // Get and validate MIME type
+                $realMimeType = $secureService->getRealMimeType($value);
+                $secureService->validateMimeType($realMimeType);
+                
+                // Validate magic bytes
+                $secureService->validateMagicBytes($value, $realMimeType);
+                
+                // Validate image integrity
+                $secureService->validateImageIntegrity($value);
+                
+                // Scan for dangerous patterns
+                $secureService->scanForDangerousPatterns($value);
+                
+                return true;
+            } catch (\Exception $e) {
+                return false;
+            }
+        });
+        
+        // Add custom error message for valid_file
+        Validator::replacer('valid_file', function ($message, $attribute, $rule, $parameters) {
+            return 'The uploaded file contains dangerous content or is not a valid image.';
         });
     }
 

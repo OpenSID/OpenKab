@@ -14,8 +14,12 @@ trait FilterWilayahTrait
     public function scopeFilterKecamatan($query)
     {
         if (request('kode_kecamatan')) {
-            return $query->whereIn('config_id', function ($kecamatan) {
-                return $kecamatan->selectRaw('c.id from config as c where c.kode_kecamatan = '.request('kode_kecamatan'));
+            $kodeKecamatan = request('kode_kecamatan');
+
+            return $query->whereIn('config_id', function ($kecamatan) use ($kodeKecamatan) {
+                return $kecamatan->select('id')
+                    ->from('config')
+                    ->where('kode_kecamatan', $kodeKecamatan);
             });
         }
 

@@ -356,6 +356,20 @@ return [
             'url' => '/dasbor-demografi',
         ],
 
+        // Pengaturan
+        [
+            'text' => 'Pengaturan',
+            'icon' => 'nav-icon fas fa-cog',
+            'submenu' => [
+                [
+                    'text' => 'Cek Domain API',
+                    'icon' => 'nav-icon fas fa-globe',
+                    'url' => '/pengaturan/domain-check',
+                    'active' => ['pengaturan/domain-check*'],
+                ],
+            ],
+        ],
+
     ],
 
     /*

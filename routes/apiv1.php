@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\IdentitasController;
 use App\Http\Controllers\Api\OpendkSynchronizeController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\SsoVerifyController;
 use App\Http\Controllers\Api\TeamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/signin', [AuthController::class, 'login']);
+
+// SSO OpenSID: verifikasi token oleh OpenSID (server-to-server, sekret bersama)
+Route::middleware(['sso.callback', 'sso.ip-whitelist'])
+    ->post('/sso/verify-token', [SsoVerifyController::class, 'verify']);
 
 Route::middleware('auth:sanctum')->get('validate-token', function (Request $request) {
     $user = $request->user();

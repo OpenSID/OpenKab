@@ -123,16 +123,19 @@ return new class extends Migration
      */
     private function ensureRole(string $teamName, array $config): void
     {
+        $menu = $this->buildMenu($config['menu'], $config['abilities']);
+
         $team = Team::firstOrCreate(
             ['name' => $teamName],
-            ['menu' => $this->buildMenu($config['menu'])]
+            ['menu' => $menu]
         );
 
-        // Menu sudah terisi (mis. dikustomisasi admin) → jangan menimpa.
-        // Menu yang belum berisi submenu DataSpasial diperbaiki agar peran
-        // tetap punya navigasi setelah instalasi/pembaruan.
-        if ($this->submenuCount($team->menu) === 0) {
-            $team->update(['menu' => $this->buildMenu($config['menu'])]);
+        // Menu sudah ada tetapi belum dalam bentuk yang benar (mis. dibuat
+        // sebelum penambahan flag ability, atau belum berisi submenu
+        // DataSpasial) → perbaiki agar hak akses tampil tercentang di UI dan
+        // tidak terhapus saat grup disimpan. Menu yang sudah benar tidak diubah.
+        if ($this->needsMenuRepair($team->menu)) {
+            $team->update(['menu' => $menu]);
         }
 
         setPermissionsTeamId($team->id);
@@ -174,10 +177,19 @@ return new class extends Migration
      * Bangun struktur menu grup DataSpasial berisi hanya submenu yang diizinkan,
      * mengikuti bentuk yang dibaca `App\Listeners\MenuListener`.
      *
+     * Setiap item (grup & submenu) menyertakan flag ability
+     * `"{permission}-read|write|edit|delete"` dan `selected`, yaitu bentuk yang
+     * dipakai halaman Pengaturan › Grup (`resources/views/group/edit_js.blade.php`
+     * → `mergeByKey`) untuk mencentang hak akses, dan yang dibaca
+     * `App\Http\Controllers\Api\TeamController::collectPermissions()` saat
+     * grup disimpan. Tanpa flag ini kotak centang tidak muncul tercentang dan
+     * menyimpan grup dari UI akan menghapus izinnya.
+     *
      * @param  array<int, string>  $allowedMenus
+     * @param  array<string, array<int, string>>  $abilities
      * @return array<int, array<string, mixed>>
      */
-    private function buildMenu(array $allowedMenus): array
+    private function buildMenu(array $allowedMenus, array $abilities): array
     {
         $group = $this->dataspasialGroup();
 
@@ -185,34 +197,89 @@ return new class extends Migration
             return [];
         }
 
-        $allowed = array_map(
+        $allowed = array_flip(array_map(
             fn (string $menu) => 'dataspasial-'.$menu,
             $allowedMenus
-        );
-        $allowed = array_flip($allowed);
+        ));
+
+        $submenus = [];
+        $groupAbilities = [];
+
+        foreach ($group['submenu'] ?? [] as $item) {
+            $permission = $item['permission'] ?? '';
+
+            if (! isset($allowed[$permission])) {
+                continue;
+            }
+
+            // permission submenu = "dataspasial-{slug}" → slug "skema", dst.
+            $slug = (string) preg_replace('/^dataspasial-/', '', $permission);
+            $itemAbilities = $abilities[$slug] ?? [];
+
+            $submenus[] = $this->withAbilityFlags($item, $itemAbilities);
+            $groupAbilities = array_merge($groupAbilities, $itemAbilities);
+        }
+
+        $groupItem = array_merge($group, ['submenu' => array_values($submenus)]);
 
         return [
-            array_merge($group, [
-                'submenu' => array_values(array_filter(
-                    $group['submenu'] ?? [],
-                    fn (array $item) => isset($allowed[$item['permission'] ?? ''])
-                )),
-            ]),
+            $this->withAbilityFlags($groupItem, array_values(array_unique($groupAbilities))),
         ];
     }
 
     /**
-     * Jumlah submenu grup DataSpasial yang tersimpan pada team.
+     * Tambahkan flag ability (`{permission}-{ability}`) dan `selected` ke item
+     * menu, sesuai bentuk yang diproduksi UI Pengaturan › Grup.
+     *
+     * @param  array<string, mixed>  $item
+     * @param  array<int, string>  $abilities
+     * @return array<string, mixed>
      */
-    private function submenuCount(mixed $menu): int
+    private function withAbilityFlags(array $item, array $abilities): array
     {
-        foreach ((array) $menu as $group) {
-            if (($group['text'] ?? null) === 'DataSpasial') {
-                return count($group['submenu'] ?? []);
-            }
+        $permission = (string) ($item['permission'] ?? '');
+
+        foreach (['read', 'write', 'edit', 'delete'] as $ability) {
+            $item[$permission.'-'.$ability] = in_array($ability, $abilities, true);
         }
 
-        return 0;
+        $item['selected'] = true;
+
+        return $item;
+    }
+
+    /**
+     * Apakah menu team perlu diperbaiki?
+     *
+     * Dianggap perlu bila grup DataSpasial tidak ada, tidak punya submenu, atau
+     * item grup/submenu belum memuat flag ability (`{permission}-read`) yang
+     * dibutuhkan halaman Pengaturan › Grup.
+     */
+    private function needsMenuRepair(mixed $menu): bool
+    {
+        foreach ((array) $menu as $group) {
+            if (($group['text'] ?? null) !== 'DataSpasial') {
+                continue;
+            }
+
+            if (empty($group['submenu'])) {
+                return true;
+            }
+
+            if (! array_key_exists(($group['permission'] ?? '').'-read', $group)) {
+                return true;
+            }
+
+            foreach ($group['submenu'] as $item) {
+                if (! array_key_exists(($item['permission'] ?? '').'-read', $item)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     /**

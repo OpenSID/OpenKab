@@ -186,6 +186,73 @@ it('menyimpan menu grup pada team sesuai matriks izin', function () {
         ->and($analisTexts)->not->toContain('Impor Data');
 });
 
+it('menyimpan flag hak akses pada menu team agar tercentang di Pengaturan Grup', function () {
+    // Halaman Pengaturan › Grup membaca flag "{permission}-read|write|edit|delete"
+    // dari team.menu (lihat resources/views/group/edit_js.blade.php). Tanpa flag
+    // ini kotak centang tidak tercentang.
+    $adminGroup = null;
+    foreach (teamMenu('admin skema') as $group) {
+        if (($group['text'] ?? null) === 'DataSpasial') {
+            $adminGroup = $group;
+        }
+    }
+
+    expect($adminGroup)->not->toBeNull()
+        ->and($adminGroup['dataspasial-read'])->toBeTrue()
+        ->and($adminGroup['selected'])->toBeTrue();
+
+    $skema = collect($adminGroup['submenu'])->firstWhere('permission', 'dataspasial-skema');
+
+    expect($skema)->not->toBeNull()
+        ->and($skema['dataspasial-skema-read'])->toBeTrue()
+        ->and($skema['dataspasial-skema-write'])->toBeTrue()
+        ->and($skema['dataspasial-skema-edit'])->toBeTrue()
+        ->and($skema['dataspasial-skema-delete'])->toBeTrue()
+        ->and($skema['selected'])->toBeTrue();
+
+    // Analis OPD: read saja pada Peta Gabungan.
+    $analisGroup = null;
+    foreach (teamMenu('analis opd') as $group) {
+        if (($group['text'] ?? null) === 'DataSpasial') {
+            $analisGroup = $group;
+        }
+    }
+
+    $peta = collect($analisGroup['submenu'])->firstWhere('permission', 'dataspasial-peta');
+
+    expect($peta['dataspasial-peta-read'])->toBeTrue()
+        ->and($peta['dataspasial-peta-write'])->toBeFalse()
+        ->and($peta['dataspasial-peta-edit'])->toBeFalse()
+        ->and($peta['dataspasial-peta-delete'])->toBeFalse();
+});
+
+it('memperbaiki menu team lama yang belum memuat flag hak akses', function () {
+    $team = Team::where('name', 'admin skema')->firstOrFail();
+
+    // Simulasikan menu versi lama: grup & submenu tanpa flag ability.
+    $legacy = [[
+        'text' => 'DataSpasial',
+        'icon' => 'fas fa-map',
+        'permission' => 'dataspasial',
+        'submenu' => [
+            ['text' => 'Skema DataSpasial', 'url' => 'dataspasial/skema', 'permission' => 'dataspasial-skema'],
+        ],
+    ]];
+    $team->update(['menu' => $legacy]);
+
+    runDataSpasialRolesMigration();
+
+    $group = null;
+    foreach (teamMenu('admin skema') as $item) {
+        if (($item['text'] ?? null) === 'DataSpasial') {
+            $group = $item;
+        }
+    }
+
+    expect($group['dataspasial-read'])->toBeTrue()
+        ->and(collect($group['submenu'])->firstWhere('permission', 'dataspasial-skema')['dataspasial-skema-read'])->toBeTrue();
+});
+
 // ---------------------------------------------------------------------------
 // T037 — Idempotensi
 // ---------------------------------------------------------------------------

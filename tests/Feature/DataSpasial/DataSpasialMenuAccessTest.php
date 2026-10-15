@@ -145,6 +145,99 @@ it('menolak Operator Impor membuka Skema DataSpasial', function () {
 });
 
 // ---------------------------------------------------------------------------
+// KAB-02 (T020) — Endpoint Tulis editor skema (FR-001)
+// Izin tulis TIDAK menambah负担 pada peran lain: Operator Impor & Analis OPD
+// tetap ditolak meski sudah bisa POST.
+// ---------------------------------------------------------------------------
+
+it('menolak Operator Impor dan Analis OPD menyimpan draf skema', function (array $izin) {
+    actingAsWithTeam('penulis ditolak', $izin);
+
+    $this->post(route('dataspasial.skema.draf.store'), [
+        'sektor' => 'pendidikan',
+        'isian' => [[
+            'kode' => 'jumlah_siswa',
+            'label' => 'Jumlah Siswa',
+            'tipe' => 'angka',
+            'urutan' => 1,
+        ]],
+    ])->assertForbidden();
+})->with([
+    'operator impor' => [['dataspasial-impor-read', 'dataspasial-impor-write']],
+    'analis opd' => [['dataspasial-peta-read']],
+    'tanpa izin data' => [[]],
+]);
+
+it('menolak Operator Impor dan Analis OPD menambah sektor baru', function (array $izin) {
+    actingAsWithTeam('penambah sektor ditolak', $izin);
+
+    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => 'Kesehatan'])
+        ->assertForbidden();
+})->with([
+    'operator impor' => [['dataspasial-impor-read', 'dataspasial-impor-write']],
+    'analis opd' => [['dataspasial-peta-read']],
+    'tanpa izin data' => [[]],
+]);
+
+// T075 (US7) — ubah sektor memakai izin tulis yang sama.
+it('menolak Operator Impor dan Analis OPD mengubah sektor yang sudah ada', function (array $izin) {
+    actingAsWithTeam('pengubah sektor ditolak', $izin);
+
+    $this->put(route('dataspasial.skema.sektor.update', ['sektor' => 101]), ['nama' => 'Pendidikan Dasar'])
+        ->assertForbidden();
+})->with([
+    'operator impor' => [['dataspasial-impor-read', 'dataspasial-impor-write']],
+    'analis opd' => [['dataspasial-peta-read']],
+    'tanpa izin data' => [[]],
+]);
+
+// T082 (US8) — terbitkan memakai izin tulis yang sama.
+it('menolak Operator Impor dan Analis OPD menerbitkan draf skema', function (array $izin) {
+    actingAsWithTeam('penerbit ditolak', $izin);
+
+    $this->post(route('dataspasial.skema.terbit'), [
+        'sektor' => 'pendidikan',
+        'skema' => 901,
+    ])->assertForbidden();
+})->with([
+    'operator impor' => [['dataspasial-impor-read', 'dataspasial-impor-write']],
+    'analis opd' => [['dataspasial-peta-read']],
+    'tanpa izin data' => [[]],
+]);
+
+it('menolak peran tanpa izin Skema membuka halaman editor', function (array $izin) {
+    actingAsWithTeam('pembaca ditolak', $izin);
+
+    $this->get(route('dataspasial.skema'))->assertForbidden();
+})->with([
+    'operator impor' => [['dataspasial-impor-read', 'dataspasial-impor-write']],
+    'analis opd' => [['dataspasial-peta-read']],
+    'tanpa izin data' => [[]],
+]);
+
+it('membolehkan Admin Skema menyimpan draf dan menambah sektor', function () {
+    Http::fake([
+        '*/api/v1/config/*' => Http::response(['data' => []], 200),
+        '*' => Http::response(['data' => ['type' => 'ds_skema_versi', 'id' => '9', 'attributes' => []]], 200),
+    ]);
+
+    actingAsWithTeam('admin skema tulis', permissionNames('skema', ['read', 'write', 'edit', 'delete']));
+
+    $this->post(route('dataspasial.skema.draf.store'), [
+        'sektor' => 'pendidikan',
+        'isian' => [[
+            'kode' => 'jumlah_siswa',
+            'label' => 'Jumlah Siswa',
+            'tipe' => 'angka',
+            'urutan' => 1,
+        ]],
+    ])->assertSessionHasNoErrors();
+
+    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => 'Kesehatan'])
+        ->assertSessionHasNoErrors();
+});
+
+// ---------------------------------------------------------------------------
 // T027 — Menu tidak tampil bagi peran tanpa izin
 // ---------------------------------------------------------------------------
 

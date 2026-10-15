@@ -1,0 +1,137 @@
+{{--
+    Satu baris tabel isian = satu kolom formulir desa (FR-009).
+
+    ⚠️ Nama field di sini adalah NAMA INTERNAL (`popupPeta`, `sebagaiFilter`,
+    `sebagaiIndikator`, ). Nama field ASUMSI kontrak API
+    (`popup_peta`, `filter`, `indikator`, `pemetaan`) **dilarang** muncul di
+    view — pemetaannya hanya di `SkemaEditorService` (research.md R12).
+
+    Kolom opsi hanya aktif bila tipe `pilihan`; kolom satuan hanya relevan bila
+    tipe `angka` (FR-010, `TipeIsian::memakaiPilihan()` / `memakaiSatuan()`).
+--}}
+@php
+    $tipe = \App\Enums\TipeIsian::hasValue($baris['tipe'])
+        ? \App\Enums\TipeIsian::fromValue($baris['tipe'])
+        : \App\Enums\TipeIsian::Teks();
+    $memakaiPilihan = $tipe->memakaiPilihan();
+    $memakaiSatuan = $tipe->memakaiSatuan();
+    // ⚠️ VERIFIKASI LANGSUNG: `sumber` berisi ENUM API (`openSID`/`dataPresisi`/
+    // `impor`), BUKAN kode sektor dan bukan literal 'pemetaan' (kontrak §6a.5).
+    $sumber = $baris['sumber'] ?? 'manual';
+    $terpetakan = $sumber !== null && $sumber !== '' && $sumber !== 'manual';
+@endphp
+
+<tr data-testid="baris-isian"
+    data-index="{{ $index }}"
+    draggable="{{ $bolehUbah ? 'true' : 'false' }}">
+
+    {{-- Handle seret (FR-012). --}}
+    <td class="text-center handle-seret align-middle" title="Seret untuk mengurutkan">
+        @if ($bolehUbah)
+            <i class="fas fa-grip-vertical text-muted"></i>
+        @endif
+    </td>
+
+    <td class="text-center align-middle urutan text-muted">{{ $baris['urutan'] }}</td>
+
+    <td>
+        <input type="text" class="form-control form-control-sm input-label" maxlength="255"
+               value="{{ $baris['label'] }}" placeholder="Jumlah Siswa"
+               @disabled(!$bolehUbah)>
+        @error("isian.{$index}.label")
+            <div class="text-danger small">{{ $message }}</div>
+        @enderror
+    </td>
+
+    <td>
+        <select class="form-control form-control-sm input-tipe" @disabled(!$bolehUbah)>
+            @foreach (\App\Enums\TipeIsian::getValues() as $nilai)
+                <option value="{{ $nilai }}" @selected($nilai === $baris['tipe'])>
+                    {{ $nilai }}
+                </option>
+            @endforeach
+        </select>
+        @error("isian.{$index}.tipe")
+            <div class="text-danger small">{{ $message }}</div>
+        @enderror
+    </td>
+
+    <td class="text-center">
+        <input type="checkbox" class="input-wajib" @checked($baris['wajib']) @disabled(!$bolehUbah)>
+    </td>
+
+    <td>
+        <input type="text" class="form-control form-control-sm input-satuan" maxlength="50"
+               value="{{ $baris['satuan'] ?? '' }}" placeholder="{{ $memakaiSatuan ? 'orang' : '—' }}"
+               @disabled(!$bolehUbah || ! $memakaiSatuan)>
+    </td>
+
+    <td>
+        <select class="form-control form-control-sm input-opsi" multiple size="2"
+                @disabled(!$bolehUbah || ! $memakaiPilihan)>
+            @if ($memakaiPilihan)
+                @foreach ($baris['opsi'] as $opsi)
+                    <option value="{{ $opsi }}" selected>{{ $opsi }}</option>
+                @endforeach
+                @if (count($baris['opsi']) === 0)
+                    <option disabled selected>— belum ada pilihan —</option>
+                @endif
+            @else
+                <option disabled>—</option>
+            @endif
+        </select>
+        @error("isian.{$index}.opsi")
+            <div class="text-danger small">{{ $message }}</div>
+        @enderror
+    </td>
+
+    {{--
+        Sumber nilai: manual atau pemetaan (FR-023).
+        Memakai `data-*` sehingga JS bisa menulis/membaca status pemetaan
+        tanpa perlu mem-parsing teks badge.
+    --}}
+    <td class="sumber-nilai align-middle"
+        data-sumber="{{ $sumber }}"
+        data-rujukan="{{ $baris['rujukan'] ?? '' }}">
+        @if ($bolehUbah)
+            <button type="button" class="btn btn-outline-secondary btn-sm btn-pilih-sumber-baris px-1 py-0"
+                    title="Pilih sumber nilai">
+                @if ($terpetakan)
+                    <span class="badge badge-info" data-testid="badge-terpetakan">
+                        <i class="fas fa-lock mr-1"></i>{{ $sumber }}
+                    </span>
+                @else
+                    <span class="badge badge-secondary" data-testid="badge-manual">Manual</span>
+                @endif
+            </button>
+        @else
+            @if ($terpetakan)
+                <span class="badge badge-info">{{ $sumber }}</span>
+            @else
+                <span class="badge badge-secondary">Manual</span>
+            @endif
+        @endif
+    </td>
+
+    <td class="text-center">
+        <input type="checkbox" class="input-popup-peta" @checked($baris['popupPeta']) @disabled(!$bolehUbah)>
+    </td>
+
+    <td class="text-center">
+        <input type="checkbox" class="input-filter" @checked($baris['sebagaiFilter']) @disabled(!$bolehUbah)>
+    </td>
+
+    <td class="text-center">
+        <input type="checkbox" class="input-indikator" @checked($baris['sebagaiIndikator']) @disabled(!$bolehUbah)>
+    </td>
+
+    <td class="text-center">
+        @if ($bolehUbah)
+            <button type="button" class="btn btn-outline-danger btn-sm btn-hapus-isian"
+                    title="Hapus isian" data-testid="btn-hapus-isian"
+                    data-kode="{{ $baris['kode'] }}" data-terpetakan="{{ $terpetakan ? '1' : '0' }}">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        @endif
+    </td>
+</tr>

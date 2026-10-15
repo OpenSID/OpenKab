@@ -472,3 +472,91 @@ it('memakai kunci cache yang berbeda untuk endpoint berbeda', function () {
         ->and($service->cacheKey('/sektor', ['a' => 1, 'b' => 2]))
         ->toBe($service->cacheKey('/sektor', ['b' => 2, 'a' => 1]));
 });
+
+// ---------------------------------------------------------------------------
+// T006 — buatSektor() (U1: endpoint belum ada di kontrak v0.1.0)
+// Bentuk respons disalin dari contracts/skema-editor-api.md §3.3
+// ---------------------------------------------------------------------------
+
+it('mengirim POST ke /sektor hanya dengan nama dan ikon tanpa kode', function () {
+    Http::fake(['*' => Http::response([
+        'success' => true,
+        'message' => 'Sektor berhasil dibuat.',
+        'data' => [
+            'type' => 'ds_sektor',
+            'id' => '7',
+            'attributes' => [
+                'id' => 7,
+                'kode' => 'kesehatan',
+                'nama' => 'Kesehatan',
+                'ikon' => 'heart-pulse',
+                'status' => 'aktif',
+            ],
+        ],
+    ], 201)]);
+
+    $result = service()->buatSektor(['nama' => 'Kesehatan', 'ikon' => 'heart-pulse']);
+
+    expect($result->isData())->toBeTrue()
+        ->and($result->httpStatus)->toBe(201)
+        ->and($result->data[0]['attributes']['kode'])->toBe('kesehatan');
+
+    Http::assertSent(function (Request $request) {
+        return $request->method() === 'POST'
+            && str_contains($request->url(), '/api/v1/dataspasial/sektor')
+            && $request->data() === ['nama' => 'Kesehatan', 'ikon' => 'heart-pulse'];
+    });
+});
+
+it('tidak mengirim kode sektor karena kode dibangkitkan server (R4/Q5)', function () {
+    Http::fake(['*' => Http::response([
+        'success' => true,
+        'data' => ['type' => 'ds_sektor', 'id' => '7', 'attributes' => ['kode' => 'kesehatan', 'nama' => 'Kesehatan']],
+    ], 201)]);
+
+    service()->buatSektor(['nama' => 'Kesehatan']);
+
+    Http::assertSent(function (Request $request) {
+        return ! array_key_exists('kode', $request->data());
+    });
+});
+
+it('memetakan 404 dan 405 dari /sektor sebagai client_error tanpa melempar exception', function (int $status) {
+    Http::fake(['*' => Http::response(['message' => 'Not Found'], $status)]);
+
+    $result = service()->buatSektor(['nama' => 'Kesehatan']);
+
+    expect($result->isUnavailable())->toBeTrue()
+        ->and($result->reason->value)->toBe('client_error')
+        ->and($result->httpStatus)->toBe($status)
+        ->and($result->userMessage())->toBe('Data sementara tidak tersedia. Silakan coba lagi nanti.');
+})->with([404, 405]);
+
+it('memetakan 409 nama sektor bentrok sebagai client_error', function () {
+    Http::fake(['*' => Http::response([
+        'success' => false,
+        'message' => 'Validasi gagal.',
+        'error_code' => 'ValidationException',
+        'errors' => ['nama' => ['nama sudah dipakai sektor lain.']],
+    ], 409)]);
+
+    $result = service()->buatSektor(['nama' => 'Pendidikan']);
+
+    expect($result->isUnavailable())->toBeTrue()
+        ->and($result->reason->value)->toBe('client_error')
+        ->and($result->httpStatus)->toBe(409);
+});
+
+it('membuat cache baca tidak berlaku setelah pembuatan sektor', function () {
+    Http::fake([
+        '*' => Http::response(successPayload([sektorItem()]), 200),
+    ]);
+
+    service()->listSektor();
+    Http::assertSentCount(1);
+
+    service()->buatSektor(['nama' => 'Kesehatan']);
+
+    service()->listSektor();
+    Http::assertSentCount(3);
+});

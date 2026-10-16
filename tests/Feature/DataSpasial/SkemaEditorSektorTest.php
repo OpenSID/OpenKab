@@ -336,9 +336,9 @@ it('memuat isian skema terakhir lewat satu pemanggilan skema, tanpa riwayat vers
             collection([
                 itemSkemaAktif('10', 'pendidikan', 'Pendidikan', 1, 3, 'draf', [
                     ['kode' => 'jumlah_siswa', 'label' => 'Jumlah Siswa', 'tipe' => 'angka', 'wajib' => true,
-                     'satuan' => 'orang', 'opsi' => null, 'urutan' => 1,
-                     'tampil_popup' => true, 'tampil_filter' => false, 'tampil_indikator' => false,
-                     'pemetaan' => []],
+                        'satuan' => 'orang', 'opsi' => null, 'urutan' => 1,
+                        'tampil_popup' => true, 'tampil_filter' => false, 'tampil_indikator' => false,
+                        'pemetaan' => []],
                 ]),
             ]),
             200,
@@ -354,8 +354,7 @@ it('memuat isian skema terakhir lewat satu pemanggilan skema, tanpa riwayat vers
     ])->filter(fn ($call) => str_contains($call['path'], '/dataspasial/'));
 
     // Tepat satu pemanggilan ke /skema dengan parameter sektor (SC-014).
-    $skemaCalls = $calls->filter(fn ($call) =>
-        str_contains($call['path'], '/dataspasial/skema') && ! str_contains($call['path'], '/skema/riwayat'));
+    $skemaCalls = $calls->filter(fn ($call) => str_contains($call['path'], '/dataspasial/skema') && ! str_contains($call['path'], '/skema/riwayat'));
 
     expect($skemaCalls)->toHaveCount(1);
     expect($skemaCalls->first()['path'])->toContain('/dataspasial/skema');
@@ -413,11 +412,11 @@ it('menampilkan tombol Terbitan dalam keadaan aktif untuk draf dan tanpa catatan
         '*/api/v1/dataspasial/skema?sektor=pendidikan' => Http::response(collection([
             itemSkemaAktif('10', 'pendidikan', 'Pendidikan', 1, 3, 'draf', [
                 ['kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
-                 'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
-                 'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
-                 'pemetaan' => []],
-             ]),
-         ]), 200),
+                    'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
+                    'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
+                    'pemetaan' => []],
+            ]),
+        ]), 200),
         '*' => Http::response(collection([]), 200),
     ]);
 
@@ -567,10 +566,13 @@ it('memetakan counter sektor nyata untuk label versi dan draf', function () {
     $editor = app(SkemaEditorService::class);
     $daftar = $editor->petakanDaftarSektor($responsSektor);
 
+    // 2 versi, 1 terbit → versi terakhir (2) masih berupa draf sehingga
+    // `adaDraf` benar dan label menampilkan "Versi 2 · Draf".
     expect($daftar[0]['jumlahSkema'])->toBe(2)
         ->and($daftar[0]['jumlahTerbit'])->toBe(1)
-        // Sudah ada versi terbit → label "Terbit", bukan "Draf".
-        ->and($daftar[0]['adaDraf'])->toBeFalse();
+        ->and($daftar[0]['adaDraf'])->toBeTrue()
+        ->and($daftar[0]['nomorVersiTerakhir'])->toBe(2)
+        ->and($daftar[0]['statusTerakhir'])->toBe('draf');
 });
 
 it('menyusun badan draf memakai nama field resmi API', function () {
@@ -598,10 +600,11 @@ it('menyusun badan draf memakai nama field resmi API', function () {
         ->and($payload['isian'][0]['tampil_di_filter'])->toBeFalse()
         ->and($payload['isian'][0]['tampil_di_indikator'])->toBeTrue()
         // Pemetaan dikirim sebagai ARRAY di dalam isian (bentuk nyata §6a.3 / Q20).
+        // ⚠️ `ds_pemetaan` hanya punya SATU kolom `rujukan_sumber` "tabel.kolom"
+        // — bukan `tabel_sumber`/`kolom_sumber` terpisah (§6a.4).
         ->and($payload['isian'][0]['pemetaan'])->toBe([[
             'sumber' => 'openSID',
-            'tabel_sumber' => 'tbl_jalan',
-            'kolom_sumber' => 'lebar',
+            'rujukan_sumber' => 'tbl_jalan.lebar',
         ]]);
 });
 
@@ -632,9 +635,9 @@ it('menampilkan tombol Ubah hanya ketika skema berstatus terbit', function () {
         '*/api/v1/dataspasial/skema?sektor=pendidikan' => Http::response(
             collection([itemSkemaAktif('10', 'pendidikan', 'Pendidikan', 1, 2, 'terbit', [
                 ['kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
-                 'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
-                 'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
-                 'pemetaan' => []],
+                    'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
+                    'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
+                    'pemetaan' => []],
             ])]),
             200
         ),
@@ -669,9 +672,9 @@ it('menyembunyikan tombol Ubah ketika skema yang dimuat berstatus draf', functio
         '*/api/v1/dataspasial/skema?sektor=pendidikan' => Http::response(
             collection([itemSkemaAktif('11', 'pendidikan', 'Pendidikan', 1, 3, 'draf', [
                 ['kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
-                 'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
-                 'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
-                 'pemetaan' => []],
+                    'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
+                    'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
+                    'pemetaan' => []],
             ])]),
             200
         ),
@@ -697,9 +700,9 @@ it('menampilkan kolom nama sektor yang dapat disunting pada editor', function ()
         '*/api/v1/dataspasial/skema?sektor=pendidikan' => Http::response(
             collection([itemSkemaAktif('12', 'pendidikan', 'Pendidikan Dasar', 1, 3, 'draf', [
                 ['kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
-                 'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
-                 'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
-                 'pemetaan' => []],
+                    'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
+                    'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
+                    'pemetaan' => []],
             ])]),
             200
         ),
@@ -817,4 +820,67 @@ it('menampilkan pesan generik dan menjaga isi editor saat nama sektor bentrok', 
             'urutan' => 1,
         ]],
     ])->assertStatus(503)->assertJsonPath('success', false);
+});
+
+// ---------------------------------------------------------------------------
+// Label versi terakhir + status pada daftar sektor (FR-007, Q22/SC-013)
+// ---------------------------------------------------------------------------
+
+/**
+ * Ambil teks badge status versi terakhir dari HTML panel sektor.
+ */
+function badgeStatusSektor(string $content): ?string
+{
+    return preg_match('/data-testid="label-status-versi-sektor">([^<]*)</', $content, $m) === 1
+        ? trim($m[1])
+        : null;
+}
+
+/**
+ * Ambil nomor versi terakhir dari badge `v{n}` (null bila belum ada skema).
+ */
+function badgeNomorVersiSektor(string $content): ?string
+{
+    return preg_match('/data-testid="label-nomor-versi-sektor">\s*v(\d+)/', $content, $m) === 1
+        ? $m[1]
+        : null;
+}
+
+it('menampilkan nomor versi terakhir dan status draf pada daftar sektor', function () {
+    // 3 versi, hanya 1 yang terbit → versi terakhir (3) masih berupa draf.
+    fakeEndpointEditor([fxSektor('1', 'pendidikan', 'Pendidikan', 3, 1)]);
+
+    $content = $this->get(route('dataspasial.skema'))->assertOk()->getContent();
+
+    expect(badgeStatusSektor($content))->toBe('Draf')
+        ->and(badgeNomorVersiSektor($content))->toBe('3');
+});
+
+it('menampilkan nomor versi terakhir dan status terbit pada daftar sektor', function () {
+    // 3 versi, semuanya terbit → versi terakhir (3) berstatus terbit.
+    fakeEndpointEditor([fxSektor('1', 'pendidikan', 'Pendidikan', 3, 3)]);
+
+    $content = $this->get(route('dataspasial.skema'))->assertOk()->getContent();
+
+    expect(badgeStatusSektor($content))->toBe('Terbit')
+        ->and(badgeNomorVersiSektor($content))->toBe('3');
+});
+
+it('menampilkan belum ada skema tanpa nomor versi pada daftar sektor', function () {
+    fakeEndpointEditor([fxSektor('1', 'pendidikan', 'Pendidikan', 0, 0)]);
+
+    $content = $this->get(route('dataspasial.skema'))->assertOk()->getContent();
+
+    expect(badgeStatusSektor($content))->toBe('Belum ada skema')
+        ->and(badgeNomorVersiSektor($content))->toBeNull();
+});
+
+it('tidak menampilkan jumlah versi pada daftar sektor', function () {
+    fakeEndpointEditor([fxSektor('1', 'pendidikan', 'Pendidikan', 3, 3)]);
+
+    $content = $this->get(route('dataspasial.skema'))->assertOk()->getContent();
+
+    // ⚠️ Informasi "3 versi" dihapus; yang tampil hanya nomor versi terakhir (v3).
+    expect($content)->not->toContain(' versi<')
+        ->and(badgeNomorVersiSektor($content))->toBe('3');
 });

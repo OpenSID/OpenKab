@@ -126,10 +126,12 @@ it('menyertakan pemetaan pada badan draf saat menyimpan', function () {
         $pemetaan = $body['isian'][0]['pemetaan'] ?? [];
 
         // Pemetaan dikirim sebagai ARRAY di dalam isian (bentuk nyata §6a.3).
+        // ⚠️ Tabel & kolom disambung menjadi SATU `rujukan_sumber` (§6a.4).
         return is_array($pemetaan)
             && ($pemetaan[0]['sumber'] ?? null) === 'openSID'
-            && ($pemetaan[0]['tabel_sumber'] ?? null) === 'luas_wilayah'
-            && ($pemetaan[0]['kolom_sumber'] ?? null) === '*';
+            && ($pemetaan[0]['rujukan_sumber'] ?? null) === 'luas_wilayah.*'
+            && ! array_key_exists('tabel_sumber', $pemetaan[0])
+            && ! array_key_exists('kolom_sumber', $pemetaan[0]);
     });
 });
 

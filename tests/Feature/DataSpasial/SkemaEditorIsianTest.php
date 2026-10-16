@@ -121,7 +121,7 @@ it('tidak mengirim kolom kode dari DOM saat menyerialisasi isian', function () {
 
     // ⚠️ `kode` harus SELALU dihitung ulang dari `label` saat serialisasi —
     // tidak boleh dibaca dari input yang bisa diedit.
-    expect($js)->toContain("kode: slugKodeDariLabel(")
+    expect($js)->toContain('kode: slugKodeDariLabel(')
         ->and($js)->not->toContain(".input-kode')?.value?.trim()");
 });
 
@@ -154,6 +154,10 @@ it('menampilkan isian lengkap dengan seluruh atributnya', function () {
         'diarsipkan' => false,
         'sumber' => 'manual',
         'rujukan' => null,
+        // ⚠️ Diturunkan dari `rujukan_sumber`; kosong bila pemetaan belum punya
+        // rujukan tabel.kolom (§6a.4).
+        'tabelSumber' => '',
+        'kolomSumber' => '',
         'aturanHitung' => null,
         'popupPeta' => false,
         'sebagaiFilter' => false,
@@ -304,14 +308,22 @@ it('menyertakan pemetaan pada badan draf hanya bila ada', function () {
     $payload = $editor->composeDrafPayload([
         ['kode' => 'a', 'label' => 'A', 'tipe' => 'teks', 'urutan' => 1, 'sumber' => 'manual', 'tabelSumber' => null, 'kolomSumber' => null, 'rujukan' => null],
         ['kode' => 'b', 'label' => 'B', 'tipe' => 'teks', 'urutan' => 2,
-            'sumber' => 'openSID', 'tabelSumber' => 'tabel', 'kolomSumber' => 'kolom', 'rujukan' => 'r'],
+            'sumber' => 'openSID', 'tabelSumber' => 'tabel', 'kolomSumber' => 'kolom', 'rujukan' => null],
+        ['kode' => 'c', 'label' => 'C', 'tipe' => 'teks', 'urutan' => 3,
+            'sumber' => 'openSID', 'rujukan' => 'tbl.kolom'],
     ], ['sektor' => 'pendidikan']);
 
     expect($payload['isian'][0]['pemetaan'])->toBeNull()
+        // ⚠️ Tabel & kolom disambung menjadi SATU `rujukan_sumber` (§6a.4) —
+        // entitas `ds_pemetaan` tidak punya `tabel_sumber`/`kolom_sumber`.
         ->and($payload['isian'][1]['pemetaan'])->toBe([[
             'sumber' => 'openSID',
-            'tabel_sumber' => 'tabel',
-            'kolom_sumber' => 'kolom',
+            'rujukan_sumber' => 'tabel.kolom',
+        ]])
+        // `rujukan` yang sudah jadi dipakai apa adanya tanpa disambung ulang.
+        ->and($payload['isian'][2]['pemetaan'])->toBe([[
+            'sumber' => 'openSID',
+            'rujukan_sumber' => 'tbl.kolom',
         ]]);
 });
 
@@ -387,8 +399,11 @@ it('merender baris isian pada halaman editor dengan tombol tambah isian', functi
         ->toContain('jenis_sekolah')
         ->toContain('Negeri')
         ->toContain('btn-tambah-isian')
-        // Kolom opsi NONAKTIF pada tipe non-pilihan (FR-010).
-        ->toContain('class="form-control form-control-sm input-opsi" multiple size="2" disabled')
+        // ⚠️ Kolom "Pilihan" tidak lagi ditampilkan pada tabel editor, tetapi
+        // nilai opsi yang tersimpan di API tetap dibawa lewat `data-opsi`
+        // sehingga tidak hilang saat Simpan draf.
+        ->not->toContain('input-opsi')
+        ->toContain('data-opsi=')
         // Urutan tampil pada kolom # (FR-012).
         ->toContain('class="text-center align-middle urutan text-muted"');
 });

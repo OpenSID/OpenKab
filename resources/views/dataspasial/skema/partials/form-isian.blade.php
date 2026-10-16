@@ -6,14 +6,13 @@
     (`popup_peta`, `filter`, `indikator`, `pemetaan`) **dilarang** muncul di
     view — pemetaannya hanya di `SkemaEditorService` (research.md R12).
 
-    Kolom opsi hanya aktif bila tipe `pilihan`; kolom satuan hanya relevan bila
-    tipe `angka` (FR-010, `TipeIsian::memakaiPilihan()` / `memakaiSatuan()`).
+    ⚠️ Kolom satuan hanya relevan bila tipe `angka` (FR-010,
+    `TipeIsian::memakaiSatuan()`).
 --}}
 @php
     $tipe = \App\Enums\TipeIsian::hasValue($baris['tipe'])
         ? \App\Enums\TipeIsian::fromValue($baris['tipe'])
         : \App\Enums\TipeIsian::Teks();
-    $memakaiPilihan = $tipe->memakaiPilihan();
     $memakaiSatuan = $tipe->memakaiSatuan();
     // ⚠️ VERIFIKASI LANGSUNG: `sumber` berisi ENUM API (`openSID`/`dataPresisi`/
     // `impor`), BUKAN kode sektor dan bukan literal 'pemetaan' (kontrak §6a.5).
@@ -23,6 +22,7 @@
 
 <tr data-testid="baris-isian"
     data-index="{{ $index }}"
+    data-opsi="{{ Illuminate\Support\Js::from($baris['opsi'] ?? []) }}"
     draggable="{{ $bolehUbah ? 'true' : 'false' }}">
 
     {{-- Handle seret (FR-012). --}}
@@ -66,24 +66,12 @@
                @disabled(!$bolehUbah || ! $memakaiSatuan)>
     </td>
 
-    <td>
-        <select class="form-control form-control-sm input-opsi" multiple size="2"
-                @disabled(!$bolehUbah || ! $memakaiPilihan)>
-            @if ($memakaiPilihan)
-                @foreach ($baris['opsi'] as $opsi)
-                    <option value="{{ $opsi }}" selected>{{ $opsi }}</option>
-                @endforeach
-                @if (count($baris['opsi']) === 0)
-                    <option disabled selected>— belum ada pilihan —</option>
-                @endif
-            @else
-                <option disabled>—</option>
-            @endif
-        </select>
-        @error("isian.{$index}.opsi")
-            <div class="text-danger small">{{ $message }}</div>
-        @enderror
-    </td>
+    {{--
+        ⚠️ Kolom **Pilihan (opsi) tidak lagi ditampilkan** — tidak dipakai pada
+        editor ini. Nilai `opsi` yang tersimpan di API tetap **dipertahankan**
+        melalui atribut `data-opsi` pada baris sehingga `bacaDariDom()`
+        mengirimkannya kembali saat Simpan draf dan tidak terjadi kehilangan data.
+    --}}
 
     {{--
         Sumber nilai: manual atau pemetaan (FR-023).

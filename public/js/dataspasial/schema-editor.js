@@ -166,11 +166,68 @@ const swalInput = async (pesan, judul = 'Masukkan nilai', nilaiAwal = '') => {
     return hasil.isConfirmed === true ? (hasil.value || '') : null;
 };
 
+/** Escape nilai sebelum disisipkan ke markup SweetAlert2. */
+function escapeHtml(nilai) {
+    return String(nilai ?? '').replace(/[&<>"']/g, (karakter) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+    }[karakter]));
+}
+
+/**
+ * Susun rujukan sumber satu baris: "tabel.kolom".
+ *
+ * ⚠️ Bentuk API hanya punya SATU kolom `rujukan_sumber` (§6a.4). Dua input
+ * tabel & kolom pada tabel editor karena itu digabung di sini menjadi satu
+ * nilai `rujukan`; penyambungan di sisi server ada pada
+ * `SkemaEditorService::composePemetaan()`.
+ *
+ * @param {HTMLElement} tr
+ * @param {HTMLElement|null} sel Elemen `.sumber-nilai` (pemegang dataset).
+ * @returns {string}
+ */
+function rujukanDari(tr, sel) {
+    const tabel = (tr.querySelector('.input-tabel-sumber')?.value
+        || sel?.dataset?.tabelSumber || '').trim();
+    const kolom = (tr.querySelector('.input-kolom-sumber')?.value
+        || sel?.dataset?.kolomSumber || '').trim();
+
+    return [tabel, kolom].filter(Boolean).join('.');
+}
+
+/**
+ * Baca opsi satu baris isian.
+ *
+ * ⚠️ Kolom "Pilihan" tidak lagi ada di tabel editor (tidak dipakai), sehingga
+ * nilai opsi diambil dari atribut `data-opsi`. Bila atribut tidak tersedia,
+ * kembalikan array kosong.
+ *
+ * @param {HTMLElement} tr
+ * @returns {Array<string>}
+ */
+function bacaOpsiBaris(tr) {
+    const mentah = tr?.dataset?.opsi;
+
+    if (!mentah || mentah === '[]' || mentah === 'null') {
+        return [];
+    }
+
+    try {
+        const hasil = JSON.parse(mentah);
+
+        return Array.isArray(hasil) ? hasil.filter((v) => typeof v === 'string') : [];
+    } catch (e) {
+        return [];
+    }
+}
+
 function bacaDariDom(tbody) {
     return Array.from(tbody.querySelectorAll('tr[data-testid="baris-isian"], tr.baris-baru'))
         .map((tr, index) => {
             const nilai = (selector) => tr.querySelector(selector);
-            const opsi = nilai('.input-opsi');
             const sel = nilai('.sumber-nilai');
 
             return {
@@ -181,15 +238,19 @@ function bacaDariDom(tbody) {
                 tipe: nilai('.input-tipe')?.value ?? 'teks',
                 wajib: Boolean(nilai('.input-wajib')?.checked),
                 satuan: nilai('.input-satuan')?.value?.trim() ?? '',
-                opsi: opsi && !opsi.disabled
-                    ? Array.from(opsi.selectedOptions).map((o) => o.value).filter(Boolean)
-                    : [],
+                // ⚠️ Kolom Pilihan (opsi) TIDAK lagi ditampilkan pada tabel
+                // editor. Nilainya dibaca dari atribut `data-opsi` pada baris
+                // supaya opsi yang tersimpan di API tidak hilang saat Simpan draf.
+                opsi: bacaOpsiBaris(tr),
                 urutan: index + 1,
                 popupPeta: Boolean(nilai('.input-popup-peta')?.checked),
                 sebagaiFilter: Boolean(nilai('.input-filter')?.checked),
                 sebagaiIndikator: Boolean(nilai('.input-indikator')?.checked),
                 sumber: sel?.dataset?.sumber ?? 'manual',
-                rujukan: sel?.dataset?.rujukan || null,
+                // ⚠️ `rujukan` = "tabel.kolom" adalah nilai yang benar-benar
+                // disimpan sebagai `rujukan_sumber` (§6a.4). Field tabel/kolom
+                // di bawah hanya dipakai untuk memulihkan snapshot (Batal).
+                rujukan: rujukanDari(tr, sel) || null,
                 tabelSumber: sel?.dataset?.tabelSumber ?? null,
                 kolomSumber: sel?.dataset?.kolomSumber ?? null,
             };
@@ -204,13 +265,8 @@ function bacaDariDom(tbody) {
 function terapkanAturanTipe(tbody) {
     tbody.querySelectorAll('tr').forEach((tr) => {
         const tipe = tr.querySelector('.input-tipe')?.value ?? 'teks';
-        const opsi = tr.querySelector('.input-opsi');
         const satuan = tr.querySelector('.input-satuan');
         const bolehUbah = tbody.dataset.bolehUbah === '1';
-
-        if (opsi) {
-            opsi.disabled = !bolehUbah || tipe !== TIPE_PILIHAN;
-        }
 
         if (satuan) {
             satuan.disabled = !bolehUbah || tipe !== TIPE_SATUAN;
@@ -332,9 +388,9 @@ function serialisasiKeForm(isian) {
         // bukan kode sektor — hasil verifikasi langsung ke API (§6a.5).
         if (baris.sumber && baris.sumber !== 'manual') {
             tambah('sumber', baris.sumber);
+            // ⚠️ Satu nilai "tabel.kolom" — inilah yang disimpan sebagai
+            // `rujukan_sumber` (§6a.4). Tabel & kolom tidak dikirim terpisah.
             tambah('rujukan', baris.rujukan || '');
-            tambah('tabelSumber', baris.tabelSumber || '');
-            tambah('kolomSumber', baris.kolomSumber || '');
         }
     });
 }
@@ -483,37 +539,6 @@ function perbaruiNomorUrutan(tbody) {
     });
 }
 
-/**
- * Konfirmasi "sudah ada draf berjalan" (FR-007g/FR-007h, spec Q6).
- *
- * @param {number} RedirectKe
- * @returns {Promise<boolean>}
- */
-function konfirmasiDrafAda(RedirectKe) {
-    if (typeof window.Swal === 'undefined') {
-        if (window.confirm('Sektor ini sudah memiliki draf berjalan. Buka draf tersebut?')) {
-            window.location.href = RedirectKe;
-        }
-
-        return Promise.resolve(false);
-    }
-
-    return window.Swal.fire({
-        title: 'Draf sudah ada',
-        text: 'Sektor ini sudah memiliki draf berjalan. Buka draf tersebut?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Buka draf',
-        cancelButtonText: 'Batal',
-    }).then((hasil) => {
-        if (hasil.isConfirmed) {
-            window.location.href = RedirectKe;
-        }
-
-        return false;
-    });
-}
-
 export function mountSchemaEditor() {
     const akar = document.querySelector('[data-status-editor]');
     const tbody = document.getElementById('isi-tabel-isian');
@@ -527,7 +552,6 @@ export function mountSchemaEditor() {
     // FR-008c/Q24 — `bolehUbah` mutable supaya tombol "Ubah" dapat membuka
     // kunci penyuntingan pada skema `terbit` tanpa memuat ulang halaman.
     let bolehUbah = tbody.dataset.bolehUbah === '1';
-    const adaDrafBerjalan = Boolean(document.querySelector('[data-testid="item-skema"][data-status="draf"]'));
     const sektorKode = akar.dataset.sektor || '';
     const skemaAktif = akar.dataset.skema || '';
 
@@ -541,13 +565,14 @@ export function mountSchemaEditor() {
     const tombolBatalUbah = document.getElementById('btn-batal-ubah');
     const tombolSimpan = document.getElementById('btn-simpan-draf');
     const inputNamaSektor = document.getElementById('input-sektor-nama-editor');
+    const wadahNamaSektor = document.getElementById('wadah-input-sektor-nama');
     let modeUbahAktif = false;
     let modeSektorBaru = false;
 
     /** Aktifkan/nonaktifkan seluruh kontrol isian pada tabel (FR-008c/FR-008e). */
     const kunciKontrolIsian = (aktif) => {
         tbody.querySelectorAll(
-            '.input-label, .input-tipe, .input-wajib, .input-satuan, .input-opsi, '
+            '.input-label, .input-tipe, .input-wajib, .input-satuan, '
             + '.input-popup-peta, .input-filter, .input-indikator, '
             + '.input-tabel-sumber, .input-kolom-sumber, .btn-pilih-sumber-baris, .btn-hapus-isian',
         ).forEach((el) => {
@@ -575,7 +600,7 @@ export function mountSchemaEditor() {
         // aktif walau skema sedang `terbit`.
         if (!aktif) {
             template?.content.querySelectorAll(
-                '.input-label, .input-tipe, .input-wajib, .input-satuan, .input-opsi, '
+                '.input-label, .input-tipe, .input-wajib, .input-satuan, '
                 + '.input-popup-peta, .input-filter, .input-indikator',
             ).forEach((el) => {
                 if (el.tagName === 'INPUT') {
@@ -600,7 +625,6 @@ export function mountSchemaEditor() {
             const tipe = tr.querySelector('.input-tipe');
             const wajib = tr.querySelector('.input-wajib');
             const satuan = tr.querySelector('.input-satuan');
-            const opsi = tr.querySelector('.input-opsi');
             const sumberNilai = tr.querySelector('.sumber-nilai');
 
             if (label) {
@@ -619,16 +643,15 @@ export function mountSchemaEditor() {
                 satuan.value = sumber.satuan ?? '';
             }
 
-            if (opsi) {
-                Array.from(opsi.options).forEach((option) => {
-                    option.selected = (sumber.opsi ?? []).includes(option.value);
-                });
-            }
+            // ⚠️ Kolom Pilihan tidak dirender; opsi dipulihkan lewat `data-opsi`
+            // yang dipakai `bacaOpsiBaris()` saat serialize.
+            tr.dataset.opsi = JSON.stringify(sumber.opsi ?? []);
 
             if (sumberNilai) {
                 sumberNilai.dataset.sumber = sumber.sumber ?? 'manual';
                 sumberNilai.dataset.tabelSumber = sumber.tabelSumber ?? '';
                 sumberNilai.dataset.kolomSumber = sumber.kolomSumber ?? '';
+                sumberNilai.dataset.rujukan = sumber.rujukan || '';
 
                 const tabel = tr.querySelector('.input-tabel-sumber');
                 const kolom = tr.querySelector('.input-kolom-sumber');
@@ -684,6 +707,14 @@ export function mountSchemaEditor() {
             }
 
             kunciKontrolIsian(false);
+
+            // Bila memang tidak ada sektor yang dipilih, kembalikan blok nama
+            // sektor ke kondisi tersembunyi seperti semula.
+            if (sektorKode === '') {
+                wadahNamaSektor?.classList.add('d-none');
+            }
+
+            document.getElementById('isian-belum-pilih-sektor')?.classList.remove('d-none');
 
             if (tombolSimpan) {
                 tombolSimpan.disabled = true;
@@ -828,6 +859,14 @@ export function mountSchemaEditor() {
         kosongkanPenandaPratinjau(wadahPratinjau);
         kunciKontrolIsian(true);
 
+        // ⚠️ Blok nama sektor disembunyikan Blade saat belum ada sektor terpilih;
+        // pada mode "sektor baru" blok ini WAJIB dibuka supaya admin punya
+        // kolom untuk diisi nama (FR-008f).
+        wadahNamaSektor?.classList.remove('d-none');
+
+        // Pesan "pilih salah satu sektor" tidak relevan selama mode ini aktif.
+        document.getElementById('isian-belum-pilih-sektor')?.classList.add('d-none');
+
         if (tombolSimpan) {
             tombolSimpan.disabled = false;
         }
@@ -840,119 +879,6 @@ export function mountSchemaEditor() {
         tombolUbah?.classList.add('d-none');
         tombolBatalUbah?.classList.remove('d-none');
         inputNamaSektor?.focus();
-    });
-
-    // -----------------------------------------------------------------------
-    // Ubah sektor (US7, FR-007d-4 … FR-007d-6)
-    //
-    // ⚠️ KODE SEKTOR TIDAK DIKIRIM — form hanya memuat `nama` + `ikon`
-    // (FR-007d-5). Daftar sektor tidak ikut dikirim karena keunikan nama
-    // diperiksa API (spec Q13).
-    // -----------------------------------------------------------------------
-    const formUbahSektor = document.getElementById('form-ubah-sektor');
-
-    const tutupFormUbahSektor = () => {
-        formUbahSektor?.classList.add('d-none');
-    };
-
-    document.querySelectorAll('.btn-ubah-sektor').forEach((tombol) => {
-        tombol.addEventListener('click', (event) => {
-            // Item sektor memakai `list-group-item-action` sehingga klik pada
-            // elemen anak ikut memicu navigasi — klik tombol harus dihentikan.
-            event.preventDefault();
-            event.stopPropagation();
-
-            const item = tombol.closest('[data-testid="item-sektor"]');
-            const template = formUbahSektor?.dataset.urlTemplate;
-
-            if (!item || !template) {
-                return;
-            }
-
-            const id = item.dataset.sektorId || '';
-
-            if (id === '') {
-                return;
-            }
-
-            if (formUbahSektor) {
-                formUbahSektor.action = template.replace('__ID__', id);
-                formUbahSektor.classList.remove('d-none');
-
-                // Kode hanya ditampilkan sebagai informasi, bukan input.
-                const labelKode = formUbahSektor.querySelector('[data-testid="ubah-sektor-kode"]');
-                if (labelKode) {
-                    labelKode.textContent = item.dataset.sektorKode || '';
-                }
-
-                const inputNama = formUbahSektor.querySelector('#input-ubah-nama-sektor');
-                if (inputNama) {
-                    inputNama.value = item.dataset.sektorNama || '';
-                }
-
-                const inputIkon = formUbahSektor.querySelector('#input-ubah-ikon-sektor');
-                if (inputIkon) {
-                    inputIkon.value = item.dataset.sektorIkon || '';
-                }
-
-                inputNama?.focus();
-            }
-        });
-    });
-
-    document.getElementById('btn-batal-ubah-sektor')?.addEventListener('click', tutupFormUbahSektor);
-
-    // Menutup form ubah bila admin membuka form tambah (hanya satu form terbuka).
-    document.getElementById('btn-tambah-sektor')?.addEventListener('click', tutupFormUbahSektor);
-
-    // -----------------------------------------------------------------------
-    // Tambah skema baru (US1#9, Q6/R6)
-    // -----------------------------------------------------------------------
-    document.getElementById('btn-tambah-skema')?.addEventListener('click', async () => {
-        if (!sektorKode) {
-            return;
-        }
-
-        // Draf sudah berjalan → konfirmasi, JANGAN buat draf kedua (FR-007g).
-        if (adaDrafBerjalan) {
-            await konfirmasiDrafAda(`${window.location.pathname}?sektor=${encodeURIComponent(sektorKode)}`);
-
-            return;
-        }
-
-        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-            ?? document.querySelector('input[name="_token"]')?.value
-            ?? '';
-
-        try {
-            const respons = await fetch('/dataspasial/skema/draf', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': token,
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ sektor: sektorKode, isian: [] }),
-            });
-
-            if (respons.status === 422) {
-                await swalPeringatan('Sektor ini sudah memiliki draf berjalan.');
-
-                return;
-            }
-
-            if (!respons.ok) {
-                await swalGalat('Data sementara tidak tersedia. Silakan coba lagi nanti.');
-
-                return;
-            }
-
-            window.location.href = `${window.location.pathname}?sektor=${encodeURIComponent(sektorKode)}`;
-        } catch (error) {
-            await swalGalat('Data sementara tidak tersedia. Silakan coba lagi nanti.');
-        }
     });
 
     // -----------------------------------------------------------------------
@@ -970,17 +896,8 @@ export function mountSchemaEditor() {
             return;
         }
 
-        // FR-007i: bila admin SEDANG menyunting draf itu sendiri, konfirmasi
-        // tidak boleh muncul.
-        const menyuntingDrafIni = Boolean(skemaAktif)
-            && document.querySelector(`[data-testid="item-skema"][data-skema-id="${skemaAktif}"][data-status="draf"]`);
-
-        if (adaDrafBerjalan && !menyuntingDrafIni) {
-            await konfirmasiDrafAda(`${window.location.pathname}?sektor=${encodeURIComponent(sektorKode)}&skema=${skemaAktif}`);
-
-            return;
-        }
-
+        // ⚠️ Q22 — editor hanya menampilkan SATU skema (versi terakhir), jadi
+        // tidak ada lagi daftar versi yang perlu dicek untuk "draf sudah ada".
         const isian = bacaDariDom(tbody);
 
         if (isian.length === 0) {
@@ -1187,11 +1104,11 @@ export function mountSchemaEditor() {
     // -----------------------------------------------------------------------
     // Modal pemilihan sumber nilai (US4, FR-022 … FR-025, Q20)
     //
-    // ⚠️ Q20 — pemetaan memakai `{sumber, tabel_sumber, kolom_sumber}` dan
-    // TIDAK memakai katalog/daftar sektor. Pilihan presented的是 dua mode:
+    // ⚠️ Q20 — pemetaan memakai `{sumber, rujukan_sumber}` dan TIDAK memakai
+    // katalog/daftar sektor. Pilihan yang disediakan dua mode:
     // **Manual** (isian diisi operator desa) atau **Otomatis** dari sumber data.
-    // Modal **tidak terikat** pada pemetaan yang sudah tersimpan — isian
-    // selalu dibuka kosong agar admin bebas memilih ulang.
+    // Modal **terisi dengan nilai saat ini** sehingga admin dapat melanjutkan
+    // atau memperbaiki pemetaan yang sudah ada tanpa mengetik ulang.
     // -----------------------------------------------------------------------
     const SUMBER_ENUM = ['openSID', 'dataPresisi', 'impor'];
 
@@ -1206,7 +1123,9 @@ export function mountSchemaEditor() {
         sel.dataset.sumber = sumber || 'manual';
         sel.dataset.tabelSumber = tabel || '';
         sel.dataset.kolomSumber = kolom || '';
-        sel.dataset.rujukan = '';
+        // ⚠️ `rujukan` harus selalu konsisten dengan tabel.kolom karena inilah
+        // nilai yang dikirim ke API sebagai `rujukan_sumber` (§6a.4).
+        sel.dataset.rujukan = [tabel || '', kolom || ''].filter(Boolean).join('.');
 
         const tombol = sel.querySelector('.btn-pilih-sumber-baris');
         const badge = tombol?.querySelector('.badge') ?? sel.querySelector('.badge');
@@ -1247,34 +1166,40 @@ export function mountSchemaEditor() {
 
         const label = tr.querySelector('.input-label')?.value || '(tanpa label)';
 
-        // ⚠️ Modal TIDAK diisi dari pemetaan yang sudah ada — selalu mulai
-        // kosong agar admin bebas memilih (bukan terikat pada nilai lama).
+        // ⚠️ Modal TERISI dengan nilai saat ini agar admin dapat melanjutkan /
+        // memperbaiki pemetaan yang sudah ada — bukan dimulai dari kosong.
+        const sel = tr.querySelector('.sumber-nilai');
+        const sumberSekarang = sel?.dataset?.sumber || 'manual';
+        const otomatisSekarang = sumberSekarang !== '' && sumberSekarang !== 'manual';
+        const tabelSekarang = sel?.dataset?.tabelSumber || '';
+        const kolomSekarang = sel?.dataset?.kolomSumber || '';
+
         const hasil = await window.Swal.fire({
             title: 'Sumber nilai isian',
             html: `
                 <p class="mb-3 text-left small text-muted">Isian: <strong>${label}</strong></p>
                 <div class="form-check mb-2 text-left">
-                    <input class="form-check-input" type="radio" name="mode-sumber" id="sumber-mode-manual" value="manual" checked>
+                    <input class="form-check-input" type="radio" name="mode-sumber" id="sumber-mode-manual" value="manual" ${otomatisSekarang ? '' : 'checked'}>
                     <label class="form-check-label" for="sumber-mode-manual">Manual — diisi operator desa</label>
                 </div>
                 <div class="form-check mb-3 text-left">
-                    <input class="form-check-input" type="radio" name="mode-sumber" id="sumber-mode-otomatis" value="otomatis">
+                    <input class="form-check-input" type="radio" name="mode-sumber" id="sumber-mode-otomatis" value="otomatis" ${otomatisSekarang ? 'checked' : ''}>
                     <label class="form-check-label" for="sumber-mode-otomatis">Otomatis — diambil dari sumber data</label>
                 </div>
                 <div id="bagian-otomatis" style="display:none">
                     <div class="form-group text-left mb-2">
                         <label for="sumber-pilihan">Sumber data</label>
                         <select id="sumber-pilihan" class="form-control form-control-sm">
-                            ${SUMBER_ENUM.map((n) => `<option value="${n}">${n}</option>`).join('')}
+                            ${SUMBER_ENUM.map((n) => `<option value="${n}" ${n === sumberSekarang ? 'selected' : ''}>${n}</option>`).join('')}
                         </select>
                     </div>
                     <div class="form-group text-left mb-2">
                         <label for="sumber-tabel">Tabel sumber</label>
-                        <input id="sumber-tabel" class="form-control form-control-sm" maxlength="100" placeholder="mis. posyandu">
+                        <input id="sumber-tabel" class="form-control form-control-sm" maxlength="100" placeholder="mis. posyandu" value="${escapeHtml(tabelSekarang)}">
                     </div>
                     <div class="form-group text-left">
                         <label for="sumber-kolom">Kolom sumber</label>
-                        <input id="sumber-kolom" class="form-control form-control-sm" maxlength="100" placeholder="mis. jenis">
+                        <input id="sumber-kolom" class="form-control form-control-sm" maxlength="100" placeholder="mis. jenis" value="${escapeHtml(kolomSekarang)}">
                     </div>
                 </div>`,
             showCancelButton: true,

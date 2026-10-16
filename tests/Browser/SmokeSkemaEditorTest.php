@@ -254,3 +254,44 @@ it('menyediakan template baris isian agar tombol tambah isian dapat bekerja', fu
 
     ScreenshotHelper::saveIfEnabled($page, 'skema-editor-template-baris');
 });
+
+// ---------------------------------------------------------------------------
+// Regresi — klik "Tambah Sektor Baru" tanpa pernah memilih sektor harus
+// memunculkan kolom Nama sektor (FR-008f/Q26).
+// ---------------------------------------------------------------------------
+
+it('memunculkan kolom nama sektor saat tambah sektor baru tanpa memilih sektor', function () {
+    $page = SessionState::loginAndNavigate($this->user, '/dataspasial/skema')
+        ->assertPathIs('/dataspasial/skema');
+
+    $page->assertScript(
+        "(function () {
+            const tombol = document.getElementById('btn-tambah-sektor');
+
+            if (!tombol) {
+                return true; // editor tidak dirender (sumber data tidak tersedia)
+            }
+
+            // Keadaan awal: kolom ada di DOM tetapi tersembunyi.
+            const wadah = document.getElementById('wadah-input-sektor-nama');
+            const input = document.getElementById('input-sektor-nama-editor');
+
+            if (!wadah || !input) {
+                return false;
+            }
+
+            const tersembunyiAwal = wadah.classList.contains('d-none');
+
+            // Klik tombol tambah sektor baru - kolom harus muncul & aktif.
+            tombol.click();
+
+            return tersembunyiAwal
+                && !wadah.classList.contains('d-none')
+                && input.disabled === false
+                && input.value === '';
+        })()",
+        true
+    );
+
+    ScreenshotHelper::saveIfEnabled($page, 'skema-editor-mode-sektor-baru');
+});

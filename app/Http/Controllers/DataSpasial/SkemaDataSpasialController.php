@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\DataSpasial;
 
 use App\Enums\StatusSkemaEditor;
-use App\Enums\TipeIsian;
 use App\Http\Requests\DataSpasial\StoreDrafSkemaRequest;
-use App\Http\Requests\DataSpasial\StoreSektorRequest;
 use App\Http\Requests\DataSpasial\TerbitSkemaRequest;
-use App\Http\Requests\DataSpasial\UpdateSektorRequest;
 use App\Services\DataSpasialApiService;
 use App\Services\DataSpasialResult;
 use App\Services\SkemaEditorService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -98,7 +96,6 @@ class SkemaDataSpasialController extends DataSpasialController
 
         return view($this->viewName(), [
             'title' => $this->pageTitle(),
-            'result' => $resultSektor,
             'resultSektor' => $resultSektor,
             'daftarSektor' => $daftarSektor,
             'sektorTerpilih' => $sektorTerpilih,
@@ -106,42 +103,6 @@ class SkemaDataSpasialController extends DataSpasialController
             'isian' => $isian,
             'statusEditor' => $statusEditor,
         ]);
-    }
-
-    /**
-     * Tambah sektor baru (FR-007d).
-     *
-     * ⚠️ UTANG KONTRAK U1 — `POST /dataspasial/sektor` belum ada di kontrak
-     * v0.1.0. `404`/`405` dari API otomatis menjadi pesan "data sementara tidak
-     * tersedia" lewat pemetaan `DataSpasialResult` (FR-005).
-     */
-    public function storeSektor(StoreSektorRequest $request): RedirectResponse
-    {
-        $validated = $request->validated();
-
-        // ⚠️ Keunikan nama sektor diperiksa API (spec Q13) — bukan di sini.
-        // Validasi bentuk sudah dijaga `StoreSektorRequest`.
-        $result = $this->dataspasial->buatSektor([
-            'nama' => trim((string) $validated['nama']),
-            'ikon' => $validated['ikon'] ?? null,
-        ]);
-
-        if ($result->isUnavailable()) {
-            Log::warning('DataSpasial: pembuatan sektor gagal', [
-                'reason' => $result->reason?->value,
-                'http_status' => $result->httpStatus,
-            ]);
-
-            return back()
-                ->withInput($request->only('nama', 'ikon'))
-                ->with('error', $result->userMessage());
-        }
-
-        return redirect()
-            ->route('dataspasial.skema', array_filter([
-                'sektor' => $result->first()['attributes']['kode'] ?? null,
-            ]))
-            ->with('success', 'Sektor berhasil disimpan.');
     }
 
     /**
@@ -156,7 +117,7 @@ class SkemaDataSpasialController extends DataSpasialController
      * untuk formulir biasa. Kegagalan → pesan "data sementara tidak tersedia",
      * isi editor utuh, tanpa muat ulang halaman.
      */
-    public function storeDraf(StoreDrafSkemaRequest $request): RedirectResponse|\Illuminate\Http\JsonResponse
+    public function storeDraf(StoreDrafSkemaRequest $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validated();
         $sektorNama = trim((string) ($validated['sektor_nama'] ?? ''));
@@ -211,44 +172,6 @@ class SkemaDataSpasialController extends DataSpasialController
                 'sektor' => $sektorKode,
             ]))
             ->with('success', 'Draf skema berhasil disimpan.');
-    }
-
-    /**
-     * Ubah sektor yang sudah ada (US7, FR-007d-4 … FR-007d-9).
-     *
-     * ⚠️ UTANG KONTRAK U5 — `PUT /dataspasial/sektor/{id}` belum ada di kontrak
-     * v0.1.0 maupun API hidup. `404`/`405` otomatis menjadi pesan "data
-     * sementara tidak tersedia" dan daftar sektor tidak berubah (FR-007d-7).
-     *
-     * ⚠️ **Kode sektor tidak pernah dikirim** — kode bersifat baca-saja
-     * (FR-007d-5).
-     */
-    public function updateSektor(UpdateSektorRequest $request, int $sektor): RedirectResponse
-    {
-        $validated = $request->validated();
-
-        $result = $this->dataspasial->ubahSektor($sektor, [
-            'nama' => trim((string) $validated['nama']),
-            'ikon' => $validated['ikon'] ?? null,
-        ]);
-
-        if ($result->isUnavailable()) {
-            Log::warning('DataSpasial: perubahan sektor gagal', [
-                'sektor_id' => $sektor,
-                'reason' => $result->reason?->value,
-                'http_status' => $result->httpStatus,
-            ]);
-
-            return back()
-                ->withInput($request->only('nama', 'ikon'))
-                ->with('error', $result->userMessage());
-        }
-
-        $kode = $result->first()['attributes']['kode'] ?? $request->query('sektor');
-
-        return redirect()
-            ->route('dataspasial.skema', array_filter(['sektor' => $kode]))
-            ->with('success', 'Sektor berhasil diperbarui.');
     }
 
     /**
@@ -309,32 +232,6 @@ class SkemaDataSpasialController extends DataSpasialController
         }
 
         return null;
-    }
-
-    /**
-     * @param  array<int, array<string, mixed>>  $skemaSektor
-     * @return array<string, mixed>|null
-     */
-    private function skemaTerpilih(Request $request, array $skemaSektor): ?array
-    {
-        $id = (int) $request->query('skema', 0);
-
-        if ($id > 0) {
-            foreach ($skemaSektor as $skema) {
-                if ($skema['id'] === $id) {
-                    return $skema;
-                }
-            }
-        }
-
-        // Tanpa pilihan eksplisit: utamakan draf berjalan, lalu versi terbaru.
-        foreach ($skemaSektor as $skema) {
-            if ($skema['status'] === StatusSkemaEditor::Draf) {
-                return $skema;
-            }
-        }
-
-        return $skemaSektor[0] ?? null;
     }
 
     /**

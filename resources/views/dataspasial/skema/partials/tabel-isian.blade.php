@@ -5,8 +5,12 @@
     turunan dari `label` yang dibuat otomatis oleh aplikasi, sehingga tidak ada
     kolom yang perlu diisi admin.
 
-    Kolom memuat: label, tipe, wajib, satuan, pilihan, popup peta, filter,
-    indikator, dan sumber nilai (manual atau pemetaan).
+    Kolom memuat: label, tipe, wajib, satuan, sumber nilai (manual atau
+    otomatis), popup peta, filter, dan indikator.
+
+    ⚠️ Kolom **Pilihan (opsi)** tidak lagi ditampilkan karena tidak dipakai
+    pada editor ini; nilai opsi yang sudah tersimpan di API tetap dikirim ulang
+    lewat atribut `data-opsi` agar tidak hilang.
 
     Kolom popup/filter/indikator & sumber nilai diisi penuh pada US4/US5;
     kolomnya sudah disiapkan sejak US1 agar tata letak tidak berubah
@@ -25,21 +29,29 @@
             US7/Q19 — nama sektor disunting dari editor, dikirim sebagai
             `sektor_nama` pada setiap Simpan draf (FR-007d-4/FR-007d-9).
             Kode sektor tetap baca-saja (FR-007d-5).
+
+            ⚠️ **Selalu dirender**, termasuk ketika belum ada sektor yang dipilih.
+            Bila input ini hanya dirender bila `$sektorTerpilih`, maka mode
+            "sektor baru" (FR-008f/Q26) tidak punya kolom untuk diisi — admin
+            menekan "Tambah Sektor Baru" tetapi tidak ada apa pun yang muncul.
+            Saat belum ada sektor terpilih, blok ini disembunyikan dan dibuka
+            kembali oleh JS ketika mode "sektor baru" diaktifkan.
         --}}
-        @if ($sektorTerpilih)
-            <div class="form-group mb-0 mt-2">
-                <label class="mb-1" for="input-sektor-nama-editor">Nama sektor</label>
-                <input type="text"
-                       class="form-control form-control-sm {{ $errors->has('sektor_nama') ? 'is-invalid' : '' }}"
-                       id="input-sektor-nama-editor" data-testid="input-sektor-nama-editor"
-                       name="sektor_nama" maxlength="100"
-                       value="{{ old('sektor_nama', $sektorTerpilih['nama']) }}"
-                       @disabled(! $bolehUbah)>
-                @error('sektor_nama')
-                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                @enderror
-            </div>
-        @endif
+        <div class="form-group mb-0 mt-2 {{ $sektorTerpilih ? '' : 'd-none' }}"
+             id="wadah-input-sektor-nama" data-testid="wadah-input-sektor-nama">
+            <label class="mb-1" for="input-sektor-nama-editor">
+                Nama sektor <span class="text-danger">*</span>
+            </label>
+            <input type="text"
+                   class="form-control form-control-sm {{ $errors->has('sektor_nama') ? 'is-invalid' : '' }}"
+                   id="input-sektor-nama-editor" data-testid="input-sektor-nama-editor"
+                   name="sektor_nama" maxlength="100" autocomplete="off"
+                   value="{{ old('sektor_nama', $sektorTerpilih['nama'] ?? '') }}"
+                   @disabled(! $bolehUbah)>
+            @error('sektor_nama')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+        </div>
 
         <div class="d-flex align-items-center mt-2">
             {{-- Simpan draf: aktif hanya bila skema berstatus draf (FR-008b). --}}
@@ -115,7 +127,6 @@
                         <th style="width:8rem">Tipe</th>
                         <th style="width:4rem" class="text-center">Wajib</th>
                         <th style="width:6rem">Satuan</th>
-                        <th style="width:11rem">Pilihan</th>
                         <th style="width:11rem">Sumber nilai</th>
                         <th style="width:4rem" class="text-center" title="Tampil di popup peta">Peta</th>
                         <th style="width:4rem" class="text-center" title="Tersedia sebagai filter">Filter</th>
@@ -153,7 +164,9 @@
         sudah ada kontrolnya dikunci oleh `kunciKontrolIsian()` (FR-008a).
     --}}
     <template id="template-baris-isian">
-        <tr class="baris-baru" draggable="false">
+        {{-- `data-opsi` diisi `[]` agar `bacaDariDom()` tetap mengirim array
+             kosong untuk baris baru (kolom Pilihan tidak lagi ditampilkan). --}}
+        <tr class="baris-baru" draggable="false" data-opsi="[]">
             <td class="text-center handle-seret align-middle" title="Seret untuk mengurutkan">
                 <i class="fas fa-grip-vertical text-muted"></i>
             </td>
@@ -169,11 +182,6 @@
             </td>
             <td class="text-center"><input type="checkbox" class="input-wajib"></td>
             <td><input type="text" class="form-control form-control-sm input-satuan" maxlength="50" placeholder="orang"></td>
-            <td>
-                <select class="form-control form-control-sm input-opsi" multiple size="2" disabled>
-                    <option disabled>—</option>
-                </select>
-            </td>
             {{-- ⚠️ Atribut `data-*` wajib ada agar `bacaDariDom()` membaca
                  sumber nilai baris baru (Q20: sumber/tabel_sumber/kolom_sumber). --}}
             <td class="sumber-nilai" data-sumber="manual"

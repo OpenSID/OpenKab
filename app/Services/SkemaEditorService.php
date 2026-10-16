@@ -64,13 +64,38 @@ class SkemaEditorService
             'nama' => (string) ($attributes['nama'] ?? ''),
             'ikon' => $attributes['ikon'] ?? null,
             'status' => (string) ($attributes['status'] ?? 'aktif'),
-            // Counter dari API nyata (§6a.2) — dipakai untuk label versi/draf
-            // TANPA perlu memanggil endpoint skema lebih awal.
+            // Counter dari API nyata (§6a.2). Karena Q22 melarang memanggil
+            // endpoint skema per sektor (SC-013: tepat satu pemanggilan baca),
+            // versi terakhir dan statusnya DITURUNKAN dari kedua counter ini:
+            //   jumlah_versi_skema = 0            → belum ada skema
+            //   jumlah_versi_terbit < jumlah_skema → versi terakhir berstatus draf
+            //   selainnya                           → versi terakhir berstatus terbit
+            // Penomoran versi dibuat berurutan oleh API (Q18), sehingga nomor
+            // versi terakhir sama dengan jumlah versi yang ada.
             'jumlahSkema' => (int) ($attributes['jumlah_versi_skema'] ?? 0),
             'jumlahTerbit' => (int) ($attributes['jumlah_versi_terbit'] ?? 0),
-            'adaDraf' => false,
-            'nomorVersiDraf' => null,
+            'adaDraf' => ((int) ($attributes['jumlah_versi_skema'] ?? 0)) > 0
+                && ((int) ($attributes['jumlah_versi_skema'] ?? 0)) > ((int) ($attributes['jumlah_versi_terbit'] ?? 0)),
+            'nomorVersiTerakhir' => (int) ($attributes['jumlah_versi_skema'] ?? 0),
+            'statusTerakhir' => $this->statusTerakhirSektor(
+                (int) ($attributes['jumlah_versi_skema'] ?? 0),
+                (int) ($attributes['jumlah_versi_terbit'] ?? 0),
+            ),
         ];
+    }
+
+    /**
+     * Turunkan status versi terakhir sebuah sektor dari counter API (Q22).
+     *
+     * @return string `draf`, `terbit`, atau `kosong`
+     */
+    private function statusTerakhirSektor(int $jumlahVersi, int $jumlahTerbit): string
+    {
+        if ($jumlahVersi === 0) {
+            return 'kosong';
+        }
+
+        return $jumlahTerbit < $jumlahVersi ? 'draf' : 'terbit';
     }
 
     /**
@@ -128,6 +153,12 @@ class SkemaEditorService
         $attributes = $this->attributes($item);
         $pemetaan = $this->pemetaanPertama(is_array($attributes['pemetaan'] ?? null) ? $attributes['pemetaan'] : []) ?? [];
 
+        // `rujukan_sumber` dipecah menjadi tabel + kolom untuk ditampilkan.
+        // Rujukan kosong dinormalkan jadi `null` (bukan string kosong) supaya
+        // pemetaan yang belum punya rujukan tetap terbaca sebagai "tidak ada".
+        $rujukan = trim((string) ($pemetaan['rujukan'] ?? ''));
+        [$tabelSumber, $kolomSumber] = $this->pecahRujukan($rujukan);
+
         $isian = [
             'id' => isset($item['id']) ? (int) $item['id'] : (isset($attributes['id']) ? (int) $attributes['id'] : null),
             'kode' => (string) ($attributes['kode'] ?? ''),
@@ -144,7 +175,14 @@ class SkemaEditorService
             // ⚠️ VERIFIKASI LANGSUNG: `sumber` adalah ENUM API
             // (`openSID`/`dataPresisi`/`impor`), BUKAN kode sektor (§6a.5).
             'sumber' => $pemetaan['sumber'] ?? 'manual',
-            'rujukan' => $pemetaan['rujukan'] ?? null,
+            // ⚠️ VERIFIKASI LANGSUNG (§6a.4): entitas `ds_pemetaan` hanya
+            // menyimpan SATU kolom `rujukan_sumber` berbentuk "tabel.kolom"
+            // (contoh `tbl_jalan.lebar`). Karena form menampilkan dua kolom,
+            // nilainya dipecah di sini; saat menyimpan, keduanya disambung
+            // kembali menjadi `rujukan_sumber` oleh `composePemetaan()`.
+            'rujukan' => $rujukan === '' ? null : $rujukan,
+            'tabelSumber' => $tabelSumber,
+            'kolomSumber' => $kolomSumber,
             'aturanHitung' => $pemetaan['aturan_hitung'] ?? null,
         ];
 
@@ -275,9 +313,6 @@ class SkemaEditorService
      * Pola `snake_case`: huruf kecil, angka, garis bawah; diawali huruf.
      * Bila hasil kosong (mis. nama hanya simbol), fallback `sektor`.
      * Keunikan global ditjamin API (Q13); OpenKab hanya menyusun bentuknya.
-     *
-     * @param  string  $nama
-     * @return string
      */
     public function kodeSektorDariNama(string $nama): string
     {
@@ -325,8 +360,9 @@ class SkemaEditorService
                 'tampil_di_popup' => (bool) ($baris['popupPeta'] ?? false),
                 'tampil_di_filter' => (bool) ($baris['sebagaiFilter'] ?? false),
                 'tampil_di_indikator' => (bool) ($baris['sebagaiIndikator'] ?? false),
-                // Pemetaan berupa array `{sumber, tabel_sumber, kolom_sumber}` (Q20).
-                // View memakai nama internal `tabelSumber`/`kolomSumber`.
+                // Pemetaan berupa array `{sumber, rujukan_sumber}` — satu nilai
+                // "tabel.kolom" (§6a.4). View memakai `rujukan` sebagai sumber
+                // kebenaran; `composePemetaan()` yang menyusun bentuk API.
                 'pemetaan' => $this->composePemetaan($baris),
             ];
 
@@ -342,8 +378,15 @@ class SkemaEditorService
     }
 
     /**
+     * Susun pemetaan satu isian untuk badan draf.
+     *
+     * ⚠️ Bentuk API (`ds_pemetaan`) hanya punya **`rujukan_sumber`** — satu
+     * string "tabel.kolom" (contoh `tbl_jalan.lebar`, §6a.4). Klien boleh
+     * mengirim `rujukan` apa adanya; bila hanya mengirim `tabelSumber` +
+     * `kolomSumber` keduanya disambung di sini.
+     *
      * @param  array<string, mixed>  $baris
-     * @return array{sektor: string|null, rujukan: string|null}|null
+     * @return array<int, array{sumber: string, rujukan_sumber: string}>|null
      */
     private function composePemetaan(array $baris): ?array
     {
@@ -353,12 +396,55 @@ class SkemaEditorService
             return null;
         }
 
-        // Pemetaan berupa array `{sumber, tabel_sumber, kolom_sumber}` (Q20).
         return [[
             'sumber' => (string) $sumber,
-            'tabel_sumber' => $baris['tabelSumber'] ?? null,
-            'kolom_sumber' => $baris['kolomSumber'] ?? null,
+            'rujukan_sumber' => $this->susunRujukan($baris),
         ]];
+    }
+
+    /**
+     * Rujukan sumber satu isian: pakai `rujukan` bila ada, kalau tidak
+     * sambung `tabelSumber` + `kolomSumber` menjadi "tabel.kolom".
+     *
+     * @param  array<string, mixed>  $baris
+     */
+    private function susunRujukan(array $baris): string
+    {
+        $rujukan = trim((string) ($baris['rujukan'] ?? ''));
+
+        if ($rujukan !== '') {
+            return $rujukan;
+        }
+
+        $tabel = trim((string) ($baris['tabelSumber'] ?? ''));
+        $kolom = trim((string) ($baris['kolomSumber'] ?? ''));
+
+        return implode('.', array_filter([$tabel, $kolom], static fn (string $bagian): bool => $bagian !== ''));
+    }
+
+    /**
+     * Pecah `rujukan_sumber` ("tabel.kolom") menjadi bagian tabel & kolom.
+     *
+     * ⚠️ Pemecahan memakai titik TERAKHIR agar nilai yang hanya memuat satu
+     * titik tetap pulih utuh saat disambung kembali (mis. `ds.tbl.col`).
+     *
+     * @return array{0: string, 1: string}
+     */
+    private function pecahRujukan(?string $rujukan): array
+    {
+        $rujukan = trim((string) $rujukan);
+
+        if ($rujukan === '') {
+            return ['', ''];
+        }
+
+        $titik = strrpos($rujukan, '.');
+
+        if ($titik === false) {
+            return [$rujukan, ''];
+        }
+
+        return [substr($rujukan, 0, $titik), substr($rujukan, $titik + 1)];
     }
 
     // -----------------------------------------------------------------------

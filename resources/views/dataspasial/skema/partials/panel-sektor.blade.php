@@ -39,19 +39,33 @@
                                 </span>
                             </div>
 
-                            {{-- Label versi atau draf (FR-007). --}}
+                            {{--
+                                FR-007 — label **versi terakhir + statusnya**.
+                                ⚠️ Jumlah versi tidak lagi ditampilkan; yang
+                                Useful bagi admin adalah versi berapa yang berlaku
+                                dan apakah masih berupa draf.
+                            --}}
                             <div class="mt-1">
-                                @if ($sektor['adaDraf'])
-                                    <span class="badge badge-warning">Draf berjalan</span>
-                                @elseif ($sektor['jumlahSkema'] > 0)
-                                    <span class="badge badge-success">Terbit</span>
+                                @php
+                                    $statusTerakhir = $sektor['statusTerakhir'] ?? 'kosong';
+                                    $nomorVersiTerakhir = (int) ($sektor['nomorVersiTerakhir'] ?? 0);
+                                @endphp
+
+                                @if ($statusTerakhir === 'draf')
+                                    <span class="badge badge-warning"
+                                          data-testid="label-status-versi-sektor">Draf</span>
+                                @elseif ($statusTerakhir === 'terbit')
+                                    <span class="badge badge-success"
+                                          data-testid="label-status-versi-sektor">Terbit</span>
                                 @else
-                                    <span class="badge badge-secondary">Belum ada skema</span>
+                                    <span class="badge badge-secondary"
+                                          data-testid="label-status-versi-sektor">Belum ada skema</span>
                                 @endif
 
-                                @if ($sektor['jumlahSkema'] > 0)
-                                    <small class="ml-1 {{ $terpilih ? 'text-white-50' : 'text-muted' }}">
-                                        {{ $sektor['jumlahSkema'] }} versi
+                                @if ($nomorVersiTerakhir > 0)
+                                    <small class="ml-1 badge badge-info {{ $terpilih ? 'text-white-50' : 'text-muted' }}"
+                                           data-testid="label-nomor-versi-sektor">
+                                        v{{ $nomorVersiTerakhir }}
                                     </small>
                                 @endif
                             </div>

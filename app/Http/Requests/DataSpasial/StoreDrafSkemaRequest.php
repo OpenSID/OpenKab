@@ -68,9 +68,12 @@ class StoreDrafSkemaRequest extends FormRequest
             'isian.*.popupPeta' => ['boolean'],
             'isian.*.sebagaiFilter' => ['boolean'],
             'isian.*.sebagaiIndikator' => ['boolean'],
-            // Q20 — pemetaan: `sumber` enum, `tabelSumber` + `kolomSumber`
-            // diisi bebas, wajib bila sumber bukan manual.
+            // ⚠️ Bentuk API hanya punya SATU nilai `rujukan_sumber`
+            // ("tabel.kolom", §6a.4) —ini rujukan yang dikirim klien.
+            // `tabelSumber`/`kolomSumber` tetap diterima agar klien lama /
+            // ISIan yang dipecah di sisi tampilan tetap kompatibel.
             'isian.*.sumber' => ['nullable', 'string', Rule::in(['openSID', 'dataPresisi', 'impor', 'manual'])],
+            'isian.*.rujukan' => ['nullable', 'string', 'max:201'],
             'isian.*.tabelSumber' => ['nullable', 'string', 'max:100'],
             'isian.*.kolomSumber' => ['nullable', 'string', 'max:100'],
         ];
@@ -84,7 +87,52 @@ class StoreDrafSkemaRequest extends FormRequest
         $validator->after(function (Validator $validator): void {
             $this->tolakKodeBentrok($validator);
             $this->tolakPilihanKosong($validator);
+            $this->tolakRujukanKosong($validator);
         });
+    }
+
+    /**
+     * FR-022/Q20 — sumber nilai selain `manual` wajib punya rujukan.
+     *
+     * ⚠️ Rujukan diterima sebagai `rujukan` ("tabel.kolom"); bila klien hanya
+     * mengirim `tabelSumber` + `kolomSumber`, keduanya disambung di sini —
+     * bentuk akhir yang disimpan adalah `rujukan_sumber`.
+     */
+    private function tolakRujukanKosong(Validator $validator): void
+    {
+        $isian = $this->input('isian');
+
+        if (! is_array($isian)) {
+            return;
+        }
+
+        foreach ($isian as $index => $baris) {
+            if (! is_array($baris)) {
+                continue;
+            }
+
+            $sumber = trim((string) ($baris['sumber'] ?? ''));
+
+            if ($sumber === '' || $sumber === 'manual') {
+                continue;
+            }
+
+            $rujukan = trim((string) ($baris['rujukan'] ?? ''));
+
+            if ($rujukan === '') {
+                $rujukan = implode('.', array_filter([
+                    trim((string) ($baris['tabelSumber'] ?? '')),
+                    trim((string) ($baris['kolomSumber'] ?? '')),
+                ], static fn (string $bagian): bool => $bagian !== ''));
+            }
+
+            if ($rujukan === '') {
+                $validator->errors()->add(
+                    "isian.{$index}.rujukan",
+                    'Rujukan sumber wajib diisi bila sumber nilai bukan manual.'
+                );
+            }
+        }
     }
 
     /**

@@ -48,7 +48,7 @@ class SkemaDataSpasialController extends DataSpasialController
     }
 
     /**
-     * Data awal untuk kerangka & komponen tiga-keadaan.
+     * Data awal untuk kerangka editor dua panel.
      *
      * Halaman editor memerlukan daftar sektor sebagai sumber kebenarannya,
      * sehingga `fetch()` membaca sektor (bukan daftar skema seperti kerangka
@@ -67,70 +67,44 @@ class SkemaDataSpasialController extends DataSpasialController
 
         $sektorTerpilih = $this->sektorTerpilih($request, $daftarSektor);
 
-        // ⚠️ FR-007a-1 — endpoint daftar skema yang membutuhkan parameter sektor
-        // DIPASTIKAN GAGAL bila dipanggil tanpa sektor. Karena itu setelah
-        // kunjungan pertama ia **tidak boleh** dipanggil sama sekali, bukan
-        // sekadar "dipanggil lalu hasilnya diabaikan".
-        $resultSkema = null;
-        $skemaSektor = [];
-        $skemaTerpilih = null;
+        // ⚠️ Q22 — tidak ada lagi daftar skema. Setelah sektor dipilih, editor
+        // langsung memuat isian skema terakhir via satu pemanggilan
+        // `GET /dataspasial/skema?sektor={kode}` (parameter wajib).
         $isian = [];
-        $resultDetail = null;
+        $skemaTerpilih = null;
 
         if ($sektorTerpilih !== null) {
-            // ⚠️ Q9 — daftar skema diambil dari endpoint RIWAYAT VERSI.
-            // `GET /skema?sektor=` hanya mengembalikan SATU versi (aktif) sehingga
-            // tidak bisa menjadi sumber daftar. Parameternya KODE sektor.
-            $resultRiwayat = $this->dataspasial->riwayatSkema([
+            $resultSkema = $this->dataspasial->listSkema([
                 'sektor' => $sektorTerpilih['kode'],
             ]);
 
-            $skemaSektor = array_map(
-                fn (array $item): array => $this->editor->petakanRiwayatVersi($item),
-                $resultRiwayat->data
-            );
+            [$isian] = $this->muatIsian($resultSkema);
 
-            // Urut dari versi terbaru (API sudah mengurutkan `nomor_versi` DESC).
-            $skemaTerpilih = $this->skemaTerpilih($request, $skemaSektor);
-
-            // ⚠️ K2 — isian hanya diambil bila sebuah versi benar-benar dipilih.
-            if ($skemaTerpilih !== null) {
-                // ⚠️ K1: endpoint versi aktif memakai parameter `sektor` (WAJIB),
-                // dan responsnya sudah memuat `isian[]` + `pemetaan[]`.
-                $resultSkema = $this->dataspasial->listSkema([
-                    'sektor' => $sektorTerpilih['id'],
-                ]);
-
-                [$isian, $resultDetail] = $this->muatIsian($resultSkema);
-            } else {
-                $isian = [];
-                $resultDetail = null;
-            }
+            $item = is_array($resultSkema?->first()) ? $resultSkema->first() : null;
+            $atribut = is_array($item['attributes'] ?? null) ? $item['attributes'] : [];
+            $versi = is_array($atribut['versi_skema'] ?? null) ? $atribut['versi_skema'] : [];
+            $skemaTerpilih = [
+                'status' => (string) ($versi['status'] ?? ''),
+                'jumlah_skema' => 1,
+            ];
         }
 
         // Status global: bila sektor tidak dapat diperoleh, seluruh tombol mati.
         if ($resultSektor->isUnavailable()) {
-            $statusEditor = StatusSkemaEditor::fromValue(StatusSkemaEditor::BelumTersedia);
-        } elseif ($skemaTerpilih === null) {
-            $statusEditor = $this->editor->statusEditor(null, $skemaSektor);
+            $statusEditor = StatusSkemaEditor::BelumTersedia();
         } else {
-            $statusEditor = $this->editor->statusEditor($skemaTerpilih, $skemaSektor);
+            $statusEditor = $this->editor->statusEditor($skemaTerpilih, $daftarSektor);
         }
 
         return view($this->viewName(), [
             'title' => $this->pageTitle(),
             'result' => $resultSektor,
             'resultSektor' => $resultSektor,
-            'resultSkema' => $resultSkema,
-            'resultDetail' => $resultDetail,
             'daftarSektor' => $daftarSektor,
             'sektorTerpilih' => $sektorTerpilih,
-            'skemaSektor' => $skemaSektor,
             'skemaTerpilih' => $skemaTerpilih,
             'isian' => $isian,
             'statusEditor' => $statusEditor,
-            'daftarSektorSumber' => $daftarSektor,
-            'tipeIsian' => TipeIsian::class,
         ]);
     }
 
@@ -171,36 +145,70 @@ class SkemaDataSpasialController extends DataSpasialController
     }
 
     /**
-     * Simpan draf skema (FR-029 … FR-033).
+     * Simpan draf skema (FR-029 … FR-033, Q18/Q19/Q20/Q23).
+     *
+     * Sektor dan seluruh isian dikirim dalam satu permintaan
+     * `POST /dataspasial/skema`. Kode sektor dibangkitkan sistem dari nama
+     * (Q5) dan dikirim sebagai `sektor`; nama sektor dikirim sebagai
+     * `sektor_nama`. Minimal satu isian wajib (Q23).
+     *
+     * Q21 — selalu via AJAX (JSON); balas JSON untuk request AJAX, redirect
+     * untuk formulir biasa. Kegagalan → pesan "data sementara tidak tersedia",
+     * isi editor utuh, tanpa muat ulang halaman.
      */
-    public function storeDraf(StoreDrafSkemaRequest $request): RedirectResponse
+    public function storeDraf(StoreDrafSkemaRequest $request): RedirectResponse|\Illuminate\Http\JsonResponse
     {
         $validated = $request->validated();
+        $sektorNama = trim((string) ($validated['sektor_nama'] ?? ''));
+
+        // ⚠️ FR-007d-5 — kode sektor TIDAK PERNAH berubah karena nama diubah.
+        // Kode yang dikirim klien dipakai apa adanya; kode baru hanya
+        // dibangkitkan dari nama bila klien tidak mengirimnya, yaitu pada mode
+        // "sektor baru" (Q26/FR-008f).
+        $sektorKode = trim((string) ($validated['sektor'] ?? ''));
+
+        if ($sektorKode === '') {
+            $sektorKode = $this->editor->kodeSektorDariNama($sektorNama);
+        }
 
         $body = $this->editor->composeDrafPayload($validated['isian'] ?? [], [
-            'sektor' => $validated['sektor'] ?? null,
-            'nomor_versi' => $validated['nomor_versi'] ?? null,
-            'catatan_perubahan' => $validated['catatan_perubahan'] ?? null,
+            'sektor' => $sektorKode,
+            'sektor_nama' => $sektorNama,
+            'keterangan' => $validated['keterangan'] ?? null,
         ]);
 
         $result = $this->dataspasial->buatDrafSkema($body);
 
         if ($result->isUnavailable()) {
             Log::warning('DataSpasial: penyimpanan draf gagal', [
-                'sektor' => $validated['sektor'] ?? null,
+                'sektor' => $sektorKode,
                 'reason' => $result->reason?->value,
                 'http_status' => $result->httpStatus,
             ]);
 
+            $pesan = $result->userMessage() ?: 'Data sementara tidak tersedia.';
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $pesan], 503);
+            }
+
             return back()
                 ->withInput()
-                ->with('error', $result->userMessage());
+                ->with('error', $pesan);
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Draf skema berhasil disimpan.',
+                'sektor' => $sektorKode,
+                'data' => $result->first(),
+            ]);
         }
 
         return redirect()
             ->route('dataspasial.skema', array_filter([
-                'sektor' => $validated['sektor'] ?? null,
-                'skema' => $result->first()['id'] ?? null,
+                'sektor' => $sektorKode,
             ]))
             ->with('success', 'Draf skema berhasil disimpan.');
     }

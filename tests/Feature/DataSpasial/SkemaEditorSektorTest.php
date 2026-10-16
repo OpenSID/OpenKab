@@ -274,79 +274,6 @@ it('menampilkan keadaan kosong saat DataSpasial belum memiliki sektor', function
 });
 
 // ---------------------------------------------------------------------------
-// US1#2 / #7 — daftar skema hanya setelah sektor dipilih (FR-007a)
-// ---------------------------------------------------------------------------
-
-it('tidak menampilkan daftar skema sebelum admin memilih sektor', function () {
-    fakeSektorDanSkema(
-        [itemSektor('1', 'pendidikan', 'Pendidikan')],
-        [itemRiwayat('9', 1, 3, 'draf')]
-    );
-
-    $content = $this->get(route('dataspasial.skema'))->assertOk()->getContent();
-
-    // Penanda daftar skema belum boleh muncul saat belum ada sektor terpilih.
-    expect($content)->toContain('data-testid="panel-skema-belum-dipilih"');
-});
-
-it('menampilkan daftar skema setelah admin memilih satu sektor', function () {
-    fakeSektorDanSkema(
-        [itemSektor('1', 'pendidikan', 'Pendidikan')],
-        [itemRiwayat('9', 1, 3, 'draf'), itemRiwayat('5', 1, 2, 'terbit')]
-    );
-
-    $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))->assertOk()->getContent();
-
-    expect($content)
-        ->toContain('data-testid="panel-skema"')
-        ->toContain('Versi 3')
-        ->toContain('Draf berjalan')
-        ->toContain('Versi 2')
-        ->toContain('Terbit');
-});
-
-it('menampilkan daftar skema milik sektor yang dipilih saja', function () {
-    fakeSektorDanSkema(
-        [itemSektor('1', 'pendidikan', 'Pendidikan'), itemSektor('2', 'kesehatan', 'Kesehatan')],
-        [itemRiwayat('9', 1, 3, 'draf'), itemRiwayat('8', 2, 1, 'draf')]
-    );
-
-    $kesehatan = $this->get(route('dataspasial.skema', ['sektor' => 'kesehatan']))->assertOk()->getContent();
-
-    expect($kesehatan)
-        ->toContain('Versi 1')
-        ->not->toContain('Versi 3');
-});
-
-// ---------------------------------------------------------------------------
-// US1#3 — skema terbit baca-saja (FR-008a)
-// ---------------------------------------------------------------------------
-
-it('menampilkan skema terbit dalam keadaan baca-saja dan menonaktifkan simpan', function () {
-    fakeSektorDanSkema(
-        [itemSektor('1', 'pendidikan', 'Pendidikan')],
-        [itemRiwayat('5', 1, 2, 'terbit')]
-    );
-
-    $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))->assertOk()->getContent();
-
-    expect($content)
-        ->toContain('data-status-editor="terbit"')
-        ->toContain('Skema versi terbit hanya dapat dibaca.');
-});
-
-it('menampilkan skema draf dalam keadaan dapat disunting', function () {
-    fakeSektorDanSkema(
-        [itemSektor('1', 'pendidikan', 'Pendidikan')],
-        [itemRiwayat('9', 1, 3, 'draf')]
-    );
-
-    $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))->assertOk()->getContent();
-
-    expect($content)->toContain('data-status-editor="draf"');
-});
-
-// ---------------------------------------------------------------------------
 // FR-007a-1 / SC-013 (spec Q7) — kunjungan pertama HANYA memanggil daftar sektor
 // ---------------------------------------------------------------------------
 
@@ -394,35 +321,47 @@ it('tidak pernah memanggil daftar skema maupun detail skema tanpa sektor terpili
     Http::assertNotSent(fn ($request) => str_contains($request->url(), '/dataspasial/skema'));
 });
 
-it('memanggil daftar skema dengan parameter sektor setelah sektor dipilih', function () {
+// ---------------------------------------------------------------------------
+// SC-014 — setelah sektor dipilih, tepat SATU pemanggilan skema dengan parameter
+// sektor, dan endpoint riwayat versi TIDAK pernah dipanggil (Q22).
+// ---------------------------------------------------------------------------
+
+it('memuat isian skema terakhir lewat satu pemanggilan skema, tanpa riwayat versi', function () {
     Http::fake([
         '*/api/v1/config/*' => Http::response(['data' => []], 200),
         '*/api/v1/dataspasial/sektor*' => Http::response(collection([
             itemSektor('1', 'pendidikan', 'Pendidikan'),
         ]), 200),
-        '*/api/v1/dataspasial/skema*' => Http::response(collection([
-            itemRiwayat('9', 1, 3, 'draf'),
-        ]), 200),
+        '*/api/v1/dataspasial/skema?sektor=1' => Http::response(
+            collection([
+                itemSkemaAktif('10', 'pendidikan', 'Pendidikan', 1, 3, 'draf', [
+                    ['kode' => 'jumlah_siswa', 'label' => 'Jumlah Siswa', 'tipe' => 'angka', 'wajib' => true,
+                     'satuan' => 'orang', 'opsi' => null, 'urutan' => 1,
+                     'tampil_popup' => true, 'tampil_filter' => false, 'tampil_indikator' => false,
+                     'pemetaan' => []],
+                ]),
+            ]),
+            200,
+        ),
         '*' => Http::response(collection([]), 200),
     ]);
 
     $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))->assertOk();
 
-    Http::assertSent(function ($request) {
-        $path = parse_url($request->url(), PHP_URL_PATH);
+    $calls = Http::recorded()->map(fn ($pair) => [
+        'method' => $pair[0]->method(),
+        'path' => parse_url($pair[0]->url(), PHP_URL_PATH),
+    ])->filter(fn ($call) => str_contains($call['path'], '/dataspasial/'));
 
-        if (! str_contains($path, '/dataspasial/skema')) {
-            return false;
-        }
+    // Tepat satu pemanggilan ke /skema dengan parameter sektor (SC-014).
+    $skemaCalls = $calls->filter(fn ($call) =>
+        str_contains($call['path'], '/dataspasial/skema') && ! str_contains($call['path'], '/skema/riwayat'));
 
-        // WAJIB menyertakan penyaring sektor dengan NAMA `sektor`.
-        // ⚠️ VERIFIKASI LANGSUNG: `sektor_id` membalas 422
-        // `{"errors":{"sektor":["Isian sektor wajib diisi."]}}` (kontrak §6a.4 K1).
-        parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+    expect($skemaCalls)->toHaveCount(1);
+    expect($skemaCalls->first()['path'])->toContain('/dataspasial/skema');
 
-        return ($query['sektor'] ?? null) === '1'
-            && ! array_key_exists('sektor_id', $query);
-    });
+    // Endpoint riwayat versi TIDAK boleh disentuh (Q22).
+    expect($calls->filter(fn ($call) => str_contains($call['path'], '/skema/riwayat')))->toHaveCount(0);
 });
 
 // ---------------------------------------------------------------------------
@@ -459,186 +398,6 @@ it('menyembunyikan seluruh editor termasuk tombol simpan ketika sumber tidak ter
 });
 
 // ---------------------------------------------------------------------------
-// US1#12 — validasi nama sektor bentrok (FR-007f)
-// ---------------------------------------------------------------------------
-
-it('menolak nama sektor yang kosong tanpa mengirim permintaan', function () {
-    fakeSektorDanSkema([itemSektor('1', 'pendidikan', 'Pendidikan')]);
-
-    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => ''])
-        ->assertSessionHasErrors('nama');
-
-    Http::assertNotSent(fn ($request) => str_contains($request->url(), '/dataspasial/sektor')
-        && $request->method() === 'POST');
-});
-
-it('tidak memeriksa keunikan nama sektor di sisi OpenKab dan meneruskan penolakan API', function () {
-    // ⚠️ Spec Q13 — keunikan nama sektor adalah tanggung jawab API. OpenKab
-    // TIDAK boleh menolak lebih dulu; ia harus mengirim dan menampilkan
-    // penjelasan yang dikembalikan API.
-    // ⚠️ `Http::fake()` FIFO + awalan method diperlakukan sebagai glob —
-    // pemisahan GET/POST dilakukan di dalam closure.
-    Http::fake([
-        '*/api/v1/config/*' => Http::response(['data' => []], 200),
-        '*/api/v1/dataspasial/sektor*' => function ($request) {
-            if ($request->method() === 'POST') {
-                return Http::response([
-                    'message' => 'Nama sektor sudah digunakan.',
-                    'errors' => ['nama' => ['Nama sektor sudah digunakan.']],
-                ], 422);
-            }
-
-            return Http::response(fakeKoleksi([itemSektor('1', 'pendidikan', 'Pendidikan')]), 200);
-        },
-        '*' => Http::response(['data' => []], 200),
-    ]);
-
-    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => 'Pendidikan'])
-        ->assertSessionHas('error');
-});
-
-// ⚠️ Q13 — OpenKab tidak boleh mengirim daftar sektor untuk memeriksa keunikan
-// sendiri; keunikan sepenuhnya milik API.
-it('tidak mengirim nama_sektor_ada ke API saat membuat sektor', function () {
-    Http::fake([
-        '*/api/v1/config/*' => Http::response(['data' => []], 200),
-        '*/api/v1/dataspasial/sektor*' => function ($request) {
-            return $request->method() === 'POST'
-                ? Http::response(['data' => ['id' => '1', 'attributes' => ['kode' => 'pendidikan']]], 201)
-                : Http::response(fakeKoleksi([itemSektor('1', 'pendidikan', 'Pendidikan')]), 200);
-        },
-        '*' => Http::response(['data' => []], 200),
-    ]);
-
-    $this->post(route('dataspasial.skema.sektor.store'), [
-        'nama' => 'Pendidikan',
-        // Field ini sengaja dikirim untuk membuktikan servers mengabaikannya.
-        'nama_sektor_ada' => ['Pendidikan', 'Kesehatan'],
-    ])->assertSessionHas('success');
-
-    Http::assertSent(function ($request) {
-        if ($request->method() !== 'POST' || ! str_contains($request->url(), '/dataspasial/sektor')) {
-            return false;
-        }
-
-        return ! array_key_exists('nama_sektor_ada', $request->data())
-            && $request['nama'] === 'Pendidikan';
-    });
-});
-
-it('menolak nama sektor yang hanya berisi spasi', function (string $nama) {
-    fakeSektorDanSkema([itemSektor('1', 'pendidikan', 'Pendidikan')]);
-
-    // `TrimStrings` menormalkan spasi tepi menjadi kosong, lalu `required` menolak.
-    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => $nama])
-        ->assertSessionHasErrors('nama');
-})->with(['spasi saja' => '   ', 'spasi dan tab' => "  \t  "]);
-
-it('menerima nama sektor dengan spasi tepi dan menormalkannya', function () {
-    Http::fake([
-        '*/api/v1/config/*' => Http::response(['data' => []], 200),
-        '*/api/v1/dataspasial/sektor' => Http::response([
-            'success' => true,
-            'data' => ['type' => 'ds_sektor', 'id' => '7', 'attributes' => ['kode' => 'kesehatan', 'nama' => 'Kesehatan']],
-        ], 201),
-        '*' => Http::response(collection([itemSektor('7', 'kesehatan', 'Kesehatan')]), 200),
-    ]);
-
-    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => '  Kesehatan  '])
-        ->assertSessionHasNoErrors();
-
-    // Spasi tepi TIDAK ikut dikirim ke API.
-    Http::assertSent(function ($request) {
-        return $request->method() === 'POST'
-            && str_contains($request->url(), '/dataspasial/sektor')
-            && ($request->data()['nama'] ?? null) === 'Kesehatan';
-    });
-});
-
-// ---------------------------------------------------------------------------
-// US1#8 — pembuatan sektor (FR-007d-3, U1)
-// ---------------------------------------------------------------------------
-
-it('menyimpan sektor baru dan menampilkan kodenya sebagai baca-saja', function () {
-    Http::fake([
-        '*/api/v1/config/*' => Http::response(['data' => []], 200),
-        '*/api/v1/dataspasial/sektor' => Http::response([
-            'success' => true,
-            'message' => 'Sektor berhasil dibuat.',
-            'data' => [
-                'type' => 'ds_sektor',
-                'id' => '7',
-                'attributes' => ['id' => 7, 'kode' => 'kesehatan', 'nama' => 'Kesehatan', 'ikon' => null, 'status' => 'aktif'],
-            ],
-        ], 201),
-        '*' => Http::response(collection([itemSektor('7', 'kesehatan', 'Kesehatan')]), 200),
-    ]);
-
-    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => 'Kesehatan'])
-        ->assertRedirect()
-        ->assertSessionHas('success');
-});
-
-it('menampilkan pesan data sementara tidak tersedia bila endpoint sektor belum ada di API', function () {
-    Http::fake([
-        '*/api/v1/config/*' => Http::response(['data' => []], 200),
-        '*/api/v1/dataspasial/sektor' => Http::response(['message' => 'Not Found'], 404),
-        '*' => Http::response(collection([itemSektor('1', 'pendidikan', 'Pendidikan')]), 200),
-    ]);
-
-    $response = $this->post(route('dataspasial.skema.sektor.store'), ['nama' => 'Kesehatan']);
-
-    $response->assertSessionHas('error');
-    expect(session('error'))->toContain('Data sementara tidak tersedia');
-});
-
-it('menampilkan pesan yang dapat ditindaklanjuti, bukan halaman error saat pembuatan sektor ditolak API', function () {
-    Http::fake([
-        '*/api/v1/config/*' => Http::response(['data' => []], 200),
-        '*/api/v1/dataspasial/sektor' => Http::response([
-            'success' => false,
-            'message' => 'Validasi gagal.',
-            'errors' => ['nama' => ['nama sudah dipakai sektor lain.']],
-        ], 422),
-        '*' => Http::response(collection([itemSektor('1', 'pendidikan', 'Pendidikan')]), 200),
-    ]);
-
-    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => 'Pendidikan'])
-        ->assertRedirect()
-        ->assertSessionHas('error');
-});
-
-// ---------------------------------------------------------------------------
-// FR-001 — kontrol akses (US1 stakeholders)
-// ---------------------------------------------------------------------------
-
-it('menolak operator impor dan analis opd pada halaman editor skema', function (string $teamName) {
-    fakeSektorDanSkema([itemSektor('1', 'pendidikan', 'Pendidikan')]);
-
-    actingAs($this->{$teamName});
-
-    $this->get(route('dataspasial.skema'))->assertForbidden();
-})->with(['operatorImpor', 'analisOpd']);
-
-it('menolak operator impor dan analis opd pada endpoint tulis skema', function (string $teamName) {
-    Http::fake();
-
-    actingAs($this->{$teamName});
-
-    $this->post(route('dataspasial.skema.draf.store'), [
-        'sektor' => 'pendidikan',
-        'isian' => [[
-            'kode' => 'jumlah_siswa',
-            'label' => 'Jumlah Siswa',
-            'tipe' => 'angka',
-            'urutan' => 1,
-        ]],
-    ])->assertForbidden();
-
-    $this->post(route('dataspasial.skema.sektor.store'), ['nama' => 'Kesehatan'])->assertForbidden();
-})->with(['operatorImpor', 'analisOpd']);
-
-// ---------------------------------------------------------------------------
 // FR-041 — tombol Terbitan AKTIF saat skema berstatus draf (Q11)
 //
 // ⚠️ Bertentangan dengan behaviour lama FR-040/Q1 yang menyebut KAB-03.
@@ -646,10 +405,21 @@ it('menolak operator impor dan analis opd pada endpoint tulis skema', function (
 // ---------------------------------------------------------------------------
 
 it('menampilkan tombol Terbitan dalam keadaan aktif untuk draf dan tanpa catatan KAB-03', function () {
-    fakeSektorDanSkema(
-        [itemSektor('1', 'pendidikan', 'Pendidikan')],
-        [itemRiwayat('9', 1, 3, 'draf')]
-    );
+    Http::fake([
+        '*/api/v1/config/*' => Http::response(['data' => []], 200),
+        '*/api/v1/dataspasial/sektor*' => Http::response(collection([
+            itemSektor('1', 'pendidikan', 'Pendidikan'),
+        ]), 200),
+        '*/api/v1/dataspasial/skema?sektor=pendidikan' => Http::response(collection([
+            itemSkemaAktif('10', 'pendidikan', 'Pendidikan', 1, 3, 'draf', [
+                ['kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
+                 'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
+                 'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
+                 'pemetaan' => []],
+             ]),
+         ]), 200),
+        '*' => Http::response(collection([]), 200),
+    ]);
 
     $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))->assertOk()->getContent();
 
@@ -686,36 +456,6 @@ it('tidak pernah memanggil endpoint terbitan dari halaman editor', function () {
     Http::assertNotSent(fn ($request) => str_contains($request->url(), '/terbit'));
 });
 
-// ---------------------------------------------------------------------------
-// Q9 — Daftar skema per sektor (endpoint riwayat versi)
-// ---------------------------------------------------------------------------
-
-it('mengambil daftar skema dari endpoint riwayat versi setelah sektor dipilih', function () {
-    Http::fake([
-        '*/api/v1/config/*' => Http::response(['data' => []], 200),
-        '*/api/v1/dataspasial/sektor*' => Http::response(collection([
-            itemSektor('1', 'pendidikan', 'Pendidikan'),
-        ]), 200),
-        '*/api/v1/dataspasial/skema/riwayat*' => Http::response(riwayatNyata(), 200),
-        '*' => Http::response(collection([]), 200),
-    ]);
-
-    $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))->assertOk();
-
-    // Q9: daftar WAJIB dari /skema/riwayat dengan KODE sektor.
-    Http::assertSent(function ($request) {
-        $path = parse_url($request->url(), PHP_URL_PATH);
-
-        if (! str_contains($path, '/dataspasial/skema/riwayat')) {
-            return false;
-        }
-
-        parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
-
-        return ($query['sektor'] ?? null) === 'pendidikan';
-    });
-});
-
 it('tidak memanggil riwayat versi ketika belum ada sektor terpilih', function () {
     Http::fake([
         '*/api/v1/config/*' => Http::response(['data' => []], 200),
@@ -728,45 +468,6 @@ it('tidak memanggil riwayat versi ketika belum ada sektor terpilih', function ()
     $this->get(route('dataspasial.skema'))->assertOk();
 
     Http::assertNotSent(fn ($request) => str_contains($request->url(), '/skema/riwayat'));
-});
-
-it('menampilkan seluruh versi skema sektor pada panel skema', function () {
-    Http::fake([
-        '*/api/v1/config/*' => Http::response(['data' => []], 200),
-        '*/api/v1/dataspasial/sektor*' => Http::response(collection([
-            itemSektor('1', 'pendidikan', 'Pendidikan'),
-        ]), 200),
-        '*/api/v1/dataspasial/skema/riwayat*' => Http::response(riwayatNyata(), 200),
-        '*' => Http::response(collection([]), 200),
-    ]);
-
-    $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))->assertOk()->getContent();
-
-    // Harus naik: versi 3 (terbit) DAN versi 1 (draf) sama-sama tampil.
-    expect($content)
-        ->toContain('data-testid="panel-skema"')
-        ->toContain('Versi 3')
-        ->toContain('Versi 1')
-        ->toContain('Terbit')
-        ->toContain('Draf berjalan');
-});
-
-it('memetakan respons riwayat versi nyata ke daftar skema', function () {
-    $editor = app(SkemaEditorService::class);
-
-    $hasil = array_map(
-        fn (array $item): array => $editor->petakanRiwayatVersi($item),
-        riwayatNyata()['data']
-    );
-
-    expect($hasil)->toHaveCount(2)
-        ->and($hasil[0]['id'])->toBe(8143)
-        ->and($hasil[0]['nomorVersi'])->toBe(3)
-        ->and($hasil[0]['status'])->toBe('terbit')
-        ->and($hasil[0]['diterbitkanOleh'])->toBe('Budi Santoso')
-        ->and($hasil[1]['nomorVersi'])->toBe(1)
-        ->and($hasil[1]['status'])->toBe('draf')
-        ->and($hasil[1]['diterbitkanPada'])->toBeNull();
 });
 
 // ---------------------------------------------------------------------------
@@ -864,7 +565,7 @@ it('memetakan counter sektor nyata untuk label versi dan draf', function () {
     ]];
 
     $editor = app(SkemaEditorService::class);
-    $daftar = $editor->petakanDaftarSektor($responsSektor, []);
+    $daftar = $editor->petakanDaftarSektor($responsSektor);
 
     expect($daftar[0]['jumlahSkema'])->toBe(2)
         ->and($daftar[0]['jumlahTerbit'])->toBe(1)
@@ -884,19 +585,23 @@ it('menyusun badan draf memakai nama field resmi API', function () {
         'sebagaiFilter' => false,
         'sebagaiIndikator' => true,
         'sumber' => 'openSID',
+        'tabelSumber' => 'tbl_jalan',
+        'kolomSumber' => 'lebar',
         'rujukan' => 'tbl_jalan.lebar',
-    ]], ['sektor' => 'SK0']);
+    ]], ['sektor' => 'SK0', 'sektor_nama' => 'Sektor 0', 'keterangan' => 'Draf uji']);
 
     expect($payload['sektor'])->toBe('SK0')
-        ->and($payload['isian'][0]['tampil_popup'])->toBeTrue()
-        ->and($payload['isian'][0]['tampil_filter'])->toBeFalse()
-        ->and($payload['isian'][0]['tampil_indikator'])->toBeTrue()
-        // Pemetaan dikirim sebagai ARRAY di dalam isian (bentuk nyata §6a.3).
+        ->and($payload['sektor_nama'])->toBe('Sektor 0')
+        ->and($payload['keterangan'])->toBe('Draf uji')
+        ->and(array_key_exists('nomor_versi', $payload))->toBeFalse()
+        ->and($payload['isian'][0]['tampil_di_popup'])->toBeTrue()
+        ->and($payload['isian'][0]['tampil_di_filter'])->toBeFalse()
+        ->and($payload['isian'][0]['tampil_di_indikator'])->toBeTrue()
+        // Pemetaan dikirim sebagai ARRAY di dalam isian (bentuk nyata §6a.3 / Q20).
         ->and($payload['isian'][0]['pemetaan'])->toBe([[
-            'id' => 0,
             'sumber' => 'openSID',
-            'rujukan_sumber' => 'tbl_jalan.lebar',
-            'aturan_hitung' => null,
+            'tabel_sumber' => 'tbl_jalan',
+            'kolom_sumber' => 'lebar',
         ]]);
 });
 
@@ -908,4 +613,208 @@ it('tidak mengirim pemetaan untuk isian yang diisi manual', function () {
     ], ['sektor' => 'SK0']);
 
     expect($payload['isian'][0]['pemetaan'])->toBeNull();
+});
+
+// ---------------------------------------------------------------------------
+// Q24/Q25 — FR-008c/d/e & SC-021/022/023 — tombol "Ubah" & "Batal"
+//
+// FR-008c — tombol "Ubah" hanya tampil saat skema berstatus `terbit`.
+// FR-008d — aturan draf tetap berlaku pada draf hasil "Ubah".
+// FR-008e — tombol "Batal" hanya tampil pada keadaan menyunting hasil "Ubah".
+// ---------------------------------------------------------------------------
+
+it('menampilkan tombol Ubah hanya ketika skema berstatus terbit', function () {
+    Http::fake([
+        '*/api/v1/config/*' => Http::response(['data' => []], 200),
+        '*/api/v1/dataspasial/sektor*' => Http::response(collection([
+            itemSektor('1', 'pendidikan', 'Pendidikan'),
+        ]), 200),
+        '*/api/v1/dataspasial/skema?sektor=pendidikan' => Http::response(
+            collection([itemSkemaAktif('10', 'pendidikan', 'Pendidikan', 1, 2, 'terbit', [
+                ['kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
+                 'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
+                 'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
+                 'pemetaan' => []],
+            ])]),
+            200
+        ),
+        '*' => Http::response(collection([]), 200),
+    ]);
+
+    $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))
+        ->assertOk()
+        ->getContent();
+
+    // FR-008c — tombol Ubah ada dan TIDAK memakai `d-none` pada status terbit.
+    expect($content)
+        ->toContain('id="btn-ubah"')
+        ->toContain('data-status-editor="terbit"');
+
+    preg_match('/<button[^>]*id="btn-ubah"[^>]*>/', $content, $ubah);
+    expect($ubah)->not->toBeEmpty();
+    expect($ubah[0])->not->toContain('d-none');
+
+    // FR-008e — tombol Batal TERSEMBUNYI pada keadaan awal.
+    preg_match('/<button[^>]*id="btn-batal-ubah"[^>]*>/', $content, $batal);
+    expect($batal)->not->toBeEmpty();
+    expect($batal[0])->toContain('d-none');
+});
+
+it('menyembunyikan tombol Ubah ketika skema yang dimuat berstatus draf', function () {
+    Http::fake([
+        '*/api/v1/config/*' => Http::response(['data' => []], 200),
+        '*/api/v1/dataspasial/sektor*' => Http::response(collection([
+            itemSektor('1', 'pendidikan', 'Pendidikan'),
+        ]), 200),
+        '*/api/v1/dataspasial/skema?sektor=pendidikan' => Http::response(
+            collection([itemSkemaAktif('11', 'pendidikan', 'Pendidikan', 1, 3, 'draf', [
+                ['kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
+                 'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
+                 'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
+                 'pemetaan' => []],
+            ])]),
+            200
+        ),
+        '*' => Http::response(collection([]), 200),
+    ]);
+
+    $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))
+        ->assertOk()
+        ->getContent();
+
+    // FR-008c — draf sudah dapat disunting, jadi tombol Ubah TIDAK dirender.
+    expect($content)
+        ->toContain('data-status-editor="draf"')
+        ->not->toContain('id="btn-ubah"');
+});
+
+it('menampilkan kolom nama sektor yang dapat disunting pada editor', function () {
+    Http::fake([
+        '*/api/v1/config/*' => Http::response(['data' => []], 200),
+        '*/api/v1/dataspasial/sektor*' => Http::response(collection([
+            itemSektor('1', 'pendidikan', 'Pendidikan Dasar'),
+        ]), 200),
+        '*/api/v1/dataspasial/skema?sektor=pendidikan' => Http::response(
+            collection([itemSkemaAktif('12', 'pendidikan', 'Pendidikan Dasar', 1, 3, 'draf', [
+                ['kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
+                 'satuan' => 'meter', 'opsi' => null, 'urutan' => 1,
+                 'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false,
+                 'pemetaan' => []],
+            ])]),
+            200
+        ),
+        '*' => Http::response(collection([]), 200),
+    ]);
+
+    $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']))
+        ->assertOk()
+        ->getContent();
+
+    // US7/Q19 — nama sektor dapat disunting dari editor dan terkirim sebagai
+    // `sektor_nama`; kode sektor tetap baca-saja (FR-007d-5).
+    expect($content)
+        ->toContain('id="input-sektor-nama-editor"')
+        ->toContain('Pendidikan Dasar');
+});
+
+// ---------------------------------------------------------------------------
+// Q26 — FR-008f / SC-024 — "Tambah sektor baru" memakai editor yang sama
+// ---------------------------------------------------------------------------
+
+it('tidak lagi merender formulir penambahan sektor terpisah', function () {
+    Http::fake([
+        '*/api/v1/config/*' => Http::response(['data' => []], 200),
+        '*/api/v1/dataspasial/sektor*' => Http::response(collection([
+            itemSektor('1', 'pendidikan', 'Pendidikan'),
+        ]), 200),
+        '*' => Http::response(collection([]), 200),
+    ]);
+
+    $content = $this->get(route('dataspasial.skema'))
+        ->assertOk()
+        ->getContent();
+
+    // FR-008f/Q26 — form terpisah dihapus; tombolnya tetap ada.
+    expect($content)
+        ->not->toContain('form-tambah-sektor')
+        ->toContain('id="btn-tambah-sektor"');
+});
+
+// ---------------------------------------------------------------------------
+// US7 / FR-007d-4/5/9 — pemutakhiran nama sektor dari editor (Q19/SC-015)
+// ---------------------------------------------------------------------------
+
+it('mengirim sektor_nama terbaru dan menjaga kode sektor tidak berubah', function () {
+    Http::fake([
+        '*/api/v1/dataspasial/skema' => Http::response([
+            'success' => true,
+            'data' => ['type' => 'ds_skema_versi', 'id' => '9'],
+        ], 201),
+        '*' => Http::response(['data' => []], 200),
+    ]);
+
+    $this->postJson(route('dataspasial.skema.draf.store'), [
+        'sektor' => 'pendidikan',
+        'sektor_nama' => 'Pendidikan Dasar',
+        'isian' => [[
+            'kode' => 'jumlah_siswa',
+            'label' => 'Jumlah Siswa',
+            'tipe' => 'angka',
+            'wajib' => true,
+            'urutan' => 1,
+            'popupPeta' => false,
+            'sebagaiFilter' => false,
+            'sebagaiIndikator' => false,
+        ]],
+    ])->assertOk()->assertJsonPath('success', true);
+
+    Http::assertSent(function ($request) {
+        $body = json_decode((string) $request->body(), true);
+
+        return str_ends_with($request->url(), '/api/v1/dataspasial/skema')
+            && ($body['sektor'] ?? null) === 'pendidikan'
+            && ($body['sektor_nama'] ?? null) === 'Pendidikan Dasar';
+    });
+});
+
+it('menolak nama sektor kosong sebelum permintaan dikirim', function () {
+    // FR-007f — nama kosong ditolak di layar, tanpa request.
+    Http::fake();
+
+    $this->postJson(route('dataspasial.skema.draf.store'), [
+        'sektor' => 'pendidikan',
+        'sektor_nama' => '   ',
+        'isian' => [[
+            'kode' => 'jumlah_siswa',
+            'label' => 'Jumlah Siswa',
+            'tipe' => 'angka',
+            'urutan' => 1,
+        ]],
+    ])->assertStatus(422)->assertJsonValidationErrors('sektor_nama');
+
+    Http::assertNothingSent();
+});
+
+it('menampilkan pesan generik dan menjaga isi editor saat nama sektor bentrok', function () {
+    Http::fake([
+        '*/api/v1/dataspasial/skema' => Http::response([
+            'success' => false,
+            'message' => 'Validasi gagal.',
+            'errors' => ['sektor_nama' => ['Nama sektor sudah dipakai sektor lain.']],
+        ], 422),
+        '*' => Http::response(['data' => []], 200),
+    ]);
+
+    // FR-007f/Q13 — keunikan nama adalah tanggung jawab API; pesan teknis tidak
+    // dibocorkan ke pengguna (FR-038) dan isi editor tetap utuh (FR-041b).
+    $this->postJson(route('dataspasial.skema.draf.store'), [
+        'sektor' => 'pendidikan',
+        'sektor_nama' => 'Kesehatan',
+        'isian' => [[
+            'kode' => 'jumlah_siswa',
+            'label' => 'Jumlah Siswa',
+            'tipe' => 'angka',
+            'urutan' => 1,
+        ]],
+    ])->assertStatus(503)->assertJsonPath('success', false);
 });

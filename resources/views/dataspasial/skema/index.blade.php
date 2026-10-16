@@ -10,11 +10,12 @@
     {{--
         Editor skema kabupaten — KAB-02 (#1297).
 
-        Tiga panel (FR-008):
-          kiri   : daftar sektor + daftar skema (skema hanya muncul setelah
-                   sektor dipilih — FR-007a)
-          tengah : tabel isian
-          kanan  : pratinjau formulir desa
+        Dua panel (FR-008, Q22):
+          kiri   : daftar sektor
+          tengah : tabel isian + pratinjau formulir desa
+
+        Tidak ada lagi daftar skema maupun nomor versi di UI — daftar isian
+        selalu berasal dari skema terakhir sektor yang dipilih.
 
         Seluruh area dibungkus SATU `<x-dataspasial-status>` agar tiga keadaan
         KAB-01 (data / kosong / tidak tersedia) tetap berlaku tanpa logika
@@ -30,12 +31,12 @@
             $bolehSimpan = $statusEditor->bolehSimpan();
             $statusNilai = $statusEditor->value;
             $sektorKode = $sektorTerpilih['kode'] ?? null;
-            $skemaId = $skemaTerpilih['id'] ?? null;
+            $sektorNama = $sektorTerpilih['nama'] ?? '';
         @endphp
 
         <div data-status-editor="{{ $statusNilai }}"
              data-sektor="{{ $sektorKode }}"
-             data-skema="{{ $skemaId }}">
+             data-sektor-nama="{{ $sektorNama }}">
 
             {{-- Error validasi per baris isian (FR-017). --}}
             @if ($errors->any())
@@ -50,22 +51,12 @@
             @endif
 
             <div class="row">
-                {{-- ============ PANEL KIRI: sektor & skema ============ --}}
+                {{-- ============ PANEL KIRI: sektor ============ --}}
                 <div class="col-lg-3 mb-3">
                     @include('dataspasial.skema.partials.panel-sektor', [
                         'daftarSektor' => $daftarSektor,
                         'sektorTerpilih' => $sektorTerpilih,
                         'bolehUbah' => $bolehUbah,
-                    ])
-
-                    {{--
-                        Daftar skema: HANYA tampil setelah sektor dipilih (FR-007a).
-                        Sengaja berada di panel kiri yang sama dengan daftar sektor.
-                    --}}
-                    @include('dataspasial.skema.partials.panel-skema', [
-                        'skemaSektor' => $skemaSektor,
-                        'skemaTerpilih' => $skemaTerpilih,
-                        'sektorTerpilih' => $sektorTerpilih,
                     ])
                 </div>
 
@@ -73,13 +64,11 @@
                 <div class="col-lg-6 mb-3">
                     @include('dataspasial.skema.partials.tabel-isian', [
                         'isian' => $isian,
-                        'skemaTerpilih' => $skemaTerpilih,
                         'sektorTerpilih' => $sektorTerpilih,
                         'statusEditor' => $statusEditor,
                         'bolehUbah' => $bolehUbah,
                         'bolehSimpan' => $bolehSimpan,
                         'bolehTerbitkan' => $statusEditor->bolehSimpan(),
-                        'daftarSektorSumber' => $daftarSektorSumber,
                     ])
                 </div>
 
@@ -105,5 +94,14 @@
         `package.json` — masalah lama yang TIDAK terkait fitur ini dan tidak
         diselesaikan di sini (Prinsip V: jangan menambah dependensi).
     --}}
+    {{--
+        FR-008g/Q27 — SweetAlert2 untuk seluruh pesan pada halaman editor skema.
+
+        ⚠️ Dimuat via CDN (pola yang sama dengan
+        `resources/views/penduduk/index.blade.php:95`) karena bundle Vite yang
+        sedang ter-build di `public/build/assets/app-*.js` **belum memuat**
+        `sweetalert2`, sehingga `window.Swal` belum tersedia dari bundle.
+    --}}
+    <script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script nonce="{{ csp_nonce() }}" type="module" src="{{ asset('js/dataspasial/schema-editor.js') }}"></script>
 @endpush

@@ -77,7 +77,7 @@ function isianPemetaan(array $ubah = []): array
         'popupPeta' => false,
         'sebagaiFilter' => false,
         'sebagaiIndikator' => false,
-        'sektorSumber' => null, 'rujukan' => null,
+        'tabelSumber' => null, 'kolomSumber' => null,
     ], $ubah);
 }
 
@@ -87,39 +87,8 @@ function isianPemetaan(array $ubah = []): array
  */
 function drafPemetaan(array $isian): array
 {
-    return ['sektor' => 'pendidikan', 'isian' => $isian];
+    return ['sektor' => 'pendidikan', 'sektor_nama' => 'Pendidikan', 'isian' => $isian];
 }
-
-// ---------------------------------------------------------------------------
-// US4#1 — sumber = daftar sektor (FR-022)
-// ---------------------------------------------------------------------------
-
-it('menyediakan enum sumber pemetaan dari API resmi', function () {
-    // ⚠️ VERIFIKASI LANGSUNG (§6a.5): `pemetaan[].sumber` adalah ENUM
-    // `openSID`/`dataPresisi`/`impor` — BUKAN kode sektor. Keputusan Q2 ("sumber
-    // = daftar sektor") dicabut.
-    fakeEndpointEditor(
-        [fxSektor('1', 'pendidikan', 'Pendidikan'), fxSektor('2', 'kesehatan', 'Kesehatan')],
-        [fxRiwayatVersi('9', 1, 1, 'draf')],
-        fxSkemaAktif('9', 1, 'pendidikan', 'Pendidikan', 1, 'draf', [
-            fxIsian('jumlah_siswa', ['id' => 31]),
-        ])
-    );
-
-    $content = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan', 'skema' => 9]))
-        ->assertOk()
-        ->getContent();
-
-    // Pemilih sumber memakai enum resmi.
-    expect($content)
-        ->toContain('data-testid="daftar-sumber"')
-        ->toContain('openSID')
-        ->toContain('dataPresisi')
-        ->toContain('impor');
-
-    // TIDAK ada endpoint katalog sumber terpisah (FR-022).
-    Http::assertNotSent(fn ($request) => str_contains($request->url(), 'sumber'));
-});
 
 // ---------------------------------------------------------------------------
 // US4#2 — memilih sektor sumber menandai isian terpetakan (FR-023/FR-024)
@@ -149,7 +118,7 @@ it('menyertakan pemetaan pada badan draf saat menyimpan', function () {
     ], 201)]);
 
     $this->post($this->urlDraf, drafPemetaan([
-        isianPemetaan(['sumber' => 'openSID', 'rujukan' => 'luas_wilayah.*']),
+        isianPemetaan(['sumber' => 'openSID', 'tabelSumber' => 'luas_wilayah', 'kolomSumber' => '*']),
     ]))->assertSessionHasNoErrors();
 
     Http::assertSent(function ($request) {
@@ -159,7 +128,8 @@ it('menyertakan pemetaan pada badan draf saat menyimpan', function () {
         // Pemetaan dikirim sebagai ARRAY di dalam isian (bentuk nyata §6a.3).
         return is_array($pemetaan)
             && ($pemetaan[0]['sumber'] ?? null) === 'openSID'
-            && ($pemetaan[0]['rujukan_sumber'] ?? null) === 'luas_wilayah.*';
+            && ($pemetaan[0]['tabel_sumber'] ?? null) === 'luas_wilayah'
+            && ($pemetaan[0]['kolom_sumber'] ?? null) === '*';
     });
 });
 

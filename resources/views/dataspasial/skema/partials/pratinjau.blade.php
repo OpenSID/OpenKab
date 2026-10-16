@@ -23,16 +23,10 @@
             <div class="mb-2">
                 <small class="text-muted">Sektor</small>
                 <div class="font-weight-bold">{{ $sektorTerpilih['nama'] }}</div>
-                @if ($skemaTerpilih)
-                    <small class="text-muted">
-                        Versi {{ $skemaTerpilih['nomorVersi'] }}
-                        @if ($skemaTerpilih['status'] === 'terbit')
-                            <span class="badge badge-success ml-1">Terbit</span>
-                        @else
-                            <span class="badge badge-warning ml-1">Draf</span>
-                        @endif
-                    </small>
-                @endif
+                <small class="text-muted">
+                    Isian selalu dimuat dari skema terakhir sektor ini
+                    (draf bila ada, terbit baca-saja bila tidak).
+                </small>
             </div>
 
             <hr class="my-2">

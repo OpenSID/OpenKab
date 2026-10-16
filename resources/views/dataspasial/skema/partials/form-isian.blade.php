@@ -92,6 +92,8 @@
     --}}
     <td class="sumber-nilai align-middle"
         data-sumber="{{ $sumber }}"
+        data-tabel-sumber="{{ $baris['tabelSumber'] ?? '' }}"
+        data-kolom-sumber="{{ $baris['kolomSumber'] ?? '' }}"
         data-rujukan="{{ $baris['rujukan'] ?? '' }}">
         @if ($bolehUbah)
             <button type="button" class="btn btn-outline-secondary btn-sm btn-pilih-sumber-baris px-1 py-0"
@@ -100,6 +102,12 @@
                     <span class="badge badge-info" data-testid="badge-terpetakan">
                         <i class="fas fa-lock mr-1"></i>{{ $sumber }}
                     </span>
+                    <input type="text" class="input-tabel-sumber form-control form-control-sm mt-1"
+                           value="{{ $baris['tabelSumber'] ?? '' }}" placeholder="tabel sumber"
+                           title="Tabel sumber data">
+                    <input type="text" class="input-kolom-sumber form-control form-control-sm mt-1"
+                           value="{{ $baris['kolomSumber'] ?? '' }}" placeholder="kolom sumber"
+                           title="Kolom sumber data">
                 @else
                     <span class="badge badge-secondary" data-testid="badge-manual">Manual</span>
                 @endif
@@ -107,8 +115,9 @@
         @else
             @if ($terpetakan)
                 <span class="badge badge-info">{{ $sumber }}</span>
+                <span class="text-muted small d-block">{{ $baris['tabelSumber'] ?? '' }}.{{ $baris['kolomSumber'] ?? '' }}</span>
             @else
-                <span class="badge badge-secondary">Manual</span>
+                <span class="badge badge-secondary" data-testid="badge-manual">Manual</span>
             @endif
         @endif
     </td>

@@ -482,24 +482,12 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             ->middleware('permission:dataspasial-skema-read')
             ->name('dataspasial.skema');
 
-        // KAB-02 — endpoint tulis editor skema. Otorisasi ditegakkan server-side
-        // (FR-001), bukan sekadar menyembunyikan tombol di view.
-        Route::post('skema/sektor', [SkemaDataSpasialController::class, 'storeSektor'])
-            ->middleware('permission:dataspasial-skema-write')
-            ->name('dataspasial.skema.sektor.store');
-
-        // US7 — ubah sektor. ⚠️ UTANG KONTRAK U5: `PUT /dataspasial/sektor/{id}`
-        // belum ada di kontrak v0.1.0 maupun API hidup (FR-007d-4).
-        Route::put('skema/sektor/{sektor}', [SkemaDataSpasialController::class, 'updateSektor'])
-            ->middleware('permission:dataspasial-skema-write')
-            ->name('dataspasial.skema.sektor.update');
-
+        // KAB-02 — endpoint tulis editor skema (satu permintaan untuk sektor + isian,
+        // Q18/Q19). Otorisasi ditegakkan server-side lewat middleware permission (FR-001).
         Route::post('skema/draf', [SkemaDataSpasialController::class, 'storeDraf'])
             ->middleware('permission:dataspasial-skema-write')
             ->name('dataspasial.skema.draf.store');
 
-        // US8 — terbitkan draf. ⚠️ UTANG KONTRAK U6: `POST /skema/{sektor}/terbit`
-        // belum ada di kontrak v0.1.0 maupun API hidup (FR-041).
         Route::post('skema/terbit', [SkemaDataSpasialController::class, 'terbit'])
             ->middleware('permission:dataspasial-skema-write')
             ->name('dataspasial.skema.terbit');

@@ -79,7 +79,7 @@ function isian(string $kode, array $ubah = []): array
  */
 function isiPayload(array $isian): array
 {
-    return ['sektor' => 'pendidikan', 'isian' => $isian];
+    return ['sektor' => 'pendidikan', 'sektor_nama' => 'Pendidikan', 'isian' => $isian];
 }
 
 // ---------------------------------------------------------------------------
@@ -112,7 +112,8 @@ it('tidak memaccess properti dataset bergaris dalam serialisasi isian', function
     $kode = preg_replace(['#//[^\n]*#', '#/\*.*?\*/#s'], '', $js);
 
     expect($kode)->not->toMatch('/dataset\??\.[a-zA-Z_]*-/')
-        ->and($js)->toContain('dataset?.aturanHitung ?? null');
+        ->and($js)->toContain('dataset?.tabelSumber ?? null')
+        ->and($js)->toContain('dataset?.kolomSumber ?? null');
 });
 
 it('tidak mengirim kolom kode dari DOM saat menyerialisasi isian', function () {
@@ -301,17 +302,16 @@ it('menyertakan pemetaan pada badan draf hanya bila ada', function () {
     $editor = app(SkemaEditorService::class);
 
     $payload = $editor->composeDrafPayload([
-        ['kode' => 'a', 'label' => 'A', 'tipe' => 'teks', 'urutan' => 1, 'sumber' => 'manual', 'rujukan' => null],
+        ['kode' => 'a', 'label' => 'A', 'tipe' => 'teks', 'urutan' => 1, 'sumber' => 'manual', 'tabelSumber' => null, 'kolomSumber' => null, 'rujukan' => null],
         ['kode' => 'b', 'label' => 'B', 'tipe' => 'teks', 'urutan' => 2,
-            'sumber' => 'openSID', 'rujukan' => 'r'],
+            'sumber' => 'openSID', 'tabelSumber' => 'tabel', 'kolomSumber' => 'kolom', 'rujukan' => 'r'],
     ], ['sektor' => 'pendidikan']);
 
     expect($payload['isian'][0]['pemetaan'])->toBeNull()
         ->and($payload['isian'][1]['pemetaan'])->toBe([[
-            'id' => 0,
             'sumber' => 'openSID',
-            'rujukan_sumber' => 'r',
-            'aturan_hitung' => null,
+            'tabel_sumber' => 'tabel',
+            'kolom_sumber' => 'kolom',
         ]]);
 });
 

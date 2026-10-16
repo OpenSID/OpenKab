@@ -57,14 +57,9 @@
                             </div>
                         </a>
 
-                        {{-- US7 (FR-007d-4): ubah nama & ikon sektor yang sudah ada. --}}
-                        <button type="button"
-                                class="btn btn-tool {{ $terpilih ? 'btn-light' : 'btn-outline-secondary' }} btn-ubah-sektor ml-1"
-                                data-testid="btn-ubah-sektor"
-                                title="Ubah sektor ini"
-                                aria-label="Ubah sektor {{ $sektor['nama'] }}">
-                            <i class="fas fa-pen"></i>
-                        </button>
+                        {{-- US7 (FR-007d-4): ubah nama & ikon sektor sekarang dilakukan
+                        melalui editor skema (nama sektor dikirim sebagai sektor_nama
+                        pada setiap simpan), bukan tombol tersendiri di sini. --}}
                     </li>
                 @endforeach
             </ul>
@@ -79,99 +74,3 @@
         </button>
     </div>
 </div>
-
-{{--
-    Formulir penambahan sektor.
-
-    ⚠️ HANYA memuat kolom NAMA (spec Q5). Tidak ada kolom kode: kode dibangkitkan
-    API. ⚠️ Keunikan nama diperiksa API (spec Q13), bukan di OpenKab.
---}}
-<form id="form-tambah-sektor" method="POST" action="{{ route('dataspasial.skema.sektor.store') }}"
-      class="d-none" data-testid="form-tambah-sektor">
-    @csrf
-
-    <div class="card card-outline card-secondary">
-        <div class="card-header py-2 px-3">
-            <h3 class="card-title text-sm mb-0">Sektor Baru</h3>
-        </div>
-        <div class="card-body p-3">
-            <div class="form-group mb-2">
-                <label for="input-nama-sektor">Nama sektor <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm {{ $errors->has('nama') ? 'is-invalid' : '' }}"
-                       id="input-nama-sektor" name="nama" maxlength="100"
-                       value="{{ old('nama') }}" required>
-                @error('nama')
-                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group mb-3">
-                <label for="input-ikon-sektor">Ikon <span class="text-muted">(opsional)</span></label>
-                <input type="text" class="form-control form-control-sm"
-                       id="input-ikon-sektor" name="ikon" maxlength="100"
-                       value="{{ old('ikon') }}" placeholder="mis. school, heart-pulse">
-            </div>
-
-            <div class="d-flex">
-                <button type="submit" class="btn btn-primary btn-sm flex-fill mr-1">
-                    <i class="fas fa-save mr-1"></i>Simpan Sektor
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" id="btn-batal-sektor">Batal</button>
-            </div>
-        </div>
-    </div>
-</form>
-
-{{--
-    Formulir ubah sektor (US7, FR-007d-4 … FR-007d-6).
-
-    ⚠️ **KODE SEKTOR TIDAK ADA DI SINI** — kode dibangkitkan server dan
-    bersifat baca-saja (FR-007d-5). Kode hanya ditampilkan sebagai informasi.
-    Badannya memuat `nama` + `ikon` sesuai `PUT /dataspasial/sektor/{id}`.
-
-    ⚠️ Tidak ada `nama_sektor_ada` lagi — keunikan nama adalah tanggung jawab API
-    (spec Q13), sehingga OpenKab tidak perlu mengirim daftar sektor.
---}}
-<form id="form-ubah-sektor" method="POST" class="d-none" data-testid="form-ubah-sektor"
-      data-url-template="{{ route('dataspasial.skema.sektor.update', ['sektor' => '__ID__']) }}">
-    @csrf
-    @method('PUT')
-
-    <div class="card card-outline card-secondary">
-        <div class="card-header py-2 px-3">
-            <h3 class="card-title text-sm mb-0">Ubah Sektor</h3>
-        </div>
-        <div class="card-body p-3">
-            <div class="form-group mb-2">
-                <label class="mb-0">Kode sektor</label>
-                <p class="mb-2">
-                    <code id="ubah-sektor-kode" data-testid="ubah-sektor-kode"></code>
-                    <span class="text-muted small d-block">Kode tidak dapat diubah.</span>
-                </p>
-            </div>
-
-            <div class="form-group mb-2">
-                <label for="input-ubah-nama-sektor">Nama sektor <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm" id="input-ubah-nama-sektor"
-                       name="nama" maxlength="100" value="{{ old('nama') }}" required>
-                @error('nama')
-                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group mb-3">
-                <label for="input-ubah-ikon-sektor">Ikon <span class="text-muted">(opsional)</span></label>
-                <input type="text" class="form-control form-control-sm" id="input-ubah-ikon-sektor"
-                       name="ikon" maxlength="100" value="{{ old('ikon') }}"
-                       placeholder="mis. school, heart-pulse">
-            </div>
-
-            <div class="d-flex">
-                <button type="submit" class="btn btn-primary btn-sm flex-fill mr-1">
-                    <i class="fas fa-save mr-1"></i>Simpan Perubahan
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" id="btn-batal-ubah-sektor">Batal</button>
-            </div>
-        </div>
-    </div>
-</form>

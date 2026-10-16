@@ -13,15 +13,35 @@
     saat story berikutnya tiba (FR-008).
 --}}
 <div class="card card-outline card-success">
-    <div class="card-header py-2 px-3 d-flex justify-content-between align-items-center">
+    <div class="card-header py-2 px-3">
         <h3 class="card-title text-sm mb-0">
             <i class="fas fa-table mr-1"></i>Isian
             @if ($sektorTerpilih)
-                <span class="text-muted font-weight-normal">· {{ $sektorTerpilih['nama'] }}</span>
+                <span class="text-muted font-weight-normal">· {{ $sektorTerpilih['kode'] }}</span>
             @endif
         </h3>
 
-        <div>
+        {{--
+            US7/Q19 — nama sektor disunting dari editor, dikirim sebagai
+            `sektor_nama` pada setiap Simpan draf (FR-007d-4/FR-007d-9).
+            Kode sektor tetap baca-saja (FR-007d-5).
+        --}}
+        @if ($sektorTerpilih)
+            <div class="form-group mb-0 mt-2">
+                <label class="mb-1" for="input-sektor-nama-editor">Nama sektor</label>
+                <input type="text"
+                       class="form-control form-control-sm {{ $errors->has('sektor_nama') ? 'is-invalid' : '' }}"
+                       id="input-sektor-nama-editor" data-testid="input-sektor-nama-editor"
+                       name="sektor_nama" maxlength="100"
+                       value="{{ old('sektor_nama', $sektorTerpilih['nama']) }}"
+                       @disabled(! $bolehUbah)>
+                @error('sektor_nama')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+        @endif
+
+        <div class="d-flex align-items-center mt-2">
             {{-- Simpan draf: aktif hanya bila skema berstatus draf (FR-008b). --}}
             <button type="button" class="btn btn-success btn-sm mr-1"
                     id="btn-simpan-draf" data-testid="btn-simpan-draf"
@@ -39,10 +59,33 @@
                     {{ $bolehTerbitkan ? '' : 'disabled' }}>
                 <i class="fas fa-paper-plane mr-1"></i>Terbitkan
             </button>
+
+            {{--
+                FR-008c (Q24) — tombol "Ubah": HANYA dirender saat skema berstatus
+                `terbit`. Aksi klien semata (nol request ke sumber data): membuka
+                kunci penyuntingan isian dan mengaktifkan Simpan draf. Setelah
+                diklik, tombol ini disembunyikan oleh JS.
+            --}}
+            @if ($statusEditor->value === 'terbit')
+                <button type="button" class="btn btn-warning btn-sm ml-auto"
+                        id="btn-ubah" data-testid="btn-ubah">
+                    <i class="fas fa-pen mr-1"></i>Ubah
+                </button>
+            @endif
+
+            {{--
+                FR-008e (Q25) — tombol "Batal": hanya tampil pada keadaan
+                "menyunting draf hasil Ubah"; mengembalikan editor ke baca-saja
+                `terbit` tanpa permintaan ke sumber data.
+            --}}
+            <button type="button" class="btn btn-secondary btn-sm ml-auto d-none"
+                    id="btn-batal-ubah" data-testid="btn-batal-ubah">
+                <i class="fas fa-times mr-1"></i>Batal
+            </button>
         </div>
     </div>
 
-    @if ($skemaTerpilih !== null && $skemaTerpilih['status'] === 'terbit')
+    @if ($statusEditor->value === 'terbit')
         {{-- Skema terbit hanya baca-saja (FR-008a). --}}
         <div class="alert alert-info border-0 rounded-0 mb-0 py-2 px-3" role="alert">
             <i class="fas fa-lock mr-1"></i>
@@ -97,11 +140,18 @@
 
     {{--
         Template baris kosong untuk "Tambah Isian Baru" (US1#13).
-        ⚠️ HANYA dirender saat skema dapat disunting. Pada skema `terbit` template
-        ini tidak boleh ada karena baris kosong-nya memuat tombol interaktif
-        (saklar & pemilih sumber) yang tidak boleh aktif (FR-008a).
+
+        ⚠️ **Selalu dirender**, termasuk saat skema `terbit`. Alasannya: tombol
+        "Tambah Isian Baru" dapat diaktifkan kemudian melalui mode penyuntingan
+        (tombol **Ubah** — FR-008c/Q24, atau **Tambah Sektor Baru** —
+        FR-008f/Q26). Bila template hanya dirender saat `$bolehUbah`, elemennya
+        tidak ada di DOM dan handler klik akan bail-out tanpa efek sehingga
+        tombol tampak tidak berfungsi.
+
+        Keadaan read-only dijaga di sisi klien: saat skema `terbit` tombol simpan
+        **nonaktif** sehingga baris baru tidak pernah dibuat, dan bila baris
+        sudah ada kontrolnya dikunci oleh `kunciKontrolIsian()` (FR-008a).
     --}}
-    @if ($bolehUbah)
     <template id="template-baris-isian">
         <tr class="baris-baru" draggable="false">
             <td class="text-center handle-seret align-middle" title="Seret untuk mengurutkan">
@@ -124,7 +174,10 @@
                     <option disabled>—</option>
                 </select>
             </td>
-            <td class="sumber-nilai">
+            {{-- ⚠️ Atribut `data-*` wajib ada agar `bacaDariDom()` membaca
+                 sumber nilai baris baru (Q20: sumber/tabel_sumber/kolom_sumber). --}}
+            <td class="sumber-nilai" data-sumber="manual"
+                data-tabel-sumber="" data-kolom-sumber="" data-rujukan="">
                 <button type="button" class="btn btn-outline-secondary btn-sm btn-pilih-sumber-baris"
                         title="Pilih sumber nilai">
                     <span class="badge badge-secondary">Manual</span>
@@ -140,12 +193,6 @@
             </td>
         </tr>
     </template>
-    @endif
-
-    {{-- Pemilih sumber nilai (FR-022): sumber = daftar sektor DataSpasial. --}}
-    @if ($bolehUbah)
-        @include('dataspasial.skema.partials.pilih-sumber')
-    @endif
 
     {{-- Tombol tambah isian: selalu terlihat (FR-007c). --}}
     <div class="card-footer p-2">

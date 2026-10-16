@@ -92,6 +92,80 @@ function barisBaru(urutan) {
  *
  * @param {HTMLElement} tbody
  */
+// ---------------------------------------------------------------------------
+// FR-008g / Q27 — pembungkus SweetAlert2.
+//
+// ⚠️ SELURUH pesan pada halaman editor skema WAJIB lewat `window.Swal`
+// (sweetalert2 v11, dimuat pada `index.blade.php`). `window.alert`,
+// `window.confirm`, dan `window.prompt` TIDAK BOLEH dipakai.
+//
+// Fallback ke `window.confirm`/`window.alert` hanya berlaku bila SweetAlert2
+// gagal dimuat (mis. CDN terblokir) agar halaman tetap berfungsi.
+// ---------------------------------------------------------------------------
+
+const swalTersedia = () => typeof window.Swal !== 'undefined';
+
+/** Notifikasi hasil aksi (sukses / gagal). */
+const swalPesan = (pesan, ikon = 'info') => {
+    if (!swalTersedia()) {
+        window.alert(pesan);
+
+        return Promise.resolve();
+    }
+
+    return window.Swal.fire({
+        title: pesan,
+        icon: ikon,
+        confirmButtonText: 'Mengerti',
+        customClass: { popup: 'rounded-lg' },
+    });
+};
+
+const swalSukses = (pesan) => swalPesan(pesan, 'success');
+const swalGalat = (pesan) => swalPesan(pesan, 'error');
+const swalPeringatan = (pesan) => swalPesan(pesan, 'warning');
+
+/** Konfirmasi ya/tidak. Mengembalikan Promise<boolean>. */
+const swalKonfirmasi = async (pesan, judul = 'Konfirmasi') => {
+    if (!swalTersedia()) {
+        return window.confirm(pesan);
+    }
+
+    const hasil = await window.Swal.fire({
+        title: judul,
+        text: pesan,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, lanjutkan',
+        cancelButtonText: 'Batal',
+        reverseButtons: true,
+        customClass: { popup: 'rounded-lg' },
+    });
+
+    return hasil.isConfirmed === true;
+};
+
+/** Input teks tunggal (mis. catatan perubahan penerbitan). */
+const swalInput = async (pesan, judul = 'Masukkan nilai', nilaiAwal = '') => {
+    if (!swalTersedia()) {
+        return window.prompt(pesan, nilaiAwal) || '';
+    }
+
+    const hasil = await window.Swal.fire({
+        title: judul,
+        input: 'text',
+        inputLabel: pesan,
+        inputValue: nilaiAwal,
+        showCancelButton: true,
+        confirmButtonText: 'Simpan',
+        cancelButtonText: 'Batal',
+        inputValidator: (nilai) => (nilai && nilai.length > 500 ? 'Maksimal 500 karakter' : undefined),
+        customClass: { popup: 'rounded-lg' },
+    });
+
+    return hasil.isConfirmed === true ? (hasil.value || '') : null;
+};
+
 function bacaDariDom(tbody) {
     return Array.from(tbody.querySelectorAll('tr[data-testid="baris-isian"], tr.baris-baru'))
         .map((tr, index) => {
@@ -115,13 +189,9 @@ function bacaDariDom(tbody) {
                 sebagaiFilter: Boolean(nilai('.input-filter')?.checked),
                 sebagaiIndikator: Boolean(nilai('.input-indikator')?.checked),
                 sumber: sel?.dataset?.sumber ?? 'manual',
-                // ⚠️ `dataset` memakai camelCase: `data-aturan-hitung` →
-                // `dataset.aturanHitung`. Akses `dataset?.aturan-hitung`
-                // akan diparse sebagai pengurangan (`aturan - hitung`) dan
-                // melempar ReferenceError setiap kali serialisasi berjalan.
-                // Belum ada sumber yang menulis atribut ini, jadi default null.
-                aturanHitung: sel?.dataset?.aturanHitung ?? null,
                 rujukan: sel?.dataset?.rujukan || null,
+                tabelSumber: sel?.dataset?.tabelSumber ?? null,
+                kolomSumber: sel?.dataset?.kolomSumber ?? null,
             };
         });
 }
@@ -263,8 +333,18 @@ function serialisasiKeForm(isian) {
         if (baris.sumber && baris.sumber !== 'manual') {
             tambah('sumber', baris.sumber);
             tambah('rujukan', baris.rujukan || '');
+            tambah('tabelSumber', baris.tabelSumber || '');
+            tambah('kolomSumber', baris.kolomSumber || '');
         }
     });
+}
+
+/** Kosongkan pratinjau (dipakai mode "sektor baru", FR-008f). */
+function kosongkanPenandaPratinjau(wadah) {
+    if (wadah) {
+        wadah.innerHTML = '<p class="text-muted text-center small mb-0">'
+            + 'Belum ada isian. Pratinjau akan muncul setelah isian pertama ditambahkan.</p>';
+    }
 }
 
 /**
@@ -444,12 +524,192 @@ export function mountSchemaEditor() {
 
     const wadahPratinjau = document.getElementById('wadah-pratinjau');
     const template = document.getElementById('template-baris-isian');
-    const bolehUbah = tbody.dataset.bolehUbah === '1';
+    // FR-008c/Q24 — `bolehUbah` mutable supaya tombol "Ubah" dapat membuka
+    // kunci penyuntingan pada skema `terbit` tanpa memuat ulang halaman.
+    let bolehUbah = tbody.dataset.bolehUbah === '1';
     const adaDrafBerjalan = Boolean(document.querySelector('[data-testid="item-skema"][data-status="draf"]'));
     const sektorKode = akar.dataset.sektor || '';
     const skemaAktif = akar.dataset.skema || '';
 
     let dirty = false;
+
+    // Q25 — snapshot isian saat halaman siap, dipakai untuk "Batal" sehingga
+    // perubahan belum tersimpan dibuang tanpa memuat ulang halaman (nol request).
+    const snapshotAwal = bacaDariDom(tbody);
+
+    const tombolUbah = document.getElementById('btn-ubah');
+    const tombolBatalUbah = document.getElementById('btn-batal-ubah');
+    const tombolSimpan = document.getElementById('btn-simpan-draf');
+    const inputNamaSektor = document.getElementById('input-sektor-nama-editor');
+    let modeUbahAktif = false;
+    let modeSektorBaru = false;
+
+    /** Aktifkan/nonaktifkan seluruh kontrol isian pada tabel (FR-008c/FR-008e). */
+    const kunciKontrolIsian = (aktif) => {
+        tbody.querySelectorAll(
+            '.input-label, .input-tipe, .input-wajib, .input-satuan, .input-opsi, '
+            + '.input-popup-peta, .input-filter, .input-indikator, '
+            + '.input-tabel-sumber, .input-kolom-sumber, .btn-pilih-sumber-baris, .btn-hapus-isian',
+        ).forEach((el) => {
+            if (el.tagName === 'INPUT') {
+                el.disabled = !aktif;
+            }
+        });
+
+        // Tombol tambah/seret isian mengikuti kunci yang sama (FR-012).
+        const tombolTambah = document.getElementById('btn-tambah-isian');
+
+        if (tombolTambah) {
+            tombolTambah.disabled = !aktif;
+        }
+
+        if (inputNamaSektor) {
+            inputNamaSektor.disabled = !aktif;
+        }
+
+        tbody.dataset.bolehUbah = aktif ? '1' : '0';
+        terapkanAturanTipe(tbody);
+
+        // ⚠️ Baris kosong yang ditambahkan lewat template juga ikut terkunci
+        // pada keadaan baca-saja (FR-008a). Tanpa ini, baris baru akan tetap
+        // aktif walau skema sedang `terbit`.
+        if (!aktif) {
+            template?.content.querySelectorAll(
+                '.input-label, .input-tipe, .input-wajib, .input-satuan, .input-opsi, '
+                + '.input-popup-peta, .input-filter, .input-indikator',
+            ).forEach((el) => {
+                if (el.tagName === 'INPUT') {
+                    el.disabled = true;
+                }
+            });
+        }
+    };
+
+    /** Pulihkan nilai kontrol isian dari snapshot (Q25). */
+    const pulihkanDariSnapshot = () => {
+        const baris = Array.from(tbody.querySelectorAll('tr[data-testid="baris-isian"], tr.baris-baru'));
+
+        baris.forEach((tr, index) => {
+            const sumber = snapshotAwal[index];
+
+            if (!sumber) {
+                return;
+            }
+
+            const label = tr.querySelector('.input-label');
+            const tipe = tr.querySelector('.input-tipe');
+            const wajib = tr.querySelector('.input-wajib');
+            const satuan = tr.querySelector('.input-satuan');
+            const opsi = tr.querySelector('.input-opsi');
+            const sumberNilai = tr.querySelector('.sumber-nilai');
+
+            if (label) {
+                label.value = sumber.label ?? '';
+            }
+
+            if (tipe) {
+                tipe.value = sumber.tipe ?? 'teks';
+            }
+
+            if (wajib) {
+                wajib.checked = Boolean(sumber.wajib);
+            }
+
+            if (satuan) {
+                satuan.value = sumber.satuan ?? '';
+            }
+
+            if (opsi) {
+                Array.from(opsi.options).forEach((option) => {
+                    option.selected = (sumber.opsi ?? []).includes(option.value);
+                });
+            }
+
+            if (sumberNilai) {
+                sumberNilai.dataset.sumber = sumber.sumber ?? 'manual';
+                sumberNilai.dataset.tabelSumber = sumber.tabelSumber ?? '';
+                sumberNilai.dataset.kolomSumber = sumber.kolomSumber ?? '';
+
+                const tabel = tr.querySelector('.input-tabel-sumber');
+                const kolom = tr.querySelector('.input-kolom-sumber');
+
+                if (tabel) {
+                    tabel.value = sumber.tabelSumber ?? '';
+                }
+
+                if (kolom) {
+                    kolom.value = sumber.kolomSumber ?? '';
+                }
+            }
+        });
+
+        renderPratinjau(wadahPratinjau, bacaDariDom(tbody));
+    };
+
+    /**
+     * FR-008c (Q24) — tombol "Ubah": aksi klien semata, TANPA permintaan ke
+     * sumber data. Membuka kunci isian, mengaktifkan Simpan draf, menyembunyikan
+     * tombol Ubah, dan menampilkan tombol Batal.
+     */
+    tombolUbah?.addEventListener('click', () => {
+        modeUbahAktif = true;
+        bolehUbah = true;
+        kunciKontrolIsian(true);
+
+        if (tombolSimpan) {
+            tombolSimpan.disabled = false;
+        }
+
+        tombolUbah.classList.add('d-none');
+        tombolBatalUbah?.classList.remove('d-none');
+        perbaruiTombolTerbit();
+    });
+
+    /**
+     * FR-008e (Q25) — tombol "Batal": mengembalikan editor ke baca-saja
+     * `terbit` tanpa permintaan ke sumber data; perubahan belum tersimpan dibuang.
+     */
+    tombolBatalUbah?.addEventListener('click', () => {
+        modeUbahAktif = false;
+
+        // FR-008f — Batal pada mode "sektor baru" menutup mode itu tanpa
+        // menyimpan apa pun dan tanpa permintaan ke sumber data.
+        if (modeSektorBaru) {
+            modeSektorBaru = false;
+            kosongkanTabelIsian();
+            kosongkanPenandaPratinjau(wadahPratinjau);
+
+            if (inputNamaSektor) {
+                inputNamaSektor.value = akar.dataset.sektorNama || '';
+            }
+
+            kunciKontrolIsian(false);
+
+            if (tombolSimpan) {
+                tombolSimpan.disabled = true;
+            }
+
+            tombolBatalUbah.classList.add('d-none');
+            tombolUbah?.classList.remove('d-none');
+            perbaruiTombolTerbit();
+
+            return;
+        }
+
+        pulihkanDariSnapshot();
+        bolehUbah = false;
+        kunciKontrolIsian(false);
+
+        if (tombolSimpan) {
+            tombolSimpan.disabled = true;
+        }
+
+        tombolBatalUbah.classList.add('d-none');
+        tombolUbah?.classList.remove('d-none');
+        dirty = false;
+        perbaruiNomorUrutan(tbody);
+        perbaruiTombolTerbit();
+    });
 
     const mutasi = () => {
         dirty = true;
@@ -468,14 +728,25 @@ export function mountSchemaEditor() {
 
         const pesan = 'Ada perubahan yang belum disimpan. Tinggalkan halaman?';
 
-        return window.confirm(pesan);
+        return swalKonfirmasi(pesan, 'Perubahan belum disimpan');
     };
 
     // -----------------------------------------------------------------------
     // Tambah isian (US1#13, US2)
     // -----------------------------------------------------------------------
-    document.getElementById('btn-tambah-isian')?.addEventListener('click', () => {
+    document.getElementById('btn-tambah-isian')?.addEventListener('click', async () => {
         if (!template) {
+            // ⚠️ Guard: template WAJIB selalu ada di DOM (lihat
+            // tabel-isian.blade.php). Bila hilang, beri umpan balik alih-alih
+            // diam-diam tidak terjadi apa pun (FR-008g).
+            await swalGalat('Fungsi tambah isian belum siap. Muat ulang halaman.');
+
+            return;
+        }
+
+        if (!bolehUbah) {
+            await swalPeringatan('Skema ini sedang dibaca. Tekan Ubah untuk menyuntingnya.');
+
             return;
         }
 
@@ -491,7 +762,7 @@ export function mountSchemaEditor() {
     // -----------------------------------------------------------------------
     // Hapus isian (FR-014, US2#4/#6)
     // -----------------------------------------------------------------------
-    tbody.addEventListener('click', (event) => {
+    tbody.addEventListener('click', async (event) => {
         const tombol = event.target.closest('.btn-hapus-isian');
 
         if (!tombol) {
@@ -511,7 +782,7 @@ export function mountSchemaEditor() {
             ? `Hapus isian "${label}"? Pemetaan sumber nilainya juga akan dilepas.`
             : `Hapus isian "${label}"?`;
 
-        if (!window.confirm(pesan)) {
+        if (!(await swalKonfirmasi(pesan, 'Hapus isian'))) {
             return;
         }
 
@@ -523,15 +794,52 @@ export function mountSchemaEditor() {
     // -----------------------------------------------------------------------
     // Tambah sektor (US1#8)
     // -----------------------------------------------------------------------
-    const formSektor = document.getElementById('form-tambah-sektor');
+    // -----------------------------------------------------------------------
+    // FR-008f / Q26 — mode "sektor baru".
+    //
+    // ⚠️ Tidak ada lagi formulir terpisah: tombol ini membuka mode penyuntingan
+    // yang SAMA dengan tombol "Ubah". Sektor + isian pertama tersimpan
+    // bersamaan pada satu POST /dataspasial/skema, dan **tidak ada** permintaan
+    // ke sumber data selama mode ini aktif (Q19/Q23/Q26).
+    // -----------------------------------------------------------------------
+    const kosongkanTabelIsian = () => {
+        tbody.querySelectorAll('tr[data-testid="baris-isian"], tr.baris-baru').forEach((tr) => {
+            if (!tr.classList.contains('baris-baru')) {
+                tr.remove();
+            }
+        });
+    };
 
     document.getElementById('btn-tambah-sektor')?.addEventListener('click', () => {
-        formSektor?.classList.toggle('d-none');
-        document.getElementById('input-nama-sektor')?.focus();
-    });
+        modeSektorBaru = true;
+        modeUbahAktif = false;
+        dirty = false;
 
-    document.getElementById('btn-batal-sektor')?.addEventListener('click', () => {
-        formSektor?.classList.add('d-none');
+        // ⚠️ Mode "sektor baru" adalah keadaan MENYUNTING — `bolehUbah` harus
+        // true supaya guard tombol Tambah Isian Baru tidak salah memberi tahu
+        // "Skema ini sedang dibaca" (FR-008f).
+        bolehUbah = true;
+
+        if (inputNamaSektor) {
+            inputNamaSektor.value = '';
+        }
+
+        kosongkanTabelIsian();
+        kosongkanPenandaPratinjau(wadahPratinjau);
+        kunciKontrolIsian(true);
+
+        if (tombolSimpan) {
+            tombolSimpan.disabled = false;
+        }
+
+        if (tombolTerbit) {
+            tombolTerbit.disabled = true;
+            tombolTerbit.title = 'Terbitkan setelah draf tersimpan.';
+        }
+
+        tombolUbah?.classList.add('d-none');
+        tombolBatalUbah?.classList.remove('d-none');
+        inputNamaSektor?.focus();
     });
 
     // -----------------------------------------------------------------------
@@ -630,20 +938,20 @@ export function mountSchemaEditor() {
             });
 
             if (respons.status === 422) {
-                window.alert('Sektor ini sudah memiliki draf berjalan.');
+                await swalPeringatan('Sektor ini sudah memiliki draf berjalan.');
 
                 return;
             }
 
             if (!respons.ok) {
-                window.alert('Data sementara tidak tersedia. Silakan coba lagi nanti.');
+                await swalGalat('Data sementara tidak tersedia. Silakan coba lagi nanti.');
 
                 return;
             }
 
             window.location.href = `${window.location.pathname}?sektor=${encodeURIComponent(sektorKode)}`;
         } catch (error) {
-            window.alert('Data sementara tidak tersedia. Silakan coba lagi nanti.');
+            await swalGalat('Data sementara tidak tersedia. Silakan coba lagi nanti.');
         }
     });
 
@@ -652,6 +960,13 @@ export function mountSchemaEditor() {
     // -----------------------------------------------------------------------
     document.getElementById('btn-simpan-draf')?.addEventListener('click', async () => {
         if (!bolehUbah) {
+            return;
+        }
+
+        // FR-008f — mode "sektor baru": nama sektor wajib diisi sebelum simpan.
+        if (modeSektorBaru && ((inputNamaSektor?.value ?? '').trim() === '')) {
+            await swalPeringatan('Nama sektor wajib diisi.');
+
             return;
         }
 
@@ -669,7 +984,7 @@ export function mountSchemaEditor() {
         const isian = bacaDariDom(tbody);
 
         if (isian.length === 0) {
-            window.alert('Sektor harus memiliki minimal satu isian.');
+            await swalPeringatan('Sektor harus memiliki minimal satu isian.');
 
             return;
         }
@@ -681,7 +996,7 @@ export function mountSchemaEditor() {
             .filter((label, i, arr) => label !== '' && arr.indexOf(label) !== i);
 
         if (labelBentrok.length > 0) {
-            window.alert(`Label "${labelBentrok[0]}" dipakai lebih dari satu isian pada versi ini.`);
+            await swalPeringatan(`Label "${labelBentrok[0]}" dipakai lebih dari satu isian pada versi ini.`);
 
             return;
         }
@@ -689,7 +1004,7 @@ export function mountSchemaEditor() {
         const kodeKosong = isian.find((b) => b.kode === '');
 
         if (kodeKosong) {
-            window.alert(`Label "${kodeKosong.label}" tidak menghasilkan kode yang sah. Perbaiki labelnya.`);
+            await swalPeringatan(`Label "${kodeKosong.label}" tidak menghasilkan kode yang sah. Perbaiki labelnya.`);
 
             return;
         }
@@ -697,7 +1012,60 @@ export function mountSchemaEditor() {
         serialisasiKeForm(isian);
         dirty = false;
         perbaruiTombolTerbit();
-        document.getElementById('form-draf')?.submit();
+
+        // US7/Q19 — nama sektor SELALU diambil dari input yang dapat disunting;
+        // pada mode "sektor baru" (Q26) input itu sengaja dikosongkan oleh sistem.
+        const inputNama = document.getElementById('input-sektor-nama-editor');
+        const sektorNama = (inputNama?.value ?? '').trim()
+            || akar.dataset.sektorNama
+            || '';
+
+        // ⚠️ FR-008f — pada mode "sektor baru" kode sektor BELUM ada; backend
+        // membangkitkannya dari nama (Q5/FR-007d-1), jadi klien mengirim kosong.
+        const sektorKodeKirim = modeSektorBaru ? '' : (sektorKode || '');
+        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            ?? document.querySelector('input[name="_token"]')?.value
+            ?? '';
+
+        try {
+            const respons = await fetch('/dataspasial/skema/draf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': token,
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    sektor: sektorKodeKirim,
+                    sektor_nama: sektorNama,
+                    keterangan: '',
+                    isian,
+                }),
+            });
+
+            if (respons.status === 422) {
+                const data = await respons.json().catch(() => ({}));
+                await swalPeringatan((data && data.message) || 'Validasi gagal. Periksa isian dan coba lagi.');
+                dirty = true;
+                perbaruiTombolTerbit();
+                return;
+            }
+
+            if (!respons.ok) {
+                await swalGalat('Data sementara tidak tersedia. Silakan coba lagi nanti.');
+                dirty = true;
+                perbaruiTombolTerbit();
+                return;
+            }
+
+            await swalSukses(modeSektorBaru ? 'Sektor berhasil dibuat.' : 'Draf skema berhasil disimpan.');
+        } catch (error) {
+            await swalGalat('Data sementara tidak tersedia. Silakan coba lagi nanti.');
+            dirty = true;
+            perbaruiTombolTerbit();
+        }
     });
 
     // -----------------------------------------------------------------------
@@ -720,6 +1088,15 @@ export function mountSchemaEditor() {
             return;
         }
 
+        // FR-008d/Q24 — pada mode "Ubah" (draf baru dari versi terbit), tombol
+        // Terbitan tetap nonaktif sampai draf benar-benar tersimpan (FR-045).
+        if (modeUbahAktif) {
+            tombolTerbit.disabled = true;
+            tombolTerbit.title = 'Simpan draf dulu — ada perubahan yang belum disimpan.';
+
+            return;
+        }
+
         if (dirty) {
             tombolTerbit.disabled = true;
             tombolTerbit.title = 'Simpan draf dulu — ada perubahan yang belum disimpan.';
@@ -734,61 +1111,105 @@ export function mountSchemaEditor() {
     // Panggil sekali setelah DOM siap agar tombol sesuai keadaan awal.
     perbaruiTombolTerbit();
 
-    tombolTerbit?.addEventListener('click', () => {
+    tombolTerbit?.addEventListener('click', async () => {
         if (!formTerbit || !sektorKode) {
             return;
         }
 
         // FR-045 — pengaman kedua di sisi klien.
         if (dirty) {
-            window.alert('Simpan draf dulu. Ada perubahan yang belum disimpan.');
+            await swalPeringatan('Simpan draf dulu. Ada perubahan yang belum disimpan.');
 
             return;
         }
 
-        const item = skemaAktif
-            ? document.querySelector(`[data-testid="item-skema"][data-skema-id="${skemaAktif}"]`)
-            : null;
-        const namaSektor = document.querySelector('[data-testid="item-sektor"][data-sektor-kode="' + sektorKode + '"]')
-            ?.dataset?.sektorNama || sektorKode;
-        const nomorVersi = item?.dataset?.nomorVersi || '?';
+        const namaSektor = (document.getElementById('input-sektor-nama-editor')?.value ?? '').trim()
+            || document.querySelector('[data-testid="item-sektor"][data-sektor-kode="' + sektorKode + '"]')
+                ?.dataset?.sektorNama
+            || sektorKode;
 
-        // FR-042 — konfirmasi menyebut sektor & nomor versi secara eksplisit.
-        const pesan = `Terbitkan versi ${nomorVersi} pada sektor "${namaSektor}"?\n\n`
-            + 'Setelah diterbitkan, versi ini menjadi immutable dan tidak dapat diubah. '
-            + 'Desa yang sudah memakai versi lama tidak ikut berubah.';
+        // FR-042/Q18 — nomor versi ditentukan API, jadi konfirmasi TIDAK lagi
+        // menyebut angka; ia menyatakan bahwa versi baru immutable akan dibuat.
+        const pesan = `Terbitkan draf sektor "${namaSektor}"?\n\n`
+            + 'Penerbitan membuat versi baru yang immutable dan tidak dapat diubah lagi. '
+            + 'Nomor versinya ditentukan sistem.';
 
-        if (!window.confirm(pesan)) {
+        if (!(await swalKonfirmasi(pesan, 'Terbitkan skema'))) {
             return;
         }
 
         const inputCatatan = formTerbit.querySelector('[name="catatan_perubahan"]');
-        if (inputCatatan) {
-            inputCatatan.value = window.prompt('Catatan perubahan (opsional)', '') || '';
+        const hasilInput = await swalInput('Catatan perubahan (opsional)', 'Catatan perubahan', '');
+
+        if (hasilInput === null) {
+            return;
         }
 
-        formTerbit.submit();
+        const catatan = hasilInput;
+
+        if (inputCatatan) {
+            inputCatatan.value = catatan;
+        }
+
+        // Q21 — terbitkan lewat AJAX, tanpa memuat ulang halaman.
+        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            ?? inputCatatan?.value
+            ?? '';
+
+        fetch('/dataspasial/skema/terbit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': token,
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ sektor: sektorKode, catatan_perubahan: catatan }),
+        })
+            .then(async (respons) => {
+                const data = await respons.json().catch(() => ({}));
+
+                if (!respons.ok) {
+                    window.Swal.fire({ title: data.message || 'Data sementara tidak tersedia. Silakan coba lagi nanti.', icon: 'error', confirmButtonText: 'Mengerti' });
+
+                    return;
+                }
+
+                window.Swal.fire({ title: data.message || 'Skema berhasil diterbitkan.', icon: 'success', confirmButtonText: 'Mengerti' });
+                window.location.reload();
+            })
+            .catch(() => {
+                window.Swal.fire({ title: 'Data sementara tidak tersedia. Silakan coba lagi nanti.', icon: 'error', confirmButtonText: 'Mengerti' });
+            });
     });
 
     // -----------------------------------------------------------------------
-    // Pemetaan isian ke sumber = daftar sektor (US4, FR-022/FR-023/FR-024)
+    // Modal pemilihan sumber nilai (US4, FR-022 … FR-025, Q20)
+    //
+    // ⚠️ Q20 — pemetaan memakai `{sumber, tabel_sumber, kolom_sumber}` dan
+    // TIDAK memakai katalog/daftar sektor. Pilihan presented的是 dua mode:
+    // **Manual** (isian diisi operator desa) atau **Otomatis** dari sumber data.
+    // Modal **tidak terikat** pada pemetaan yang sudah tersimpan — isian
+    // selalu dibuka kosong agar admin bebas memilih ulang.
     // -----------------------------------------------------------------------
-    const modal = document.getElementById('modal-pilih-sumber');
-    let barisDipilih = null;
+    const SUMBER_ENUM = ['openSID', 'dataPresisi', 'impor'];
 
-    const tulisPemetaan = (tr, sumber, nama) => {
+    /** Terapkan pilihan sumber nilai ke satu baris isian. */
+    const tulisPemetaan = (tr, { sumber, tabel, kolom }) => {
         const sel = tr.querySelector('.sumber-nilai');
 
         if (!sel) {
             return;
         }
 
-        sel.dataset.sumber = sumber;
+        sel.dataset.sumber = sumber || 'manual';
+        sel.dataset.tabelSumber = tabel || '';
+        sel.dataset.kolomSumber = kolom || '';
         sel.dataset.rujukan = '';
 
         const tombol = sel.querySelector('.btn-pilih-sumber-baris');
-        const badge = tombol?.querySelector('.badge')
-            ?? sel.querySelector('.badge');
+        const badge = tombol?.querySelector('.badge') ?? sel.querySelector('.badge');
 
         if (!badge) {
             return;
@@ -796,86 +1217,135 @@ export function mountSchemaEditor() {
 
         if (sumber && sumber !== 'manual') {
             badge.className = 'badge badge-info';
-            badge.innerHTML = '<i class="fas fa-lock mr-1"></i>' + nama;
+            badge.innerHTML = '<i class="fas fa-lock mr-1"></i>' + sumber;
         } else {
             badge.className = 'badge badge-secondary';
             badge.textContent = 'Manual';
         }
+
+        // Input tabel/kolom ikut diperbarui agar `bacaDariDom()` membaca
+        // nilai yang sama dengan yang tampil.
+        const inputTabel = sel.querySelector('.input-tabel-sumber');
+        const inputKolom = sel.querySelector('.input-kolom-sumber');
+
+        if (inputTabel) {
+            inputTabel.value = tabel || '';
+        }
+
+        if (inputKolom) {
+            inputKolom.value = kolom || '';
+        }
+    };
+
+    /** Tampilkan modal pemilihan sumber nilai via SweetAlert2 (FR-008g). */
+    const bukaModalSumberNilai = async (tr) => {
+        if (!swalTersedia()) {
+            await swalGalat('Pemilih sumber nilai belum siap. Muat ulang halaman.');
+
+            return;
+        }
+
+        const label = tr.querySelector('.input-label')?.value || '(tanpa label)';
+
+        // ⚠️ Modal TIDAK diisi dari pemetaan yang sudah ada — selalu mulai
+        // kosong agar admin bebas memilih (bukan terikat pada nilai lama).
+        const hasil = await window.Swal.fire({
+            title: 'Sumber nilai isian',
+            html: `
+                <p class="mb-3 text-left small text-muted">Isian: <strong>${label}</strong></p>
+                <div class="form-check mb-2 text-left">
+                    <input class="form-check-input" type="radio" name="mode-sumber" id="sumber-mode-manual" value="manual" checked>
+                    <label class="form-check-label" for="sumber-mode-manual">Manual — diisi operator desa</label>
+                </div>
+                <div class="form-check mb-3 text-left">
+                    <input class="form-check-input" type="radio" name="mode-sumber" id="sumber-mode-otomatis" value="otomatis">
+                    <label class="form-check-label" for="sumber-mode-otomatis">Otomatis — diambil dari sumber data</label>
+                </div>
+                <div id="bagian-otomatis" style="display:none">
+                    <div class="form-group text-left mb-2">
+                        <label for="sumber-pilihan">Sumber data</label>
+                        <select id="sumber-pilihan" class="form-control form-control-sm">
+                            ${SUMBER_ENUM.map((n) => `<option value="${n}">${n}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group text-left mb-2">
+                        <label for="sumber-tabel">Tabel sumber</label>
+                        <input id="sumber-tabel" class="form-control form-control-sm" maxlength="100" placeholder="mis. posyandu">
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="sumber-kolom">Kolom sumber</label>
+                        <input id="sumber-kolom" class="form-control form-control-sm" maxlength="100" placeholder="mis. jenis">
+                    </div>
+                </div>`,
+            showCancelButton: true,
+            confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
+            focusConfirm: false,
+            preConfirm: () => {
+                const otomatis = document.getElementById('sumber-mode-otomatis')?.checked;
+
+                if (!otomatis) {
+                    return { sumber: 'manual', tabel: '', kolom: '' };
+                }
+
+                const sumber = document.getElementById('sumber-pilihan')?.value || '';
+                const tabel = (document.getElementById('sumber-tabel')?.value || '').trim();
+                const kolom = (document.getElementById('sumber-kolom')?.value || '').trim();
+
+                // FR-022/Q20 — bila otomatis, `sumber`, `tabel_sumber`, dan
+                // `kolom_sumber` seluruhnya wajib terisi.
+                if (!sumber || tabel === '' || kolom === '') {
+                    window.Swal.showValidationMessage('Sumber data, tabel, dan kolom wajib diisi.');
+
+                    return false;
+                }
+
+                return { sumber, tabel, kolom };
+            },
+            didOpen: (popup) => {
+                const manual = popup.querySelector('#sumber-mode-manual');
+                const otomatis = popup.querySelector('#sumber-mode-otomatis');
+                const bagian = popup.querySelector('#bagian-otomatis');
+
+                const sinkron = () => {
+                    bagian.style.display = otomatis.checked ? 'block' : 'none';
+                };
+
+                manual.addEventListener('change', sinkron);
+                otomatis.addEventListener('change', sinkron);
+                sinkron();
+            },
+            customClass: { popup: 'rounded-lg' },
+        });
+
+        if (!hasil.isConfirmed || !hasil.value) {
+            return;
+        }
+
+        tulisPemetaan(tr, hasil.value);
+        mutasi();
     };
 
     tbody.addEventListener('click', (event) => {
         const tombol = event.target.closest('.btn-pilih-sumber-baris');
 
-        if (!tombol || !modal) {
+        if (!tombol) {
             return;
         }
 
-        barisDipilih = tombol.closest('tr');
+        const tr = tombol.closest('tr');
 
-        const sel = barisDipilih.querySelector('.sumber-nilai');
-        const label = document.getElementById('sumber-kode-isian');
-
-        if (label) {
-            label.textContent = barisDipilih.querySelector('.input-label')?.value || '(tanpa label)';
-        }
-
-        const sudahAda = sel?.dataset.sumber && sel.dataset.sumber !== 'manual';
-        const tombolLepas = document.getElementById('btn-lepas-pemetaan');
-
-        if (tombolLepas) {
-            tombolLepas.classList.toggle('d-none', !sudahAda);
-        }
-
-        const cari = document.getElementById('cari-sumber');
-
-        if (cari) {
-            cari.value = '';
-        }
-
-        document.querySelectorAll('#daftar-sumber .item-sumber').forEach((item) => {
-            item.style.display = '';
-        });
-
-        // eslint-disable-next-line no-undef
-        window.jQuery?.(modal).modal('show');
-    });
-
-    // Pencarian sederhana pada daftar sektor.
-    document.getElementById('cari-sumber')?.addEventListener('input', (event) => {
-        const kunci = event.target.value.toLowerCase();
-
-        document.querySelectorAll('#daftar-sumber .item-sumber').forEach((item) => {
-            const nama = (item.dataset.sektor || '').toLowerCase();
-            const kode = (item.dataset.kode || '').toLowerCase();
-
-            item.style.display = (nama.includes(kunci) || kode.includes(kunci)) ? '' : 'none';
-        });
-    });
-
-    document.querySelectorAll('#daftar-sumber .btn-pilih-sumber')?.forEach((tombol) => {
-        tombol.addEventListener('click', () => {
-            if (!barisDipilih) {
-                return;
-            }
-
-            tulisPemetaan(barisDipilih, tombol.dataset.kode, tombol.dataset.nama);
-            mutasi();
-
-            // eslint-disable-next-line no-undef
-            window.jQuery?.(modal).modal('hide');
-        });
-    });
-
-    document.getElementById('btn-lepas-pemetaan')?.addEventListener('click', () => {
-        if (!barisDipilih) {
+        if (!tr) {
             return;
         }
 
-        tulisPemetaan(barisDipilih, 'manual', null);
-        mutasi();
+        if (!bolehUbah) {
+            swalPeringatan('Skema ini sedang dibaca. Tekan Ubah untuk menyuntingnya.');
 
-        // eslint-disable-next-line no-undef
-        window.jQuery?.(modal).modal('hide');
+            return;
+        }
+
+        bukaModalSumberNilai(tr);
     });
 
     // -----------------------------------------------------------------------

@@ -89,7 +89,7 @@ function isianSaklar(array $ubah = []): array
  */
 function drafSaklar(array $isian): array
 {
-    return ['sektor' => 'pendidikan', 'isian' => $isian];
+    return ['sektor' => 'pendidikan', 'sektor_nama' => 'Pendidikan', 'isian' => $isian];
 }
 
 // ---------------------------------------------------------------------------
@@ -174,9 +174,9 @@ it('memetakan nama internal ke nama asumsi kontrak saat menyusun draf', function
     ], ['sektor' => 'pendidikan']);
 
     // …berubah menjadi NAMA ASUMSI kontrak, dan TIDAK ADA di berkas lain (R12).
-    expect($payload['isian'][0]['tampil_popup'])->toBeTrue()
-        ->and($payload['isian'][0]['tampil_filter'])->toBeFalse()
-        ->and($payload['isian'][0]['tampil_indikator'])->toBeTrue();
+    expect($payload['isian'][0]['tampil_di_popup'])->toBeTrue()
+        ->and($payload['isian'][0]['tampil_di_filter'])->toBeFalse()
+        ->and($payload['isian'][0]['tampil_di_indikator'])->toBeTrue();
 });
 
 it('menolak nama asumsi kontrak sebagai input dan mengabaikannya diam-diam', function () {
@@ -191,9 +191,9 @@ it('menolak nama asumsi kontrak sebagai input dan mengabaikannya diam-diam', fun
             'tampil_popup' => true, 'sebagai_filter' => true, 'tampil_indikator' => true],
     ], ['sektor' => 'pendidikan']);
 
-    expect($payload['isian'][0]['tampil_popup'])->toBeFalse()
-        ->and($payload['isian'][0]['tampil_filter'])->toBeFalse()
-        ->and($payload['isian'][0]['tampil_indikator'])->toBeFalse();
+    expect($payload['isian'][0]['tampil_di_popup'])->toBeFalse()
+        ->and($payload['isian'][0]['tampil_di_filter'])->toBeFalse()
+        ->and($payload['isian'][0]['tampil_di_indikator'])->toBeFalse();
 });
 
 it('menyertakan ketiga penanda pada badan draf saat menyimpan', function () {
@@ -206,12 +206,12 @@ it('menyertakan ketiga penanda pada badan draf saat menyimpan', function () {
     ]))->assertSessionHasNoErrors();
 
     Http::assertSent(function ($request) {
-        $body = json_decode($request->body(), true);
-        $isian = $body['isian'][0] ?? [];
+        $body = (string) $request->body();
 
-        return ($isian['tampil_popup'] ?? null) === true
-            && ($isian['tampil_filter'] ?? null) === false
-            && ($isian['tampil_indikator'] ?? null) === true;
+        return str_contains($request->url(), '/dataspasial/skema')
+            && (bool) preg_match('/"tampil_di_popup":\s*true/', $body)
+            && (bool) preg_match('/"tampil_di_filter":\s*false/', $body)
+            && (bool) preg_match('/"tampil_di_indikator":\s*true/', $body);
     });
 });
 
@@ -229,11 +229,14 @@ it('tetap menyimpan isian yang tidak tampil di mana pun', function () {
     ]))->assertSessionHasNoErrors();
 
     Http::assertSent(function ($request) {
-        $body = json_decode($request->body(), true);
+        $body = json_decode((string) $request->body(), true) ?? [];
+        $isian = $body['isian'][0] ?? [];
 
         // Isian tetap terkirim lengkap; hanya penanda tampilan yang mati.
-        return ($body['isian'][0]['kode'] ?? null) === 'jumlah_siswa'
-            && ($body['isian'][0]['tampil_popup'] ?? null) === false;
+        return str_contains($request->url(), '/dataspasial/skema')
+            && ($isian['tampil_di_popup'] ?? null) === false
+            && ($isian['tampil_di_filter'] ?? null) === false
+            && ($isian['tampil_di_indikator'] ?? null) === false;
     });
 });
 
@@ -275,7 +278,21 @@ it('menonaktifkan ketiga saklar pada skema yang sudah terbit', function () {
 
     $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan', 'skema' => 5]))
         ->assertOk()
-        ->assertSee('Skema versi terbit hanya dapat dibaca')
-        // Badge tampil read-only: tanpa tombol pengubah (FR-008a).
-        ->assertDontSee('btn-pilih-sumber-baris');
+        ->assertSee('Skema versi terbit hanya dapat dibaca');
+
+    // FR-008a — baris yang benar-benar DIRENDER tidak boleh memuat tombol
+    // pengubah. ⚠️pemeriksaan dibatasi pada isi `<tbody>`: `<template>` baris
+    // kosong sengaja selalu dirender (Q26/FR-008f) agar tombol "Tambah Isian
+    // Baru" dapat diaktifkan lewat mode penyuntingan, dan isi `<template>`
+    // sendiri tidak pernah ditampilkan.
+    $html = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan', 'skema' => 5]))
+        ->assertOk()
+        ->getContent();
+
+    preg_match('/<tbody[^>]*id="isi-tabel-isian"[^>]*>(.*?)<\/tbody>/s', $html, $tbody);
+
+    expect($tbody)->not->toBeEmpty();
+    expect($tbody[1])
+        ->not->toContain('btn-pilih-sumber-baris')
+        ->not->toContain('btn-hapus-isian');
 });

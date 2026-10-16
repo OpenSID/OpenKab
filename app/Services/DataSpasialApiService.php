@@ -586,43 +586,4 @@ class DataSpasialApiService
     {
         return $this->request('POST', 'impor', [], $body, $schemaVersion);
     }
-
-    /**
-     * Buat sektor baru.
-     *
-     * ⚠️ **UTANG KONTRAK U1** — endpoint `POST /dataspasial/sektor` **belum ada**
-     * pada `openapi-fondasi.yaml` v0.1.0 (hanya tersedia `GET /sektor` dan
-     * `GET /sektor/{id}`). Method ini memanggil endpoint yang belum
-     * ada dan harus diselaraskan setelah API-03 (#468) terbit.
-     * Bentuk asumsinya ada di `specs/004-pengelola-skema-editor/contracts/`.
-     *
-     * ⚠️ **Kode sektor TIDAK dikirim** — kode dibangkitkan oleh sisi API dan
-     * dijamin unik global (research.md R4, spec Q5). Bila API resmi justru
-     * mewajibkan kode, bentuk badan di sini perlu ditinjau.
-     *
-     * @param  array<string, mixed>  $body  Berisi `nama` dan opsional `ikon`.
-     */
-    public function buatSektor(array $body, ?int $schemaVersion = null): DataSpasialResult
-    {
-        return $this->request('POST', 'sektor', [], $body, $schemaVersion);
-    }
-
-    /**
-     * Ubah sektor yang sudah ada (FR-007d-4, spec Q10).
-     *
-     * ⚠️ **UTANG KONTRAK U5** — `PUT /dataspasial/sektor/{id}` **belum ada**
-     * pada `openapi-fondasi.yaml` v0.1.0 maupun di API hidup (`404`). Method ini
-     * memanggil endpoint yang belum ada dan harus diselaraskan setelah API-03
-     * (#468) terbit. Bentuk asumsinya ada di
-     * `specs/004-pengelola-skema-editor/contracts/openapi-fragment.yaml`.
-     *
-     * ⚠️ **Kode sektor TIDAK dikirim dan tidak dapat diubah** — kode
-     * dibangkitkan server dan bersifat baca-saja (FR-007d-5).
-     *
-     * @param  array<string, mixed>  $body  Berisi `nama` dan opsional `ikon`.
-     */
-    public function ubahSektor(int $id, array $body, ?int $schemaVersion = null): DataSpasialResult
-    {
-        return $this->request('PUT', 'sektor/'.$id, [], $body, $schemaVersion);
-    }
 }

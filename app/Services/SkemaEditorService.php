@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\StatusSkemaEditor;
+use Illuminate\Support\Str;
 
 /**
  * Orkestrasi editor skema kabupaten (KAB-02).
@@ -78,23 +79,9 @@ class SkemaEditorService
      * @param  array<int, array<string, mixed>>  $items
      * @return array<int, array<string, mixed>>
      */
-    public function petakanDaftarSektor(array $items, array $semuaSkema = []): array
+    public function petakanDaftarSektor(array $items): array
     {
-        return array_map(function (array $item) use ($semuaSkema) {
-            $sektor = $this->petakanSektor($item);
-            $skemaSektor = $this->groupSkemaPerSektor($semuaSkema)[$sektor['id']] ?? [];
-
-            $draf = $this->cariSkema($skemaSektor, StatusSkemaEditor::Draf);
-
-            // Bila counter dari API tidak tersedia, hitung dari daftar skema.
-            $jumlahSkema = $sektor['jumlahSkema'] ?: count($skemaSektor);
-
-            return array_merge($sektor, [
-                'jumlahSkema' => $jumlahSkema,
-                'adaDraf' => $draf !== null || ($jumlahSkema > 0 && $sektor['jumlahTerbit'] === 0),
-                'nomorVersiDraf' => $draf['nomorVersi'] ?? null,
-            ]);
-        }, $items);
+        return array_map(fn (array $item): array => $this->petakanSektor($item), $items);
     }
 
     /**
@@ -256,58 +243,6 @@ class SkemaEditorService
     }
 
     /**
-     * Kelompokkan daftar skema global per sektor agar panel skema tidak
-     * memanggil API sekali per sektor (R1).
-     *
-     * @param  array<int, array<string, mixed>>  $items
-     * @return array<int, array<int, array<string, mixed>>>
-     */
-    public function groupSkemaPerSektor(array $items): array
-    {
-        $perSektor = [];
-
-        foreach ($items as $item) {
-            $skema = $this->petakanSektorSkema($item);
-            $perSektor[$skema['sektorId']][] = $skema;
-        }
-
-        foreach ($perSektor as &$daftar) {
-            usort($daftar, static fn (array $a, array $b): int => $b['nomorVersi'] <=> $a['nomorVersi']);
-        }
-        unset($daftar);
-
-        return $perSektor;
-    }
-
-    /**
-     * Petakan satu entri riwayat versi menjadi bentuk daftar skema (Q9).
-     *
-     * ⚠️ Bentuk `riwayat versi skema` **datar** — berbeda dari bentuk
-     * `skema data spasial` yang bersarang di `attributes.versi_skema`.
-     *
-     * @param  array<string, mixed>  $item
-     * @return array<string, mixed>
-     */
-    public function petakanRiwayatVersi(array $item): array
-    {
-        $attributes = $this->attributes($item);
-
-        $sektorId = (int) ($attributes['sektor_id'] ?? 0);
-        $id = (int) ($item['id'] ?? $attributes['id'] ?? 0);
-
-        return [
-            'id' => $id,
-            'sektorId' => $sektorId,
-            'nomorVersi' => (int) ($attributes['nomor_versi'] ?? 0),
-            'status' => (string) ($attributes['status'] ?? ''),
-            'catatanPerubahan' => $attributes['catatan_perubahan'] ?? null,
-            'diterbitkanPada' => $attributes['diterbitkan_pada'] ?? null,
-            'diterbitkanOleh' => $attributes['diterbitkan_oleh'] ?? null,
-            'jumlahIsian' => 0,
-        ];
-    }
-
-    /**
      * Turunkan `StatusSkemaEditor` dari skema yang dipilih (FR-008a/FR-008b).
      *
      * @param  array<string, mixed>|null  $skemaTerpilih
@@ -332,6 +267,28 @@ class SkemaEditorService
             'status' => '',
             'jumlah_skema' => count($skemaSektor),
         ]);
+    }
+
+    /**
+     * Hasilkan kode sektor dari nama (Q5 / FR-007d-1).
+     *
+     * Pola `snake_case`: huruf kecil, angka, garis bawah; diawali huruf.
+     * Bila hasil kosong (mis. nama hanya simbol), fallback `sektor`.
+     * Keunikan global ditjamin API (Q13); OpenKab hanya menyusun bentuknya.
+     *
+     * @param  string  $nama
+     * @return string
+     */
+    public function kodeSektorDariNama(string $nama): string
+    {
+        $kode = Str::lower(preg_replace('/[^a-z0-9]+/i', '_', trim($nama)));
+        $kode = trim($kode, '_');
+
+        if ($kode === '' || ! preg_match('/^[a-z]/', $kode)) {
+            $kode = 'sektor';
+        }
+
+        return $kode;
     }
 
     // -----------------------------------------------------------------------
@@ -361,11 +318,15 @@ class SkemaEditorService
                 'satuan' => $baris['satuan'] ?? null,
                 'opsi' => ($baris['tipe'] ?? '') === 'pilihan' ? array_values($baris['opsi'] ?? []) : null,
                 'urutan' => $urut++,
-                // Nama RESMI API (verifikasi langsung — lihat §6a.4 K4).
-                'tampil_popup' => (bool) ($baris['popupPeta'] ?? false),
-                'tampil_filter' => (bool) ($baris['sebagaiFilter'] ?? false),
-                'tampil_indikator' => (bool) ($baris['sebagaiIndikator'] ?? false),
-                // ⚠️ ASUMSI U3 — pemetaan inline di badan draf.
+                // Nama TULIS API (Q20) — berbeda dari nama baca `tampil_popup`/
+                // `tampil_filter`/`tampil_indikator`. View memakai nama internal
+                // (`popupPeta`, `sebagaiFilter`, `sebagaiIndikator`); terjemahan
+                // terjadi hanya di sini (R12 — satu tempat).
+                'tampil_di_popup' => (bool) ($baris['popupPeta'] ?? false),
+                'tampil_di_filter' => (bool) ($baris['sebagaiFilter'] ?? false),
+                'tampil_di_indikator' => (bool) ($baris['sebagaiIndikator'] ?? false),
+                // Pemetaan berupa array `{sumber, tabel_sumber, kolom_sumber}` (Q20).
+                // View memakai nama internal `tabelSumber`/`kolomSumber`.
                 'pemetaan' => $this->composePemetaan($baris),
             ];
 
@@ -373,10 +334,11 @@ class SkemaEditorService
         }, $isian);
 
         return array_merge([
-            'catatan_perubahan' => $meta['catatan_perubahan'] ?? null,
-            'nomor_versi' => $meta['nomor_versi'] ?? null,
+            'sektor' => $meta['sektor'] ?? null,
+            'sektor_nama' => $meta['sektor_nama'] ?? null,
+            'keterangan' => $meta['keterangan'] ?? null,
             'isian' => $isianApi,
-        ], $meta['sektor'] !== null ? ['sektor' => $meta['sektor']] : []);
+        ], []);
     }
 
     /**
@@ -391,13 +353,11 @@ class SkemaEditorService
             return null;
         }
 
-        // ⚠️ API menerima pemetaan sebagai ARRAY di dalam tiap isian (verifikasi
-        // langsung §6a.3) — bukan objek tunggal seperti asumsi lama.
+        // Pemetaan berupa array `{sumber, tabel_sumber, kolom_sumber}` (Q20).
         return [[
-            'id' => 0,
             'sumber' => (string) $sumber,
-            'rujukan_sumber' => $baris['rujukan'] ?? null,
-            'aturan_hitung' => $baris['aturanHitung'] ?? null,
+            'tabel_sumber' => $baris['tabelSumber'] ?? null,
+            'kolom_sumber' => $baris['kolomSumber'] ?? null,
         ]];
     }
 

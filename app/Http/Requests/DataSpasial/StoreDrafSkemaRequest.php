@@ -36,19 +36,21 @@ class StoreDrafSkemaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sektor' => ['required', 'string', 'max:100'],
-            'catatan_perubahan' => ['nullable', 'string', 'max:500'],
-            'nomor_versi' => ['nullable', 'integer', 'min:1'],
+            // ⚠️ Q5/Q19/Q26 — `sektor` adalah KODE sektor yang **dibangkitkan
+            // backend dari `sektor_nama`**, jadi untuk sektor baru klien
+            // mengirimnya kosong; yang wajib dari klien adalah `sektor_nama`.
+            'sektor' => ['nullable', 'string', 'max:100'],
+            'sektor_nama' => ['required', 'string', 'max:100'],
+            'keterangan' => ['nullable', 'string', 'max:500'],
 
-            // FR-019: sebuah sektor tidak boleh memiliki nol isian.
+            // FR-019/Q23: sebuah sektor tidak boleh memiliki nol isian —
+            // setidaknya satu isian wajib dalam satu permintaan penyimpanan.
             'isian' => ['required', 'array', 'min:1'],
 
             // FR-017/Q14: `kode` adalah nilai TURUNAN dari `label`, bukan
-            // ketikan admin. Aturan di bawah TIDAK lagi menilai "apa yang admin
-            // ketik" — ia memverifikasi INTEGRITAS nilai turunan itu, karena
-            // FR-018 tetap mewajibkan kode hasil bangkit memenuhi pola
-            // snake_case. Bila label tidak menghasilkan slug yang sah, kode
-            // turunan akan kosong atau diawali angka dan ditolak di sini.
+            // ketikan admin. Aturan di bawah memverifikasi INTEGRITAS nilai
+            // turunan itu, karena FR-018 tetap mewajibkan kode hasil bangkit
+            // memenuhi pola snake_case.
             'isian.*.kode' => ['required', 'string', 'max:100', 'regex:/^[a-z][a-z0-9_]*$/'],
             'isian.*.label' => ['required', 'string', 'max:255'],
             'isian.*.tipe' => ['required', 'string', Rule::in(['angka', 'teks', 'pilihan', 'ya_tidak', 'tanggal'])],
@@ -59,17 +61,18 @@ class StoreDrafSkemaRequest extends FormRequest
             'isian.*.opsi.*' => ['string', 'max:100'],
             'isian.*.urutan' => ['required', 'integer', 'min:1'],
 
-            // ⚠️ ASUMSI U2 (U3) — penanda tampilan & pemetaan belum ada pada
-            // kontrak v0.1.0. Field di sini memakai NAMA INTERNAL; pemetaan ke
-            // nama asumsi kontrak hanya terjadi di `SkemaEditorService`
-            // (research.md R12).
+            // ⚠️ R12 — nama field INTERNAL sesuai tampilan/view (`popupPeta`,
+            // `sebagaiFilter`, `sebagaiIndikator`, `tabelSumber`, `kolomSumber`).
+            // Terjemahan ke nama tulis DataSpasial (`tampil_di_*`,
+            // `tabel_sumber`, `kolom_sumber`) hanya di SkemaEditorService.
             'isian.*.popupPeta' => ['boolean'],
             'isian.*.sebagaiFilter' => ['boolean'],
             'isian.*.sebagaiIndikator' => ['boolean'],
-            // ⚠️ VERIFIKASI LANGSUNG: `sumber` adalah ENUM API
-            // (`openSID`/`dataPresisi`/`impor`), bukan kode sektor.
-            'isian.*.sumber' => ['nullable', 'string', Rule::in(['openSID', 'dataPresisi', 'impor'])],
-            'isian.*.rujukan' => ['nullable', 'string', 'max:255'],
+            // Q20 — pemetaan: `sumber` enum, `tabelSumber` + `kolomSumber`
+            // diisi bebas, wajib bila sumber bukan manual.
+            'isian.*.sumber' => ['nullable', 'string', Rule::in(['openSID', 'dataPresisi', 'impor', 'manual'])],
+            'isian.*.tabelSumber' => ['nullable', 'string', 'max:100'],
+            'isian.*.kolomSumber' => ['nullable', 'string', 'max:100'],
         ];
     }
 
@@ -179,7 +182,7 @@ class StoreDrafSkemaRequest extends FormRequest
             'isian.*.kode.max' => 'Kode isian maksimal 100 karakter.',
             'isian.required' => 'Sektor harus memiliki minimal satu isian.',
             'isian.min' => 'Sektor harus memiliki minimal satu isian.',
-            'sektor.required' => 'Sektor wajib dipilih.',
+            'sektor_nama.required' => 'Nama sektor wajib diisi.',
         ];
     }
 

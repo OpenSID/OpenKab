@@ -230,4 +230,3 @@ class ArtikelService extends BaseApiService
         Cache::forget($this->cacheRegistryKey);
     }
 }
-

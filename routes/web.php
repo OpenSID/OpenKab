@@ -26,6 +26,11 @@ use App\Http\Controllers\DataPresisiPapanController;
 use App\Http\Controllers\DataPresisiPendidikanController;
 use App\Http\Controllers\DataPresisiSandangController;
 use App\Http\Controllers\DataPresisiSeniBudayaController;
+use App\Http\Controllers\DataSpasial\DasborDataSpasialController;
+use App\Http\Controllers\DataSpasial\ImporDataController;
+use App\Http\Controllers\DataSpasial\MonitoringController;
+use App\Http\Controllers\DataSpasial\PetaGabunganController;
+use App\Http\Controllers\DataSpasial\SkemaDataSpasialController;
 use App\Http\Controllers\DDKPanganController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesaController;
@@ -466,6 +471,42 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::get('get', [ApiProxyController::class, 'get'])->name('api-proxy.get');
         Route::post('post', [ApiProxyController::class, 'post'])->name('api-proxy.post');
         Route::get('clear-cache', [ApiProxyController::class, 'clearCache'])->name('api-proxy.clear-cache');
+    });
+
+    // DataSpasial — seluruh data `ds_*` dibaca/tulis lewat API Satu Data
+    // melalui App\Services\DataSpasialApiService (FR-002). Kontrol akses
+    // ditegakkan server-side lewat middleware permission, bukan sekadar
+    // menyembunyikan menu (FR-013).
+    Route::prefix('dataspasial')->group(function () {
+        Route::get('skema', [SkemaDataSpasialController::class, 'index'])
+            ->middleware('permission:dataspasial-skema-read')
+            ->name('dataspasial.skema');
+
+        // KAB-02 — endpoint tulis editor skema (satu permintaan untuk sektor + isian,
+        // Q18/Q19). Otorisasi ditegakkan server-side lewat middleware permission (FR-001).
+        Route::post('skema/draf', [SkemaDataSpasialController::class, 'storeDraf'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.draf.store');
+
+        Route::post('skema/terbit', [SkemaDataSpasialController::class, 'terbit'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.terbit');
+
+        Route::get('peta', [PetaGabunganController::class, 'index'])
+            ->middleware('permission:dataspasial-peta-read')
+            ->name('dataspasial.peta');
+
+        Route::get('dasbor', [DasborDataSpasialController::class, 'index'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor');
+
+        Route::get('impor', [ImporDataController::class, 'index'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor');
+
+        Route::get('monitoring', [MonitoringController::class, 'index'])
+            ->middleware('permission:dataspasial-monitoring-read')
+            ->name('dataspasial.monitoring');
     });
 });
 

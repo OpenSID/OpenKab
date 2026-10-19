@@ -105,6 +105,10 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="{{ asset('js/dataspasial/peta-gabungan.js') }}"></script>
     <script nonce="{{ csp_nonce() }}">
+        window.PETA_GABUNGAN_ICON = {
+            iconUrl: "{{ asset('assets/img/map/marker-icon-2x-red.png') }}",
+            shadowUrl: "{{ asset('assets/img/map/marker-shadow.png') }}"
+        };
         document.addEventListener('DOMContentLoaded', function () {
             if (!window.PetaGabungan || !window.L) {
                 return;

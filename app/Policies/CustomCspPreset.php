@@ -14,7 +14,13 @@ class CustomCspPreset implements Preset
         $policy
             ->add(Directive::BASE, Keyword::SELF)
             ->add(Directive::OBJECT, Keyword::NONE)
-            ->add(Directive::IMG, [Keyword::SELF, 'data:', 'https://tile.openstreetmap.org/', 'blob:'])
+            ->add(Directive::IMG, [
+                Keyword::SELF,
+                'data:',
+                'https://tile.openstreetmap.org/',
+                'https://unpkg.com/',
+                'blob:',
+            ])
             ->add(Directive::STYLE, [
                 Keyword::SELF,
                 Keyword::UNSAFE_INLINE,

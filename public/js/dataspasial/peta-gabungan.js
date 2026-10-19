@@ -9,6 +9,7 @@
     var thematic = null;
     var polygons = [];
     var meta = {};
+    var markerIcon = null;
 
     var NO_DATA_COLOR = '#d2d6de';
     var SCALE_COLORS = ['#f7fbff', '#c6dbef', '#9ecae1', '#6baed6', '#3182bd', '#08519c'];
@@ -69,6 +70,18 @@
 
         var mapId = options.mapId || 'map';
         map = L.map(mapId).setView([-2.5, 118], 5);
+
+        if (window.PETA_GABUNGAN_ICON && window.PETA_GABUNGAN_ICON.iconUrl) {
+            markerIcon = new L.Icon({
+                iconUrl: window.PETA_GABUNGAN_ICON.iconUrl,
+                shadowUrl: window.PETA_GABUNGAN_ICON.shadowUrl,
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+        }
+
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
@@ -173,7 +186,7 @@
         var coords = feature.geometry.coordinates;
         var key = layerKeyOf(feature.properties);
 
-        var marker = L.marker([coords[1], coords[0]]);
+        var marker = L.marker([coords[1], coords[0]], markerIcon ? {icon: markerIcon} : {});
         marker.bindPopup(popupContent(feature.properties || {}), {closeButton: true, autoPan: true});
 
         marker.on('mouseover', function () {

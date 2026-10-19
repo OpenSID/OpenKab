@@ -86,19 +86,60 @@ class PetaGabunganController extends DataSpasialController
             return response()->json($payload, 200);
         }
 
+        $features = [];
         $data = $result->data;
         if (is_array($data) && isset($data[0]) && is_array($data[0])) {
             $fc = $data[0];
             if (isset($fc['type']) && $fc['type'] === 'FeatureCollection') {
                 $payload['type'] = 'FeatureCollection';
-                $payload['features'] = $fc['features'] ?? [];
-            } else {
-                $payload['features'] = [];
+                $features = $fc['features'] ?? [];
+                $payload['features'] = $features;
             }
         }
+
+        $payload['meta'] = array_merge($payload['meta'], $this->deriveMeta($features));
 
         return response()->json($payload, 200, [
             'Content-Type' => 'application/geo+json',
         ]);
+    }
+
+    /**
+     * Turunkan periode dan pilihan isian tematik (angka) dari fitur yang tersedia.
+     *
+     * @param  array<int, array<string, mixed>>  $features
+     * @return array<string, mixed>
+     */
+    private function deriveMeta(array $features): array
+    {
+        $periods = [];
+        $isian = [];
+
+        foreach ($features as $feature) {
+            $props = $feature['properties'] ?? [];
+            $ds = $props['dataspasial'] ?? null;
+
+            $period = $ds['periode'] ?? ($props['periode'] ?? null);
+            if (is_string($period) && $period !== '' && ! in_array($period, $periods, true)) {
+                $periods[] = $period;
+            }
+
+            if (is_array($ds)) {
+                $kode = $ds['isian_kode'] ?? null;
+                if ($kode && ! isset($isian[$kode])) {
+                    $isian[$kode] = [
+                        'value' => $kode,
+                        'label' => $ds['isian_label'] ?? $kode,
+                    ];
+                }
+            }
+        }
+
+        rsort($periods);
+
+        return [
+            'periods' => $periods,
+            'isian_tematik_options' => array_values($isian),
+        ];
     }
 }

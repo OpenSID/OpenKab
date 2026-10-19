@@ -30,36 +30,21 @@
                         <h3 class="card-title">Peta Gabungan</h3>
                     </div>
                     <div class="card-body">
-                        <div class="form-row mb-3">
-                            <div class="form-group col-md-3 col-sm-6">
+                        <div class="mb-3">
+                            <div class="form-group mb-2">
                                 <label for="filter-sektor">Sektor <span class="text-danger">*</span></label>
                                 <select id="filter-sektor" class="form-control form-control-sm" required>
                                     <option value="">Pilih Sektor</option>
+                                    @if(isset($sektor) && $sektor->isData())
+                                        @foreach($sektor->data as $item)
+                                            @php $attr = $item['attributes'] ?? []; $id = $item['id'] ?? ''; @endphp
+                                            <option value="{{ $id }}">{{ $attr['nama'] ?? $attr['kode'] ?? $id }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
-                            </div>
-                            <div class="form-group col-md-3 col-sm-6">
-                                <label for="filter-wilayah">Wilayah</label>
-                                <select id="filter-wilayah" class="form-control form-control-sm">
-                                    <option value="">Semua Wilayah</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2 col-sm-6">
-                                <label for="filter-periode">Periode</label>
-                                <select id="filter-periode" class="form-control form-control-sm" disabled>
-                                    <option value="">Pilih Periode</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2 col-sm-6">
-                                <label for="filter-tematik">Pewarnaan Desa</label>
-                                <select id="filter-tematik" class="form-control form-control-sm" disabled>
-                                    <option value="">Tidak Ada</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2 col-sm-12" id="filter-isian-wrapper" style="display:none;">
-                                <label>Filter Isian</label>
-                                <div id="filter-isian-container"></div>
                             </div>
                         </div>
+                        @include('components.wilayah_filter')
                         <div class="position-relative">
                             <div id="map"></div>
                             <div id="map-legend" class="map-legend" style="display:none;"></div>

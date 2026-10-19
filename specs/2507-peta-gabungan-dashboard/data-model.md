@@ -1,61 +1,68 @@
 # Data Model: Peta Gabungan Geospasial & DataSpasial
 
-**Feature**: 006-peta-gabungan-dashboard  
-**Date**: 2026-10-19  
+**Feature**: 2507-peta-gabungan-dashboard
+**Date**: 2026-10-19
 **Status**: Draft
 
-## 1. Overview
-This feature consumes API-04 GeoJSON (FeatureCollection) and existing DataSpasial metadata (sektor/isian/periode) via `DataSpasialApiService`. No new local database tables/models are introduced. UI state is client-side (selected sektor/periode/isian-tematik, active layers, filters).
+## 1. Ringkasan
+Fitur hanya **mengonsumsi** data API Satu Data (API-04) melalui `DataSpasialApiService`. Tidak ada tabel/model baru di MySQL OpenKab. State UI bersifat klien (lapisan aktif, filter, kecamatan).
 
-## 2. Entities (from spec, consumed/derived)
+## 2. Entitas
 
 ### 2.1 Fasilitas (Titik)
-- **Source**: API-04 FeatureCollection Point features (`geometry.type='Point'`)
-- **Properties (relevant)**: `id`, `nama`, `source` (`openkab` or `presisi`), `sektor_kode`, `sektor_nama`, `kode_desa`, `kode_kecamatan`, `kode_kabupaten`, `dataspasial` (object|null) with nilai/sumber/skema_versi_id/periode and isian fields; optional `waktu_input`/`tanggal_pembaruan`.
-- **Behavior**: Clustered by Leaflet.markercluster. Popup shows identity + only isian with `tampil_popup===true` (from isian metadata) + satuan + sumber + tanggal pembaruan (FR-004/005).
+- **Sumber**: fitur `geometry.type = Point` pada FeatureCollection API-04.
+- **Properti**: `id`, `nama`, `source` (`openkab` | `presisi`), `kategori`/`simbol` (titik geospasial lama), `sektor_kode`/`sektor_nama` (DataSpasial), `kode_desa`/`nama_desa`, `kode_kecamatan`, `kode_kabupaten`, `dataspasial` (objek atau `null`).
+- **Aturan**: titik tanpa koordinat valid diabaikan.
 
-### 2.2 Isian (Sektor metadata)
-- **Source**: `DataSpasialApiService::listIsian(['sektor_id'=>...])` (or embedded in skema)
-- **Fields**: `kode`, `label`, `tipe` (`angka|teks|pilihan|ya_tidak|tanggal`), `satuan`, `tampil_popup` (bool), `tampil_filter` (bool), `urutan`.
-- **Behavior**: Popup uses `tampil_popup`. Filter UI uses `tampil_filter`. Thematic picker allows only `tipe='angka'` (FR-010).
+### 2.2 Nilai DataSpasial (`dataspasial`)
+- **Field**: `nilai`, `sumber`/`sumber_data`, `periode`, `skema_versi_id`, `isian_kode`, `isian_label`, `isian_satuan`, `isian_tipe`, `waktu_input`/`tanggal_pembaruan`.
+- **Aturan**: hanya isian dengan `tampil_popup = true` ditampilkan di popup.
 
-### 2.3 Sektor
-- **Source**: `DataSpasialApiService::listSektor()` 
-- **Fields**: `id`, `kode`, `nama`, `status`.
-- **Behavior**: Primary selector (FR-006). Only active sectors considered; periods/isian filtered by selected sector.
+### 2.3 Isian (metadata filter/popup)
+- **Sumber**: `listSkema(['sektor' => kode])` (isian ikut pada respons).
+- **Field**: `kode`, `label`, `tipe` (`angka|teks|pilihan|ya_tidak|tanggal`), `satuan`, `opsi`, `tampil_popup`, `tampil_filter`, `urutan`.
+- **Aturan**: `tampil_filter=true` → kontrol filter; `tipe='angka'` → kandidat pewarnaan tematik; `tampil_popup=true` → baris popup.
 
-### 2.4 Periode
-- **Source**: Derived from FeatureCollection features (`properties.periode` and `properties.dataspasial.periode`) for selected sektor; fallback `listNilai()`/`ringkasan()` to enumerate.
-- **Format**: `YYYY-MM` (FR-006). Default to latest with data.
+### 2.4 Sektor (lapisan DataSpasial)
+- **Sumber**: `listSektor()`; nama lapisan = `nama`; parameter API = `kode`.
+- **Field**: `id`, `kode`, `nama`, `status`.
 
-### 2.5 Nilai (Value)
-- **Source**: Embedded in FeatureCollection (`properties.dataspasial.nilai`) or via `/dataspasial/nilai`. Includes `sumber_data`/`sumber`, `periode`, `skema_versi_id`, timestamps.
-- **Behavior**: Displayed in popup with satuan. Numeric values used for thematic coloring (desa-level aggregation).
+### 2.5 Lapisan (Layer)
+- **Turunan** dari payload GeoJSON:
+  - Lapisan kategori geospasial lama: kunci = `kategori` (fallback `simbol`), untuk fitur `source` `openkab`/`presisi`.
+  - Lapisan DataSpasial: kunci = `sektor_kode`, untuk fitur dengan `dataspasial` tidak null.
+- **Field (UI)**: `key`, `label`, `jenis` (`geospasial_lama` | `dataspasial`), `jumlah`, `aktif`.
+- **Aturan**: lapisan aktif menyaring titik yang dirender; lapisan DataSpasial aktif menetapkan konteks isian/filter.
 
-### 2.6 Wilayah (Desa) — boundaries
-- **Source**: API-04 FeatureCollection Polygon/MultiPolygon features representing desa boundaries (per OpenAPI/GeoJSON gabungan). Identified by `kode_desa`, `nama_desa`, possibly `kode_kecamatan`, `kode_kabupaten`.
-- **Behavior**: Thematic fill by selected numeric isian aggregated per desa. States: has value (including 0) → colored by scale; no data → distinct "tanpa data" style (not zero) (FR-011/012). Popup shows desa identity + selected value or "Tanpa data".
+### 2.6 Kecamatan (filter wilayah)
+- **Sumber**: endpoint wilayah Satu Data yang sudah dipakai modul lain.
+- **Field**: `kode_kecamatan`, `nama_kecamatan`.
+- **Aturan**: hanya satu tingkat; tanpa kabupaten/desa.
 
-### 2.7 Legenda
-- **Derived state**: Current classification range colors + satuan (for thematic) + "Tanpa Data" category. Updated on sector/periode/isian change (FR-009).
+### 2.7 Wilayah (Desa) — batas tematik
+- **Sumber**: fitur `Polygon`/`MultiPolygon` pada FeatureCollection (bila tersedia).
+- **Aturan**: desa tanpa nilai → gaya "tanpa data" (bukan nol); nilai nol → kelas skala terendah.
 
-### 2.8 UI State (client-side)
-- **Selected**: `sektor_id`, `periode` (`YYYY-MM`), `isian_kode` (for thematic, numeric only), active overlays (boundaries, point layers), active filters (by `tampil_filter` isian values).
-- **Fetch state**: loading (debounced on rapid changes), last request id to ignore stale responses (FR-008).
+### 2.8 Legenda
+- **Turunan**: skala warna + satuan isian tematik + entri "Tanpa Data".
 
-## 3. Validation Rules
-- Periode format `YYYY-MM` (validated upstream; UI enforces via API).
-- Thematic requires `tipe='angka'` (UI disables picker otherwise).
-- "Tanpa data" must never map to zero color class (enforced in classification mapping).
-- Popup only shows isian with `tampil_popup===true` (default true).
+### 2.9 State UI (klien)
+- `layerAktif` (set), `kecamatan`, `filter` (map isian→nilai), `isianTematik`, `requestId` terakhir (anti respons basi).
 
-## 4. Relationships
-- Fasilitas belongs to Sektor (by `sektor_kode`), Desa (by `kode_desa`).
-- Isian belongs to Sektor (by sektor context).
-- Nilai linked to Fasilitas + Isian (by kode) + Periode.
-- Desa boundary linked to values via `kode_desa`.
+## 3. Validasi
+- `periode` format `YYYY-MM` (divalidasi API).
+- Filter hanya untuk isian bertanda `tampil_filter`.
+- Popup hanya isian bertanda `tampil_popup`.
+- "Tanpa data" tidak pernah dipetakan ke kelas nol.
+- Koordinat tidak valid dilewati.
 
-## 5. Notes
-- No new models/tables in OpenKab DB (consumed via API). 
-- FeatureCollection shape defined by API-04 (GeoJSON RFC 7946). 
-- Classification method: quantile by default; fallback equal interval (assumption).
+## 4. Relasi
+- Fasilitas → Lapisan (kategori atau sektor).
+- Nilai → Fasilitas + Isian + Periode.
+- Sektor → Isian (`tampil_filter`/`tampil_popup`).
+- Desa → Nilai (tematik).
+
+## 5. Catatan
+- Tanpa migrasi/tabel baru.
+- Bentuk FeatureCollection mengikuti API-04 (RFC 7946).
+- Klasifikasi tematik: kuantil (default), fallback rentang sama besar.

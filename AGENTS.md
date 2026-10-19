@@ -22,6 +22,8 @@ Auto-generated from all feature plans. Last updated: 2026-10-19
 - MySQL (lokal: hanya user/session/peran/pengaturan — **tanpa tabel baru**); seluruh (2505-penerbitan-adopsi-skema)
 - PHP 8.4, Laravel 13 (OpenKab monolith), Blade + jQuery/Bootstrap 4.6/AdminLTE 4, Vite 8 + `spatie/laravel-permission`, `spatie/csp`, `yajra/laravel-datatables-oracle`, `jeroennoten/laravel-adminlte`, `guzzlehttp/guzzle`. Client-side: Leaflet 1.9.4 + Leaflet.markercluster (CDN). (2507-peta-gabungan-dashboard)
 - MySQL (local: users/roles/settings/sessions only). DataSpasial consumed via API Satu Data (no new local tables). (2507-peta-gabungan-dashboard)
+- PHP 8.4, Laravel 13 (OpenKab monolith) + `spatie/laravel-permission`, `spatie/csp`, `guzzlehttp/guzzle` (via Laravel HTTP client), `jeroennoten/laravel-adminlte`. Client-side: Leaflet 1.9.4 + Leaflet.markercluster 1.5.3 (CDN), Bootstrap 4.6 + jQuery/AdminLTE 4. (2507-peta-gabungan-dashboard)
+- MySQL lokal hanya untuk user/session/peran/pengaturan. Seluruh data sektor/geojson/kategori dibaca dari API Satu Data; **tanpa tabel baru**. (2507-peta-gabungan-dashboard)
 
 - PHP 8.4, Laravel 13 + laravel/framework, spatie/laravel-permission, spatie/laravel-activitylog, yajra/laravel-datatables, laravel/sanctum, guzzlehttp/guzzle, mews/captcha. Tambahan: `firebase/php-jwt` (library JWT tervalidasi untuk penandatanganan/verifikasi). (2502-opensid-sso-access)
 
@@ -74,9 +76,9 @@ Agar testing tidak pernah mengotori (memutasi atau menghapus) database eksisting
 9. **Jalankan hanya test yang relevan** — jangan pernah jalankan seluruh suite test secara simultan. Filter dengan `--filter=NamaMetode` atau path spesifik (misal `vendor/bin/pest tests/Feature/Sso/`). Ini mengurangi beban database dan mencegah side-effect tak terduga.
 
 ## Recent Changes
+- 2507-peta-gabungan-dashboard: Added PHP 8.4, Laravel 13 (OpenKab monolith) + `spatie/laravel-permission`, `spatie/csp`, `guzzlehttp/guzzle` (via Laravel HTTP client), `jeroennoten/laravel-adminlte`. Client-side: Leaflet 1.9.4 + Leaflet.markercluster 1.5.3 (CDN), Bootstrap 4.6 + jQuery/AdminLTE 4.
 - 2507-peta-gabungan-dashboard: Added PHP 8.4, Laravel 13 (OpenKab monolith), Blade + jQuery/Bootstrap 4.6/AdminLTE 4, Vite 8 + `spatie/laravel-permission`, `spatie/csp`, `yajra/laravel-datatables-oracle`, `jeroennoten/laravel-adminlte`, `guzzlehttp/guzzle`. Client-side: Leaflet 1.9.4 + Leaflet.markercluster (CDN).
 - 2506-peta-gabungan-dashboard: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
-- 2505-penerbitan-adopsi-skema: Added PHP 8.4 + laravel/framework 13 (OpenKab monolith), spatie/laravel-permission,
 
 
 <!-- MANUAL ADDITIONS START -->

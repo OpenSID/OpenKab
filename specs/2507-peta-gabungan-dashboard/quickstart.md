@@ -1,60 +1,50 @@
 # Quickstart: Peta Gabungan Geospasial & DataSpasial
 
-**Feature**: 006-peta-gabungan-dashboard  
-**Date**: 2026-10-19  
-**Purpose**: Validation scenarios for acceptance (mirror US1–US5, SC-001–SC-007)
+**Feature**: 2507-peta-gabungan-dashboard
+**Date**: 2026-10-19
 
-## Prerequisites
-- KAB-01 dependencies satisfied (permissions/menu exist; `dataspasial-peta-read` assigned to roles incl. analis opd).
-- API-04 reachable (or Http::fake in tests). `API_DATABASE_GABUNGAN_HOST` + `database_gabungan_api_key` configured for manual smoke.
-- Leaflet + markercluster assets whitelisted in CSP (updated preset).
+## Prasyarat
+- KAB-01 selesai (menu, peran, izin `dataspasial-peta-read`).
+- API-04 (`GET /api/v1/dataspasial/geojson`) tersedia; `API_DATABASE_GABUNGAN_HOST` + token `database_gabungan_api_key` terisi.
+- CSP mengizinkan Leaflet + markercluster.
 
-## Manual validation scenarios
+## Skenario manual
 
-### US1: Single combined map
-1. Login as user with `dataspasial-peta-read`.
-2. Open `/dataspasial/peta` (menu "Peta Gabungan").
-3. Verify basemap (OSM), batas wilayah (polygons) visible, points from DataSpasial present. 
-4. Zoom out → clusters appear with counts; click cluster → zooms to points.
-5. Layer control toggles legacy geospasial vs DataSpasial layers and boundaries.
-6. With API unavailable → "Data sementara tidak tersedia" shown in map area; layout/nav intact (no stack trace).
+### US1 — Tata letak dua blok + lapisan + klaster
+1. Login sebagai pengguna ber-izin `dataspasial-peta-read`; buka `/dataspasial/peta`.
+2. Pastikan tampil **dua blok**: blok filter di kiri, blok lapisan/peta di kanan; ada basemap + batas wilayah.
+3. Buka panel lapisan; pastikan ada lapisan kategori geospasial lama (mis. Sekolah, Fasilitas Kesehatan, Tempat Ibadah) dan lapisan per sektor DataSpasial.
+4. Zoom rendah → klaster tampil dengan jumlah; klik klaster → titik individual.
+5. Toggle lapisan → tampil/hilang tanpa muat ulang.
+6. API tidak tersedia → pesan "Data sementara tidak tersedia", kerangka halaman utuh.
 
-### US2: Popup with flagged isian + sumber + tanggal
-1. Click a point with `dataspasial` values and `tampil_popup=true` isian.
-2. Verify identity (nama, sektor, desa/kec) + each popup isian with nilai + satuan.
-3. Verify `sumber`/`sumber_data` and `waktu_input`/`tanggal_pembaruan` shown when present.
-4. Sector with no popup isian → popup shows identity only (no errors).
-5. Point with no values for selected periode → identity + "nilai belum tersedia untuk periode tersebut" (per acceptance).
+### US2 — Popup detail (sorot/klik)
+1. Sorot (hover) titik → popup pratinjau; klik titik → popup menetap.
+2. Popup menampilkan identitas + isian `tampil_popup` + satuan; sumber (mis. "Data Presisi") dan tanggal pembaruan bila ada.
+3. Lapisan tanpa isian `tampil_popup` → popup hanya identitas.
 
-### US3: Filters + legend (no reload)
-1. Change sektor → map + legend update without full page reload (AJAX). Periods list reflects selected sektor.
-2. Change periode → values in popups and thematic update.
-3. If `tampil_filter` isian exist → filter controls appear; change filter → map updates (debounced).
-4. No data for selection → friendly "tidak ada data untuk pilihan ini" in map area; legend updated.
-5. Rapid changes → only last selection reflected (stale responses ignored).
+### US3 — Filter kecamatan + isian filter (tanpa muat ulang)
+1. Blok filter menampilkan dropdown **Kecamatan** (tanpa kabupaten/desa) dan kontrol untuk isian `tampil_filter` lapisan DataSpasial aktif.
+2. Ubah kecamatan / isian filter → peta & legenda diperbarui tanpa muat ulang.
+3. Kombinasi tanpa data → "tidak ada data untuk pilihan ini".
+3. Ganti pilihan cepat → hasil pilihan terakhir yang tampil.
 
-### US4: Thematic desa coloring (tanpa data ≠ nol)
-1. Select numeric isian for thematic.
-2. Desa with value >0 and ==0 colored by scale; desa with no data → distinct "tanpa data" style (different from all scale colors, including zero).
-3. Legend shows scale ranges + satuan + "Tanpa Data".
-4. Sector with no numeric isian → thematic picker disabled/unavailable with explanation; points/popup still work.
-5. Toggle between periods → colors update accordingly.
+### US4 — Pewarnaan desa tematik
+1. Pilih isian angka → desa diwarnai + legenda rentang + satuan.
+2. Desa tanpa data → gaya khusus (bukan nol); desa nilai nol → kelas skala.
+3. Tidak ada isian angka → pilihan pewarnaan nonaktif dengan keterangan.
 
-### US5: Performance + mobile
-1. Load dataset with >=1000 points → pan/zoom smooth (no noticeable jank). Clusters render correctly.
-2. Mobile viewport (<=768px): controls, legend, layer panel accessible; popup fits screen; no horizontal scroll.
-3. Touch: tap cluster → expands; tap point → popup; close popup works.
+### US5 — 1.000+ titik & ponsel
+1. Dataset 1.000+ titik → pan/zoom lancar, klaster benar.
+2. Layar ponsel: blok filter, panel lapisan, legenda, popup terjangkau; tanpa scroll horizontal.
+4. Sentuh titik/klaster → popup/isi klaster terbuka dan bisa ditutup.
 
-## Automated checks (Feature/Browser)
-- Feature: `PetaGabunganControllerTest` covers unavailable (503/timeout/not_configured) → unavailable partial, empty state, success returns FeatureCollection, permission denied for unauthorized, AJAX endpoint behavior.
-- Browser smoke: `SmokePetaGabunganTest` (or extend menu smoke) verifies `/dataspasial/peta` loads and shows correct title/"Data sementara tidak tersedia" on simulated unavailable.
-- Regression: existing `DataSpasialUnavailableTest` and `SmokeDataSpasialMenuTest` still pass.
+## Pemeriksaan otomatis
+```
+vendor/bin/pest tests/Feature/DataSpasial/PetaGabunganControllerTest.php
+vendor/bin/pest tests/Feature/DataSpasial/DataSpasialUnavailableTest.php
+vendor/bin/pest tests/Browser/SmokePetaGabunganTest.php
+```
 
-## Verification of SCs
-- SC-001: 1000+ points smooth (manual + synthetic fixtures)
-- SC-002: filter changes <3s, 0 full reloads (network tab)
-- SC-003: no data style distinct from zero (visual inspection + fixture assertions)
-- SC-004: popup shows flagged isian + satuan + sumber + tanggal when present
-- SC-005: mobile task flow <1 min
-- SC-006: unavailable shows message, no error/stack trace
-- SC-007: US1–4 reviewed by System Analyst
+## Pemetaan SC
+- SC-001 (1.000+ titik lancar), SC-002 (<3 dtk, 0 muat ulang), SC-003 (tanpa data ≠ nol), SC-004 (popup lengkap), SC-005 (ponsel), SC-006 (pesan generik), SC-007 (review SA).

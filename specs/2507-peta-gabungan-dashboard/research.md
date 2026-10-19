@@ -1,82 +1,68 @@
 # Research: Peta Gabungan Geospasial & DataSpasial
 
-**Feature**: 006-peta-gabungan-dashboard  
-**Date**: 2026-10-19  
+**Feature**: 2507-peta-gabungan-dashboard
+**Date**: 2026-10-19
 **Status**: Complete
 
-## 1. Overview
+## 1. Ringkasan
+Halaman dua blok: blok filter DataSpasial (kiri) + blok lapisan/peta (kanan). Blok filter berisi filter kecamatan dan isian bertanda `tampil_filter` pada lapisan DataSpasial aktif. Panel lapisan berisi lapisan kategori geospasial lama (sekolah, fasilitas kesehatan, tempat ibadah, dll.) dan lapisan per sektor DataSpasial. Titik menampilkan popup detail saat **disorot atau diklik**. Tidak ada pemilih sektor.
 
-This feature implements the combined map dashboard (KAB-04) displaying both legacy geospatial layers and DataSpasial features (facilities + values) in one Leaflet map, with clustering, layer panel, popup filtering by `tampil_popup` flags, sector/period filters (no reload), and thematic desa coloring by a selected numeric isian where "tanpa data" ≠ zero.
+## 2. Fakta dari basis kode
+- `PetaGabunganController` (extends `DataSpasialController`): `index()` mengembalikan view + `DataSpasialResult`; `data()` baru mengembalikan JSON FeatureCollection + meta.
+- `DataSpasialApiService::geojsonGabungan()` → `GET /api/v1/dataspasial/geojson`; filter `kode_kabupaten`, `kode_kecamatan`, `kode_desa`, `sektor`, `periode`. FeatureCollection dikembalikan apa adanya; `DataSpasialResult::data[0]` = FeatureCollection.
+- `listSektor()` → `GET sektor` (memberi `id`, `kode`, `nama`, `status`).
+- `listSkema(['sektor' => kode])` → `GET skema` (wajib param `sektor`, bukan `sektor_id`) dan menyertakan isian: `label`, `tipe`, `satuan`, `tampil_popup`, `tampil_filter` (lihat `tests/Feature/DataSpasial/Fixtures.php`, koreksi K1/K2).
+- API-04 `GeoJsonController`/`GeoSpasialService`: fitur titik berasal dari `ds_fasilitas` (punya `dataspasial`), titik bawaan OpenSID `lokasi` (`source='openkab'`, punya `kategori`, `simbol`), dan Data Presisi (`source='presisi'`, punya `kategori`). Titik tanpa koordinat valid dikecualikan.
+- Legacy: halaman `/plan` (branch `002-tipe-lokasi-import`) memakai pola blok filter (tombol toggle collapse) + wilayah cascade + tombol Tampilkan; JS dijaga dengan `if (!$) return;` dan dijalankan pada `DOMContentLoaded` (jQuery dari Vite `app.js` bersifat deferred).
+- CSP `CustomCspPreset` sudah mengizinkan Leaflet + OSM + `databaseGabunganUrl`; markercluster sudah ditambahkan.
 
-## 2. Known Technical Context (from codebase)
+## 3. Keputusan
 
-### 2.1 Controller & Routes
-- `app/Http/Controllers/DataSpasial/PetaGabunganController.php`: extends `DataSpasialController`, `pageTitle()='Peta Gabungan'`, `viewName()='dataspasial.peta.index'`, `fetch()` calls `$this->dataspasial->geojsonGabungan($request->only(['sektor_id','kode_kabupaten','kode_kecamatan','kode_desa']))`.
-- `routes/web.php:522-524`: `GET dataspasial/peta` with `permission:dataspasial-peta-read`, name `dataspasial.peta`.
-- Parent `DataSpasialController` returns `view($viewName(), ['title'=>$pageTitle(),'result'=>$this->fetch($request)])` and **never throws** (maps failures to `DataSpasialResult` with `status=unavailable`).
+### D-001: Tata letak dua blok
+- **Decision**: Kolom kiri (filter) + kolom kanan (peta). Blok filter berisi kecamatan + isian `tampil_filter`; panel lapisan berada pada blok kanan (di sekitar peta).
+- **Rationale**: Sesuai klarifikasi pengguna dan acuan tampilan.
+- **Alternatives**: filter horizontal di atas peta (ditolak sesuai klarifikasi).
 
-### 2.2 DataSpasial API Service (OpenKab → API Satu Data)
-- `app/Services/DataSpasialApiService.php`:
-  - Base URL: `config('app.databaseGabunganUrl')` (env `API_DATABASE_GABUNGAN_HOST`), default `https://api-database-gabungan.id/`
-  - Token: `Setting::get('database_gabungan_api_key')` (resolved via `resolveToken()`)
-  - Endpoint prefix: `/api/v1/dataspasial` (`config('dataspasial.path_prefix')`)
-  - Timeout 10s, cache TTL 300s (GET only for `data`/`empty`; `unavailable` never cached)
-  - Headers audit: `X-OpenKab-User-Id`, `X-OpenKab-User-Name` (via `userHeaders()`)
-  - `geojsonGabungan(array $filters)` → `GET geojson` (L535-538)
-  - `extractItems()` treats payload with `type==='FeatureCollection'` as special (returns `[$payload]`), so `$result->data[0]` = FeatureCollection array.
-  - Write ops invalidate cache via generation bump.
+### D-002: Daftar lapisan dari payload GeoJSON
+- **Decision**: Turunkan lapisan dari `properties` pada satu payload `geojson`:
+  - **Geospasial lama**: kelompokkan berdasarkan `properties.kategori` (fallback `simbol`), untuk fitur `source` `openkab` (titik lokasi OpenSID) dan `presisi`.
+  - **DataSpasial**: kelompokkan berdasarkan `properties.sektor_kode`/`sektor_nama`, untuk fitur dengan `properties.dataspasial` tidak null.
+- **Rationale**: Satu pemanggilan baca; sesuai epic "satu peta"; tanpa endpoint baru; nama lapisan (sekolah, fasilitas kesehatan, tempat ibadah) berasal dari kategori titik.
+- **Alternatives**: panggil `/api/v1/point` terpisah per kategori (ditolak: menambah endpoint + tidak mencakup DataSpasial).
 
-### 2.3 API-04: GeoJSON Gabungan (upstream)
-- API-Database-Gabungan exposes `GET /api/v1/dataspasial/geojson` (returns `application/geo+json`, RFC 7946 FeatureCollection). Properties include facility identity, `source` (`openkab`/`presisi`), optional `dataspasial` with nilai/sumber/skema/periode/isian fields. Filters: `kode_kabupaten,kode_kecamatan,kode_desa,sektor,periode`.
-- `ds_isian` flags: `tampil_popup` (default 1), `tampil_filter` (default 0), `tipe` (angka/teks/pilihan/ya_tidak/tanggal), `satuan`.
+### D-003: Filter dinamis dari isian `tampil_filter`
+- **Decision**: Untuk lapisan DataSpasial aktif (sektor `kode`), ambil isian via `listSkema(['sektor' => kode])`; endpoint `peta/data` mengembalikan `meta.filters` berisi isian dengan `tampil_filter=true` (`kode`, `label`, `tipe`, `opsi`).
+- **Rationale**: Definisi "filter" ada di metadata isian API; tidak bisa diturunkan dari GeoJSON.
+- **Alternatives**: hardcode filter di UI (ditolak: tidak dinamis).
 
-### 2.4 Map stack & assets
-- Leaflet **1.9.4** via unpkg CDN. Marker icons in `public/assets/img/map/`, `public/web/img/`.
-- **Leaflet.markercluster** not present — required for clustering (FR-002).
-- CSP (`app/Policies/CustomCspPreset.php`) allows Leaflet + OSM; must whitelist markercluster CSS/JS/images and allow unpkg.
+### D-004: Hanya kecamatan
+- **Decision**: Satu dropdown kecamatan; daftar dari endpoint wilayah yang sudah dipakai modul lain (`/api/v1/statistik-web/get-list-kecamatan/{kode_kabupaten}` atau `get-list-kecamatan` + identitas). Tidak ada kabupaten/desa.
+- **Rationale**: Klarifikasi pengguna.
+- **Alternatives**: cascade kab/kec/desa (ditolak).
 
-### 2.5 UI conventions & error states
-- Pages extend `layouts.index` (AdminLTE), use `<x-dataspasial-status :result="$result">`.
-- `dataspasial.unavailable.blade.php` shows "Data sementara tidak tersedia" (testid `dataspasial-unavailable`) — no technical details (FR-016).
-- Feature/Browser tests follow DataSpasial patterns (DatabaseTransactions, Http::fake, SessionState).
+### D-005: Popup pada sorot dan klik
+- **Decision**: `mouseover` membuka popup singkat; `click` menahan popup; isi = identitas + isian `tampil_popup` + satuan + sumber + tanggal pembaruan.
+- **Rationale**: Pengguna menyebut "disorot atau diklik".
+- **Alternatives**: klik saja (ditolak).
 
-## 3. Key Decisions (resolved)
+### D-006: Proxy server-side + pesan generik
+- **Decision**: Endpoint `GET dataspasial/peta/data` (permission sama) mengembalikan `{type, features, meta}` dengan `meta.unavailable`/`meta.empty`, selalu HTTP 200. Browser tidak memanggil API Satu Data langsung.
+- **Rationale**: Menjaga token di server, konsisten dengan modul DataSpasial & uji `DataSpasialUnavailableTest`.
+- **Alternatives**: panggil API langsung dari browser (ditolak: ekspos token, melanggar CSP/convention).
 
-### D-001: Leaflet.markercluster
-- **Decision**: Include via CDN (unpkg) with SRI; update `CustomCspPreset` to whitelist markercluster assets.
-- **Rationale**: Matches existing CDN pattern, minimal change, supports 1000+ points.
+### D-007: Tanpa pemilih sektor
+- **Decision**: Hapus pemilih sektor; konteks ditentukan lapisan sektor DataSpasial.
+- **Rationale**: Klarifikasi pengguna (Opsi B).
 
-### D-002: AJAX for dynamic updates (no page reload)
-- **Decision**: Add AJAX JSON endpoint `GET dataspasial/peta/data` (same permission) returning FeatureCollection (or structured result). Initial server render remains; filter/sector/periode updates call AJAX endpoint to update map without full reload (FR-008).
-- **Rationale**: Preserves server-side token/audit logic, avoids calling external API from browser, testable with Http::fake.
-
-### D-003: Basemap + layer panel
-- **Decision**: OSM raster tiles; `L.control.layers` with basemaps + overlays for boundaries (polygons) and facility point groups (by source/has-dataspasial). Render from single API-04 FeatureCollection.
-
-### D-004: Thematic desa coloring
-- **Decision**: Extract Polygon/MultiPolygon per desa; map `kode_desa` → numeric value for selected `tipe='angka'` isian. Missing value → distinct "no data" style (not zero). Zero → included in scale. Legend includes "Tanpa Data". Default classification: quantile (data-driven); fallback equal interval.
-- **Rationale**: Enforces FR-011/012, SC-003.
-
-### D-005: Popup content
-- **Decision**: Show identity + only isian with `tampil_popup===true` (default true), include satuan, `sumber_data`/`sumber`, `periode`, `waktu_input`/version info when present. If none → identity only.
-
-### D-006: Filters
-- **Decision**: Load sectors via `listSektor()`; derive available periods from features or via `listNilai()`/`ringkasan()`; isian filter list from `listIsian()` (or sector metadata) for `tampil_filter===true`. All updates via AJAX (debounced).
-
-### D-007: Error/empty states in JS
-- **Decision**: AJAX JSON returns unavailable/empty; render same UX in map area (`dataspasial-unavailable` / friendly empty message). Never show stack traces.
-
-### D-008: CSP additions
-- **Decision**: Whitelist Leaflet.markercluster CSS/JS (unpkg v1.5.3) in `CustomCspPreset`.
+### D-008: CSP
+- **Decision**: Pertahankan whitelist Leaflet + markercluster di `CustomCspPreset`.
+- **Rationale**: Sudah diterapkan; cukup verifikasi.
 
 ## 4. Unknowns Resolved
-All clarifications satisfied (classification default quantile, boundaries from FeatureCollection, periods derived from data, isian metadata from API/listIsian).
+Semua klarifikasi spec terpenuhi: sumber lapisan (keduanya), tanpa sektor, kecamatan saja, popup sorot/klik, tata letak dua blok.
 
 ## 5. Alternatives Considered
-- Full server re-render on filter change → violates FR-008 (rejected)
-- Direct browser calls to Satu Data API → token exposure, breaks convention (rejected)
-- Bundle via Vite instead of CDN → inconsistent with legacy maps (rejected)
-- Treat "tanpa data" as transparent/zero-style → violates FR-011/SC-003 (rejected)
+Lihat D-001..D-008.
 
-## 6. References
-Spec: `specs/006-peta-gabungan-dashboard/spec.md`; Service: `app/Services/DataSpasialApiService.php`, `DataSpasialResult.php`; Controller: `PetaGabunganController.php`; CSP: `app/Policies/CustomCspPreset.php`; Tests: `DataSpasialUnavailableTest.php`, `SmokeDataSpasialMenuTest.php`, `Fixtures.php`; API: `docs/spasial/openapi-fondasi.yaml`, API-Database-Gabungan GeoJson*.
+## 6. Referensi
+`spec.md`, `plan.md`, `contracts/view-contract.md`, `app/Services/DataSpasialApiService.php`, `app/Http/Controllers/DataSpasial/PetaGabunganController.php`, `app/Policies/CustomCspPreset.php`, `tests/Feature/DataSpasial/Fixtures.php`, branch `002-tipe-lokasi-import` (`resources/views/peta/lokasi/`).

@@ -22,9 +22,9 @@
 
 **Purpose**: Prepare shared assets and CSP config needed by the map.
 
-- [ ] T001 [P] Update CSP whitelist to allow Leaflet.markercluster assets in `app/Policies/CustomCspPreset.php` (add unpkg markercluster CSS/JS)
-- [ ] T002 [P] Add Leaflet.markercluster 1.5.3 assets include strategy in peta view (via CDN with SRI or ensure CSP allows) — document in view
-- [ ] T003 [P] Create JS asset for Peta Gabungan map in `public/js/dataspasial/peta-gabungan.js` (initial scaffold with clustering, layers, popup, thematic helpers)
+^- [x] T001 [P] Update CSP whitelist to allow Leaflet.markercluster assets in `app/Policies/CustomCspPreset.php` (add unpkg markercluster CSS/JS)
+^- [x] T002 [P] Add Leaflet.markercluster 1.5.3 assets include strategy in peta view (via CDN with SRI or ensure CSP allows) — document in view
+^- [x] T003 [P] Create JS asset for Peta Gabungan map in `public/js/dataspasial/peta-gabungan.js` (initial scaffold with clustering, layers, popup, thematic helpers)
 - [ ] T004 [P] Verify existing permissions/menu for `dataspasial-peta-read` (migration already exists) — no change needed (reference `database/migrations/2026_10_14_000001_create_dataspasial_roles.php`)
 
 ---
@@ -35,10 +35,10 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase complete.
 
-- [ ] T005 Add AJAX endpoint route `GET dataspasial/peta/data` in `routes/web.php` (same middleware group as `dataspasial/peta`, permission `dataspasial-peta-read`), named `dataspasial.peta.data`
-- [ ] T006 Add controller method `data(Request $request)` to `app/Http/Controllers/DataSpasial/PetaGabunganController.php` returning JSON (FeatureCollection + meta) following view contract; handle unavailable/empty per DataSpasialResult contract
-- [ ] T007 [P] Add Feature test helper fixtures for `geojson-gabungan` success/empty/unavailable in `tests/Feature/DataSpasial/Fixtures.php` (mirror existing fixture style) 
-- [ ] T008 [P] Create base Feature test `tests/Feature/DataSpasial/PetaGabunganControllerTest.php` skeleton with `uses(DatabaseTransactions::class)`, Http::fake, config/Setting setup
+^- [x] T005 Add AJAX endpoint route `GET dataspasial/peta/data` in `routes/web.php` (same middleware group as `dataspasial/peta`, permission `dataspasial-peta-read`), named `dataspasial.peta.data`
+^- [x] T006 Add controller method `data(Request $request)` to `app/Http/Controllers/DataSpasial/PetaGabunganController.php` returning JSON (FeatureCollection + meta) following view contract; handle unavailable/empty per DataSpasialResult contract
+^- [x] T007 [P] Add Feature test helper fixtures for `geojson` success/empty/unavailable in `tests/Feature/DataSpasial/Fixtures.php` (mirror existing fixture style) 
+^- [x] T008 [P] Create base Feature test `tests/Feature/DataSpasial/PetaGabunganControllerTest.php` skeleton with `uses(DatabaseTransactions::class)`, Http::fake, config/Setting setup
 
 **Checkpoint**: Foundation ready — user story implementation can begin.
 

@@ -14,7 +14,13 @@ class CustomCspPreset implements Preset
         $policy
             ->add(Directive::BASE, Keyword::SELF)
             ->add(Directive::OBJECT, Keyword::NONE)
-            ->add(Directive::IMG, [Keyword::SELF, 'data:', 'https://tile.openstreetmap.org/', 'blob:'])
+            ->add(Directive::IMG, [
+                Keyword::SELF,
+                'data:',
+                'https://tile.openstreetmap.org/',
+                'https://unpkg.com/',
+                'blob:',
+            ])
             ->add(Directive::STYLE, [
                 Keyword::SELF,
                 Keyword::UNSAFE_INLINE,
@@ -23,6 +29,8 @@ class CustomCspPreset implements Preset
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
                 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css',
                 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+                'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css',
+                'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css',
                 'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',
                 'https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
@@ -32,6 +40,7 @@ class CustomCspPreset implements Preset
                 Keyword::UNSAFE_EVAL,
                 'https://cdn.datatables.net/2.0.7/js/dataTables.min.js',
                 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+                'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
                 'https://cdn.jsdelivr.net/npm/sweetalert2@11',
             ])

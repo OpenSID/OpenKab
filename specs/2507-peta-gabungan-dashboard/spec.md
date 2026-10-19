@@ -28,6 +28,7 @@ Sebagai analis OPD, saya membuka menu Peta Gabungan dan melihat satu peta yang m
 2. **Given** terdapat banyak titik berdekatan, **When** peta dilihat pada zoom rendah, **Then** titik dikelompokkan menjadi klaster yang menampilkan jumlah titik; **When** klaster dibuka, **Then** titik-titik individual tampil.
 3. **Given** panel lapisan tersedia, **When** pengguna menyalakan/mematikan lapisan geospasial lama atau lapisan DataSpasial, **Then** lapisan terkait tampil/hilang tanpa memuat ulang halaman dan tanpa menghilangkan pilihan lain.
 4. **Given** data sumber tidak tersedia, **When** halaman dibuka, **Then** pesan "Data sementara tidak tersedia" tampil pada area peta dan kerangka halaman tetap utuh (bukan halaman error).
+5. **Given** halaman dibuka pertama kali, **When** filter sektor dan wilayah ditampilkan, **Then** sektor bersifat wajib dipilih sebelum memuat data peta.
 
 ---
 
@@ -122,7 +123,7 @@ Sebagai analis OPD, saya dapat menggunakan peta dengan 1.000 atau lebih titik te
 - **FR-003**: Halaman MUST menyediakan panel lapisan untuk menyalakan/mematikan lapisan geospasial lama dan lapisan DataSpasial secara terpisah, tanpa memuat ulang halaman.
 - **FR-004**: Saat titik dipilih, popup MUST menampilkan identitas fasilitas dan hanya isian yang ditandai tampil di popup; setiap nilai MUST disertai satuannya bila tersedia.
 - **FR-005**: Popup MUST menampilkan keterangan sumber data (misalnya "Data Presisi") dan tanggal pembaruan bila tersedia dari sumber data.
-- **FR-006**: Halaman MUST menyediakan pemilih sektor dan pemilih periode; daftar periode MUST berisi periode yang benar-benar memiliki data untuk sektor terpilih, dengan periode terbaru dipilih secara baku.
+- **FR-006**: Halaman MUST menyediakan pemilih sektor dan pemilih wilayah (seperti modul lain); sektor bersifat wajib dipilih terlebih dahulu sebelum memuat data peta. Pemilih periode tersedia setelah sektor dipilih; daftar periode MUST berisi periode yang benar-benar memiliki data untuk sektor terpilih, dengan periode terbaru dipilih secara baku.
 - **FR-007**: Setiap isian yang ditandai filter pada sektor aktif MUST tersedia sebagai kontrol filter yang mempersempit tampilan peta.
 - **FR-008**: Mengganti sektor, periode, atau filter MUST memperbarui isi peta dan legenda tanpa memuat ulang halaman, dan MUST menampilkan hasil pilihan terakhir bila pengguna mengganti pilihan selama pemuatan berlangsung.
 - **FR-009**: Halaman MUST menampilkan legenda yang selalu sesuai dengan tampilan saat ini: skala warna pewarnaan desa (termasuk rentang nilainya dan satuan) dan kategori "tanpa data"; legenda MUST ikut diperbarui saat sektor/periode/isian berubah.

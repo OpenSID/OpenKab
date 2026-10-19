@@ -534,7 +534,7 @@ class DataSpasialApiService
      */
     public function geojsonGabungan(array $filters = []): DataSpasialResult
     {
-        return $this->request('GET', 'geojson-gabungan', $filters);
+        return $this->request('GET', 'geojson', $filters);
     }
 
     /**

@@ -32,6 +32,7 @@ use Spatie\Permission\Models\Role;
  * @param  array<int, array<string, mixed>>  $items
  * @return array<string, mixed>
  */
+if (!function_exists("fakeKoleksi")) {
 function fakeKoleksi(array $items): array
 {
     return [
@@ -460,5 +461,112 @@ function makePenggunaBacaSaja(): User
 {
     return makeRole('pembaca skema uji k03', [
         'dataspasial-skema-read',
+    ]);
+}
+}
+
+// ---------------------------------------------------------------------------
+// Fixture KAB-04 — Peta Gabungan (GeoJSON API-04)
+//
+// Bentuk salinan respons `GET /api/v1/dataspasial/geojson`: FeatureCollection
+// yang menggabungkan titik geospasial lama (OpenSID `lokasi` & Data Presisi)
+// dengan titik DataSpasial (`dataspasial` tidak null), serta polygon batas desa.
+// ---------------------------------------------------------------------------
+
+/**
+ * @return array<string, mixed>
+ */
+function fxGeoJsonGabungan(): array
+{
+    return [
+        'type' => 'FeatureCollection',
+        'features' => [
+            [
+                'type' => 'Feature',
+                'geometry' => ['type' => 'Point', 'coordinates' => [115.2, -8.65]],
+                'properties' => [
+                    'id' => 1,
+                    'nama' => 'SD Negeri 1',
+                    'source' => 'openkab',
+                    'kategori' => 'sekolah',
+                    'kode_kecamatan' => '510201',
+                ],
+            ],
+            [
+                'type' => 'Feature',
+                'geometry' => ['type' => 'Point', 'coordinates' => [115.3, -8.66]],
+                'properties' => [
+                    'id' => 2,
+                    'nama' => 'Pura Dalem',
+                    'source' => 'presisi',
+                    'kategori' => 'tempat_ibadah',
+                ],
+            ],
+            [
+                'type' => 'Feature',
+                'geometry' => ['type' => 'Point', 'coordinates' => [115.4, -8.67]],
+                'properties' => [
+                    'id' => 3,
+                    'nama' => 'Fasilitas Infrastruktur',
+                    'source' => 'openkab',
+                    'sektor_kode' => 'SK0',
+                    'sektor_nama' => 'Infrastruktur',
+                    'kode_desa' => '5102012001',
+                    'kode_kecamatan' => '510201',
+                    'dataspasial' => [
+                        'nilai' => 12,
+                        'sumber' => 'desa',
+                        'periode' => '2025-06',
+                        'isian_kode' => 'jumlah_unit',
+                        'isian_label' => 'Jumlah Unit',
+                        'isian_satuan' => 'unit',
+                        'isian_tipe' => 'angka',
+                        'waktu_input' => '2025-06-15T10:30:00Z',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'Feature',
+                'geometry' => [
+                    'type' => 'Polygon',
+                    'coordinates' => [[[115.1, -8.6], [115.2, -8.6], [115.2, -8.7], [115.1, -8.7], [115.1, -8.6]]],
+                ],
+                'properties' => ['kode_desa' => '5102012001', 'nama_desa' => 'Desa Bernilai', 'nilai' => 5],
+            ],
+            [
+                'type' => 'Feature',
+                'geometry' => [
+                    'type' => 'Polygon',
+                    'coordinates' => [[[115.2, -8.6], [115.3, -8.6], [115.3, -8.7], [115.2, -8.7], [115.2, -8.6]]],
+                ],
+                'properties' => ['kode_desa' => '5102012002', 'nama_desa' => 'Desa Nol', 'nilai' => 0],
+            ],
+            [
+                'type' => 'Feature',
+                'geometry' => [
+                    'type' => 'Polygon',
+                    'coordinates' => [[[115.3, -8.6], [115.4, -8.6], [115.4, -8.7], [115.3, -8.7], [115.3, -8.6]]],
+                ],
+                'properties' => ['kode_desa' => '5102012003', 'nama_desa' => 'Desa Tanpa Data'],
+            ],
+        ],
+    ];
+}
+
+/**
+ * Skema sektor SK0 dengan isian bertanda filter & popup.
+ *
+ * @return array<string, mixed>
+ */
+function fxSkemaIsianFilter(): array
+{
+    $isian = [
+        fxIsian('jumlah_unit', ['label' => 'Jumlah Unit', 'tipe' => 'angka', 'satuan' => 'unit', 'tampil_popup' => true]),
+        fxIsian('jenis_unit', ['label' => 'Jenis Unit', 'tipe' => 'pilihan', 'opsi' => ['A', 'B'], 'tampil_filter' => true]),
+        fxIsian('catatan', ['label' => 'Catatan', 'tipe' => 'teks']),
+    ];
+
+    return fakeKoleksi([
+        fxSkemaAktif('1', 1, 'SK0', 'Infrastruktur', 1, 'terbit', $isian),
     ]);
 }

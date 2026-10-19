@@ -29,111 +29,143 @@ class PetaGabunganControllerTest extends TestCase
         Cache::flush();
     }
 
-    protected function makePetaUser(): void
+    private function actingAsAnalis(): void
     {
-        $user = makeRole('analis opd', ['dataspasial-peta-read']);
-        $this->actingAs($user);
+        $this->actingAs(makeRole('analis opd', ['dataspasial-peta-read']));
     }
 
-    private function fakeGeoJson(array $features = [], int $status = 200): void
+    /**
+     * @param  array<int, array<string, mixed>>  $features
+     */
+    private function fakeGeoJson(array $features, int $status = 200, bool $withSkema = false): void
     {
-        Http::fake([
-            '*/api/v1/config/*' => Http::response([], 200),
+        $fakes = [
             '*/api/v1/dataspasial/geojson*' => Http::response([
                 'type' => 'FeatureCollection',
                 'features' => $features,
             ], $status),
-        ]);
-    }
+        ];
 
-    public function test_can_access_peta_page(): void
-    {
-        $user = makeRole('analis opd', ['dataspasial-peta-read']);
-        $this->actingAs($user);
+        if ($withSkema) {
+            $fakes['*/api/v1/dataspasial/skema*'] = Http::response(fxSkemaIsianFilter(), 200);
+        }
 
-        Http::fake([
-            '*/api/v1/dataspasial/geojson*' => Http::response([
-                'type' => 'FeatureCollection',
-                'features' => [
-                    [
-                        'type' => 'Feature',
-                        'geometry' => ['type' => 'Point', 'coordinates' => [115.2, -8.65]],
-                        'properties' => ['id' => 1, 'nama' => 'Fasilitas Uji'],
-                    ],
-                ],
-            ], 200),
-            '*/api/v1/dataspasial/sektor*' => Http::response(fakeKoleksi([]), 200),
-        ]);
-
-        $this->get('/dataspasial/peta')
-            ->assertStatus(200)
-            ->assertSee('Peta Gabungan');
-    }
-
-    public function test_data_endpoint_returns_featurecollection(): void
-    {
-        $this->actingAs(makeRole('analis opd', ['dataspasial-peta-read']));
-
-        Http::fake([
-            '*/api/v1/dataspasial/geojson*' => Http::response([
-                'type' => 'FeatureCollection',
-                'features' => [
-                    [
-                        'type' => 'Feature',
-                        'geometry' => ['type' => 'Point', 'coordinates' => [115.2, -8.65]],
-                        'properties' => [
-                            'id' => 1,
-                            'nama' => 'Test Fasilitas',
-                            'dataspasial' => ['nilai' => 12, 'periode' => '2025-06', 'isian_kode' => 'jumlah_siswa'],
-                        ],
-                    ],
-                ],
-            ], 200),
-        ]);
-
-        $response = $this->getJson('/dataspasial/peta/data');
-
-        $response->assertOk()
-            ->assertJsonPath('type', 'FeatureCollection')
-            ->assertJsonCount(1, 'features')
-            ->assertJsonPath('meta.periods.0', '2025-06')
-            ->assertJsonPath('meta.isian_tematik_options.0.value', 'jumlah_siswa');
-    }
-
-    public function test_data_endpoint_flags_unavailable_without_error(): void
-    {
-        $this->actingAs(makeRole('analis opd', ['dataspasial-peta-read']));
-
-        Http::fake([
-            '*/api/v1/dataspasial/geojson*' => Http::response(['message' => 'Service Unavailable'], 503),
-        ]);
-
-        $response = $this->getJson('/dataspasial/peta/data');
-
-        $response->assertOk()
-            ->assertJsonPath('meta.unavailable', true)
-            ->assertJsonCount(0, 'features');
-    }
-
-    public function test_data_endpoint_flags_empty(): void
-    {
-        $this->actingAs(makeRole('analis opd', ['dataspasial-peta-read']));
-
-        Http::fake([
-            '*/api/v1/dataspasial/geojson*' => Http::response([
-                'type' => 'FeatureCollection',
-                'features' => [],
-            ], 200),
-        ]);
-
-        $response = $this->getJson('/dataspasial/peta/data');
-
-        $response->assertOk()
-            ->assertJsonPath('meta.empty', true);
+        Http::fake($fakes);
     }
 
     public function test_guest_is_redirected_from_peta(): void
     {
         $this->get('/dataspasial/peta')->assertRedirect('/login');
+    }
+
+    public function test_page_renders_two_block_layout(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson(fxGeoJsonGabungan()['features']);
+
+        $this->get('/dataspasial/peta')
+            ->assertOk()
+            ->assertSee('Peta Gabungan')
+            ->assertSee('data-testid="filter-kecamatan"', false)
+            ->assertSee('data-testid="map-layers"', false)
+            ->assertSee('id="map"', false);
+    }
+
+    public function test_page_has_no_sector_picker(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson(fxGeoJsonGabungan()['features']);
+
+        $this->get('/dataspasial/peta')->assertOk()->assertDontSee('filter_sektor');
+    }
+
+    public function test_data_endpoint_returns_featurecollection_with_layers(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson(fxGeoJsonGabungan()['features']);
+
+        $response = $this->getJson('/dataspasial/peta/data');
+
+        $response->assertOk()
+            ->assertJsonPath('type', 'FeatureCollection')
+            ->assertJsonCount(6, 'features')
+            ->assertJsonPath('meta.unavailable', false)
+            ->assertJsonPath('meta.empty', false);
+
+        $layers = $response->json('meta.layers');
+        $jenis = array_column($layers, 'jenis');
+        $this->assertContains('geospasial_lama', $jenis);
+        $this->assertContains('dataspasial', $jenis);
+    }
+
+    public function test_data_endpoint_exposes_filters_popup_and_thematic_from_skema(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson(fxGeoJsonGabungan()['features'], 200, true);
+
+        $response = $this->getJson('/dataspasial/peta/data?sektor=SK0');
+
+        $response->assertOk()
+            ->assertJsonPath('meta.filters.0.kode', 'jenis_unit')
+            ->assertJsonPath('meta.popup_isian.0.kode', 'jumlah_unit')
+            ->assertJsonPath('meta.isian_tematik_options.0.value', 'jumlah_unit');
+    }
+
+    public function test_data_endpoint_flags_unavailable_without_error(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson([], 503);
+
+        $this->getJson('/dataspasial/peta/data')
+            ->assertOk()
+            ->assertJsonPath('meta.unavailable', true)
+            ->assertJsonCount(0, 'features');
+    }
+
+    public function test_data_endpoint_flags_empty_when_no_features(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson([]);
+
+        $this->getJson('/dataspasial/peta/data')
+            ->assertOk()
+            ->assertJsonPath('meta.empty', true);
+    }
+
+    public function test_data_endpoint_applies_isian_filter(): void
+    {
+        $this->actingAsAnalis();
+        $features = fxGeoJsonGabungan()['features'];
+        $this->fakeGeoJson($features);
+
+        // Hanya satu fitur yang `dataspasial.isian_kode = jumlah_unit` dengan nilai 12.
+        $response = $this->getJson('/dataspasial/peta/data?sektor=SK0&filter[jumlah_unit]=12');
+        $response->assertOk();
+
+        $points = array_filter(
+            $response->json('features'),
+            static fn (array $f): bool => ($f['geometry']['type'] ?? null) === 'Point'
+        );
+        $this->assertCount(1, $points);
+    }
+
+    public function test_data_endpoint_flags_empty_when_filter_excludes_all(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson(fxGeoJsonGabungan()['features']);
+
+        $this->getJson('/dataspasial/peta/data?filter[jumlah_unit]=999999')
+            ->assertOk()
+            ->assertJsonPath('meta.empty', true);
+    }
+
+    public function test_empty_featurecollection_is_flagged_empty(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson([]);
+
+        $this->getJson('/dataspasial/peta/data')
+            ->assertOk()
+            ->assertJsonPath('meta.empty', true);
     }
 }

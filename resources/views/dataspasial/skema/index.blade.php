@@ -82,6 +82,12 @@
             </div>
         </div>
     </x-dataspasial-status>
+
+    {{--
+        KAB-03 — layar terbitan: dialog di atas halaman skema, dipicu tombol
+        `#btn-terbitan`. Tidak ada route/menu baru (clarify 2026-10-16 Q1 → A).
+    --}}
+    @include('dataspasial.skema.partials.layar-terbitan')
 @stop
 
 @push('js')
@@ -104,4 +110,6 @@
     --}}
     <script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script nonce="{{ csp_nonce() }}" type="module" src="{{ asset('js/dataspasial/schema-editor.js') }}"></script>
+    {{-- KAB-03 — layar terbitan (ringkasan, riwayat, adopsi, ekspor). --}}
+    <script nonce="{{ csp_nonce() }}" type="module" src="{{ asset('js/dataspasial/terbit-dialog.js') }}"></script>
 @endpush

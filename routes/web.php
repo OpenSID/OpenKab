@@ -492,6 +492,33 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             ->middleware('permission:dataspasial-skema-write')
             ->name('dataspasial.skema.terbit');
 
+        // KAB-03 — layar terbitan (dialog di atas halaman skema, R16). Tidak ada
+        // route/menu baru; seluruh endpoint dilayani dari dialog yang dipicu
+        // tombol `#btn-terbitan` milik KAB-02.
+        //
+        // ⚠️ Akses mengikuti layar terbitan itu sendiri (Q3 → A): ringkasan,
+        // riwayat, perbandingan, tabel adopsi, dan ekspor semuanya berada di dalam
+        // dialog, sehingga `dataspasial-skema-write` menutup semuanya.
+        Route::post('skema/terbit/preview', [SkemaDataSpasialController::class, 'previewTerbit'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.terbit.preview');
+
+        Route::get('skema/riwayat', [SkemaDataSpasialController::class, 'riwayat'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.riwayat');
+
+        Route::get('skema/perbandingan', [SkemaDataSpasialController::class, 'bandingkan'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.perbandingan');
+
+        Route::get('skema/adopsi', [SkemaDataSpasialController::class, 'adopsi'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.adopsi');
+
+        Route::get('skema/adopsi/export', [SkemaDataSpasialController::class, 'eksporAdopsi'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.adopsi.export');
+
         Route::get('peta', [PetaGabunganController::class, 'index'])
             ->middleware('permission:dataspasial-peta-read')
             ->name('dataspasial.peta');

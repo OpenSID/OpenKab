@@ -223,3 +223,242 @@ function makeRole(string $teamName, array $permissions): User
 
     return $user;
 }
+
+// ---------------------------------------------------------------------------
+// Fixture KAB-03 — Penerbitan, riwayat versi & adopsi
+//
+// ⚠️ SEMUA bentuk di bawah adalah SALINAN PERSIS dari instance API Satu Data
+// yang hidup (repo `API-Database-Gabungan`, commit ca48b96), diverifikasi
+// 2026-10-16 — lihat `specs/005-penerbitan-adopsi-skema/contracts/penerbitan-adopsi-api.md`.
+//
+// Koreksi yang terkunci di sini (jangan diubah tanpa verifikasi ulang):
+//   K1 adopsi memakai `nomor_versi_skema` (BUKAN `nomor_versi`)
+//   K2 adopsi memakai `status` (BUKAN `status_adopsi`) dengan hanya dua nilai:
+//      `memakai_skema` dan `belum_ada_data` — "tertinggal" DITURUNKAN OpenKab
+//   K3 adopsi memakai `terakhir_ada_data` (BUKAN `diadopsi_pada`)
+//   K4 `GET /dataspasial/skema/{id}` tidak ada; isian per versi diambil lewat
+//      `?sektor={kode}&versi={nomor}&termasuk_arsip=1`
+//   K5 status versi punya tiga nilai: `draf`, `terbit`, `usang`
+// ---------------------------------------------------------------------------
+
+/**
+ * Riwayat dua versi sektor SK0: v3 `terbit` + v1 `draf` (verifikasi nyata).
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function fxRiwayatDuaVersi(): array
+{
+    return [
+        fxRiwayatVersi('8143', 4234, 3, 'terbit'),
+        fxRiwayatVersi('8142', 4234, 1, 'draf'),
+    ];
+}
+
+/**
+ * Riwayat dengan versi terbit lama yang sudah di-downgrade menjadi `usang`.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function fxRiwayatDenganUsang(): array
+{
+    return [
+        [
+            'type' => 'riwayat versi skema',
+            'id' => '8143',
+            'attributes' => [
+                'sektor_id' => 4234,
+                'nomor_versi' => 4,
+                'status' => 'terbit',
+                'catatan_perubahan' => 'Tambah isian guru.',
+                'diterbitkan_pada' => '2025-11-05T09:00:00.000000Z',
+                'diterbitkan_oleh' => 'Budi Santoso',
+            ],
+        ],
+        [
+            'type' => 'riwayat versi skema',
+            'id' => '8143',
+            'attributes' => [
+                'sektor_id' => 4234,
+                'nomor_versi' => 3,
+                'status' => 'usang',
+                'catatan_perubahan' => null,
+                'diterbitkan_pada' => '2025-10-05T14:00:00.000000Z',
+                'diterbitkan_oleh' => 'Budi Santoso',
+            ],
+        ],
+    ];
+}
+
+/**
+ * Satu versi skema (v3 sektor SK0) BESERTA isian terarsip — hasil
+ * `GET /dataspasial/skema?sektor=SK0&versi=3&termasuk_arsip=1`.
+ *
+ * @param  array<int, array<string, mixed>>  $isian
+ * @return array<string, mixed>
+ */
+function fxSkemaVersiDenganArsip(array $isian = []): array
+{
+    return [
+        'data' => [
+            'type' => 'skema data spasial',
+            'id' => '8143',
+            'attributes' => [
+                'sektor' => ['id' => 4234, 'kode' => 'SK0', 'nama' => 'Sektor 0'],
+                'versi_skema' => [
+                    'id' => 8143,
+                    'sektor_id' => 4234,
+                    'nomor_versi' => 3,
+                    'status' => 'terbit',
+                    'catatan_perubahan' => 'Versi terbit',
+                    'diterbitkan_pada' => '2025-10-05T14:00:00.000000Z',
+                    'diterbitkan_oleh' => 'Budi Santoso',
+                ],
+                'isian' => $isian !== [] ? $isian : [
+                    [
+                        'id' => 8484,
+                        'kode' => 'lebar_jalan',
+                        'label' => 'Lebar Jalan',
+                        'tipe' => 'angka',
+                        'wajib' => true,
+                        'satuan' => 'meter',
+                        'opsi' => null,
+                        'aturan_validasi' => null,
+                        'deskripsi' => null,
+                        'urutan' => 1,
+                        'diarsipkan' => false,
+                        'tampil_popup' => true,
+                        'tampil_filter' => false,
+                        'tampil_indikator' => false,
+                        'pemetaan' => [
+                            ['id' => 3951, 'sumber' => 'openSID', 'rujukan_sumber' => 'tbl_jalan.lebar', 'aturan_hitung' => null],
+                        ],
+                    ],
+                    [
+                        'id' => 8485,
+                        'kode' => 'arsip_lama',
+                        'label' => 'Arsip Lama',
+                        'tipe' => 'teks',
+                        'wajib' => false,
+                        'satuan' => 'meter',
+                        'opsi' => null,
+                        'aturan_validasi' => null,
+                        'deskripsi' => null,
+                        'urutan' => 1,
+                        'diarsipkan' => true,
+                        'tampil_popup' => true,
+                        'tampil_filter' => false,
+                        'tampil_indikator' => false,
+                        'pemetaan' => [],
+                    ],
+                ],
+            ],
+        ],
+    ];
+}
+
+/**
+ * Satu baris adopsi desa (nama field nyata, K1–K3).
+ *
+ * @return array<string, mixed>
+ */
+function fxAdopsiBaris(
+    int $configId = 1,
+    string $kodeDesa = '5102012001',
+    string $namaDesa = 'Bajera',
+    ?int $nomorVersi = 3,
+    ?int $sektorId = 4234,
+    string $status = 'memakai_skema',
+    ?string $terakhir = '2025-06-05 10:00:00'
+): array {
+    return [
+        'type' => 'adopsi skema desa',
+        'id' => (string) $configId,
+        'attributes' => [
+            'config_id' => $configId,
+            'kode_desa' => $kodeDesa,
+            'nama_desa' => $namaDesa,
+            'skema_versi_id' => $nomorVersi === null ? null : 9000 + $nomorVersi,
+            'nomor_versi_skema' => $nomorVersi,
+            'sektor_id' => $sektorId,
+            'status' => $status,
+            'terakhir_ada_data' => $terakhir,
+        ],
+    ];
+}
+
+/**
+ * Koleksi adopsi dengan `meta.pagination` (contoh nyata: 133 desa).
+ *
+ * @param  array<int, array<string, mixed>>|null  $baris
+ * @return array<string, mixed>
+ */
+function fxAdopsiKoleksi(?array $baris = null): array
+{
+    if ($baris === null) {
+        $baris = [];
+
+        // 3 desa memakai skema (sebenarnya: Bajera v3 sektor 4234, Bantas v3 sektor 4235).
+        $baris[] = fxAdopsiBaris(1, '5102012001', 'Bajera', 3, 4234);
+        $baris[] = fxAdopsiBaris(2, '5102022003', 'Bantas', 3, 4235);
+
+        // Sisanya belum pernah menarik skema.
+        for ($i = 3; $i <= 133; $i++) {
+            $baris[] = fxAdopsiBaris(
+                $i,
+                '35250'.$i,
+                'Desa '.$i,
+                null,
+                null,
+                'belum_ada_data',
+                null
+            );
+        }
+    }
+
+    return [
+        'data' => $baris,
+        'meta' => [
+            'pagination' => [
+                'total' => count($baris),
+                'count' => count($baris),
+                'per_page' => count($baris),
+                'current_page' => 1,
+                'total_pages' => 1,
+            ],
+        ],
+    ];
+}
+
+/**
+ * Body penolakan penerbitan saat tidak ada draf aktif (terverifikasi nyata).
+ *
+ * @return array<string, mixed>
+ */
+function fxTerbitGagal409(): array
+{
+    return [
+        'success' => false,
+        'message' => 'Tidak ada draf aktif untuk sektor kesehatan.',
+    ];
+}
+
+/**
+ * Pengguna uji dengan izin tulis skema (boleh membuka layar terbitan).
+ */
+function makeAdminSkema(): User
+{
+    return makeRole('admin skema uji k03', [
+        'dataspasial-skema-read',
+        'dataspasial-skema-write',
+    ]);
+}
+
+/**
+ * Pengguna uji HANYA baca skema (tidak boleh membuka layar terbitan).
+ */
+function makePenggunaBacaSaja(): User
+{
+    return makeRole('pembaca skema uji k03', [
+        'dataspasial-skema-read',
+    ]);
+}

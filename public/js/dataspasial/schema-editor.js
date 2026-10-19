@@ -1028,77 +1028,29 @@ export function mountSchemaEditor() {
     // Panggil sekali setelah DOM siap agar tombol sesuai keadaan awal.
     perbaruiTombolTerbit();
 
+    // KAB-03 — terbitan dipindah ke LAYAR TERBITAN (dialog) yang memuat
+    // ringkasan perubahan, peringatan dampak/bentrok, riwayat versi, perbandingan,
+    // dan tabel adopsi desa (clarify 2026-10-16 Q1 -> A, research.md R16).
+    //
+    // Berkas ini **tidak** lagi mengirim permintaan terbitan; seluruh interaksi
+    // ditangani `public/js/dataspasial/terbit-dialog.js`.
+    //
+    // FR-045 (KAB-02) tetap berlaku: tombol Terbitan tidak dapat dipakai selama
+    // ada perubahan yang belum disimpan.
     tombolTerbit?.addEventListener('click', async () => {
-        if (!formTerbit || !sektorKode) {
+        if (!sektorKode) {
             return;
         }
 
-        // FR-045 — pengaman kedua di sisi klien.
         if (dirty) {
             await swalPeringatan('Simpan draf dulu. Ada perubahan yang belum disimpan.');
 
             return;
         }
 
-        const namaSektor = (document.getElementById('input-sektor-nama-editor')?.value ?? '').trim()
-            || document.querySelector('[data-testid="item-sektor"][data-sektor-kode="' + sektorKode + '"]')
-                ?.dataset?.sektorNama
-            || sektorKode;
-
-        // FR-042/Q18 — nomor versi ditentukan API, jadi konfirmasi TIDAK lagi
-        // menyebut angka; ia menyatakan bahwa versi baru immutable akan dibuat.
-        const pesan = `Terbitkan draf sektor "${namaSektor}"?\n\n`
-            + 'Penerbitan membuat versi baru yang immutable dan tidak dapat diubah lagi. '
-            + 'Nomor versinya ditentukan sistem.';
-
-        if (!(await swalKonfirmasi(pesan, 'Terbitkan skema'))) {
-            return;
-        }
-
-        const inputCatatan = formTerbit.querySelector('[name="catatan_perubahan"]');
-        const hasilInput = await swalInput('Catatan perubahan (opsional)', 'Catatan perubahan', '');
-
-        if (hasilInput === null) {
-            return;
-        }
-
-        const catatan = hasilInput;
-
-        if (inputCatatan) {
-            inputCatatan.value = catatan;
-        }
-
-        // Q21 — terbitkan lewat AJAX, tanpa memuat ulang halaman.
-        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-            ?? inputCatatan?.value
-            ?? '';
-
-        fetch('/dataspasial/skema/terbit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': token,
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({ sektor: sektorKode, catatan_perubahan: catatan }),
-        })
-            .then(async (respons) => {
-                const data = await respons.json().catch(() => ({}));
-
-                if (!respons.ok) {
-                    window.Swal.fire({ title: data.message || 'Data sementara tidak tersedia. Silakan coba lagi nanti.', icon: 'error', confirmButtonText: 'Mengerti' });
-
-                    return;
-                }
-
-                window.Swal.fire({ title: data.message || 'Skema berhasil diterbitkan.', icon: 'success', confirmButtonText: 'Mengerti' });
-                window.location.reload();
-            })
-            .catch(() => {
-                window.Swal.fire({ title: 'Data sementara tidak tersedia. Silakan coba lagi nanti.', icon: 'error', confirmButtonText: 'Mengerti' });
-            });
+        window.dispatchEvent(new CustomEvent('dataspasial:terbit-dibuka', {
+            detail: { sektor: sektorKode },
+        }));
     });
 
     // -----------------------------------------------------------------------
@@ -1329,6 +1281,13 @@ export function mountSchemaEditor() {
     renderPratinjau(wadahPratinjau, bacaDariDom(tbody));
 }
 
+
+// KAB-03 — setelah penerbitan berhasil, `terbit-dialog.js` menyegarkan isi
+// halaman lewat pertukaran DOM (bukan muat ulang penuh, FR-022/SC-013). Editor
+// perlu dipasang ulang karena elemennya baru.
+window.addEventListener('dataspasial:refresh-editor', () => {
+    mountSchemaEditor();
+});
 
 // Dimuat sebagai `<script type="module" src="...">` (bukan bundler entry),
 // jadi harus dipanggil sendiri di root modul.

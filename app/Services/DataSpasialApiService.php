@@ -578,6 +578,26 @@ class DataSpasialApiService
     }
 
     /**
+     * Pratinjau dampak pra-terbit (jumlah data terdampak + daftar desa bentrok).
+     *
+     * ⚠️ **UTANG KONTRAK U10** — endpoint ini **belum ada** di API Satu Data
+     * (verifikasi 2026-10-16 terhadap `routes/apiv1.php`). Bentuk yang diminta
+     * ada di `specs/005-penerbitan-adopsi-skema/contracts/openapi-fragment-pra-terbit.yaml`.
+     *
+     * Sampai tersedia, `404`/`405` dikembalikan sebagai `unavailable` sehingga
+     * pemanggil menampilkan "belum dapat dihitung" — **tidak pernah** mengarang angka
+     * (FR-043/FR-071).
+     */
+    public function praTerbit(string $sektor, ?int $nomorVersi = null): DataSpasialResult
+    {
+        return $this->request(
+            'GET',
+            'skema/'.rawurlencode($sektor).'/pra-terbit',
+            array_filter(['nomor_versi' => $nomorVersi], static fn ($v): bool => $v !== null)
+        );
+    }
+
+    /**
      * Impor nilai isian dalam jumlah besar untuk satu desa dan periode.
      *
      * @param  array<string, mixed>  $body

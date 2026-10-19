@@ -70,6 +70,17 @@
             if (window.PetaGabungan) {
                 window.PetaGabungan.init({mapId: 'map'});
             }
+            $('#bt_filter').on('click', function() {
+                let sektor = $('#filter-sektor').val();
+                let kab = $('#filter_kabupaten').val();
+                let kec = $('#filter_kecamatan').val();
+                let desa = $('#filter_desa').val();
+                if (!sektor) {
+                    alert('Sektor wajib dipilih');
+                    return;
+                }
+                // trigger reload or AJAX; for now just keep
+            });
         });
     </script>
 @endpush

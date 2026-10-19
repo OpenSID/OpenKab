@@ -22,7 +22,7 @@ This feature implements the combined map dashboard (KAB-04) displaying both lega
   - Endpoint prefix: `/api/v1/dataspasial` (`config('dataspasial.path_prefix')`)
   - Timeout 10s, cache TTL 300s (GET only for `data`/`empty`; `unavailable` never cached)
   - Headers audit: `X-OpenKab-User-Id`, `X-OpenKab-User-Name` (via `userHeaders()`)
-  - `geojsonGabungan(array $filters)` → `GET geojson-gabungan` (L535-538)
+  - `geojsonGabungan(array $filters)` → `GET geojson` (L535-538)
   - `extractItems()` treats payload with `type==='FeatureCollection'` as special (returns `[$payload]`), so `$result->data[0]` = FeatureCollection array.
   - Write ops invalidate cache via generation bump.
 

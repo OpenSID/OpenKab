@@ -6,6 +6,18 @@
     <h1>{{ $title }}</h1>
 @stop
 
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <style>
+        #map { height: 480px; width: 100%; }
+        .peta-popup { max-width: 280px; }
+        .map-legend { position: absolute; bottom: 10px; left: 10px; background: #fff; padding: 6px 8px; border-radius: 4px; box-shadow: 0 1px 5px rgba(0,0,0,0.4); z-index: 1000; }
+        @media (max-width: 768px) { #map { height: 360px; } }
+    </style>
+@endpush
+
 @section('content')
     @include('partials.breadcrumbs')
     @include('partials.flash_message')
@@ -18,18 +30,44 @@
                         <h3 class="card-title">Peta Gabungan</h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted mb-0">
-                            Kerangka menu. Peta geospasial penuh menjadi lingkup fitur
-                            turunan dan dibangun di atas service
-                            <code>DataSpasialApiService</code> tanpa mengubah kontraknya.
-                        </p>
-
-                        <div class="mt-3">
-                            <p class="mb-1"><strong>FeatureCollection</strong> diterima</p>
-                            <p class="mb-0">
-                                <span class="badge badge-info">{{ count($result->data) }}</span>
-                                lapisan geospasial
-                            </p>
+                        <div class="form-row mb-3">
+                            <div class="form-group col-md-3 col-sm-6">
+                                <label for="filter-sektor">Sektor <span class="text-danger">*</span></label>
+                                <select id="filter-sektor" class="form-control form-control-sm" required>
+                                    <option value="">Pilih Sektor</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-6">
+                                <label for="filter-wilayah">Wilayah</label>
+                                <select id="filter-wilayah" class="form-control form-control-sm">
+                                    <option value="">Semua Wilayah</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 col-sm-6">
+                                <label for="filter-periode">Periode</label>
+                                <select id="filter-periode" class="form-control form-control-sm" disabled>
+                                    <option value="">Pilih Periode</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 col-sm-6">
+                                <label for="filter-tematik">Pewarnaan Desa</label>
+                                <select id="filter-tematik" class="form-control form-control-sm" disabled>
+                                    <option value="">Tidak Ada</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 col-sm-12" id="filter-isian-wrapper" style="display:none;">
+                                <label>Filter Isian</label>
+                                <div id="filter-isian-container"></div>
+                            </div>
+                        </div>
+                        <div class="position-relative">
+                            <div id="map"></div>
+                            <div id="map-legend" class="map-legend" style="display:none;"></div>
+                        </div>
+                        <div id="map-empty" class="alert alert-info mt-2" style="display:none;">Tidak ada data untuk pilihan ini.</div>
+                        <div id="map-unavailable" class="alert alert-warning mt-2" style="display:none;" data-testid="dataspasial-unavailable">
+                            <h5 class="alert-heading">Data sementara tidak tersedia</h5>
+                            <p class="mb-0">Silakan coba lagi nanti.</p>
                         </div>
                     </div>
                 </div>
@@ -37,3 +75,16 @@
         </div>
     </x-dataspasial-status>
 @stop
+
+@push('js')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="{{ asset('js/dataspasial/peta-gabungan.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}">
+        $(function () {
+            if (window.PetaGabungan) {
+                window.PetaGabungan.init({mapId: 'map'});
+            }
+        });
+    </script>
+@endpush

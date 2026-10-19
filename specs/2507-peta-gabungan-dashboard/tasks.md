@@ -61,7 +61,7 @@
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Replace/implement full map UI in `resources/views/dataspasial/peta/index.blade.php` (map container, layer panel, legend placeholder, filter controls structure) using AdminLTE + `<x-dataspasial-status>`
+^- [x] T015 [P] [US1] Replace/implement full map UI in `resources/views/dataspasial/peta/index.blade.php` (map container, layer panel, legend placeholder, filter controls structure) using AdminLTE + `<x-dataspasial-status>`
 - [ ] T016 [US1] Implement controller `data()` to return JSON FeatureCollection + meta (sectors/periods/filters derived) with unavailable/empty envelope (HTTP 200)
 - [ ] T017 [US1] Implement `public/js/dataspasial/peta-gabungan.js`: initialize Leaflet map (OSM), L.markerclusterGroup, L.control.layers (basemap + boundary overlay + point groups), render features from server/JSON, graceful error rendering for unavailable/empty
 - [ ] T018 [US1] Extract boundaries (Polygon/MultiPolygon) and points (Point) from FeatureCollection; group by source/has-dataspasial for layer toggles per FR-003

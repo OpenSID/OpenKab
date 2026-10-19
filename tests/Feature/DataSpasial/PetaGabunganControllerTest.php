@@ -108,7 +108,18 @@ class PetaGabunganControllerTest extends TestCase
         $response->assertOk()
             ->assertJsonPath('meta.filters.0.kode', 'jenis_unit')
             ->assertJsonPath('meta.popup_isian.0.kode', 'jumlah_unit')
+            ->assertJsonPath('meta.popup_isian.0.satuan', 'unit')
             ->assertJsonPath('meta.isian_tematik_options.0.value', 'jumlah_unit');
+
+        // Hanya isian yang ditandai yang ikut (catatan tidak ditandai).
+        $kodeFilter = array_column($response->json('meta.filters'), 'kode');
+        $kodePopup = array_column($response->json('meta.popup_isian'), 'kode');
+        $kodeTematik = array_column($response->json('meta.isian_tematik_options'), 'value');
+
+        $this->assertSame(['jenis_unit'], $kodeFilter);
+        $this->assertSame(['jumlah_unit'], $kodePopup);
+        $this->assertSame(['jumlah_unit'], $kodeTematik);
+        $this->assertNotContains('catatan', array_merge($kodeFilter, $kodePopup, $kodeTematik));
     }
 
     public function test_data_endpoint_flags_unavailable_without_error(): void
@@ -167,5 +178,51 @@ class PetaGabunganControllerTest extends TestCase
         $this->getJson('/dataspasial/peta/data')
             ->assertOk()
             ->assertJsonPath('meta.empty', true);
+    }
+
+    public function test_data_preserves_polygon_without_value_as_no_data(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson(fxGeoJsonGabungan()['features']);
+
+        $response = $this->getJson('/dataspasial/peta/data');
+        $response->assertOk();
+
+        $polygons = array_values(array_filter(
+            $response->json('features'),
+            static fn (array $f): bool => ($f['geometry']['type'] ?? null) === 'Polygon'
+        ));
+
+        $this->assertCount(3, $polygons);
+
+        $nilai = array_map(
+            static fn (array $f): mixed => $f['properties']['nilai'] ?? null,
+            $polygons
+        );
+
+        // Nilai tetap apa adanya: nol tetap nol, nilai positif tetap positif.
+        $this->assertContains(0, $nilai);
+        $this->assertContains(5, $nilai);
+
+        // Desa tanpa data TIDAK dipaksa menjadi nol (tidak ada kunci nilai).
+        $tanpaData = array_values(array_filter(
+            $polygons,
+            static fn (array $f): bool => ($f['properties']['nama_desa'] ?? '') === 'Desa Tanpa Data'
+        ));
+        $this->assertCount(1, $tanpaData);
+        $this->assertArrayNotHasKey('nilai', $tanpaData[0]['properties']);
+    }
+
+    public function test_data_forwards_kecamatan_filter_to_api(): void
+    {
+        $this->actingAsAnalis();
+        $this->fakeGeoJson(fxGeoJsonGabungan()['features']);
+
+        $this->getJson('/dataspasial/peta/data?kode_kecamatan=510201')->assertOk();
+
+        Http::assertSent(function ($request) {
+            return str_contains($request->url(), '/dataspasial/geojson')
+                && str_contains($request->url(), 'kode_kecamatan=510201');
+        });
     }
 }

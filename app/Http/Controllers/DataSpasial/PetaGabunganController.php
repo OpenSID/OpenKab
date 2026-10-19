@@ -98,6 +98,7 @@ class PetaGabunganController extends DataSpasialController
         }
 
         $payload['meta'] = array_merge($payload['meta'], $this->deriveMeta($features));
+        $payload['meta']['empty'] = count($features) === 0;
 
         return response()->json($payload, 200, [
             'Content-Type' => 'application/geo+json',

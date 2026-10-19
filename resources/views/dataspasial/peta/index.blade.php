@@ -25,15 +25,6 @@
             margin-bottom: 0.15rem;
         }
 
-        .map-legend {
-            background: #fff;
-            border: 1px solid #dee2e6;
-            padding: 6px 8px;
-            border-radius: 4px;
-            line-height: 1.4;
-            font-size: 0.8rem;
-        }
-
         .peta-popup {
             max-width: 280px;
         }
@@ -60,37 +51,32 @@
                     </div>
                     <div class="card-body">
                         @include('dataspasial.peta.filter')
+
+                        <hr class="my-2">
+
+                        <h5 class="mb-2">Lapisan</h5>
+                        <div id="map-layers" data-testid="map-layers">
+                            <p class="text-muted small mb-0">Belum ada lapisan.</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Blok 2: Peta + panel lapisan --}}
+            {{-- Blok 2: Peta --}}
             <div class="col-md-9">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-map"></i> Peta</h3>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-9 mb-2">
-                                <div id="map"></div>
-                                <div id="map-empty" class="alert alert-info mt-2" style="display:none;">
-                                    Tidak ada data untuk pilihan ini.
-                                </div>
-                                <div id="map-unavailable" class="alert alert-warning mt-2" style="display:none;"
-                                    data-testid="dataspasial-unavailable">
-                                    <h5 class="alert-heading">Data sementara tidak tersedia</h5>
-                                    <p class="mb-0">Silakan coba lagi nanti.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <h5 class="mb-2">Lapisan</h5>
-                                <div id="map-layers" data-testid="map-layers">
-                                    <p class="text-muted small mb-0">Belum ada lapisan.</p>
-                                </div>
-                                <h5 class="mt-3 mb-2">Legenda</h5>
-                                <div id="map-legend" class="map-legend" style="display:none;"></div>
-                            </div>
+                        <div id="map"></div>
+                        <div id="map-empty" class="alert alert-info mt-2" style="display:none;">
+                            Tidak ada data untuk pilihan ini.
+                        </div>
+                        <div id="map-unavailable" class="alert alert-warning mt-2" style="display:none;"
+                            data-testid="dataspasial-unavailable">
+                            <h5 class="alert-heading">Data sementara tidak tersedia</h5>
+                            <p class="mb-0">Silakan coba lagi nanti.</p>
                         </div>
                     </div>
                 </div>
@@ -196,25 +182,6 @@
                 container.innerHTML = html;
             }
 
-            function renderThematicOptions(options) {
-                var select = document.getElementById('filter_tematik');
-                if (!select) {
-                    return;
-                }
-
-                select.innerHTML = '<option value="">Tanpa Pewarnaan</option>';
-                (options || []).forEach(function (option) {
-                    var el = document.createElement('option');
-                    el.value = option.value;
-                    el.textContent = option.label || option.value;
-                    select.appendChild(el);
-                });
-
-                select.disabled = !(options && options.length > 0);
-                select.value = '';
-                window.PetaGabungan.setThematic(null);
-            }
-
             function collectSelectedFilters() {
                 var result = {};
                 document.querySelectorAll('#peta-filters [data-filter]').forEach(function (input) {
@@ -263,7 +230,6 @@
                         }
 
                         renderDynamicFilters(meta.filters || []);
-                        renderThematicOptions(meta.isian_tematik_options || []);
                         window.PetaGabungan.render(payload, meta);
 
                         if (meta.empty) {
@@ -301,16 +267,6 @@
                 });
             }
 
-            var thematicSelect = document.getElementById('filter_tematik');
-            if (thematicSelect) {
-                thematicSelect.addEventListener('change', function () {
-                    var option = (state.thematicOptions || []).filter(function (item) {
-                        return item.value === thematicSelect.value;
-                    })[0];
-                    window.PetaGabungan.setThematic(option || null);
-                });
-            }
-
             var applyButton = document.getElementById('peta-filter');
             if (applyButton) {
                 applyButton.addEventListener('click', function () {
@@ -333,13 +289,6 @@
                     load();
                 });
             }
-
-            // Simpan opsi tematik untuk lookup saat change.
-            var originalRender = window.PetaGabungan.render;
-            window.PetaGabungan.render = function (geojson, meta) {
-                state.thematicOptions = (meta && meta.isian_tematik_options) || [];
-                return originalRender(geojson, meta);
-            };
 
             loadKecamatan();
             load();

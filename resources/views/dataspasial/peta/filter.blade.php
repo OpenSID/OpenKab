@@ -21,13 +21,6 @@
 
     <hr class="my-2">
 
-    <div class="form-group mb-2">
-        <label for="filter_tematik">Pewarnaan Desa</label>
-        <select id="filter_tematik" class="form-control form-control-sm" data-testid="filter-tematik" disabled>
-            <option value="">Tanpa Pewarnaan</option>
-        </select>
-    </div>
-
     <div class="row">
         <div class="col-6">
             <button type="button" id="peta-reset" data-testid="bt-reset" class="btn btn-secondary btn-sm btn-block">

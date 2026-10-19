@@ -258,7 +258,6 @@ class PetaGabunganController extends DataSpasialController
             'periods' => $periods,
             'filters' => $this->isianFlags($isian, 'tampil_filter', $features),
             'popup_isian' => $this->isianFlags($isian, 'tampil_popup', $features),
-            'isian_tematik_options' => $this->tematikOptions($isian, $features),
         ];
     }
 
@@ -336,53 +335,5 @@ class PetaGabunganController extends DataSpasialController
         }
 
         return $result;
-    }
-
-    /**
-     * @param  array<int, array<string, mixed>>  $isian
-     * @param  array<int, array<string, mixed>>  $features
-     * @return array<int, array<string, mixed>>
-     */
-    private function tematikOptions(array $isian, array $features): array
-    {
-        $options = [];
-
-        foreach ($isian as $item) {
-            if (($item['tipe'] ?? null) !== 'angka') {
-                continue;
-            }
-
-            $options[] = [
-                'value' => $item['kode'] ?? null,
-                'label' => $item['label'] ?? ($item['kode'] ?? null),
-                'satuan' => $item['satuan'] ?? null,
-            ];
-        }
-
-        if ($options !== []) {
-            return array_values(array_filter($options, static fn ($o): bool => $o['value'] !== null));
-        }
-
-        $seen = [];
-        foreach ($features as $feature) {
-            $dataspasial = $feature['properties']['dataspasial'] ?? null;
-            if (! is_array($dataspasial) || ($dataspasial['isian_tipe'] ?? null) !== 'angka') {
-                continue;
-            }
-
-            $kode = $dataspasial['isian_kode'] ?? null;
-            if ($kode === null || isset($seen[$kode])) {
-                continue;
-            }
-
-            $seen[$kode] = true;
-            $options[] = [
-                'value' => $kode,
-                'label' => $dataspasial['isian_label'] ?? $kode,
-                'satuan' => $dataspasial['isian_satuan'] ?? null,
-            ];
-        }
-
-        return $options;
     }
 }

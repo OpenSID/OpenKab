@@ -4,17 +4,19 @@
     var map = null;
     var boundaryLayer = null;
     var layerGroups = {};
-    var markerMeta = [];
     var activeLayers = {};
-    var thematic = null;
     var polygons = [];
     var meta = {};
     var markerIcon = null;
 
     var NO_DATA_COLOR = '#d2d6de';
-    var SCALE_COLORS = ['#f7fbff', '#c6dbef', '#9ecae1', '#6baed6', '#3182bd', '#08519c'];
     var LEGACY_LAYER_PREFIX = 'legacy:';
     var DATA_LAYER_PREFIX = 'data:';
+    var DEFAULT_CENTER = [-2.5, 118];
+    var DEFAULT_ZOOM = 5;
+    var MAX_FIT_ZOOM = 15;
+    var markerBounds = {};
+    var boundaryBounds = null;
 
     function el(id) {
         return document.getElementById(id);
@@ -69,7 +71,7 @@
         }
 
         var mapId = options.mapId || 'map';
-        map = L.map(mapId).setView([-2.5, 118], 5);
+        map = L.map(mapId).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
 
         if (window.PETA_GABUNGAN_ICON && window.PETA_GABUNGAN_ICON.iconUrl) {
             markerIcon = new L.Icon({
@@ -120,16 +122,6 @@
             return ds.nilai;
         }
 
-        return null;
-    }
-
-    function isianMeta(kode) {
-        var list = (meta.popup_isian || []).concat(meta.filters || []);
-        for (var i = 0; i < list.length; i++) {
-            if (list[i] && list[i].kode === kode) {
-                return list[i];
-            }
-        }
         return null;
     }
 
@@ -186,6 +178,11 @@
         var coords = feature.geometry.coordinates;
         var key = layerKeyOf(feature.properties);
 
+        if (!markerBounds[key]) {
+            markerBounds[key] = L.latLngBounds([]);
+        }
+        markerBounds[key].extend([coords[1], coords[0]]);
+
         var marker = L.marker([coords[1], coords[0]], markerIcon ? {icon: markerIcon} : {});
         marker.bindPopup(popupContent(feature.properties || {}), {closeButton: true, autoPan: true});
 
@@ -204,6 +201,30 @@
         });
     }
 
+    function visibleBounds() {
+        var bounds = L.latLngBounds([]);
+
+        if (boundaryBounds && boundaryBounds.isValid()) {
+            bounds.extend(boundaryBounds);
+        }
+
+        Object.keys(activeLayers).forEach(function (key) {
+            if (activeLayers[key] && markerBounds[key] && markerBounds[key].isValid()) {
+                bounds.extend(markerBounds[key]);
+            }
+        });
+
+        return bounds;
+    }
+
+    function fitToVisible() {
+        var bounds = visibleBounds();
+
+        if (bounds.isValid()) {
+            map.fitBounds(bounds, {padding: [24, 24], maxZoom: MAX_FIT_ZOOM});
+        }
+    }
+
     function syncActiveGroups() {
         removeAllGroups();
         Object.keys(activeLayers).forEach(function (key) {
@@ -211,6 +232,8 @@
                 map.addLayer(layerGroups[key]);
             }
         });
+
+        fitToVisible();
     }
 
     function renderLayerPanel() {
@@ -261,133 +284,23 @@
         }).join('');
     }
 
-    function quantile(values, q) {
-        if (values.length === 0) {
-            return null;
-        }
-        var pos = (values.length - 1) * q;
-        var base = Math.floor(pos);
-        var rest = pos - base;
-        if (values[base + 1] !== undefined) {
-            return values[base] + rest * (values[base + 1] - values[base]);
-        }
-        return values[base];
-    }
-
-    function buildBreaks(values) {
-        var sorted = values.slice().sort(function (a, b) { return a - b; });
-        var breaks = [];
-        for (var i = 1; i < SCALE_COLORS.length; i++) {
-            breaks.push(quantile(sorted, i / SCALE_COLORS.length));
-        }
-        return breaks;
-    }
-
-    function colorFor(value, breaks) {
-        for (var i = 0; i < breaks.length; i++) {
-            if (value <= breaks[i]) {
-                return SCALE_COLORS[i];
-            }
-        }
-        return SCALE_COLORS[SCALE_COLORS.length - 1];
-    }
-
-    function applyThematic() {
-        if (boundaryLayer) {
-            boundaryLayer.clearLayers();
-        }
-
-        if (!thematic || !thematic.kode) {
-            renderPolygons(null);
-            renderLegend();
-            return;
-        }
-
-        var values = [];
-        polygons.forEach(function (feature) {
-            var value = feature.properties ? feature.properties.nilai : null;
-            if (value !== null && value !== undefined && value !== '' && isFinite(Number(value))) {
-                values.push(Number(value));
-            }
-        });
-
-        var breaks = buildBreaks(values);
-        renderPolygonLayer(breaks);
-        renderLegend(breaks);
-    }
-
-    function renderPolygons() {
-        if (!boundaryLayer) {
-            return;
-        }
-        boundaryLayer.clearLayers();
-        polygons.forEach(function (feature) {
-            boundaryLayer.addLayer(polygonLayer(feature));
-        });
-    }
-
-    function polygonHasValue(feature) {
-        var value = feature.properties && feature.properties.nilai;
-        return value !== null && value !== undefined && value !== '';
-    }
-
-    function polygonStyle(feature) {
-        var hasValue = polygonHasValue(feature) && isFinite(Number(feature.properties.nilai));
-        if (!thematic) {
-            return {color: '#5a6268', weight: 1, fillOpacity: 0.2, fillColor: NO_DATA_COLOR, dashArray: '4,3'};
-        }
-
-        if (!hasValue) {
-            return {color: '#5a6268', weight: 1, fillOpacity: 0.35, fillColor: NO_DATA_COLOR, dashArray: '4,3'};
-        }
-
-        return {
-            color: '#5a6268',
-            weight: 1,
-            fillOpacity: 0.65,
-            fillColor: colorFor(Number(feature.properties.nilai), thematic.breaks)
-        };
-    }
-
     function polygonLayer(feature) {
         return L.geoJSON(feature, {
-            style: function () { return polygonStyle(feature); }
+            style: {
+                color: '#5a6268',
+                weight: 1,
+                opacity: 0.9,
+                fillOpacity: 0.25,
+                fillColor: NO_DATA_COLOR
+            },
+            onEachFeature: function (f, layer) {
+                var props = f.properties || {};
+                var label = props.nama_desa || props.nama || props.kode_desa;
+                if (label) {
+                    layer.bindPopup('<strong>' + esc(label) + '</strong>');
+                }
+            }
         });
-    }
-
-    function legendHtml() {
-        if (!thematic) {
-            return '';
-        }
-
-        var html = '<strong>' + esc(thematic.label) + '</strong>';
-        if (thematic.satuan) {
-            html += ' <small>(' + esc(thematic.satuan) + ')</small>';
-        }
-        html += '<div class="d-flex mt-1">';
-        SCALE_COLORS.forEach(function (color) {
-            html += '<span style="display:inline-block;width:16px;height:12px;background:' + color + ';"></span>';
-        });
-        html += '</div>';
-        html += '<div class="mt-1"><span style="display:inline-block;width:16px;height:12px;background:' + NO_DATA_COLOR + ';border:1px dashed #5a6268;"></span> Tanpa Data</div>';
-
-        return html;
-    }
-
-    function renderLegend() {
-        var node = el('map-legend');
-        if (!node) {
-            return;
-        }
-
-        if (!thematic) {
-            node.style.display = 'none';
-            node.innerHTML = '';
-            return;
-        }
-
-        node.innerHTML = legendHtml();
-        node.style.display = '';
     }
 
     function clearMap() {
@@ -395,8 +308,9 @@
             layerGroups[key].clearLayers();
         });
         layerGroups = {};
-        markerMeta = [];
         polygons = [];
+        markerBounds = {};
+        boundaryBounds = null;
         if (boundaryLayer) {
             boundaryLayer.clearLayers();
         }
@@ -428,56 +342,27 @@
             }
         });
 
+        polygons.forEach(function (feature) {
+            var layer = polygonLayer(feature);
+            boundaryLayer.addLayer(layer);
+
+            var bounds = layer.getBounds();
+            if (bounds.isValid()) {
+                if (!boundaryBounds) {
+                    boundaryBounds = L.latLngBounds([]);
+                }
+                boundaryBounds.extend(bounds);
+            }
+        });
+
+        if (features.length === 0) {
+            map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+        }
+
         renderLayerPanel();
         syncActiveGroups();
 
-        if (polygons.length > 0) {
-            renderThematicPolygons();
-        }
-
         show('map-empty', features.length === 0);
-    }
-
-    function renderThematicPolygons() {
-        polygons.forEach(function (feature) {
-            var styled = polygonLayer(feature);
-            styled.eachLayer(function (layer) {
-                if (feature.properties && (feature.properties.nama_desa || feature.properties.nama || feature.properties.kode_desa)) {
-                    var label = feature.properties.nama_desa || feature.properties.nama || feature.properties.kode_desa;
-                    var value = thematic && polygonHasValue(feature) ? feature.properties.nilai : 'Tanpa Data';
-                    layer.bindPopup('<strong>' + esc(label) + '</strong><br>' + esc(value));
-                }
-            });
-            boundaryLayer.addLayer(styled);
-        });
-    }
-
-    function setThematic(option) {
-        if (!option || !option.value) {
-            thematic = null;
-        } else {
-            var values = [];
-            polygons.forEach(function (feature) {
-                var raw = featureValue(feature.properties, option.value);
-                if (raw === null || raw === undefined) {
-                    raw = feature.properties && feature.properties.nilai;
-                }
-                if (raw !== null && raw !== undefined && raw !== '' && isFinite(Number(raw))) {
-                    values.push(Number(raw));
-                }
-            });
-            thematic = {
-                kode: option.value,
-                label: option.label || option.value,
-                satuan: option.satuan || null,
-                breaks: buildBreaks(values)
-            };
-        }
-
-        if (polygons.length > 0) {
-            renderThematicPolygons();
-        }
-        renderLegend();
     }
 
     function renderUnavailable(message) {
@@ -496,7 +381,6 @@
     window.PetaGabungan = {
         init: init,
         render: render,
-        setThematic: setThematic,
         unavailable: renderUnavailable,
         empty: renderEmpty
     };

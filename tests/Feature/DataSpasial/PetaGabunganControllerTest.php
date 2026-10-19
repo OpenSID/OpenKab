@@ -98,7 +98,7 @@ class PetaGabunganControllerTest extends TestCase
         $this->assertContains('dataspasial', $jenis);
     }
 
-    public function test_data_endpoint_exposes_filters_popup_and_thematic_from_skema(): void
+    public function test_data_endpoint_exposes_filters_and_popup_from_skema(): void
     {
         $this->actingAsAnalis();
         $this->fakeGeoJson(fxGeoJsonGabungan()['features'], 200, true);
@@ -108,18 +108,15 @@ class PetaGabunganControllerTest extends TestCase
         $response->assertOk()
             ->assertJsonPath('meta.filters.0.kode', 'jenis_unit')
             ->assertJsonPath('meta.popup_isian.0.kode', 'jumlah_unit')
-            ->assertJsonPath('meta.popup_isian.0.satuan', 'unit')
-            ->assertJsonPath('meta.isian_tematik_options.0.value', 'jumlah_unit');
+            ->assertJsonPath('meta.popup_isian.0.satuan', 'unit');
 
         // Hanya isian yang ditandai yang ikut (catatan tidak ditandai).
         $kodeFilter = array_column($response->json('meta.filters'), 'kode');
         $kodePopup = array_column($response->json('meta.popup_isian'), 'kode');
-        $kodeTematik = array_column($response->json('meta.isian_tematik_options'), 'value');
 
         $this->assertSame(['jenis_unit'], $kodeFilter);
         $this->assertSame(['jumlah_unit'], $kodePopup);
-        $this->assertSame(['jumlah_unit'], $kodeTematik);
-        $this->assertNotContains('catatan', array_merge($kodeFilter, $kodePopup, $kodeTematik));
+        $this->assertNotContains('catatan', array_merge($kodeFilter, $kodePopup));
     }
 
     public function test_data_endpoint_flags_unavailable_without_error(): void

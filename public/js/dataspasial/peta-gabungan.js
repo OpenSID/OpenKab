@@ -131,4 +131,4 @@
         clear: clearLayers
     };
 
-})(window, L, window.jQuery);
+})(window, L, window.jQuery || window.$);

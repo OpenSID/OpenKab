@@ -98,10 +98,11 @@ class PetaGabunganController extends DataSpasialController
     private function filters(Request $request): array
     {
         $filters = [
-            'sektor' => $this->stringInput($request, 'sektor'),
+            'sektor' => $this->stringInput($request, 'sektor') ?? $this->stringInput($request, 'sektor_id'),
             'kode_kabupaten' => $this->stringInput($request, 'kode_kabupaten'),
             'kode_kecamatan' => $this->stringInput($request, 'kode_kecamatan'),
-            'kode_desa' => $this->stringInput($request, 'kode_desa'),
+            'kode_desa' => $this->stringInput($request, 'kode_desa') ?? $this->stringInput($request, 'desa'),
+            'desa' => $this->stringInput($request, 'kode_desa') ?? $this->stringInput($request, 'desa'),
             'periode' => $this->stringInput($request, 'periode'),
         ];
 
@@ -240,9 +241,16 @@ class PetaGabunganController extends DataSpasialController
                 $key = (string) ($props['sektor_kode'] ?? 'dataspasial');
                 $label = (string) ($props['sektor_nama'] ?? $props['sektor_kode'] ?? 'DataSpasial');
                 $this->addLayer($layers, $key, $label, 'dataspasial');
+                $kategori = $props['kategori'] ?? $props['simbol'] ?? null;
+                if ($kategori) {
+                    $this->addLayer($layers, 'kategori:'.(string) $kategori, (string) $kategori, 'kategori');
+                }
             } else {
                 $key = (string) ($props['kategori'] ?? $props['simbol'] ?? 'lainnya');
                 $this->addLayer($layers, $key, $key, 'geospasial_lama');
+                if ($key !== '') {
+                    $this->addLayer($layers, 'kategori:'.$key, $key, 'kategori');
+                }
             }
 
             $period = $dataspasial['periode'] ?? ($props['periode'] ?? null);

@@ -8,6 +8,7 @@
     var polygons = [];
     var meta = {};
     var markerIcon = null;
+    var layersControl = null;
 
     var NO_DATA_COLOR = '#d2d6de';
     var LEGACY_LAYER_PREFIX = 'legacy:';
@@ -84,10 +85,15 @@
             });
         }
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        var baseLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
+
+        if (!layersControl) {
+            layersControl = L.control.layers({ 'OpenStreetMap': baseLayer }, {}, { collapsed: false });
+            layersControl.addTo(map);
+        }
 
         boundaryLayer = L.layerGroup().addTo(map);
 
@@ -225,13 +231,46 @@
         }
     }
 
+    function layerLabel(key) {
+        if (key.indexOf(DATA_LAYER_PREFIX) === 0) {
+            return key.substring(DATA_LAYER_PREFIX.length);
+        }
+        if (key.indexOf(LEGACY_LAYER_PREFIX) === 0) {
+            return key.substring(LEGACY_LAYER_PREFIX.length);
+        }
+        return key;
+    }
+
     function syncActiveGroups() {
-        removeAllGroups();
-        Object.keys(activeLayers).forEach(function (key) {
-            if (activeLayers[key] && layerGroups[key]) {
-                map.addLayer(layerGroups[key]);
+        if (!map) {
+            return;
+        }
+        if (layersControl) {
+            try { layersControl.remove(); } catch (e) { /* noop */ }
+            layersControl = null;
+        }
+        var overlays = {};
+        Object.keys(layerGroups).forEach(function (key) {
+            if (layerGroups[key]) {
+                var label = layerLabel(key);
+                overlays[label] = layerGroups[key];
             }
         });
+        if (Object.keys(overlays).length) {
+            layersControl = L.control.layers({}, overlays, { collapsed: false });
+            layersControl.addTo(map);
+            Object.keys(layerGroups).forEach(function (key) {
+                if (layerGroups[key] && activeLayers[key] !== false && !map.hasLayer(layerGroups[key])) {
+                    map.addLayer(layerGroups[key]);
+                }
+            });
+        } else {
+            Object.keys(layerGroups).forEach(function (key) {
+                if (layerGroups[key] && !map.hasLayer(layerGroups[key])) {
+                    map.addLayer(layerGroups[key]);
+                }
+            });
+        }
 
         fitToVisible();
     }
@@ -242,17 +281,33 @@
             return;
         }
 
-        var groups = {legacy: [], data: []};
-        (meta.layers || []).forEach(function (layer) {
-            var kind = layer.jenis === 'dataspasial' ? 'data' : 'legacy';
-            groups[kind].push(layer);
+        var groups = {legacy: [], data: [], dataspasial: [], kategori: []};
+        (meta.layers || []).forEach(function (layer) {            
+            var jenis = layer.jenis || '';
+            if (jenis === 'dataspasial' || jenis === 'dataspasial_layer' || jenis === 'sektor') {
+                groups.dataspasial.push(layer);
+                groups.data.push(layer);
+            } else if (jenis === 'kategori') {
+                groups.kategori.push(layer);
+            } else {
+                groups.legacy.push(layer);
+            }
         });
 
         var html = '';
-        html += '<div class="layer-group"><strong>Geospasial Lama</strong>';
+        if (groups.dataspasial.length) {
+            html += '<div class="layer-group"><strong>Layer DataSpasial</strong>';
+            html += layerItemsHtml(groups.dataspasial, 'data');
+            html += '</div>';
+        }
+        if (groups.kategori.length) {
+            html += '<div class="layer-group mt-2"><strong>Kategori</strong>';
+            html += layerItemsHtml(groups.kategori, 'legacy');
+            html += '</div>';
+        }
+        html += '<div class="layer-group mt-2"><strong>Geospasial Lama</strong>';
         html += layerItemsHtml(groups.legacy, 'legacy');
         html += '</div>';
-
         html += '<div class="layer-group mt-2"><strong>DataSpasial</strong>';
         html += layerItemsHtml(groups.data, 'data');
         html += '</div>';

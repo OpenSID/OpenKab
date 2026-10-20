@@ -527,9 +527,15 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             ->middleware('permission:dataspasial-peta-read')
             ->name('dataspasial.peta.data');
 
-        Route::get('dasbor', [DasborDataSpasialController::class, 'index'])
-            ->middleware('permission:dataspasial-dasbor-read')
-            ->name('dataspasial.dasbor');
+    Route::get('dasbor', [DasborDataSpasialController::class, 'index'])
+        ->middleware('permission:dataspasial-dasbor-read')
+        ->name('dataspasial.dasbor');
+    Route::get('dasbor/data', [DasborDataSpasialController::class, 'data'])
+        ->middleware('permission:dataspasial-dasbor-read')
+        ->name('dataspasial.dasbor.data');
+    Route::get('dasbor/ekspor', [DasborDataSpasialController::class, 'ekspor'])
+        ->middleware('permission:dataspasial-dasbor-read')
+        ->name('dataspasial.dasbor.export');
 
         Route::get('impor', [ImporDataController::class, 'index'])
             ->middleware('permission:dataspasial-impor-read')

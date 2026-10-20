@@ -570,3 +570,86 @@ function fxSkemaIsianFilter(): array
         fxSkemaAktif('1', 1, 'SK0', 'Infrastruktur', 1, 'terbit', $isian),
     ]);
 }
+
+function fxRingkasanIndikator(string $fieldKeterangan = 'keterangan'): array
+{
+    return [
+        'data' => [
+            [
+                'type' => 'ds_ringkasan',
+                'id' => '1',
+                'attributes' => [
+                    'sektor' => 'SK0',
+                    'periode' => '2025-06',
+                    'isian_kode' => 'jumlah_unit',
+                    'isian_label' => 'Jumlah Unit',
+                    'isian_satuan' => 'unit',
+                    'ukuran' => 'total',
+                    'total' => 120,
+                ],
+            ],
+            [
+                'type' => 'ds_ringkasan',
+                'id' => '2',
+                'attributes' => [
+                    'sektor' => 'SK0',
+                    'periode' => '2025-06',
+                    'isian_kode' => 'jumlah_penduduk',
+                    'isian_label' => 'Jumlah Penduduk',
+                    'isian_satuan' => 'jiwa',
+                    'ukuran' => 'total',
+                    'total' => 5000,
+                    // Q3: baris keterangan opsional dari ringkasan (item pertama sengaja tanpa)
+                    $fieldKeterangan => 'L 30.112 · P 28.828',
+                ],
+            ],
+        ],
+        'meta' => [
+            'pagination' => [
+                'total' => 2,
+                'count' => 2,
+                'per_page' => 10,
+                'current_page' => 1,
+                'total_pages' => 1,
+            ],
+        ],
+    ];
+}
+
+function fxSkemaIsianIndikator(): array
+{
+    return [
+        'data' => [
+            [
+                'type' => 'ds_skema_versi',
+                'id' => '1',
+                'attributes' => [
+                    'sektor_id' => 1,
+                    'status' => 'terbit',
+                    'isian' => [
+                        ['kode' => 'jumlah_unit', 'label' => 'Jumlah Unit', 'tipe' => 'angka', 'satuan' => 'unit', 'tampil_indikator' => true, 'tampil_filter' => true],
+                        ['kode' => 'jumlah_penduduk', 'label' => 'Jumlah Penduduk', 'tipe' => 'angka', 'satuan' => 'jiwa', 'tampil_indikator' => true],
+                    ],
+                ],
+            ],
+        ],
+    ];
+}
+
+function fxNilaiIsian(): array
+{
+    return [
+        'data' => [
+            [
+                'type' => 'ds_nilai',
+                'id' => '1',
+                'attributes' => ['isian_kode' => 'jumlah_unit', 'nilai' => 60, 'config_id' => '5102012001', 'periode' => '2025-06'],
+            ],
+            [
+                'type' => 'ds_nilai',
+                'id' => '2',
+                'attributes' => ['isian_kode' => 'jumlah_unit', 'nilai' => 60, 'config_id' => '5102012002', 'periode' => '2025-06'],
+            ],
+        ],
+    ];
+}

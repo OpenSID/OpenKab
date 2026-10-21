@@ -60,7 +60,7 @@ beforeEach(function () {
  */
 function dataspasialRoutes(): array
 {
-    return ['dataspasial.peta', 'dataspasial.monitoring'];
+    return ['dataspasial.peta'];
 }
 
 // ---------------------------------------------------------------------------

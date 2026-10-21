@@ -606,4 +606,26 @@ class DataSpasialApiService
     {
         return $this->request('POST', 'impor', [], $body, $schemaVersion);
     }
+
+    /**
+     * Pratinjau impor data spasial (API-06).
+     *
+     * @param  array<string, mixed>  $body
+     */
+    public function imporPratinjau(array $body, ?int $schemaVersion = null): DataSpasialResult
+    {
+        return $this->request('POST', 'impor/pratinjau', [], $body, $schemaVersion);
+    }
+
+    /**
+     * Simpan hasil pratinjau impor data spasial (API-06).
+     *
+     * @param  array<string, mixed>  $body
+     */
+    public function imporSimpan(string $imporId, array $body = [], ?int $schemaVersion = null): DataSpasialResult
+    {
+        $path = 'impor/'.rawurlencode($imporId).'/simpan';
+
+        return $this->request('POST', $path, [], $body, $schemaVersion);
+    }
 }

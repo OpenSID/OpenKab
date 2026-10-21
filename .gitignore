@@ -38,5 +38,6 @@ graphify-out
 docs
 specs/
 .opencode/
+.gemini/
 .specify/
 storage/sso

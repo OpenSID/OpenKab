@@ -540,6 +540,21 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::get('impor', [ImporDataController::class, 'index'])
             ->middleware('permission:dataspasial-impor-read')
             ->name('dataspasial.impor');
+        Route::get('impor/template', [ImporDataController::class, 'downloadTemplate'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.template');
+        Route::post('impor/template', [ImporDataController::class, 'downloadTemplate'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.template.post');
+        Route::post('impor/upload', [ImporDataController::class, 'upload'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.upload');
+        Route::post('impor/pratinjau', [ImporDataController::class, 'preview'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.preview');
+        Route::post('impor/simpan/{impor_id}', [ImporDataController::class, 'save'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.simpan');
 
         Route::get('monitoring', [MonitoringController::class, 'index'])
             ->middleware('permission:dataspasial-monitoring-read')

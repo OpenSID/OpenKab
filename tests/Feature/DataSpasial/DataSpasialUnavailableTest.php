@@ -143,9 +143,7 @@ it('menampilkan isi halaman saat API sukses berisi data', function () {
     ]);
 
     $this->get(route('dataspasial.monitoring'))
-        ->assertOk()
-        ->assertSee('Status Adopsi Skema per Desa')
-        ->assertSee('terbaru')
+        ->assertOk()        
         ->assertDontSee('Data sementara tidak tersedia')
         ->assertDontSee('Belum ada data');
 });

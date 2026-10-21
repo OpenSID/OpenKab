@@ -12,7 +12,7 @@ class DownloadTemplateRequest extends FormRequest
     {
         return [
             'sektor' => 'required|string',
-            'kecamatan' => 'nullable|string',            
+            'kecamatan' => 'nullable|string',
         ];
     }
 

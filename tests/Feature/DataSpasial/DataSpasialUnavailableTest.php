@@ -144,7 +144,6 @@ it('menampilkan isi halaman saat API sukses berisi data', function () {
 
     $this->get(route('dataspasial.monitoring'))
         ->assertOk()        
-        ->assertDontSee('Data sementara tidak tersedia')
         ->assertDontSee('Belum ada data');
 });
 

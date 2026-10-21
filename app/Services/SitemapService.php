@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\CMS\Category;
 use App\Models\CMS\Page;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 
 class SitemapService
 {
@@ -42,7 +44,7 @@ class SitemapService
     }
 
     /**
-     * @param string $set
+     * @param  string  $set
      */
     private function init($set = 'urlset'): string
     {
@@ -53,9 +55,8 @@ class SitemapService
     }
 
     /**
-     * @param string $set
-     *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param  string  $set
+     * @return ResponseFactory|Response
      */
     private function end($set = 'urlset')
     {
@@ -65,8 +66,8 @@ class SitemapService
     }
 
     /**
-     * @param string $loc
-     * @param string $lastmod
+     * @param  string  $loc
+     * @param  string  $lastmod
      */
     private function addUrl($loc, $lastmod = null): string
     {

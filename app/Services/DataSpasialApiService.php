@@ -136,13 +136,15 @@ class DataSpasialApiService
     /**
      * @param  array<string, mixed>  $query
      * @param  array<string, mixed>|null  $body
+     * @param  bool  $skipCache  Lewati cache baca (data yang harus selalu segar).
      */
     protected function request(
         string $method,
         string $path,
         array $query = [],
         ?array $body = null,
-        ?int $schemaVersion = null
+        ?int $schemaVersion = null,
+        bool $skipCache = false
     ): DataSpasialResult {
         $path = $this->endpoint($path);
         $isRead = strtoupper($method) === 'GET';
@@ -159,7 +161,7 @@ class DataSpasialApiService
 
         $cacheKey = $this->cacheKey($path, $query);
 
-        if ($isRead && $this->cacheTtl() > 0) {
+        if ($isRead && ! $skipCache && $this->cacheTtl() > 0) {
             $cached = $this->cacheStore()->get($cacheKey);
 
             if (is_array($cached) && isset($cached['status'])) {
@@ -204,7 +206,7 @@ class DataSpasialApiService
         if ($isRead) {
             // Hanya hasil sukses yang di-cache; `unavailable` tidak pernah
             // dibekukan agar outage tidak bertahan selama TTL (R8).
-            if (! $result->isUnavailable()) {
+            if (! $result->isUnavailable() && ! $skipCache) {
                 $this->remember($cacheKey, $result);
             }
         } elseif (! $result->isUnavailable()) {
@@ -627,5 +629,41 @@ class DataSpasialApiService
         $path = 'impor/'.rawurlencode($imporId).'/simpan';
 
         return $this->request('POST', $path, [], $body, $schemaVersion);
+    }
+
+    /**
+     * Log audit entri/perubahan DataSpasial (API-08).
+     *
+     * ⚠️ **TIDAK di-cache** — log audit harus selalu menampilkan data
+     * terbaru (freshness untuk auditabilitas), sesuai perilaku sisi API
+     * yang juga tidak meng-cache endpoint ini.
+     *
+     * @param  array<string, mixed>  $filters
+     */
+    public function audit(array $filters = []): DataSpasialResult
+    {
+        return $this->request('GET', 'audit', $filters, null, null, true);
+    }
+
+    /**
+     * Detail satu entri audit (nilai sebelum/sesudah penuh).
+     *
+     * @param  string|int  $id
+     */
+    public function auditDetail(string|int $id): DataSpasialResult
+    {
+        return $this->request('GET', 'audit/'.rawurlencode((string) $id), [], null, null, true);
+    }
+
+    /**
+     * Ringkasan log audit per sumber (API-08).
+     *
+     * ⚠️ **TIDAK di-cache** — mengikuti perilaku endpoint audit.
+     *
+     * @param  array<string, mixed>  $filters
+     */
+    public function auditRingkasan(array $filters = []): DataSpasialResult
+    {
+        return $this->request('GET', 'audit/ringkasan', $filters, null, null, true);
     }
 }

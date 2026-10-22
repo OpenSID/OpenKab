@@ -26,6 +26,7 @@ use App\Http\Controllers\DataPresisiPapanController;
 use App\Http\Controllers\DataPresisiPendidikanController;
 use App\Http\Controllers\DataPresisiSandangController;
 use App\Http\Controllers\DataPresisiSeniBudayaController;
+use App\Http\Controllers\DataSpasial\AuditDataSpasialController;
 use App\Http\Controllers\DataSpasial\DasborDataSpasialController;
 use App\Http\Controllers\DataSpasial\ImporDataController;
 use App\Http\Controllers\DataSpasial\MonitoringController;
@@ -565,6 +566,20 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::get('monitoring/ekspor', [MonitoringController::class, 'ekspor'])
             ->middleware('permission:dataspasial-monitoring-read')
             ->name('dataspasial.monitoring.ekspor');
+
+        // KAB-08 — Log Entri audit DataSpasial (baca-saja).
+        Route::get('audit', [AuditDataSpasialController::class, 'index'])
+            ->middleware('permission:dataspasial-audit-read')
+            ->name('dataspasial.audit');
+        Route::get('audit/data', [AuditDataSpasialController::class, 'data'])
+            ->middleware('permission:dataspasial-audit-read')
+            ->name('dataspasial.audit.data');
+        Route::get('audit/detail/{id}', [AuditDataSpasialController::class, 'detail'])
+            ->middleware('permission:dataspasial-audit-read')
+            ->name('dataspasial.audit.detail');
+        Route::get('audit/ekspor', [AuditDataSpasialController::class, 'ekspor'])
+            ->middleware('permission:dataspasial-audit-read')
+            ->name('dataspasial.audit.ekspor');
     });
 });
 

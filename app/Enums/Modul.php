@@ -307,6 +307,12 @@ final class Modul extends Enum
                     'url' => 'dataspasial/monitoring',
                     'permission' => 'dataspasial-monitoring',
                 ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Log Entri',
+                    'url' => 'dataspasial/audit',
+                    'permission' => 'dataspasial-audit',
+                ],
             ],
         ],
         [

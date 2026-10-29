@@ -1,44 +1,47 @@
 {
-    "data": [
-        {
-            "attributes": {
-                "nama_desa": "Desa Ampenan Tua",
-                "nama_kecamatan": "Kecamatan Ampenan",
-                "kode_desa": "5271010001",
-                "kode_kecamatan": "5271010",
-                "kode_kabupaten": "5271",
-                "nama_kabupaten": "Kota Mataram",
-                "penduduk_count": 5000
-            }
-        },
-        {
-            "attributes": {
-                "nama_desa": "Desa Taman Sari",
-                "nama_kecamatan": "Kecamatan Ampenan",
-                "kode_desa": "5271010002",
-                "kode_kecamatan": "5271010",
-                "kode_kabupaten": "5271",
-                "nama_kabupaten": "Kota Mataram",
-                "penduduk_count": 4500
-            }
-        },
-        {
-            "attributes": {
-                "nama_desa": "Desa Cakranegara",
-                "nama_kecamatan": "Kecamatan Cakranegara",
-                "kode_desa": "5271020001",
-                "kode_kecamatan": "5271020",
-                "kode_kabupaten": "5271",
-                "nama_kabupaten": "Kota Mataram",
-                "penduduk_count": 6000
-            }
-        }
-    ],
-    "meta": {
-        "pagination": {
-            "total": 3,
-            "current_page": 1,
-            "last_page": 1
-        }
-    }
+ "data": [
+  {
+   "attributes": {
+    "nama_desa": "Desa Ampenan Tua",
+    "nama_kecamatan": "Kecamatan Ampenan",
+    "kode_desa": "5271010001",
+    "kode_kecamatan": "5271010",
+    "kode_kabupaten": "5271",
+    "nama_kabupaten": "Kota Mataram",
+    "penduduk_count": 5000,
+    "website": "https://ampenantua.opendesa.id"
+   }
+  },
+  {
+   "attributes": {
+    "nama_desa": "Desa Taman Sari",
+    "nama_kecamatan": "Kecamatan Ampenan",
+    "kode_desa": "5271010002",
+    "kode_kecamatan": "5271010",
+    "kode_kabupaten": "5271",
+    "nama_kabupaten": "Kota Mataram",
+    "penduduk_count": 4500,
+    "website": "https://tamansari.opendesa.id"
+   }
+  },
+  {
+   "attributes": {
+    "nama_desa": "Desa Cakranegara",
+    "nama_kecamatan": "Kecamatan Cakranegara",
+    "kode_desa": "5271020001",
+    "kode_kecamatan": "5271020",
+    "kode_kabupaten": "5271",
+    "nama_kabupaten": "Kota Mataram",
+    "penduduk_count": 6000,
+    "website": ""
+   }
+  }
+ ],
+ "meta": {
+  "pagination": {
+   "total": 3,
+   "current_page": 1,
+   "last_page": 1
+  }
+ }
 }

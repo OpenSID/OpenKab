@@ -23,8 +23,15 @@ it('opens the lokasi page', function () {
 
 it('displays filter fields', function () {
     $page = SessionState::loginAndNavigate($this->user, '/plan')
+        ->assertVisible('@bt-toggle-filter')
+        ->assertVisible('@bt-bulk-delete')
+        ->click('@bt-toggle-filter')
         ->assertVisible('@filter-status')
-        ->assertVisible('@filter-point');
+        ->assertVisible('@filter-point')
+        ->assertVisible('@filter-kabupaten')
+        ->assertVisible('@filter-kecamatan')
+        ->assertVisible('@filter-desa')
+        ->assertVisible('@bt-filter');
 
     ScreenshotHelper::saveIfEnabled($page, 'lokasi-filter-fields');
 });

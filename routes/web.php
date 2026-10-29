@@ -461,6 +461,13 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::get('/plan/{parent?}', [PlanController::class, 'index'])->name('plan');
     Route::get('/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'ajax_lokasi_maps'])->name('plan.ajax_lokasi_maps');
     Route::get('/show/plan/ajax_lokasi_maps/{parrent}/{id}', [PlanController::class, 'show_ajax_lokasi_maps']);
+    Route::post('/plan/import', [PlanController::class, 'import'])->name('plan.import');
+    Route::get('/plan/import/template', [PlanController::class, 'downloadTemplate'])->name('plan.import.template');
+    Route::get('/plan/detail/{id}', [PlanController::class, 'detail'])->name('plan.detail');
+    Route::post('/plan/store', [PlanController::class, 'store'])->name('plan.store');
+    Route::put('/plan/update/{id}', [PlanController::class, 'update'])->name('plan.update');
+    Route::delete('/plan/hapus', [PlanController::class, 'bulkDestroy'])->name('plan.destroy.bulk');
+    Route::delete('/plan/hapus/{id}', [PlanController::class, 'destroy'])->name('plan.destroy');
 
     Route::resource('desa', DesaController::class)->only(['index']);
     Route::get('desa/cetak', [DesaController::class, 'cetak']);

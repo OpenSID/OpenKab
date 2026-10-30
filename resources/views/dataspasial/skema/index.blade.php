@@ -24,7 +24,8 @@
     @include('partials.breadcrumbs')
     @include('partials.flash_message')
 
-    <x-dataspasial-status :result="$resultSektor">
+    {{-- Q-empty-sektor: keadaan kosong tetap merender editor (panel sektor + tombol tambah). --}}
+    <x-dataspasial-status :result="$resultSektor" :tetap-tampilkan-konten="true">
         @php
             // Keadaan editor menentukan tombol mana yang aktif (FR-008a/FR-008b).
             $bolehUbah = $statusEditor->bolehUbah();
@@ -36,7 +37,18 @@
 
         <div data-status-editor="{{ $statusNilai }}"
              data-sektor="{{ $sektorKode }}"
-             data-sektor-nama="{{ $sektorNama }}">
+             data-sektor-nama="{{ $sektorNama }}"
+             data-mode-sektor-baru="{{ $modeSektorBaru ? '1' : '0' }}">
+
+            @if ($modeSektorBaru)
+                <div class="alert alert-info border-0 shadow-sm" role="alert" data-testid="keadaan-sektor-kosong">
+                    <h6 class="alert-heading mb-1">Belum ada sektor</h6>
+                    <p class="mb-0">
+                        DataSpasial belum memiliki sektor. Isi nama sektor dan minimal satu isian,
+                        lalu tekan <strong>Simpan draf</strong> untuk membuat sektor pertama.
+                    </p>
+                </div>
+            @endif
 
             {{-- Error validasi per baris isian (FR-017). --}}
             @if ($errors->any())

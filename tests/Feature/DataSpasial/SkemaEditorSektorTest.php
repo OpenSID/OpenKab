@@ -269,8 +269,35 @@ it('menampilkan keadaan kosong saat DataSpasial belum memiliki sektor', function
 
     $this->get(route('dataspasial.skema'))
         ->assertOk()
-        ->assertSee('Belum ada data')
+        ->assertSee('Belum ada sektor')
         ->assertDontSee('Data sementara tidak tersedia');
+});
+
+// Q-empty-sektor (T061) — sektor kosong tetap merender panel, tombol tambah,
+// dan editor dalam mode "sektor baru"; halaman tidak berhenti di pesan kosong.
+it('tetap merender editor dan tombol tambah sektor saat sektor kosong', function () {
+    fakeSektorDanSkema([]);
+
+    $content = $this->get(route('dataspasial.skema'))
+        ->assertOk()
+        ->getContent();
+
+    expect($content)
+        ->toContain('id="btn-tambah-sektor"')
+        ->toContain('id="btn-simpan-draf"')
+        ->toContain('data-mode-sektor-baru="1"')
+        ->toContain('id="wadah-input-sektor-nama"')
+        ->not->toContain('data-testid="dataspasial-empty"');
+});
+
+it('tidak membuka mode sektor baru otomatis saat sektor sudah ada', function () {
+    fakeSektorDanSkema([itemSektor('1', 'pendidikan', 'Pendidikan')]);
+
+    $content = $this->get(route('dataspasial.skema'))
+        ->assertOk()
+        ->getContent();
+
+    expect($content)->toContain('data-mode-sektor-baru="0"');
 });
 
 // ---------------------------------------------------------------------------

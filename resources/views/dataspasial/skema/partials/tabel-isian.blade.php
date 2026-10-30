@@ -18,8 +18,7 @@
 --}}
 <div class="card card-outline card-success">
     <div class="card-header py-2 px-3">
-        <h3 class="card-title text-sm mb-0">
-            <i class="fas fa-table mr-1"></i>Isian
+        <h3 class="card-title text-sm mb-0">            
             @if ($sektorTerpilih)
                 <span class="text-muted font-weight-normal">· {{ $sektorTerpilih['kode'] }}</span>
             @endif

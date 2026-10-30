@@ -1327,6 +1327,12 @@ export function mountSchemaEditor() {
     terapkanAturanTipe(tbody);
     validasiKodeLokal(tbody);
     renderPratinjau(wadahPratinjau, bacaDariDom(tbody));
+
+    // Q-empty-sektor — belum ada sektor: editor langsung masuk mode "sektor baru"
+    // (memakai jalur tombol yang sama, tanpa permintaan ke sumber data).
+    if (akar.dataset.modeSektorBaru === '1') {
+        document.getElementById('btn-tambah-sektor')?.click();
+    }
 }
 
 

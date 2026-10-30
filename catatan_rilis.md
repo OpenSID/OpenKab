@@ -1,9 +1,10 @@
-Di rilis ini, versi 2610.0.1 berisi penambahan dan perbaikan yang diminta pengguna.
+Di rilis ini, versi 2610.0.2 berisi penambahan dan perbaikan yang diminta pengguna.
 
 #### Penambahan Fitur
 
 
 1. [#1103](https://github.com/OpenSID/OpenKab/issues/1103) Feature SSO Akses Panel Admin OpenSID dari OpenKab.
+2. [#1295](https://github.com/OpenSID/OpenKab/issues/1295) Feat: Import dan Pengelolaan Data Lokasi (Tipe Lokasi) Multi-Desa via API Database Gabungan.
 
 #### Perbaikan BUG
 

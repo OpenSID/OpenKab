@@ -273,6 +273,43 @@ final class Modul extends Enum
             ],
         ],
         [
+            'text' => 'DataSpasial',
+            'icon' => 'fas fa-map',
+            'permission' => 'dataspasial',
+            'submenu' => [
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Skema DataSpasial',
+                    'url' => 'dataspasial/skema',
+                    'permission' => 'dataspasial-skema',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Peta Gabungan',
+                    'url' => 'dataspasial/peta',
+                    'permission' => 'dataspasial-peta',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Dasbor DataSpasial',
+                    'url' => 'dataspasial/dasbor',
+                    'permission' => 'dataspasial-dasbor',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Impor Data',
+                    'url' => 'dataspasial/impor',
+                    'permission' => 'dataspasial-impor',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Monitoring',
+                    'url' => 'dataspasial/monitoring',
+                    'permission' => 'dataspasial-monitoring',
+                ],
+            ],
+        ],
+        [
             'text' => 'SOTK',
             'icon' => 'fa fa-tags',
             'permission' => 'organisasi',

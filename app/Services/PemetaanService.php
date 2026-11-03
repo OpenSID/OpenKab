@@ -2,91 +2,91 @@
 
 namespace App\Services;
 
-use App\Models\Setting;
-use Illuminate\Support\Facades\Http;
-
 class PemetaanService extends BaseApiService
 {
-    protected $baseUrl;
-
-    protected $setting;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setting = Setting::where('key', 'database_gabungan_api_key')->first();
-    }
-
-    public function getAllPoint(array $query = [])
+    public function getAllPoint(array $query = []): array
     {
         return $this->apiRequest('/api/v1/point', $query);
     }
 
     public function pointLock(array $data, string $id): ?array
     {
-        $url = "{$this->baseUrl}/api/v1/point/lock/{$id}";
-
-        $response = Http::withToken($this->setting->value ?? '')
-            ->acceptJson()
-            ->put($url, $data);
-
-        if ($response->successful()) {
-            return $response->json('data') ?? null;
-        }
-
-        throw new \Exception('Gagal mengupdate data point: '.$response->status().' - '.$response->body());
+        return $this->apiPut("/api/v1/point/lock/{$id}", $data);
     }
 
     public function pointUpdate(array $data, string $id): ?array
     {
-        $url = "{$this->baseUrl}/api/v1/point/update/{$id}";
-
-        $response = Http::withToken($this->setting->value ?? '')
-            ->acceptJson()
-            ->put($url, $data);
-
-        if ($response->successful()) {
-            return $response->json('data') ?? null;
-        }
-
-        throw new \Exception('Gagal mengupdate data point: '.$response->status().' - '.$response->body());
+        return $this->apiPut("/api/v1/point/update/{$id}", $data);
     }
 
     public function pointStore(array $data): ?array
     {
-        $url = "{$this->baseUrl}/api/v1/point/store";
-
-        $response = Http::withToken($this->setting->value ?? '')
-            ->acceptJson()
-            ->post($url, $data);
-
-        if ($response->successful()) {
-            return $response->json('data') ?? null;
-        }
-
-        throw new \Exception('Gagal store data point: '.$response->status().' - '.$response->body());
+        return $this->apiPost('/api/v1/point/store', $data);
     }
 
-    public function getAllPlan(array $query = [])
+    public function getAllPlan(array $query = []): ?array
     {
-        $url = $this->baseUrl.'/api/v1/plan';
+        $data = $this->apiGet('/api/v1/plan', $query);
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer '.($this->setting->value ?? ''),
-        ])->get($url, $query);
+        return is_array($data) ? $data : null;
+    }
 
-        if ($response->successful()) {
-            $data = $response->json('data');
+    public function planStore(array $data): ?array
+    {
+        return $this->apiPost('/api/v1/plan/store', $data);
+    }
 
-            if (is_array($data)) {
-                return $data;
-            }
+    /**
+     * Kirim seluruh baris import sekaligus (batch) ke API database gabungan.
+     *
+     * @param  array<string, mixed>  $payload
+     */
+    public function planImport(array $payload): array
+    {
+        $result = $this->apiPost('/api/v1/plan/import', $payload);
 
-            return null;
+        return is_array($result) ? $result : [];
+    }
+
+    /**
+     * Hapus beberapa lokasi sekaligus (batch) via API database gabungan.
+     * Dikirim sebagai query string array `ids[]` pada endpoint `/api/v1/plan/`.
+     *
+     * @param  array<int, int|string>  $ids
+     * @return array<string, mixed>
+     */
+    public function planBulkDelete(array $ids): array
+    {
+        $query = implode('&', array_map(
+            fn (int|string $id): string => 'ids[]='.urlencode((string) $id),
+            array_values($ids),
+        ));
+
+        $result = $this->apiDelete('/api/v1/plan/?'.$query);
+
+        return is_array($result) ? $result : [];
+    }
+
+    public function planUpdate(array $data, string $id): ?array
+    {
+        return $this->apiPut("/api/v1/plan/update/{$id}", $data);
+    }
+
+    public function planDelete(string $id): bool
+    {
+        $this->apiDelete("/api/v1/plan/hapus/{$id}");
+
+        return true;
+    }
+
+    public function planById(string $id): ?array
+    {
+        $result = $this->getAllPlan(['filter[id]' => $id]);
+
+        if (is_array($result) && count($result) > 0) {
+            return (array) $result[0];
         }
 
-        throw new \Exception('Gagal mengambil data point: '.$response->status());
+        return null;
     }
 }

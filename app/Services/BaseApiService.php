@@ -69,4 +69,73 @@ class BaseApiService
 
         return [];
     }
+
+    /**
+     * Panggilan API database gabungan generik (GET/POST/PUT/PATCH/DELETE).
+     *
+     * Menangani header otentikasi, pengiriman payload, logging, dan
+     * melempar exception saat respons gagal agar dapat ditangani pemanggil.
+     *
+     * @param  array<string, mixed>  $payload
+     */
+    protected function apiCall(string $method, string $endpoint, array $payload = []): mixed
+    {
+        $url = str_starts_with($endpoint, 'http') ? $endpoint : $this->baseUrl.$endpoint;
+        $headers = array_merge($this->header, ['Accept' => 'application/json']);
+
+        try {
+            $pending = Http::withHeaders($headers);
+
+            $response = match (strtoupper($method)) {
+                'GET' => $pending->get($url, $payload),
+                'POST' => $pending->post($url, $payload),
+                'PUT' => $pending->put($url, $payload),
+                'PATCH' => $pending->patch($url, $payload),
+                'DELETE' => $pending->delete($url, $payload),
+                default => throw new \InvalidArgumentException("Metode HTTP '{$method}' tidak didukung."),
+            };
+
+            if ($response->failed()) {
+                throw new \RuntimeException('Gagal memanggil API ('.$response->status().'): '.$response->body());
+            }
+
+            return $response->json('data') ?? $response->json();
+        } catch (\Throwable $e) {
+            Log::error('Failed '.strtoupper($method).' request to '.$url.' in '.__FILE__.' '.$e->getMessage());
+
+            throw $e;
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $params
+     */
+    protected function apiGet(string $endpoint, array $params = []): mixed
+    {
+        return $this->apiCall('GET', $endpoint, $params);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    protected function apiPost(string $endpoint, array $data = []): mixed
+    {
+        return $this->apiCall('POST', $endpoint, $data);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    protected function apiPut(string $endpoint, array $data = []): mixed
+    {
+        return $this->apiCall('PUT', $endpoint, $data);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    protected function apiDelete(string $endpoint, array $data = []): mixed
+    {
+        return $this->apiCall('DELETE', $endpoint, $data);
+    }
 }

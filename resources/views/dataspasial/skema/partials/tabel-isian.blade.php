@@ -17,13 +17,7 @@
     saat story berikutnya tiba (FR-008).
 --}}
 <div class="card card-outline card-success">
-    <div class="card-header py-2 px-3">
-        <h3 class="card-title text-sm mb-0">
-            <i class="fas fa-table mr-1"></i>Isian
-            @if ($sektorTerpilih)
-                <span class="text-muted font-weight-normal">· {{ $sektorTerpilih['kode'] }}</span>
-            @endif
-        </h3>
+    <div class="card-header py-2 px-3">        
 
         {{--
             US7/Q19 — nama sektor disunting dari editor, dikirim sebagai

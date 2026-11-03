@@ -106,6 +106,8 @@ class SkemaDataSpasialController extends DataSpasialController
             'skemaTerpilih' => $skemaTerpilih,
             'isian' => $isian,
             'statusEditor' => $statusEditor,
+            // Q-empty-sektor: belum ada sektor → editor langsung dalam mode "sektor baru".
+            'modeSektorBaru' => $resultSektor->isEmpty(),
         ]);
     }
 

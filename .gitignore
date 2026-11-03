@@ -41,3 +41,4 @@ specs/
 .gemini/
 .specify/
 storage/sso
+.claude/

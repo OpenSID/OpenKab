@@ -1,9 +1,11 @@
 <table class="table table-striped" id="plan" data-testid="datatable-lokasi">
     <thead>
         <tr>
+            <th class="padat"><input type="checkbox" id="check-all" data-testid="check-all" title="Pilih semua baris halaman ini"></th>
             <th class="padat">No</th>
             <th class="padat">Aksi</th>
             <th>Lokasi</th>
+            <th>Desa</th>
             <th style="width:10%">Aktif</th>
             <th style="width:15%">Jenis</th>
             <th style="width:15%">Kategori</th>

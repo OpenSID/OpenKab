@@ -17,7 +17,10 @@
         @else
             <ul class="list-group list-group-flush" data-testid="daftar-sektor">
                 @foreach ($daftarSektor as $sektor)
-                    @php $terpilih = $sektorTerpilih !== null && $sektorTerpilih['id'] === $sektor['id']; @endphp
+                    @php
+                        $terpilih = $sektorTerpilih !== null && $sektorTerpilih['id'] === $sektor['id'];
+                        $versiLink = (int) ($sektor['nomorVersiTerakhir'] ?? 0);
+                    @endphp
                     <li class="list-group-item list-group-item-action py-2 px-3 d-flex align-items-start {{ $terpilih ? 'active' : '' }}"
                         data-testid="item-sektor"
                         data-sektor-id="{{ $sektor['id'] }}"
@@ -25,7 +28,7 @@
                         data-sektor-nama="{{ $sektor['nama'] }}"
                         data-sektor-ikon="{{ $sektor['ikon'] ?? '' }}"
                         data-ada-draf="{{ $sektor['adaDraf'] ? '1' : '0' }}">
-                        <a href="{{ route('dataspasial.skema', array_filter(['sektor' => $sektor['kode']])) }}"
+                        <a href="{{ route('dataspasial.skema', array_filter(['sektor' => $sektor['kode'], 'versi' => $versiLink > 0 ? $versiLink : null])) }}"
                            class="flex-grow-1 {{ $terpilih ? 'text-white' : 'text-dark' }}">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>

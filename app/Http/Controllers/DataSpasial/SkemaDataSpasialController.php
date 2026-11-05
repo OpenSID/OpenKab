@@ -74,25 +74,38 @@ class SkemaDataSpasialController extends DataSpasialController
         // `GET /dataspasial/skema?sektor={kode}` (parameter wajib).
         $isian = [];
         $skemaTerpilih = null;
+        $versiTidakDitemukan = false;
 
         if ($sektorTerpilih !== null) {
-            $resultSkema = $this->dataspasial->listSkema([
-                'sektor' => $sektorTerpilih['kode'],
-            ]);
+            // FR-007a-6: `versi` (opsional) dibawa link sektor. `termasuk_arsip`
+            // TIDAK pernah dikirim (FR-007a-7).
+            $versiDiminta = $this->versiDiminta($request);
 
-            [$isian] = $this->muatIsian($resultSkema);
+            $resultSkema = $this->dataspasial->listSkema(array_filter([
+                'sektor' => $sektorTerpilih['kode'],
+                'versi' => $versiDiminta,
+            ], static fn($nilai) => $nilai !== null));
 
             $item = is_array($resultSkema?->first()) ? $resultSkema->first() : null;
             $atribut = is_array($item['attributes'] ?? null) ? $item['attributes'] : [];
             $versi = is_array($atribut['versi_skema'] ?? null) ? $atribut['versi_skema'] : [];
-            $skemaTerpilih = [
-                'status' => (string) ($versi['status'] ?? ''),
-                'jumlah_skema' => 1,
-            ];
+
+            $versiTidakDitemukan = $versiDiminta !== null
+                && $this->versiTidakDitemukan($resultSkema, (int) ($versi['nomor_versi'] ?? 0), $versiDiminta);
+
+            if (! $versiTidakDitemukan) {
+                [$isian] = $this->muatIsian($resultSkema);
+
+                $skemaTerpilih = [
+                    'status' => (string) ($versi['status'] ?? ''),
+                    'jumlah_skema' => 1,
+                ];
+            }
         }
 
-        // Status global: bila sektor tidak dapat diperoleh, seluruh tombol mati.
-        if ($resultSektor->isUnavailable()) {
+        // Status global: bila sektor tidak dapat diperoleh (atau versi yang diminta
+        // tidak ditemukan), seluruh tombol mati.
+        if ($resultSektor->isUnavailable() || $versiTidakDitemukan) {
             $statusEditor = StatusSkemaEditor::BelumTersedia();
         } else {
             $statusEditor = $this->editor->statusEditor($skemaTerpilih, $daftarSektor);
@@ -105,6 +118,7 @@ class SkemaDataSpasialController extends DataSpasialController
             'sektorTerpilih' => $sektorTerpilih,
             'skemaTerpilih' => $skemaTerpilih,
             'isian' => $isian,
+            'versiTidakDitemukan' => $versiTidakDitemukan,
             'statusEditor' => $statusEditor,
             // Q-empty-sektor: belum ada sektor → editor langsung dalam mode "sektor baru".
             'modeSektorBaru' => $resultSektor->isEmpty(),
@@ -228,9 +242,10 @@ class SkemaDataSpasialController extends DataSpasialController
         // mencerminkan apa yang AKAN diterbitkan, bukan isi draf tersimpan (FR-010).
         $isianDraf = $this->isianDrafDariRequest($request);
         $versiTerbit = $this->versi->versiTerbitTerakhir($sektorKode, $riwayatVersi);
+        $nomorDraf = (int) $versiDraf['nomor_versi'];
 
         $ringkasan = $isianDraf === null
-            ? $this->versi->ringkasanPerubahan($sektorKode, $this->isianDrafTersimpan($sektorKode), $riwayatVersi)
+            ? $this->versi->ringkasanPerubahan($sektorKode, $this->isianDrafTersimpan($sektorKode, $nomorDraf), $riwayatVersi)
             : $this->versi->ringkasanPerubahan($sektorKode, $isianDraf, $riwayatVersi);
 
         // FR-016: tidak ada perubahan → tidak boleh diterbitkan.
@@ -245,7 +260,7 @@ class SkemaDataSpasialController extends DataSpasialController
         // FR-045: pra-pemeriksaan yang pasti ditolak server.
         $pemeriksaan = $this->versi->praPemeriksaanTerbit(
             $sektorKode,
-            $isianDraf ?? $this->isianDrafTersimpan($sektorKode),
+            $isianDraf ?? $this->isianDrafTersimpan($sektorKode, $nomorDraf),
             $riwayatVersi
         );
 
@@ -269,7 +284,7 @@ class SkemaDataSpasialController extends DataSpasialController
             ]);
         }
 
-        $peringatan = $this->versi->peringatanTerbit($isianDraf ?? $this->isianDrafTersimpan($sektorKode), $pratinjau);
+        $peringatan = $this->versi->peringatanTerbit($isianDraf ?? $this->isianDrafTersimpan($sektorKode, $nomorDraf), $pratinjau);
 
         return response()->json([
             'success' => true,
@@ -342,7 +357,7 @@ class SkemaDataSpasialController extends DataSpasialController
             return response()->json([
                 'success' => false,
                 'gagal_dimuat' => $dari,
-                'message' => 'Versi '.$dari.' tidak dapat dimuat, perbandingan tidak ditampilkan.',
+                'message' => 'Versi ' . $dari . ' tidak dapat dimuat, perbandingan tidak ditampilkan.',
             ], 503);
         }
 
@@ -350,7 +365,7 @@ class SkemaDataSpasialController extends DataSpasialController
             return response()->json([
                 'success' => false,
                 'gagal_dimuat' => $ke,
-                'message' => 'Versi '.$ke.' tidak dapat dimuat, perbandingan tidak ditampilkan.',
+                'message' => 'Versi ' . $ke . ' tidak dapat dimuat, perbandingan tidak ditampilkan.',
             ], 503);
         }
 
@@ -468,7 +483,7 @@ class SkemaDataSpasialController extends DataSpasialController
                 'excel' => true,
             ])
             ->header('Content-Type', 'application/vnd.ms-excel')
-            ->header('Content-Disposition', 'attachment; filename="adopsi-skema-'.preg_replace('/[^a-z0-9\-_]/i', '', $sektorKode).'-'.now()->format('Ymd-His').'.xls"');
+            ->header('Content-Disposition', 'attachment; filename="adopsi-skema-' . preg_replace('/[^a-z0-9\-_]/i', '', $sektorKode) . '-' . now()->format('Ymd-His') . '.xls"');
     }
 
     /**
@@ -489,7 +504,7 @@ class SkemaDataSpasialController extends DataSpasialController
 
         $result = $this->dataspasial->terbitkanSkema($sektorKode, array_filter([
             'catatan_perubahan' => $validated['catatan_perubahan'] ?? null,
-        ], fn ($v): bool => filled($v)));
+        ], fn($v): bool => filled($v)));
 
         if ($result->isUnavailable()) {
             $pesan = $this->pesanTerbitan($result);
@@ -568,19 +583,22 @@ class SkemaDataSpasialController extends DataSpasialController
         }
 
         return array_values(array_map(
-            fn (array $baris): array => $this->editor->petakanIsian($baris + ['attributes' => $baris]),
+            fn(array $baris): array => $this->editor->petakanIsian($baris + ['attributes' => $baris]),
             array_filter($isian, 'is_array')
         ));
     }
 
     /**
      * Isian draf tersimpan di sumber data (dipakai bila klien tidak mengirim).
+     * Diambil per nomor versi draf (lihat catatan `versi` di bawah).
      *
      * @return array<int, array<string, mixed>>
      */
-    private function isianDrafTersimpan(string $sektorKode): array
+    private function isianDrafTersimpan(string $sektorKode, int $nomorDraf): array
     {
-        $result = $this->dataspasial->listSkema(['sektor' => $sektorKode]);
+        // ⚠️ `versi` wajib: tanpa itu API memberi versi TERBIT terbaru, bukan draf,
+        // sehingga draf dibandingkan dengan dirinya sendiri → "tanpa perubahan".
+        $result = $this->dataspasial->listSkema(['sektor' => $sektorKode, 'versi' => $nomorDraf]);
 
         if ($result->isUnavailable()) {
             return [];
@@ -660,5 +678,37 @@ class SkemaDataSpasialController extends DataSpasialController
         $itemIsian = is_array($atribut['isian'] ?? null) ? $atribut['isian'] : [];
 
         return [$this->editor->petakanDaftarIsian($itemIsian), $resultSkema];
+    }
+
+    /**
+     * Versi pada query: integer >= 1; selain itu diperlakukan tanpa parameter.
+     */
+    private function versiDiminta(Request $request): ?int
+    {
+        $nilai = $request->query('versi');
+
+        if (! is_string($nilai) || preg_match('/^[1-9]\d{0,8}$/', $nilai) !== 1) {
+            return null;
+        }
+
+        return (int) $nilai;
+    }
+
+    /**
+     * Versi yang diminta dianggap tidak ditemukan bila API menolaknya (404/422),
+     * tidak mengembalikan data, atau mengembalikan nomor versi lain (R9).
+     * Kegagalan jaringan/5xx tetap jalur "data sementara tidak tersedia".
+     */
+    private function versiTidakDitemukan(?DataSpasialResult $result, int $nomorVersi, int $versiDiminta): bool
+    {
+        if ($result === null) {
+            return false;
+        }
+
+        if ($result->isUnavailable()) {
+            return in_array($result->httpStatus, [404, 422], true);
+        }
+
+        return $result->isEmpty() || $nomorVersi !== $versiDiminta;
     }
 }

@@ -156,6 +156,36 @@ it('menolak preview tanpa ada perubahan terhadap versi terbit', function () {
     $response->assertJsonPath('tanpa_perubahan', true);
 });
 
+it('membandingkan isian draf tersimpan (bukan versi terbit) saat klien tidak mengirim isian', function () {
+    fakeTerbitan();
+
+    $draf = fxSkemaVersiDenganArsip([
+        ['id' => 8484, 'kode' => 'lebar_jalan', 'label' => 'Lebar Jalan', 'tipe' => 'angka', 'wajib' => true,
+            'satuan' => 'meter', 'urutan' => 1, 'diarsipkan' => false, 'tampil_popup' => true,
+            'pemetaan' => [['id' => 3951, 'sumber' => 'openSID', 'rujukan_sumber' => 'tbl_jalan.lebar', 'aturan_hitung' => null]]],
+        ['id' => 9000, 'kode' => 'jumlah_siswa', 'label' => 'Jumlah Siswa', 'tipe' => 'angka', 'wajib' => false,
+            'urutan' => 2, 'diarsipkan' => false, 'pemetaan' => []],
+    ]);
+    $draf['data']['attributes']['versi_skema']['nomor_versi'] = 1;
+    $draf['data']['attributes']['versi_skema']['status'] = 'draf';
+
+    // Meniru API: tanpa `versi` → versi TERBIT terbaru; `versi=1` → draf.
+    Http::fake([
+        '*/api/v1/dataspasial/skema?*' => function (Request $request) use ($draf) {
+            parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+
+            return ($query['versi'] ?? null) === '1'
+                ? Http::response($draf, 200)
+                : Http::response(fxSkemaVersiDenganArsip(), 200);
+        },
+    ] + []);
+
+    $this->postJson(route('dataspasial.skema.terbit.preview'), ['sektor' => 'SK0'])
+        ->assertOk()
+        ->assertJsonPath('ringkasan.ada_perubahan', true)
+        ->assertJsonPath('ringkasan.jumlah_baru', 1);
+});
+
 it('menolak preview saat sektor tidak memiliki draf berjalan', function () {
     Http::fake([
         '*/api/v1/config/*' => Http::response(fakeConfigEndpoint(), 200),

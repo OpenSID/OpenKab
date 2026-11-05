@@ -62,6 +62,17 @@
                 </div>
             @endif
 
+            @if ($versiTidakDitemukan)
+                <div class="alert alert-warning border-0 shadow-sm" role="alert" data-testid="versi-tidak-ditemukan">
+                    <h6 class="alert-heading mb-1">Versi tidak ditemukan atau sudah tidak berlaku</h6>
+                    <p class="mb-2">Versi skema pada tautan tidak tersedia. Pilih kembali sektor dari daftar.</p>
+                    <a href="{{ route('dataspasial.skema') }}" class="btn btn-sm btn-outline-secondary"
+                       data-testid="btn-kembali-daftar-sektor">
+                        <i class="fas fa-arrow-left mr-1"></i>Kembali ke daftar sektor
+                    </a>
+                </div>
+            @endif
+
             <div class="row">
                 {{-- ============ PANEL KIRI: sektor ============ --}}
                 <div class="col-lg-3 mb-3">
@@ -73,7 +84,7 @@
                 </div>
 
                 {{-- ============ PANEL TENGAH: editor isian ============ --}}
-                <div class="col-lg-6 mb-3">
+                <div class="col-lg-6 mb-3 {{ $versiTidakDitemukan ? 'd-none' : '' }}">
                     @include('dataspasial.skema.partials.tabel-isian', [
                         'isian' => $isian,
                         'sektorTerpilih' => $sektorTerpilih,
@@ -85,7 +96,7 @@
                 </div>
 
                 {{-- ============ PANEL KANAN: pratinjau ============ --}}
-                <div class="col-lg-3 mb-3">
+                <div class="col-lg-3 mb-3 {{ $versiTidakDitemukan ? 'd-none' : '' }}">
                     @include('dataspasial.skema.partials.pratinjau', [
                         'isian' => $isian,
                         'sektorTerpilih' => $sektorTerpilih,

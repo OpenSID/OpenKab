@@ -242,9 +242,10 @@ class SkemaDataSpasialController extends DataSpasialController
         // mencerminkan apa yang AKAN diterbitkan, bukan isi draf tersimpan (FR-010).
         $isianDraf = $this->isianDrafDariRequest($request);
         $versiTerbit = $this->versi->versiTerbitTerakhir($sektorKode, $riwayatVersi);
+        $nomorDraf = (int) $versiDraf['nomor_versi'];
 
         $ringkasan = $isianDraf === null
-            ? $this->versi->ringkasanPerubahan($sektorKode, $this->isianDrafTersimpan($sektorKode), $riwayatVersi)
+            ? $this->versi->ringkasanPerubahan($sektorKode, $this->isianDrafTersimpan($sektorKode, $nomorDraf), $riwayatVersi)
             : $this->versi->ringkasanPerubahan($sektorKode, $isianDraf, $riwayatVersi);
 
         // FR-016: tidak ada perubahan → tidak boleh diterbitkan.
@@ -259,7 +260,7 @@ class SkemaDataSpasialController extends DataSpasialController
         // FR-045: pra-pemeriksaan yang pasti ditolak server.
         $pemeriksaan = $this->versi->praPemeriksaanTerbit(
             $sektorKode,
-            $isianDraf ?? $this->isianDrafTersimpan($sektorKode),
+            $isianDraf ?? $this->isianDrafTersimpan($sektorKode, $nomorDraf),
             $riwayatVersi
         );
 
@@ -283,7 +284,7 @@ class SkemaDataSpasialController extends DataSpasialController
             ]);
         }
 
-        $peringatan = $this->versi->peringatanTerbit($isianDraf ?? $this->isianDrafTersimpan($sektorKode), $pratinjau);
+        $peringatan = $this->versi->peringatanTerbit($isianDraf ?? $this->isianDrafTersimpan($sektorKode, $nomorDraf), $pratinjau);
 
         return response()->json([
             'success' => true,
@@ -589,12 +590,15 @@ class SkemaDataSpasialController extends DataSpasialController
 
     /**
      * Isian draf tersimpan di sumber data (dipakai bila klien tidak mengirim).
+     * Diambil per nomor versi draf (lihat catatan `versi` di bawah).
      *
      * @return array<int, array<string, mixed>>
      */
-    private function isianDrafTersimpan(string $sektorKode): array
+    private function isianDrafTersimpan(string $sektorKode, int $nomorDraf): array
     {
-        $result = $this->dataspasial->listSkema(['sektor' => $sektorKode]);
+        // ⚠️ `versi` wajib: tanpa itu API memberi versi TERBIT terbaru, bukan draf,
+        // sehingga draf dibandingkan dengan dirinya sendiri → "tanpa perubahan".
+        $result = $this->dataspasial->listSkema(['sektor' => $sektorKode, 'versi' => $nomorDraf]);
 
         if ($result->isUnavailable()) {
             return [];

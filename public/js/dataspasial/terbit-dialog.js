@@ -110,6 +110,41 @@ async function panggil(url, opsi = {}) {
     }
 }
 
+/**
+ * Pesan galat yang jelas untuk pengguna dari hasil `panggil()`.
+ *
+ * Urutan: pesan validasi pertama (422 Laravel) → `message` dari server →
+ * pesan menurut status HTTP (sesi habis, tidak berizin, jaringan, dll.).
+ */
+function pesanGalat(hasil, bawaan = 'Data sementara tidak tersedia. Silakan coba lagi nanti.') {
+    const data = hasil?.data ?? {};
+
+    if (data.errors && typeof data.errors === 'object') {
+        const pertama = Object.values(data.errors).flat().find((m) => typeof m === 'string' && m !== '');
+
+        if (pertama) {
+            return pertama;
+        }
+    }
+
+    // Pesan bawaan framework berbahasa Inggris tidak ditampilkan apa adanya.
+    if (typeof data.message === 'string' && data.message !== '' && !/^(The given data was invalid|Server Error|CSRF token mismatch)/i.test(data.message)) {
+        return data.message;
+    }
+
+    switch (hasil?.status) {
+        case 0: return 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda lalu coba lagi.';
+        case 401:
+        case 419: return 'Sesi Anda telah berakhir. Muat ulang halaman dan masuk kembali.';
+        case 403: return 'Anda tidak memiliki izin untuk melakukan tindakan ini.';
+        case 404: return 'Data yang diminta tidak ditemukan.';
+        case 409: return 'Data sudah berubah. Muat ulang halaman lalu coba lagi.';
+        case 422: return 'Permintaan tidak dapat diproses. Periksa kembali isian Anda.';
+        case 429: return 'Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.';
+        default: return bawaan;
+    }
+}
+
 // ---------------------------------------------------------------------------
 // 1. Ringkasan perubahan
 // ---------------------------------------------------------------------------
@@ -349,7 +384,7 @@ async function muatPerbandingan() {
 
     if (!hasil.ok) {
         // FR-057 — sebut versi yang gagal, jangan tampilkan diff menyesatkan.
-        wadah.innerHTML = `<div class="p-3 text-danger mb-0">${escapeHtml(hasil.data.message ?? 'Perbandingan gagal dimuat.')}</div>`;
+        wadah.innerHTML = `<div class="p-3 text-danger mb-0">${escapeHtml(pesanGalat(hasil, 'Perbandingan gagal dimuat.'))}</div>`;
         wadah.classList.remove('d-none');
 
         return;
@@ -407,7 +442,7 @@ async function muatAdopsi(halaman = state.adopsi.halaman) {
 
     if (!hasil.ok) {
         // FR-047 — hanya bagian tabel yang gagal; bagian lain tetap dipakai.
-        wadah.innerHTML = `<div class="p-3 text-warning mb-0">${escapeHtml(hasil.data.message ?? 'Data sementara tidak tersedia.')}</div>`;
+        wadah.innerHTML = `<div class="p-3 text-warning mb-0">${escapeHtml(pesanGalat(hasil))}</div>`;
 
         if (ringkasanWadah) {
             ringkasanWadah.textContent = '';
@@ -550,7 +585,7 @@ async function kirimTerbitan() {
 
     if (!hasil.ok) {
         perbaruiTombolTerbit();
-        await swalInfo(hasil.data.message ?? 'Data sementara tidak tersedia. Silakan coba lagi nanti.', 'error');
+        await swalInfo(pesanGalat(hasil), 'error');
 
         return;
     }
@@ -644,7 +679,7 @@ async function bukaDialog(sektor) {
     el('[data-testid="terbitan-memuat"]').classList.add('d-none');
 
     if (!hasil.ok) {
-        pesanDi('[data-testid="terbitan-gagal"]', hasil.data.message ?? 'Data sementara tidak tersedia.');
+        pesanDi('[data-testid="terbitan-gagal"]', pesanGalat(hasil));
         el('[data-testid="terbitan-isi"]').classList.remove('d-none');
 
         return;

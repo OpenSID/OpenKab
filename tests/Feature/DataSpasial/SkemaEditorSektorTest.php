@@ -911,3 +911,102 @@ it('tidak menampilkan jumlah versi pada daftar sektor', function () {
     expect($content)->not->toContain(' versi<')
         ->and(badgeNomorVersiSektor($content))->toBe('3');
 });
+
+// ---------------------------------------------------------------------------
+// Sesi 2026-11-05 — link sektor menyertakan versi skema (FR-007a-6, FR-007a-7)
+// ---------------------------------------------------------------------------
+
+/**
+ * Sektor dengan counter versi nyata (§6a.2).
+ *
+ * @return array<string, mixed>
+ */
+function sektorBerversi(string $id, string $kode, string $nama, int $jumlahVersi, int $jumlahTerbit): array
+{
+    $item = itemSektor($id, $kode, $nama);
+    $item['attributes']['jumlah_versi_skema'] = $jumlahVersi;
+    $item['attributes']['jumlah_versi_terbit'] = $jumlahTerbit;
+
+    return $item;
+}
+
+it('menyertakan versi terakhir pada link item sektor dan tidak pada sektor tanpa versi', function () {
+    fakeSektorDanSkema([
+        sektorBerversi('1', 'pendidikan', 'Pendidikan', 3, 2),
+        sektorBerversi('2', 'kesehatan', 'Kesehatan', 0, 0),
+    ]);
+
+    $html = $this->get(route('dataspasial.skema'))->assertOk()->getContent();
+
+    expect($html)->toContain(e(route('dataspasial.skema', ['sektor' => 'pendidikan', 'versi' => 3])));
+    expect($html)->toContain(e(route('dataspasial.skema', ['sektor' => 'kesehatan'])));
+    expect($html)->not->toContain('sektor=kesehatan&amp;versi');
+});
+
+it('meneruskan versi ke API skema tanpa termasuk_arsip', function () {
+    fakeSektorDanSkema(
+        [sektorBerversi('1', 'pendidikan', 'Pendidikan', 3, 2)],
+        [],
+        collection([itemSkemaAktif('10', 'pendidikan', 'Pendidikan', 1, 3, 'draf', [
+            ['kode' => 'jumlah_siswa', 'label' => 'Jumlah Siswa', 'tipe' => 'angka', 'wajib' => true,
+                'satuan' => 'orang', 'opsi' => null, 'urutan' => 1,
+                'tampil_popup' => true, 'tampil_filter' => false, 'tampil_indikator' => false, 'pemetaan' => []],
+        ])]),
+    );
+
+    $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan', 'versi' => 3]))
+        ->assertOk()
+        ->assertSee('Jumlah Siswa');
+
+    Http::assertSent(function (Request $request) {
+        if (! str_contains($request->url(), '/dataspasial/skema')) {
+            return false;
+        }
+        parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $q);
+
+        return ($q['sektor'] ?? null) === 'pendidikan'
+            && ($q['versi'] ?? null) === '3'
+            && ! array_key_exists('termasuk_arsip', $q);
+    });
+});
+
+it('menampilkan galat versi tidak ditemukan saat API tidak mengembalikan versi tersebut', function (mixed $respons) {
+    Http::fake([
+        '*/api/v1/config/*' => Http::response(['data' => []], 200),
+        '*/api/v1/dataspasial/sektor*' => Http::response(collection([
+            sektorBerversi('1', 'pendidikan', 'Pendidikan', 3, 2),
+        ]), 200),
+        '*/api/v1/dataspasial/skema*' => $respons,
+        '*' => Http::response(collection([]), 200),
+    ]);
+
+    $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan', 'versi' => 9]))
+        ->assertOk()
+        ->assertSee('Versi tidak ditemukan atau sudah tidak berlaku')
+        ->assertSee('btn-kembali-daftar-sektor', false)
+        ->assertDontSee('value="Jumlah Siswa"', false)
+        ->assertSee('data-status-editor="belum_tersedia"', false);
+})->with([
+    '404' => fn () => Http::response(['errors' => ['versi' => ['tidak ada']]], 404),
+    '422' => fn () => Http::response(['errors' => ['versi' => ['tidak valid']]], 422),
+    'kosong' => fn () => Http::response(collection([]), 200),
+    'versi lain' => fn () => Http::response(collection([
+        itemSkemaAktif('10', 'pendidikan', 'Pendidikan', 1, 3, 'terbit', [
+            ['kode' => 'jumlah_siswa', 'label' => 'Jumlah Siswa', 'tipe' => 'angka', 'wajib' => true,
+                'satuan' => null, 'opsi' => null, 'urutan' => 1,
+                'tampil_popup' => false, 'tampil_filter' => false, 'tampil_indikator' => false, 'pemetaan' => []],
+        ]),
+    ]), 200),
+]);
+
+it('mengabaikan versi yang tidak valid', function (string $versi) {
+    fakeSektorDanSkema([sektorBerversi('1', 'pendidikan', 'Pendidikan', 3, 2)]);
+
+    $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan', 'versi' => $versi]))->assertOk();
+
+    Http::assertNotSent(function (Request $request) {
+        parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $q);
+
+        return str_contains($request->url(), '/dataspasial/skema') && array_key_exists('versi', $q);
+    });
+})->with(['abc', '0', '-1']);

@@ -83,7 +83,7 @@ class PetaGabunganController extends DataSpasialController
         $payload['features'] = $features;
         $payload['meta'] = array_merge(
             $payload['meta'],
-            $this->deriveMeta($features, $this->skemaIsian($sektor))
+            $this->deriveMeta($features, $this->isianUntukFitur($sektor, $features))
         );
         $payload['meta']['empty'] = count($features) === 0;
 
@@ -182,6 +182,42 @@ class PetaGabunganController extends DataSpasialController
         }
 
         return strcasecmp((string) $actual, (string) $expected) === 0;
+    }
+
+    /**
+     * Isian untuk popup/filter. Bila sektor tidak dipilih (mis. halaman Peta
+     * Gabungan awal), ambil isian dari seluruh sektor yang muncul pada fitur
+     * sehingga lokasi ber-DataSpasial tetap menampilkan informasinya.
+     *
+     * @param  array<int, array<string, mixed>>  $features
+     * @return array<int, array<string, mixed>>
+     */
+    private function isianUntukFitur(?string $sektor, array $features): array
+    {
+        if ($sektor !== null) {
+            return $this->skemaIsian($sektor);
+        }
+
+        $sektorKode = [];
+        foreach ($features as $feature) {
+            $props = $feature['properties'] ?? [];
+            $kode = $props['sektor_kode'] ?? null;
+            if (is_array($props['dataspasial'] ?? null) && is_string($kode) && $kode !== '') {
+                $sektorKode[$kode] = true;
+            }
+        }
+
+        $merged = [];
+        foreach (array_slice(array_keys($sektorKode), 0, 10) as $kode) {
+            foreach ($this->skemaIsian((string) $kode) as $item) {
+                $key = (string) ($item['kode'] ?? '');
+                if ($key !== '' && ! isset($merged[$key])) {
+                    $merged[$key] = $item;
+                }
+            }
+        }
+
+        return array_values($merged);
     }
 
     /**

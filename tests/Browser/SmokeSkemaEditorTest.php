@@ -295,3 +295,12 @@ it('memunculkan kolom nama sektor saat tambah sektor baru tanpa memilih sektor',
 
     ScreenshotHelper::saveIfEnabled($page, 'skema-editor-mode-sektor-baru');
 });
+
+it('membuka halaman dengan parameter versi tanpa error', function () {
+    // API berjalan di sisi server (tidak bisa di-intercept MSW), jadi yang
+    // diverifikasi: tautan berversi tidak menghasilkan halaman error (FR-007a-6/7).
+    SessionState::loginAndNavigate($this->user, '/dataspasial/skema?sektor=tidak-ada&versi=3')
+        ->assertPathIs('/dataspasial/skema')
+        ->assertSee('Skema DataSpasial')
+        ->assertDontSee('Whoops');
+});

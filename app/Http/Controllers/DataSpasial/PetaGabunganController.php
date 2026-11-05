@@ -142,7 +142,7 @@ class PetaGabunganController extends DataSpasialController
             $props = $feature['properties'] ?? [];
             $dataspasial = $props['dataspasial'] ?? null;
 
-            if (! is_array($dataspasial)) {
+            if (! is_array($dataspasial) || $dataspasial === []) {
                 return false;
             }
 
@@ -159,9 +159,40 @@ class PetaGabunganController extends DataSpasialController
     }
 
     /**
+     * `dataspasial` dapat berupa satu entri (objek) atau daftar entri per isian.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function entriDataspasial(mixed $dataspasial): array
+    {
+        if (! is_array($dataspasial) || $dataspasial === []) {
+            return [];
+        }
+
+        $list = array_is_list($dataspasial) ? $dataspasial : [$dataspasial];
+
+        return array_values(array_filter($list, 'is_array'));
+    }
+
+    /**
      * @param  array<string, mixed>  $dataspasial
      */
     private function featureValue(array $dataspasial, string $kode): mixed
+    {
+        foreach ($this->entriDataspasial($dataspasial) as $entri) {
+            $value = $this->entriValue($entri, $kode);
+            if ($value !== null) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $dataspasial
+     */
+    private function entriValue(array $dataspasial, string $kode): mixed
     {
         $map = $dataspasial['nilai_map'] ?? null;
         if (is_array($map) && array_key_exists($kode, $map)) {
@@ -202,7 +233,7 @@ class PetaGabunganController extends DataSpasialController
         foreach ($features as $feature) {
             $props = $feature['properties'] ?? [];
             $kode = $props['sektor_kode'] ?? null;
-            if (is_array($props['dataspasial'] ?? null) && is_string($kode) && $kode !== '') {
+            if (! empty($props['dataspasial']) && is_string($kode) && $kode !== '') {
                 $sektorKode[$kode] = true;
             }
         }
@@ -273,7 +304,7 @@ class PetaGabunganController extends DataSpasialController
             $source = $props['source'] ?? null;
             $dataspasial = $props['dataspasial'] ?? null;
 
-            if (is_array($dataspasial)) {
+            if (is_array($dataspasial) && $dataspasial !== []) {
                 $key = (string) ($props['sektor_kode'] ?? 'dataspasial');
                 $label = (string) ($props['sektor_nama'] ?? $props['sektor_kode'] ?? 'DataSpasial');
                 $this->addLayer($layers, $key, $label, 'dataspasial');
@@ -289,9 +320,14 @@ class PetaGabunganController extends DataSpasialController
                 }
             }
 
-            $period = $dataspasial['periode'] ?? ($props['periode'] ?? null);
-            if (is_string($period) && $period !== '' && ! in_array($period, $periods, true)) {
-                $periods[] = $period;
+            $candidates = [$props['periode'] ?? null];
+            foreach ($this->entriDataspasial($dataspasial) as $entri) {
+                $candidates[] = $entri['periode'] ?? null;
+            }
+            foreach ($candidates as $period) {
+                if (is_string($period) && $period !== '' && ! in_array($period, $periods, true)) {
+                    $periods[] = $period;
+                }
             }
         }
 
@@ -358,24 +394,21 @@ class PetaGabunganController extends DataSpasialController
 
         $seen = [];
         foreach ($features as $feature) {
-            $dataspasial = $feature['properties']['dataspasial'] ?? null;
-            if (! is_array($dataspasial)) {
-                continue;
-            }
+            foreach ($this->entriDataspasial($feature['properties']['dataspasial'] ?? null) as $entri) {
+                $kode = $entri['isian_kode'] ?? null;
+                if ($kode === null || isset($seen[$kode])) {
+                    continue;
+                }
 
-            $kode = $dataspasial['isian_kode'] ?? null;
-            if ($kode === null || isset($seen[$kode])) {
-                continue;
+                $seen[$kode] = true;
+                $result[] = [
+                    'kode' => $kode,
+                    'label' => $entri['isian_label'] ?? $kode,
+                    'tipe' => $entri['isian_tipe'] ?? 'teks',
+                    'satuan' => $entri['isian_satuan'] ?? null,
+                    'opsi' => null,
+                ];
             }
-
-            $seen[$kode] = true;
-            $result[] = [
-                'kode' => $kode,
-                'label' => $dataspasial['isian_label'] ?? $kode,
-                'tipe' => $dataspasial['isian_tipe'] ?? 'teks',
-                'satuan' => $dataspasial['isian_satuan'] ?? null,
-                'opsi' => null,
-            ];
         }
 
         return $result;

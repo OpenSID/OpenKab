@@ -251,7 +251,7 @@ class DasborDataSpasialService
             $satuan = $this->pick($attrs, ['isian_satuan', 'satuan']);
             $ukuran = $this->pick($attrs, ['ukuran', 'jenis', 'agregat']) ?? 'total';
             $nilai = $this->pickNum($attrs, ['total', 'jumlah', 'nilai', 'rata_rata']);
-            $periode = $this->pick($attrs, ['periode', 'period']);
+            $periode = $this->pickScalar($attrs, ['periode', 'period']);
             $keterangan = $this->pick($attrs, ['keterangan', 'detail', 'subketerangan', 'keterangan_nilai']);
             if ($kode === null || $kode === '') {
                 continue;
@@ -284,12 +284,12 @@ class DasborDataSpasialService
                 continue;
             }
             $nilai = $this->pickNum($attrs, ['nilai', 'total', 'jumlah']);
-            $isianKode = $this->pick($attrs, ['isian_kode', 'kode_isian', 'kode', 'isian']);
-            $configId = $this->pick($attrs, ['config_id', 'desa_id', 'kode_desa', 'kode_kemendagri_desa']);
-            $kodeKecamatan = $this->pick($attrs, ['kode_kecamatan', 'kode_kemendagri_kecamatan', 'kecamatan_kode']);
-            $kodeDesa = $this->pick($attrs, ['kode_desa', 'kode_kemendagri_desa', 'desa_kode', 'config_id']);
-            $periode = $this->pick($attrs, ['periode', 'period']);
-            $sektor = $this->pick($attrs, ['sektor_kode', 'sektor']);
+            $isianKode = $this->pickScalar($attrs, ['isian_kode', 'kode_isian', 'kode', 'isian']);
+            $configId = $this->pickScalar($attrs, ['config_id', 'desa_id', 'kode_desa', 'kode_kemendagri_desa']);
+            $kodeKecamatan = $this->pickScalar($attrs, ['kode_kecamatan', 'kode_kemendagri_kecamatan', 'kecamatan_kode']);
+            $kodeDesa = $this->pickScalar($attrs, ['kode_desa', 'kode_kemendagri_desa', 'desa_kode', 'config_id']);
+            $periode = $this->pickScalar($attrs, ['periode', 'period']);
+            $sektor = $this->pickScalar($attrs, ['sektor_kode', 'sektor']);
             if ($nilai === null || $isianKode === null || $isianKode === '') {
                 continue;
             }
@@ -457,6 +457,34 @@ class DasborDataSpasialService
         return null;
     }
 
+    /**
+     * Seperti pick(), tetapi selalu menghasilkan skalar: nilai berbentuk
+     * array/objek (mis. `sektor: {kode, nama}`) dipetakan ke kode/id/nama-nya.
+     *
+     * @param  array<string, mixed>  $attrs
+     * @param  array<int, string>  $keys
+     */
+    protected function pickScalar(array $attrs, array $keys): string|int|float|null
+    {
+        $value = $this->pick($attrs, $keys);
+
+        if (is_array($value)) {
+            foreach (['kode', 'id', 'nama'] as $inner) {
+                if (isset($value[$inner]) && is_scalar($value[$inner]) && $value[$inner] !== '') {
+                    return $value[$inner];
+                }
+            }
+
+            return null;
+        }
+
+        return is_scalar($value) ? $value : null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $attrs
+     * @param  array<int, string>  $keys
+     */
     /**
      * @param  array<string, mixed>  $attrs
      * @param  array<int, string>  $keys

@@ -123,6 +123,12 @@ class DasborDataSpasialService
             }
         }
 
+        // Ringkasan API bersifat per-wilayah (tanpa isian_kode); nilai per isian
+        // diagregasi dari endpoint nilai agar kartu & tabel terisi.
+        $agregat = $this->aggregatePerIsian($normalizedNilai, $filters['periode'] ?? null);
+        $kartu = $this->isiDariAgregat($kartu, $agregat);
+        $tabelRows = $this->isiDariAgregat($tabelRows, $agregat);
+
         return [
             'indikator' => array_values($indikatorMap),
             'kartu' => $kartu,
@@ -305,6 +311,65 @@ class DasborDataSpasialService
         }
 
         return $out;
+    }
+
+    /**
+     * Agregat per isian_kode. Tanpa filter periode dipakai periode terbaru
+     * pada isian tersebut agar tidak menjumlahkan lintas periode.
+     *
+     * @param  array<int, array<string, mixed>>  $nilaiItems
+     * @return array<string, array{total: float, jumlah: int, periode: ?string}>
+     */
+    public function aggregatePerIsian(array $nilaiItems, ?string $periode = null): array
+    {
+        $latest = [];
+        foreach ($nilaiItems as $n) {
+            $kode = (string) ($n['isian_kode'] ?? '');
+            $p = (string) ($n['periode'] ?? '');
+            if ($kode === '' || ($periode !== null && $periode !== '' && $p !== $periode)) {
+                continue;
+            }
+            if (! isset($latest[$kode]) || strcmp($p, $latest[$kode]) > 0) {
+                $latest[$kode] = $p;
+            }
+        }
+
+        $out = [];
+        foreach ($nilaiItems as $n) {
+            $kode = (string) ($n['isian_kode'] ?? '');
+            if ($kode === '' || ! isset($latest[$kode]) || (string) ($n['periode'] ?? '') !== $latest[$kode]) {
+                continue;
+            }
+            $out[$kode] ??= ['total' => 0.0, 'jumlah' => 0, 'periode' => $latest[$kode] !== '' ? $latest[$kode] : null];
+            $out[$kode]['total'] += (float) $n['nilai'];
+            $out[$kode]['jumlah']++;
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $rows
+     * @param  array<string, array{total: float, jumlah: int, periode: ?string}>  $agregat
+     * @return array<int, array<string, mixed>>
+     */
+    protected function isiDariAgregat(array $rows, array $agregat): array
+    {
+        foreach ($rows as $i => $row) {
+            if (($row['nilai'] ?? null) !== null) {
+                continue;
+            }
+            $a = $agregat[(string) ($row['kode'] ?? '')] ?? null;
+            if ($a === null) {
+                continue;
+            }
+            $rata = in_array(strtolower((string) ($row['ukuran'] ?? '')), ['rata_rata', 'rata-rata', 'avg', 'average'], true);
+            $rows[$i]['nilai'] = round($rata && $a['jumlah'] > 0 ? $a['total'] / $a['jumlah'] : $a['total'], 4);
+            $rows[$i]['tersedia'] = true;
+            $rows[$i]['periode'] ??= $a['periode'];
+        }
+
+        return $rows;
     }
 
     /**

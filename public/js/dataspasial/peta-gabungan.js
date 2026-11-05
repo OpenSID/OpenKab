@@ -444,6 +444,7 @@
         renderLayerPanel();
         syncActiveGroups();
 
+        show('map-unavailable', false);
         show('map-empty', features.length === 0);
     }
 

@@ -91,22 +91,25 @@
                 </div>
             </div>
 
-            <div class="modal-footer py-2 d-none flex-wrap" data-testid="terbitan-footer">
-                <div class="form-group mb-0 mr-auto text-left flex-grow-1">
+            <div class="modal-footer py-2 d-none flex-wrap align-items-end" data-testid="terbitan-footer">
+                <div class="form-group mb-0 mr-auto text-left flex-grow-1 position-relative">
                     <label class="small mb-1" for="catatan-perubahan">
                         Catatan perubahan <span class="text-danger">*</span>
                     </label>
                     <input type="text" class="form-control form-control-sm" id="catatan-perubahan"
                            maxlength="255" data-testid="catatan-perubahan"
                            placeholder="Contoh: tambah isian jumlah_siswa, arsipkan lebar_jalan">
-                    <div class="invalid-feedback" data-testid="catatan-perubahan-error"></div>
+                    <div class="invalid-feedback position-absolute" style="top: 100%; left: 0;" data-testid="catatan-perubahan-error"></div>
                 </div>
 
-                <div class="form-check mr-3 d-none" data-testid="pengakuan-bentrok-wrap">
-                    <input class="form-check-input" type="checkbox" id="pengakuan-bentrok" data-testid="pengakuan-bentrok">
-                    <label class="form-check-label small" for="pengakuan-bentrok">
-                        Saya sudah membaca peringatan bentrok
-                    </label>
+                {{-- Tinggi disamakan dengan input `form-control-sm` agar sejajar vertikal dengan kolom catatan & tombol. --}}
+                <div class="mr-3 d-none" data-testid="pengakuan-bentrok-wrap">
+                    <div class="custom-control custom-checkbox d-flex align-items-center" style="min-height: calc(1.8125rem + 2px);">
+                        <input class="custom-control-input" type="checkbox" id="pengakuan-bentrok" data-testid="pengakuan-bentrok">
+                        <label class="custom-control-label small" for="pengakuan-bentrok">
+                            Saya sudah membaca peringatan bentrok
+                        </label>
+                    </div>
                 </div>
 
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" data-testid="btn-batal-terbit">

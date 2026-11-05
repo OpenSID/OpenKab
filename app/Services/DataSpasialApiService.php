@@ -435,6 +435,9 @@ class DataSpasialApiService
      * ⚠️ (K2) Respons sudah memuat `attributes.isian[]` LENGKAP dengan
      * `pemetaan[]`, jadi TIDAK ada endpoint detail terpisah.
      *
+     * Filter opsional `versi` (nomor versi tertentu, dibawa link daftar sektor).
+     * OpenKab tidak pernah mengirim `termasuk_arsip` (FR-007a-7).
+     *
      * @param  array<string, mixed>  $filters  Wajib menyertakan `sektor`.
      */
     public function listSkema(array $filters = []): DataSpasialResult

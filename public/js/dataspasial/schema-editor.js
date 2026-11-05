@@ -122,6 +122,14 @@ const swalPesan = (pesan, ikon = 'info') => {
 };
 
 const swalSukses = (pesan) => swalPesan(pesan, 'success');
+
+/**
+ * Muat ulang ke `/dataspasial/skema` (dengan sektor terpilih, tanpa `versi`)
+ * setelah simpan draf/terbitkan agar data terbaru dari API tampil.
+ */
+const muatUlangHalaman = (sektor) => {    
+    window.location.assign(`/dataspasial/skema`);
+};
 const swalGalat = (pesan) => swalPesan(pesan, 'error');
 const swalPeringatan = (pesan) => swalPesan(pesan, 'warning');
 
@@ -977,7 +985,13 @@ export function mountSchemaEditor() {
                 return;
             }
 
+            const hasilDraf = await respons.json().catch(() => ({}));
+
             await swalSukses(modeSektorBaru ? 'Sektor berhasil dibuat.' : 'Draf skema berhasil disimpan.');
+
+            // Muat ulang data terbaru. Tanpa `versi` agar editor memuat versi
+            // terakhir (draf baru) — bukan versi lama dari URL sebelumnya.
+            muatUlangHalaman((hasilDraf && hasilDraf.sektor) || sektorKode);
         } catch (error) {
             await swalGalat('Data sementara tidak tersedia. Silakan coba lagi nanti.');
             dirty = true;

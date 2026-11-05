@@ -151,12 +151,12 @@
             html += '<small>Kec. ' + esc(props.kode_kecamatan) + '</small><br>';
         }
 
-        var popupIsian = meta.popup_isian || [];
+        var popupIsian = props.dataspasial ? (meta.popup_isian || []) : [];
         for (var i = 0; i < popupIsian.length; i++) {
             var item = popupIsian[i];
             var value = featureValue(props, item.kode);
             var display = (value === null || value === undefined || value === '')
-                ? (props.dataspasial ? 'Belum ada data untuk periode ini' : '-')
+                ? 'Belum ada data untuk periode ini'
                 : value;
             var satuan = item.satuan ? ' ' + esc(item.satuan) : '';
 

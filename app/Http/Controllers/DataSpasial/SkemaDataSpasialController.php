@@ -70,25 +70,38 @@ class SkemaDataSpasialController extends DataSpasialController
         // `GET /dataspasial/skema?sektor={kode}` (parameter wajib).
         $isian = [];
         $skemaTerpilih = null;
+        $versiTidakDitemukan = false;
 
         if ($sektorTerpilih !== null) {
-            $resultSkema = $this->dataspasial->listSkema([
-                'sektor' => $sektorTerpilih['kode'],
-            ]);
+            // FR-007a-6: `versi` (opsional) dibawa link sektor. `termasuk_arsip`
+            // TIDAK pernah dikirim (FR-007a-7).
+            $versiDiminta = $this->versiDiminta($request);
 
-            [$isian] = $this->muatIsian($resultSkema);
+            $resultSkema = $this->dataspasial->listSkema(array_filter([
+                'sektor' => $sektorTerpilih['kode'],
+                'versi' => $versiDiminta,
+            ], static fn ($nilai) => $nilai !== null));
 
             $item = is_array($resultSkema?->first()) ? $resultSkema->first() : null;
             $atribut = is_array($item['attributes'] ?? null) ? $item['attributes'] : [];
             $versi = is_array($atribut['versi_skema'] ?? null) ? $atribut['versi_skema'] : [];
-            $skemaTerpilih = [
-                'status' => (string) ($versi['status'] ?? ''),
-                'jumlah_skema' => 1,
-            ];
+
+            $versiTidakDitemukan = $versiDiminta !== null
+                && $this->versiTidakDitemukan($resultSkema, (int) ($versi['nomor_versi'] ?? 0), $versiDiminta);
+
+            if (! $versiTidakDitemukan) {
+                [$isian] = $this->muatIsian($resultSkema);
+
+                $skemaTerpilih = [
+                    'status' => (string) ($versi['status'] ?? ''),
+                    'jumlah_skema' => 1,
+                ];
+            }
         }
 
-        // Status global: bila sektor tidak dapat diperoleh, seluruh tombol mati.
-        if ($resultSektor->isUnavailable()) {
+        // Status global: bila sektor tidak dapat diperoleh (atau versi yang diminta
+        // tidak ditemukan), seluruh tombol mati.
+        if ($resultSektor->isUnavailable() || $versiTidakDitemukan) {
             $statusEditor = StatusSkemaEditor::BelumTersedia();
         } else {
             $statusEditor = $this->editor->statusEditor($skemaTerpilih, $daftarSektor);
@@ -101,6 +114,7 @@ class SkemaDataSpasialController extends DataSpasialController
             'sektorTerpilih' => $sektorTerpilih,
             'skemaTerpilih' => $skemaTerpilih,
             'isian' => $isian,
+            'versiTidakDitemukan' => $versiTidakDitemukan,
             'statusEditor' => $statusEditor,
             // Q-empty-sektor: belum ada sektor → editor langsung dalam mode "sektor baru".
             'modeSektorBaru' => $resultSektor->isEmpty(),
@@ -213,6 +227,38 @@ class SkemaDataSpasialController extends DataSpasialController
                 'skema' => $result->first()['id'] ?? $validated['skema'] ?? null,
             ]))
             ->with('success', 'Skema berhasil diterbitkan.');
+    }
+
+    /**
+     * Versi pada query: integer >= 1; selain itu diperlakukan tanpa parameter.
+     */
+    private function versiDiminta(Request $request): ?int
+    {
+        $nilai = $request->query('versi');
+
+        if (! is_string($nilai) || preg_match('/^[1-9]\d{0,8}$/', $nilai) !== 1) {
+            return null;
+        }
+
+        return (int) $nilai;
+    }
+
+    /**
+     * Versi yang diminta dianggap tidak ditemukan bila API menolaknya (404/422),
+     * tidak mengembalikan data, atau mengembalikan nomor versi lain (R9).
+     * Kegagalan jaringan/5xx tetap jalur "data sementara tidak tersedia".
+     */
+    private function versiTidakDitemukan(?DataSpasialResult $result, int $nomorVersi, int $versiDiminta): bool
+    {
+        if ($result === null) {
+            return false;
+        }
+
+        if ($result->isUnavailable()) {
+            return in_array($result->httpStatus, [404, 422], true);
+        }
+
+        return $result->isEmpty() || $nomorVersi !== $versiDiminta;
     }
 
     /**

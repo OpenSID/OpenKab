@@ -96,6 +96,8 @@ class PetaGabunganControllerTest extends TestCase
         $jenis = array_column($layers, 'jenis');
         $this->assertContains('geospasial_lama', $jenis);
         $this->assertContains('dataspasial', $jenis);
+        // Kategori tidak lagi menjadi layer terpisah (sudah tercakup grup geospasial lama).
+        $this->assertNotContains('kategori', $jenis);
     }
 
     public function test_data_endpoint_exposes_filters_and_popup_from_skema(): void
@@ -105,18 +107,84 @@ class PetaGabunganControllerTest extends TestCase
 
         $response = $this->getJson('/dataspasial/peta/data?sektor=SK0');
 
+        // Fitur ke-3 (indeks 2) adalah lokasi SK0 dengan data jumlah_unit.
         $response->assertOk()
             ->assertJsonPath('meta.filters.0.kode', 'jenis_unit')
-            ->assertJsonPath('meta.popup_isian.0.kode', 'jumlah_unit')
-            ->assertJsonPath('meta.popup_isian.0.satuan', 'unit');
+            ->assertJsonPath('features.2.properties.popup_isian.0.kode', 'jumlah_unit')
+            ->assertJsonPath('features.2.properties.popup_isian.0.satuan', 'unit');
 
         // Hanya isian yang ditandai yang ikut (catatan tidak ditandai).
         $kodeFilter = array_column($response->json('meta.filters'), 'kode');
-        $kodePopup = array_column($response->json('meta.popup_isian'), 'kode');
+        $kodePopup = array_column($response->json('features.2.properties.popup_isian'), 'kode');
 
         $this->assertSame(['jenis_unit'], $kodeFilter);
         $this->assertSame(['jumlah_unit'], $kodePopup);
         $this->assertNotContains('catatan', array_merge($kodeFilter, $kodePopup));
+    }
+
+    public function test_popup_isian_tidak_tercampur_antar_sektor(): void
+    {
+        $this->actingAsAnalis();
+
+        $features = [
+            [
+                'type' => 'Feature',
+                'geometry' => ['type' => 'Point', 'coordinates' => [115.2, -8.65]],
+                'properties' => [
+                    'id' => 1,
+                    'nama' => 'Fasilitas Infrastruktur',
+                    'sektor_kode' => 'SK0',
+                    'sektor_nama' => 'Infrastruktur',
+                    'dataspasial' => [
+                        'isian_kode' => 'jumlah_unit',
+                        'isian_label' => 'Jumlah Unit',
+                        'isian_satuan' => 'unit',
+                        'isian_tipe' => 'angka',
+                        'nilai' => 12,
+                        'periode' => '2026-11',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'Feature',
+                'geometry' => ['type' => 'Point', 'coordinates' => [115.3, -8.66]],
+                'properties' => [
+                    'id' => 2,
+                    'nama' => 'SDN 2',
+                    'sektor_kode' => 'SK1',
+                    'sektor_nama' => 'Pendidikan',
+                    'dataspasial' => [
+                        ['isian_kode' => 'jumlah_siswa', 'isian_tipe' => 'angka', 'nilai' => 233, 'periode' => '2026-11'],
+                        ['isian_kode' => 'guru', 'isian_tipe' => 'angka', 'nilai' => 5, 'periode' => '2026-11'],
+                    ],
+                ],
+            ],
+        ];
+
+        Http::fake([
+            '*/api/v1/dataspasial/geojson*' => Http::response(['type' => 'FeatureCollection', 'features' => $features], 200),
+            '*/api/v1/dataspasial/skema*' => function ($request) {
+                $isian = str_contains($request->url(), 'SK1')
+                    ? [
+                        fxIsian('jumlah_siswa', ['label' => 'Jumlah Siswa', 'tipe' => 'angka', 'tampil_popup' => true]),
+                        fxIsian('guru', ['label' => 'Guru', 'tipe' => 'angka', 'tampil_popup' => true]),
+                    ]
+                    : [
+                        fxIsian('jumlah_unit', ['label' => 'Jumlah Unit', 'tipe' => 'angka', 'satuan' => 'unit', 'tampil_popup' => true]),
+                    ];
+
+                return Http::response(fakeKoleksi([
+                    fxSkemaAktif(str_contains($request->url(), 'SK1') ? '2' : '1', 1, str_contains($request->url(), 'SK1') ? 'SK1' : 'SK0', 'Sektor', 1, 'terbit', $isian),
+                ]), 200);
+            },
+        ]);
+
+        $response = $this->getJson('/dataspasial/peta/data');
+
+        $response->assertOk();
+        $this->assertSame(['jumlah_unit'], array_column($response->json('features.0.properties.popup_isian'), 'kode'));
+        $this->assertSame(['jumlah_siswa', 'guru'], array_column($response->json('features.1.properties.popup_isian'), 'kode'));
+        $this->assertArrayNotHasKey('popup_isian', $response->json('meta'));
     }
 
     public function test_data_endpoint_flags_unavailable_without_error(): void

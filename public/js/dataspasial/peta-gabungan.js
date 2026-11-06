@@ -176,7 +176,7 @@
             html += '<small>Kec. ' + esc(props.kode_kecamatan) + '</small><br>';
         }
 
-        var popupIsian = props.dataspasial ? (meta.popup_isian || []) : [];
+        var popupIsian = props.dataspasial ? (props.popup_isian || []) : [];
         for (var i = 0; i < popupIsian.length; i++) {
             var item = popupIsian[i];
             var value = featureValue(props, item.kode);
@@ -308,14 +308,11 @@
             return;
         }
 
-        var groups = {legacy: [], data: [], dataspasial: [], kategori: []};
-        (meta.layers || []).forEach(function (layer) {            
+        var groups = {legacy: [], dataspasial: []};
+        (meta.layers || []).forEach(function (layer) {
             var jenis = layer.jenis || '';
             if (jenis === 'dataspasial' || jenis === 'dataspasial_layer' || jenis === 'sektor') {
                 groups.dataspasial.push(layer);
-                groups.data.push(layer);
-            } else if (jenis === 'kategori') {
-                groups.kategori.push(layer);
             } else {
                 groups.legacy.push(layer);
             }
@@ -327,16 +324,8 @@
             html += layerItemsHtml(groups.dataspasial, 'data');
             html += '</div>';
         }
-        if (groups.kategori.length) {
-            html += '<div class="layer-group mt-2"><strong>Kategori</strong>';
-            html += layerItemsHtml(groups.kategori, 'legacy');
-            html += '</div>';
-        }
         html += '<div class="layer-group mt-2"><strong>Geospasial Lama</strong>';
         html += layerItemsHtml(groups.legacy, 'legacy');
-        html += '</div>';
-        html += '<div class="layer-group mt-2"><strong>DataSpasial</strong>';
-        html += layerItemsHtml(groups.data, 'data');
         html += '</div>';
 
         container.innerHTML = html;

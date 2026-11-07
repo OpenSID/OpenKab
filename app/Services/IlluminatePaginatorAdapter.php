@@ -7,9 +7,7 @@ use League\Fractal\Pagination\PaginatorInterface;
 
 class IlluminatePaginatorAdapter implements PaginatorInterface
 {
-    public function __construct(protected LengthAwarePaginator $paginator)
-    {
-    }
+    public function __construct(protected LengthAwarePaginator $paginator) {}
 
     /**
      * {@inheritdoc}

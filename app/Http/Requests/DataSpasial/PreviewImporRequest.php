@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Requests\DataSpasial;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class PreviewImporRequest extends FormRequest
+{
+    public function rules(): array
+    {
+        return [
+            'force_overwrite' => 'nullable|boolean',
+            // API mewajibkan alasan setiap kali nilai desa ditimpa.
+            'alasan_override' => 'nullable|string|max:500|required_if:force_overwrite,1,true',
+            'mode' => 'nullable|string',
+        ];
+    }
+
+    public function authorize(): bool
+    {
+        return $this->user() !== null;
+    }
+}

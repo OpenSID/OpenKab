@@ -67,7 +67,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label>Periode</label>
-                                <input type="month" name="periode" id="periode" class="form-control" value="{{ date('Y-m') }}">
+                                <input type="number" name="periode" id="periode" class="form-control" min="2000" max="2100" step="1" value="{{ date('Y') }}" placeholder="Tahun, mis. 2026">
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-download"></i> Unduh Templat</button>
@@ -105,6 +105,17 @@
                                             <thead></thead>
                                             <tbody></tbody>
                                         </table>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="force_overwrite" value="1">
+                                            <label class="custom-control-label" for="force_overwrite">Paksa timpa nilai desa yang sudah ada (baris berstatus konflik)</label>
+                                        </div>
+                                        <div class="form-group mt-2 mb-0" id="alasan-override-wrap" style="display:none;">
+                                            <label for="alasan_override">Alasan penimpaan <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" id="alasan_override" rows="2" maxlength="500" placeholder="Contoh: Koreksi data dinas kesehatan"></textarea>
+                                            <small class="form-text text-muted">Wajib diisi. Maksimal 500 karakter.</small>
+                                        </div>
                                     </div>
                                     <div class="mt-2 d-flex align-items-center">
                                         <input type="hidden" id="impor_id">
@@ -285,16 +296,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
         });
     }
 
+    $('#force_overwrite').on('change', function(){
+        var aktif = $(this).is(':checked');
+        $('#alasan-override-wrap').toggle(aktif);
+        if (!aktif) { $('#alasan_override').val(''); }
+    });
+
     $('#btn-pratinjau').on('click', function(){
         var sektor = document.getElementById('sektor') ? document.getElementById('sektor').value : '';
         document.getElementById('upl_sektor').value = sektor;
         var $btn = $(this);
         $btn.prop('disabled', true).text('Memproses...');
         $('#save-result').html('');
+
+        var forceOverwrite = $('#force_overwrite').is(':checked');
+        var alasanOverride = $.trim($('#alasan_override').val() || '');
+        if (forceOverwrite && alasanOverride === '') {
+            $('#preview-summary').html('<div class="alert alert-warning mb-0">Isi alasan penimpaan sebelum melanjutkan.</div>');
+            $btn.prop('disabled', false).text('Kirim ke Pratinjau (API)');
+            $('#alasan_override').trigger('focus');
+            return;
+        }
+
+        var payload = {_token: '{{ csrf_token() }}', force_overwrite: forceOverwrite ? 1 : 0};
+        if (forceOverwrite) {
+            payload.alasan_override = alasanOverride;
+        }
+
         $.ajax({
             url: '{{ route("dataspasial.impor.preview") }}',
             type: 'POST',
-            data: {_token: '{{ csrf_token() }}'},
+            data: payload,
             success: function(res){
                 if(res.success){
                     var p = res.preview || {};

@@ -16,14 +16,35 @@ class ImporDataSpasialTemplateExport
     public const SHEET_DESA = 'Daftar Desa';
     public const SHEET_PETUNJUK = 'Petunjuk';
 
-    private const CONTEXT_ROWS = 6;
+    private const DATA_START_ROW = 9;
 
+    /**
+     * @param  mixed  $desaList
+     * @param  array<int, mixed>  $items  Item isian skema terbit.
+     * @param  array<int, array{kode_desa: string, kode_fasilitas: string, nama_fasilitas: string, nilai: array<string, mixed>}>  $fasilitas  Data fasilitas yang sudah ada, diisikan sebagai baris awal.
+     */
     public function __construct(
         private mixed $desaList,
         private array $items,
         private string $sektor = '',
         private string $periode = '',
+        private array $fasilitas = [],
     ) {}
+
+    /**
+     * Kunci kolom templat untuk satu item isian. Dipakai juga oleh pengisi nilai
+     * agar header dan nilai selalu cocok.
+     */
+    public static function headerKey(mixed $item): string
+    {
+        if (is_array($item)) {
+            $key = $item['kode'] ?? $item['key'] ?? $item['id'] ?? $item['nama'] ?? $item['label'] ?? 'field';
+        } else {
+            $key = (string) $item;
+        }
+
+        return preg_replace('/[^A-Za-z0-9_]/', '_', strtolower((string) $key));
+    }
 
     public function write(string $filePath): void
     {
@@ -62,16 +83,24 @@ class ImporDataSpasialTemplateExport
 
         $header = ['kode_desa', 'kode_fasilitas', 'nama_fasilitas'];
         foreach ($this->items as $item) {
-            if (is_array($item)) {
-                $key = $item['kode'] ?? $item['key'] ?? $item['id'] ?? $item['nama'] ?? $item['label'] ?? 'field';
-            } else {
-                $key = (string) $item;
-            }
-            $key = preg_replace('/[^A-Za-z0-9_]/', '_', strtolower((string) $key));
-            $header[] = $key;
+            $header[] = self::headerKey($item);
         }
         $headerStyle = (new Style)->setFontBold()->setBackgroundColor(Color::YELLOW);
         $writer->addRow(Row::fromValues($header), $headerStyle);
+
+        // Baris data fasilitas yang sudah ada: pengguna cukup mengedit atau menambah baris.
+        $isianColumns = array_slice($header, 3);
+        foreach ($this->fasilitas as $fasilitas) {
+            $values = [
+                (string) $fasilitas['kode_desa'],
+                (string) $fasilitas['kode_fasilitas'],
+                (string) $fasilitas['nama_fasilitas'],
+            ];
+            foreach ($isianColumns as $column) {
+                $values[] = $fasilitas['nilai'][$column] ?? '';
+            }
+            $writer->addRow(Row::fromValues($values));
+        }
 
         $writer->addNewSheetAndMakeItCurrent();
         $writer->getCurrentSheet()->setName(self::SHEET_DESA);
@@ -139,7 +168,8 @@ class ImporDataSpasialTemplateExport
             return;
         }
 
-        $dataStartRow = self::CONTEXT_ROWS + 2;
+        // Baris header berada di baris 8 pada sheet Data Impor; data mulai di baris 9.
+        $dataStartRow = self::DATA_START_ROW;
         $lastRow = $dataStartRow + 999;
         $lastDesaRow = count($this->desaList) + 1;
         $formula = sprintf("'%s'!\$C\$2:\$C\$%d", self::SHEET_DESA, $lastDesaRow);
@@ -148,13 +178,10 @@ class ImporDataSpasialTemplateExport
             .htmlspecialchars($formula, ENT_XML1 | ENT_QUOTES, 'UTF-8')
             .'</formula1></dataValidation></dataValidations>';
 
+        // dataValidations wajib berada setelah </sheetData>; baris tidak boleh ditambahkan di luar sheetData.
         $pos = strpos($xml, '</sheetData>');
         if ($pos !== false) {
-            $formulaBlock = '';
-            for ($r = $dataStartRow; $r <= $dataStartRow + 49; $r++) {
-                $formulaBlock .= '<row r="'.$r.'"><c r="B'.$r.'" t="str"><f>IFERROR(MID(A'.$r.',FIND(" - ",A'.$r.')+3,255),"")</f></c></row>';
-            }
-            $xml = substr_replace($xml, '</sheetData>'.$formulaBlock.$validation, $pos, strlen('</sheetData>'));
+            $xml = substr_replace($xml, '</sheetData>'.$validation, $pos, strlen('</sheetData>'));
             $zip->addFromString($sheetPath, $xml);
         } else {
             $zip->close();

@@ -506,20 +506,22 @@ class DataSpasialApiService
      * Daftar fasilitas.
      *
      * @param  array<string, mixed>  $filters
+     * @param  bool  $segar  Lewati cache baca (data yang harus selalu terbaru, mis. templat impor).
      */
-    public function listFasilitas(array $filters = []): DataSpasialResult
+    public function listFasilitas(array $filters = [], bool $segar = false): DataSpasialResult
     {
-        return $this->request('GET', 'fasilitas', $filters);
+        return $this->request('GET', 'fasilitas', $filters, null, null, $segar);
     }
 
     /**
      * Daftar nilai isian.
      *
      * @param  array<string, mixed>  $filters
+     * @param  bool  $segar  Lewati cache baca (data yang harus selalu terbaru, mis. templat impor).
      */
-    public function listNilai(array $filters = []): DataSpasialResult
+    public function listNilai(array $filters = [], bool $segar = false): DataSpasialResult
     {
-        return $this->request('GET', 'nilai', $filters);
+        return $this->request('GET', 'nilai', $filters, null, null, $segar);
     }
 
     /**

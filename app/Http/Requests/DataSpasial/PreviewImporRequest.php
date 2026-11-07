@@ -12,6 +12,8 @@ class PreviewImporRequest extends FormRequest
     {
         return [
             'force_overwrite' => 'nullable|boolean',
+            // API mewajibkan alasan setiap kali nilai desa ditimpa.
+            'alasan_override' => 'nullable|string|max:500|required_if:force_overwrite,1,true',
             'mode' => 'nullable|string',
         ];
     }

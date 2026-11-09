@@ -9,6 +9,7 @@ Di rilis ini, versi 2611.0.0 berisi penambahan dan perbaikan yang diminta penggu
 4. [#1296](https://github.com/OpenSID/OpenKab/issues/1296) Service Klien API Satu Data & Menu DataSpasial Berbasis Peran (KAB-01).
 5. [#1297](https://github.com/OpenSID/OpenKab/issues/1297) [KAB-02] Editor sektor, isian & pemetaan skema kabupaten.
 6. [#1298](https://github.com/OpenSID/OpenKab/issues/1298) [KAB-03] Penerbitan, riwayat versi & status adopsi desa.
+7. [#1299](https://github.com/OpenSID/OpenKab/issues/1299) Feat: Peta Gabungan Geospasial & DataSpasial.
 
 #### Perbaikan BUG
 

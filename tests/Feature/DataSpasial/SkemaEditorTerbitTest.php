@@ -21,8 +21,11 @@ uses(DatabaseTransactions::class);
  *  #6 tombol nonaktif bila ada perubahan belum disimpan (FR-045)
  *  plus penerbitan sukses → versi `terbit`
  *
- * ⚠️ **UTANG KONTRAK U6** — `POST /dataspasial/skema/{sektor}/terbit` belum ada
- * di kontrak v0.1.0 maupun API hidup. `{sektor}` adalah **kode** sektor.
+ * ⚠️ **KAB-03 (2026-10-16)** — `POST /dataspasial/skema/{sektor}/terbit` **sudah ada**
+ * di API yang hidup (verifikasi di
+ * `specs/005-penerbitan-adopsi-skema/contracts/penerbitan-adopsi-api.md` §6), dan terbitan kini
+ * selalu lewat dialog "layar terbitan". Test di bawah tetap berlaku sebagai jaminan bahwa jalur
+ * lama (formulir biasa + redirect) tidak rusak. `{sektor}` adalah **kode** sektor.
  */
 beforeEach(function () {
     config([
@@ -106,12 +109,15 @@ it('mengaktifkan tombol terbitkan saat skema berstatus draf', function () {
     expect($m[0])->not->toContain('disabled');
 });
 
-it('tidak menyertakan catatan KAB-03 pada tombol terbitkan', function () {
+it('menyertakan layar terbitan KAB-03 pada halaman skema', function () {
     fakeTerbit();
 
     $response = $this->get(route('dataspasial.skema', ['sektor' => 'pendidikan']));
 
-    $response->assertDontSee('KAB-03');
+    // KAB-03: layar terbitan adalah DIALOG di atas halaman skema, bukan halaman
+    // baru - test lama "tidak menyertakan catatan KAB-03" digantikan ini.
+    $response->assertSee('data-testid="layar-terbitan"', false);
+    $response->assertSee('js/dataspasial/terbit-dialog.js', false);
 });
 
 // -----------------------------------------------------------------------
@@ -164,8 +170,11 @@ it('menampilkan data sementara tidak tersedia saat endpoint terbitan 404', funct
         ->post(route('dataspasial.skema.terbit'), [
             'sektor' => 'pendidikan',
             'skema' => 901,
+            'catatan_perubahan' => 'Catatan perubahan untuk uji 404.',
         ])
-        ->assertSessionHas('error', fn (string $m): bool => str_contains($m, 'tidak tersedia'));
+        // ⚠️ KAB-03: `404` kini berarti "sektor tidak ditemukan" (FR-020),
+        // bukan lagi "endpoint belum ada" seperti pada masa Utang U6.
+        ->assertSessionHas('error', fn (string $m): bool => str_contains($m, 'Sektor tidak ditemukan'));
 });
 
 it('menampilkan data sementara tidak tersedia saat endpoint terbitan 405', function () {
@@ -175,6 +184,7 @@ it('menampilkan data sementara tidak tersedia saat endpoint terbitan 405', funct
         ->post(route('dataspasial.skema.terbit'), [
             'sektor' => 'pendidikan',
             'skema' => 901,
+            'catatan_perubahan' => 'Catatan perubahan untuk uji 405.',
         ])
         ->assertSessionHas('error');
 });

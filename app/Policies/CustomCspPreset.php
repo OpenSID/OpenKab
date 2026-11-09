@@ -43,6 +43,7 @@ class CustomCspPreset implements Preset
                 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js',
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
                 'https://cdn.jsdelivr.net/npm/sweetalert2@11',
+                'https://cdn.jsdelivr.net/npm/apexcharts'
             ])
             ->addNonce(Directive::SCRIPT)
             ->add(Directive::FONT, [

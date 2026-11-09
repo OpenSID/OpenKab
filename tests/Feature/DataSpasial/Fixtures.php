@@ -653,3 +653,265 @@ function fxNilaiIsian(): array
         ],
     ];
 }
+
+// ---------------------------------------------------------------------------
+// Fixture KAB-07 — Monitoring Desa (K-verify LANGSUNG 2026-10-21 terhadap
+// API hidup 127.0.0.1:8001 + sumber repo API-Database-Gabungan).
+//
+// Koreksi yang terkunci di sini (lihat contracts/dataspasial-consumption.md §8):
+//   K1 kolom sumber nilai bernama `sumber_data` (BUKAN `sumber`),
+//      nilai: manual | desa | impor | pemetaan
+//   K2 respons `nilai` TIDAK memuat identitas desa (hanya fasilitas_id) —
+//      rincian per desa diambil per desa (`nilai?kode_desa=X`)
+//   K3 `ringkasan` per wilayah: {wilayah, wilayah_kode, total_fasilitas,
+//      total_isian, nilai:{angka,pilihan,teks}} — tanpa meta, tanpa per-isian
+//   K4 isian aktif versi terbit: riwayatSkema → listSkema (isian + tipe)
+//   K5 periode default diturunkan dari `terakhir_ada_data` adopsi
+// ---------------------------------------------------------------------------
+
+/**
+ * Isian versi terbit SK0 (nomor 3) untuk monitoring: 3 angka + 1 teks.
+ *
+ * Denominator kelengkapan = 4 isian aktif (tanpa arsip).
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function fxMonitoringIsianVersi3(): array
+{
+    return [
+        fxIsian('jumlah_lk', ['label' => 'Jumlah Laki-laki', 'tipe' => 'angka', 'satuan' => 'jiwa', 'urutan' => 1]),
+        fxIsian('jumlah_pr', ['label' => 'Jumlah Perempuan', 'tipe' => 'angka', 'satuan' => 'jiwa', 'urutan' => 2]),
+        fxIsian('jumlah_total', ['label' => 'Jumlah Penduduk', 'tipe' => 'angka', 'satuan' => 'jiwa', 'urutan' => 3]),
+        fxIsian('catatan', ['label' => 'Catatan', 'tipe' => 'teks', 'urutan' => 4]),
+    ];
+}
+
+/**
+ * Koleksi adopsi campuran untuk satu kecamatan monitoring (sektor_id 4234).
+ *
+ * Dunia uji: versi terbit terbaru SK0 = 3.
+ *   D1 Bajera   5102012001 v3  mutakhir   (memakai_skema)
+ *   D2 Bantas   5102022003 v2  tertinggal (memakai_skema)
+ *   D3 Cekatak  5102022004 —   belum_ada_data
+ *   D4 Dauhwaru 5102012005 v4  anomali    (lebih besar dari terbit)
+ *   D5 Epal     5102012006 v3  mutakhir
+ *
+ * @return array<string, mixed>
+ */
+function fxMonitoringAdopsi(): array
+{
+    return fxAdopsiKoleksi([
+        fxAdopsiBaris(1, '5102012001', 'Bajera', 3, 4234, 'memakai_skema', '2025-06-05 10:00:00'),
+        fxAdopsiBaris(2, '5102022003', 'Bantas', 2, 4234, 'memakai_skema', '2025-05-02 09:00:00'),
+        fxAdopsiBaris(3, '5102022004', 'Cekatak', null, null, 'belum_ada_data', null),
+        fxAdopsiBaris(4, '5102012005', 'Dauhwaru', 4, 4234, 'memakai_skema', '2025-06-01 08:00:00'),
+        fxAdopsiBaris(5, '5102012006', 'Epal', 3, 4234, 'memakai_skema', '2025-06-03 07:00:00'),
+    ]);
+}
+
+/**
+ * Satu baris `nilai?kode_desa=…` — bentuk nyata transformer API (K1/K2).
+ *
+ * @return array<string, mixed>
+ */
+function fxMonitoringNilaiBaris(
+    string $id,
+    string $isianKode,
+    mixed $nilai,
+    string $tipe = 'angka',
+    string $sumberData = 'manual',
+    string $periode = '2025-06',
+    int $nomorVersi = 3
+): array {
+    return [
+        'type' => 'daftar nilai DataSpasial',
+        'id' => $id,
+        'attributes' => [
+            'fasilitas_id' => (int) $id,
+            'isian_kode' => $isianKode,
+            'isian_label' => ucfirst(str_replace('_', ' ', $isianKode)),
+            'isian_tipe' => $tipe,
+            'isian_satuan' => $tipe === 'angka' ? 'jiwa' : null,
+            'isian_opsi' => null,
+            'nilai' => $nilai,
+            'sumber_data' => $sumberData,
+            'periode' => $periode,
+            'waktu_input' => '2025-06-10 09:00:00',
+            'skema_versi' => ['id' => 9000 + $nomorVersi, 'nomor_versi' => $nomorVersi, 'status' => $nomorVersi === 3 ? 'terbit' : 'usang'],
+            'sektor' => ['id' => 4234, 'kode' => 'SK0', 'nama' => 'Sektor 0'],
+        ],
+    ];
+}
+
+/**
+ * Respons `nilai?kode_desa=…` lengkap untuk satu desa monitoring (K2: tanpa
+ * identitas desa di badan respons).
+ *
+ * @param  array<int, array<string, mixed>>  $baris
+ * @return array<string, mixed>
+ */
+function fxMonitoringNilaiDesa(array $baris): array
+{
+    return [
+        'data' => $baris,
+        'meta' => ['pagination' => [
+            'total' => count($baris),
+            'count' => count($baris),
+            'per_page' => 100,
+            'current_page' => 1,
+            'total_pages' => 1,
+        ]],
+        'links' => [],
+    ];
+}
+
+/**
+ * Nilai per desa pada dunia uji monitoring (sektor SK0, periode 2025-06).
+ *
+ * @return array<string, array<int, array<string, mixed>>>
+ */
+function fxMonitoringNilaiPerDesa(): array
+{
+    return [
+        // D1 Bajera — valid (100+90=190), sumber manual, 3 dari 4 isian.
+        '5102012001' => [
+            fxMonitoringNilaiBaris('11', 'jumlah_lk', 100),
+            fxMonitoringNilaiBaris('12', 'jumlah_pr', 90),
+            fxMonitoringNilaiBaris('13', 'jumlah_total', 190),
+        ],
+        // D2 Bantas — melanggar (50+40≠100), sumber desa.
+        '5102022003' => [
+            fxMonitoringNilaiBaris('21', 'jumlah_lk', 50, 'angka', 'desa'),
+            fxMonitoringNilaiBaris('22', 'jumlah_pr', 40, 'angka', 'desa'),
+            fxMonitoringNilaiBaris('23', 'jumlah_total', 100, 'angka', 'desa'),
+        ],
+        // D3 Cekatak — tidak ada baris nilai (belum_ada_data).
+        '5102022004' => [],
+        // D4 Dauhwaru — valid (10+10=20), sumber pemetaan (tanpa tanda impor).
+        '5102012005' => [
+            fxMonitoringNilaiBaris('41', 'jumlah_lk', 10, 'angka', 'pemetaan'),
+            fxMonitoringNilaiBaris('42', 'jumlah_pr', 10, 'angka', 'pemetaan'),
+            fxMonitoringNilaiBaris('43', 'jumlah_total', 20, 'angka', 'pemetaan'),
+        ],
+        // D5 Epal — melanggar (5+5≠99), sumber impor (tanda impor).
+        '5102012006' => [
+            fxMonitoringNilaiBaris('51', 'jumlah_lk', 5, 'angka', 'impor'),
+            fxMonitoringNilaiBaris('52', 'jumlah_pr', 5, 'angka', 'impor'),
+            fxMonitoringNilaiBaris('53', 'jumlah_total', 99, 'angka', 'impor'),
+        ],
+    ];
+}
+
+/**
+ * Respons `ringkasan?…&group_by=desa` (K3: tanpa meta, tanpa per-isian).
+ *
+ * @param  array<string, int>  $totalIsianPerDesa  kode_desa => total_isian
+ * @return array<string, mixed>
+ */
+function fxMonitoringRingkasan(array $totalIsianPerDesa = []): array
+{
+    if ($totalIsianPerDesa === []) {
+        $totalIsianPerDesa = [
+            '5102012001' => 3,
+            '5102022003' => 3,
+            '5102012005' => 3,
+            '5102012006' => 3,
+        ];
+    }
+
+    $data = [];
+
+    foreach ($totalIsianPerDesa as $kode => $totalIsian) {
+        $data[] = [
+            'type' => 'ds_ringkasan',
+            'attributes' => [
+                'wilayah' => 'Desa '.$kode,
+                'wilayah_kode' => $kode,
+                'total_fasilitas' => 1,
+                'total_isian' => $totalIsian,
+                'nilai' => [
+                    'angka' => ['jumlah' => $totalIsian, 'total' => 0, 'rata_rata' => 0, 'min' => null, 'max' => null],
+                    'pilihan' => ['jumlah' => 0, 'pecahan' => []],
+                    'teks' => ['jumlah' => 0, 'catatan' => 'dieksklusi dari agregat'],
+                ],
+            ],
+        ];
+    }
+
+    return ['data' => $data];
+}
+
+/**
+ * Daftar kecamatan untuk komponen filter (statistik-web, bentuk polos).
+ *
+ * @return array<int, array<string, string>>
+ */
+function fxMonitoringWilayah(): array
+{
+    return [
+        ['kode_kecamatan' => '510201', 'nama_kecamatan' => 'Kecamatan Kediri'],
+        ['kode_kecamatan' => '510202', 'nama_kecamatan' => 'Kecamatan Mengwi'],
+    ];
+}
+
+/**
+ * Respons `config/kecamatan` (JSON:API) untuk kolom Kecamatan tabel
+ * monitoring (KAB-07).
+ *
+ * @return array<string, mixed>
+ */
+function fxMonitoringKecamatan(): array
+{
+    return ['data' => [
+        ['type' => 'config', 'id' => '1', 'attributes' => ['kode_kecamatan' => '510201', 'nama_kecamatan' => 'Kecamatan Kediri']],
+        ['type' => 'config', 'id' => '2', 'attributes' => ['kode_kecamatan' => '510202', 'nama_kecamatan' => 'Kecamatan Mengwi']],
+    ]];
+}
+
+/**
+ * Palsukan seluruh endpoint yang dipakai halaman monitoring (tanpa peta).
+ *
+ * Secara bawaan memakai dunia uji `fxMonitoringAdopsi` + `fxMonitoringNilaiPerDesa`.
+ *
+ * @param  array<string, mixed>|null  $adopsi
+ * @param  array<string, array<int, array<string, mixed>>>|null  $nilaiPerDesa
+ * @param  array<string, mixed>|null  $ringkasan
+ * @param  array<int, array<string, mixed>>|null  $riwayat
+ * @param  array<string, mixed>|null  $skemaAktif
+ */
+function fakeEndpointMonitoring(
+    ?array $adopsi = null,
+    ?array $nilaiPerDesa = null,
+    ?array $ringkasan = null,
+    ?array $riwayat = null,
+    ?array $skemaAktif = null
+): void {
+    $adopsi ??= fxMonitoringAdopsi();
+    $nilaiPerDesa ??= fxMonitoringNilaiPerDesa();
+    $ringkasan ??= fxMonitoringRingkasan();
+    $riwayat ??= [fxRiwayatVersi('8143', 4234, 3, 'terbit'), fxRiwayatVersi('8142', 4234, 1, 'draf')];
+    $skemaAktif ??= fxSkemaAktif('8143', 4234, 'SK0', 'Sektor 0', 3, 'terbit', fxMonitoringIsianVersi3());
+
+    // ⚠️ Http::fake(array): stub PERTAMA yang cocok menang — pola spesifik
+    // (rincian per desa) HARUS didaftarkan sebelum wildcard dan catch-all.
+    $fakes = [];
+
+    foreach ($nilaiPerDesa as $kodeDesa => $baris) {
+        $fakes['*/api/v1/dataspasial/nilai*kode_desa='.$kodeDesa.'*'] = Http::response(
+            fxMonitoringNilaiDesa($baris),
+            200
+        );
+    }
+
+    // Kolom Kecamatan (nama kecamatan per kode) — sebelum wildcard config.
+    $fakes['*/api/v1/config/kecamatan*'] = Http::response(fxMonitoringKecamatan(), 200);
+    $fakes['*/api/v1/config/*'] = Http::response(fakeConfigEndpoint(), 200);
+    $fakes['*/api/v1/dataspasial/adopsi*'] = Http::response($adopsi, 200);
+    $fakes['*/api/v1/dataspasial/ringkasan*'] = Http::response($ringkasan, 200);
+    $fakes['*/api/v1/dataspasial/skema/riwayat*'] = Http::response(fakeKoleksi($riwayat), 200);
+    $fakes['*/api/v1/dataspasial/sektor*'] = Http::response(fakeKoleksi([fxSektor('4234', 'SK0', 'Sektor 0')]), 200);
+    $fakes['*/api/v1/dataspasial/skema?*'] = Http::response($skemaAktif, 200);
+    $fakes['*'] = Http::response(['data' => []], 200);
+
+    Http::fake($fakes);
+}

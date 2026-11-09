@@ -566,6 +566,12 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::get('monitoring', [MonitoringController::class, 'index'])
             ->middleware('permission:dataspasial-monitoring-read')
             ->name('dataspasial.monitoring');
+        Route::get('monitoring/data', [MonitoringController::class, 'data'])
+            ->middleware('permission:dataspasial-monitoring-read')
+            ->name('dataspasial.monitoring.data');
+        Route::get('monitoring/ekspor', [MonitoringController::class, 'ekspor'])
+            ->middleware('permission:dataspasial-monitoring-read')
+            ->name('dataspasial.monitoring.ekspor');
     });
 });
 

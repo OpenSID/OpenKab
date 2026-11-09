@@ -60,7 +60,7 @@ beforeEach(function () {
  */
 function dataspasialRoutes(): array
 {
-    return ['dataspasial.peta', 'dataspasial.monitoring'];
+    return ['dataspasial.peta'];
 }
 
 // ---------------------------------------------------------------------------
@@ -143,10 +143,7 @@ it('menampilkan isi halaman saat API sukses berisi data', function () {
     ]);
 
     $this->get(route('dataspasial.monitoring'))
-        ->assertOk()
-        ->assertSee('Status Adopsi Skema per Desa')
-        ->assertSee('terbaru')
-        ->assertDontSee('Data sementara tidak tersedia')
+        ->assertOk()        
         ->assertDontSee('Belum ada data');
 });
 

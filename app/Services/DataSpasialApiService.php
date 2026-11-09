@@ -421,9 +421,22 @@ class DataSpasialApiService
     }
 
     /**
-     * Daftar versi skema, opsional disaring per sektor.
+     * Daftar versi skema untuk SATU sektor.
      *
-     * @param  array<string, mixed>  $filters
+     * ⚠️ VERIFIKASI LANGSUNG KE API NYATA (spec Q8 / kontrak §6a.4 K1):
+     * parameter bernama **`sektor`** dan **WAJIB** — `GET /dataspasial/skema`
+     * tanpa parameter itu membalas `422 {"errors":{"sektor":[...]}}`.
+     * Nilai yang diterima berupa id numerik (`4234`) maupun kode (`SK0`).
+     * Parameter `sektor_id` yang tertera pada draft `openapi-fondasi.yaml`
+     * **tidak dikenali** oleh API dan menghasilkan 422.
+     *
+     * ⚠️ (K2) Respons sudah memuat `attributes.isian[]` LENGKAP dengan
+     * `pemetaan[]`, jadi TIDAK ada endpoint detail terpisah.
+     *
+     * Filter opsional `versi` (nomor versi tertentu, dibawa link daftar sektor).
+     * OpenKab tidak pernah mengirim `termasuk_arsip` (FR-007a-7).
+     *
+     * @param  array<string, mixed>  $filters  Wajib menyertakan `sektor`.
      */
     public function listSkema(array $filters = []): DataSpasialResult
     {
@@ -431,10 +444,39 @@ class DataSpasialApiService
     }
 
     /**
+     * Daftar **seluruh versi** skema milik satu sektor (riwayat versi).
+     *
+     * ⚠️ VERIFIKASI LANGSUNG + pembacaan kode API (spec Q9): endpoint
+     * `GET /dataspasial/skema?sektor={id}` **hanya mengembalikan SATU versi**
+     * (yang sedang aktif), sehingga tidak dapat dipakai sebagai sumber daftar
+     * skema. Endpoint ini — `GET /dataspasial/skema/riwayat?sektor={id}` —
+     * mengembalikan seluruh versi sektor tersebut (nomor versi, status, catatan
+     * perubahan, waktu terbit).
+     *
+     * Parameternya berupa **kode sektor** (bukan id), sama seperti
+     * `sektor()` pada API.
+     *
+     * @param  array<string, mixed>  $filters  Wajib menyertakan `sektor`.
+     */
+    public function riwayatSkema(array $filters = []): DataSpasialResult
+    {
+        return $this->request('GET', 'skema/riwayat', $filters);
+    }
+
+    /**
      * Detail satu versi skema beserta isiannya.
+     *
+     * @deprecated Endpoint `GET /dataspasial/skema/{id}` **tidak ada** di API
+     *             nyata (mengembalikan 404). Gunakan `listSkema(['sektor' => …])`
+     *             yang sudah menyertakan isian. Dipertahankan sementara agar
+     *             pemanggilan lama tidak langsung rusak saat transisi.
      */
     public function detailSkema(int $id): DataSpasialResult
     {
+        Log::warning('DataSpasial: detailSkema() dipanggil padahal endpoint detail tidak ada', [
+            'skema_id' => $id,
+        ]);
+
         return $this->request('GET', 'skema/'.$id);
     }
 

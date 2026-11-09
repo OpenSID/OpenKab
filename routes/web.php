@@ -489,6 +489,16 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             ->middleware('permission:dataspasial-skema-read')
             ->name('dataspasial.skema');
 
+        // KAB-02 — endpoint tulis editor skema (satu permintaan untuk sektor + isian,
+        // Q18/Q19). Otorisasi ditegakkan server-side lewat middleware permission (FR-001).
+        Route::post('skema/draf', [SkemaDataSpasialController::class, 'storeDraf'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.draf.store');
+
+        Route::post('skema/terbit', [SkemaDataSpasialController::class, 'terbit'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.terbit');
+
         Route::get('peta', [PetaGabunganController::class, 'index'])
             ->middleware('permission:dataspasial-peta-read')
             ->name('dataspasial.peta');

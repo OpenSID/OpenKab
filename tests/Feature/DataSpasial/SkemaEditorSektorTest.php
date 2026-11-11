@@ -774,6 +774,50 @@ it('tidak lagi merender formulir penambahan sektor terpisah', function () {
 // US7 / FR-007d-4/5/9 — pemutakhiran nama sektor dari editor (Q19/SC-015)
 // ---------------------------------------------------------------------------
 
+it('menyimpan nama sektor tanpa mengirim isian atau membuat draf', function () {
+    Http::fake([
+        '*/api/v1/dataspasial/skema' => Http::response([
+            'data' => ['type' => 'ds_sektor', 'attributes' => ['kode' => 'pendidikan', 'nama' => 'Pendidikan Dasar']],
+        ]),
+    ]);
+
+    $this->postJson(route('dataspasial.skema.nama-sektor'), [
+        'sektor' => 'pendidikan',
+        'sektor_nama' => 'Pendidikan Dasar',
+    ])->assertOk()->assertJsonPath('success', true);
+
+    Http::assertSentCount(1);
+    Http::assertSent(fn (Request $request) => $request->method() === 'POST'
+        && $request['aksi'] === 'ubah_nama_sektor'
+        && $request['sektor'] === 'pendidikan'
+        && $request['sektor_nama'] === 'Pendidikan Dasar'
+        && ! isset($request['isian']));
+});
+
+it('menolak sukses semu jika API gagal atau tidak mengonfirmasi nama sektor', function ($status, $response) {
+    Http::fake(['*/api/v1/dataspasial/skema' => Http::response($response, $status)]);
+
+    $this->postJson(route('dataspasial.skema.nama-sektor'), [
+        'sektor' => 'pendidikan',
+        'sektor_nama' => 'Pendidikan Dasar',
+    ])->assertStatus(503)->assertJsonPath('success', false);
+})->with([
+    [422, ['message' => 'Validasi gagal']],
+    [200, ['data' => ['type' => 'ds_sektor', 'attributes' => ['kode' => 'pendidikan', 'nama' => 'Lama']]]],
+]);
+
+it('menolak perubahan nama sektor oleh pengguna tanpa izin tulis', function () {
+    actingAs($this->analisOpd);
+    Http::fake();
+
+    $this->postJson(route('dataspasial.skema.nama-sektor'), [
+        'sektor' => 'pendidikan',
+        'sektor_nama' => 'Pendidikan Dasar',
+    ])->assertForbidden();
+
+    Http::assertNothingSent();
+});
+
 it('mengirim sektor_nama terbaru dan menjaga kode sektor tidak berubah', function () {
     Http::fake([
         '*/api/v1/dataspasial/skema' => Http::response([

@@ -382,7 +382,7 @@ it('merender baris isian pada halaman editor dengan tombol tambah isian', functi
                     'catatan_perubahan' => null, 'diterbitkan_pada' => null, 'diterbitkan_oleh' => null],
                 'isian' => [
                     isian('jumlah_siswa', ['id' => 31, 'tipe' => 'angka', 'wajib' => true, 'satuan' => 'orang', 'urutan' => 1]),
-                    isian('jenis_sekolah', ['id' => 32, 'tipe' => 'pilihan', 'opsi' => ['Negeri', 'Swasta'], 'urutan' => 2]),
+                    isian('jenis_sekolah', ['id' => 32, 'tipe' => 'pilihan', 'opsi' => ['Negeri', 'Swasta & "Umum"'], 'urutan' => 2]),
                 ],
             ],
         ], 200),
@@ -399,13 +399,20 @@ it('merender baris isian pada halaman editor dengan tombol tambah isian', functi
         ->toContain('jenis_sekolah')
         ->toContain('Negeri')
         ->toContain('btn-tambah-isian')
-        // ⚠️ Kolom "Pilihan" tidak lagi ditampilkan pada tabel editor, tetapi
-        // nilai opsi yang tersimpan di API tetap dibawa lewat `data-opsi`
-        // sehingga tidak hilang saat Simpan draf.
-        ->not->toContain('input-opsi')
-        ->toContain('data-opsi=')
+        ->toContain('btn-atur-opsi')
+        ->toContain('btn-ubah-nama-sektor')
+        ->toContain('toggle-pratinjau')
         // Urutan tampil pada kolom # (FR-012).
         ->toContain('class="text-center align-middle urutan text-muted"');
+
+    $previous = libxml_use_internal_errors(true);
+    $dom = new DOMDocument;
+    $dom->loadHTML($content);
+    libxml_clear_errors();
+    libxml_use_internal_errors($previous);
+    $rows = (new DOMXPath($dom))->query('//tr[@data-testid="baris-isian"]');
+    expect(json_decode($rows->item(1)->getAttribute('data-opsi'), true))
+        ->toBe(['Negeri', 'Swasta & "Umum"']);
 });
 
 it('menampilkan keadaan kosong dengan ajakan menambah isian pertama', function () {

@@ -11,6 +11,7 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="{{ asset('css/dataspasial/popup-skema.css') }}" />
     <style nonce="{{ csp_nonce() }}">
         #map {
             height: 560px;
@@ -89,6 +90,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="{{ asset('js/dataspasial/popup-skema.js') }}"></script>
     <script src="{{ asset('js/dataspasial/peta-gabungan.js') }}"></script>
     <script nonce="{{ csp_nonce() }}">
         window.PETA_GABUNGAN_ICON = {

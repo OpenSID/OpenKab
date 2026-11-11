@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\DataSpasial;
 
 use App\Services\DataSpasialResult;
+use App\Services\PetaSkemaPopupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -47,7 +48,7 @@ class PetaGabunganController extends DataSpasialController
      * Selalu HTTP 200; kegagalan ditandai pada `meta.unavailable`/`meta.empty`
      * agar UI menampilkan pesan generik (tanpa stack trace).
      */
-    public function data(Request $request): JsonResponse
+    public function data(Request $request, PetaSkemaPopupService $popup): JsonResponse
     {
         $sektor = $this->stringInput($request, 'sektor');
         $result = $this->dataspasial->geojsonGabungan($this->filters($request));
@@ -80,6 +81,49 @@ class PetaGabunganController extends DataSpasialController
 
         $features = $this->applyIsianFilters($features, (array) $request->input('filter', []));
         $features = $this->withPopupIsian($features, $sektor);
+        $periode = $this->stringInput($request, 'periode');
+        $features = $popup->susun($features, $periode)['features'];
+        if ($sektor !== null || $periode !== null) {
+            $filters = $this->filters($request);
+            unset($filters['sektor'], $filters['periode']);
+            $semua = $this->dataspasial->geojsonGabungan($filters);
+            if ($semua->isUnavailable()) {
+                foreach ($features as $i => $feature) {
+                    $features[$i]['properties']['popup_skema_unavailable'] = true;
+                }
+            } else {
+                $collection = $semua->first();
+                $referensi = is_array($collection['features'] ?? null) ? $collection['features'] : [];
+                $rincian = $popup->susun($referensi, $periode);
+                $lokasi = $rincian['lokasi'];
+                $fasilitas = [];
+                foreach ($rincian['features'] as $feature) {
+                    $props = $feature['properties'] ?? [];
+                    $id = $props['id'] ?? null;
+                    $kode = $props['sektor_kode'] ?? null;
+                    if (is_scalar($id) && is_string($kode) && $kode !== '' && isset($props['popup_skema'])) {
+                        $fasilitas[$kode][(string) $id] = [
+                            'skema' => $props['popup_skema'],
+                            'unavailable' => $props['popup_skema_unavailable'],
+                        ];
+                    }
+                }
+                foreach ($features as $i => $feature) {
+                    $props = $feature['properties'] ?? [];
+                    $id = $props['lokasi_id'] ?? null;
+                    $detail = null;
+                    if (is_scalar($id) && isset($lokasi[(string) $id])) {
+                        $detail = $lokasi[(string) $id];
+                    } elseif (is_scalar($props['id'] ?? null) && is_string($props['sektor_kode'] ?? null)) {
+                        $detail = $fasilitas[$props['sektor_kode']][(string) $props['id']] ?? null;
+                    }
+                    if ($detail !== null) {
+                        $features[$i]['properties']['popup_skema'] = $detail['skema'];
+                        $features[$i]['properties']['popup_skema_unavailable'] = $detail['unavailable'];
+                    }
+                }
+            }
+        }
 
         $payload['features'] = $features;
         $payload['meta'] = array_merge(

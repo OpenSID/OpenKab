@@ -115,10 +115,24 @@ class ImporDataTemplateTest extends TestCase
 
         $rows = $this->readDataImporRows($response->getFile()->getPathname());
 
-        $this->assertSame(['kode_desa', 'kode_fasilitas', 'nama_fasilitas', 'jumlah_penduduk'], $rows[0]);
+        $this->assertSame(['kode_desa', 'kode_fasilitas', 'nama_fasilitas', 'lokasi_id', 'jumlah_penduduk'], $rows[0]);
         // Kode desa memakai format "kode - nama" seperti dropdown; hanya fasilitas kesehatan yang muncul.
-        $this->assertSame(['3501010001 - Desa Satu', 'PS-01', 'Posyandu Mawar', 320], $rows[1]);
+        $this->assertSame(['3501010001 - Desa Satu', 'PS-01', 'Posyandu Mawar', '42 - Posyandu Mawar (Desa Satu)', 320], $rows[1]);
         $this->assertCount(2, $rows);
+
+        $berkas = app(\App\Services\ImporBerkasService::class);
+        $parsed = $berkas->normalisasiKodeDesa($berkas->baca($response->getFile()->getPathname()), []);
+        $baris = $berkas->bangunBarisPratinjau($parsed);
+        $this->assertSame('42', $baris[0]['lokasi_id']);
+        $this->assertSame('3501010001', $baris[0]['kode_desa']);
+        $this->assertArrayNotHasKey('lokasi_id', $baris[0]['nilai']);
+
+        $zip = new \ZipArchive;
+        $this->assertTrue($zip->open($response->getFile()->getPathname()));
+        $sheet = $zip->getFromName('xl/worksheets/sheet2.xml');
+        $this->assertStringContainsString('sqref="D9:D1008"', $sheet);
+        $this->assertStringContainsString('Daftar Lokasi', $sheet);
+        $zip->close();
 
         // API menolak periode tahunan pada filter nilai, jadi permintaan nilai tidak boleh membawa periode.
         // Filter sektor pada fasilitas memakai sektor_id, bukan kode sektor.
@@ -180,6 +194,12 @@ class ImporDataTemplateTest extends TestCase
                 ],
             ]),
             '*/api/v1/config/kecamatan*' => Http::response(['data' => []]),
+            '*/api/v1/plan/get-list-coordinate*' => Http::response([
+                ['id' => 42, 'nama' => 'Posyandu Mawar', 'lat' => -8, 'lng' => 115,
+                    'config' => ['kode_desa' => '3501010001', 'nama_desa' => 'Desa Satu'], 'point' => ['nama' => 'Posyandu']],
+                ['id' => 43, 'nama' => 'Lokasi lain', 'lat' => -8, 'lng' => 115,
+                    'config' => ['kode_desa' => '3501099999', 'nama_desa' => 'Desa Lain'], 'point' => ['nama' => 'Lain']],
+            ]),
         ]);
     }
 

@@ -209,9 +209,7 @@ function rujukanDari(tr, sel) {
 /**
  * Baca opsi satu baris isian.
  *
- * ⚠️ Kolom "Pilihan" tidak lagi ada di tabel editor (tidak dipakai), sehingga
- * nilai opsi diambil dari atribut `data-opsi`. Bila atribut tidak tersedia,
- * kembalikan array kosong.
+ * Nilai opsi disimpan di atribut `data-opsi` dan disunting melalui dialog.
  *
  * @param {HTMLElement} tr
  * @returns {Array<string>}
@@ -246,9 +244,6 @@ function bacaDariDom(tbody) {
                 tipe: nilai('.input-tipe')?.value ?? 'teks',
                 wajib: Boolean(nilai('.input-wajib')?.checked),
                 satuan: nilai('.input-satuan')?.value?.trim() ?? '',
-                // ⚠️ Kolom Pilihan (opsi) TIDAK lagi ditampilkan pada tabel
-                // editor. Nilainya dibaca dari atribut `data-opsi` pada baris
-                // supaya opsi yang tersimpan di API tidak hilang saat Simpan draf.
                 opsi: bacaOpsiBaris(tr),
                 urutan: index + 1,
                 popupPeta: Boolean(nilai('.input-popup-peta')?.checked),
@@ -274,10 +269,17 @@ function terapkanAturanTipe(tbody) {
     tbody.querySelectorAll('tr').forEach((tr) => {
         const tipe = tr.querySelector('.input-tipe')?.value ?? 'teks';
         const satuan = tr.querySelector('.input-satuan');
+        const tombolOpsi = tr.querySelector('.btn-atur-opsi');
         const bolehUbah = tbody.dataset.bolehUbah === '1';
 
         if (satuan) {
             satuan.disabled = !bolehUbah || tipe !== TIPE_SATUAN;
+        }
+        if (tombolOpsi) {
+            tombolOpsi.classList.toggle('d-none', tipe !== TIPE_PILIHAN);
+            tombolOpsi.disabled = !bolehUbah;
+            const jumlah = bacaOpsiBaris(tr).length;
+            tombolOpsi.textContent = jumlah ? `Atur pilihan (${jumlah})` : 'Atur pilihan';
         }
     });
 }
@@ -312,11 +314,11 @@ function renderPratinjau(wadah, isian) {
             kontrol = '<div class="form-control input-group-sm" style="background:#f1f2f3;'
                 + 'border:1px dashed #adb5bd;min-height:calc(1.5em + .5rem + 2px)">'
                 + '<span class="text-muted"><i class="fas fa-lock mr-1"></i>'
-                + 'Diisi dari sumber: ' + (baris.sumber || 'pemetaan') + '</span></div>';
+                + 'Diisi dari sumber: ' + escapeHtml(baris.sumber || 'pemetaan') + '</span></div>';
         } else if (baris.tipe === TIPE_PILIHAN) {
             kontrol = '<select class="form-control form-control-sm" disabled>'
                 + '<option>— pilih —</option>'
-                + baris.opsi.map((o) => `<option>${o}</option>`).join('')
+                + baris.opsi.map((o) => `<option>${escapeHtml(o)}</option>`).join('')
                 + '</select>';
         } else if (baris.tipe === 'ya_tidak') {
             kontrol = '<select class="form-control form-control-sm" disabled>'
@@ -326,7 +328,7 @@ function renderPratinjau(wadah, isian) {
         } else {
             kontrol = '<input type="' + (baris.tipe === TIPE_SATUAN ? 'number' : 'text')
                 + '" class="form-control form-control-sm" disabled placeholder="'
-                + (baris.satuan || 'isi nilai') + '">';
+                + escapeHtml(baris.satuan || 'isi nilai') + '">';
         }
 
         const catatanTersembunyi = terkunci && !baris.rujukan
@@ -339,7 +341,7 @@ function renderPratinjau(wadah, isian) {
         if (baris.sebagaiIndikator) { penanda.push('<span class="badge badge-primary mr-1">Indikator</span>'); }
 
         return '<div class="mb-2 pb-2 border-bottom" data-testid="pratinjau-baris">'
-            + '<label class="mb-1 small font-weight-bold">' + (baris.label || '(tanpa label)')
+            + '<label class="mb-1 small font-weight-bold">' + escapeHtml(baris.label || '(tanpa label)')
             + wajib + '</label>'
             + kontrol
             + (penanda.length ? '<div class="mt-1">' + penanda.join('') + '</div>' : '')
@@ -480,16 +482,13 @@ function validasiKodeLokal(tbody) {
  * @param {Function} onMutasi
  */
 function pasangSeretUrutan(tbody, onMutasi) {
-    if (tbody.dataset.bolehUbah !== '1') {
-        return;
-    }
-
     let yangDiseret = null;
 
     tbody.addEventListener('dragstart', (event) => {
         const tr = event.target.closest('tr');
 
-        if (!tr) {
+        if (!tr || tbody.dataset.bolehUbah !== '1') {
+            event.preventDefault();
             return;
         }
 
@@ -573,20 +572,25 @@ export function mountSchemaEditor() {
     const tombolBatalUbah = document.getElementById('btn-batal-ubah');
     const tombolSimpan = document.getElementById('btn-simpan-draf');
     const inputNamaSektor = document.getElementById('input-sektor-nama-editor');
+    const tombolNamaSektor = document.getElementById('btn-ubah-nama-sektor');
     const wadahNamaSektor = document.getElementById('wadah-input-sektor-nama');
+    const namaSektorAwal = inputNamaSektor?.value ?? '';
     let modeUbahAktif = false;
     let modeSektorBaru = false;
+    let sebelumSektorBaru = null;
+    const namaPratinjau = document.getElementById('nama-sektor-pratinjau');
+    const perbaruiNamaPratinjau = () => {
+        if (namaPratinjau) namaPratinjau.textContent = inputNamaSektor?.value.trim() || 'Belum diisi';
+    };
 
     /** Aktifkan/nonaktifkan seluruh kontrol isian pada tabel (FR-008c/FR-008e). */
     const kunciKontrolIsian = (aktif) => {
         tbody.querySelectorAll(
             '.input-label, .input-tipe, .input-wajib, .input-satuan, '
             + '.input-popup-peta, .input-filter, .input-indikator, '
-            + '.input-tabel-sumber, .input-kolom-sumber, .btn-pilih-sumber-baris, .btn-hapus-isian',
+            + '.input-tabel-sumber, .input-kolom-sumber, .btn-pilih-sumber-baris, .btn-hapus-isian, .btn-atur-opsi',
         ).forEach((el) => {
-            if (el.tagName === 'INPUT') {
-                el.disabled = !aktif;
-            }
+            el.disabled = !aktif;
         });
 
         // Tombol tambah/seret isian mengikuti kunci yang sama (FR-012).
@@ -596,26 +600,20 @@ export function mountSchemaEditor() {
             tombolTambah.disabled = !aktif;
         }
 
-        if (inputNamaSektor) {
-            inputNamaSektor.disabled = !aktif;
+        if (tombolNamaSektor) {
+            tombolNamaSektor.disabled = !aktif;
         }
 
         tbody.dataset.bolehUbah = aktif ? '1' : '0';
+        tbody.querySelectorAll('tr').forEach((tr) => { tr.draggable = aktif; });
         terapkanAturanTipe(tbody);
 
         // ⚠️ Baris kosong yang ditambahkan lewat template juga ikut terkunci
         // pada keadaan baca-saja (FR-008a). Tanpa ini, baris baru akan tetap
         // aktif walau skema sedang `terbit`.
-        if (!aktif) {
-            template?.content.querySelectorAll(
-                '.input-label, .input-tipe, .input-wajib, .input-satuan, '
-                + '.input-popup-peta, .input-filter, .input-indikator',
-            ).forEach((el) => {
-                if (el.tagName === 'INPUT') {
-                    el.disabled = true;
-                }
-            });
-        }
+        template?.content.querySelectorAll('input, select, button').forEach((el) => {
+            el.disabled = !aktif;
+        });
     };
 
     /** Pulihkan nilai kontrol isian dari snapshot (Q25). */
@@ -651,8 +649,7 @@ export function mountSchemaEditor() {
                 satuan.value = sumber.satuan ?? '';
             }
 
-            // ⚠️ Kolom Pilihan tidak dirender; opsi dipulihkan lewat `data-opsi`
-            // yang dipakai `bacaOpsiBaris()` saat serialize.
+            // Pulihkan opsi yang dibaca dialog dan serialisasi dari `data-opsi`.
             tr.dataset.opsi = JSON.stringify(sumber.opsi ?? []);
 
             if (sumberNilai) {
@@ -707,14 +704,14 @@ export function mountSchemaEditor() {
         // menyimpan apa pun dan tanpa permintaan ke sumber data.
         if (modeSektorBaru) {
             modeSektorBaru = false;
-            kosongkanTabelIsian();
-            kosongkanPenandaPratinjau(wadahPratinjau);
-
-            if (inputNamaSektor) {
-                inputNamaSektor.value = akar.dataset.sektorNama || '';
-            }
-
-            kunciKontrolIsian(false);
+            tbody.replaceChildren(...(sebelumSektorBaru?.baris ?? []));
+            if (inputNamaSektor) inputNamaSektor.value = sebelumSektorBaru?.nama ?? '';
+            bolehUbah = sebelumSektorBaru?.bolehUbah ?? false;
+            dirty = sebelumSektorBaru?.dirty ?? false;
+            modeUbahAktif = sebelumSektorBaru?.modeUbahAktif ?? false;
+            kunciKontrolIsian(bolehUbah);
+            perbaruiNamaPratinjau();
+            renderPratinjau(wadahPratinjau, bacaDariDom(tbody));
 
             // Bila memang tidak ada sektor yang dipilih, kembalikan blok nama
             // sektor ke kondisi tersembunyi seperti semula.
@@ -723,19 +720,23 @@ export function mountSchemaEditor() {
             }
 
             document.getElementById('isian-belum-pilih-sektor')?.classList.remove('d-none');
+            document.getElementById('isian-kosong')?.classList.toggle('d-none', tbody.children.length > 0);
 
-            if (tombolSimpan) {
-                tombolSimpan.disabled = true;
-            }
+            if (tombolSimpan) tombolSimpan.disabled = sebelumSektorBaru?.simpanDisabled ?? true;
 
-            tombolBatalUbah.classList.add('d-none');
-            tombolUbah?.classList.remove('d-none');
+            tombolBatalUbah.classList.toggle('d-none', !modeUbahAktif);
+            tombolUbah?.classList.toggle('d-none', modeUbahAktif);
+            sebelumSektorBaru = null;
             perbaruiTombolTerbit();
 
             return;
         }
 
         pulihkanDariSnapshot();
+        if (inputNamaSektor) {
+            inputNamaSektor.value = namaSektorAwal;
+        }
+        perbaruiNamaPratinjau();
         bolehUbah = false;
         kunciKontrolIsian(false);
 
@@ -759,6 +760,90 @@ export function mountSchemaEditor() {
         // FR-045 — perubahan baru membuat penerbitan tidak boleh dipakai.
         perbaruiTombolTerbit();
     };
+
+    const ubahNamaSektor = async () => {
+        if (!bolehUbah || !inputNamaSektor) {
+            return;
+        }
+
+        let nama;
+        if (swalTersedia()) {
+            const hasil = await window.Swal.fire({
+                title: 'Nama sektor',
+                input: 'text',
+                inputLabel: 'Masukkan nama sektor',
+                inputValue: inputNamaSektor.value,
+                inputAttributes: { maxlength: '100' },
+                inputValidator: (nilai) => !nilai.trim() ? 'Nama sektor wajib diisi.' : undefined,
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                cancelButtonText: 'Batal',
+            });
+            if (!hasil.isConfirmed) return;
+            nama = hasil.value.trim();
+        } else {
+            const hasil = window.prompt('Nama sektor (maksimal 100 karakter)', inputNamaSektor.value);
+            if (hasil === null) return;
+            nama = hasil.trim();
+            if (!nama || nama.length > 100) {
+                await swalPeringatan('Nama sektor wajib diisi dan maksimal 100 karakter.');
+                return;
+            }
+        }
+
+        if (nama !== inputNamaSektor.value) {
+            inputNamaSektor.value = nama;
+            perbaruiNamaPratinjau();
+            mutasi();
+        }
+    };
+
+    tombolNamaSektor?.addEventListener('click', ubahNamaSektor);
+
+    tbody.addEventListener('click', async (event) => {
+        const tombol = event.target.closest('.btn-atur-opsi');
+        if (!tombol || !bolehUbah) return;
+
+        const tr = tombol.closest('tr');
+        if (!tr || tr.querySelector('.input-tipe')?.value !== TIPE_PILIHAN) return;
+
+        const nilaiAwal = bacaOpsiBaris(tr).join('\n');
+        const parseOpsi = (nilai) => nilai.split(/\r?\n/).map((opsi) => opsi.trim()).filter(Boolean);
+        const validasi = (opsi) => {
+            if (!opsi.length) return 'Masukkan minimal satu pilihan.';
+            if (opsi.some((nilai) => nilai.length > 100)) return 'Setiap pilihan maksimal 100 karakter.';
+            return undefined;
+        };
+        let opsi;
+        if (swalTersedia()) {
+            const hasil = await window.Swal.fire({
+                title: 'Atur pilihan',
+                input: 'textarea',
+                inputLabel: 'Masukkan satu pilihan per baris',
+                inputValue: nilaiAwal,
+                inputValidator: (nilai) => validasi(parseOpsi(nilai)),
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                cancelButtonText: 'Batal',
+            });
+            if (!hasil.isConfirmed) return;
+            opsi = parseOpsi(hasil.value);
+        } else {
+            const hasil = window.prompt('Masukkan satu pilihan per baris', nilaiAwal);
+            if (hasil === null) return;
+            opsi = parseOpsi(hasil);
+            const pesan = validasi(opsi);
+            if (pesan) {
+                await swalPeringatan(pesan);
+                return;
+            }
+        }
+
+        if (JSON.stringify(opsi) !== JSON.stringify(bacaOpsiBaris(tr))) {
+            tr.dataset.opsi = JSON.stringify(opsi);
+            mutasi();
+        }
+    });
 
     const pasangKonfirmasi = () => {
         if (!dirty) {
@@ -790,6 +875,8 @@ export function mountSchemaEditor() {
         }
 
         tbody.appendChild(template.content.cloneNode(true));
+        tbody.lastElementChild.draggable = true;
+        document.getElementById('isian-kosong')?.classList.add('d-none');
         perbaruiNomorUrutan(tbody);
         mutasi();
 
@@ -843,13 +930,26 @@ export function mountSchemaEditor() {
     // -----------------------------------------------------------------------
     const kosongkanTabelIsian = () => {
         tbody.querySelectorAll('tr[data-testid="baris-isian"], tr.baris-baru').forEach((tr) => {
-            if (!tr.classList.contains('baris-baru')) {
-                tr.remove();
-            }
+            tr.remove();
         });
     };
 
-    document.getElementById('btn-tambah-sektor')?.addEventListener('click', () => {
+    const mulaiSektorBaru = async (bukaNama = true) => {
+        if (modeSektorBaru) {
+            if (bukaNama) await ubahNamaSektor();
+            return;
+        }
+        if (dirty && !(await swalKonfirmasi('Ada perubahan yang belum disimpan. Mulai sektor baru?', 'Perubahan belum disimpan'))) {
+            return;
+        }
+        sebelumSektorBaru = {
+            baris: Array.from(tbody.children, (baris) => baris.cloneNode(true)),
+            nama: inputNamaSektor?.value ?? '',
+            bolehUbah,
+            dirty,
+            modeUbahAktif,
+            simpanDisabled: tombolSimpan?.disabled ?? true,
+        };
         modeSektorBaru = true;
         modeUbahAktif = false;
         dirty = false;
@@ -862,6 +962,7 @@ export function mountSchemaEditor() {
         if (inputNamaSektor) {
             inputNamaSektor.value = '';
         }
+        perbaruiNamaPratinjau();
 
         kosongkanTabelIsian();
         kosongkanPenandaPratinjau(wadahPratinjau);
@@ -874,6 +975,7 @@ export function mountSchemaEditor() {
 
         // Pesan "pilih salah satu sektor" tidak relevan selama mode ini aktif.
         document.getElementById('isian-belum-pilih-sektor')?.classList.add('d-none');
+        document.getElementById('isian-kosong')?.classList.add('d-none');
 
         if (tombolSimpan) {
             tombolSimpan.disabled = false;
@@ -886,8 +988,9 @@ export function mountSchemaEditor() {
 
         tombolUbah?.classList.add('d-none');
         tombolBatalUbah?.classList.remove('d-none');
-        inputNamaSektor?.focus();
-    });
+        if (bukaNama) ubahNamaSektor();
+    };
+    document.getElementById('btn-tambah-sektor')?.addEventListener('click', () => mulaiSektorBaru());
 
     // -----------------------------------------------------------------------
     // Simpan draf (US3) — pemicu konfirmasi yang sama (FR-007h)
@@ -911,6 +1014,12 @@ export function mountSchemaEditor() {
         if (isian.length === 0) {
             await swalPeringatan('Sektor harus memiliki minimal satu isian.');
 
+            return;
+        }
+
+        const pilihanKosong = isian.find((baris) => baris.tipe === TIPE_PILIHAN && baris.opsi.length === 0);
+        if (pilihanKosong) {
+            await swalPeringatan(`Atur pilihan untuk isian "${pilihanKosong.label || '(tanpa label)'}".`);
             return;
         }
 
@@ -1297,7 +1406,7 @@ export function mountSchemaEditor() {
     // Q-empty-sektor — belum ada sektor: editor langsung masuk mode "sektor baru"
     // (memakai jalur tombol yang sama, tanpa permintaan ke sumber data).
     if (akar.dataset.modeSektorBaru === '1') {
-        document.getElementById('btn-tambah-sektor')?.click();
+        mulaiSektorBaru(false);
     }
 }
 

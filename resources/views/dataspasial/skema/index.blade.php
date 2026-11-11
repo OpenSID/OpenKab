@@ -12,7 +12,7 @@
 
         Dua panel (FR-008, Q22):
           kiri   : daftar sektor
-          tengah : tabel isian + pratinjau formulir desa
+          kanan  : tabel isian + pratinjau formulir desa yang dapat dibuka
 
         Tidak ada lagi daftar skema maupun nomor versi di UI — daftar isian
         selalu berasal dari skema terakhir sektor yang dipilih.
@@ -83,8 +83,8 @@
                     ])
                 </div>
 
-                {{-- ============ PANEL TENGAH: editor isian ============ --}}
-                <div class="col-lg-6 mb-3 {{ $versiTidakDitemukan ? 'd-none' : '' }}">
+                {{-- ============ EDITOR ISIAN DAN PRATINJAU ============ --}}
+                <div class="col-lg-9 mb-3 {{ $versiTidakDitemukan ? 'd-none' : '' }}">
                     @include('dataspasial.skema.partials.tabel-isian', [
                         'isian' => $isian,
                         'sektorTerpilih' => $sektorTerpilih,
@@ -93,14 +93,17 @@
                         'bolehSimpan' => $bolehSimpan,
                         'bolehTerbitkan' => $statusEditor->bolehSimpan(),
                     ])
-                </div>
-
-                {{-- ============ PANEL KANAN: pratinjau ============ --}}
-                <div class="col-lg-3 mb-3 {{ $versiTidakDitemukan ? 'd-none' : '' }}">
-                    @include('dataspasial.skema.partials.pratinjau', [
-                        'isian' => $isian,
-                        'sektorTerpilih' => $sektorTerpilih,
-                    ])
+                    <details class="mt-3">
+                        <summary class="btn btn-outline-secondary" data-testid="toggle-pratinjau">
+                            <i class="fas fa-eye mr-1"></i>Pratinjau formulir desa
+                        </summary>
+                        <div class="mt-2">
+                            @include('dataspasial.skema.partials.pratinjau', [
+                                'isian' => $isian,
+                                'sektorTerpilih' => $sektorTerpilih,
+                            ])
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>

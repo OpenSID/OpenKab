@@ -112,9 +112,23 @@
                 '<td>' + barKelengkapan(r.kelengkapan_persen) + '</td>' +
                 '<td class="text-center">' + (r.skor_kualitas === null ? '<span title="Belum ada aturan berlaku">—</span>' : r.skor_kualitas                    
                 ) + '</td>' +
-                '<td class="text-center">-</td>' +
+                '<td class="text-center">' + tautanLogDesa(r.kode_desa) + '</td>' +
                 '</tr>';
         }).join('');
+    }
+
+    /**
+     * Tautan ke Log Entri (KAB-08) untuk satu desa — difilter `kode_desa`.
+     *
+     * @param  {string} kodeDesa
+     * @returns {string}
+     */
+    function tautanLogDesa(kodeDesa) {
+        if (!opts.auditUrl || !kodeDesa) return '-';
+
+        return '<a href="' + esc(opts.auditUrl) + '?kode_desa=' + encodeURIComponent(kodeDesa) + '" ' +
+            'class="btn btn-xs btn-outline-info" data-testid="tautan-log-desa" ' +
+            'title="Lihat log entri desa ini"><i class="fas fa-history"></i> Log</a>';
     }
 
     function renderPaginasi(meta) {
@@ -363,7 +377,12 @@
                 URL.revokeObjectURL(a.href);
             });
         }).catch(function (e) {
-            alert(e.message || 'Tidak ada data yang cocok dengan saringan.');
+            var pesan = e.message || 'Tidak ada data yang cocok dengan saringan.';
+            if (typeof window.Swal !== 'undefined') {
+                window.Swal.fire({ icon: 'info', text: pesan });
+                return;
+            }
+            alert(pesan);
         });
     }
 

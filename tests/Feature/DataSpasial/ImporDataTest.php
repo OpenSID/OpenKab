@@ -188,6 +188,75 @@ class ImporDataTest extends TestCase
             ->assertJsonPath('preview.impor_id', 'imp-ok');
     }
 
+    public function test_paksa_timpa_tanpa_alasan_ditolak(): void
+    {
+        $this->actingAsOperatorImpor();
+        Session::put('impor_parsed', ['sektor' => 'kesehatan', 'filename' => 'a.xlsx', 'rows' => []]);
+        Http::fake();
+
+        $this->postJson(route('dataspasial.impor.preview'), ['force_overwrite' => 1])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('alasan_override');
+
+        Http::assertNothingSent();
+    }
+
+    public function test_paksa_timpa_meneruskan_alasan_ke_api(): void
+    {
+        $this->actingAsOperatorImpor();
+        Session::put('impor_parsed', [
+            'sektor' => 'kesehatan',
+            'filename' => 'template.xlsx',
+            'rows' => [
+                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'jumlah_bidan' => '10', '_kode_valid' => true],
+            ],
+        ]);
+
+        Http::fake([
+            '*/impor/pratinjau' => Http::response(['data' => [['impor_id' => 'imp-force', 'attributes' => ['ringkasan' => ['total_baris' => 1, 'bisa_disimpan' => true], 'laporan' => []]]]], 200),
+        ]);
+
+        $this->post(route('dataspasial.impor.preview'), [
+            'force_overwrite' => 1,
+            'alasan_override' => 'Koreksi data dinas kesehatan',
+        ])->assertStatus(200);
+
+        Http::assertSent(function ($request) {
+            $body = $request->data();
+
+            return ($body['force_overwrite'] ?? null) === true
+                && ($body['alasan_override'] ?? null) === 'Koreksi data dinas kesehatan';
+        });
+    }
+
+    public function test_tanpa_paksa_timpa_alasan_tidak_dikirim(): void
+    {
+        $this->actingAsOperatorImpor();
+        Session::put('impor_parsed', [
+            'sektor' => 'kesehatan',
+            'filename' => 'template.xlsx',
+            'rows' => [
+                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'jumlah_bidan' => '10', '_kode_valid' => true],
+            ],
+        ]);
+
+        Http::fake([
+            '*/impor/pratinjau' => Http::response(['data' => [['impor_id' => 'imp-no', 'attributes' => ['ringkasan' => ['total_baris' => 1, 'bisa_disimpan' => true], 'laporan' => []]]]], 200),
+        ]);
+
+        $this->post(route('dataspasial.impor.preview'), [
+            'force_overwrite' => 0,
+            'alasan_override' => 'tidak relevan',
+        ])->assertStatus(200);
+
+        Http::assertSent(function ($request) {
+            $body = $request->data();
+
+            return ($body['force_overwrite'] ?? null) === false
+                && ! array_key_exists('alasan_override', $body);
+        });
+    }
+
     public function test_index_hanya_menampilkan_sektor_dan_kecamatan(): void
     {
         $this->actingAsOperatorImpor();

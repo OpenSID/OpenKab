@@ -79,6 +79,7 @@ class PetaGabunganController extends DataSpasialController
         }
 
         $features = $this->applyIsianFilters($features, (array) $request->input('filter', []));
+        $features = $this->withPopupIsian($features, $sektor);
 
         $payload['features'] = $features;
         $payload['meta'] = array_merge(
@@ -142,7 +143,7 @@ class PetaGabunganController extends DataSpasialController
             $props = $feature['properties'] ?? [];
             $dataspasial = $props['dataspasial'] ?? null;
 
-            if (! is_array($dataspasial)) {
+            if (! is_array($dataspasial) || $dataspasial === []) {
                 return false;
             }
 
@@ -159,9 +160,40 @@ class PetaGabunganController extends DataSpasialController
     }
 
     /**
+     * `dataspasial` dapat berupa satu entri (objek) atau daftar entri per isian.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function entriDataspasial(mixed $dataspasial): array
+    {
+        if (! is_array($dataspasial) || $dataspasial === []) {
+            return [];
+        }
+
+        $list = array_is_list($dataspasial) ? $dataspasial : [$dataspasial];
+
+        return array_values(array_filter($list, 'is_array'));
+    }
+
+    /**
      * @param  array<string, mixed>  $dataspasial
      */
     private function featureValue(array $dataspasial, string $kode): mixed
+    {
+        foreach ($this->entriDataspasial($dataspasial) as $entri) {
+            $value = $this->entriValue($entri, $kode);
+            if ($value !== null) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $dataspasial
+     */
+    private function entriValue(array $dataspasial, string $kode): mixed
     {
         $map = $dataspasial['nilai_map'] ?? null;
         if (is_array($map) && array_key_exists($kode, $map)) {
@@ -202,7 +234,7 @@ class PetaGabunganController extends DataSpasialController
         foreach ($features as $feature) {
             $props = $feature['properties'] ?? [];
             $kode = $props['sektor_kode'] ?? null;
-            if (is_array($props['dataspasial'] ?? null) && is_string($kode) && $kode !== '') {
+            if (! empty($props['dataspasial']) && is_string($kode) && $kode !== '') {
                 $sektorKode[$kode] = true;
             }
         }
@@ -273,25 +305,23 @@ class PetaGabunganController extends DataSpasialController
             $source = $props['source'] ?? null;
             $dataspasial = $props['dataspasial'] ?? null;
 
-            if (is_array($dataspasial)) {
+            if (is_array($dataspasial) && $dataspasial !== []) {
                 $key = (string) ($props['sektor_kode'] ?? 'dataspasial');
                 $label = (string) ($props['sektor_nama'] ?? $props['sektor_kode'] ?? 'DataSpasial');
                 $this->addLayer($layers, $key, $label, 'dataspasial');
-                $kategori = $props['kategori'] ?? $props['simbol'] ?? null;
-                if ($kategori) {
-                    $this->addLayer($layers, 'kategori:'.(string) $kategori, (string) $kategori, 'kategori');
-                }
             } else {
                 $key = (string) ($props['kategori'] ?? $props['simbol'] ?? 'lainnya');
                 $this->addLayer($layers, $key, $key, 'geospasial_lama');
-                if ($key !== '') {
-                    $this->addLayer($layers, 'kategori:'.$key, $key, 'kategori');
-                }
             }
 
-            $period = $dataspasial['periode'] ?? ($props['periode'] ?? null);
-            if (is_string($period) && $period !== '' && ! in_array($period, $periods, true)) {
-                $periods[] = $period;
+            $candidates = [$props['periode'] ?? null];
+            foreach ($this->entriDataspasial($dataspasial) as $entri) {
+                $candidates[] = $entri['periode'] ?? null;
+            }
+            foreach ($candidates as $period) {
+                if (is_string($period) && $period !== '' && ! in_array($period, $periods, true)) {
+                    $periods[] = $period;
+                }
             }
         }
 
@@ -300,8 +330,7 @@ class PetaGabunganController extends DataSpasialController
         return [
             'layers' => array_values($layers),
             'periods' => $periods,
-            'filters' => $this->isianFlags($isian, 'tampil_filter', $features),
-            'popup_isian' => $this->isianFlags($isian, 'tampil_popup', $features),
+            'filters' => $this->isianFlags($isian, 'tampil_filter'),
         ];
     }
 
@@ -323,14 +352,12 @@ class PetaGabunganController extends DataSpasialController
     }
 
     /**
-     * Daftar isian menurut penanda (tampil_filter/tampil_popup), dengan fallback
-     * dari fitur bila metadata skema tidak tersedia.
+     * Isian skema yang ditandai (tampil_filter), dalam bentuk ringkas.
      *
      * @param  array<int, array<string, mixed>>  $isian
-     * @param  array<int, array<string, mixed>>  $features
      * @return array<int, array<string, mixed>>
      */
-    private function isianFlags(array $isian, string $flag, array $features): array
+    private function isianFlags(array $isian, string $flag): array
     {
         $result = [];
 
@@ -339,31 +366,66 @@ class PetaGabunganController extends DataSpasialController
                 continue;
             }
 
-            $result[] = [
-                'kode' => $item['kode'] ?? null,
-                'label' => $item['label'] ?? ($item['kode'] ?? null),
-                'tipe' => $item['tipe'] ?? 'teks',
-                'satuan' => $item['satuan'] ?? null,
-                'opsi' => $item['opsi'] ?? null,
-            ];
+            $result[] = $this->ringkasIsian($item);
         }
 
-        if ($result !== []) {
-            return $result;
-        }
+        return $result;
+    }
 
-        if ($flag !== 'tampil_popup') {
-            return [];
-        }
+    /**
+     * Isian popup per fitur. Setiap lokasi hanya menerima isian dari sektornya
+     * sendiri (skema sektor fitur, atau entri datanya bila skema tidak tersedia),
+     * sehingga data antar-sektor tidak tercampur di popup.
+     *
+     * @param  array<int, array<string, mixed>>  $features
+     * @return array<int, array<string, mixed>>
+     */
+    private function withPopupIsian(array $features, ?string $sektor): array
+    {
+        $popupPerSektor = [];
 
-        $seen = [];
-        foreach ($features as $feature) {
-            $dataspasial = $feature['properties']['dataspasial'] ?? null;
-            if (! is_array($dataspasial)) {
+        foreach ($features as $i => $feature) {
+            $props = $feature['properties'] ?? [];
+            $dataspasial = $props['dataspasial'] ?? null;
+
+            if (! is_array($dataspasial) || $dataspasial === []) {
                 continue;
             }
 
-            $kode = $dataspasial['isian_kode'] ?? null;
+            $kodeSektor = (string) ($props['sektor_kode'] ?? $sektor ?? '');
+
+            if ($kodeSektor !== '' && ! array_key_exists($kodeSektor, $popupPerSektor)) {
+                $popupPerSektor[$kodeSektor] = array_map(
+                    fn (array $item): array => $this->ringkasIsian($item),
+                    array_values(array_filter(
+                        $this->skemaIsian($kodeSektor),
+                        static fn (array $item): bool => ! empty($item['tampil_popup'])
+                    ))
+                );
+            }
+
+            $items = $kodeSektor !== '' ? ($popupPerSektor[$kodeSektor] ?? []) : [];
+
+            $features[$i]['properties']['popup_isian'] = $items !== []
+                ? $items
+                : $this->popupDariEntri($dataspasial);
+        }
+
+        return $features;
+    }
+
+    /**
+     * Fallback popup dari entri data milik fitur itu sendiri (tanpa skema).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function popupDariEntri(mixed $dataspasial): array
+    {
+        $result = [];
+        $seen = [];
+
+        foreach ($this->entriDataspasial($dataspasial) as $entri) {
+            $kode = $entri['isian_kode'] ?? null;
             if ($kode === null || isset($seen[$kode])) {
                 continue;
             }
@@ -371,13 +433,28 @@ class PetaGabunganController extends DataSpasialController
             $seen[$kode] = true;
             $result[] = [
                 'kode' => $kode,
-                'label' => $dataspasial['isian_label'] ?? $kode,
-                'tipe' => $dataspasial['isian_tipe'] ?? 'teks',
-                'satuan' => $dataspasial['isian_satuan'] ?? null,
+                'label' => $entri['isian_label'] ?? $kode,
+                'tipe' => $entri['isian_tipe'] ?? 'teks',
+                'satuan' => $entri['isian_satuan'] ?? null,
                 'opsi' => null,
             ];
         }
 
         return $result;
+    }
+
+    /**
+     * @param  array<string, mixed>  $item
+     * @return array<string, mixed>
+     */
+    private function ringkasIsian(array $item): array
+    {
+        return [
+            'kode' => $item['kode'] ?? null,
+            'label' => $item['label'] ?? ($item['kode'] ?? null),
+            'tipe' => $item['tipe'] ?? 'teks',
+            'satuan' => $item['satuan'] ?? null,
+            'opsi' => $item['opsi'] ?? null,
+        ];
     }
 }

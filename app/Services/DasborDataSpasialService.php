@@ -123,6 +123,12 @@ class DasborDataSpasialService
             }
         }
 
+        // Ringkasan API bersifat per-wilayah (tanpa isian_kode); nilai per isian
+        // diagregasi dari endpoint nilai agar kartu & tabel terisi.
+        $agregat = $this->aggregatePerIsian($normalizedNilai, $filters['periode'] ?? null);
+        $kartu = $this->isiDariAgregat($kartu, $agregat);
+        $tabelRows = $this->isiDariAgregat($tabelRows, $agregat);
+
         return [
             'indikator' => array_values($indikatorMap),
             'kartu' => $kartu,
@@ -251,7 +257,7 @@ class DasborDataSpasialService
             $satuan = $this->pick($attrs, ['isian_satuan', 'satuan']);
             $ukuran = $this->pick($attrs, ['ukuran', 'jenis', 'agregat']) ?? 'total';
             $nilai = $this->pickNum($attrs, ['total', 'jumlah', 'nilai', 'rata_rata']);
-            $periode = $this->pick($attrs, ['periode', 'period']);
+            $periode = $this->pickScalar($attrs, ['periode', 'period']);
             $keterangan = $this->pick($attrs, ['keterangan', 'detail', 'subketerangan', 'keterangan_nilai']);
             if ($kode === null || $kode === '') {
                 continue;
@@ -284,12 +290,12 @@ class DasborDataSpasialService
                 continue;
             }
             $nilai = $this->pickNum($attrs, ['nilai', 'total', 'jumlah']);
-            $isianKode = $this->pick($attrs, ['isian_kode', 'kode_isian', 'kode', 'isian']);
-            $configId = $this->pick($attrs, ['config_id', 'desa_id', 'kode_desa', 'kode_kemendagri_desa']);
-            $kodeKecamatan = $this->pick($attrs, ['kode_kecamatan', 'kode_kemendagri_kecamatan', 'kecamatan_kode']);
-            $kodeDesa = $this->pick($attrs, ['kode_desa', 'kode_kemendagri_desa', 'desa_kode', 'config_id']);
-            $periode = $this->pick($attrs, ['periode', 'period']);
-            $sektor = $this->pick($attrs, ['sektor_kode', 'sektor']);
+            $isianKode = $this->pickScalar($attrs, ['isian_kode', 'kode_isian', 'kode', 'isian']);
+            $configId = $this->pickScalar($attrs, ['config_id', 'desa_id', 'kode_desa', 'kode_kemendagri_desa']);
+            $kodeKecamatan = $this->pickScalar($attrs, ['kode_kecamatan', 'kode_kemendagri_kecamatan', 'kecamatan_kode']);
+            $kodeDesa = $this->pickScalar($attrs, ['kode_desa', 'kode_kemendagri_desa', 'desa_kode', 'config_id']);
+            $periode = $this->pickScalar($attrs, ['periode', 'period']);
+            $sektor = $this->pickScalar($attrs, ['sektor_kode', 'sektor']);
             if ($nilai === null || $isianKode === null || $isianKode === '') {
                 continue;
             }
@@ -305,6 +311,65 @@ class DasborDataSpasialService
         }
 
         return $out;
+    }
+
+    /**
+     * Agregat per isian_kode. Tanpa filter periode dipakai periode terbaru
+     * pada isian tersebut agar tidak menjumlahkan lintas periode.
+     *
+     * @param  array<int, array<string, mixed>>  $nilaiItems
+     * @return array<string, array{total: float, jumlah: int, periode: ?string}>
+     */
+    public function aggregatePerIsian(array $nilaiItems, ?string $periode = null): array
+    {
+        $latest = [];
+        foreach ($nilaiItems as $n) {
+            $kode = (string) ($n['isian_kode'] ?? '');
+            $p = (string) ($n['periode'] ?? '');
+            if ($kode === '' || ($periode !== null && $periode !== '' && $p !== $periode)) {
+                continue;
+            }
+            if (! isset($latest[$kode]) || strcmp($p, $latest[$kode]) > 0) {
+                $latest[$kode] = $p;
+            }
+        }
+
+        $out = [];
+        foreach ($nilaiItems as $n) {
+            $kode = (string) ($n['isian_kode'] ?? '');
+            if ($kode === '' || ! isset($latest[$kode]) || (string) ($n['periode'] ?? '') !== $latest[$kode]) {
+                continue;
+            }
+            $out[$kode] ??= ['total' => 0.0, 'jumlah' => 0, 'periode' => $latest[$kode] !== '' ? $latest[$kode] : null];
+            $out[$kode]['total'] += (float) $n['nilai'];
+            $out[$kode]['jumlah']++;
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $rows
+     * @param  array<string, array{total: float, jumlah: int, periode: ?string}>  $agregat
+     * @return array<int, array<string, mixed>>
+     */
+    protected function isiDariAgregat(array $rows, array $agregat): array
+    {
+        foreach ($rows as $i => $row) {
+            if (($row['nilai'] ?? null) !== null) {
+                continue;
+            }
+            $a = $agregat[(string) ($row['kode'] ?? '')] ?? null;
+            if ($a === null) {
+                continue;
+            }
+            $rata = in_array(strtolower((string) ($row['ukuran'] ?? '')), ['rata_rata', 'rata-rata', 'avg', 'average'], true);
+            $rows[$i]['nilai'] = round($rata && $a['jumlah'] > 0 ? $a['total'] / $a['jumlah'] : $a['total'], 4);
+            $rows[$i]['tersedia'] = true;
+            $rows[$i]['periode'] ??= $a['periode'];
+        }
+
+        return $rows;
     }
 
     /**
@@ -457,6 +522,34 @@ class DasborDataSpasialService
         return null;
     }
 
+    /**
+     * Seperti pick(), tetapi selalu menghasilkan skalar: nilai berbentuk
+     * array/objek (mis. `sektor: {kode, nama}`) dipetakan ke kode/id/nama-nya.
+     *
+     * @param  array<string, mixed>  $attrs
+     * @param  array<int, string>  $keys
+     */
+    protected function pickScalar(array $attrs, array $keys): string|int|float|null
+    {
+        $value = $this->pick($attrs, $keys);
+
+        if (is_array($value)) {
+            foreach (['kode', 'id', 'nama'] as $inner) {
+                if (isset($value[$inner]) && is_scalar($value[$inner]) && $value[$inner] !== '') {
+                    return $value[$inner];
+                }
+            }
+
+            return null;
+        }
+
+        return is_scalar($value) ? $value : null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $attrs
+     * @param  array<int, string>  $keys
+     */
     /**
      * @param  array<string, mixed>  $attrs
      * @param  array<int, string>  $keys

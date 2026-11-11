@@ -119,7 +119,9 @@
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener('DOMContentLoaded', function () {
             if (window.MonitoringDataSpasial) {
-                window.MonitoringDataSpasial.init(window.MonitoringFilterKomponen || {});
+                window.MonitoringDataSpasial.init(Object.assign({}, window.MonitoringFilterKomponen || {}, {
+                    auditUrl: @json(route('dataspasial.audit')),
+                }));
             }
         });
     </script>

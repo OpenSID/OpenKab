@@ -13,6 +13,8 @@ Di rilis ini, versi 2611.0.0 berisi penambahan dan perbaikan yang diminta penggu
 8. [#1300](https://github.com/OpenSID/OpenKab/issues/1300) [KAB-05] Dasbor indikator, grafik & ekspor.
 9. [#1301](https://github.com/OpenSID/OpenKab/issues/1301) [KAB-06] Impor data desa dari file: templat, unggah & pratinjau.
 10. [#1303](https://github.com/OpenSID/OpenKab/issues/1303) Feat: Monitoring Pengisian & Kualitas Data Desa.
+11. [#1304](https://github.com/OpenSID/OpenKab/issues/1304)  Log entri: siapa, kapan, dari OpenKab atau OpenSID.
+
 
 #### Perbaikan BUG
 

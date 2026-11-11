@@ -114,18 +114,43 @@
         return layerGroups[key];
     }
 
+    function dsEntries(ds) {
+        if (!ds) {
+            return [];
+        }
+        if (Array.isArray(ds)) {
+            return ds.filter(function (e) { return e && typeof e === 'object'; });
+        }
+
+        return [ds];
+    }
+
     function featureValue(props, kode) {
         if (!props || !props.dataspasial) {
             return null;
         }
 
-        var ds = props.dataspasial;
-        if (ds.nilai_map && Object.prototype.hasOwnProperty.call(ds.nilai_map, kode)) {
-            return ds.nilai_map[kode];
+        var entries = dsEntries(props.dataspasial);
+        for (var i = 0; i < entries.length; i++) {
+            var ds = entries[i];
+            if (ds.nilai_map && Object.prototype.hasOwnProperty.call(ds.nilai_map, kode)) {
+                return ds.nilai_map[kode];
+            }
+            if (ds.isian_kode === kode) {
+                return ds.nilai;
+            }
         }
 
-        if (ds.isian_kode === kode) {
-            return ds.nilai;
+        return null;
+    }
+
+    function firstEntryValue(entries, keys) {
+        for (var i = 0; i < entries.length; i++) {
+            for (var j = 0; j < keys.length; j++) {
+                if (entries[i][keys[j]]) {
+                    return entries[i][keys[j]];
+                }
+            }
         }
 
         return null;
@@ -151,7 +176,7 @@
             html += '<small>Kec. ' + esc(props.kode_kecamatan) + '</small><br>';
         }
 
-        var popupIsian = props.dataspasial ? (meta.popup_isian || []) : [];
+        var popupIsian = props.dataspasial ? (props.popup_isian || []) : [];
         for (var i = 0; i < popupIsian.length; i++) {
             var item = popupIsian[i];
             var value = featureValue(props, item.kode);
@@ -163,16 +188,18 @@
             html += '<div>' + esc(item.label || item.kode) + ': <strong>' + esc(display) + '</strong>' + satuan + '</div>';
         }
 
-        var ds = props.dataspasial || {};
-        var sumber = ds.sumber || ds.sumber_data || (props.source === 'presisi' ? 'Data Presisi' : null);
+        var entries = dsEntries(props.dataspasial);
+        var sumber = firstEntryValue(entries, ['sumber', 'sumber_data']) || (props.source === 'presisi' ? 'Data Presisi' : null);
+        var diperbarui = firstEntryValue(entries, ['waktu_input', 'tanggal_pembaruan']);
+        var periode = firstEntryValue(entries, ['periode']);
         if (sumber) {
             html += '<small>Sumber: ' + esc(sumber) + '</small><br>';
         }
-        if (ds.waktu_input || ds.tanggal_pembaruan) {
-            html += '<small>Diperbarui: ' + esc(ds.waktu_input || ds.tanggal_pembaruan) + '</small>';
+        if (diperbarui) {
+            html += '<small>Diperbarui: ' + esc(diperbarui) + '</small><br>';
         }
-        if (ds.periode) {
-            html += '<small>Periode: ' + esc(ds.periode) + '</small>';
+        if (periode) {
+            html += '<small>Periode: ' + esc(periode) + '</small>';
         }
 
         html += '</div>';
@@ -281,14 +308,11 @@
             return;
         }
 
-        var groups = {legacy: [], data: [], dataspasial: [], kategori: []};
-        (meta.layers || []).forEach(function (layer) {            
+        var groups = {legacy: [], dataspasial: []};
+        (meta.layers || []).forEach(function (layer) {
             var jenis = layer.jenis || '';
             if (jenis === 'dataspasial' || jenis === 'dataspasial_layer' || jenis === 'sektor') {
                 groups.dataspasial.push(layer);
-                groups.data.push(layer);
-            } else if (jenis === 'kategori') {
-                groups.kategori.push(layer);
             } else {
                 groups.legacy.push(layer);
             }
@@ -300,16 +324,8 @@
             html += layerItemsHtml(groups.dataspasial, 'data');
             html += '</div>';
         }
-        if (groups.kategori.length) {
-            html += '<div class="layer-group mt-2"><strong>Kategori</strong>';
-            html += layerItemsHtml(groups.kategori, 'legacy');
-            html += '</div>';
-        }
         html += '<div class="layer-group mt-2"><strong>Geospasial Lama</strong>';
         html += layerItemsHtml(groups.legacy, 'legacy');
-        html += '</div>';
-        html += '<div class="layer-group mt-2"><strong>DataSpasial</strong>';
-        html += layerItemsHtml(groups.data, 'data');
         html += '</div>';
 
         container.innerHTML = html;
@@ -417,6 +433,7 @@
         renderLayerPanel();
         syncActiveGroups();
 
+        show('map-unavailable', false);
         show('map-empty', features.length === 0);
     }
 

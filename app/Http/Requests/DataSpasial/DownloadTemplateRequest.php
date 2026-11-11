@@ -13,6 +13,7 @@ class DownloadTemplateRequest extends FormRequest
         return [
             'sektor' => 'required|string',
             'kecamatan' => 'nullable|string',
+            'periode' => 'nullable|date_format:Y',
         ];
     }
 

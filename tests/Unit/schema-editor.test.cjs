@@ -7,7 +7,7 @@ const vm = require('node:vm');
 const source = fs.readFileSync(path.join(__dirname, '..', '..', 'public', 'js', 'dataspasial', 'schema-editor.js'), 'utf8');
 const context = { window: { addEventListener() {} } };
 vm.runInNewContext(
-    source.replace(/^export /gm, '') + '\nglobalThis.editor = { bacaDariDom, terapkanAturanTipe, renderPratinjau };',
+    source.replace(/^export /gm, '') + '\nglobalThis.editor = { bacaDariDom, terapkanAturanTipe, renderPratinjau, jenisPenyimpanan };',
     context,
 );
 
@@ -60,4 +60,12 @@ test('tombol pilihan mengikuti tipe dan status editor', () => {
     context.editor.terapkanAturanTipe(tbody);
     assert.equal(tombol.hidden, false);
     assert.equal(tombol.disabled, true);
+});
+
+test('perubahan nama saja disimpan terpisah, perubahan isian tetap menjadi draf', () => {
+    const awal = [{ label: 'Jumlah', opsi: ['A'] }];
+    assert.equal(context.editor.jenisPenyimpanan(false, 'Lama', 'Baru', awal, [{ label: 'Jumlah', opsi: ['A'] }]), 'nama');
+    assert.equal(context.editor.jenisPenyimpanan(false, 'Lama', 'Baru', awal, [{ label: 'Jumlah', opsi: ['B'] }]), 'draf');
+    assert.equal(context.editor.jenisPenyimpanan(false, 'Lama', 'Lama', awal, awal), 'tidak-berubah');
+    assert.equal(context.editor.jenisPenyimpanan(true, 'Lama', 'Baru', awal, awal), 'draf');
 });

@@ -7,8 +7,14 @@ use App\Enums\KeluargaKategoriStatistikEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Enums\StatistikPendudukEnum;
 use App\Models\Enums\StatistikRtmEnum;
+use App\Services\DataSpasialApiService;
 use App\Services\KesehatanApiService;
+use App\Services\PetaSkemaPopupService;
 use App\Services\PemetaanService;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use RuntimeException;
 
 class PresisiController extends Controller
 {
@@ -192,5 +198,37 @@ class PresisiController extends Controller
         $kategori = (array) $object;
 
         return view('presisi.geo_spasial.index', compact('categoriesItems', 'listKecamatan', 'listDesa', 'kategori'));
+    }
+
+    public function geoSpasialSkema(DataSpasialApiService $dataspasial, PetaSkemaPopupService $popup, PemetaanService $pemetaan): JsonResponse
+    {
+        $result = $dataspasial->geojsonGabungan();
+        if ($result->isUnavailable()) {
+            return response()->json(['message' => $result->userMessage()], 503);
+        }
+
+        $collection = $result->first();
+        $features = is_array($collection['features'] ?? null) ? $collection['features'] : [];
+        try {
+            $coordinates = $pemetaan->getCoordinates();
+        } catch (RuntimeException|ConnectionException $exception) {
+            Log::warning('DataSpasial: lokasi peta Presisi tidak tersedia', ['message' => $exception->getMessage()]);
+
+            return response()->json(['message' => 'Data sementara tidak tersedia. Silakan coba lagi nanti.'], 503);
+        }
+
+        $ids = [];
+        foreach ($coordinates as $coordinate) {
+            if (is_array($coordinate) && isset($coordinate['id']) && is_scalar($coordinate['id'])) {
+                $ids[(string) $coordinate['id']] = true;
+            }
+        }
+        $features = array_values(array_filter($features, static function ($feature) use ($ids): bool {
+            $id = is_array($feature) ? ($feature['properties']['lokasi_id'] ?? null) : null;
+
+            return is_scalar($id) && isset($ids[(string) $id]);
+        }));
+
+        return response()->json(['lokasi' => $popup->susun($features)['lokasi']]);
     }
 }

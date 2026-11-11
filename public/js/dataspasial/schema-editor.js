@@ -260,6 +260,11 @@ function bacaDariDom(tbody) {
         });
 }
 
+function jenisPenyimpanan(modeSektorBaru, namaAwal, nama, isianAwal, isian) {
+    if (modeSektorBaru || JSON.stringify(isianAwal) !== JSON.stringify(isian)) return 'draf';
+    return nama.trim() !== namaAwal.trim() ? 'nama' : 'tidak-berubah';
+}
+
 /**
  * Terapkan aturan kolom  tipe (FR-010).
  *
@@ -1011,14 +1016,22 @@ export function mountSchemaEditor() {
         // tidak ada lagi daftar versi yang perlu dicek untuk "draf sudah ada".
         const isian = bacaDariDom(tbody);
 
-        if (isian.length === 0) {
+        const jenisSimpan = jenisPenyimpanan(modeSektorBaru, namaSektorAwal, inputNamaSektor?.value ?? '', snapshotAwal, isian);
+        const hanyaNamaBerubah = jenisSimpan === 'nama';
+
+        if (jenisSimpan === 'tidak-berubah') {
+            await swalPeringatan('Tidak ada perubahan untuk disimpan.');
+            return;
+        }
+
+        if (!hanyaNamaBerubah && isian.length === 0) {
             await swalPeringatan('Sektor harus memiliki minimal satu isian.');
 
             return;
         }
 
         const pilihanKosong = isian.find((baris) => baris.tipe === TIPE_PILIHAN && baris.opsi.length === 0);
-        if (pilihanKosong) {
+        if (!hanyaNamaBerubah && pilihanKosong) {
             await swalPeringatan(`Atur pilihan untuk isian "${pilihanKosong.label || '(tanpa label)'}".`);
             return;
         }
@@ -1029,7 +1042,7 @@ export function mountSchemaEditor() {
             .map((b) => b.label)
             .filter((label, i, arr) => label !== '' && arr.indexOf(label) !== i);
 
-        if (labelBentrok.length > 0) {
+        if (!hanyaNamaBerubah && labelBentrok.length > 0) {
             await swalPeringatan(`Label "${labelBentrok[0]}" dipakai lebih dari satu isian pada versi ini.`);
 
             return;
@@ -1037,16 +1050,13 @@ export function mountSchemaEditor() {
 
         const kodeKosong = isian.find((b) => b.kode === '');
 
-        if (kodeKosong) {
+        if (!hanyaNamaBerubah && kodeKosong) {
             await swalPeringatan(`Label "${kodeKosong.label}" tidak menghasilkan kode yang sah. Perbaiki labelnya.`);
 
             return;
         }
 
         serialisasiKeForm(isian);
-        dirty = false;
-        perbaruiTombolTerbit();
-
         // US7/Q19 — nama sektor SELALU diambil dari input yang dapat disunting;
         // pada mode "sektor baru" (Q26) input itu sengaja dikosongkan oleh sistem.
         const inputNama = document.getElementById('input-sektor-nama-editor');
@@ -1062,7 +1072,7 @@ export function mountSchemaEditor() {
             ?? '';
 
         try {
-            const respons = await fetch('/dataspasial/skema/draf', {
+            const respons = await fetch(hanyaNamaBerubah ? '/dataspasial/skema/nama-sektor' : '/dataspasial/skema/draf', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1071,7 +1081,10 @@ export function mountSchemaEditor() {
                     'X-CSRF-TOKEN': token,
                 },
                 credentials: 'same-origin',
-                body: JSON.stringify({
+                body: JSON.stringify(hanyaNamaBerubah ? {
+                    sektor: sektorKodeKirim,
+                    sektor_nama: sektorNama,
+                } : {
                     sektor: sektorKodeKirim,
                     sektor_nama: sektorNama,
                     keterangan: '',
@@ -1096,7 +1109,13 @@ export function mountSchemaEditor() {
 
             const hasilDraf = await respons.json().catch(() => ({}));
 
-            await swalSukses(modeSektorBaru ? 'Sektor berhasil dibuat.' : 'Draf skema berhasil disimpan.');
+            dirty = false;
+            await swalSukses(modeSektorBaru ? 'Sektor berhasil dibuat.' : (hanyaNamaBerubah ? 'Nama sektor berhasil disimpan.' : 'Draf skema berhasil disimpan.'));
+
+            if (hanyaNamaBerubah) {
+                window.location.reload();
+                return;
+            }
 
             // Muat ulang data terbaru. Tanpa `versi` agar editor memuat versi
             // terakhir (draf baru) — bukan versi lama dari URL sebelumnya.

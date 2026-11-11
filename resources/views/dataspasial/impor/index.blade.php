@@ -21,6 +21,7 @@
                         <div class="col-md-12">
                             <div class="alert alert-info">
                                 <strong>Alur:</strong> 1) Unduh Templat (pilih sektor dan kecamatan/semua kecamatan) 2) Unggah XLSX 3) Pratinjau & Simpan
+                                <br>Lokasi wajib sudah terdaftar di peta, memiliki koordinat, dan berada di desa yang sama dengan fasilitas.
                             </div>
                         </div>
                     </div>
@@ -87,7 +88,7 @@
                                         <button class="btn btn-success" type="submit">Unggah</button>
                                     </div>
                                 </div>
-                                <small class="text-muted">Maks 10MB. Parsing dilakukan di OpenKab.</small>
+                                <small class="text-muted">Maks 10MB. Setiap baris wajib memilih lokasi dari daftar lokasi pada desa yang sama.</small>
                             </form>
                         </div>
                     </div>
@@ -244,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             return;
         }
 
-        var baseColumns = ['nomor_baris', 'kode_desa', 'nama_desa', 'kode_fasilitas', 'nama_fasilitas', 'periode'];
+        var baseColumns = ['nomor_baris', 'kode_desa', 'nama_desa', 'kode_fasilitas', 'nama_fasilitas', 'lokasi_id', 'periode'];
 
         // Kumpulkan kolom nilai (isian) dinamis dari seluruh baris
         var nilaiKeys = [];

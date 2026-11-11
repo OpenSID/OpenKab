@@ -73,6 +73,7 @@
 
         var mapId = options.mapId || 'map';
         map = L.map(mapId).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+        if (window.PopupSkema) window.PopupSkema.ikutiUkuranPeta(map);
 
         if (window.PETA_GABUNGAN_ICON && window.PETA_GABUNGAN_ICON.iconUrl) {
             markerIcon = new L.Icon({
@@ -114,92 +115,32 @@
         return layerGroups[key];
     }
 
-    function dsEntries(ds) {
-        if (!ds) {
-            return [];
-        }
-        if (Array.isArray(ds)) {
-            return ds.filter(function (e) { return e && typeof e === 'object'; });
-        }
-
-        return [ds];
-    }
-
-    function featureValue(props, kode) {
-        if (!props || !props.dataspasial) {
-            return null;
-        }
-
-        var entries = dsEntries(props.dataspasial);
-        for (var i = 0; i < entries.length; i++) {
-            var ds = entries[i];
-            if (ds.nilai_map && Object.prototype.hasOwnProperty.call(ds.nilai_map, kode)) {
-                return ds.nilai_map[kode];
-            }
-            if (ds.isian_kode === kode) {
-                return ds.nilai;
-            }
-        }
-
-        return null;
-    }
-
-    function firstEntryValue(entries, keys) {
-        for (var i = 0; i < entries.length; i++) {
-            for (var j = 0; j < keys.length; j++) {
-                if (entries[i][keys[j]]) {
-                    return entries[i][keys[j]];
-                }
-            }
-        }
-
-        return null;
-    }
-
-    function popupContent(props) {
+    function popupContent(props, coordinates) {
         props = props || {};
         var html = '<div class="peta-popup">';
 
-        if (props.nama) {
-            html += '<strong>' + esc(props.nama) + '</strong><br>';
-        }
-
-        if (props.sektor_nama || props.sektor_kode) {
-            html += '<small>Sektor: ' + esc(props.sektor_nama || props.sektor_kode) + '</small><br>';
-        } else if (props.kategori) {
-            html += '<small>' + esc(props.kategori) + '</small><br>';
-        }
-
-        if (props.nama_desa || props.kode_desa) {
-            html += '<small>' + esc(props.nama_desa || props.kode_desa) + '</small><br>';
-        } else if (props.kode_kecamatan) {
-            html += '<small>Kec. ' + esc(props.kode_kecamatan) + '</small><br>';
-        }
-
-        var popupIsian = props.dataspasial ? (props.popup_isian || []) : [];
-        for (var i = 0; i < popupIsian.length; i++) {
-            var item = popupIsian[i];
-            var value = featureValue(props, item.kode);
-            var display = (value === null || value === undefined || value === '')
-                ? 'Belum ada data untuk periode ini'
-                : value;
-            var satuan = item.satuan ? ' ' + esc(item.satuan) : '';
-
-            html += '<div>' + esc(item.label || item.kode) + ': <strong>' + esc(display) + '</strong>' + satuan + '</div>';
-        }
-
-        var entries = dsEntries(props.dataspasial);
-        var sumber = firstEntryValue(entries, ['sumber', 'sumber_data']) || (props.source === 'presisi' ? 'Data Presisi' : null);
-        var diperbarui = firstEntryValue(entries, ['waktu_input', 'tanggal_pembaruan']);
-        var periode = firstEntryValue(entries, ['periode']);
-        if (sumber) {
-            html += '<small>Sumber: ' + esc(sumber) + '</small><br>';
-        }
-        if (diperbarui) {
-            html += '<small>Diperbarui: ' + esc(diperbarui) + '</small><br>';
-        }
-        if (periode) {
-            html += '<small>Periode: ' + esc(periode) + '</small>';
+        if (window.PopupSkema) {
+            html += window.PopupSkema.renderLokasi({
+                nama: props.nama,
+                deskripsi: props.deskripsi || props.desk,
+                kategori: props.kategori,
+                sektor: props.sektor_nama || props.sektor_kode,
+                provinsi: props.nama_propinsi || props.kode_propinsi,
+                kabupaten: props.nama_kabupaten || props.kode_kabupaten,
+                kecamatan: props.nama_kecamatan || props.kode_kecamatan,
+                desa: props.nama_desa || props.kode_desa,
+                koordinat: Array.isArray(coordinates) && coordinates.length >= 2 ? coordinates[1] + ', ' + coordinates[0] : null
+            });
+            html += window.PopupSkema.render(props.popup_skema, props.popup_skema_unavailable);
+        } else {
+            html += '<strong>' + esc(props.nama || 'Lokasi') + '</strong>';
+            if (props.deskripsi || props.desk) html += '<div>' + esc(props.deskripsi || props.desk) + '</div>';
+            if (props.kategori) html += '<div>Jenis peta: ' + esc(props.kategori) + '</div>';
+            if (props.sektor_nama || props.sektor_kode) html += '<div>Sektor: ' + esc(props.sektor_nama || props.sektor_kode) + '</div>';
+            if (props.nama_desa || props.kode_desa) html += '<div>Desa: ' + esc(props.nama_desa || props.kode_desa) + '</div>';
+            if (props.nama_kecamatan || props.kode_kecamatan) html += '<div>Kecamatan: ' + esc(props.nama_kecamatan || props.kode_kecamatan) + '</div>';
+            if (Array.isArray(coordinates) && coordinates.length >= 2) html += '<div>Koordinat: ' + esc(coordinates[1]) + ', ' + esc(coordinates[0]) + '</div>';
+            html += '<div class="text-muted small">Informasi skema tidak dapat dimuat.</div>';
         }
 
         html += '</div>';
@@ -217,11 +158,8 @@
         markerBounds[key].extend([coords[1], coords[0]]);
 
         var marker = L.marker([coords[1], coords[0]], markerIcon ? {icon: markerIcon} : {});
-        marker.bindPopup(popupContent(feature.properties || {}), {closeButton: true, autoPan: true});
-
-        marker.on('mouseover', function () {
-            this.openPopup();
-        });
+        marker.bindPopup(popupContent(feature.properties || {}, coords), window.PopupSkema
+            ? window.PopupSkema.opsiPeta(map) : {maxWidth: 360, maxHeight: 300});
 
         clusterFor(key).addLayer(marker);
     }

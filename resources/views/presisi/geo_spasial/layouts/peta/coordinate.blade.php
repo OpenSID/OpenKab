@@ -1,3 +1,23 @@
+var modalSkemaSequence = 0;
+
+function getPopupSkemaRequest() {
+    if (!popupSkemaRequest) {
+        popupSkemaRequest = $.ajax({
+            type: 'GET',
+            url: "{{ route('presisi.geo-spasial.skema') }}",
+            dataType: 'json'
+        });
+        popupSkemaRequest.fail(function() { popupSkemaRequest = null; });
+    }
+    return popupSkemaRequest;
+}
+
+function renderPopupSkema(detail) {
+    return window.PopupSkema
+        ? window.PopupSkema.render(detail.skema, detail.unavailable)
+        : '<div class="text-muted small">Informasi skema tidak dapat dimuat.</div>';
+}
+
 // Event listener untuk kategori
 $('#nav-kategori a').on('click', function() {
 var kategoriId = $(this).data('key');
@@ -50,6 +70,7 @@ searchKeyword);
 
 
 function GetListCoordinates(kabupaten = null, kecamatan = null, desa = null, kategoriId = null, searchKeyword = null) {
+var requestSequence = ++coordinateRequestSequence;
 var coordUrl = new URL("{{ config('app.databaseGabunganUrl') . '/api/v1/plan/get-list-coordinate' }}");
 var filterParams = [];
 
@@ -79,6 +100,7 @@ url: coordUrl,
 
 dataType: 'json',
 success: function(data) {
+if (requestSequence !== coordinateRequestSequence) return;
 // Hapus semua marker dari peta sebelum menambahkan yang baru
 map.eachLayer((layer) => {
 if (layer instanceof L.Marker) {
@@ -86,19 +108,55 @@ layer.remove();
 }
 });
 var isFirst = true;
-for (var i=0; i < data.length; i++ ){ if (data[i].lat !=null && data[i].lng !=null){ var
-    marker=L.marker([parseFloat(data[i].lat), parseFloat(data[i].lng)], {icon: markerIcon}).bindPopup(data[i].nama
-    + '<br><strong>' + data[i].desk + '</strong><br>' + data[i].point.nama+"<hr>Provinsi :" +
-    data[i].config.nama_propinsi + "<br>Kota :" + data[i].config.nama_kabupaten + "<br>Kecamatan :" +
-    data[i].config.nama_kecamatan + "<br>Desa :" + data[i].config.nama_desa ).addTo(map)
-    marker.on('mouseover',function(ev) {
-    ev.target.openPopup();
-    });
+var markerDetails = [];
+var escapePopup = function(value) {
+    return String(value == null ? '' : value).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+};
+var renderLocation = function(item) {
+    var config = item.config || {};
+    var point = item.point || {};
+    var koordinat = item.lat != null && item.lng != null ? item.lat + ', ' + item.lng : null;
+    if (window.PopupSkema) {
+        return window.PopupSkema.renderLokasi({
+            nama: item.nama, deskripsi: item.desk, kategori: point.nama,
+            provinsi: config.nama_propinsi, kabupaten: config.nama_kabupaten,
+            kecamatan: config.nama_kecamatan, desa: config.nama_desa, koordinat: koordinat
+        });
+    }
+    return '<strong>' + escapePopup(item.nama) + '</strong><div>' + escapePopup(item.desk)
+        + '</div><div>' + escapePopup(point.nama) + '</div><div>Provinsi: ' + escapePopup(config.nama_propinsi)
+        + '</div><div>Kota: ' + escapePopup(config.nama_kabupaten)
+        + '</div><div>Kecamatan: ' + escapePopup(config.nama_kecamatan) + '</div><div>Desa: '
+        + escapePopup(config.nama_desa) + '</div><div>Koordinat: ' + escapePopup(koordinat) + '</div>';
+};
+for (var i=0; i < data.length; i++ ){ if (data[i].lat !=null && data[i].lng !=null){
+    var item = data[i];
+    var basePopup = '<div class="peta-popup">' + renderLocation(item);
+    var marker = L.marker([parseFloat(item.lat), parseFloat(item.lng)], {icon: markerIcon})
+        .bindPopup(basePopup + '<div class="dataspasial-popup-notice">Memuat informasi skema...</div></div>',
+            window.PopupSkema ? window.PopupSkema.opsiPeta(map) : {maxWidth: 360, maxHeight: 300}).addTo(map);
+    markerDetails.push({id: item.id, marker: marker, base: basePopup});
     if (isFirst){
     isFirst = false;
     map.panTo(new L.LatLng(parseFloat(data[i].lat), parseFloat(data[i].lng)));
     }
     }
+    }
+
+    if (markerDetails.length) {
+        getPopupSkemaRequest().done(function(result) {
+            if (requestSequence !== coordinateRequestSequence) return;
+            markerDetails.forEach(function(entry) {
+                var detail = (result.lokasi || {})[String(entry.id)] || {};
+                entry.marker.setPopupContent(entry.base + renderPopupSkema(detail) + '</div>');
+            });
+        }).fail(function() {
+            if (requestSequence !== coordinateRequestSequence) return;
+            markerDetails.forEach(function(entry) {
+                entry.marker.setPopupContent(entry.base + renderPopupSkema({unavailable: true}) + '</div>');
+            });
+        });
     }
 
     // Hapus semua kartu dari container
@@ -128,7 +186,8 @@ for (var i=0; i < data.length; i++ ){ if (data[i].lat !=null && data[i].lng !=nu
 
     var description = document.createElement('span');
     description.className = 'description';
-    description.innerHTML = item.nama + '<br><strong>' + item.desk + '</strong><br>' + item.point.nama;
+    description.innerHTML = escapePopup(item.nama) + '<br><strong>' + escapePopup(item.desk)
+        + '</strong><br>' + escapePopup((item.point || {}).nama);
 
     // Ikon Detail (menggunakan FontAwesome)
     var detailIcon = document.createElement('i');
@@ -136,18 +195,18 @@ for (var i=0; i < data.length; i++ ){ if (data[i].lat !=null && data[i].lng !=nu
 
     // Event Listener untuk ikon detail
     detailIcon.addEventListener('click', function () {
-    document.getElementById('modalContent').innerHTML = `
-    <h5>${item.nama}</h5>
-    <p>${item.desk}</p>
-    <p><strong>Provinsi:</strong> ${item.config.nama_propinsi}</p>
-    <p><strong>Kota:</strong> ${item.config.nama_kabupaten}</p>
-    <p><strong>Kecamatan:</strong> ${item.config.nama_kecamatan}</p>
-    <p><strong>Desa:</strong> ${item.config.nama_desa}</p>
-    <p><strong>Latitude:</strong> ${item.lat}</p>
-    <p><strong>Longitude:</strong> ${item.lng}</p>
-    `;
-
+    var sequence = ++modalSkemaSequence;
+    var base = renderLocation(item);
+    var content = document.getElementById('modalContent');
+    content.innerHTML = base + '<div class="text-muted small">Memuat informasi skema...</div>';
     $('#detailModal').modal();
+    getPopupSkemaRequest().done(function(result) {
+        if (sequence !== modalSkemaSequence) return;
+        content.innerHTML = base + renderPopupSkema((result.lokasi || {})[String(item.id)] || {});
+    }).fail(function() {
+        if (sequence !== modalSkemaSequence) return;
+        content.innerHTML = base + renderPopupSkema({unavailable: true});
+    });
     });
 
     // Menambahkan elemen ke kartu

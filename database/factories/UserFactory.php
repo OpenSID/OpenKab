@@ -27,9 +27,15 @@ class UserFactory extends Factory
         // ];
 
         return [
-            'username' => $this->faker->userName,
+            // ⚠️ WAJIB `unique()` + sufiks acak. Kolom `username` punya batasan unik
+            // di DB dan basis data pengembangan sudah berisi ratusan baris,
+            // sehingga `unique()` saja (yang hanya men unik dalam satu proses)
+            // TIDAK cukup — nama dari kumpulan faker bisa saja sudah ada.
+            // Sufiks 6 karakter acak membuat bentrok praktis mustahil tanpa
+            // mengubah bentuk nama yang dipakai test lain.
+            'username' => $this->faker->unique()->userName.'.'.Str::lower(Str::random(6)),
             'password' => Hash::make('password'), // default password
-            'email' => $this->faker->unique()->safeEmail,
+            'email' => $this->faker->unique()->safeEmail.'+'.Str::lower(Str::random(6)).'@example.test',
             'last_login' => now(),
             'email_verified_at' => now(),
             'active' => 1,

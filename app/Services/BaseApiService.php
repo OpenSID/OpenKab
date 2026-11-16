@@ -24,7 +24,10 @@ class BaseApiService
         $this->header = [
             'Accept' => 'application/ld+json',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.$this->settings['database_gabungan_api_key'] ?? '',
+            // Catatan: pada PHP, '.' mengikat lebih kuat daripada '??', sehingga
+            // 'Bearer '.$x['k'] ?? '' tetap menghitung akses array tanpa
+            // perlindungan. Tanda kurung diperlukan.
+            'Authorization' => 'Bearer '.($this->settings['database_gabungan_api_key'] ?? ''),
         ];
         $this->baseUrl = config('app.databaseGabunganUrl');
         $this->kodeKecamatan = str_replace('.', '', config('profil.kecamatan_id'));

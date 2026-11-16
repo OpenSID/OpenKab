@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\DataSpasial;
 
 use App\Models\Setting;
+use App\Services\CakupanPenggunaService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -24,7 +25,10 @@ class DasborDataSpasialControllerTest extends TestCase
 
     private function actingAsAnalis(): void
     {
-        $this->actingAs(makeRole('analis opd', ['dataspasial-dasbor-read']));
+        $user = makeRole('analis opd', ['dataspasial-dasbor-read']);
+        // Hak akses sektor wajib (issue #1320): sektor SKX dan SK0 dipakai di tes ini.
+        app(CakupanPenggunaService::class)->simpanSektor($user->id, ['SKX', 'SK0']);
+        $this->actingAs($user);
     }
 
     private function fakeData(): void

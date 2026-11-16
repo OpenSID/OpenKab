@@ -32,11 +32,19 @@ class MonitoringDataSpasialService
      */
     public const SEMUA_KECAMATAN = 'SEMUA';
 
+    /** Penyaring wilayah pengguna untuk daftar desa (null bila tidak dibatasi). */
+    private ?\Closure $filterAkses = null;
+
     public function __construct(
         public readonly DataSpasialApiService $dataspasial,
         private readonly AdopsiDesaService $adopsi,
         private readonly ConfigApiService $configApi,
     ) {}
+
+    public function setFilterAkses(?\Closure $filter): void
+    {
+        $this->filterAkses = $filter;
+    }
 
     // -----------------------------------------------------------------------
     // Filter
@@ -87,6 +95,10 @@ class MonitoringDataSpasialService
         $sektorId = $this->sektorId($filter['sektor']);
 
         $barisAdopsi = $this->barisAdopsiSektor($ambil['baris'], $sektorId);
+        if ($this->filterAkses !== null) {
+            // Desa di luar wilayah pengguna tidak ikut dihitung (kartu, tabel, dan ringkasan).
+            $barisAdopsi = array_values(array_filter($barisAdopsi, $this->filterAkses));
+        }
         $baris = $this->susunBarisDasar($barisAdopsi, $filter['kode_kecamatan']);
 
         if ($baris === []) {
@@ -111,7 +123,7 @@ class MonitoringDataSpasialService
         ], static fn ($v) => $v !== null);
 
         $ringkasan = $this->dataspasial->ringkasan($ringkasanQuery);
-        
+
         $totalIsian = [];
         $ringkasanTersedia = ! $ringkasan->isUnavailable();
 
@@ -136,7 +148,7 @@ class MonitoringDataSpasialService
 
         $barisLengkap = [];
         $namaKecamatan = $this->petaNamaKecamatan();
-        
+
         foreach ($baris as $kodeDesa => $dasar) {
             $kodeDesa = (string) $kodeDesa; // key array numerik bisa berupa int
             $hasil = $detail[$kodeDesa] ?? null; // null = rincian tidak terbaca
@@ -275,7 +287,7 @@ class MonitoringDataSpasialService
                     $barisCsv['kode_desa'],
                     $barisCsv['nama_desa'],
                     $barisCsv['nama_kecamatan'] ?? ($barisCsv['kode_kecamatan'] ?? ''),
-                    $barisCsv['kelengkapan_persen'] ?? '',                    
+                    $barisCsv['kelengkapan_persen'] ?? '',
                     $barisCsv['skor_kualitas'] ?? $barisCsv['skor_persen'] ?? '',
                     '',
                 ], ',', '"', '\\');

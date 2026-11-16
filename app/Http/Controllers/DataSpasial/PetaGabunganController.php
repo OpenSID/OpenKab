@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\DataSpasial;
 
+use App\Services\CakupanPenggunaService;
+use App\Services\DataSpasialApiService;
 use App\Services\DataSpasialResult;
 use App\Services\PetaSkemaPopupService;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +21,13 @@ use Illuminate\View\View;
  */
 class PetaGabunganController extends DataSpasialController
 {
+    public function __construct(
+        DataSpasialApiService $dataspasial,
+        protected CakupanPenggunaService $cakupan,
+    ) {
+        parent::__construct($dataspasial);
+    }
+
     protected function pageTitle(): string
     {
         return 'Peta Gabungan';
@@ -77,6 +86,13 @@ class PetaGabunganController extends DataSpasialController
             if (isset($data[0]) && is_array($data[0]) && ($data[0]['type'] ?? null) === 'FeatureCollection') {
                 $features = $data[0]['features'] ?? [];
             }
+        }
+
+        // Sektor disaring di sini. Wilayah sudah dibatasi API lewat kode_kecamatan/kode_desa yang dipaksa middleware;
+        // fitur GeoJSON (fasilitas) tidak memuat kode desa, sehingga tidak bisa disaring per wilayah di sini.
+        $akses = $this->cakupan->filterBaris((int) $request->user()->id, true, false);
+        if ($akses !== null) {
+            $features = array_values(array_filter($features, fn ($f) => $akses(is_array($f['properties'] ?? null) ? $f['properties'] : [])));
         }
 
         $features = $this->applyIsianFilters($features, (array) $request->input('filter', []));

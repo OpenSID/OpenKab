@@ -363,8 +363,16 @@
     function init(options) {
         opts = options || {};
         readUrl();
+        // Kecamatan dari URL ikut dipilihkan bila hanya desa yang diberikan (6 digit pertama kode desa).
+        if (state.kode_desa && !state.kode_kecamatan) {
+            state.kode_kecamatan = state.kode_desa.substr(0, 6);
+        }
+        var desaDariUrl = state.kode_desa;
         isiFilterDariState();
         saringDesaByKecamatan();
+        // Desa dari URL yang tidak tersedia untuk pengguna ini dilepas; beri tahu, jangan diam-diam.
+        var desaDilepas = !!desaDariUrl && !state.kode_desa;
+
 
         var btFilter = qs('#bt-filter-audit');
         if (btFilter) btFilter.addEventListener('click', function () {
@@ -421,7 +429,17 @@
         saringDesaByKecamatan();
         setTimeout(saringDesaByKecamatan, 0);
 
+        // Tautan dengan filter (mis. ?kode_desa=...) langsung menampilkan datanya.
         muatData();
+
+        // Ditampilkan setelah muatData, karena muatData menyembunyikan panel pesan.
+        if (desaDilepas) {
+            var pesan = qs('#audit-validation');
+            if (pesan) {
+                pesan.textContent = 'Desa ' + desaDariUrl + ' tidak tersedia untuk akun Anda (di luar hak akses atau tidak ditemukan), sehingga filter desa dilepas.';
+                show('#audit-validation', true);
+            }
+        }
     }
 
     window.AuditDataSpasial = {

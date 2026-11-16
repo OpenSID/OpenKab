@@ -7,8 +7,10 @@ namespace App\Http\Controllers\DataSpasial;
 use App\Exports\AuditDataSpasialExport;
 use App\Http\Requests\DataSpasial\AuditDataRequest;
 use App\Services\AuditDataSpasialService;
+use App\Services\CakupanPenggunaService;
 use App\Services\ConfigApiService;
 use App\Services\DataSpasialResult;
+use App\Support\KodeWilayah;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -31,8 +33,17 @@ class AuditDataSpasialController extends DataSpasialController
     public function __construct(
         protected AuditDataSpasialService $audit,
         protected ConfigApiService $configApi,
+        protected CakupanPenggunaService $cakupan,
     ) {
         parent::__construct($this->audit->dataspasial);
+    }
+
+    /**
+     * Terapkan hak akses sektor & wilayah pengguna pada baris audit (issue #1320).
+     */
+    private function terapkanAkses(Request $request): void
+    {
+        $this->audit->setFilterAkses($this->cakupan->filterBaris((int) $request->user()->id));
     }
 
     protected function pageTitle(): string
@@ -53,12 +64,40 @@ class AuditDataSpasialController extends DataSpasialController
 
     public function index(Request $request): View
     {
+        $uid = (int) $request->user()->id;
+        $sektorAkses = $this->cakupan->sektorAkses($uid);
+        $sektorList = array_values(array_filter(
+            $this->daftarSektorTersimpan(),
+            fn (array $s) => $sektorAkses === null || in_array($s['kode'], $sektorAkses, true),
+        ));
+        $filterWilayah = $this->cakupan->filterBaris($uid, false);
+        $desaList = array_values(array_filter(
+            $this->daftarDesa(),
+            fn (array $d) => $filterWilayah === null || $filterWilayah($d),
+        ));
+
+        // Filter dari URL (mis. ?kode_desa=5102102003) dipilihkan di dropdown; kecamatan diturunkan dari desa.
+        $kodeDesa = $this->kodeWilayahDariQuery($request, 'kode_desa');
+        $kodeKecamatan = $this->kodeWilayahDariQuery($request, 'kode_kecamatan') ?? KodeWilayah::kecamatan($kodeDesa);
+
         return view($this->viewName(), [
             'title' => $this->pageTitle(),
             'result' => $this->fetch($request),
-            'sektorList' => $this->daftarSektorTersimpan(),
-            'desaList' => $this->daftarDesa(),
+            'sektorList' => $sektorList,
+            'desaList' => $desaList,
+            'kodeDesaTerpilih' => $kodeDesa ?? '',
+            'kodeKecamatanTerpilih' => $kodeKecamatan ?? '',
         ]);
+    }
+
+    /**
+     * Kode wilayah dari query string bila formatnya angka; selain itu null.
+     */
+    private function kodeWilayahDariQuery(Request $request, string $kunci): ?string
+    {
+        $nilai = (string) $request->query($kunci, '');
+
+        return preg_match('/^[0-9]{4,10}$/', $nilai) === 1 ? $nilai : null;
     }
 
     /**
@@ -66,6 +105,7 @@ class AuditDataSpasialController extends DataSpasialController
      */
     public function data(AuditDataRequest $request): JsonResponse
     {
+        $this->terapkanAkses($request);
         $built = $this->audit->buildHalaman($request->validated());
 
         return response()->json([
@@ -82,6 +122,12 @@ class AuditDataSpasialController extends DataSpasialController
     public function detail(Request $request, string $id): JsonResponse
     {
         $detail = $this->audit->detail($id);
+
+        // Entri di luar hak akses diperlakukan seperti tidak ditemukan.
+        $filter = $this->cakupan->filterBaris((int) $request->user()->id);
+        if ($detail !== null && $filter !== null && ! $filter($detail)) {
+            $detail = null;
+        }
 
         if ($detail === null) {
             return response()->json([
@@ -106,6 +152,7 @@ class AuditDataSpasialController extends DataSpasialController
      */
     public function ekspor(AuditDataRequest $request): BinaryFileResponse|JsonResponse
     {
+        $this->terapkanAkses($request);
         $filter = $this->audit->filter($request->validated());
         $hasil = $this->audit->barisEkspor($filter);
 

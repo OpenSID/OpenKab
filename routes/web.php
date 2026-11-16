@@ -29,6 +29,7 @@ use App\Http\Controllers\DataPresisiSeniBudayaController;
 use App\Http\Controllers\DataSpasial\AuditDataSpasialController;
 use App\Http\Controllers\DataSpasial\DasborDataSpasialController;
 use App\Http\Controllers\DataSpasial\ImporDataController;
+use App\Http\Controllers\DataSpasial\ListImporController;
 use App\Http\Controllers\DataSpasial\MonitoringController;
 use App\Http\Controllers\DataSpasial\PetaGabunganController;
 use App\Http\Controllers\DataSpasial\SkemaDataSpasialController;
@@ -80,6 +81,7 @@ use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\Web\SearchController;
+use App\Http\Middleware\AksesDataSpasialMiddleware;
 use App\Http\Middleware\KabupatenMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
 use App\Http\Middleware\WilayahMiddleware;
@@ -485,7 +487,7 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     // melalui App\Services\DataSpasialApiService (FR-002). Kontrol akses
     // ditegakkan server-side lewat middleware permission, bukan sekadar
     // menyembunyikan menu (FR-013).
-    Route::prefix('dataspasial')->group(function () {
+    Route::prefix('dataspasial')->middleware(AksesDataSpasialMiddleware::class)->group(function () {
         Route::get('skema', [SkemaDataSpasialController::class, 'index'])
             ->middleware('permission:dataspasial-skema-read')
             ->name('dataspasial.skema');
@@ -574,6 +576,15 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::post('impor/simpan/{impor_id}', [ImporDataController::class, 'save'])
             ->middleware('permission:dataspasial-impor-read')
             ->name('dataspasial.impor.simpan');
+        Route::get('impor/daftar', [ListImporController::class, 'index'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.daftar');
+        Route::get('impor/daftar/data', [ListImporController::class, 'data'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.daftar.data');
+        Route::get('impor/daftar/versi', [ListImporController::class, 'versi'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.daftar.versi');
 
         Route::get('monitoring', [MonitoringController::class, 'index'])
             ->middleware('permission:dataspasial-monitoring-read')

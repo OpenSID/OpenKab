@@ -1,0 +1,10 @@
+{
+  "data": [
+    {"type": "daftar nilai DataSpasial", "id": "5249824", "attributes": {"fasilitas_id": 691, "isian_kode": "bidan", "isian_label": "bidan", "isian_tipe": "angka", "isian_satuan": "orang", "isian_opsi": null, "nilai": 15, "sumber_data": "impor", "periode": "2026-11", "waktu_input": "2026-11-03 09:06:34", "skema_versi": {"id": 12908, "nomor_versi": 1, "status": "terbit"}, "sektor": {"id": 6758, "kode": "kesehatan", "nama": "kesehatan"}}},
+    {"type": "daftar nilai DataSpasial", "id": "5249825", "attributes": {"fasilitas_id": 692, "isian_kode": "bidan", "isian_label": "bidan", "isian_tipe": "angka", "isian_satuan": "orang", "isian_opsi": null, "nilai": 5, "sumber_data": "impor", "periode": "2026-11", "waktu_input": "2026-11-03 09:06:34", "skema_versi": {"id": 12908, "nomor_versi": 1, "status": "terbit"}, "sektor": {"id": 6758, "kode": "kesehatan", "nama": "kesehatan"}}},
+    {"type": "daftar nilai DataSpasial", "id": "5249826", "attributes": {"fasilitas_id": 692, "isian_kode": "dokter", "isian_label": "dokter", "isian_tipe": "angka", "isian_satuan": "orang", "isian_opsi": null, "nilai": null, "sumber_data": "impor", "periode": "2026-11", "waktu_input": "2026-11-03 09:06:34", "skema_versi": {"id": 12908, "nomor_versi": 1, "status": "terbit"}, "sektor": {"id": 6758, "kode": "kesehatan", "nama": "kesehatan"}}},
+    {"type": "daftar nilai DataSpasial", "id": "5249827", "attributes": {"fasilitas_id": 691, "isian_kode": "bidan", "isian_label": "bidan", "isian_tipe": "angka", "isian_satuan": "orang", "isian_opsi": null, "nilai": 3, "sumber_data": "desa", "periode": "2026-11", "waktu_input": "2026-11-03 09:06:34", "skema_versi": {"id": 12908, "nomor_versi": 1, "status": "terbit"}, "sektor": {"id": 6758, "kode": "kesehatan", "nama": "kesehatan"}}}
+  ],
+  "meta": {"pagination": {"total": 4, "count": 4, "per_page": 100, "current_page": 1, "total_pages": 1}},
+  "links": {"self": "http://127.0.0.1:8001/api/v1/dataspasial/nilai?page=1", "first": "http://127.0.0.1:8001/api/v1/dataspasial/nilai?page=1", "last": "http://127.0.0.1:8001/api/v1/dataspasial/nilai?page=1"}
+}

@@ -216,7 +216,6 @@ class ImporDataController extends DataSpasialController
             || ! ($preview['ringkasan']['bisa_disimpan'] ?? false)) {
             return response()->json(['success' => false, 'message' => 'Lakukan pratinjau lokasi yang valid sebelum menyimpan impor.'], 422);
         }
-
         $result = $this->dataspasial->imporSimpan($imporId, $request->all());
 
         if ($result->isUnavailable()) {

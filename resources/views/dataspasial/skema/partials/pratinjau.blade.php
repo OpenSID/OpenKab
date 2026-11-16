@@ -20,7 +20,11 @@
             <div class="font-weight-bold" id="nama-sektor-pratinjau">{{ $sektorTerpilih['nama'] ?? 'Belum diisi' }}</div>
         </div>
         <hr class="my-2">
-        <div id="wadah-pratinjau" data-testid="wadah-pratinjau"></div>
+        <div id="wadah-pratinjau" data-testid="wadah-pratinjau">
+            @if (empty($sektorTerpilih))
+                <p class="text-muted text-center small mb-0">Pratinjau formulir akan muncul setelah sektor dipilih.</p>
+            @endif
+        </div>
         <noscript>
             <div class="alert alert-secondary border-0 py-2 px-2 mb-0 small">
                 Pratinjau live memerlukan JavaScript.

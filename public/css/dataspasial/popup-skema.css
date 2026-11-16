@@ -1,0 +1,247 @@
+.dataspasial-leaflet-popup .leaflet-popup-content-wrapper {
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(15, 23, 42, .2);
+}
+
+.dataspasial-leaflet-popup .leaflet-popup-content {
+    width: 360px;
+    max-width: calc(100vw - 64px);
+    margin: 0;
+    overflow-y: auto;
+}
+
+.dataspasial-leaflet-popup a.leaflet-popup-close-button {
+    top: 10px;
+    right: 11px;
+    color: #64748b;
+    font-size: 21px;
+}
+
+.peta-popup {
+    box-sizing: border-box;
+    padding: 18px;
+    color: #253449;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.dataspasial-popup-header {
+    padding-right: 22px;
+}
+
+.dataspasial-popup-eyebrow,
+.dataspasial-popup-section-title {
+    color: #52657b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.dataspasial-popup-title {
+    margin: 4px 0 0;
+    color: #162a42;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.dataspasial-popup-description {
+    margin: 6px 0 0 !important;
+    color: #52657b;
+    line-height: 1.45;
+}
+
+.dataspasial-popup-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 9px;
+}
+
+.dataspasial-popup-tag {
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: #eaf3fb;
+    color: #205a88;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.dataspasial-popup-tag-sector {
+    background: #edf6f1;
+    color: #28664d;
+}
+
+.dataspasial-popup-location,
+.dataspasial-popup-fields {
+    margin: 0;
+}
+
+.dataspasial-popup-location {
+    margin-top: 13px;
+    padding: 9px 11px;
+    border-radius: 7px;
+    background: #f5f8fb;
+}
+
+.dataspasial-popup-location-row,
+.dataspasial-popup-field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 12px;
+}
+
+.dataspasial-popup-location-row + .dataspasial-popup-location-row {
+    margin-top: 4px;
+}
+
+.dataspasial-popup-location dt,
+.dataspasial-popup-location dd,
+.dataspasial-popup-fields dt,
+.dataspasial-popup-fields dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.dataspasial-popup-location dt,
+.dataspasial-popup-fields dt {
+    color: #52657b;
+    font-weight: 400;
+}
+
+.dataspasial-popup-location dd,
+.dataspasial-popup-fields dd {
+    color: #162a42;
+    font-weight: 600;
+    text-align: right;
+}
+
+.dataspasial-popup-skema {
+    margin-top: 16px;
+    overflow-wrap: anywhere;
+}
+
+.dataspasial-popup-section-title {
+    margin: 0 0 8px;
+}
+
+.dataspasial-popup-notice {
+    padding: 10px 12px;
+    border-radius: 7px;
+    background: #f5f8fb;
+    color: #52657b;
+    font-size: 12px;
+}
+
+.peta-popup > .dataspasial-popup-notice {
+    margin-top: 16px;
+}
+
+.dataspasial-popup-notice + .dataspasial-popup-group {
+    margin-top: 8px;
+}
+
+.dataspasial-popup-group {
+    overflow: hidden;
+    border: 1px solid #dce5ed;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.dataspasial-popup-group + .dataspasial-popup-group {
+    margin-top: 8px;
+}
+
+.dataspasial-popup-group summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    color: #205a88;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+}
+
+.dataspasial-popup-group summary::-webkit-details-marker {
+    display: none;
+}
+
+.dataspasial-popup-group summary::after {
+    width: 7px;
+    height: 7px;
+    flex: none;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    content: "";
+    transform: rotate(45deg);
+}
+
+.dataspasial-popup-group[open] summary::after {
+    transform: rotate(225deg);
+}
+
+.dataspasial-popup-group summary:focus-visible,
+.dataspasial-popup-period:focus-visible {
+    outline: 2px solid #277bc0;
+    outline-offset: -2px;
+}
+
+.dataspasial-popup-group-body {
+    padding: 0 12px 12px;
+}
+
+.dataspasial-popup-facility {
+    margin-bottom: 8px;
+    color: #52657b;
+    font-size: 12px;
+}
+
+.dataspasial-popup-period-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 8px;
+    color: #52657b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.dataspasial-popup-period {
+    width: auto;
+    max-width: 60%;
+    min-height: 32px;
+    padding: 4px 8px;
+    border: 1px solid #cbd7e2;
+    border-radius: 6px;
+    background: #fff;
+    color: #253449;
+    font: inherit;
+}
+
+.dataspasial-popup-field {
+    padding: 7px 0;
+    border-top: 1px solid #edf1f5;
+}
+
+.dataspasial-popup-fields dd.dataspasial-popup-field-empty {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.dataspasial-popup-source {
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 11px;
+}
+
+.dataspasial-popup-group [data-popup-period][hidden] {
+    display: none !important;
+}

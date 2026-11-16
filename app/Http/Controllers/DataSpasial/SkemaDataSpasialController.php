@@ -125,6 +125,64 @@ class SkemaDataSpasialController extends DataSpasialController
         ]);
     }
 
+    public function ubahNamaSektor(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'sektor' => ['required', 'string', 'max:50'],
+            'sektor_nama' => ['required', 'string', 'max:100'],
+        ]);
+
+        $nama = trim($data['sektor_nama']);
+        if ($nama === '') {
+            return response()->json(['message' => 'Nama sektor wajib diisi.'], 422);
+        }
+
+        $result = $this->dataspasial->ubahNamaSektor($data['sektor'], $nama);
+        $item = $result->first();
+        if ($result->isUnavailable() || ($item['type'] ?? null) !== 'ds_sektor'
+            || ($item['attributes']['kode'] ?? null) !== $data['sektor']
+            || ($item['attributes']['nama'] ?? null) !== $nama) {
+            Log::warning('DataSpasial: perubahan nama sektor gagal atau tidak dikonfirmasi', [
+                'sektor' => $data['sektor'],
+                'http_status' => $result->httpStatus,
+            ]);
+
+            return response()->json(['success' => false, 'message' => 'Nama sektor belum dapat disimpan. Silakan coba lagi nanti.'], 503);
+        }
+
+        return response()->json(['success' => true, 'sektor' => $data['sektor']]);
+    }
+
+    public function batalkanDraf(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'sektor' => ['required', 'string', 'max:50'],
+            'nomor_draf' => ['required', 'integer', 'min:1'],
+            'nomor_terbit' => ['required', 'integer', 'min:1'],
+        ]);
+        $nomorDraf = (int) $data['nomor_draf'];
+        $nomorTerbit = (int) $data['nomor_terbit'];
+        $result = $this->dataspasial->batalkanDrafTanpaPerubahan($data['sektor'], $nomorDraf, $nomorTerbit);
+        $item = $result->first();
+        $atribut = $item['attributes'] ?? [];
+
+        if ($result->isUnavailable() || ($item['type'] ?? null) !== 'pembatalan_draf'
+            || ($atribut['sektor'] ?? null) !== $data['sektor']
+            || ($atribut['nomor_draf'] ?? null) !== $nomorDraf
+            || ($atribut['nomor_terbit'] ?? null) !== $nomorTerbit) {
+            Log::warning('DataSpasial: pembatalan draf gagal atau tidak dikonfirmasi', [
+                'sektor' => $data['sektor'], 'http_status' => $result->httpStatus,
+            ]);
+            $pesan = $result->httpStatus === 422 && $result->message
+                ? $result->message
+                : 'Draf belum dapat dibatalkan. Silakan coba lagi nanti.';
+
+            return response()->json(['success' => false, 'message' => $pesan], 422);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
     /**
      * Simpan draf skema (FR-029 … FR-033, Q18/Q19/Q20/Q23).
      *
@@ -253,7 +311,9 @@ class SkemaDataSpasialController extends DataSpasialController
             return response()->json([
                 'success' => false,
                 'tanpa_perubahan' => true,
-                'message' => 'Tidak ada perubahan untuk diterbitkan pada draf ini.',
+                'message' => 'Draf tidak memiliki perubahan. Versi terbit sebelumnya tetap berlaku.',
+                'nomor_draf' => $nomorDraf,
+                'nomor_terbit' => $versiTerbit['nomor_versi'] ?? null,
             ], 422);
         }
 

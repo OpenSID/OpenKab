@@ -15,6 +15,7 @@ class ImporDataSpasialTemplateExport
     public const SHEET_DATA = 'Data Impor';
     public const SHEET_DESA = 'Daftar Desa';
     public const SHEET_PETUNJUK = 'Petunjuk';
+    public const SHEET_LOKASI = 'Daftar Lokasi';
 
     private const DATA_START_ROW = 9;
 
@@ -29,6 +30,7 @@ class ImporDataSpasialTemplateExport
         private string $sektor = '',
         private string $periode = '',
         private array $fasilitas = [],
+        private array $lokasi = [],
     ) {}
 
     /**
@@ -62,8 +64,10 @@ class ImporDataSpasialTemplateExport
         $writer->addRow(Row::fromValues(['1. Isi kolom sesuai dengan data yang dimiliki.']));
         $writer->addRow(Row::fromValues(['2. Pilih desa pada kolom pertama dari daftar dropdown (jika tersedia).']));
         $writer->addRow(Row::fromValues(['3. Isi kode_fasilitas dan nama_fasilitas sesuai data.']));
-        $writer->addRow(Row::fromValues(['4. Kolom lainnya diisi sesuai skema terbit untuk sektor yang dipilih.']));
-        $writer->addRow(Row::fromValues(['5. Jangan mengubah nama sheet atau header kolom.']));
+        $writer->addRow(Row::fromValues(['4. Pilih lokasi pada kolom lokasi_id dari daftar lokasi di desa yang sama.']));
+        $writer->addRow(Row::fromValues(['5. Kolom lainnya diisi sesuai skema terbit untuk sektor yang dipilih.']));
+        $writer->addRow(Row::fromValues(['6. Jangan mengubah nama sheet atau header kolom.']));
+        $writer->addRow(Row::fromValues(['Jika lokasi belum tersedia, daftarkan lokasi beserta koordinatnya di peta terlebih dahulu.']));
         if ($this->sektor) {
             $writer->addRow(Row::fromValues(['']));
             $writer->addRow(Row::fromValues(['Sektor: '.$this->sektor]));
@@ -81,7 +85,7 @@ class ImporDataSpasialTemplateExport
         $writer->addRow(Row::fromValues(['']));
         $writer->addRow(Row::fromValues(['']));
 
-        $header = ['kode_desa', 'kode_fasilitas', 'nama_fasilitas'];
+        $header = ['kode_desa', 'kode_fasilitas', 'nama_fasilitas', 'lokasi_id'];
         foreach ($this->items as $item) {
             $header[] = self::headerKey($item);
         }
@@ -89,12 +93,17 @@ class ImporDataSpasialTemplateExport
         $writer->addRow(Row::fromValues($header), $headerStyle);
 
         // Baris data fasilitas yang sudah ada: pengguna cukup mengedit atau menambah baris.
-        $isianColumns = array_slice($header, 3);
+        $isianColumns = array_slice($header, 4);
+        $lokasiLabels = [];
+        foreach ($this->lokasi as $lokasi) {
+            $lokasiLabels[$lokasi['id']] = $this->labelLokasi($lokasi);
+        }
         foreach ($this->fasilitas as $fasilitas) {
             $values = [
                 (string) $fasilitas['kode_desa'],
                 (string) $fasilitas['kode_fasilitas'],
                 (string) $fasilitas['nama_fasilitas'],
+                $lokasiLabels[$fasilitas['lokasi_id'] ?? ''] ?? (string) ($fasilitas['lokasi_id'] ?? ''),
             ];
             foreach ($isianColumns as $column) {
                 $values[] = $fasilitas['nilai'][$column] ?? '';
@@ -137,8 +146,22 @@ class ImporDataSpasialTemplateExport
             $writer->addRow(Row::fromValues([(string) $kode, (string) $nama, (string) $kode.' - '.(string) $nama]));
         }
 
+        $writer->addNewSheetAndMakeItCurrent();
+        $writer->getCurrentSheet()->setName(self::SHEET_LOKASI);
+        $writer->addRow(Row::fromValues(['Lokasi', 'Kode Desa', 'Desa', 'Jenis Peta'], (new Style)->setFontBold()));
+        foreach ($this->lokasi as $lokasi) {
+            $writer->addRow(Row::fromValues([
+                $this->labelLokasi($lokasi), $lokasi['kode_desa'], $lokasi['nama_desa'], $lokasi['kategori'],
+            ]));
+        }
+
         $writer->close();
         $this->injectDesaDropdown($filePath);
+    }
+
+    private function labelLokasi(array $lokasi): string
+    {
+        return $lokasi['id'].' - '.$lokasi['nama'].' ('.$lokasi['nama_desa'].')';
     }
 
     protected function injectDesaDropdown(string $filePath): void
@@ -147,10 +170,7 @@ class ImporDataSpasialTemplateExport
         if (is_object($desaList) && method_exists($desaList, 'toArray')) {
             $desaList = $desaList->toArray();
         }
-        if (! is_array($desaList) || $desaList === []) {
-            return;
-        }
-        $this->desaList = $desaList; // normalize for count below
+        $desaList = is_array($desaList) ? $desaList : [];
 
         $zip = new ZipArchive;
         if ($zip->open($filePath) !== true) {
@@ -171,12 +191,23 @@ class ImporDataSpasialTemplateExport
         // Baris header berada di baris 8 pada sheet Data Impor; data mulai di baris 9.
         $dataStartRow = self::DATA_START_ROW;
         $lastRow = $dataStartRow + 999;
-        $lastDesaRow = count($this->desaList) + 1;
-        $formula = sprintf("'%s'!\$C\$2:\$C\$%d", self::SHEET_DESA, $lastDesaRow);
+        $validations = [];
+        if ($desaList !== []) {
+            $formula = sprintf("'%s'!\$C\$2:\$C\$%d", self::SHEET_DESA, count($desaList) + 1);
+            $validations[] = '<dataValidation type="list" allowBlank="1" showErrorMessage="1" errorStyle="stop" errorTitle="Desa tidak valid" error="Pilih desa dari daftar." sqref="A'.$dataStartRow.':A'.$lastRow.'"><formula1>'
+                .htmlspecialchars($formula, ENT_XML1 | ENT_QUOTES, 'UTF-8').'</formula1></dataValidation>';
+        }
+        if ($this->lokasi !== []) {
+            $formula = sprintf("INDIRECT(\"'%s'!\$A\$2:\$A\$%d\")", self::SHEET_LOKASI, count($this->lokasi) + 1);
+            $validations[] = '<dataValidation type="list" allowBlank="0" showErrorMessage="1" errorStyle="stop" errorTitle="Lokasi tidak valid" error="Pilih lokasi dari daftar." sqref="D'.$dataStartRow.':D'.$lastRow.'"><formula1>'
+                .htmlspecialchars($formula, ENT_XML1 | ENT_QUOTES, 'UTF-8').'</formula1></dataValidation>';
+        }
+        if ($validations === []) {
+            $zip->close();
 
-        $validation = '<dataValidations count="1"><dataValidation type="list" allowBlank="1" showInputMessage="1" showErrorMessage="1" errorStyle="stop" errorTitle="Desa tidak valid" error="Pilih desa dari daftar." sqref="A'.$dataStartRow.':A'.$lastRow.'"><formula1>'
-            .htmlspecialchars($formula, ENT_XML1 | ENT_QUOTES, 'UTF-8')
-            .'</formula1></dataValidation></dataValidations>';
+            return;
+        }
+        $validation = '<dataValidations count="'.count($validations).'">'.implode('', $validations).'</dataValidations>';
 
         // dataValidations wajib berada setelah </sheetData>; baris tidak boleh ditambahkan di luar sheetData.
         $pos = strpos($xml, '</sheetData>');

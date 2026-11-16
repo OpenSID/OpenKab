@@ -31,6 +31,16 @@ class PemetaanService extends BaseApiService
         return is_array($data) ? $data : null;
     }
 
+    public function getCoordinates(): array
+    {
+        $data = $this->apiGet('/api/v1/plan/get-list-coordinate');
+        if (! is_array($data) || ! array_is_list($data)) {
+            throw new \UnexpectedValueException('Respons koordinat peta tidak valid.');
+        }
+
+        return $data;
+    }
+
     public function planStore(array $data): ?array
     {
         return $this->apiPost('/api/v1/plan/store', $data);

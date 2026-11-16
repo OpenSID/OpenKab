@@ -496,6 +496,14 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             ->middleware('permission:dataspasial-skema-write')
             ->name('dataspasial.skema.draf.store');
 
+        Route::post('skema/nama-sektor', [SkemaDataSpasialController::class, 'ubahNamaSektor'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.nama-sektor');
+
+        Route::post('skema/draf/batalkan', [SkemaDataSpasialController::class, 'batalkanDraf'])
+            ->middleware('permission:dataspasial-skema-write')
+            ->name('dataspasial.skema.draf.batalkan');
+
         Route::post('skema/terbit', [SkemaDataSpasialController::class, 'terbit'])
             ->middleware('permission:dataspasial-skema-write')
             ->name('dataspasial.skema.terbit');
@@ -541,6 +549,9 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::get('dasbor/data', [DasborDataSpasialController::class, 'data'])
         ->middleware('permission:dataspasial-dasbor-read')
         ->name('dataspasial.dasbor.data');
+    Route::get('dasbor/peta/data', [PetaGabunganController::class, 'data'])
+        ->middleware('permission:dataspasial-dasbor-read')
+        ->name('dataspasial.dasbor.peta.data');
     Route::get('dasbor/ekspor', [DasborDataSpasialController::class, 'ekspor'])
         ->middleware('permission:dataspasial-dasbor-read')
         ->name('dataspasial.dasbor.export');
@@ -610,6 +621,8 @@ Route::prefix('presisi')->middleware('check.presisi')->group(function () {
     Route::get('/bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan');
     Route::get('/statistik-bantuan', [PresisiController::class, 'bantuan'])->name('presisi.bantuan_statistik_outer');
     Route::get('/geo-spasial', [PresisiController::class, 'geoSpasial'])->name('presisi.geo-spasial');
+    Route::get('/geo-spasial/skema', [PresisiController::class, 'geoSpasialSkema'])
+        ->middleware('throttle:60,1')->name('presisi.geo-spasial.skema');
 });
 
 Route::middleware(['website.enable', 'log.visitor'])->group(function () {

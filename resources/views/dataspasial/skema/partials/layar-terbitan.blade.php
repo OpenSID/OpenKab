@@ -33,7 +33,14 @@
 
                 <div class="d-none" data-testid="terbitan-isi">
                     <div class="alert alert-warning d-none" data-testid="terbitan-gagal" role="alert"></div>
+                    <div class="d-none mb-3" data-testid="batalkan-draf-wrap">
+                        <button type="button" class="btn btn-warning btn-sm" data-testid="btn-batalkan-draf">
+                            Batalkan draf tanpa perubahan
+                        </button>
+                        <small class="text-muted ml-2">Versi terbit sebelumnya tetap berlaku.</small>
+                    </div>
 
+                    <div data-testid="terbitan-detail">
                     <div class="card card-outline card-primary mb-3">
                         <div class="card-header py-2">
                             <h3 class="card-title">Ringkasan Perubahan</h3>
@@ -87,6 +94,7 @@
                         </div>
                         <div class="card-body p-0" data-testid="tabel-adopsi"></div>
                         <div class="card-footer py-1 bg-white d-none" data-testid="adopsi-navigasi"></div>
+                    </div>
                     </div>
                 </div>
             </div>

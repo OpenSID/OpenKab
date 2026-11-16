@@ -568,6 +568,25 @@ class DataSpasialApiService
         return $this->request('POST', 'skema', [], $body, $schemaVersion);
     }
 
+    public function ubahNamaSektor(string $sektor, string $nama): DataSpasialResult
+    {
+        return $this->request('POST', 'skema', [], [
+            'aksi' => 'ubah_nama_sektor',
+            'sektor' => $sektor,
+            'sektor_nama' => $nama,
+        ]);
+    }
+
+    public function batalkanDrafTanpaPerubahan(string $sektor, int $nomorDraf, int $nomorTerbit): DataSpasialResult
+    {
+        return $this->request('POST', 'skema', [], [
+            'aksi' => 'batalkan_draf_tanpa_perubahan',
+            'sektor' => $sektor,
+            'nomor_draf' => $nomorDraf,
+            'nomor_terbit' => $nomorTerbit,
+        ]);
+    }
+
     /**
      * Terbitkan draf skema menjadi versi `terbit` yang immutable.
      *

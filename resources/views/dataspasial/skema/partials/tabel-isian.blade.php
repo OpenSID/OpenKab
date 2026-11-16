@@ -1,5 +1,5 @@
 {{--
-    Panel tengah: tabel isian (FR-013).
+    Panel editor: tabel isian (FR-013).
 
     ⚠️ Kolom **Kode tidak lagi ditampilkan** (FR-017/Q14). `kode` adalah nilai
     turunan dari `label` yang dibuat otomatis oleh aplikasi, sehingga tidak ada
@@ -8,9 +8,7 @@
     Kolom memuat: label, tipe, wajib, satuan, sumber nilai (manual atau
     otomatis), popup peta, filter, dan indikator.
 
-    ⚠️ Kolom **Pilihan (opsi)** tidak lagi ditampilkan karena tidak dipakai
-    pada editor ini; nilai opsi yang sudah tersimpan di API tetap dikirim ulang
-    lewat atribut `data-opsi` agar tidak hilang.
+    Pilihan untuk tipe `pilihan` disunting melalui dialog pada kolom tipe.
 
     Kolom popup/filter/indikator & sumber nilai diisi penuh pada US4/US5;
     kolomnya sudah disiapkan sejak US1 agar tata letak tidak berubah
@@ -36,12 +34,20 @@
             <label class="mb-1" for="input-sektor-nama-editor">
                 Nama sektor <span class="text-danger">*</span>
             </label>
-            <input type="text"
-                   class="form-control form-control-sm {{ $errors->has('sektor_nama') ? 'is-invalid' : '' }}"
-                   id="input-sektor-nama-editor" data-testid="input-sektor-nama-editor"
-                   name="sektor_nama" maxlength="100" autocomplete="off"
-                   value="{{ old('sektor_nama', $sektorTerpilih['nama'] ?? '') }}"
-                   @disabled(! $bolehUbah)>
+            <div class="input-group input-group-sm">
+                <input type="text"
+                       class="form-control {{ $errors->has('sektor_nama') ? 'is-invalid' : '' }}"
+                       id="input-sektor-nama-editor" data-testid="input-sektor-nama-editor"
+                       name="sektor_nama" maxlength="100"
+                       value="{{ old('sektor_nama', $sektorTerpilih['nama'] ?? '') }}"
+                       readonly>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-outline-secondary" id="btn-ubah-nama-sektor"
+                            @disabled(! $bolehUbah)>
+                        <i class="fas fa-pen mr-1"></i>Ubah nama
+                    </button>
+                </div>
+            </div>
             @error('sektor_nama')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
@@ -101,11 +107,11 @@
 
     <div class="card-body p-0">
         @if ($sektorTerpilih === null)
-            <p class="text-muted text-center my-4 px-2 mb-0" data-testid="isian-belum-pilih-sektor">
+            <p class="text-muted text-center my-4 px-2 mb-0" id="isian-belum-pilih-sektor" data-testid="isian-belum-pilih-sektor">
                 Pilih salah satu sektor untuk menyusun isiannya.
             </p>
         @elseif (count($isian) === 0)
-            <p class="text-muted text-center my-4 px-2 mb-0" data-testid="isian-kosong">
+            <p class="text-muted text-center my-4 px-2 mb-0" id="isian-kosong" data-testid="isian-kosong">
                 Belum ada isian pada skema ini. Tekan <strong>Tambah Isian Baru</strong> untuk
                 menambahkan kolom formulir pertama.
             </p>
@@ -158,8 +164,6 @@
         sudah ada kontrolnya dikunci oleh `kunciKontrolIsian()` (FR-008a).
     --}}
     <template id="template-baris-isian">
-        {{-- `data-opsi` diisi `[]` agar `bacaDariDom()` tetap mengirim array
-             kosong untuk baris baru (kolom Pilihan tidak lagi ditampilkan). --}}
         <tr class="baris-baru" draggable="false" data-opsi="[]">
             <td class="text-center handle-seret align-middle" title="Seret untuk mengurutkan">
                 <i class="fas fa-grip-vertical text-muted"></i>
@@ -173,6 +177,9 @@
                         <option value="{{ $tipe }}">{{ $tipe }}</option>
                     @endforeach
                 </select>
+                <button type="button" class="btn btn-outline-primary btn-sm btn-atur-opsi mt-1 d-none">
+                    Atur pilihan
+                </button>
             </td>
             <td class="text-center"><input type="checkbox" class="input-wajib"></td>
             <td><input type="text" class="form-control form-control-sm input-satuan" maxlength="50" placeholder="orang"></td>

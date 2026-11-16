@@ -184,16 +184,65 @@
     history.replaceState(null, null, s ? '?' + s : window.location.pathname);
   }
 
+  function loadMap(rid) {
+    var peta = window.PetaGabungan;
+    if (!peta) {
+      var alert = document.getElementById('map-unavailable');
+      if (alert) alert.style.display = '';
+      console.error('Peta DataSpasial tidak dapat dimuat.');
+      return;
+    }
+
+    var params = new URLSearchParams();
+    if (state.kecamatan) params.set('kode_kecamatan', state.kecamatan);
+    if (state.desa) params.set('kode_desa', state.desa);
+    if (state.sektor) params.set('sektor', state.sektor);
+    if (state.periode) params.set('periode', state.periode);
+
+    try {
+      peta.init({ mapId: 'map' });
+    } catch (error) {
+      console.error('Peta DataSpasial tidak dapat diinisialisasi.', error);
+      peta.unavailable();
+      return;
+    }
+
+    fetch(window.DasborDataSpasial.opts.petaUrl + '?' + params.toString(), {
+      headers: { 'Accept': 'application/json' }, credentials: 'same-origin'
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.json();
+      })
+      .then(function (data) {
+        if (rid !== state.last) return;
+        if (data.meta && data.meta.unavailable) {
+          peta.unavailable(data.meta.message);
+          return;
+        }
+        peta.render(data, data.meta);
+      })
+      .catch(function (error) {
+        if (rid !== state.last) return;
+        console.error('Data peta tidak dapat dimuat.', error);
+        peta.unavailable();
+      });
+  }
+
   function load() {
     var rid = ++state.last;
     var params = new URLSearchParams();
     FILTER_KEYS.forEach(function (k) { if (state[k]) params.set(k, state[k]); });
     if (state.kecamatan) params.set('kode_kecamatan', state.kecamatan);
     if (state.desa) params.set('kode_desa', state.desa);
+    loadMap(rid);
     fetch(window.DasborDataSpasial.opts.dataUrl + '?' + params.toString(), {
       headers: { 'Accept': 'application/json' }, credentials: 'same-origin'
     })
-      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
       .then(function (j) {
         if (rid !== state.last) return;
         setText('dasbor-kartu', cardHtml(j.kartu || []));
@@ -232,30 +281,14 @@
           }
         }
         syncUrl();
-
-        if (window.PetaGabungan) {
-          var petaParams = new URLSearchParams();
-          if (state.kecamatan) petaParams.set('kode_kecamatan', state.kecamatan);
-          if (state.desa) petaParams.set('kode_desa', state.desa);
-          if (state.sektor) petaParams.set('sektor', state.sektor);
-          if (state.periode) petaParams.set('periode', state.periode);
-          fetch(window.DasborDataSpasial.opts.petaUrl + '?' + petaParams.toString(), { credentials: 'same-origin' })
-            .then(function (x) { return x.json(); })
-            .then(function (p) {
-              if (p.meta && p.meta.unavailable) {
-                if (typeof window.PetaGabungan.unavailable === 'function') window.PetaGabungan.unavailable(p.meta.message);
-                return;
-              }
-              if (typeof window.PetaGabungan.init === 'function' && !window._dasborPetaInit) {
-                try { window.PetaGabungan.init({ mapId: 'map' }); window._dasborPetaInit = true; } catch (e) { /* noop */ }
-              }
-              if (typeof window.PetaGabungan.render === 'function') window.PetaGabungan.render(p, p.meta);
-              if (p.meta && p.meta.empty && typeof window.PetaGabungan.empty === 'function') window.PetaGabungan.empty();
-            })
-            .catch(function () { if (typeof window.PetaGabungan.unavailable === 'function') window.PetaGabungan.unavailable(); });
-        }
       })
-      .catch(function () { });
+      .catch(function (error) {
+        if (rid !== state.last) return;
+        console.error('Data dasbor tidak dapat dimuat.', error);
+        setText('dasbor-kartu', '<div class="col-12 text-warning small">Data dasbor sementara tidak tersedia.</div>');
+        setText('dasbor-tabel-baris', '');
+        renderChartsHint('Data dasbor sementara tidak tersedia.');
+      });
   }
 
   function clearDashboard() {
@@ -266,8 +299,6 @@
     renderChartsHint('Pilih filter dan klik Tampilkan untuk melihat data.');
     if (window.PetaGabungan && typeof window.PetaGabungan.clear === 'function') {
       try { window.PetaGabungan.clear(); } catch (e) { /* noop */ }
-    } else if (window.PetaGabungan && typeof window.PetaGabungan.unavailable === 'function') {
-      try { window.PetaGabungan.unavailable('Pilih filter dan klik Tampilkan untuk melihat data.'); } catch (e) { /* noop */ }
     }
   }
 
@@ -287,12 +318,13 @@
 
       var r = qs('#peta-reset');
       if (r) r.onclick = function () {
-        state = { kecamatan: '', desa: '', sektor: '', periode: '', indikator: '', page: 1, last: state.last };
+        state = { kecamatan: '', desa: '', sektor: '', periode: '', indikator: '', page: 1, last: state.last + 1 };
         FILTER_KEYS.forEach(function (k) { var el = qs('#filter_' + k); if (el) { el.value = ''; if (k === 'indikator') { el.disabled = true; fillSelect(el, [], '', 'Pilih sektor terlebih dahulu'); } } });
         var selInd = qs('#filter_indikator');
         if (selInd) { selInd.disabled = true; fillSelect(selInd, [], '', 'Pilih sektor terlebih dahulu'); }
         loadDesa(false);
         clearDashboard();
+        loadMap(state.last);
         history.replaceState(null, null, window.location.pathname);
       };
 
@@ -382,6 +414,8 @@
       if (hasQuery) {
         state.page = 1;
         load();
+      } else {
+        loadMap(++state.last);
       }
     }
   };

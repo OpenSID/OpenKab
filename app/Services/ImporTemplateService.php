@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Exports\ImporDataSpasialTemplateExport;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Menyusun berkas templat impor DataSpasial (XLSX) beserta data fasilitas
@@ -22,6 +23,7 @@ class ImporTemplateService
     public function __construct(
         private DataSpasialApiService $dataspasial,
         private ConfigApiService $configApiService,
+        private PemetaanService $pemetaan,
     ) {}
 
     /**
@@ -31,12 +33,50 @@ class ImporTemplateService
     {
         $desaList = $this->daftarDesa($kecamatan);
         $items = $this->itemIsian($sektor);
+        foreach ($items as $item) {
+            if (ImporDataSpasialTemplateExport::headerKey($item) === 'lokasi_id') {
+                throw ValidationException::withMessages(['sektor' => 'Kode isian lokasi_id digunakan untuk hubungan lokasi dan tidak dapat digunakan sebagai kode isian skema.']);
+            }
+        }
         $fasilitas = $this->fasilitasBerjalan($sektor, $kecamatan, $periode, $desaList);
+        $lokasi = $this->daftarLokasi($desaList);
 
         $tempFile = tempnam(sys_get_temp_dir(), 'tmpl_');
-        (new ImporDataSpasialTemplateExport($desaList, $items, $sektor, $periode, $fasilitas))->write($tempFile);
+        (new ImporDataSpasialTemplateExport($desaList, $items, $sektor, $periode, $fasilitas, $lokasi))->write($tempFile);
 
         return $tempFile;
+    }
+
+    /**
+     * @param  array<int, array{kode_desa: string, nama_desa: string}>  $desaList
+     * @return array<int, array{id: string, nama: string, kode_desa: string, nama_desa: string, kategori: string}>
+     */
+    public function daftarLokasi(array $desaList): array
+    {
+        $cakupan = array_fill_keys(array_column($desaList, 'kode_desa'), true);
+        $hasil = [];
+        foreach ($this->pemetaan->getCoordinates() as $item) {
+            $id = $item['id'] ?? null;
+            $desa = (string) ($item['config']['kode_desa'] ?? '');
+            $lat = $item['lat'] ?? null;
+            $lng = $item['lng'] ?? null;
+            if (! is_scalar($id) || ! ctype_digit((string) $id) || (int) $id < 1
+                || ! isset($cakupan[$desa]) || ! is_numeric($lat) || ! is_numeric($lng)
+                || (float) $lat === 0.0 || (float) $lng === 0.0
+                || abs((float) $lat) > 90 || abs((float) $lng) > 180) {
+                continue;
+            }
+
+            $hasil[] = [
+                'id' => (string) $id,
+                'nama' => (string) ($item['nama'] ?? ''),
+                'kode_desa' => $desa,
+                'nama_desa' => (string) ($item['config']['nama_desa'] ?? ''),
+                'kategori' => (string) ($item['point']['nama'] ?? ''),
+            ];
+        }
+
+        return $hasil;
     }
 
     /**
@@ -205,11 +245,13 @@ class ImporTemplateService
 
             $namaDesa = (string) $cakupan[$kodeDesa];
             $kodeFasilitas = (string) ($atribut['kode_fasilitas'] ?? '');
+            $rujukan = (string) ($atribut['rujukan_fasilitas'] ?? '');
             $peta[$id] = [
                 // Format "kode - nama" sama dengan daftar dropdown pada sheet Daftar Desa.
                 'kode_desa' => $namaDesa !== '' ? $kodeDesa.' - '.$namaDesa : $kodeDesa,
                 'kode_fasilitas' => $kodeFasilitas !== '' ? $kodeFasilitas : $id,
                 'nama_fasilitas' => (string) ($atribut['nama'] ?? ''),
+                'lokasi_id' => preg_match('/^point:([1-9][0-9]*)$/', $rujukan, $matches) ? $matches[1] : '',
                 'nilai' => [],
             ];
         }

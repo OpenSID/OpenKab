@@ -98,10 +98,12 @@
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="{{ asset('css/dataspasial/popup-skema.css') }}" />
 @endpush
 @push('js')
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="{{ asset('js/dataspasial/popup-skema.js') }}"></script>
     <script nonce="{{ csp_nonce() }}" type="text/javascript">
         document.addEventListener("DOMContentLoaded", function(event) {
             "use strict";

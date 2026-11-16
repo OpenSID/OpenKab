@@ -81,7 +81,7 @@ class ImporDataTest extends TestCase
             '*/impor/pratinjau' => Http::response(['data' => [['impor_id' => 'imp001', 'diterima' => 0, 'ditolak' => 0]]], 200),
         ]);
 
-        $this->post(route('dataspasial.impor.preview'))->assertStatus(200);
+        $this->post(route('dataspasial.impor.preview'))->assertStatus(422);
     }
 
     public function test_preview_mengembalikan_ringkasan_dan_baris_galat(): void
@@ -92,7 +92,7 @@ class ImporDataTest extends TestCase
             'sektor' => 'kesehatan',
             'filename' => 'template.xlsx',
             'rows' => [
-                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'jumlah_bidan' => '10'],
+                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'lokasi_id' => '42', 'jumlah_bidan' => '10'],
             ],
         ]);
         Http::fake([
@@ -119,6 +119,7 @@ class ImporDataTest extends TestCase
                             'nama_desa' => 'Mambang',
                             'kode_fasilitas' => 'FAS-01',
                             'nama_fasilitas' => 'Puskesmas',
+                            'lokasi_id' => 42,
                             'periode' => '2026-10',
                             'status' => 'galat',
                             'pesan' => ['Kode isian tidak dikenal pada skema terbit.'],
@@ -127,6 +128,7 @@ class ImporDataTest extends TestCase
                     ],
                 ]],
             ], 200),
+            '*/api/v1/plan/get-list-coordinate*' => $this->lokasiResponse(),
         ]);
 
         $response = $this->post(route('dataspasial.impor.preview'));
@@ -148,12 +150,13 @@ class ImporDataTest extends TestCase
             'sektor' => 'kesehatan',
             'filename' => 'template.xlsx',
             'rows' => [
-                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'jumlah_bidan' => '10', '_kode_valid' => true],
+                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'lokasi_id' => '42 - Puskesmas (Mambang)', 'jumlah_bidan' => '10', '_kode_valid' => true],
             ],
         ]);
 
         Http::fake([
-            '*/impor/pratinjau' => Http::response(['data' => [['impor_id' => 'imp1', 'attributes' => ['ringkasan' => ['total_baris' => 1, 'baris_galat' => 0, 'bisa_disimpan' => true], 'laporan' => []]]]], 200),
+            '*/impor/pratinjau' => $this->previewResponse('imp1'),
+            '*/api/v1/plan/get-list-coordinate*' => $this->lokasiResponse(),
         ]);
 
         $this->post(route('dataspasial.impor.preview'))->assertStatus(200);
@@ -162,7 +165,8 @@ class ImporDataTest extends TestCase
             $body = $request->data();
             $nilai = $body['baris'][0]['nilai'] ?? [];
 
-            return ! array_key_exists('_kode_valid', $nilai) && ($nilai['jumlah_bidan'] ?? null) === '10';
+            return ! array_key_exists('_kode_valid', $nilai) && ! array_key_exists('lokasi_id', $nilai)
+                && ($body['baris'][0]['lokasi_id'] ?? null) === 42 && ($nilai['jumlah_bidan'] ?? null) === '10';
         });
     }
 
@@ -174,12 +178,13 @@ class ImporDataTest extends TestCase
             'sektor' => 'kesehatan',
             'filename' => 'template.xlsx',
             'rows' => [
-                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'jumlah_bidan' => '10'],
+                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'lokasi_id' => '42', 'jumlah_bidan' => '10'],
             ],
         ]);
 
         Http::fake([
-            '*/impor/pratinjau' => Http::response(['data' => [['impor_id' => 'imp-ok', 'attributes' => ['ringkasan' => ['total_baris' => 1, 'baris_siap' => 1, 'baris_galat' => 0, 'bisa_disimpan' => true], 'laporan' => []]]]], 200),
+            '*/impor/pratinjau' => $this->previewResponse('imp-ok'),
+            '*/api/v1/plan/get-list-coordinate*' => $this->lokasiResponse(),
         ]);
 
         $this->post(route('dataspasial.impor.preview'))
@@ -208,12 +213,13 @@ class ImporDataTest extends TestCase
             'sektor' => 'kesehatan',
             'filename' => 'template.xlsx',
             'rows' => [
-                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'jumlah_bidan' => '10', '_kode_valid' => true],
+                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'lokasi_id' => '42', 'jumlah_bidan' => '10', '_kode_valid' => true],
             ],
         ]);
 
         Http::fake([
-            '*/impor/pratinjau' => Http::response(['data' => [['impor_id' => 'imp-force', 'attributes' => ['ringkasan' => ['total_baris' => 1, 'bisa_disimpan' => true], 'laporan' => []]]]], 200),
+            '*/impor/pratinjau' => $this->previewResponse('imp-force'),
+            '*/api/v1/plan/get-list-coordinate*' => $this->lokasiResponse(),
         ]);
 
         $this->post(route('dataspasial.impor.preview'), [
@@ -236,12 +242,13 @@ class ImporDataTest extends TestCase
             'sektor' => 'kesehatan',
             'filename' => 'template.xlsx',
             'rows' => [
-                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'jumlah_bidan' => '10', '_kode_valid' => true],
+                ['kode_desa' => '5102022004', 'kode_fasilitas' => 'FAS-01', 'nama_fasilitas' => 'Puskesmas', 'lokasi_id' => '42', 'jumlah_bidan' => '10', '_kode_valid' => true],
             ],
         ]);
 
         Http::fake([
-            '*/impor/pratinjau' => Http::response(['data' => [['impor_id' => 'imp-no', 'attributes' => ['ringkasan' => ['total_baris' => 1, 'bisa_disimpan' => true], 'laporan' => []]]]], 200),
+            '*/impor/pratinjau' => $this->previewResponse('imp-no'),
+            '*/api/v1/plan/get-list-coordinate*' => $this->lokasiResponse(),
         ]);
 
         $this->post(route('dataspasial.impor.preview'), [
@@ -269,5 +276,94 @@ class ImporDataTest extends TestCase
         $this->actingAsOperatorImpor();
 
         $this->postJson(route('dataspasial.impor.template'), ['sektor' => ''])->assertStatus(422);
+    }
+
+    public function test_impor_menolak_lokasi_kosong_atau_lokasi_desa_lain(): void
+    {
+        $this->actingAsOperatorImpor();
+        Http::fake(['*/api/v1/plan/get-list-coordinate*' => $this->lokasiResponse()]);
+
+        foreach ([
+            ['kode_desa' => '5102022004'],
+            ['kode_desa' => '5102022005', 'lokasi_id' => '42'],
+            ['kode_desa' => '5102022004', 'lokasi_id' => '999'],
+        ] as $row) {
+            Session::put('impor_parsed', ['sektor' => 'kesehatan', 'filename' => 'a.xlsx', 'rows' => [$row]]);
+            $this->postJson(route('dataspasial.impor.preview'))->assertStatus(422);
+        }
+        Http::assertNotSent(fn ($request) => str_contains($request->url(), '/impor/pratinjau'));
+    }
+
+    public function test_impor_tidak_boleh_disimpan_jika_api_mengabaikan_lokasi(): void
+    {
+        $this->actingAsOperatorImpor();
+        Session::put('impor_parsed', [
+            'sektor' => 'kesehatan', 'filename' => 'a.xlsx',
+            'rows' => [['kode_desa' => '5102022004', 'lokasi_id' => '42', 'kode_fasilitas' => 'F-1']],
+        ]);
+        Http::fake([
+            '*/api/v1/plan/get-list-coordinate*' => $this->lokasiResponse(),
+            '*/impor/pratinjau' => Http::response(['data' => [['attributes' => [
+                'impor_id' => 'old-api', 'ringkasan' => ['bisa_disimpan' => true],
+                'laporan' => [['nomor_baris' => 2, 'status' => 'siap']],
+            ]]]]),
+        ]);
+        $this->postJson(route('dataspasial.impor.preview'))->assertStatus(503)
+            ->assertJsonPath('success', false);
+        $this->postJson(route('dataspasial.impor.simpan', ['impor_id' => 'old-api']))->assertStatus(422);
+        Http::assertNotSent(fn ($request) => str_contains($request->url(), '/simpan'));
+    }
+
+    public function test_impor_disimpan_setelah_api_mengonfirmasi_lokasi(): void
+    {
+        $this->actingAsOperatorImpor();
+        Session::put('impor_parsed', [
+            'sektor' => 'kesehatan', 'filename' => 'a.xlsx',
+            'rows' => [['kode_desa' => '5102022004', 'lokasi_id' => '42', 'kode_fasilitas' => 'F-1']],
+        ]);
+        Http::fake([
+            '*/api/v1/plan/get-list-coordinate*' => $this->lokasiResponse(),
+            '*/impor/pratinjau' => $this->previewResponse('confirmed'),
+            '*/impor/confirmed/simpan' => Http::response(['data' => [['id' => 'confirmed']]], 201),
+        ]);
+
+        $this->postJson(route('dataspasial.impor.preview'))->assertOk()
+            ->assertJsonPath('preview.baris.0.lokasi_id', 42);
+        $this->postJson(route('dataspasial.impor.simpan', ['impor_id' => 'another']))->assertStatus(422);
+        $this->postJson(route('dataspasial.impor.simpan', ['impor_id' => 'confirmed']))->assertOk()
+            ->assertJsonPath('success', true);
+    }
+
+    public function test_pratinjau_baru_yang_gagal_membatalkan_sesi_simpan_sebelumnya(): void
+    {
+        $this->actingAsOperatorImpor();
+        Session::put('impor_preview', ['impor_id' => 'previous', 'ringkasan' => ['bisa_disimpan' => true]]);
+        Session::put('impor_parsed', [
+            'sektor' => 'kesehatan', 'filename' => 'a.xlsx',
+            'rows' => [['kode_desa' => '5102022004', 'lokasi_id' => '42']],
+        ]);
+        Http::fake(['*/api/v1/plan/get-list-coordinate*' => Http::response(['message' => 'unavailable'], 503)]);
+
+        $this->postJson(route('dataspasial.impor.preview'))->assertStatus(503)
+            ->assertJsonPath('message', 'Daftar lokasi tidak tersedia. Silakan coba lagi.');
+        $this->postJson(route('dataspasial.impor.simpan', ['impor_id' => 'previous']))->assertStatus(422);
+    }
+
+    private function lokasiResponse(): \GuzzleHttp\Promise\PromiseInterface
+    {
+        return Http::response([[
+            'id' => 42, 'nama' => 'Puskesmas', 'lat' => -8, 'lng' => 115,
+            'config' => ['kode_desa' => '5102022004', 'nama_desa' => 'Mambang'],
+            'point' => ['nama' => 'Kesehatan'],
+        ]]);
+    }
+
+    private function previewResponse(string $id): \GuzzleHttp\Promise\PromiseInterface
+    {
+        return Http::response(['data' => [['attributes' => [
+            'impor_id' => $id,
+            'ringkasan' => ['total_baris' => 1, 'baris_siap' => 1, 'baris_galat' => 0, 'bisa_disimpan' => true],
+            'laporan' => [['nomor_baris' => 2, 'lokasi_id' => 42, 'status' => 'siap']],
+        ]]]]);
     }
 }

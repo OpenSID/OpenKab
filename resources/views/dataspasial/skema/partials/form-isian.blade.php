@@ -22,7 +22,7 @@
 
 <tr data-testid="baris-isian"
     data-index="{{ $index }}"
-    data-opsi="{{ Illuminate\Support\Js::from($baris['opsi'] ?? []) }}"
+    data-opsi="{{ json_encode($baris['opsi'] ?? [], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR) }}"
     draggable="{{ $bolehUbah ? 'true' : 'false' }}">
 
     {{-- Handle seret (FR-012). --}}
@@ -51,6 +51,10 @@
                 </option>
             @endforeach
         </select>
+        <button type="button" class="btn btn-outline-primary btn-sm btn-atur-opsi mt-1 {{ $baris['tipe'] === 'pilihan' ? '' : 'd-none' }}"
+                @disabled(!$bolehUbah)>
+            Atur pilihan
+        </button>
         @error("isian.{$index}.tipe")
             <div class="text-danger small">{{ $message }}</div>
         @enderror
@@ -65,13 +69,6 @@
                value="{{ $baris['satuan'] ?? '' }}" placeholder="{{ $memakaiSatuan ? 'orang' : '—' }}"
                @disabled(!$bolehUbah || ! $memakaiSatuan)>
     </td>
-
-    {{--
-        ⚠️ Kolom **Pilihan (opsi) tidak lagi ditampilkan** — tidak dipakai pada
-        editor ini. Nilai `opsi` yang tersimpan di API tetap **dipertahankan**
-        melalui atribut `data-opsi` pada baris sehingga `bacaDariDom()`
-        mengirimkannya kembali saat Simpan draf dan tidak terjadi kehilangan data.
-    --}}
 
     {{--
         Sumber nilai: manual atau pemetaan (FR-023).

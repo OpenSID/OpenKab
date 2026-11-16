@@ -96,6 +96,7 @@ it('merender dialog layar terbitan pada halaman skema tanpa memuat halaman baru'
     $response->assertSee('data-testid="catatan-perubahan"', false);
     $response->assertSee('data-testid="tabel-adopsi"', false);
     $response->assertSee('data-testid="btn-kirim-terbit"', false);
+    $response->assertSee('data-testid="btn-batalkan-draf"', false);
 });
 
 it('menyertakan skrip layar terbitan pada halaman skema', function () {
@@ -154,6 +155,52 @@ it('menolak preview tanpa ada perubahan terhadap versi terbit', function () {
 
     $response->assertStatus(422);
     $response->assertJsonPath('tanpa_perubahan', true);
+    $response->assertJsonPath('nomor_draf', 1);
+    $response->assertJsonPath('nomor_terbit', 3);
+});
+
+it('membatalkan draf tanpa perubahan hanya setelah konfirmasi API', function () {
+    Http::fake([
+        '*/api/v1/dataspasial/skema' => Http::response([
+            'data' => ['type' => 'pembatalan_draf', 'attributes' => [
+                'sektor' => 'SK0', 'nomor_draf' => 2, 'nomor_terbit' => 1,
+            ]],
+        ]),
+    ]);
+
+    $this->postJson(route('dataspasial.skema.draf.batalkan'), [
+        'sektor' => 'SK0', 'nomor_draf' => 2, 'nomor_terbit' => 1,
+    ])->assertOk()->assertJsonPath('success', true);
+
+    Http::assertSent(fn (Request $request) => $request['aksi'] === 'batalkan_draf_tanpa_perubahan'
+        && $request['nomor_draf'] === 2 && $request['nomor_terbit'] === 1);
+});
+
+it('menampilkan penolakan API dan tidak melaporkan pembatalan berhasil', function () {
+    Http::fake(['*/api/v1/dataspasial/skema' => Http::response([
+        'message' => 'Draf memiliki perubahan dan tidak dapat dibatalkan dengan tindakan ini.',
+    ], 422)]);
+
+    $this->postJson(route('dataspasial.skema.draf.batalkan'), [
+        'sektor' => 'SK0', 'nomor_draf' => 2, 'nomor_terbit' => 1,
+    ])->assertStatus(422)->assertJsonPath('success', false)
+        ->assertJsonPath('message', 'Draf memiliki perubahan dan tidak dapat dibatalkan dengan tindakan ini.');
+});
+
+it('menolak pembatalan tanpa konfirmasi yang sesuai dari API', function () {
+    Http::fake(['*/api/v1/dataspasial/skema' => Http::response(['data' => []])]);
+    $this->postJson(route('dataspasial.skema.draf.batalkan'), [
+        'sektor' => 'SK0', 'nomor_draf' => 2, 'nomor_terbit' => 1,
+    ])->assertStatus(422)->assertJsonPath('success', false);
+});
+
+it('menolak pembatalan draf oleh pengguna tanpa izin tulis', function () {
+    Http::fake();
+    test()->actingAs(makePenggunaBacaSaja(), 'web');
+    $this->postJson(route('dataspasial.skema.draf.batalkan'), [
+        'sektor' => 'SK0', 'nomor_draf' => 2, 'nomor_terbit' => 1,
+    ])->assertForbidden();
+    Http::assertNothingSent();
 });
 
 it('membandingkan isian draf tersimpan (bukan versi terbit) saat klien tidak mengirim isian', function () {

@@ -74,9 +74,7 @@
                             </div>
                         </a>
 
-                        {{-- US7 (FR-007d-4): ubah nama & ikon sektor sekarang dilakukan
-                        melalui editor skema (nama sektor dikirim sebagai sektor_nama
-                        pada setiap simpan), bukan tombol tersendiri di sini. --}}
+                        {{-- Nama sektor dapat diubah melalui editor skema. --}}
                     </li>
                 @endforeach
             </ul>

@@ -29,7 +29,7 @@ class ImporBerkasService
             $reader->open($path);
 
             foreach ($reader->getSheetIterator() as $sheet) {
-                if (in_array(strtolower($sheet->getName()), ['petunjuk', 'daftar desa'], true)) {
+                if (in_array(strtolower($sheet->getName()), ['petunjuk', 'daftar desa', 'daftar lokasi'], true)) {
                     continue;
                 }
 
@@ -103,11 +103,17 @@ class ImporBerkasService
                 ARRAY_FILTER_USE_BOTH
             );
 
+            $lokasi = trim((string) ($row['lokasi_id'] ?? ''));
+            if (str_contains($lokasi, ' - ')) {
+                $lokasi = trim(explode(' - ', $lokasi, 2)[0]);
+            }
+
             $baris[] = [
                 'nomor_baris' => $row['nomor_baris'] ?? ($idx + 2),
                 'kode_desa' => $row['kode_desa'] ?? ($row['desa'] ?? ''),
                 'kode_fasilitas' => $row['kode_fasilitas'] ?? '',
                 'nama_fasilitas' => $row['nama_fasilitas'] ?? '',
+                'lokasi_id' => $lokasi,
                 'periode' => $row['periode'] ?? date('Y'),
                 'nilai' => $nilai,
             ];
@@ -155,6 +161,7 @@ class ImporBerkasService
                 'nama_desa' => $item['nama_desa'] ?? '',
                 'kode_fasilitas' => $item['kode_fasilitas'] ?? '',
                 'nama_fasilitas' => $item['nama_fasilitas'] ?? '',
+                'lokasi_id' => $item['lokasi_id'] ?? null,
                 'periode' => $item['periode'] ?? '',
                 'status' => $item['status'] ?? ($item['keterangan'] ?? ''),
                 'pesan' => (string) ($pesan ?? ''),
@@ -305,7 +312,7 @@ class ImporBerkasService
      */
     private function ambilNilai(array $row): array
     {
-        $exclude = ['nomor_baris', 'kode_desa', 'desa', 'kode_fasilitas', 'nama_fasilitas', 'periode', 'petunjuk'];
+        $exclude = ['nomor_baris', 'kode_desa', 'desa', 'kode_fasilitas', 'nama_fasilitas', 'lokasi_id', 'periode', 'petunjuk'];
         $nilai = [];
 
         foreach ($row as $k => $v) {

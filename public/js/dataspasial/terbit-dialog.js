@@ -22,6 +22,7 @@
 const TERBIT = {
     urlPreview: '/dataspasial/skema/terbit/preview',
     urlTerbit: '/dataspasial/skema/terbit',
+    urlBatalkanDraf: '/dataspasial/skema/draf/batalkan',
     urlRiwayat: '/dataspasial/skema/riwayat',
     urlBandingkan: '/dataspasial/skema/perbandingan',
     urlAdopsi: '/dataspasial/skema/adopsi',
@@ -31,6 +32,7 @@ const TERBIT = {
 const state = {
     sektor: null,
     preview: null,
+    drafTanpaPerubahan: null,
     adopsi: { status: '', q: '', halaman: 1, totalHalaman: 1 },
     versiDipilih: [],
     wymagLoad: false,
@@ -604,6 +606,37 @@ async function kirimTerbitan() {
     await segarkanHalaman();
 }
 
+async function batalkanDraf() {
+    if (!state.sektor || !state.drafTanpaPerubahan) return;
+
+    const konfirmasi = swalAda()
+        ? (await window.Swal.fire({
+            title: 'Batalkan draf tanpa perubahan?',
+            text: 'Versi terbit sebelumnya tetap berlaku. Draf akan dibatalkan.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, batalkan draf',
+            cancelButtonText: 'Kembali',
+        })).isConfirmed
+        : window.confirm('Batalkan draf tanpa perubahan? Versi terbit sebelumnya tetap berlaku.');
+    if (!konfirmasi) return;
+
+    const tombol = el('[data-testid="btn-batalkan-draf"]');
+    tombol.disabled = true;
+    const hasil = await panggil(TERBIT.urlBatalkanDraf, {
+        method: 'POST',
+        body: { sektor: state.sektor, ...state.drafTanpaPerubahan },
+    });
+    if (!hasil.ok || hasil.data.success !== true) {
+        tombol.disabled = false;
+        pesanDi('[data-testid="terbitan-gagal"]', pesanGalat(hasil));
+        return;
+    }
+
+    await swalInfo('Draf dibatalkan. Versi terbit sebelumnya tetap berlaku.', 'success');
+    window.location.assign(`/dataspasial/skema?sektor=${encodeURIComponent(state.sektor)}`);
+}
+
 /**
  * Segarkan isi halaman tanpa `location.reload()` (FR-022).
  *
@@ -651,11 +684,15 @@ async function bukaDialog(sektor) {
     state.sektor = sektor;
     state.versiDipilih = [];
     state.preview = null;
+    state.drafTanpaPerubahan = null;
 
     el('[data-testid="terbitan-sektor"]').textContent = sektor;
     el('[data-testid="terbitan-memuat"]').classList.remove('d-none');
     el('[data-testid="terbitan-isi"]').classList.add('d-none');
     el('[data-testid="terbitan-footer"]').classList.add('d-none');
+    el('[data-testid="terbitan-detail"]').classList.add('d-none');
+    el('[data-testid="batalkan-draf-wrap"]').classList.add('d-none');
+    el('[data-testid="btn-batalkan-draf"]').disabled = false;
     el('[data-testid="peringatan-dampak"]').classList.add('d-none');
     el('[data-testid="pengakuan-bentrok-wrap"]').classList.add('d-none');
     bersihkanPesan('[data-testid="terbitan-gagal"]');
@@ -681,11 +718,20 @@ async function bukaDialog(sektor) {
     if (!hasil.ok) {
         pesanDi('[data-testid="terbitan-gagal"]', pesanGalat(hasil));
         el('[data-testid="terbitan-isi"]').classList.remove('d-none');
+        if (hasil.data.tanpa_perubahan && Number.isInteger(hasil.data.nomor_draf)
+            && Number.isInteger(hasil.data.nomor_terbit)) {
+            state.drafTanpaPerubahan = {
+                nomor_draf: hasil.data.nomor_draf,
+                nomor_terbit: hasil.data.nomor_terbit,
+            };
+            el('[data-testid="batalkan-draf-wrap"]').classList.remove('d-none');
+        }
 
         return;
     }
 
     state.preview = hasil.data;
+    el('[data-testid="terbitan-detail"]').classList.remove('d-none');
     renderRingkasan(hasil.data.ringkasan);
     renderPeringatan(hasil.data.peringatan);
     renderRiwayat(hasil.data.riwayat, hasil.data.bisa_dibandingkan);
@@ -713,6 +759,7 @@ function pasang() {
     el('[data-testid="catatan-perubahan"]')?.addEventListener('input', perbaruiTombolTerbit);
     el('[data-testid="pengakuan-bentrok"]')?.addEventListener('change', perbaruiTombolTerbit);
     el('[data-testid="btn-kirim-terbit"]')?.addEventListener('click', kirimTerbitan);
+    el('[data-testid="btn-batalkan-draf"]')?.addEventListener('click', batalkanDraf);
 
     el('[data-testid="btn-bandingkan-versi"]')?.addEventListener('click', muatPerbandingan);
 

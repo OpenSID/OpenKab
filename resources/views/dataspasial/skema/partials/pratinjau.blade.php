@@ -15,31 +15,16 @@
     </div>
 
     <div class="card-body p-3">
-        @if ($sektorTerpilih === null)
-            <p class="text-muted text-center mb-0" data-testid="pratinjau-kosong">
-                Pratinjau formulir akan muncul setelah sektor dipilih.
-            </p>
-        @else
-            <div class="mb-2">
-                <small class="text-muted">Sektor</small>
-                <div class="font-weight-bold">{{ $sektorTerpilih['nama'] }}</div>
-                <small class="text-muted">
-                    Isian selalu dimuat dari skema terakhir sektor ini
-                    (draf bila ada, terbit baca-saja bila tidak).
-                </small>
+        <div class="mb-2">
+            <small class="text-muted">Sektor</small>
+            <div class="font-weight-bold" id="nama-sektor-pratinjau">{{ $sektorTerpilih['nama'] ?? 'Belum diisi' }}</div>
+        </div>
+        <hr class="my-2">
+        <div id="wadah-pratinjau" data-testid="wadah-pratinjau"></div>
+        <noscript>
+            <div class="alert alert-secondary border-0 py-2 px-2 mb-0 small">
+                Pratinjau live memerlukan JavaScript.
             </div>
-
-            <hr class="my-2">
-
-            {{-- Dikosongkan oleh JS lalu diisi `renderPratinjau()`. --}}
-            <div id="wadah-pratinjau" data-testid="wadah-pratinjau"></div>
-
-            <noscript>
-                <div class="alert alert-secondary border-0 py-2 px-2 mb-0 small">
-                    Pratinjau live memerlukan JavaScript. Tabel isian di samping tetap
-                    dapat digunakan.
-                </div>
-            </noscript>
-        @endif
+        </noscript>
     </div>
 </div>

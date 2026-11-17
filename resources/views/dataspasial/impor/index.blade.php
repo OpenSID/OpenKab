@@ -291,6 +291,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 } else {
                     td.textContent = v;
                 }
+                // API-09: peringatan non-blokir (mis. pengisian desa dinonaktifkan kabupaten) tampil di kolom pesan
+                if(c === 'pesan' && r.peringatan){
+                    var warn = document.createElement('div');
+                    warn.className = 'text-warning small';
+                    warn.setAttribute('data-testid', 'peringatan-baris');
+                    warn.textContent = '⚠ ' + r.peringatan;
+                    if(v === '-'){ td.textContent = ''; }
+                    td.appendChild(warn);
+                }
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);

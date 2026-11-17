@@ -106,8 +106,12 @@
             return;
         }
         tb.innerHTML = rows.map(function (r) {
+            // KAB-09: desa yang pengisiannya dinonaktifkan kabupaten diberi lencana
+            var lencanaNonaktif = r.isian_aktif === false
+                ? ' <span class="badge badge-danger" data-testid="lencana-nonaktif" title="Pengisian desa dinonaktifkan kabupaten">Nonaktif</span>'
+                : '';
             return '<tr data-kode="' + esc(r.kode_desa) + '" data-testid="baris-desa">' +
-                '<td><strong>' + esc(r.nama_desa) + '</strong><br><small class="text-muted">' + esc(r.kode_desa) + '</small></td>' +
+                '<td><strong>' + esc(r.nama_desa) + '</strong>' + lencanaNonaktif + '<br><small class="text-muted">' + esc(r.kode_desa) + '</small></td>' +
                 '<td>' + esc(r.nama_kecamatan || r.kode_kecamatan || '—') + '</td>' +
                 '<td>' + barKelengkapan(r.kelengkapan_persen) + '</td>' +
                 '<td class="text-center">' + (r.skor_kualitas === null ? '<span title="Belum ada aturan berlaku">—</span>' : r.skor_kualitas                    

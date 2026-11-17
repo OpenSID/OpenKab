@@ -120,6 +120,8 @@ class AdopsiDesaService
                 : null,
             'status_api' => is_string($statusApi) ? $statusApi : null,
             'terakhir_ada_data' => is_string($terakhir) && $terakhir !== '' ? $terakhir : null,
+            // API-09: false bila kabupaten menonaktifkan pengisian desa. API lama tanpa field ini = aktif.
+            'isian_aktif' => ! array_key_exists('isian_aktif', $atribut) || (bool) $atribut['isian_aktif'],
         ];
     }
 

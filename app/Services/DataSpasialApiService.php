@@ -690,4 +690,35 @@ class DataSpasialApiService
     {
         return $this->request('GET', 'audit/ringkasan', $filters, null, null, true);
     }
+
+    // -----------------------------------------------------------------------
+    // Status isian desa (API-09 / KAB-09)
+    // -----------------------------------------------------------------------
+
+    /**
+     * Daftar desa kabupaten beserta status pengisian Data Spasialnya.
+     *
+     * ⚠️ **TIDAK di-cache** — status menentukan apakah operator desa boleh
+     * mengisi, sehingga halaman harus selalu menampilkan keadaan terbaru.
+     *
+     * @param  array<string, mixed>  $filters  kode_kecamatan, kode_desa, config_id, status (aktif|nonaktif), page
+     */
+    public function listDesa(array $filters = []): DataSpasialResult
+    {
+        return $this->request('GET', 'desa', $filters, null, null, true);
+    }
+
+    /**
+     * Nonaktifkan (`$aktif=false`, alasan wajib) atau aktifkan kembali pengisian satu desa.
+     * Penulisan sukses menginvalidasi seluruh cache baca (adopsi ikut berubah).
+     */
+    public function ubahStatusDesa(int $configId, bool $aktif, ?string $alasan = null): DataSpasialResult
+    {
+        return $this->request(
+            'PUT',
+            'desa/'.$configId.'/status',
+            [],
+            array_filter(['aktif' => $aktif, 'alasan' => $alasan], static fn ($v) => $v !== null)
+        );
+    }
 }

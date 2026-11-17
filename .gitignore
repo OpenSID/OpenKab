@@ -42,3 +42,4 @@ specs/
 .specify/
 storage/sso
 .claude/
+CLAUDE.md

@@ -155,6 +155,11 @@ class ImporBerkasService
             if (is_array($pesan)) {
                 $pesan = implode('; ', $pesan);
             }
+            // API-09: peringatan non-blokir, mis. desa yang pengisiannya dinonaktifkan kabupaten
+            $peringatan = $item['peringatan'] ?? null;
+            if (is_array($peringatan)) {
+                $peringatan = implode('; ', $peringatan);
+            }
             $baris[] = [
                 'nomor_baris' => $item['nomor_baris'] ?? null,
                 'kode_desa' => $item['kode_desa'] ?? '',
@@ -165,6 +170,7 @@ class ImporBerkasService
                 'periode' => $item['periode'] ?? '',
                 'status' => $item['status'] ?? ($item['keterangan'] ?? ''),
                 'pesan' => (string) ($pesan ?? ''),
+                'peringatan' => (string) ($peringatan ?? ''),
                 'nilai' => $item['nilai'] ?? [],
             ];
         }

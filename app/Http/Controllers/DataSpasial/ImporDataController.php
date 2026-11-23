@@ -7,6 +7,7 @@ namespace App\Http\Controllers\DataSpasial;
 use App\Http\Requests\DataSpasial\DownloadTemplateRequest;
 use App\Http\Requests\DataSpasial\PreviewImporRequest;
 use App\Http\Requests\DataSpasial\UploadImporRequest;
+use App\Services\CakupanPenggunaService;
 use App\Services\ConfigApiService;
 use App\Services\DataSpasialApiService;
 use App\Services\DataSpasialResult;
@@ -27,6 +28,7 @@ class ImporDataController extends DataSpasialController
         protected ConfigApiService $configApiService,
         protected ImporTemplateService $templateService,
         protected ImporBerkasService $berkasService,
+        protected CakupanPenggunaService $cakupan,
     ) {
         parent::__construct($dataspasial);
     }
@@ -50,14 +52,27 @@ class ImporDataController extends DataSpasialController
     {
         return view($this->viewName(), [
             'title' => $this->pageTitle(),
-            'sektors' => $this->dataspasial->listSektor(),
-            'kecamatans' => $this->configApiService->kecamatan(),
+            'sektors' => $this->sektorTampil($request),
+            'kecamatans' => $this->kecamatanTampil($request),
         ]);
     }
 
     public function downloadTemplate(DownloadTemplateRequest $request)
     {
         $sektor = $request->validated('sektor');
+        abort_unless($this->sektorDiizinkan($request, $sektor), 403, 'Anda tidak memiliki akses ke sektor ini.');
+
+        // Hak akses wilayah: templat hanya untuk kecamatan yang berada dalam wilayah pengguna.
+        $wilayah = $this->cakupan->wilayahAkses((int) $request->user()->id);
+        if ($wilayah !== null) {
+            $kecamatan = (string) $request->validated('kecamatan', '');
+            abort_unless(
+                $kecamatan !== '' && $this->cakupan->kecamatanDalamWilayah($wilayah, $kecamatan),
+                403,
+                'Anda hanya dapat mengunduh templat untuk kecamatan dalam wilayah akses Anda.',
+            );
+        }
+
         $periode = $request->validated('periode') ?? date('Y');
 
         try {
@@ -75,11 +90,27 @@ class ImporDataController extends DataSpasialController
 
     public function upload(UploadImporRequest $request): JsonResponse
     {
+        if (! $this->sektorDiizinkan($request, $request->input('sektor'))) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki akses ke sektor ini.'], 403);
+        }
+
         Session::forget(['impor_parsed', 'impor_preview']);
         $file = $request->file('file');
 
         $rows = $this->berkasService->baca($file->getRealPath());
         $rows = $this->berkasService->normalisasiKodeDesa($rows, $this->configApiService->desaConfig());
+
+        // Hak akses wilayah: berkas tidak boleh memuat desa di luar wilayah pengguna (issue #1320).
+        $wilayahDiluar = $this->cakupan->filterBaris((int) $request->user()->id, false);
+        if ($wilayahDiluar !== null) {
+            $jumlahDiluar = count(array_filter($rows, fn (array $r) => ! $wilayahDiluar($r)));
+            if ($jumlahDiluar > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Berkas memuat {$jumlahDiluar} baris dengan desa di luar wilayah akses Anda.",
+                ], 422);
+            }
+        }
 
         Session::put('impor_parsed', [
             'sektor' => $request->input('sektor'),
@@ -101,6 +132,10 @@ class ImporDataController extends DataSpasialController
         $parsed = Session::get('impor_parsed');
         if (! $parsed) {
             return response()->json(['success' => false, 'message' => 'Tidak ada data hasil unggah.'], 422);
+        }
+
+        if (! $this->sektorDiizinkan($request, $parsed['sektor'] ?? null)) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki akses ke sektor ini.'], 403);
         }
 
         $forceOverwrite = (bool) $request->input('force_overwrite', false);
@@ -170,6 +205,12 @@ class ImporDataController extends DataSpasialController
 
     public function save(Request $request, string $imporId): JsonResponse
     {
+        // Sektor batch diambil dari sesi unggah; tanpa sesi, sektor tidak bisa diverifikasi.
+        $parsed = Session::get('impor_parsed');
+        if (! $parsed || ! $this->sektorDiizinkan($request, $parsed['sektor'] ?? null)) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki akses ke sektor ini.'], 403);
+        }
+
         $preview = Session::get('impor_preview');
         if (! is_array($preview) || ($preview['impor_id'] ?? null) !== $imporId
             || ! ($preview['ringkasan']['bisa_disimpan'] ?? false)) {
@@ -184,5 +225,52 @@ class ImporDataController extends DataSpasialController
         Session::forget(['impor_parsed', 'impor_preview']);
 
         return response()->json(['success' => true, 'result' => $result->data]);
+    }
+
+    /**
+     * Sektor yang boleh diakses pengguna, dibungkus sebagai hasil API untuk dropdown.
+     */
+    private function sektorTampil(Request $request): DataSpasialResult
+    {
+        $hasil = $this->dataspasial->listSektor();
+        $akses = $this->cakupan->sektorAkses((int) $request->user()->id);
+
+        $tampil = array_values(array_filter(
+            $hasil->isData() ? $hasil->data : [],
+            fn ($s) => $akses === null || in_array($s['attributes']['kode'] ?? null, $akses, true),
+        ));
+
+        return $tampil === [] ? DataSpasialResult::empty() : DataSpasialResult::data($tampil);
+    }
+
+    /**
+     * Kecamatan untuk dropdown; dibatasi bila pengguna punya hak akses wilayah.
+     */
+    private function kecamatanTampil(Request $request): mixed
+    {
+        $wilayah = $this->cakupan->wilayahAkses((int) $request->user()->id);
+        $semua = $this->configApiService->kecamatan();
+        if ($wilayah === null) {
+            return $semua;
+        }
+
+        return collect($semua)
+            ->filter(function ($k) use ($wilayah) {
+                $attr = is_object($k) ? (array) $k : $k;
+                $kode = (string) ($attr['kode_kecamatan'] ?? '');
+
+                return $kode !== '' && $this->cakupan->kecamatanDalamWilayah($wilayah, $kode);
+            })
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Sektor boleh dipakai bila tidak dibatasi, atau termasuk daftar hak akses pengguna.
+     */
+    private function sektorDiizinkan(Request $request, mixed $kode): bool
+    {
+        return is_string($kode) && $kode !== ''
+            && $this->cakupan->bolehSektor((int) $request->user()->id, $kode);
     }
 }

@@ -1,0 +1,8 @@
+{
+  "data": [
+    {"type": "ds_fasilitas", "id": "691", "attributes": {"sektor": {"id": 6758, "kode": "kesehatan", "nama": "kesehatan", "ikon": null, "status": "aktif"}, "kode_fasilitas": "PS-01", "config_id": 17, "rujukan_fasilitas": "point:6", "nama": "Puskesmas", "point": null, "wilayah": {"config_id": 17, "kode_desa": "5102102003", "kode_kecamatan": "510210", "kode_kabupaten": "5102", "kode_propinsi": "51", "nama_desa": "Batungsel", "nama_kecamatan": "Pupuan", "nama_kabupaten": "TABANAN", "nama_propinsi": "Bali"}}},
+    {"type": "ds_fasilitas", "id": "692", "attributes": {"sektor": {"id": 6758, "kode": "kesehatan", "nama": "kesehatan", "ikon": null, "status": "aktif"}, "kode_fasilitas": "PS-01", "config_id": 5, "rujukan_fasilitas": null, "nama": "Puskesmas", "point": null, "wilayah": {"config_id": 5, "kode_desa": "5102022007", "kode_kecamatan": "510202", "kode_kabupaten": "5102", "kode_propinsi": "51", "nama_desa": "Beraban", "nama_kecamatan": "Selemadeg Timur", "nama_kabupaten": "TABANAN", "nama_propinsi": "Bali"}}}
+  ],
+  "meta": {"pagination": {"total": 2, "count": 2, "per_page": 100, "current_page": 1, "total_pages": 1}},
+  "links": {"self": "http://127.0.0.1:8001/api/v1/dataspasial/fasilitas?page=1", "first": "http://127.0.0.1:8001/api/v1/dataspasial/fasilitas?page=1", "last": "http://127.0.0.1:8001/api/v1/dataspasial/fasilitas?page=1"}
+}

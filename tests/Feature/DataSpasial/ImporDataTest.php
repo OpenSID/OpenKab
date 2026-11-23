@@ -6,6 +6,7 @@ namespace Tests\Feature\DataSpasial;
 
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\CakupanPenggunaService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
@@ -37,6 +38,8 @@ class ImporDataTest extends TestCase
     private function actingAsOperatorImpor(): User
     {
         $user = makeRole('operator impor', ['dataspasial-impor-read']);
+        // Hak akses sektor wajib (issue #1320): pengguna uji diberi sektor kesehatan yang dipakai tes.
+        app(CakupanPenggunaService::class)->simpanSektor($user->id, ['kesehatan']);
         $this->actingAs($user);
 
         return $user;

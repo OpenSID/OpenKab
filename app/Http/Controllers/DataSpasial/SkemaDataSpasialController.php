@@ -8,6 +8,7 @@ use App\Enums\StatusSkemaEditor;
 use App\Http\Requests\DataSpasial\StoreDrafSkemaRequest;
 use App\Http\Requests\DataSpasial\TerbitSkemaRequest;
 use App\Services\AdopsiDesaService;
+use App\Services\CakupanPenggunaService;
 use App\Services\DataSpasialApiService;
 use App\Services\DataSpasialResult;
 use App\Services\SkemaEditorService;
@@ -35,6 +36,7 @@ class SkemaDataSpasialController extends DataSpasialController
         private readonly SkemaEditorService $editor,
         private readonly SkemaVersiService $versi,
         private readonly AdopsiDesaService $adopsi,
+        private readonly CakupanPenggunaService $cakupan,
     ) {
         parent::__construct($dataspasial);
     }
@@ -61,11 +63,31 @@ class SkemaDataSpasialController extends DataSpasialController
         return $this->dataspasial->listSektor(['page[size]' => 200]);
     }
 
+    /**
+     * Sektor yang boleh dilihat pengguna di editor (issue #1320). Tanpa pembatasan, semua sektor.
+     *
+     * @param  array<int, mixed>  $sektor
+     * @return array<int, mixed>
+     */
+    private function sektorTampil(Request $request, array $sektor): array
+    {
+        $akses = $this->cakupan->sektorAkses((int) $request->user()->id);
+        if ($akses === null) {
+            return $sektor;
+        }
+
+        return array_values(array_filter($sektor, function ($s) use ($akses) {
+            $kode = is_array($s) ? ($s['attributes']['kode'] ?? $s['kode'] ?? null) : null;
+
+            return $kode !== null && in_array((string) $kode, $akses, true);
+        }));
+    }
+
     public function index(Request $request): View
     {
         // ⚠️ KUNJUNGAN PERTAMA (FR-007a-1/Q7): yang dipanggil HANYA daftar sektor.
         $resultSektor = $this->fetch($request);
-        $daftarSektor = $this->editor->petakanDaftarSektor($resultSektor->data);
+        $daftarSektor = $this->editor->petakanDaftarSektor($this->sektorTampil($request, $resultSektor->data));
 
         $sektorTerpilih = $this->sektorTerpilih($request, $daftarSektor);
 
@@ -84,7 +106,7 @@ class SkemaDataSpasialController extends DataSpasialController
             $resultSkema = $this->dataspasial->listSkema(array_filter([
                 'sektor' => $sektorTerpilih['kode'],
                 'versi' => $versiDiminta,
-            ], static fn($nilai) => $nilai !== null));
+            ], static fn ($nilai) => $nilai !== null));
 
             $item = is_array($resultSkema?->first()) ? $resultSkema->first() : null;
             $atribut = is_array($item['attributes'] ?? null) ? $item['attributes'] : [];
@@ -417,7 +439,7 @@ class SkemaDataSpasialController extends DataSpasialController
             return response()->json([
                 'success' => false,
                 'gagal_dimuat' => $dari,
-                'message' => 'Versi ' . $dari . ' tidak dapat dimuat, perbandingan tidak ditampilkan.',
+                'message' => 'Versi '.$dari.' tidak dapat dimuat, perbandingan tidak ditampilkan.',
             ], 503);
         }
 
@@ -425,7 +447,7 @@ class SkemaDataSpasialController extends DataSpasialController
             return response()->json([
                 'success' => false,
                 'gagal_dimuat' => $ke,
-                'message' => 'Versi ' . $ke . ' tidak dapat dimuat, perbandingan tidak ditampilkan.',
+                'message' => 'Versi '.$ke.' tidak dapat dimuat, perbandingan tidak ditampilkan.',
             ], 503);
         }
 
@@ -543,7 +565,7 @@ class SkemaDataSpasialController extends DataSpasialController
                 'excel' => true,
             ])
             ->header('Content-Type', 'application/vnd.ms-excel')
-            ->header('Content-Disposition', 'attachment; filename="adopsi-skema-' . preg_replace('/[^a-z0-9\-_]/i', '', $sektorKode) . '-' . now()->format('Ymd-His') . '.xls"');
+            ->header('Content-Disposition', 'attachment; filename="adopsi-skema-'.preg_replace('/[^a-z0-9\-_]/i', '', $sektorKode).'-'.now()->format('Ymd-His').'.xls"');
     }
 
     /**
@@ -564,7 +586,7 @@ class SkemaDataSpasialController extends DataSpasialController
 
         $result = $this->dataspasial->terbitkanSkema($sektorKode, array_filter([
             'catatan_perubahan' => $validated['catatan_perubahan'] ?? null,
-        ], fn($v): bool => filled($v)));
+        ], fn ($v): bool => filled($v)));
 
         if ($result->isUnavailable()) {
             $pesan = $this->pesanTerbitan($result);
@@ -643,7 +665,7 @@ class SkemaDataSpasialController extends DataSpasialController
         }
 
         return array_values(array_map(
-            fn(array $baris): array => $this->editor->petakanIsian($baris + ['attributes' => $baris]),
+            fn (array $baris): array => $this->editor->petakanIsian($baris + ['attributes' => $baris]),
             array_filter($isian, 'is_array')
         ));
     }

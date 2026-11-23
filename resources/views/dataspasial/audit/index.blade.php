@@ -36,11 +36,11 @@
                             </div>
                             <div class="col-lg col-md-4 col-sm-6 mb-2">
                                 <x-dataspasial-dropdown-kecamatan id="filter_kecamatan_audit" name="kode_kecamatan"
-                                    data-testid="filter-kecamatan" />
+                                    :selected="$kodeKecamatanTerpilih" data-testid="filter-kecamatan" />
                             </div>
                             <div class="col-lg col-md-4 col-sm-6 mb-2">
                                 <x-dataspasial-dropdown-desa :desa-list="$desaList" id="filter_desa_audit" name="kode_desa"
-                                    data-testid="filter-desa" />
+                                    :selected="$kodeDesaTerpilih" data-testid="filter-desa" />
                             </div>
                             <div class="col-lg col-md-4 col-sm-6 mb-2">
                                 <x-dataspasial-dropdown-sektor :sektor-list="$sektorList" id="filter_sektor_audit"

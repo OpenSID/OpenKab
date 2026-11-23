@@ -29,9 +29,11 @@ use App\Http\Controllers\DataPresisiSeniBudayaController;
 use App\Http\Controllers\DataSpasial\AuditDataSpasialController;
 use App\Http\Controllers\DataSpasial\DasborDataSpasialController;
 use App\Http\Controllers\DataSpasial\ImporDataController;
+use App\Http\Controllers\DataSpasial\ListImporController;
 use App\Http\Controllers\DataSpasial\MonitoringController;
 use App\Http\Controllers\DataSpasial\PetaGabunganController;
 use App\Http\Controllers\DataSpasial\SkemaDataSpasialController;
+use App\Http\Controllers\DataSpasial\StatusDesaController;
 use App\Http\Controllers\DDKPanganController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesaController;
@@ -80,8 +82,10 @@ use App\Http\Controllers\Web\ModuleController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Controllers\Web\PresisiController;
 use App\Http\Controllers\Web\SearchController;
+use App\Http\Middleware\AksesDataSpasialMiddleware;
 use App\Http\Middleware\KabupatenMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
+use App\Http\Middleware\RedirectIfTanpaIzin;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -115,8 +119,9 @@ Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak', '2fa'])->group(function () {
     Route::get('catatan-rilis', CatatanRilis::class);
-    Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
-    Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->name('dasbor-demografi');
+    Route::get('beranda', fn () => view('beranda.index'))->name('beranda');
+    Route::get('/dasbor', [DasborController::class, 'index'])->middleware(RedirectIfTanpaIzin::class.':dasbor-read')->name('dasbor');
+    Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->middleware(RedirectIfTanpaIzin::class.':dasbor-demografi-read')->name('dasbor-demografi');
 
     // SSO OpenSID: terbitkan token akses sekali pakai untuk administrator
     Route::post('/sso/generate-session', [SsoLoginController::class, 'generateSession'])->name('sso.generate')->middleware('throttle:sso-generate');
@@ -136,6 +141,9 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::put('users/{user}', [UserController::class, 'update'])->name('profile.update');
     Route::prefix('pengaturan')->group(function () {
         Route::middleware('easyauthorize:pengaturan-users')->resource('users', UserController::class);
+        Route::middleware(['can:pengaturan-users-edit', 'throttle:10,1'])
+            ->post('users/{user}/reset-password', [UserController::class, 'resetPassword'])
+            ->name('users.reset-password');
         Route::middleware('easyauthorize:pengaturan-identitas')->resource('identitas', IdentitasController::class)->only(['index', 'edit']);
         Route::middleware('can:pengaturan-group-read')->prefix('groups')->group(function () {
             Route::get('/', [GroupController::class, 'index'])->name('groups.index');
@@ -485,7 +493,7 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     // melalui App\Services\DataSpasialApiService (FR-002). Kontrol akses
     // ditegakkan server-side lewat middleware permission, bukan sekadar
     // menyembunyikan menu (FR-013).
-    Route::prefix('dataspasial')->group(function () {
+    Route::prefix('dataspasial')->middleware(AksesDataSpasialMiddleware::class)->group(function () {
         Route::get('skema', [SkemaDataSpasialController::class, 'index'])
             ->middleware('permission:dataspasial-skema-read')
             ->name('dataspasial.skema');
@@ -543,18 +551,18 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             ->middleware('permission:dataspasial-peta-read')
             ->name('dataspasial.peta.data');
 
-    Route::get('dasbor', [DasborDataSpasialController::class, 'index'])
-        ->middleware('permission:dataspasial-dasbor-read')
-        ->name('dataspasial.dasbor');
-    Route::get('dasbor/data', [DasborDataSpasialController::class, 'data'])
-        ->middleware('permission:dataspasial-dasbor-read')
-        ->name('dataspasial.dasbor.data');
-    Route::get('dasbor/peta/data', [PetaGabunganController::class, 'data'])
-        ->middleware('permission:dataspasial-dasbor-read')
-        ->name('dataspasial.dasbor.peta.data');
-    Route::get('dasbor/ekspor', [DasborDataSpasialController::class, 'ekspor'])
-        ->middleware('permission:dataspasial-dasbor-read')
-        ->name('dataspasial.dasbor.export');
+        Route::get('dasbor', [DasborDataSpasialController::class, 'index'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor');
+        Route::get('dasbor/data', [DasborDataSpasialController::class, 'data'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor.data');
+        Route::get('dasbor/peta/data', [PetaGabunganController::class, 'data'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor.peta.data');
+        Route::get('dasbor/ekspor', [DasborDataSpasialController::class, 'ekspor'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor.export');
 
         Route::get('impor', [ImporDataController::class, 'index'])
             ->middleware('permission:dataspasial-impor-read')
@@ -574,6 +582,15 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::post('impor/simpan/{impor_id}', [ImporDataController::class, 'save'])
             ->middleware('permission:dataspasial-impor-read')
             ->name('dataspasial.impor.simpan');
+        Route::get('impor/daftar', [ListImporController::class, 'index'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.daftar');
+        Route::get('impor/daftar/data', [ListImporController::class, 'data'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.daftar.data');
+        Route::get('impor/daftar/versi', [ListImporController::class, 'versi'])
+            ->middleware('permission:dataspasial-impor-read')
+            ->name('dataspasial.impor.daftar.versi');
 
         Route::get('monitoring', [MonitoringController::class, 'index'])
             ->middleware('permission:dataspasial-monitoring-read')
@@ -598,6 +615,21 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::get('audit/ekspor', [AuditDataSpasialController::class, 'ekspor'])
             ->middleware('permission:dataspasial-audit-read')
             ->name('dataspasial.audit.ekspor');
+
+        // KAB-09 — Status Desa: nonaktifkan/aktifkan pengisian Data Spasial per desa (API-09).
+        Route::get('desa', [StatusDesaController::class, 'index'])
+            ->middleware('permission:dataspasial-desa-read')
+            ->name('dataspasial.desa');
+        Route::get('desa/data', [StatusDesaController::class, 'data'])
+            ->middleware('permission:dataspasial-desa-read')
+            ->name('dataspasial.desa.data');
+        Route::post('desa/status-massal', [StatusDesaController::class, 'ubahStatusMassal'])
+            ->middleware('permission:dataspasial-desa-write')
+            ->name('dataspasial.desa.status-massal');
+        Route::post('desa/{config_id}/status', [StatusDesaController::class, 'ubahStatus'])
+            ->whereNumber('config_id')
+            ->middleware('permission:dataspasial-desa-write')
+            ->name('dataspasial.desa.status');
     });
 });
 

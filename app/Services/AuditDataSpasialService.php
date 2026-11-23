@@ -44,9 +44,17 @@ class AuditDataSpasialService
      */
     public const SEMUA_SUMBER = '';
 
+    /** Penyaring hak akses per baris (sektor & wilayah pengguna), null bila tidak dibatasi. */
+    private ?\Closure $filterAkses = null;
+
     public function __construct(
         public readonly DataSpasialApiService $dataspasial,
     ) {}
+
+    public function setFilterAkses(?\Closure $filter): void
+    {
+        $this->filterAkses = $filter;
+    }
 
     // -----------------------------------------------------------------------
     // Filter
@@ -138,13 +146,16 @@ class AuditDataSpasialService
         foreach ($result->data as $item) {
             $normal = $this->normalisasiBaris($item);
 
-            if ($normal !== null) {
+            if ($normal !== null && ($this->filterAkses === null || ($this->filterAkses)($normal))) {
                 $baris[] = $normal;
             }
         }
 
         $pagination = $result->pagination();
-        $total = (int) ($pagination['total'] ?? count($baris));
+        // Bila penyaring hak akses aktif, total dari API tidak lagi akurat untuk halaman ini.
+        $total = $this->filterAkses === null
+            ? (int) ($pagination['total'] ?? count($baris))
+            : count($baris);
         $totalPages = (int) ($pagination['total_pages'] ?? max(1, (int) ceil($total / max(1, $filter['per_page']))));
 
         return [

@@ -7,8 +7,13 @@ use App\Models\Enums\StatusEnum;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\UserTeam;
+use App\Services\CakupanPenggunaService;
 use App\Services\ConfigApiService;
+use App\Services\DataSpasialApiService;
+use App\Services\PasswordResetByAdminService;
+use App\Support\KodeWilayah;
 use App\Traits\UploadedFile;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +61,9 @@ class UserController extends Controller
                     if (! auth()->guest()) {
                         if ($permission['canedit']) {
                             $data['edit'] = route('users.edit', $row->id);
+                        }
+                        if ($permission['canedit'] && $row->id !== auth()->id() && auth()->user()->can('update', $row)) {
+                            $data['resetPassword'] = route('users.reset-password', $row->id);
                         }
                         if ($row->id !== User::superAdmin()) {
                             if ($permission['candelete']) {
@@ -109,8 +117,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\UserRequest $request
-     *
+     * @param  \Illuminate\Http\UserRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(UserRequest $request)
@@ -166,8 +173,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -178,8 +184,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -196,14 +201,134 @@ class UserController extends Controller
 
         $openkab_siapakai = $this->isOpenKabSiapPakai();
 
-        return view('user.edit', compact('user', 'groups', 'team', 'kabupatens', 'openkab_siapakai'));
+        $akses = $this->dataAkses($user);
+
+        return view('user.edit', compact('user', 'groups', 'team', 'kabupatens', 'openkab_siapakai', 'akses'));
+    }
+
+    /**
+     * Data pilihan dan keadaan awal pembatasan hak akses DataSpasial (issue #1319/#1320).
+     *
+     * @return array{wilayah: array<string, mixed>, sektor: array<string, mixed>, data: array<string, mixed>, sektors: array<int, array{kode: string, nama: string}>}
+     */
+    private function dataAkses(User $user): array
+    {
+        $layanan = app(CakupanPenggunaService::class);
+        $config = new ConfigApiService;
+
+        $wilayah = $layanan->wilayahAkses($user->id);
+        $sektorAkses = $layanan->sektorAkses($user->id);
+
+        $kabupaten = collect($config->kabupaten())
+            ->map(fn ($k) => ['kode' => (string) ($k->kode_kabupaten ?? ''), 'nama' => (string) ($k->nama_kabupaten ?? '')])
+            ->filter(fn ($k) => $k['kode'] !== '')
+            ->values()
+            ->all();
+
+        $kecamatan = collect($config->kecamatan())
+            ->map(function ($k) {
+                $a = is_object($k) ? (array) $k : $k;
+                $kode = (string) ($a['kode_kecamatan'] ?? '');
+
+                return ['kode' => $kode, 'nama' => (string) ($a['nama_kecamatan'] ?? $kode), 'kab' => KodeWilayah::kabupaten($kode)];
+            })
+            ->filter(fn ($k) => $k['kode'] !== '')
+            ->values()
+            ->all();
+
+        $desa = collect($config->desaConfig())
+            ->map(function ($d) {
+                $a = is_object($d) ? (array) $d : $d;
+                $kode = (string) ($a['kode_desa'] ?? '');
+
+                return ['kode' => $kode, 'nama' => (string) ($a['nama_desa'] ?? $kode), 'kec' => (string) ($a['kode_kecamatan'] ?? KodeWilayah::kecamatan($kode))];
+            })
+            ->filter(fn ($d) => $d['kode'] !== '')
+            ->values()
+            ->all();
+
+        $sektor = collect(app(DataSpasialApiService::class)->listSektor()->data ?? [])
+            ->map(fn ($s) => ['kode' => (string) ($s['attributes']['kode'] ?? ''), 'nama' => (string) ($s['attributes']['nama'] ?? ($s['attributes']['kode'] ?? ''))])
+            ->filter(fn ($s) => $s['kode'] !== '')
+            ->values()
+            ->all();
+
+        $kode = $wilayah['kode'] ?? null;
+
+        return [
+            'wilayah' => [
+                'aktif' => $wilayah !== null,
+                'level' => $wilayah['level'] ?? null,
+                'kode' => $kode,
+                // Kabupaten dan kecamatan induk dari kode yang disimpan, lewat helper KodeWilayah.
+                'kab' => KodeWilayah::kabupaten($kode),
+                'kec' => match ($wilayah['level'] ?? null) {
+                    KodeWilayah::KECAMATAN => $kode,
+                    KodeWilayah::DESA => KodeWilayah::kecamatan($kode),
+                    default => null,
+                },
+            ],
+            'sektor' => [
+                'aktif' => $sektorAkses !== null,
+                'pilih' => $sektorAkses ?? [],
+            ],
+            'data' => ['kabupaten' => $kabupaten, 'kecamatan' => $kecamatan, 'desa' => $desa],
+            'sektors' => $sektor,
+        ];
+    }
+
+    /**
+     * Validasi input pembatasan hak akses sebelum data pengguna disimpan.
+     */
+    private function validasiHakAkses(Request $request): ?string
+    {
+        if ($request->boolean('akses_wilayah_aktif')) {
+            $level = (string) $request->input('akses_wilayah_level', '');
+            if (! in_array($level, CakupanPenggunaService::LEVEL_WILAYAH, true)) {
+                return 'Pilih level wilayah untuk pembatasan wilayah.';
+            }
+            $kode = (string) $request->input('akses_wilayah_'.$level, '');
+            if ($kode === '') {
+                return 'Pilih '.$level.' untuk pembatasan wilayah.';
+            }
+            if (! KodeWilayah::sesuaiLevel($level, $kode)) {
+                $panjang = KodeWilayah::PANJANG[$level];
+
+                return 'Kode '.$level.' tidak valid: harus '.$panjang.' digit.';
+            }
+        }
+
+        if ($request->boolean('akses_sektor_aktif') && $request->input('akses_sektor', []) === []) {
+            return 'Pilih minimal satu sektor untuk pembatasan sektor.';
+        }
+
+        return null;
+    }
+
+    /**
+     * Simpan pembatasan hak akses. Pembatasan yang tidak diaktifkan dihapus (kembali bebas).
+     */
+    private function simpanHakAkses(Request $request, User $user): void
+    {
+        $layanan = app(CakupanPenggunaService::class);
+
+        if ($request->boolean('akses_wilayah_aktif')) {
+            $level = (string) $request->input('akses_wilayah_level');
+            $layanan->simpanWilayah($user->id, $level, (string) $request->input('akses_wilayah_'.$level));
+        } else {
+            $layanan->simpanWilayah($user->id, null, null);
+        }
+
+        $layanan->simpanSektor(
+            $user->id,
+            $request->boolean('akses_sektor_aktif') ? (array) $request->input('akses_sektor', []) : [],
+        );
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function profile($id)
@@ -217,17 +342,46 @@ class UserController extends Controller
     }
 
     /**
+     * Reset password pengguna oleh administrator. Password sementara ditampilkan
+     * sekali lewat flash session dan dikirim ke email pengguna.
+     *
+     * @return RedirectResponse
+     */
+    public function resetPassword(Request $request, User $user)
+    {
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $user);
+
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak dapat mereset password akun sendiri.');
+        }
+
+        $hasil = app(PasswordResetByAdminService::class)->reset($user, $request->user());
+
+        $redirect = redirect()->route('users.index')
+            ->with('password_sementara', $hasil['password']);
+
+        return $hasil['email_terkirim']
+            ? $redirect->with('success', "Password {$user->name} berhasil direset. Email pemberitahuan telah dikirim.")
+            : $redirect->with('warning', "Password {$user->name} berhasil direset, tetapi email pemberitahuan gagal dikirim. Sampaikan password sementara secara langsung.");
+    }
+
+    /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param int     $id
-     *
+     * @param  Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(UserRequest $request, User $user)
     {
         // IDOR Prevention: Authorization check
         $this->authorize('update', $user);
+
+        // Validasi pembatasan hak akses sebelum data pengguna diubah.
+        if ($request->has('akses_form') && ($errorAkses = $this->validasiHakAkses($request))) {
+            return back()->withInput()->with('error', $errorAkses);
+        }
 
         try {
             $currentUser = auth()->user();
@@ -308,6 +462,10 @@ class UserController extends Controller
                 $user->syncRoles($role);
             }
 
+            if ($request->has('akses_form')) {
+                $this->simpanHakAkses($request, $user);
+            }
+
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil diubah!');
         } catch (\Exception $e) {
             report($e);
@@ -319,8 +477,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
@@ -342,8 +499,7 @@ class UserController extends Controller
     /**
      * Update status resource from storage.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function status($id, $status, User $user)

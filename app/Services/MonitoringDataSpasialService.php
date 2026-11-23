@@ -32,11 +32,19 @@ class MonitoringDataSpasialService
      */
     public const SEMUA_KECAMATAN = 'SEMUA';
 
+    /** Penyaring wilayah pengguna untuk daftar desa (null bila tidak dibatasi). */
+    private ?\Closure $filterAkses = null;
+
     public function __construct(
         public readonly DataSpasialApiService $dataspasial,
         private readonly AdopsiDesaService $adopsi,
         private readonly ConfigApiService $configApi,
     ) {}
+
+    public function setFilterAkses(?\Closure $filter): void
+    {
+        $this->filterAkses = $filter;
+    }
 
     // -----------------------------------------------------------------------
     // Filter
@@ -87,6 +95,10 @@ class MonitoringDataSpasialService
         $sektorId = $this->sektorId($filter['sektor']);
 
         $barisAdopsi = $this->barisAdopsiSektor($ambil['baris'], $sektorId);
+        if ($this->filterAkses !== null) {
+            // Desa di luar wilayah pengguna tidak ikut dihitung (kartu, tabel, dan ringkasan).
+            $barisAdopsi = array_values(array_filter($barisAdopsi, $this->filterAkses));
+        }
         $baris = $this->susunBarisDasar($barisAdopsi, $filter['kode_kecamatan']);
 
         if ($baris === []) {
@@ -111,7 +123,7 @@ class MonitoringDataSpasialService
         ], static fn ($v) => $v !== null);
 
         $ringkasan = $this->dataspasial->ringkasan($ringkasanQuery);
-        
+
         $totalIsian = [];
         $ringkasanTersedia = ! $ringkasan->isUnavailable();
 
@@ -136,7 +148,7 @@ class MonitoringDataSpasialService
 
         $barisLengkap = [];
         $namaKecamatan = $this->petaNamaKecamatan();
-        
+
         foreach ($baris as $kodeDesa => $dasar) {
             $kodeDesa = (string) $kodeDesa; // key array numerik bisa berupa int
             $hasil = $detail[$kodeDesa] ?? null; // null = rincian tidak terbaca
@@ -177,9 +189,12 @@ class MonitoringDataSpasialService
 
         // Kartu atas SELURUH hasil (FR-010). "Perlu diperiksa" kini = desa
         // dengan versi tertinggal (tanda data dihapus 2026-10-21).
+        // KAB-09: desa yang pengisiannya dinonaktifkan kabupaten tidak dihitung
+        // "belum pernah mengirim" maupun "perlu diperiksa" — desa itu memang dikunci.
         $sudah = count(array_filter($terfilter, static fn (array $b): bool => $b['status_pengisian'] === 'sudah_mengisi'));
-        $belum = count(array_filter($terfilter, static fn (array $b): bool => $b['status_pengisian'] === 'belum_pernah_mengirim'));
+        $belum = count(array_filter($terfilter, static fn (array $b): bool => $b['status_pengisian'] === 'belum_pernah_mengirim' && $b['isian_aktif']));
         $perlu = count(array_filter($terfilter, static fn (array $b): bool => $b['perlu_tindakan']));
+        $nonaktif = count(array_filter($terfilter, static fn (array $b): bool => ! $b['isian_aktif']));
 
         $kartu = [
             'sudah_mengisi' => $sudah,
@@ -187,6 +202,7 @@ class MonitoringDataSpasialService
             'perlu_diperiksa' => $perlu,
             'total_desa' => count($terfilter),
             'sudah_mengisi_label' => $sudah.'/'.count($terfilter),
+            'isian_nonaktif' => $nonaktif,
         ];
 
         $total = count($terfilter);
@@ -275,7 +291,7 @@ class MonitoringDataSpasialService
                     $barisCsv['kode_desa'],
                     $barisCsv['nama_desa'],
                     $barisCsv['nama_kecamatan'] ?? ($barisCsv['kode_kecamatan'] ?? ''),
-                    $barisCsv['kelengkapan_persen'] ?? '',                    
+                    $barisCsv['kelengkapan_persen'] ?? '',
                     $barisCsv['skor_kualitas'] ?? $barisCsv['skor_persen'] ?? '',
                     '',
                 ], ',', '"', '\\');
@@ -432,6 +448,7 @@ class MonitoringDataSpasialService
                 'versi_terpakai' => $b['nomor_versi'],
                 'terakhir_ada_data' => $b['terakhir_ada_data'],
                 'ada_adopsi' => true,
+                'isian_aktif' => $b['isian_aktif'] ?? true,
             ];
         }
 
@@ -465,6 +482,7 @@ class MonitoringDataSpasialService
                 'versi_terpakai' => null,
                 'terakhir_ada_data' => null,
                 'ada_adopsi' => false,
+                'isian_aktif' => true,
             ];
         }
 
@@ -594,6 +612,7 @@ class MonitoringDataSpasialService
     ): array {
         $kodeDesa = (string) $dasar['kode_desa'];
         $versiTerpakai = $dasar['versi_terpakai'];
+        $isianAktif = (bool) ($dasar['isian_aktif'] ?? true);
 
         // Status versi (FR-022): anomali bila nomor versi > terbit terbaru.
         if ($versiTerbit === null || $versiTerpakai === null) {
@@ -686,7 +705,9 @@ class MonitoringDataSpasialService
             'tanda_impor' => $sumber === 'impor',
             'kelengkapan_persen' => $kelengkapan,
             'skor_kualitas' => null,
-            'perlu_tindakan' => (! $berdata) || $statusVersi === 'tertinggal',
+            // KAB-09: desa yang dinonaktifkan kabupaten tidak perlu ditindaklanjuti operatornya.
+            'isian_aktif' => $isianAktif,
+            'perlu_tindakan' => $isianAktif && ((! $berdata) || $statusVersi === 'tertinggal'),
             'periode' => $periode,
         ];
     }
@@ -716,7 +737,7 @@ class MonitoringDataSpasialService
                 'total' => 0,
                 'total_pages' => 1,
             ],
-            'kartu' => ['sudah_mengisi' => 0, 'belum_pernah_mengirim' => 0, 'perlu_diperiksa' => 0],
+            'kartu' => ['sudah_mengisi' => 0, 'belum_pernah_mengirim' => 0, 'perlu_diperiksa' => 0, 'isian_nonaktif' => 0],
             'tabel' => ['columns' => ['desa', 'kecamatan', 'kelengkapan', 'status', 'kualitas'], 'rows' => []],
             'semua_baris' => [],
         ];

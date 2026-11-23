@@ -22,6 +22,20 @@ final class Modul extends Enum
 
     const Menu = [
         [
+            'text' => 'Dasbor',
+            'icon' => 'fa fa-home',
+            'permission' => 'dasbor',
+            'can' => 'dasbor-read',
+            'url' => 'dasbor',
+        ],
+        [
+            'text' => 'Dasbor Demografi',
+            'icon' => 'fa fa-home',
+            'permission' => 'dasbor-demografi',
+            'can' => 'dasbor-demografi-read',
+            'url' => 'dasbor-demografi',
+        ],
+        [
             'text' => 'Profile Kependudukan',
             'icon' => 'fa fa-users',
             'permission' => 'datapokok',
@@ -303,6 +317,12 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Daftar Data Hasil Impor',
+                    'url' => 'dataspasial/impor/daftar',
+                    'permission' => 'dataspasial-impor',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
                     'text' => 'Monitoring',
                     'url' => 'dataspasial/monitoring',
                     'permission' => 'dataspasial-monitoring',
@@ -312,6 +332,12 @@ final class Modul extends Enum
                     'text' => 'Log Entri',
                     'url' => 'dataspasial/audit',
                     'permission' => 'dataspasial-audit',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Status Desa',
+                    'url' => 'dataspasial/desa',
+                    'permission' => 'dataspasial-desa',
                 ],
             ],
         ],

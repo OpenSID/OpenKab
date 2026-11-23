@@ -9,6 +9,16 @@
 @section('content')
     @include('partials.breadcrumbs')
     @include('partials.flash_message')
+    @if (session('password_sementara'))
+        <div class="alert alert-warning" data-testid="password-sementara">
+            <strong>Password sementara:</strong>
+            <code id="password-sementara" class="ml-1">{{ session('password_sementara') }}</code>
+            <button type="button" class="btn btn-sm btn-outline-dark ml-2" id="btn-salin-password">Salin</button>
+            <div class="small mt-1">
+                Password ini hanya ditampilkan sekali. Catat sekarang atau berikan kepada pengguna. Pengguna wajib mengganti password saat login berikutnya.
+            </div>
+        </div>
+    @endif
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -46,6 +56,48 @@
 
 @section('js')
     <script nonce="{{ csp_nonce() }}"  >
+    // Reset password: konfirmasi, lalu kirim POST dengan CSRF token dari tombol
+    document.addEventListener("click", function(e) {
+        var tombol = e.target.closest('[data-button="reset-password"]');
+        if (!tombol) {
+            return;
+        }
+        e.preventDefault();
+        Swal.fire({
+            title: 'Reset Password',
+            text: 'Reset password pengguna ini? Password sementara akan ditampilkan sekali dan dikirim ke email pengguna.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Reset',
+            cancelButtonText: 'Batal',
+        }).then(function(result) {
+            if (!result.isConfirmed) {
+                return;
+            }
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = tombol.getAttribute('data-href');
+            var token = document.createElement('input');
+            token.type = 'hidden';
+            token.name = '_token';
+            token.value = tombol.getAttribute('data-token');
+            form.appendChild(token);
+            document.body.appendChild(form);
+            form.submit();
+        });
+    });
+
+    // Salin password sementara ke clipboard (opsional, gagal diam-diam jika tidak didukung)
+    document.addEventListener("click", function(e) {
+        if (!e.target.closest('#btn-salin-password')) {
+            return;
+        }
+        var teks = document.getElementById('password-sementara');
+        if (teks && navigator.clipboard) {
+            navigator.clipboard.writeText(teks.textContent.trim()).catch(function() {});
+        }
+    });
+
     document.addEventListener("DOMContentLoaded", function(event) {
         var user = $('#user').DataTable({
             processing: true,

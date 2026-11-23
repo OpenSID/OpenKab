@@ -118,7 +118,7 @@ class MonitoringDataTest extends TestCase
 
         // Kartu dasar (aturan tanda dihapus): sudah=4, belum=1, perlu_diperiksa = tertinggal + belum (perlu tindakan).
         $this->assertSame(
-            ['sudah_mengisi' => 4, 'belum_pernah_mengirim' => 1, 'perlu_diperiksa' => 2, 'total_desa' => 5, 'sudah_mengisi_label' => '4/5'],
+            ['sudah_mengisi' => 4, 'belum_pernah_mengirim' => 1, 'perlu_diperiksa' => 2, 'total_desa' => 5, 'sudah_mengisi_label' => '4/5', 'isian_nonaktif' => 0],
             $resp->json('kartu')
         );
 
@@ -242,5 +242,40 @@ class MonitoringDataTest extends TestCase
 
         // Perlu tindakan: tertinggal (Bantas) & belum (Cekatak) lebih dulu — lalu nama menaik.
         $this->assertSame(['5102022003', '5102022004', '5102012001', '5102012005', '5102012006'], $kode);
+    }
+
+    public function test_desa_nonaktif_tidak_dihitung_belum_mengirim_maupun_perlu_diperiksa(): void
+    {
+        $this->actingAsPembaca();
+
+        // KAB-09: Cekatak (belum pernah mengirim) dinonaktifkan kabupaten lewat API-09.
+        $adopsi = fxMonitoringAdopsi();
+        foreach ($adopsi['data'] as $i => $baris) {
+            $adopsi['data'][$i]['attributes']['isian_aktif'] = $baris['attributes']['kode_desa'] !== '5102022004';
+        }
+        fakeEndpointMonitoring($adopsi);
+
+        $resp = $this->getJson('/dataspasial/monitoring/data?sektor=SK0&kode_kecamatan=SEMUA&periode=2025-06')
+            ->assertOk();
+
+        $this->assertSame(0, $resp->json('kartu.belum_pernah_mengirim'));
+        $this->assertSame(1, $resp->json('kartu.perlu_diperiksa'), 'Hanya Bantas (tertinggal) yang perlu diperiksa');
+        $this->assertSame(1, $resp->json('kartu.isian_nonaktif'));
+
+        $cekatak = collect($resp->json('tabel.rows'))->firstWhere('kode_desa', '5102022004');
+        $this->assertFalse($cekatak['isian_aktif']);
+        $this->assertFalse($cekatak['perlu_tindakan']);
+        $this->assertSame('belum_pernah_mengirim', $cekatak['status_pengisian']);
+    }
+
+    public function test_respons_adopsi_lama_tanpa_isian_aktif_dianggap_aktif(): void
+    {
+        $this->actingAsPembaca();
+        fakeEndpointMonitoring();
+
+        $rows = collect($this->getJson('/dataspasial/monitoring/data?sektor=SK0&kode_kecamatan=SEMUA&periode=2025-06')
+            ->assertOk()->json('tabel.rows'));
+
+        $this->assertTrue($rows->every(fn (array $r) => $r['isian_aktif'] === true));
     }
 }

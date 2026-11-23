@@ -25,4 +25,12 @@
                     aria-hidden="true"></i></button>
         </a>
     @endif
+    @if (isset($resetPassword))
+        {{-- Aksi POST: ditangani JS di user/index.blade.php (konfirmasi lalu kirim form dengan CSRF) --}}
+        <a href="javascript:void(0)" title="Reset Password" data-button="reset-password" data-href="{{ $resetPassword }}"
+            data-token="{{ csrf_token() }}" data-testid="bt-reset-password">
+            <button type="button" class="mr-1 btn btn-warning btn-sm width-40p"><i class="fa fa-key"
+                    aria-hidden="true"></i></button>
+        </a>
+    @endif
 </div>

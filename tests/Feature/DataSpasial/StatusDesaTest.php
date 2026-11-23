@@ -301,6 +301,12 @@ class StatusDesaTest extends TestCase
 
         // Script ber-versi agar browser tidak memakai status-desa.js lama dari cache
         $this->assertMatchesRegularExpression('#js/dataspasial/status-desa\.js\?v=\d+#', $html);
+
+        // Label tombol pendek, tanpa label kolom; style tombol biasa (bukan outline). Angka hanya di modal.
+        $this->assertMatchesRegularExpression('#class="btn btn-sm btn-danger tombol-status-massal"[^>]*>\s*<i class="fas fa-lock"></i> Nonaktifkan Semua\s*</button>#', $html);
+        $this->assertMatchesRegularExpression('#class="btn btn-sm btn-success tombol-status-massal"[^>]*>\s*<i class="fas fa-lock-open"></i> Aktifkan Semua\s*</button>#', $html);
+        $this->assertStringNotContainsString('Aksi Semua Desa', $html);
+        $this->assertStringNotContainsString('btn-outline-danger tombol-status-massal', $html);
     }
 
     public function test_pembaca_tidak_boleh_menjalankan_aksi_massal(): void

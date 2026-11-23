@@ -98,19 +98,20 @@
         return aktifkan ? (ringkasanStatus.nonaktif || 0) : (ringkasanStatus.aktif || 0);
     }
 
+    /**
+     * Label tombol tetap pendek ("Nonaktifkan Semua" / "Aktifkan Semua"); jumlah desa dan cakupan
+     * hanya ditampilkan di modal. Cakupan tetap terlihat lewat tooltip.
+     */
     function renderTombolMassal() {
         document.querySelectorAll('.tombol-status-massal').forEach(function (tombol) {
             var aktifkan = tombol.getAttribute('data-aktif') === '1';
             var n = jumlahTerdampak(aktifkan);
-            var label = tombol.querySelector('.label-massal');
-            if (label) {
-                label.textContent = (aktifkan ? 'Aktifkan' : 'Nonaktifkan') + ' Semua Desa ' + teksCakupan() +
-                    (ringkasanStatus ? ' (' + n + ')' : '');
-            }
             tombol.disabled = !ringkasanStatus || n === 0;
             tombol.title = !ringkasanStatus
                 ? 'Jumlah desa belum dapat dihitung'
-                : (n === 0 ? 'Tidak ada desa yang perlu diubah pada cakupan ini' : '');
+                : (n === 0
+                    ? 'Tidak ada desa yang perlu diubah pada cakupan ini'
+                    : (aktifkan ? 'Aktifkan' : 'Nonaktifkan') + ' semua desa ' + teksCakupan());
         });
     }
 

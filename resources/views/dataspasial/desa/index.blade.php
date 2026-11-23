@@ -53,17 +53,19 @@
                             </div>
                             @if ($bolehUbah)
                                 {{-- Aksi massal: cakupan mengikuti filter kecamatan (tanpa filter = se-kabupaten).
-                                     Tombol aktif setelah jumlah desa per status dimuat (ringkasan_status). --}}
+                                     Tombol aktif setelah jumlah desa per status dimuat (ringkasan_status);
+                                     angka & cakupan ditampilkan di modal, bukan di tombol. --}}
                                 <div class="col-md-4 col-sm-12 mb-2" data-testid="aksi-massal">
-                                    <label class="d-block">Aksi Semua Desa</label>
+                                    {{-- Label kosong hanya untuk meratakan tombol dengan dropdown filter di sebelahnya --}}
+                                    <label class="d-none d-md-block" aria-hidden="true">&nbsp;</label>
                                     <div class="d-flex flex-wrap" style="gap: .25rem;">
-                                        <button type="button" class="btn btn-sm btn-outline-danger tombol-status-massal" disabled
+                                        <button type="button" class="btn btn-sm btn-danger tombol-status-massal" disabled
                                             data-aktif="0" data-testid="tombol-nonaktifkan-semua">
-                                            <i class="fas fa-lock"></i> <span class="label-massal">Nonaktifkan Semua Desa</span>
+                                            <i class="fas fa-lock"></i> Nonaktifkan Semua
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-success tombol-status-massal" disabled
+                                        <button type="button" class="btn btn-sm btn-success tombol-status-massal" disabled
                                             data-aktif="1" data-testid="tombol-aktifkan-semua">
-                                            <i class="fas fa-lock-open"></i> <span class="label-massal">Aktifkan Semua Desa</span>
+                                            <i class="fas fa-lock-open"></i> Aktifkan Semua
                                         </button>
                                     </div>
                                 </div>

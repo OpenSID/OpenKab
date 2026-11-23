@@ -25,7 +25,7 @@ class StatusDesaService
      * Satu halaman daftar desa yang sudah dinormalkan.
      *
      * @param  array<string, mixed>  $filter  kode_kecamatan, status (aktif|nonaktif), page
-     * @return array{tersedia: bool, baris: array<int, array<string, mixed>>, halaman: int, total_halaman: int, total: int, per_halaman: int, ringkasan: array<string, int>}
+     * @return array{tersedia: bool, baris: array<int, array<string, mixed>>, halaman: int, total_halaman: int, total: int, per_halaman: int, ringkasan: array<string, int>, ringkasan_status: array{total: int, aktif: int, nonaktif: int}|null}
      */
     public function daftar(array $filter): array
     {
@@ -47,6 +47,7 @@ class StatusDesaService
                 'total' => 0,
                 'per_halaman' => self::PER_HALAMAN,
                 'ringkasan' => ['total' => 0, 'nonaktif' => 0],
+                'ringkasan_status' => null,
             ];
         }
 
@@ -67,7 +68,38 @@ class StatusDesaService
                 'total' => count($baris),
                 'nonaktif' => count(array_filter($baris, static fn (array $b): bool => ! $b['isian_aktif'])),
             ],
+            'ringkasan_status' => $this->ringkasanStatus($result->meta['ringkasan_status'] ?? null),
         ];
+    }
+
+    /**
+     * Nonaktifkan / aktifkan seluruh desa pada cakupan (kabupaten, dipersempit kecamatan bila diberikan).
+     */
+    public function ubahStatusMassal(bool $aktif, ?string $alasan, ?string $kodeKecamatan): DataSpasialResult
+    {
+        return $this->dataspasial->ubahStatusDesaMassal($aktif, $alasan, $kodeKecamatan);
+    }
+
+    /**
+     * Pesan flash setelah aksi massal; angka diambil dari respons API, bukan dari modal.
+     */
+    public function pesanMassal(DataSpasialResult $result, bool $aktif, ?string $namaKecamatan): string
+    {
+        $item = is_array($result->first()) ? $result->first() : [];
+        $atribut = is_array($item['attributes'] ?? null) ? $item['attributes'] : [];
+        $diubah = (int) ($atribut['jumlah_diubah'] ?? 0);
+        $tetap = (int) ($atribut['jumlah_tidak_berubah'] ?? 0);
+        $cakupan = $namaKecamatan !== null ? "di Kecamatan {$namaKecamatan}" : 'se-kabupaten';
+
+        if ($aktif) {
+            $pesan = "Pengisian Data Spasial {$diubah} desa {$cakupan} telah diaktifkan kembali.";
+
+            return $tetap > 0 ? "{$pesan} {$tetap} desa sudah aktif sebelumnya." : $pesan;
+        }
+
+        $pesan = "Pengisian Data Spasial {$diubah} desa {$cakupan} telah dinonaktifkan.";
+
+        return $tetap > 0 ? "{$pesan} {$tetap} desa sudah nonaktif sebelumnya dan alasannya tidak diubah." : $pesan;
     }
 
     /**
@@ -131,6 +163,24 @@ class StatusDesaService
             'dinonaktifkan_oleh' => $this->teks($atribut['dinonaktifkan_oleh'] ?? null),
             'dinonaktifkan_pada' => $this->teks($atribut['dinonaktifkan_pada'] ?? null),
             'dinonaktifkan_pada_label' => $this->formatTanggal($atribut['dinonaktifkan_pada'] ?? null),
+        ];
+    }
+
+    /**
+     * `meta.ringkasan_status` API; null bila API versi lama belum mengirimnya.
+     *
+     * @return array{total: int, aktif: int, nonaktif: int}|null
+     */
+    private function ringkasanStatus(mixed $ringkasan): ?array
+    {
+        if (! is_array($ringkasan) || ! isset($ringkasan['total'], $ringkasan['aktif'], $ringkasan['nonaktif'])) {
+            return null;
+        }
+
+        return [
+            'total' => (int) $ringkasan['total'],
+            'aktif' => (int) $ringkasan['aktif'],
+            'nonaktif' => (int) $ringkasan['nonaktif'],
         ];
     }
 

@@ -51,6 +51,23 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @if ($bolehUbah)
+                                {{-- Aksi massal: cakupan mengikuti filter kecamatan (tanpa filter = se-kabupaten).
+                                     Tombol aktif setelah jumlah desa per status dimuat (ringkasan_status). --}}
+                                <div class="col-md-4 col-sm-12 mb-2" data-testid="aksi-massal">
+                                    <label class="d-block">Aksi Semua Desa</label>
+                                    <div class="d-flex flex-wrap" style="gap: .25rem;">
+                                        <button type="button" class="btn btn-sm btn-outline-danger tombol-status-massal" disabled
+                                            data-aktif="0" data-testid="tombol-nonaktifkan-semua">
+                                            <i class="fas fa-lock"></i> <span class="label-massal">Nonaktifkan Semua Desa</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-success tombol-status-massal" disabled
+                                            data-aktif="1" data-testid="tombol-aktifkan-semua">
+                                            <i class="fas fa-lock-open"></i> <span class="label-massal">Aktifkan Semua Desa</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -149,11 +166,62 @@
                 </form>
             </div>
         </div>
+
+        {{-- Modal konfirmasi aksi massal --}}
+        <div class="modal fade" id="modal-status-massal" tabindex="-1" role="dialog" aria-hidden="true"
+            data-testid="modal-status-massal">
+            <div class="modal-dialog" role="document">
+                <form method="POST" id="form-status-massal" class="modal-content"
+                    action="{{ route('dataspasial.desa.status-massal') }}">
+                    @csrf
+                    <input type="hidden" name="aktif" id="massal-aktif" value="0">
+                    <input type="hidden" name="kode_kecamatan" id="massal-kode-kecamatan" value="">
+                    <input type="hidden" name="nama_kecamatan" id="massal-nama-kecamatan" value="">
+                    <input type="hidden" name="status" id="massal-status-filter" value="">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="judul-modal-massal">Nonaktifkan Semua Desa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning py-2" id="teks-modal-massal" data-testid="teks-modal-massal"></div>
+                        <div class="form-group" id="grup-alasan-massal">
+                            <label for="massal-alasan">Alasan <span class="text-danger">*</span></label>
+                            <textarea name="alasan" id="massal-alasan" class="form-control" rows="3"
+                                maxlength="{{ \App\Http\Requests\DataSpasial\UbahStatusDesaRequest::PANJANG_ALASAN }}"
+                                data-testid="input-alasan-massal"
+                                placeholder="Contoh: Verifikasi data spasial tahunan oleh kabupaten"></textarea>
+                            <small class="form-text text-muted">
+                                Alasan ditampilkan kepada operator desa di OpenSID. Desa yang sudah nonaktif tetap memakai alasan lamanya.
+                            </small>
+                        </div>
+                        <p class="small text-muted mb-2" id="catatan-desa-baru">
+                            Status disimpan per desa: desa yang baru terdaftar setelah aksi ini tetap aktif.
+                        </p>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="massal-konfirmasi" name="konfirmasi" value="1"
+                                data-testid="konfirmasi-massal">
+                            <label class="custom-control-label" for="massal-konfirmasi" id="label-konfirmasi-massal">
+                                Saya memahami perubahan ini berlaku untuk semua desa pada cakupan di atas.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger" id="tombol-simpan-massal" disabled
+                            data-testid="tombol-simpan-massal">Nonaktifkan Semua</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     @endif
 @stop
 
 @push('js')
-    <script src="{{ asset('js/dataspasial/status-desa.js') }}"></script>
+    {{-- ?v=filemtime: browser selalu memuat versi terbaru setelah berkas berubah (tanpa ini JS lama dari cache
+         tidak mengenal tombol massal sehingga tombol tetap disabled) --}}
+    <script src="{{ asset('js/dataspasial/status-desa.js') }}?v={{ @filemtime(public_path('js/dataspasial/status-desa.js')) }}"></script>
     <script nonce="{{ csp_nonce() }}">
         document.addEventListener('DOMContentLoaded', function () {
             if (!window.StatusDesaDataSpasial) return;

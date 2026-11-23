@@ -618,6 +618,9 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::get('desa/data', [StatusDesaController::class, 'data'])
             ->middleware('permission:dataspasial-desa-read')
             ->name('dataspasial.desa.data');
+        Route::post('desa/status-massal', [StatusDesaController::class, 'ubahStatusMassal'])
+            ->middleware('permission:dataspasial-desa-write')
+            ->name('dataspasial.desa.status-massal');
         Route::post('desa/{config_id}/status', [StatusDesaController::class, 'ubahStatus'])
             ->whereNumber('config_id')
             ->middleware('permission:dataspasial-desa-write')

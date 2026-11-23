@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\DataSpasial;
 
+use App\Http\Requests\DataSpasial\UbahStatusDesaMassalRequest;
 use App\Http\Requests\DataSpasial\UbahStatusDesaRequest;
 use App\Services\DataSpasialResult;
 use App\Services\StatusDesaService;
@@ -75,8 +76,37 @@ class StatusDesaController extends DataSpasialController
                 'per_page' => $hasil['per_halaman'],
             ],
             'ringkasan' => $hasil['ringkasan'],
+            // Jumlah per status pada cakupan filter (seluruh halaman) untuk tombol & modal aksi massal
+            'ringkasan_status' => $hasil['ringkasan_status'],
             'baris' => $hasil['baris'],
         ]);
+    }
+
+    /**
+     * Nonaktifkan atau aktifkan kembali seluruh desa pada cakupan filter kecamatan
+     * (tanpa filter = seluruh desa kabupaten).
+     */
+    public function ubahStatusMassal(UbahStatusDesaMassalRequest $request): RedirectResponse|JsonResponse
+    {
+        $aktif = $request->aktif();
+        $result = $this->statusDesa->ubahStatusMassal($aktif, $request->alasan(), $request->kodeKecamatan());
+        $kembali = redirect()->route('dataspasial.desa', $request->only(['kode_kecamatan', 'status']));
+
+        if ($result->isUnavailable()) {
+            $pesan = $result->httpStatus === 404
+                ? 'Tidak ada desa pada cakupan yang dipilih.'
+                : (string) config('dataspasial.unavailable_message');
+
+            return $request->wantsJson()
+                ? response()->json(['success' => false, 'message' => $pesan], $result->httpStatus === 404 ? 404 : 503)
+                : $kembali->with('error', $pesan);
+        }
+
+        $pesan = $this->statusDesa->pesanMassal($result, $aktif, $request->namaKecamatan());
+
+        return $request->wantsJson()
+            ? response()->json(['success' => true, 'message' => $pesan, 'hasil' => $result->first()['attributes'] ?? null])
+            : $kembali->with('success', $pesan);
     }
 
     /**

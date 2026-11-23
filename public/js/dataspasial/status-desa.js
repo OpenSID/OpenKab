@@ -4,12 +4,17 @@
  * Tabel desa dimuat lewat AJAX (filter kecamatan + status, paginasi); tombol
  * Nonaktifkan/Aktifkan membuka modal konfirmasi yang mengirim form POST biasa
  * (CSRF dari @csrf) sehingga hasilnya tampil sebagai flash message.
+ *
+ * Tombol massal "Nonaktifkan/Aktifkan Semua Desa" memakai cakupan filter kecamatan
+ * (tanpa filter = se-kabupaten) dan jumlah terdampak dari `ringkasan_status`
+ * (seluruh cakupan, bukan hanya halaman yang tampil).
  */
 (function () {
     'use strict';
 
     var opts = {};
     var state = { kode_kecamatan: '', status: '', page: 1 };
+    var ringkasanStatus = null;
     var lastToken = 0;
 
     function qs(sel) { return document.querySelector(sel); }
@@ -75,6 +80,71 @@
         }).join('');
     }
 
+    // ------------------------------------------------------------- massal
+
+    function namaKecamatanTerpilih() {
+        var kec = qs('#filter_kecamatan_status');
+        if (!kec || !state.kode_kecamatan || kec.selectedIndex < 0) return '';
+        return (kec.options[kec.selectedIndex].text || '').trim();
+    }
+
+    function teksCakupan() {
+        return state.kode_kecamatan ? 'di Kecamatan ' + (namaKecamatanTerpilih() || state.kode_kecamatan) : 'se-kabupaten';
+    }
+
+    /** Jumlah desa yang akan berubah: nonaktifkan → desa aktif, aktifkan → desa nonaktif. */
+    function jumlahTerdampak(aktifkan) {
+        if (!ringkasanStatus) return 0;
+        return aktifkan ? (ringkasanStatus.nonaktif || 0) : (ringkasanStatus.aktif || 0);
+    }
+
+    function renderTombolMassal() {
+        document.querySelectorAll('.tombol-status-massal').forEach(function (tombol) {
+            var aktifkan = tombol.getAttribute('data-aktif') === '1';
+            var n = jumlahTerdampak(aktifkan);
+            var label = tombol.querySelector('.label-massal');
+            if (label) {
+                label.textContent = (aktifkan ? 'Aktifkan' : 'Nonaktifkan') + ' Semua Desa ' + teksCakupan() +
+                    (ringkasanStatus ? ' (' + n + ')' : '');
+            }
+            tombol.disabled = !ringkasanStatus || n === 0;
+            tombol.title = !ringkasanStatus
+                ? 'Jumlah desa belum dapat dihitung'
+                : (n === 0 ? 'Tidak ada desa yang perlu diubah pada cakupan ini' : '');
+        });
+    }
+
+    function bukaModalMassal(aktifkan) {
+        var form = qs('#form-status-massal');
+        if (!form) return;
+        var n = jumlahTerdampak(aktifkan);
+        var total = ringkasanStatus ? ringkasanStatus.total : 0;
+
+        qs('#massal-aktif').value = aktifkan ? '1' : '0';
+        qs('#massal-kode-kecamatan').value = state.kode_kecamatan;
+        qs('#massal-nama-kecamatan').value = state.kode_kecamatan ? namaKecamatanTerpilih() : '';
+        qs('#massal-status-filter').value = state.status;
+        qs('#judul-modal-massal').textContent = aktifkan ? 'Aktifkan Semua Desa' : 'Nonaktifkan Semua Desa';
+        qs('#teks-modal-massal').textContent = aktifkan
+            ? n + ' dari ' + total + ' desa ' + teksCakupan() + ' akan dapat kembali mengisi data spasial.'
+            : n + ' dari ' + total + ' desa ' + teksCakupan() + ' tidak akan dapat menambah, mengubah, atau mengisi data spasial sampai diaktifkan kembali.';
+
+        var alasan = qs('#massal-alasan');
+        alasan.value = '';
+        alasan.required = !aktifkan;
+        show('#grup-alasan-massal', !aktifkan);
+        show('#catatan-desa-baru', !aktifkan);
+
+        var konfirmasi = qs('#massal-konfirmasi');
+        konfirmasi.checked = false;
+        var simpan = qs('#tombol-simpan-massal');
+        simpan.disabled = true;
+        simpan.textContent = aktifkan ? 'Aktifkan Semua' : 'Nonaktifkan Semua';
+        simpan.className = 'btn ' + (aktifkan ? 'btn-success' : 'btn-danger');
+
+        if (window.jQuery) window.jQuery('#modal-status-massal').modal('show');
+    }
+
     function renderPaginasi(meta) {
         var nav = qs('#status-desa-paginasi');
         if (!nav) return;
@@ -105,6 +175,8 @@
                 if (token !== lastToken) return;
                 show('#status-desa-loading', false);
                 var meta = body.meta || {};
+                ringkasanStatus = body.ringkasan_status || null;
+                renderTombolMassal();
                 if (meta.unavailable) {
                     show('#status-desa-unavailable', true);
                     renderTabel([]);
@@ -125,6 +197,8 @@
                 if (token !== lastToken) return;
                 show('#status-desa-loading', false);
                 show('#status-desa-unavailable', true);
+                ringkasanStatus = null;
+                renderTombolMassal();
             });
     }
 
@@ -170,8 +244,21 @@
             var tombol = e.target.closest('.tombol-ubah-status');
             if (tombol) {
                 bukaModal(tombol.getAttribute('data-id'), tombol.getAttribute('data-nama'), tombol.getAttribute('data-aktif') === '1');
+                return;
+            }
+            var massal = e.target.closest('.tombol-status-massal');
+            if (massal && !massal.disabled) {
+                bukaModalMassal(massal.getAttribute('data-aktif') === '1');
             }
         });
+
+        // Tombol simpan massal hanya aktif setelah konfirmasi dicentang
+        var konfirmasi = qs('#massal-konfirmasi');
+        if (konfirmasi) {
+            konfirmasi.addEventListener('change', function () {
+                qs('#tombol-simpan-massal').disabled = !konfirmasi.checked;
+            });
+        }
 
         muat();
     }

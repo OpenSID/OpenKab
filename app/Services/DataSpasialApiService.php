@@ -328,6 +328,8 @@ class DataSpasialApiService
         return array_filter([
             'pagination' => is_array($payload['meta']['pagination'] ?? null) ? $payload['meta']['pagination'] : null,
             'links' => is_array($payload['links'] ?? null) ? $payload['links'] : null,
+            // API-09: jumlah desa per status pada cakupan filter (GET /dataspasial/desa)
+            'ringkasan_status' => is_array($payload['meta']['ringkasan_status'] ?? null) ? $payload['meta']['ringkasan_status'] : null,
         ], static fn ($value) => $value !== null);
     }
 
@@ -719,6 +721,24 @@ class DataSpasialApiService
             'desa/'.$configId.'/status',
             [],
             array_filter(['aktif' => $aktif, 'alasan' => $alasan], static fn ($v) => $v !== null)
+        );
+    }
+
+    /**
+     * Nonaktifkan / aktifkan seluruh desa kabupaten sekaligus, dipersempit `$kodeKecamatan` bila diberikan.
+     * Satu transaksi di sisi API; penulisan sukses menginvalidasi seluruh cache baca.
+     */
+    public function ubahStatusDesaMassal(bool $aktif, ?string $alasan = null, ?string $kodeKecamatan = null): DataSpasialResult
+    {
+        return $this->request(
+            'PUT',
+            'desa/status',
+            [],
+            array_filter([
+                'aktif' => $aktif,
+                'alasan' => $alasan,
+                'kode_kecamatan' => $kodeKecamatan,
+            ], static fn ($v) => $v !== null)
         );
     }
 }

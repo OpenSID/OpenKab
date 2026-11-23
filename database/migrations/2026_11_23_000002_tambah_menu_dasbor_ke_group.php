@@ -14,6 +14,26 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
+     * Role yang menerima menu Dasbor. Team (group) dipilih dari role ini: nama role
+     * sama dengan nama team (administrator, kabupaten, superadmin_daerah).
+     */
+    private array $roleTujuan = ['administrator', 'kabupaten', 'superadmin_daerah'];
+
+    /**
+     * ID team yang memiliki salah satu role tujuan.
+     */
+    private function teamTujuan(): array
+    {
+        return DB::table('roles')
+            ->whereIn('name', $this->roleTujuan)
+            ->where('guard_name', 'web')
+            ->whereNotNull('team_id')
+            ->distinct()
+            ->pluck('team_id')
+            ->all();
+    }
+
+    /**
      * Item yang disisipkan, sama dengan entri di Modul::Menu.
      */
     private function itemDasbor(): array
@@ -43,7 +63,7 @@ return new class extends Migration
             $kolom[] = 'menu_order';
         }
 
-        DB::table('team')->select(array_merge(['id'], $kolom))->orderBy('id')->chunkById(100, function ($teams) use ($kolom) {
+        DB::table('team')->select(array_merge(['id'], $kolom))->whereIn('id', $this->teamTujuan())->orderBy('id')->chunkById(100, function ($teams) use ($kolom) {
             foreach ($teams as $team) {
                 $update = [];
                 foreach ($kolom as $field) {
@@ -70,7 +90,7 @@ return new class extends Migration
             $kolom[] = 'menu_order';
         }
 
-        DB::table('team')->select(array_merge(['id'], $kolom))->orderBy('id')->chunkById(100, function ($teams) use ($kolom) {
+        DB::table('team')->select(array_merge(['id'], $kolom))->whereIn('id', $this->teamTujuan())->orderBy('id')->chunkById(100, function ($teams) use ($kolom) {
             foreach ($teams as $team) {
                 $update = [];
                 foreach ($kolom as $field) {

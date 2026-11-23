@@ -133,7 +133,7 @@ it('grants dasbor permissions only to administrator, superadmin_daerah and kabup
 });
 
 it('inserts dasbor menu items at the top of existing group menus without duplicates', function () {
-    $team = Team::create(['name' => 'group-menu-'.uniqid(), 'menu' => []]);
+    $team = teamDenganRole('kabupaten');
     $team->update([
         'menu' => [['text' => 'Profile Kependudukan', 'permission' => 'datapokok', 'url' => 'penduduk']],
         'menu_order' => [['text' => 'Profile Kependudukan', 'permission' => 'datapokok', 'url' => 'penduduk']],
@@ -151,7 +151,7 @@ it('inserts dasbor menu items at the top of existing group menus without duplica
 });
 
 it('removes only the dasbor menu items when rolled back', function () {
-    $team = Team::create(['name' => 'group-menu-'.uniqid(), 'menu' => []]);
+    $team = teamDenganRole('kabupaten');
     $team->update([
         'menu' => [['text' => 'Profile Kependudukan', 'permission' => 'datapokok', 'url' => 'penduduk']],
     ]);
@@ -169,3 +169,21 @@ it('shows the empty beranda page to a group without any dasbor permission', func
         ->assertOk()
         ->assertViewIs('beranda.index');
 });
+
+it('does not add dasbor menu to groups without the target roles', function () {
+    $lain = Team::create(['name' => 'group-menu-'.uniqid(), 'menu' => [['text' => 'Profile Kependudukan', 'permission' => 'datapokok', 'url' => 'penduduk']]]);
+    Role::firstOrCreate(['name' => 'staff-biasa-'.uniqid(), 'team_id' => $lain->id, 'guard_name' => 'web']);
+
+    jalankanMigrasiMenuDasbor();
+
+    $lain->refresh();
+    expect(collect($lain->menu)->pluck('permission')->all())->toBe(['datapokok']);
+});
+
+function teamDenganRole(string $namaRole): Team
+{
+    $team = Team::create(['name' => 'group-menu-'.uniqid(), 'menu' => []]);
+    Role::firstOrCreate(['name' => $namaRole, 'team_id' => $team->id, 'guard_name' => 'web']);
+
+    return $team;
+}

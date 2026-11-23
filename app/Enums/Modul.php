@@ -333,6 +333,12 @@ final class Modul extends Enum
                     'url' => 'dataspasial/audit',
                     'permission' => 'dataspasial-audit',
                 ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Status Desa',
+                    'url' => 'dataspasial/desa',
+                    'permission' => 'dataspasial-desa',
+                ],
             ],
         ],
         [

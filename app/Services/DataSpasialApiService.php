@@ -328,6 +328,8 @@ class DataSpasialApiService
         return array_filter([
             'pagination' => is_array($payload['meta']['pagination'] ?? null) ? $payload['meta']['pagination'] : null,
             'links' => is_array($payload['links'] ?? null) ? $payload['links'] : null,
+            // API-09: jumlah desa per status pada cakupan filter (GET /dataspasial/desa)
+            'ringkasan_status' => is_array($payload['meta']['ringkasan_status'] ?? null) ? $payload['meta']['ringkasan_status'] : null,
         ], static fn ($value) => $value !== null);
     }
 
@@ -689,5 +691,54 @@ class DataSpasialApiService
     public function auditRingkasan(array $filters = []): DataSpasialResult
     {
         return $this->request('GET', 'audit/ringkasan', $filters, null, null, true);
+    }
+
+    // -----------------------------------------------------------------------
+    // Status isian desa (API-09 / KAB-09)
+    // -----------------------------------------------------------------------
+
+    /**
+     * Daftar desa kabupaten beserta status pengisian Data Spasialnya.
+     *
+     * ⚠️ **TIDAK di-cache** — status menentukan apakah operator desa boleh
+     * mengisi, sehingga halaman harus selalu menampilkan keadaan terbaru.
+     *
+     * @param  array<string, mixed>  $filters  kode_kecamatan, kode_desa, config_id, status (aktif|nonaktif), page
+     */
+    public function listDesa(array $filters = []): DataSpasialResult
+    {
+        return $this->request('GET', 'desa', $filters, null, null, true);
+    }
+
+    /**
+     * Nonaktifkan (`$aktif=false`, alasan wajib) atau aktifkan kembali pengisian satu desa.
+     * Penulisan sukses menginvalidasi seluruh cache baca (adopsi ikut berubah).
+     */
+    public function ubahStatusDesa(int $configId, bool $aktif, ?string $alasan = null): DataSpasialResult
+    {
+        return $this->request(
+            'PUT',
+            'desa/'.$configId.'/status',
+            [],
+            array_filter(['aktif' => $aktif, 'alasan' => $alasan], static fn ($v) => $v !== null)
+        );
+    }
+
+    /**
+     * Nonaktifkan / aktifkan seluruh desa kabupaten sekaligus, dipersempit `$kodeKecamatan` bila diberikan.
+     * Satu transaksi di sisi API; penulisan sukses menginvalidasi seluruh cache baca.
+     */
+    public function ubahStatusDesaMassal(bool $aktif, ?string $alasan = null, ?string $kodeKecamatan = null): DataSpasialResult
+    {
+        return $this->request(
+            'PUT',
+            'desa/status',
+            [],
+            array_filter([
+                'aktif' => $aktif,
+                'alasan' => $alasan,
+                'kode_kecamatan' => $kodeKecamatan,
+            ], static fn ($v) => $v !== null)
+        );
     }
 }

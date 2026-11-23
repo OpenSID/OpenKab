@@ -33,6 +33,7 @@ use App\Http\Controllers\DataSpasial\ListImporController;
 use App\Http\Controllers\DataSpasial\MonitoringController;
 use App\Http\Controllers\DataSpasial\PetaGabunganController;
 use App\Http\Controllers\DataSpasial\SkemaDataSpasialController;
+use App\Http\Controllers\DataSpasial\StatusDesaController;
 use App\Http\Controllers\DDKPanganController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesaController;
@@ -614,6 +615,21 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         Route::get('audit/ekspor', [AuditDataSpasialController::class, 'ekspor'])
             ->middleware('permission:dataspasial-audit-read')
             ->name('dataspasial.audit.ekspor');
+
+        // KAB-09 — Status Desa: nonaktifkan/aktifkan pengisian Data Spasial per desa (API-09).
+        Route::get('desa', [StatusDesaController::class, 'index'])
+            ->middleware('permission:dataspasial-desa-read')
+            ->name('dataspasial.desa');
+        Route::get('desa/data', [StatusDesaController::class, 'data'])
+            ->middleware('permission:dataspasial-desa-read')
+            ->name('dataspasial.desa.data');
+        Route::post('desa/status-massal', [StatusDesaController::class, 'ubahStatusMassal'])
+            ->middleware('permission:dataspasial-desa-write')
+            ->name('dataspasial.desa.status-massal');
+        Route::post('desa/{config_id}/status', [StatusDesaController::class, 'ubahStatus'])
+            ->whereNumber('config_id')
+            ->middleware('permission:dataspasial-desa-write')
+            ->name('dataspasial.desa.status');
     });
 });
 

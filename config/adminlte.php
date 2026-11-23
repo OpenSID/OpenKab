@@ -353,18 +353,7 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'cari',
         ],
-        [
-            'text' => 'Dasbor',
-            'icon' => 'nav-icon fas fa-home',
-            'url' => '/dasbor',
-            'can' => 'dasbor-read',
-        ],
-        [
-            'text' => 'Dasbor Demografi',
-            'icon' => 'nav-icon fas fa-home',
-            'url' => '/dasbor-demografi',
-            'can' => 'dasbor-demografi-read',
-        ],
+        // Dasbor & Dasbor Demografi: diambil dari menu group (Modul::Menu) dengan gate 'can'
 
     ],
 

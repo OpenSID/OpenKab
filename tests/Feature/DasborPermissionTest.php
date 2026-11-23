@@ -77,7 +77,17 @@ it('applies a permission change without recreating the account', function () {
     $this->actingAs($this->user)->get(route('dasbor'))->assertOk();
 });
 
+function jalankanMigrasiMenuDasbor(string $arah = 'up'): void
+{
+    $migration = require database_path('migrations/2026_11_23_000002_tambah_menu_dasbor_ke_group.php');
+    $migration->{$arah}();
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
+}
+
 it('hides the dasbor menu from a group without dasbor-read', function () {
+    // Item menu Dasbor harus ada di menu group agar gate 'can' benar-benar diuji
+    jalankanMigrasiMenuDasbor();
+
     // Halaman profil sendiri bisa diakses tanpa izin khusus dan memuat sidebar
     $this->actingAs($this->user)
         ->get(route('profile.edit', $this->user->id))
@@ -87,6 +97,7 @@ it('hides the dasbor menu from a group without dasbor-read', function () {
 });
 
 it('shows the dasbor menu to a group with dasbor-read', function () {
+    jalankanMigrasiMenuDasbor();
     grantDasborPermission($this->groupRole, 'dasbor-read');
 
     $this->actingAs($this->user)
@@ -119,6 +130,37 @@ it('grants dasbor permissions only to administrator, superadmin_daerah and kabup
     $lainnya->refresh();
     expect($lainnya->hasPermissionTo('dasbor-read'))->toBeFalse();
     expect($lainnya->hasPermissionTo('dasbor-demografi-read'))->toBeFalse();
+});
+
+it('inserts dasbor menu items at the top of existing group menus without duplicates', function () {
+    $team = Team::create(['name' => 'group-menu-'.uniqid(), 'menu' => []]);
+    $team->update([
+        'menu' => [['text' => 'Profile Kependudukan', 'permission' => 'datapokok', 'url' => 'penduduk']],
+        'menu_order' => [['text' => 'Profile Kependudukan', 'permission' => 'datapokok', 'url' => 'penduduk']],
+    ]);
+
+    jalankanMigrasiMenuDasbor();
+    jalankanMigrasiMenuDasbor(); // jalankan dua kali: tidak boleh menduplikasi
+
+    $team->refresh();
+    $permissions = collect($team->menu)->pluck('permission')->all();
+
+    expect($permissions)->toBe(['dasbor', 'dasbor-demografi', 'datapokok']);
+    expect(collect($team->menu_order)->pluck('permission')->all())->toBe(['dasbor', 'dasbor-demografi', 'datapokok']);
+    expect($team->menu[0]['can'])->toBe('dasbor-read');
+});
+
+it('removes only the dasbor menu items when rolled back', function () {
+    $team = Team::create(['name' => 'group-menu-'.uniqid(), 'menu' => []]);
+    $team->update([
+        'menu' => [['text' => 'Profile Kependudukan', 'permission' => 'datapokok', 'url' => 'penduduk']],
+    ]);
+
+    jalankanMigrasiMenuDasbor();
+    jalankanMigrasiMenuDasbor('down');
+
+    $team->refresh();
+    expect(collect($team->menu)->pluck('permission')->all())->toBe(['datapokok']);
 });
 
 it('shows the empty beranda page to a group without any dasbor permission', function () {

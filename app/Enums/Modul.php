@@ -303,6 +303,12 @@ final class Modul extends Enum
                 ],
                 [
                     'icon' => 'far fa-fw fa-circle',
+                    'text' => 'Daftar Data Hasil Impor',
+                    'url' => 'dataspasial/impor/daftar',
+                    'permission' => 'dataspasial-impor',
+                ],
+                [
+                    'icon' => 'far fa-fw fa-circle',
                     'text' => 'Monitoring',
                     'url' => 'dataspasial/monitoring',
                     'permission' => 'dataspasial-monitoring',

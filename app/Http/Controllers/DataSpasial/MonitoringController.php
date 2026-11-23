@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\DataSpasial;
 
 use App\Http\Requests\DataSpasial\MonitoringDataRequest;
+use App\Services\CakupanPenggunaService;
 use App\Services\DataSpasialResult;
 use App\Services\MonitoringDataSpasialService;
 use Illuminate\Http\JsonResponse;
@@ -24,8 +25,17 @@ class MonitoringController extends DataSpasialController
 {
     public function __construct(
         protected MonitoringDataSpasialService $monitoring,
+        protected CakupanPenggunaService $cakupan,
     ) {
         parent::__construct($this->monitoring->dataspasial);
+    }
+
+    /**
+     * Desa di luar wilayah pengguna tidak ditampilkan (issue #1320). Sektor sudah dijaga middleware.
+     */
+    private function terapkanAkses(Request $request): void
+    {
+        $this->monitoring->setFilterAkses($this->cakupan->filterBaris((int) $request->user()->id, false));
     }
 
     protected function pageTitle(): string
@@ -46,10 +56,15 @@ class MonitoringController extends DataSpasialController
 
     public function index(Request $request): View
     {
+        $sektorAkses = $this->cakupan->sektorAkses((int) $request->user()->id);
+
         return view($this->viewName(), [
             'title' => $this->pageTitle(),
             'result' => $this->fetch($request),
-            'sektorList' => $this->daftarSektorTersimpan(),
+            'sektorList' => array_values(array_filter(
+                $this->daftarSektorTersimpan(),
+                fn (array $s) => $sektorAkses === null || in_array($s['kode'], $sektorAkses, true),
+            )),
         ]);
     }
 
@@ -59,6 +74,7 @@ class MonitoringController extends DataSpasialController
      */
     public function data(MonitoringDataRequest $request): JsonResponse
     {
+        $this->terapkanAkses($request);
         $built = $this->monitoring->buildMonitoring($request->validated());
 
         return response()->json([
@@ -73,6 +89,7 @@ class MonitoringController extends DataSpasialController
      */
     public function ekspor(MonitoringDataRequest $request): StreamedResponse|JsonResponse
     {
+        $this->terapkanAkses($request);
         $hasil = $this->monitoring->eksporCsv($request->validated());
 
         if ($hasil === null) {

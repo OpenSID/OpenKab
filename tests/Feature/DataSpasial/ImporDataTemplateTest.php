@@ -3,6 +3,7 @@
 namespace Tests\Feature\DataSpasial;
 
 use App\Models\Setting;
+use App\Services\CakupanPenggunaService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -28,7 +29,10 @@ class ImporDataTemplateTest extends TestCase
         Cache::flush();
 
         // Route dilindungi permission; withoutMiddleware tidak menghapus pengecekan FormRequest::authorize.
-        $this->actingAs(makeRole('operator impor', ['dataspasial-impor-read']));
+        $user = makeRole('operator impor', ['dataspasial-impor-read']);
+        // Hak akses sektor wajib (issue #1320): sektor kesehatan dipakai di tes ini.
+        app(CakupanPenggunaService::class)->simpanSektor($user->id, ['kesehatan']);
+        $this->actingAs($user);
     }
 
     public function test_template_requires_sektor(): void

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\DataSpasial;
 
+use App\Services\CakupanPenggunaService;
 use App\Services\DasborDataSpasialService;
 use App\Services\DataSpasialApiService;
 use App\Services\DataSpasialResult;
@@ -15,7 +16,8 @@ use Illuminate\View\View;
 class DasborDataSpasialController extends DataSpasialController
 {
     public function __construct(
-        protected DasborDataSpasialService $dasbor
+        protected DasborDataSpasialService $dasbor,
+        protected CakupanPenggunaService $cakupan,
     ) {
         parent::__construct($this->dasbor?->dataspasial ?? app(DataSpasialApiService::class));
     }
@@ -82,6 +84,13 @@ class DasborDataSpasialController extends DataSpasialController
             ], now()->addMinutes(30));
         }
 
+        // Cache bersifat global; pembatasan sektor diterapkan per pengguna di sini (issue #1320).
+        $sektorAkses = $this->cakupan->sektorAkses((int) $request->user()->id);
+        if ($sektorAkses !== null) {
+            $sektorList = array_values(array_filter($sektorList, fn ($s) => in_array($s['kode'] ?? null, $sektorAkses, true)));
+            $indikatorBySektor = array_intersect_key($indikatorBySektor, array_flip($sektorAkses));
+        }
+
         return view($this->viewName(), [
             'title' => $this->pageTitle(),
             'sektorList' => $sektorList,
@@ -91,6 +100,11 @@ class DasborDataSpasialController extends DataSpasialController
 
     public function data(Request $request): JsonResponse
     {
+        $request = $this->batasiSektor($request);
+        if ($request === null) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki akses ke sektor ini.'], 403);
+        }
+
         $built = $this->dasbor->buildDashboard($request->all());
         $ringkasanResult = $this->dasbor->fetchRingkasan($request->only(['sektor', 'sektor_id', 'periode', 'kode_kabupaten', 'kode_kecamatan', 'kode_desa']));
         $unavailable = $ringkasanResult->isUnavailable();
@@ -124,6 +138,45 @@ class DasborDataSpasialController extends DataSpasialController
     }
 
     /**
+     * Terapkan hak akses pengguna pada permintaan dasbor (issue #1320).
+     *
+     * Tanpa pembatasan, permintaan dibiarkan apa adanya.
+     * - Sektor dibatasi: sektor kosong diisi sektor pertama yang diizinkan; sektor di luar hak akses → null (403).
+     * - Wilayah dibatasi: filter kabupaten/kecamatan/desa dipaksa sesuai hak akses.
+     *
+     * @return Request|null null berarti ditolak (403).
+     */
+    private function batasiSektor(Request $request): ?Request
+    {
+        $uid = (int) $request->user()->id;
+        $sektorAkses = $this->cakupan->sektorAkses($uid);
+        $wilayah = $this->cakupan->wilayahAkses($uid);
+
+        if ($sektorAkses !== null) {
+            $kode = (string) $request->input('sektor', '');
+            if ($kode === '' && $request->filled('sektor_id')) {
+                $kode = (string) ($this->cakupan->kodeSektorDariId((int) $request->input('sektor_id')) ?? '');
+                if ($kode === '') {
+                    return null; // sektor_id tidak dikenali: tolak, jangan ganti diam-diam
+                }
+            }
+            if ($kode === '') {
+                $kode = $sektorAkses[0];
+            }
+            if (! in_array($kode, $sektorAkses, true)) {
+                return null;
+            }
+            $request->merge(['sektor' => $kode]);
+        }
+
+        if ($wilayah !== null) {
+            $request->merge($this->cakupan->filterDasbor($wilayah));
+        }
+
+        return $request;
+    }
+
+    /**
      * Daftar sektor untuk dropdown filter (kosong bila API tidak tersedia).
      *
      * @return array<int, array<string, string>>
@@ -153,6 +206,11 @@ class DasborDataSpasialController extends DataSpasialController
 
     public function ekspor(Request $request): mixed
     {
+        $request = $this->batasiSektor($request);
+        if ($request === null) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki akses ke sektor ini.'], 403);
+        }
+
         $built = $this->dasbor->buildDashboard($request->all());
         $rows = $built['tabel']['rows'] ?? [];
         if ($rows === []) {

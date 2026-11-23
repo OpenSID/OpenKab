@@ -33,6 +33,11 @@
                                     @include('user.form')
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-lg-9 offset-lg-3 col-md-8 offset-md-4">
+                                    @include('user.akses', ['sektors' => $akses['sektors'], 'akses' => $akses])
+                                </div>
+                            </div>
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">

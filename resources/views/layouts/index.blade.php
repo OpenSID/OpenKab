@@ -158,3 +158,9 @@ Seluruh hak cipta dilindungi.
     })
 </script>
 @endpush
+
+@if (request()->routeIs('dataspasial.*'))
+    @push('js')
+        @include('dataspasial.partials.akses_guard')
+    @endpush
+@endif

@@ -1,5 +1,13 @@
 <?php
 
+use JeroenNoten\LaravelAdminLte\Menu\Filters\ActiveFilter;
+use JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter;
+use JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter;
+use JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter;
+use JeroenNoten\LaravelAdminLte\Menu\Filters\HrefFilter;
+use JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter;
+use JeroenNoten\LaravelAdminLte\Menu\Filters\SearchFilter;
+
 return [
 
     /*
@@ -297,7 +305,7 @@ return [
         //     'route'        => 'password.change',
         //     'topnav_user'  => true
         // ],
-        //Topbar items:
+        // Topbar items:
         [
             'type' => 'darkmode-widget',
             'topnav_right' => false, // Or "topnav => true" to place on the left.
@@ -323,21 +331,21 @@ return [
             'key' => 'kabupaten',
             'text' => 'kabupaten',
             'topnav_right' => true,
-            'id' => 'kabupaten'
+            'id' => 'kabupaten',
         ],
         // Kecamatan
         [
             'key' => 'kecamatan',
             'text' => 'Kecamatan',
             'topnav_right' => true,
-            'id' => 'kecamatan'
+            'id' => 'kecamatan',
         ],
         // Desa
         [
             'key' => 'desa',
             'text' => 'Desa',
             'topnav_right' => true,
-            'id' => 'desa'
+            'id' => 'desa',
         ],
 
         // Sidebar items:
@@ -345,16 +353,7 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'cari',
         ],
-        [
-            'text' => 'Dasbor',
-            'icon' => 'nav-icon fas fa-home',
-            'url' => '/dasbor',
-        ],
-        [
-            'text' => 'Dasbor Demografi',
-            'icon' => 'nav-icon fas fa-home',
-            'url' => '/dasbor-demografi',
-        ],
+        // Dasbor & Dasbor Demografi: diambil dari menu group (Modul::Menu) dengan gate 'can'
 
     ],
 
@@ -371,13 +370,13 @@ return [
     */
 
     'filters' => [
-        JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,
-        JeroenNoten\LaravelAdminLte\Menu\Filters\HrefFilter::class,
-        JeroenNoten\LaravelAdminLte\Menu\Filters\SearchFilter::class,
-        JeroenNoten\LaravelAdminLte\Menu\Filters\ActiveFilter::class,
-        JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
-        JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter::class,
-        JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter::class,
+        GateFilter::class,
+        HrefFilter::class,
+        SearchFilter::class,
+        ActiveFilter::class,
+        ClassesFilter::class,
+        LangFilter::class,
+        DataFilter::class,
     ],
 
     /*

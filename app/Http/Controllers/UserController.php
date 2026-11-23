@@ -10,8 +10,10 @@ use App\Models\UserTeam;
 use App\Services\CakupanPenggunaService;
 use App\Services\ConfigApiService;
 use App\Services\DataSpasialApiService;
+use App\Services\PasswordResetByAdminService;
 use App\Support\KodeWilayah;
 use App\Traits\UploadedFile;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +61,9 @@ class UserController extends Controller
                     if (! auth()->guest()) {
                         if ($permission['canedit']) {
                             $data['edit'] = route('users.edit', $row->id);
+                        }
+                        if ($permission['canedit'] && $row->id !== auth()->id() && auth()->user()->can('update', $row)) {
+                            $data['resetPassword'] = route('users.reset-password', $row->id);
                         }
                         if ($row->id !== User::superAdmin()) {
                             if ($permission['candelete']) {
@@ -334,6 +339,31 @@ class UserController extends Controller
         $this->authorize('view', $user);
 
         return view('user.profile', compact('user'));
+    }
+
+    /**
+     * Reset password pengguna oleh administrator. Password sementara ditampilkan
+     * sekali lewat flash session dan dikirim ke email pengguna.
+     *
+     * @return RedirectResponse
+     */
+    public function resetPassword(Request $request, User $user)
+    {
+        // IDOR Prevention: Authorization check
+        $this->authorize('update', $user);
+
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak dapat mereset password akun sendiri.');
+        }
+
+        $hasil = app(PasswordResetByAdminService::class)->reset($user, $request->user());
+
+        $redirect = redirect()->route('users.index')
+            ->with('password_sementara', $hasil['password']);
+
+        return $hasil['email_terkirim']
+            ? $redirect->with('success', "Password {$user->name} berhasil direset. Email pemberitahuan telah dikirim.")
+            : $redirect->with('warning', "Password {$user->name} berhasil direset, tetapi email pemberitahuan gagal dikirim. Sampaikan password sementara secara langsung.");
     }
 
     /**

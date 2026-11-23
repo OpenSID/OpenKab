@@ -22,6 +22,20 @@ final class Modul extends Enum
 
     const Menu = [
         [
+            'text' => 'Dasbor',
+            'icon' => 'fa fa-home',
+            'permission' => 'dasbor',
+            'can' => 'dasbor-read',
+            'url' => 'dasbor',
+        ],
+        [
+            'text' => 'Dasbor Demografi',
+            'icon' => 'fa fa-home',
+            'permission' => 'dasbor-demografi',
+            'can' => 'dasbor-demografi-read',
+            'url' => 'dasbor-demografi',
+        ],
+        [
             'text' => 'Profile Kependudukan',
             'icon' => 'fa fa-users',
             'permission' => 'datapokok',

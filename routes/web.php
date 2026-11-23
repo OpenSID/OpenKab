@@ -85,6 +85,7 @@ use App\Http\Controllers\Web\SearchController;
 use App\Http\Middleware\AksesDataSpasialMiddleware;
 use App\Http\Middleware\KabupatenMiddleware;
 use App\Http\Middleware\KecamatanMiddleware;
+use App\Http\Middleware\RedirectIfTanpaIzin;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -118,8 +119,9 @@ Route::get('pengaturan/logo', [IdentitasController::class, 'logo']);
 
 Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak', '2fa'])->group(function () {
     Route::get('catatan-rilis', CatatanRilis::class);
-    Route::get('/dasbor', [DasborController::class, 'index'])->name('dasbor');
-    Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->name('dasbor-demografi');
+    Route::get('beranda', fn () => view('beranda.index'))->name('beranda');
+    Route::get('/dasbor', [DasborController::class, 'index'])->middleware(RedirectIfTanpaIzin::class.':dasbor-read')->name('dasbor');
+    Route::get('dasbor-demografi', [DasborDemografiController::class, 'index'])->middleware(RedirectIfTanpaIzin::class.':dasbor-demografi-read')->name('dasbor-demografi');
 
     // SSO OpenSID: terbitkan token akses sekali pakai untuk administrator
     Route::post('/sso/generate-session', [SsoLoginController::class, 'generateSession'])->name('sso.generate')->middleware('throttle:sso-generate');
@@ -139,6 +141,9 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
     Route::put('users/{user}', [UserController::class, 'update'])->name('profile.update');
     Route::prefix('pengaturan')->group(function () {
         Route::middleware('easyauthorize:pengaturan-users')->resource('users', UserController::class);
+        Route::middleware(['can:pengaturan-users-edit', 'throttle:10,1'])
+            ->post('users/{user}/reset-password', [UserController::class, 'resetPassword'])
+            ->name('users.reset-password');
         Route::middleware('easyauthorize:pengaturan-identitas')->resource('identitas', IdentitasController::class)->only(['index', 'edit']);
         Route::middleware('can:pengaturan-group-read')->prefix('groups')->group(function () {
             Route::get('/', [GroupController::class, 'index'])->name('groups.index');
@@ -546,18 +551,18 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
             ->middleware('permission:dataspasial-peta-read')
             ->name('dataspasial.peta.data');
 
-    Route::get('dasbor', [DasborDataSpasialController::class, 'index'])
-        ->middleware('permission:dataspasial-dasbor-read')
-        ->name('dataspasial.dasbor');
-    Route::get('dasbor/data', [DasborDataSpasialController::class, 'data'])
-        ->middleware('permission:dataspasial-dasbor-read')
-        ->name('dataspasial.dasbor.data');
-    Route::get('dasbor/peta/data', [PetaGabunganController::class, 'data'])
-        ->middleware('permission:dataspasial-dasbor-read')
-        ->name('dataspasial.dasbor.peta.data');
-    Route::get('dasbor/ekspor', [DasborDataSpasialController::class, 'ekspor'])
-        ->middleware('permission:dataspasial-dasbor-read')
-        ->name('dataspasial.dasbor.export');
+        Route::get('dasbor', [DasborDataSpasialController::class, 'index'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor');
+        Route::get('dasbor/data', [DasborDataSpasialController::class, 'data'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor.data');
+        Route::get('dasbor/peta/data', [PetaGabunganController::class, 'data'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor.peta.data');
+        Route::get('dasbor/ekspor', [DasborDataSpasialController::class, 'ekspor'])
+            ->middleware('permission:dataspasial-dasbor-read')
+            ->name('dataspasial.dasbor.export');
 
         Route::get('impor', [ImporDataController::class, 'index'])
             ->middleware('permission:dataspasial-impor-read')

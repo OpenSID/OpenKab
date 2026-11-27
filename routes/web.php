@@ -14,6 +14,7 @@ use App\Http\Controllers\CMS\SlideController;
 use App\Http\Controllers\CMS\StatistikPengunjungController;
 use App\Http\Controllers\DasborController;
 use App\Http\Controllers\DasborDemografiController;
+use App\Http\Controllers\DomainCheckController;
 use App\Http\Controllers\DataPokokController;
 use App\Http\Controllers\DataPresisiAdatController;
 use App\Http\Controllers\DataPresisiAktivitasKeagamaanController;
@@ -152,6 +153,10 @@ Route::middleware(['auth', 'teams_permission', 'password.expiry', 'password.weak
         });
         Route::resource('activities', RiwayatPenggunaController::class)->only(['index', 'show'])->middleware('easyauthorize:pengaturan-activities');
         Route::resource('settings', SettingController::class)->except(['show', 'create', 'delete'])->middleware('easyauthorize:pengaturan-settings');
+
+        // Domain Check Route
+        Route::get('domain-check', [DomainCheckController::class, 'index'])->name('domain-check.index');
+        Route::post('domain-check', [DomainCheckController::class, 'check'])->name('domain-check.check');
 
         // OTP & 2FA Routes - combined into one page
         Route::prefix('otp')->group(function () {
